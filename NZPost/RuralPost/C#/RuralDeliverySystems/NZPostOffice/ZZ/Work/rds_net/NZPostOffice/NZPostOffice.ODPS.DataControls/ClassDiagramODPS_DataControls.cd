@@ -1,0 +1,1660 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwAccountCode" Collapsed="true">
+    <Position X="93" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwAccountCode.cs</FileName>
+      <HashCode>AIAAAAAgACIAAAAAAACAAAACAAAAAAIAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwDateSearch" Collapsed="true">
+    <Position X="101.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwDateSearch.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACQAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwNational" Collapsed="true">
+    <Position X="77.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwNational.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAQCAAAACAAIAAgAAAAgAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwNationalDetail" Collapsed="true">
+    <Position X="79" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwNationalDetail.cs</FileName>
+      <HashCode>EIRIoQCGcCxgggBMEUiDIAR3RIIJB2tRrgAKIKCqAQg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwNationalDetailDs" Collapsed="true">
+    <Position X="80.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwNationalDetailDs.cs</FileName>
+      <HashCode>EIRIoQCGcCwAggBICUiDIARmRAYBB3tTqgAIIKCiAQg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwOdpsContract" Collapsed="true">
+    <Position X="87.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwOdpsContract.cs</FileName>
+      <HashCode>IIAABoAAASACAAQAAAaAAAAqAQAAAgBAAAAAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwOdpsContractAdjustments" Collapsed="true">
+    <Position X="89.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwOdpsContractAdjustments.cs</FileName>
+      <HashCode>EJAAQAAAACQAAACEAACBBAAKAgAAAAAAAIAIAKAIEBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwOdpsFrequencyAdjustments" Collapsed="true">
+    <Position X="91.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwOdpsFrequencyAdjustments.cs</FileName>
+      <HashCode>AIAAEAAAACQAAACEAACBAAAKAAAAAAAQAAAAAYAAEBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwOdpsOwnerdrivercontract" Collapsed="true">
+    <Position X="93" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwOdpsOwnerdrivercontract.cs</FileName>
+      <HashCode>AIAAAAAAACgAAAAAAgGAAAACAAAAEAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwOdpsPiecerateVolumes" Collapsed="true">
+    <Position X="94.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwOdpsPiecerateVolumes.cs</FileName>
+      <HashCode>AIAAAIAACCAAAAAAAACAAQBCAAAAAAAAAAAACAAABAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwPbuCode" Collapsed="true">
+    <Position X="87.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwPbuCode.cs</FileName>
+      <HashCode>AIAIAAAAACIAAAAAAACAAAACAAAAABAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwPostIrdNo" Collapsed="true">
+    <Position X="89.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwPostIrdNo.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAAiAAIAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwReportCriteria" Collapsed="true">
+    <Position X="96.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwReportCriteria.cs</FileName>
+      <HashCode>AIAAAAAAACAAABAAAASAAAICEAAAAFgEAAkAAIgAQAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwReportCriteriaFinancial" Collapsed="true">
+    <Position X="98.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwReportCriteriaFinancial.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACEAAAAEAEAAgAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwSptest" Collapsed="true">
+    <Position X="100" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwSptest.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAASAAAACAAAAAAAAAgAAAgAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwSync" Collapsed="true">
+    <Position X="101.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwSync.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwTest" Collapsed="true">
+    <Position X="77.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwTest.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAASAAAACAAAAAAAAAgAAAgAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwUserId" Collapsed="true">
+    <Position X="80.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwUserId.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwYearlyEarnings" Collapsed="true">
+    <Position X="89.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwYearlyEarnings.cs</FileName>
+      <HashCode>AIAAAAABASAAAABAAICAAACiAAAAAAAAgAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.DwYearSearch" Collapsed="true">
+    <Position X="91.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\DwYearSearch.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACQAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.Ir13" Collapsed="true">
+    <Position X="93" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\Ir13.cs</FileName>
+      <HashCode>AIAAAAAhQCIBAeAAAACBQCAaIAEAABAACgAAAAEAgBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Odps.Ir13test" Collapsed="true">
+    <Position X="94.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Odps\Ir13test.cs</FileName>
+      <HashCode>AIAAAAAAQCIAAWAAAACAQCACIAEgABAACAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DDddwAccountCodes" Collapsed="true">
+    <Position X="82.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DDddwAccountCodes.cs</FileName>
+      <HashCode>AIAAAAAgACIAAAAAAACAAAACAAAAAgIAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DDddwContractors" Collapsed="true">
+    <Position X="84.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DDddwContractors.cs</FileName>
+      <HashCode>AIAAAQAAACIAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DDddwPaymentComponents" Collapsed="true">
+    <Position X="87.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DDddwPaymentComponents.cs</FileName>
+      <HashCode>CIAAAAAAACIAgAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DDddwPbuCodes" Collapsed="true">
+    <Position X="89.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DDddwPbuCodes.cs</FileName>
+      <HashCode>AIAIAAAAACIAAAAAAACAAAACAAAAABAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DDddwPtaCode" Collapsed="true">
+    <Position X="91.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DDddwPtaCode.cs</FileName>
+      <HashCode>AIAAAAAAACIAgAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DddwAccountId" Collapsed="true">
+    <Position X="94.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DddwAccountId.cs</FileName>
+      <HashCode>AIAAAAAgACIAAAAAAACAAAACAAAAAgAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DddwPaymentComponentType" Collapsed="true">
+    <Position X="96.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DddwPaymentComponentType.cs</FileName>
+      <HashCode>AIAAAAAAACIAgAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsCodes.DddwPbuCode" Collapsed="true">
+    <Position X="98.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsCodes\DddwPbuCode.cs</FileName>
+      <HashCode>AIAIAAAAACIAAAAAAACAAAACAAAAABAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DDddwContracttypes" Collapsed="true">
+    <Position X="86" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DDddwContracttypes.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACAAAACgAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DDddwRegions" Collapsed="true">
+    <Position X="93" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DDddwRegions.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACBAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPayment" Collapsed="true">
+    <Position X="86" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPayment.cs</FileName>
+      <HashCode>AqQAAIAgAGAAAAAAIACARAAm4H8ABIgAAAAAAEAACEI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentDed" Collapsed="true">
+    <Position X="87.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentDed.cs</FileName>
+      <HashCode>CIgABAAgAiIAAAAAAACAAAACAACAAgAAAAAAgCAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPr" Collapsed="true">
+    <Position X="89.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPr.cs</FileName>
+      <HashCode>AIAABAAgAjIAAgAAEACAAAICAACAAgAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrDetailcp" Collapsed="true">
+    <Position X="91.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrDetailcp.cs</FileName>
+      <HashCode>AJAABEAgAiIAAAAEAACAAABiACCQAAAAAEAAAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrDetailkm" Collapsed="true">
+    <Position X="93" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.cs</FileName>
+      <HashCode>AJAABEggAiIAAAAAAACAAABiACAQAAAAAEAACABAAAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrDetailpp" Collapsed="true">
+    <Position X="94.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrDetailpp.cs</FileName>
+      <HashCode>AJAABEAgAiIAAAAAAACAAABiACCQAAAAAEAAAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrDetailxp" Collapsed="true">
+    <Position X="96.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrDetailxp.cs</FileName>
+      <HashCode>AJAABEAgAqIAAAAAAACAAABiICCQAgAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrMessage" Collapsed="true">
+    <Position X="98.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrMessage.cs</FileName>
+      <HashCode>AIEAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceDetailPaymentPrTitle" Collapsed="true">
+    <Position X="100" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceDetailPaymentPrTitle.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAAiAAAAAAAAAAAAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceHeaderOnly" Collapsed="true">
+    <Position X="77.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceHeaderOnly.cs</FileName>
+      <HashCode>AIAAAgAgECAAAAQAAACAAAAiACAAAAABAAACAIAEAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceHeaderPostaddress" Collapsed="true">
+    <Position X="79" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceHeaderPostaddress.cs</FileName>
+      <HashCode>AIAAAAAAAKAAAAAAAACAAAACAAAAAAARBAAAAYAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceHeaderv5" Collapsed="true">
+    <Position X="80.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceHeaderv5.cs</FileName>
+      <HashCode>AIAAAAABACAEAABAAgCAAACiAAAAAAEAAAAAAsAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceSearch" Collapsed="true">
+    <Position X="86" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceSearch.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAEgAACQAAIiAAAAgAAACAICAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsInvoice.DwInvoiceSearchResults" Collapsed="true">
+    <Position X="87.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsInvoice\DwInvoiceSearchResults.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAQAAACAAAAKAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DPassword" Collapsed="true">
+    <Position X="100" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DPassword.cs</FileName>
+      <HashCode>AIAAAAAYACAAAAACAACAAAICAAAAAAEAAAAEAIAAACA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DShellImport" Collapsed="true">
+    <Position X="79" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DShellImport.cs</FileName>
+      <HashCode>gIIAAAAAACIAAAAQAECAIAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DShellImportBackup" Collapsed="true">
+    <Position X="80.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DShellImportBackup.cs</FileName>
+      <HashCode>gIIAAAAAACIAAAAQAECAIAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DShellImportProcessed" Collapsed="true">
+    <Position X="82.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DShellImportProcessed.cs</FileName>
+      <HashCode>AIAAAAAAACIAQAAAAACAAAACAACAAQCAAAAAAAAACAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DShellImportTest" Collapsed="true">
+    <Position X="84.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DShellImportTest.cs</FileName>
+      <HashCode>AIIAAAAAACIAWgAQAECAIAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsLib.DTelecomImport" Collapsed="true">
+    <Position X="87.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsLib\DTelecomImport.cs</FileName>
+      <HashCode>AoAAIEAAACKQIAAAABCAIAACAAAAAAAAAAEAAAgAQAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwAcceptRejectMainrundetailGrid" Collapsed="true">
+    <Position X="89.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwAcceptRejectMainrundetailGrid.cs</FileName>
+      <HashCode>AIAgAAAAAKIAAAQAAACAAEACAAAEACAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwAcceptRejectMainrunGrid" Collapsed="true">
+    <Position X="91.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwAcceptRejectMainrunGrid.cs</FileName>
+      <HashCode>AIAAAgAAACIAACQAAgCAAAACAIAAAAAAAAAAAAAACAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwEmergency" Collapsed="true">
+    <Position X="77.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwEmergency.cs</FileName>
+      <HashCode>AIAAAAAAACIwAAAAAACAAAAiAAAAAAAAAAAEAIAAAAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentComponentGroup" Collapsed="true">
+    <Position X="96.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentComponentGroup.cs</FileName>
+      <HashCode>AIAAAAAAACIAgAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentManualAdjustment" Collapsed="true">
+    <Position X="100" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentManualAdjustment.cs</FileName>
+      <HashCode>AIAgAAAAACIAAAAAAACAAAACIAAAAAIAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentRunContractors" Collapsed="true">
+    <Position X="101.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentRunContractors.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAQAAACAAAAKAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentRunContractorsRegion" Collapsed="true">
+    <Position X="77.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentRunContractorsRegion.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAQAAACAAAAKAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentRunNegativepay" Collapsed="true">
+    <Position X="79" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentRunNegativepay.cs</FileName>
+      <HashCode>AIAAAKAAACIAAAQAAACAAEAKAAAAAAAAAACBAAAAACA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentRunPeriod" Collapsed="true">
+    <Position X="80.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentRunPeriod.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAEAAACQAAAiAAAAAAAACAACAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPaymentRunPeriodRegion" Collapsed="true">
+    <Position X="82.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPaymentRunPeriodRegion.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAEAAACQAAIiAAAAAAAACAACAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsPayrun.DwPostTaxDeductions" Collapsed="true">
+    <Position X="94.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsPayrun\DwPostTaxDeductions.cs</FileName>
+      <HashCode>AYAAQAAACGAADCqAAAiQABA+IgAABUJAAAABBKBABBI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwApInterfaceDetailRows" Collapsed="true">
+    <Position X="94.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwApInterfaceDetailRows.cs</FileName>
+      <HashCode>wIAAAIAAIGIAAAAAQCCAAAAiIAAAgAAAECABAAAAABA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwApInterfaceHeaderRows" Collapsed="true">
+    <Position X="96.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwApInterfaceHeaderRows.cs</FileName>
+      <HashCode>wIAAAIAAIGIAAAAAQCCAAAAiIAAAgAAAECABAAAAABA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwAuditLog" Collapsed="true">
+    <Position X="98.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwAuditLog.cs</FileName>
+      <HashCode>AIAAAAAAACAACABAAACAAACCAAAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwAuditLogAddresschange" Collapsed="true">
+    <Position X="100" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwAuditLogAddresschange.cs</FileName>
+      <HashCode>AIAAAAAAACAAAABACACAAACCAAAAAAAAQAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwGlAccrualsAudit" Collapsed="true">
+    <Position X="79" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwGlAccrualsAudit.cs</FileName>
+      <HashCode>EIAAAAAAACAAAABCAACACACCEAAAAAAAAAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwGlInterfaceForAccruals" Collapsed="true">
+    <Position X="80.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwGlInterfaceForAccruals.cs</FileName>
+      <HashCode>AIAgIAACgCKgBBAIAJCAAAACQAIAAAAAABgAQAAAAAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwGlInterfaceForPayment" Collapsed="true">
+    <Position X="82.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwGlInterfaceForPayment.cs</FileName>
+      <HashCode>AIAgIAACgCKgBBAIAJCAAAACQAIAAAAAABgAQAAAAAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwGrosspayvariance" Collapsed="true">
+    <Position X="84.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwGrosspayvariance.cs</FileName>
+      <HashCode>AIAAAAABACAAAABAAACAACCiAAAAAAAAAAABAAAgAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwInvoiceHeaderBackup" Collapsed="true">
+    <Position X="101.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwInvoiceHeaderBackup.cs</FileName>
+      <HashCode>AIAAAgAAECIAAAQAAACAAAACAAAAAQABAAACAAAEAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwInvoiceInterfaceDetail" Collapsed="true">
+    <Position X="82.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwInvoiceInterfaceDetail.cs</FileName>
+      <HashCode>EIDAAAAQAGIBAAAAABCBAAACAAGgAAAAAKGQAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwInvoiceInterfaceHeader" Collapsed="true">
+    <Position X="84.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwInvoiceInterfaceHeader.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACAAAACAQAAAAABAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr13InterfaceDetail" Collapsed="true">
+    <Position X="89.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr13InterfaceDetail.cs</FileName>
+      <HashCode>AIAAACAEACIAABAAAACAAEADAAABAAAACAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr13InterfaceHeader" Collapsed="true">
+    <Position X="91.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr13InterfaceHeader.cs</FileName>
+      <HashCode>AIAAAAAGACIACACAAACAAAASAAAAAAAAAAADBAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr348Detail" Collapsed="true">
+    <Position X="93" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr348Detail.cs</FileName>
+      <HashCode>AIAAIQAAACIAAQAAAACAACADQAAAgBAACAQAEAAAAAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr348DetailException" Collapsed="true">
+    <Position X="94.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr348DetailException.cs</FileName>
+      <HashCode>AIAAIQAAACIAAQAAAACAACADQAAAgBAACAQAEAAAAAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr348Header" Collapsed="true">
+    <Position X="96.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr348Header.cs</FileName>
+      <HashCode>IIAAAABAACoAAAAAAACAACQDAAAAAAEAAAAAECAQBBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr66es" Collapsed="true">
+    <Position X="98.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr66es.cs</FileName>
+      <HashCode>AIAAAAABACAAAABAAACAAAGiAAAAAAAAAAABQAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr66n" Collapsed="true">
+    <Position X="100" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr66n.cs</FileName>
+      <HashCode>AIAAAAAAACAAAABAAASAAACCAAAAAAIAIAEAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwIr68aIr68p" Collapsed="true">
+    <Position X="101.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwIr68aIr68p.cs</FileName>
+      <HashCode>AIAAQAAAACIAAAAAEACAAIACAAAAAAAAQAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwNationalHistoryChanges" Collapsed="true">
+    <Position X="82.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwNationalHistoryChanges.cs</FileName>
+      <HashCode>/4wIARwgACIDAAAYIACBAQAKMYCBACIAKgAYBiDAIAk=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwNegativepay" Collapsed="true">
+    <Position X="84.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwNegativepay.cs</FileName>
+      <HashCode>AIAAAAAAACAAAEBQAACBAASCAAAAAAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwNetpayvariance" Collapsed="true">
+    <Position X="86" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwNetpayvariance.cs</FileName>
+      <HashCode>AIAAAIAAACIAAAQAAACAAAACARAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwPaymentComponentType" Collapsed="true">
+    <Position X="98.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwPaymentComponentType.cs</FileName>
+      <HashCode>AIAAAAAAACIAgAAAAACCAAAKAAAAAgAAAAAAAIAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwPaymentSummary" Collapsed="true">
+    <Position X="84.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwPaymentSummary.cs</FileName>
+      <HashCode>AIACAAAAAKAAAABAAACAAASCQAAAAAAAAAAAAQgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwPaymentSummaryCtype" Collapsed="true">
+    <Position X="86" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwPaymentSummaryCtype.cs</FileName>
+      <HashCode>AIAAABAAAiAAAARgQACAAASCQAAAAAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwPostTaxAdjustments" Collapsed="true">
+    <Position X="91.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwPostTaxAdjustments.cs</FileName>
+      <HashCode>AIAEAAEAACAAAABAAAiQAASCCAAAAAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwPostTaxAdjustmentsRegion" Collapsed="true">
+    <Position X="93" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwPostTaxAdjustmentsRegion.cs</FileName>
+      <HashCode>AIAAAAQAUCAAAABAAACAAASCQAAAIAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwUpdatedContractors" Collapsed="true">
+    <Position X="79" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwUpdatedContractors.cs</FileName>
+      <HashCode>AIAAAAEAUCIAAAAAAAGQAAACjCAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwVolumesValue" Collapsed="true">
+    <Position X="82.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwVolumesValue.cs</FileName>
+      <HashCode>AICEAAAAQCAAAABAAACAAASCQAAAAAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwVolumesValueDetail" Collapsed="true">
+    <Position X="84.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwVolumesValueDetail.cs</FileName>
+      <HashCode>QIAAAAAAACgAAABAAACAAASCQAAAAAAAAAAAIQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwVolumesValueSummary" Collapsed="true">
+    <Position X="86" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwVolumesValueSummary.cs</FileName>
+      <HashCode>AIAAAAAAICAAAABAAICAABSCQAAAAAAAAAIAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.OdpsRep.DwWithholdingTax" Collapsed="true">
+    <Position X="87.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>OdpsRep\DwWithholdingTax.cs</FileName>
+      <HashCode>AIAAAAABACAAAABAAACAAACCBAAAAAAAAAAAAACAIAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RAuditLogAddresschange" Collapsed="true">
+    <Position X="98.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\AuditLogAddresschangeDataSet.cs</FileName>
+      <HashCode>CAAgAgAAAAAAAAEAAAACBAAqAAIkAAAABQAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.AuditLogAddresschangeDataSet" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\AuditLogAddresschangeDataSet.cs</FileName>
+      <HashCode>CAAgAgAAAAAAAAEAAAACBAAqBAIkAAAABQAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RAuditLog" Collapsed="true">
+    <Position X="96.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\AuditLogDataSet.cs</FileName>
+      <HashCode>CAAgAgAAAAAAAAEAAAACBAAqAAIkAAAABQAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.AuditLogDataSet" Collapsed="true">
+    <Position X="11.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\AuditLogDataSet.cs</FileName>
+      <HashCode>CAAgAgAAAAAAAAEAAAACBAAqBAIkAAAABQAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RDatadict" Collapsed="true">
+    <Position X="100" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\DatadictDataSet.cs</FileName>
+      <HashCode>AAAAAAAEAAAEAACAAABAAABAAiAAAAAABAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.DatadictDataSet" Collapsed="true">
+    <Position X="23" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\DatadictDataSet.cs</FileName>
+      <HashCode>AAAAAAAEAAAEAACAAABAAABABiAAAAAABAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RGlAccrualsAudit" Collapsed="true">
+    <Position X="79" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\GlAccrualsAuditDataSet.cs</FileName>
+      <HashCode>QAAAAAAgIBBgAAABAAAAAAAAAAAAAAAAAAIACAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.GlAccrualsAuditDataSet" Collapsed="true">
+    <Position X="32" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\GlAccrualsAuditDataSet.cs</FileName>
+      <HashCode>QAAAAAAgIBBgAAABAAAAAAAABAAAAAAAAAIACAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RGrossPayVariance" Collapsed="true">
+    <Position X="80.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\GrossPayVarianceDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAABAAAIAAEAAAYIAEAgAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.GrossPayVarianceDataSet" Collapsed="true">
+    <Position X="41" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\GrossPayVarianceDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAABAAAIAAEAAAYIAEAgAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPayment" Collapsed="true">
+    <Position X="82.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentDataSet.cs</FileName>
+      <HashCode>gCIEIUgAAAAQgmACICAAEgAQIACAAABEAIAABAigEMI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentDataSet" Collapsed="true">
+    <Position X="50" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentDataSet.cs</FileName>
+      <HashCode>gCIEIUgAAAAQgmACICAAEgAQJACAAABEAIAABAigEMI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentDed" Collapsed="true">
+    <Position X="84.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentDedDataSet.cs</FileName>
+      <HashCode>AAAAIEAAAABAAgAAAAAACABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentDedDataSet" Collapsed="true">
+    <Position X="59" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentDedDataSet.cs</FileName>
+      <HashCode>AAAAIEAAAABAAgAAAAAACABABAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPr" Collapsed="true">
+    <Position X="86" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDataSet.cs</FileName>
+      <HashCode>AAEAIAAAAAAAAAQAAAIAQAABAAAAAAAAAAACAEAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDataSet" Collapsed="true">
+    <Position X="68" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDataSet.cs</FileName>
+      <HashCode>AAEAIAAAAAAAAAQAAAIAQAABBAAAAAAAAAACAEAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrDetailcp" Collapsed="true">
+    <Position X="87.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailcpDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailcpDataSet" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailcpDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAABAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrDetailkm" Collapsed="true">
+    <Position X="89.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailkmDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailkmDataSet" Collapsed="true">
+    <Position X="14" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailkmDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAABAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrDetailpp" Collapsed="true">
+    <Position X="91.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailppDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailppDataSet" Collapsed="true">
+    <Position X="25.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailppDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAABAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrDetailxp" Collapsed="true">
+    <Position X="93" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailxpDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailxpDataSet" Collapsed="true">
+    <Position X="34.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrDetailxpDataSet.cs</FileName>
+      <HashCode>RAAAIAAIAAAAAgAAACAAABAABAAAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrMessage" Collapsed="true">
+    <Position X="94.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrMessageDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrMessageDataSet" Collapsed="true">
+    <Position X="43.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrMessageDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceDetailPaymentPrTitle" Collapsed="true">
+    <Position X="96.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrTitleDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrTitleDataSet" Collapsed="true">
+    <Position X="52.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceDetailPaymentPrTitleDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAACAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceHeaderBackup" Collapsed="true">
+    <Position X="98.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderBackupDataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAgAAACAAAIAEAAAAIAAEQAAAIAABgAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceHeaderBackupDataSet" Collapsed="true">
+    <Position X="61.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderBackupDataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAgAAACAAAIAEBAAAIAAEQAAAIAABgAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceHeaderOnly" Collapsed="true">
+    <Position X="100" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderOnlyDataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAACAECCAgIAEAAAAIAgEQAFAIAAAwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceHeaderOnlyDataSet" Collapsed="true">
+    <Position X="70.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderOnlyDataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAACAECCAgIAEBAAAIAgEQAFAIAAAwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceHeaderPostaddress" Collapsed="true">
+    <Position X="101.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderPostaddressDataSet.cs</FileName>
+      <HashCode>AAEAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceHeaderPostaddressDataSet" Collapsed="true">
+    <Position X="5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderPostaddressDataSet.cs</FileName>
+      <HashCode>AAEAAAQAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RInvoiceHeaderv5" Collapsed="true">
+    <Position X="77.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderv5DataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAACAECCAgoAEAACAIAgEQAFAIAAAwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.InvoiceHeaderv5DataSet" Collapsed="true">
+    <Position X="16.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\InvoiceHeaderv5DataSet.cs</FileName>
+      <HashCode>gIAAABAACAAAAACAECCAgoAEBACAIAgEQAFAIAAAwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RIr66es" Collapsed="true">
+    <Position X="79" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir66esDataSet.cs</FileName>
+      <HashCode>AAAQAQAAAAAAAAAAACAAAAAABAAAIAAAAAAQIEAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.Ir66esDataSet" Collapsed="true">
+    <Position X="27.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir66esDataSet.cs</FileName>
+      <HashCode>AAAQAQAAAAAAAAAAACAAAAAABAAAIAAAAAAQIEAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RIr66n" Collapsed="true">
+    <Position X="80.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir66nDataSet.cs</FileName>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.Ir66nDataSet" Collapsed="true">
+    <Position X="36.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir66nDataSet.cs</FileName>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RIr68aIr68p" Collapsed="true">
+    <Position X="82.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir68aIr68pDataSet.cs</FileName>
+      <HashCode>AAAIAAAgAAAQAAAACAAAAAAABACAIAAEAAAAIEgAgEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.Ir68aIr68pDataSet" Collapsed="true">
+    <Position X="45.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\Ir68aIr68pDataSet.cs</FileName>
+      <HashCode>AAAIAAAgAAAQAAAACAAAAAAABACAIAAEAAAAIEgAgEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RNationalHistoryChanges" Collapsed="true">
+    <Position X="84.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NationalHistoryChangesDataSet.cs</FileName>
+      <HashCode>AAkABQcCRQGIIAFBCCCAAAAkkAGKxAMAYAApIAMIAWA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.NationalHistoryChangesDataSet" Collapsed="true">
+    <Position X="54.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NationalHistoryChangesDataSet.cs</FileName>
+      <HashCode>AAkABQcCRQGIIAFBCCCAAAAklAGKxAMAYAApIAMIAWA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RNegativepay" Collapsed="true">
+    <Position X="86" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NegativepayDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAgAAQAAQAAAAAAVAABIAEEAAAAoAAAgAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.NegativepayDataSet" Collapsed="true">
+    <Position X="63.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NegativepayDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAgAAQAAQAAAAAAVAABIAEEAAAAoAAAgAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RNetpayvariance" Collapsed="true">
+    <Position X="87.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NetpayvarianceDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAABAAAIAAEAAAYIAEAgAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.NetpayvarianceDataSet" Collapsed="true">
+    <Position X="72.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\NetpayvarianceDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAABAAAIAAEAAAYIAEAgAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RPaymentSummaryCtype" Collapsed="true">
+    <Position X="91.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PaymentSummaryCtypeDataSet.cs</FileName>
+      <HashCode>gSAAIUAQgAAQQCACQAAAgASAIQgAEAAkAIAAJAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.PaymentSummaryCtypeDataSet" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PaymentSummaryCtypeDataSet.cs</FileName>
+      <HashCode>gSAAIUAQgAAQQCACQAAAgASAJQgAEAAkAIAAJAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RPaymentSummary" Collapsed="true">
+    <Position X="89.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PaymentSummaryDataSet.cs</FileName>
+      <HashCode>gSAAIUAQgAAQQCACQAAAgASAIQgAEAAkAIAAJAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.PaymentSummaryDataSet" Collapsed="true">
+    <Position X="18.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PaymentSummaryDataSet.cs</FileName>
+      <HashCode>gSAAIUAQgAAQQCACQAAAgASAJQgAEAAkAIAAJAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RPostIrdNo" Collapsed="true">
+    <Position X="93" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostIrdNoDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.PostIrdNoDataSet" Collapsed="true">
+    <Position X="29.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostIrdNoDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RPostTaxAdjustments" Collapsed="true">
+    <Position X="94.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostTaxAdjustmentsDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAACABAAAIAAEAAgAKAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.PostTaxAdjustmentsDataSet" Collapsed="true">
+    <Position X="38.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostTaxAdjustmentsDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAACABAAAIAAEAAgAKAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RPostTaxAdjustmentsRegion" Collapsed="true">
+    <Position X="96.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostTaxAdjustmentsRegionDataSet.cs</FileName>
+      <HashCode>AAAAAEAAgABAAAAAAAAAAABAAAAAIAAEAAAAIAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.PostTaxAdjustmentsRegionDataSet" Collapsed="true">
+    <Position X="47.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\PostTaxAdjustmentsRegionDataSet.cs</FileName>
+      <HashCode>AAAAAEAAgABAAAAAAAAAAABABAAAIAAEAAAAIAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDDatadict" Collapsed="true">
+    <Position X="101.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDDatadict.cs</FileName>
+      <HashCode>AAgAAABBAgAQAAAAAAAIAAAAAAAAAAAADAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDDatadict" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="77.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDDatadict.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDInvoiceDetailPaymentDed" Collapsed="true">
+    <Position X="77.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentDed.cs</FileName>
+      <HashCode>AAgAAAABAACQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDInvoiceDetailPaymentDed" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="79" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentDed.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDInvoiceDetailPaymentPr" Collapsed="true">
+    <Position X="79" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentPr.cs</FileName>
+      <HashCode>AAgAAAABAACQAAAAAAAIAAAAAAAAAAAACAAAAAABBAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDInvoiceDetailPaymentPr" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="80.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentPr.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDInvoiceDetailPaymentPrTitle" Collapsed="true">
+    <Position X="80.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentPrTitle.cs</FileName>
+      <HashCode>AAwAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDInvoiceDetailPaymentPrTitle" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="82.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDInvoiceDetailPaymentPrTitle.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwAuditLog" Collapsed="true">
+    <Position X="82.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwAuditLog.cs</FileName>
+      <HashCode>AAgAAAABAAAwAAAAAAAIAAAAAAAAAAEACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwAuditLog" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="84.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwAuditLog.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwAuditLogAddresschange" Collapsed="true">
+    <Position X="84.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwAuditLogAddresschange.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwAuditLogAddresschange" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="86" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwAuditLogAddresschange.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwGlAccrualsAudit" Collapsed="true">
+    <Position X="86" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwGlAccrualsAudit.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwGlAccrualsAudit" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="87.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwGlAccrualsAudit.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwGrossPayVariance" Collapsed="true">
+    <Position X="87.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwGrossPayVariance.cs</FileName>
+      <HashCode>AAgAAABBAAAQAAAAAAAIAAAAAAAAAAAADEAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwGrossPayVariance" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="89.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwGrossPayVariance.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwIinvoiceHeaderPostaddress" Collapsed="true">
+    <Position X="89.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIinvoiceHeaderPostaddress.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAIAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwIinvoiceHeaderPostaddress" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="91.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIinvoiceHeaderPostaddress.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPayment" Collapsed="true">
+    <Position X="91.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPayment.cs</FileName>
+      <HashCode>AAgAAAABAACQAACAABAIAAAAAAAAAAAACAIAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPayment" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="93" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPayment.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPaymentPrDetailcp" Collapsed="true">
+    <Position X="93" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailcp.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPaymentPrDetailcp" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="94.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailcp.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPaymentPrDetailkm" Collapsed="true">
+    <Position X="94.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailkm.cs</FileName>
+      <HashCode>AAgAAAARAkCQAgAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPaymentPrDetailkm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="96.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailkm.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPaymentPrDetailpp" Collapsed="true">
+    <Position X="96.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailpp.cs</FileName>
+      <HashCode>AAgAAAARAkCQAgAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPaymentPrDetailpp" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="98.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailpp.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPaymentPrDetailxp" Collapsed="true">
+    <Position X="98.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailxp.cs</FileName>
+      <HashCode>AAgAAAARAkCQAgAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPaymentPrDetailxp" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrDetailxp.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceDetailPaymentPrMessage" Collapsed="true">
+    <Position X="100" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrMessage.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceDetailPaymentPrMessage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceDetailPaymentPrMessage.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceHeaderBackup" Collapsed="true">
+    <Position X="101.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderBackup.cs</FileName>
+      <HashCode>AAgEAYBBAAAQAAAQAAAMIAAABAAAAgAADAEAAACApAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceHeaderBackup" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="77.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderBackup.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceHeaderOnly" Collapsed="true">
+    <Position X="77.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderOnly.cs</FileName>
+      <HashCode>AAgCAQBBAgAQAAAQAAAIAAAAAAAAAgAADgEABACABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceHeaderOnly" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="79" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderOnly.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwInvoiceHeaderv5" Collapsed="true">
+    <Position X="79" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderv5.cs</FileName>
+      <HashCode>BQkGQYDRAgAYCEQQgAEMABQgBwMChogA/yECBgXC5CE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwInvoiceHeaderv5" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="80.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwInvoiceHeaderv5.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwIr66es" Collapsed="true">
+    <Position X="80.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIr66es.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAIACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwIr66es" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="82.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIr66es.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwIr66n" Collapsed="true">
+    <Position X="82.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIr66n.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAIAAAAAAAACEAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwIr66n" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="84.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwIr66n.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwNegativepay" Collapsed="true">
+    <Position X="84.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwNegativepay.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAIAAAAAAIACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwNegativepay" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="86" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwNegativepay.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwNetpayvariance" Collapsed="true">
+    <Position X="86" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwNetpayvariance.cs</FileName>
+      <HashCode>AAgAAABBBAAQAAAAAAAIAAAIAAAAAAIADAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwNetpayvariance" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="87.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwNetpayvariance.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwPaymentSummary" Collapsed="true">
+    <Position X="87.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPaymentSummary.cs</FileName>
+      <HashCode>AAgAAABBAgAQAAAAAAAIAAAIAAAAAAIADgAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwPaymentSummary" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="89.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPaymentSummary.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwPaymentSummaryCtype" Collapsed="true">
+    <Position X="89.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPaymentSummaryCtype.cs</FileName>
+      <HashCode>AAgAAABBAwAQAAAAAAAIAAAIAAAAAAIADgAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwPaymentSummaryCtype" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="91.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPaymentSummaryCtype.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwPostIrdNo" Collapsed="true">
+    <Position X="91.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostIrdNo.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAAACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwPostIrdNo" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="93" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostIrdNo.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwPostTaxAdjustments" Collapsed="true">
+    <Position X="93" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostTaxAdjustments.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAIAAAAAAIACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwPostTaxAdjustments" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="94.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostTaxAdjustments.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwPostTaxAdjustmentsRegion" Collapsed="true">
+    <Position X="94.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostTaxAdjustmentsRegion.cs</FileName>
+      <HashCode>AAgAAABBAgAQAAAAAAAIAAAIAAAAAAIADgAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwPostTaxAdjustmentsRegion" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="96.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwPostTaxAdjustmentsRegion.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwVolumesValue" Collapsed="true">
+    <Position X="96.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValue.cs</FileName>
+      <HashCode>AAgAAABBAgAQAAAAAAAIAAAIAAAAAAIADgAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwVolumesValue" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="98.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValue.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwVolumesValueDetail" Collapsed="true">
+    <Position X="98.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValueDetail.cs</FileName>
+      <HashCode>AAgAAABBLwAQAAAAAAAIAAAIAAAAAAIA7wAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwVolumesValueDetail" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="100" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValueDetail.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwVolumesValueSummary" Collapsed="true">
+    <Position X="100" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValueSummary.cs</FileName>
+      <HashCode>AAgAAABBAgAQAAAAAAAIAAAIAAAAAAIADgAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwVolumesValueSummary" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="101.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwVolumesValueSummary.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwWithholdingTax" Collapsed="true">
+    <Position X="101.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwWithholdingTax.cs</FileName>
+      <HashCode>AAgAAAABAAAQAAAAAAAIAAAAAAAAAAIACAAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwWithholdingTax" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="77.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwWithholdingTax.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.REDwYearlyEarnings" Collapsed="true">
+    <Position X="77.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwYearlyEarnings.cs</FileName>
+      <HashCode>AAgAAABBAwAQAAAAAAAIAAAAAAAAAAIADwAAAAAABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.CachedREDwYearlyEarnings" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="79" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\REDwYearlyEarnings.cs</FileName>
+      <HashCode>AAAAACAAAAAFAEAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.ReportDataSet&lt;T&gt;" Collapsed="true">
+    <Position X="37.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\ReportDataSet.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACABAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RVolumesValue" Collapsed="true">
+    <Position X="98.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueDataSet.cs</FileName>
+      <HashCode>AAAAAAgAgAEAAEABABAAICAAAAAAIIAFAAAAIAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.VolumesValueDataSet" Collapsed="true">
+    <Position X="56.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueDataSet.cs</FileName>
+      <HashCode>AAAAAAgAgAEAAEABABAAICAABAAAIIAFAAAAIAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RVolumesValueDetail" Collapsed="true">
+    <Position X="100" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueDetailDataSet.cs</FileName>
+      <HashCode>AAAgAAAAABAAAAAAIAAAAIAAAAAAIIAEAAACIACAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.VolumesValueDetailDataSet" Collapsed="true">
+    <Position X="65.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueDetailDataSet.cs</FileName>
+      <HashCode>AAAgAAAAABAAAAAAIAAAAIAABAAAIIAEAAACIACAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RVolumesValueSummary" Collapsed="true">
+    <Position X="101.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueSummaryDataSet.cs</FileName>
+      <HashCode>AAAAAAgAgAAAAEABAAAAAAAAAAAAKIAFAAAAgAAAQBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.VolumesValueSummaryDataSet" Collapsed="true">
+    <Position X="74.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\VolumesValueSummaryDataSet.cs</FileName>
+      <HashCode>AAAAAAgAgAAAAEABAAAAAAAABAAAKIAFAAAAgAAAQBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RWithholdingTax" Collapsed="true">
+    <Position X="77.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\WithholdingTaxDataSet.cs</FileName>
+      <HashCode>AAABAAAAAAgAAAAAAAAAAACABAAAIAAGAAgAKAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.WithholdingTaxDataSet" Collapsed="true">
+    <Position X="9.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\WithholdingTaxDataSet.cs</FileName>
+      <HashCode>AAABAAAAAAgAAAAAAAAAAACABAAAIAAGAAgAKAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.RYearlyEarnings" Collapsed="true">
+    <Position X="79" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\YearlyEarningsDataSet.cs</FileName>
+      <HashCode>AAAAAAAAgAAAABAAAAAAAAAAAAAAIAEEAAAQAAQAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Report.YearlyEarningsDataSet" Collapsed="true">
+    <Position X="20.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Report\YearlyEarningsDataSet.cs</FileName>
+      <HashCode>AAAAAAAAgAAAABAAAAAAAAAABAAAIAEEAAAQAAQAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Ruralbase.DDatadict" Collapsed="true">
+    <Position X="80.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\DDatadict.cs</FileName>
+      <HashCode>CIAAAAAAACIABAAAAECAAAACQAAAAAIAAAAAAAQAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Ruralbase.DPassword" Collapsed="true">
+    <Position X="101.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\DPassword.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAACAACAAAIiAAAAAAEAAAAEAAAAACA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Ruralbase.DPrintOptions" Collapsed="true">
+    <Position X="77.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\DPrintOptions.cs</FileName>
+      <HashCode>AYABhAAAACAQACAAAAGAAAACQAAAAAAAAAAAIAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.ODPS.DataControls.Ruralbase.DSystemTitle" Collapsed="true">
+    <Position X="86" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\DSystemTitle.cs</FileName>
+      <HashCode>CIAAAAAgAAAAAAAAAACAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

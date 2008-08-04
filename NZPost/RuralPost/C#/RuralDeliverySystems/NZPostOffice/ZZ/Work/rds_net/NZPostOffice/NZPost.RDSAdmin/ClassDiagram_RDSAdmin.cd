@@ -1,0 +1,474 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="NZPostOffice.RDSAdmin.Controls.USecurityTvs" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Controls\USecurityTvs.cs</FileName>
+      <HashCode>AIAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAQgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Menus.MMainMenu" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Menus\MMainMenu.cs</FileName>
+      <HashCode>ABABAAAAqAEAAQAAAAAAAAAAQAAgAAAAAAAAAIAAAAw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Menus.MRdsDw" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Menus\MRdsDw.cs</FileName>
+      <HashCode>AAAAAAAAACAABACAgACAAABCAAAAAAAAAAAAAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Menus.MSecurityTvs" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Menus\MSecurityTvs.cs</FileName>
+      <HashCode>AAAAAAAAACAAAAAAggCAIABCAAEAAAAIBAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPost.RDSAdmin.Properties.Resources" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPost.RDSAdmin.Properties.Settings" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Security" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Security.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAIAAAAACAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.WAddSuburb" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Windows\WAddSuburb.cs</FileName>
+      <HashCode>AgQIAAAEACAAABAAAACABAACgQAAACQQAIAAANAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.WMainMdi" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Windows\WMainMdi.cs</FileName>
+      <HashCode>IgFCAJCgkjTEQoQB8AGgpJwSRnFABQK0ALAAAjiQGiw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.WSecurityComponent" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Windows\WSecurityComponent.cs</FileName>
+      <HashCode>AgAAAAAAACAAAAQAACCAAAACAAAABAAYAIgAABAQEAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.WSecurityOutletDetails" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Windows\WSecurityOutletDetails.cs</FileName>
+      <HashCode>IgCAAAAAACQAAAAAAACAAAACAAAQAAAQAAAAAAEABAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DAllowanceType" Collapsed="true">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DArticalType" Collapsed="true">
+    <Position X="2.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DContractType" Collapsed="true">
+    <Position X="4.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DDddwOutletType" Collapsed="true">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DDddwPieceRateSuppliers" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DDddwRegion" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DDddwUsername" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DddwGroupRegion" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DddwTowncity" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DddwUserRegion" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DFixedAssetType" Collapsed="true">
+    <Position X="6" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DFuelType" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DMailCategory" Collapsed="true">
+    <Position X="0.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DNpadParameters" Collapsed="true">
+    <Position X="2.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DOutletForm" Collapsed="true">
+    <Position X="4.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DOutletList" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DOutletType" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DPieceRateSupplier" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DPieceRateType" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DPostCodeType" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DProcurement" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRegion" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRenewalGroup" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRoadSuffix" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRoadType" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRouteFreqPointType" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DRouteFreqVerbs" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DStandardFrequency" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DSuburblocality" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DTowncity" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DUiIdDetails" Collapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DVehicalClass" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DVehicalType" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwComponentList" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwContractTypes" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwFind" Collapsed="true">
+    <Position X="4" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwGroupDetails" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DGVCheckBoxColumn" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DGVCheckBoxCell" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwGroupHeader" Collapsed="true">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwGroupsAndUsersLevel1" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwGroupsAndUsersLevel2" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwGroupsAndUsersLevel3" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwSearchComponent" Collapsed="true">
+    <Position X="2.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwSuburb" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwTowncity" Collapsed="true">
+    <Position X="5.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwTownDddw" Collapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwUserDetails" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataControls.Security.DwUserRegion" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.DataService.MainMdiService" Collapsed="true">
+    <Position X="1" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.AllowanceType" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.ArticalType" Collapsed="true">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.ContractTypeBE" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupRegion" Collapsed="true">
+    <Position X="2.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.DddwOutletType" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.PieceRateSuppliers" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.DddwRegion" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.DddwTowncity" Collapsed="true">
+    <Position X="0.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Username" Collapsed="true">
+    <Position X="2.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.DUserRegion" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.ComponentList" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.ContractTypes" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Find" Collapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupDetails" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupHeader" Collapsed="true">
+    <Position X="0.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupsAndUsersLevel1" Collapsed="true">
+    <Position X="4.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupsAndUsersLevel2" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.GroupsAndUsersLevel3" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.SearchComponent" Collapsed="true">
+    <Position X="0.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Suburb" Collapsed="true">
+    <Position X="4.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Towncity" Collapsed="true">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.TownDddw" Collapsed="true">
+    <Position X="9.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.UserDetails" Collapsed="true">
+    <Position X="0.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.UserRegion" Collapsed="true">
+    <Position X="4.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.FixedAssetType" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.FuelType" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.MailCategory" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.NpadParameters" Collapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.OutletForm" Collapsed="true">
+    <Position X="0.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.OutletList" Collapsed="true">
+    <Position X="2.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.OutletType" Collapsed="true">
+    <Position X="4.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.PieceRateSupplier" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.PieceRateType" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.PostCodeType" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Procurement" Collapsed="true">
+    <Position X="0.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Region" Collapsed="true">
+    <Position X="2.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.RenewalGroup" Collapsed="true">
+    <Position X="4.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.RoadSuffix" Collapsed="true">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.RoadType" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.RouteFreqPointType" Collapsed="true">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.RouteFreqVerbs" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.StandardFrequency" Collapsed="true">
+    <Position X="2.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.Suburblocality" Collapsed="true">
+    <Position X="6" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.DTowncity" Collapsed="true">
+    <Position X="2.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.UiIdDetails" Collapsed="true">
+    <Position X="11.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.VehicalClass" Collapsed="true">
+    <Position X="6" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="NZPostOffice.RDSAdmin.Entity.Security.VehicalType" Collapsed="true">
+    <Position X="7.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Struct Name="NZPostOffice.RDSAdmin.Structures.StrInfo" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Structures\StrInfo.cs</FileName>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAACAAAgAAIgAA=</HashCode>
+    </TypeIdentifier>
+  </Struct>
+</ClassDiagram>

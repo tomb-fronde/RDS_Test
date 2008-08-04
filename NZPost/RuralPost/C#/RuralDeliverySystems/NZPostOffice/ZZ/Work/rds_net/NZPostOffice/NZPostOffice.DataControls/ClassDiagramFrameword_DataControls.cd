@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="NZPostOffice.DataControls.DComponentlist" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DComponentlist.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAIACAAAACAAAEAAAAAAAAAAAAAgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DDddwContractTypes" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DDddwContractTypes.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACgAAAAAAAAAAAAAEAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DDddwFilteredContractTypes" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DDddwFilteredContractTypes.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACgAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DDddwFilteredRegions" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DDddwFilteredRegions.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACBAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DDddwRegions" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DDddwRegions.cs</FileName>
+      <HashCode>AIAAAAAAACAAAAAAAACAAAACBAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DGroupDetails" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DGroupDetails.cs</FileName>
+      <HashCode>AIAAAAAwACIAAAAIIACAAAACAAQEAAAAAAAAAABAQAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DPassword" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DPassword.cs</FileName>
+      <HashCode>AAAAAAAAACAAAAACAACAAAIiAAAAAAEAAAAEAAAAACA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserComponentRegionlist" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserComponentRegionlist.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACAAAICAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserContractTypes" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserContractTypes.cs</FileName>
+      <HashCode>AIAAAAQAACIAAAAAAACAAAICAAAAgAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserDetails" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserDetails.cs</FileName>
+      <HashCode>AYAAACAgACIIAAAIAACBAAICAIQEAAAgAAACggBCQgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserGrouplist" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserGrouplist.cs</FileName>
+      <HashCode>AIAAAAAAACIAAAAAAACAAAACAAAAAAAAAAAAAAAIAgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserGroupRights" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserGroupRights.cs</FileName>
+      <HashCode>gIIAAAAAACIEAEAAAACAAAICAAIEAAAAAAAAACAAAAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserGroups" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserGroups.cs</FileName>
+      <HashCode>AIAAAAAwACIAAAAIAACAAAACAARAAACAAAAAAABAQAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.DataControls.DUserTest" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DUserTest.cs</FileName>
+      <HashCode>iIAAYJQJACAECAAkSACAAA4CmgAAgwLgAgYACAASIAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

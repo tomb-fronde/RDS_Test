@@ -1,0 +1,427 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0B380E0C-0A10-4536-BD85-BF0993671FAC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NZPostOffice.RDSAdmin.DataControls</RootNamespace>
+    <AssemblyName>NZPostOffice.RDSAdmin.DataControls</AssemblyName>
+    <SccProjectName>"%24/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice", VCMVAAAA</SccProjectName>
+    <SccLocalPath>..\..\..\..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0219;0414;0169;0649;0168</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Metex.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAllowanceType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DAllowanceType.designer.cs">
+      <DependentUpon>DAllowanceType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DArticalType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DArticalType.designer.cs">
+      <DependentUpon>DArticalType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DContractType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DContractType.Designer.cs">
+      <DependentUpon>DContractType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DDddwOutletType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwOutletType.designer.cs">
+      <DependentUpon>DDddwOutletType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DDddwPieceRateSuppliers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwPieceRateSuppliers.designer.cs">
+      <DependentUpon>DDddwPieceRateSuppliers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DDddwRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwRegion.designer.cs">
+      <DependentUpon>DDddwRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DDddwUsername.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwUsername.designer.cs">
+      <DependentUpon>DDddwUsername.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DddwGroupRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DddwGroupRegion.designer.cs">
+      <DependentUpon>DddwGroupRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DddwTowncity.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DddwTowncity.designer.cs">
+      <DependentUpon>DddwTowncity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DddwUserRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DddwUserRegion.designer.cs">
+      <DependentUpon>DddwUserRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DFixedAssetType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DFixedAssetType.designer.cs">
+      <DependentUpon>DFixedAssetType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DFuelType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DFuelType.Designer.cs">
+      <DependentUpon>DFuelType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DMailCategory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DMailCategory.Designer.cs">
+      <DependentUpon>DMailCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DNpadParameters.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DNpadParameters.Designer.cs">
+      <DependentUpon>DNpadParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DOutletForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DOutletForm.Designer.cs">
+      <DependentUpon>DOutletForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DOutletList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DOutletList.designer.cs">
+      <DependentUpon>DOutletList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DOutletType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DOutletType.Designer.cs">
+      <DependentUpon>DOutletType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DPieceRateSupplier.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DPieceRateSupplier.Designer.cs">
+      <DependentUpon>DPieceRateSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DPieceRateType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DPieceRateType.Designer.cs">
+      <DependentUpon>DPieceRateType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DPostCodeType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DPostCodeType.Designer.cs">
+      <DependentUpon>DPostCodeType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DProcurement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DProcurement.Designer.cs">
+      <DependentUpon>DProcurement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRegion.Designer.cs">
+      <DependentUpon>DRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRenewalGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRenewalGroup.Designer.cs">
+      <DependentUpon>DRenewalGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRoadSuffix.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRoadSuffix.Designer.cs">
+      <DependentUpon>DRoadSuffix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRoadType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRoadType.Designer.cs">
+      <DependentUpon>DRoadType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRouteFreqPointType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRouteFreqPointType.Designer.cs">
+      <DependentUpon>DRouteFreqPointType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DRouteFreqVerbs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DRouteFreqVerbs.Designer.cs">
+      <DependentUpon>DRouteFreqVerbs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DStandardFrequency.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DStandardFrequency.Designer.cs">
+      <DependentUpon>DStandardFrequency.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DSuburblocality.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DSuburblocality.Designer.cs">
+      <DependentUpon>DSuburblocality.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DTowncity.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DTowncity.Designer.cs">
+      <DependentUpon>DTowncity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DUiIdDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DUiIdDetails.Designer.cs">
+      <DependentUpon>DUiIdDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DVehicalClass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DVehicalClass.Designer.cs">
+      <DependentUpon>DVehicalClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DVehicalType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DVehicalType.Designer.cs">
+      <DependentUpon>DVehicalType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwComponentList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwComponentList.Designer.cs">
+      <DependentUpon>DwComponentList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwContractTypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwContractTypes.designer.cs">
+      <DependentUpon>DwContractTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwFind.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwFind.Designer.cs">
+      <DependentUpon>DwFind.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwGroupDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwGroupDetails.Designer.cs">
+      <DependentUpon>DwGroupDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwGroupHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwGroupHeader.Designer.cs">
+      <DependentUpon>DwGroupHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel1.designer.cs">
+      <DependentUpon>DwGroupsAndUsersLevel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel2.designer.cs">
+      <DependentUpon>DwGroupsAndUsersLevel2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel3.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwGroupsAndUsersLevel3.designer.cs">
+      <DependentUpon>DwGroupsAndUsersLevel3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwSearchComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwSearchComponent.Designer.cs">
+      <DependentUpon>DwSearchComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwSuburb.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwSuburb.Designer.cs">
+      <DependentUpon>DwSuburb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwTowncity.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwTowncity.Designer.cs">
+      <DependentUpon>DwTowncity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwTownDddw.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwTownDddw.Designer.cs">
+      <DependentUpon>DwTownDddw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwUserDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwUserDetails.Designer.cs">
+      <DependentUpon>DwUserDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DwUserRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DwUserRegion.designer.cs">
+      <DependentUpon>DwUserRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DOutletForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DOutletForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DOutletList.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DOutletList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DRegion.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRegion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DUiIdDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DUiIdDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwComponentList.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwComponentList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwContractTypes.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwContractTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwGroupDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwGroupDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwGroupHeader.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwGroupHeader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwTowncity.resx">
+      <DependentUpon>DwTowncity.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwUserDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwUserDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DwUserRegion.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwUserRegion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="ClassDiagram_RDSAdmin_DataControls.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
+      <Project>{6D5CE23C-C567-4E5D-8245-F383554C6DC6}</Project>
+      <Name>NZPostOffice.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDSAdmin.Entity\NZPostOffice.RDSAdmin.Entity.csproj">
+      <Project>{933136D5-86EB-41F4-BAEF-39AC7CFE24BE}</Project>
+      <Name>NZPostOffice.RDSAdmin.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Shared\NZPostOffice.Shared.csproj">
+      <Project>{D9C16BDE-6368-4221-8319-B7AF123357C1}</Project>
+      <Name>NZPostOffice.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

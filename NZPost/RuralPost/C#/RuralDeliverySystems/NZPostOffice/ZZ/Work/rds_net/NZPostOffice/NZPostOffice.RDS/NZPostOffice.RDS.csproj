@@ -1,0 +1,810 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6C20CC8C-4C7E-4CC0-AF37-94387C1DCDD3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NZPostOffice.RDS</RootNamespace>
+    <AssemblyName>NZPostOffice.RDS</AssemblyName>
+    <SccProjectName>"%24/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice", VCMVAAAA</SccProjectName>
+    <SccLocalPath>..\..\..\..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <ApplicationIcon>RDSYSTAB.ICO</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Metex.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>App.config</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NCriteria.cs" />
+    <Compile Include="Controls\NRdsMsg.cs" />
+    <Compile Include="Controls\NRoad.cs" />
+    <Compile Include="Controls\NWp.cs" />
+    <Compile Include="Controls\URdsDw.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\WAncestorWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WGenericSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WMaster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WPrintPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WReportAncestor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WMdiClock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menus\MMainMenu.cs" />
+    <Compile Include="Menus\MRdsDw.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Menus\MRdsMaster.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Menus\MSheet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDS_NPAD.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralbase\WSystemAbout.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WSystemAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralrpt\WMailingListSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WMailingListSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WWhatifCalc2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WWhatifCalc2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddArticleCounts.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddArticleCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="App.config">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>App.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="CustomerTemplate.DOT">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="OwnerDriverTemplate.DOT">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="ClassDiagramRDS.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Windows\Struct\StPrintPreview.cs" />
+    <Compile Include="Windows\Struct\StSearch.cs" />
+    <Compile Include="Windows\Ruralbase\WOpeningScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WPasswordChange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WPreviewZoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WPrintOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WQuickSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WStatusabort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WSystemAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralbase\WZoomPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WMailmergeCustomerDownloadSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WMailmergeDownloadAncestor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WMailmergeDownloadCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WMailmergeDownloadOwnerdriver.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WMailmergeOwnerdriverDownloadSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralmailmerge\WSelectProcurements.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WMailCountSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WMailCountSearch.Designer.cs">
+      <DependentUpon>WMailCountSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoCommencementReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoCommencementReport.Designer.cs">
+      <DependentUpon>WNoCommencementReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoCommencementSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoCommencementSearch.Designer.cs">
+      <DependentUpon>WNoCommencementSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNonumberReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNonumberReport.Designer.cs">
+      <DependentUpon>WNonumberReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoRoadnumSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WNoRoadnumSearch.Designer.cs">
+      <DependentUpon>WNoRoadnumSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutletReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutletReport.Designer.cs">
+      <DependentUpon>WOutletReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutletReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutletReportSearch.Designer.cs">
+      <DependentUpon>WOutletReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutValReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOutValReport.Designer.cs">
+      <DependentUpon>WOutValReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOwnerDriverLabelsCriteria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOwnerDriverLabelsCriteria.Designer.cs">
+      <DependentUpon>WOwnerDriverLabelsCriteria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOwnerDriverReportPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WOwnerDriverReportPreview.Designer.cs">
+      <DependentUpon>WOwnerDriverReportPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateReport.Designer.cs">
+      <DependentUpon>WPieceRateReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateSearch.Designer.cs">
+      <DependentUpon>WPieceRateSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPieceRateSummary.Designer.cs">
+      <DependentUpon>WPieceRateSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPrintAbort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPrintAbort.Designer.cs">
+      <DependentUpon>WPrintAbort.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPrintpageAbort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPrintpageAbort.Designer.cs">
+      <DependentUpon>WPrintpageAbort.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementDetail.Designer.cs">
+      <DependentUpon>WProcurementDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementSelect.Designer.cs">
+      <DependentUpon>WProcurementSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WAllowanceReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WAllowanceReport.Designer.cs">
+      <DependentUpon>WAllowanceReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WAllowanceSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WAllowanceSearch.Designer.cs">
+      <DependentUpon>WAllowanceSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustListReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustListReport.Designer.cs">
+      <DependentUpon>WCustListReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustListSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustListSearch.Designer.cs">
+      <DependentUpon>WCustListSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustlistSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustlistSelect.Designer.cs">
+      <DependentUpon>WCustlistSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCounterDelDays.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCounterDelDays.Designer.cs">
+      <DependentUpon>WCustomerCounterDelDays.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCounterDelFreq.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCounterDelFreq.Designer.cs">
+      <DependentUpon>WCustomerCounterDelFreq.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCountReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCountReport.Designer.cs">
+      <DependentUpon>WCustomerCountReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCountReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerCountReportSearch.Designer.cs">
+      <DependentUpon>WCustomerCountReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerDelSequence.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerDelSequence.Designer.cs">
+      <DependentUpon>WCustomerDelSequence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerLabels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerLabels.Designer.cs">
+      <DependentUpon>WCustomerLabels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerSequenceReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerSequenceReport.Designer.cs">
+      <DependentUpon>WCustomerSequenceReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerStatisticsReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerStatisticsReport.Designer.cs">
+      <DependentUpon>WCustomerStatisticsReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerStatisticsReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerStatisticsReportSearch.Designer.cs">
+      <DependentUpon>WCustomerStatisticsReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerUnconfirmedReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerUnconfirmedReport.Designer.cs">
+      <DependentUpon>WCustomerUnconfirmedReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerUnconfirmedReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WCustomerUnconfirmedReportSearch.Designer.cs">
+      <DependentUpon>WCustomerUnconfirmedReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WDeedComp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WDeedComp.Designer.cs">
+      <DependentUpon>WDeedComp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WDetailedCustomerListing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WDetailedCustomerListing.Designer.cs">
+      <DependentUpon>WDetailedCustomerListing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreview.Designer.cs">
+      <DependentUpon>WGenericReportPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreviewWithDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreviewWithDate.Designer.cs">
+      <DependentUpon>WGenericReportPreviewWithDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WProcurementSummary.Designer.cs">
+      <DependentUpon>WProcurementSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPsReportPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPsReportPreview.Designer.cs">
+      <DependentUpon>WPsReportPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPsSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WPsSearch.Designer.cs">
+      <DependentUpon>WPsSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportMailCountPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportMailCountPreview.Designer.cs">
+      <DependentUpon>WReportMailCountPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportRcmPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportRcmPreview.Designer.cs">
+      <DependentUpon>WReportRcmPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportRcmSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WReportRcmSearch.Designer.cs">
+      <DependentUpon>WReportRcmSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRoadnameReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRoadnameReport.Designer.cs">
+      <DependentUpon>WRoadnameReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRoadnameSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRoadnameSearch.Designer.cs">
+      <DependentUpon>WRoadnameSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRouteFrequencyReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WRouteFrequencyReportSearch.Designer.cs">
+      <DependentUpon>WRouteFrequencyReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WUnoccupiedSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WUnoccupiedSearch.Designer.cs">
+      <DependentUpon>WUnoccupiedSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVehicleExpiryReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVehicleExpiryReport.Designer.cs">
+      <DependentUpon>WVehicleExpiryReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVehicleReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVehicleReportSearch.Designer.cs">
+      <DependentUpon>WVehicleReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVExpirySearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WVExpirySearch.Designer.cs">
+      <DependentUpon>WVExpirySearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegionPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegionPreview.Designer.cs">
+      <DependentUpon>WGenericReportRegionPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegionSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegionSearch.Designer.cs">
+      <DependentUpon>WGenericReportRegionSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegOutletPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegOutletPreview.Designer.cs">
+      <DependentUpon>WGenericReportRegOutletPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegOutletSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportRegOutletSearch.Designer.cs">
+      <DependentUpon>WGenericReportRegOutletSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearch.Designer.cs">
+      <DependentUpon>WGenericReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearchWithDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearchWithDate.Designer.cs">
+      <DependentUpon>WGenericReportSearchWithDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WMailingListSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WNationalFuelOverride.Designer.cs">
+      <DependentUpon>WNationalFuelOverride.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WDeliveryDays.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WFrequencies2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WSelectFrequency.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WSelectSchedules2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WSetArticalCountsScalingFactor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WSetScalingFactors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WShowRates2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WFreqDistances.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WFullArticalCountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WPieceRateBreakdown.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WPieceRateImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WPostTaxDeduction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WPvtBagsUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WWhatifCalc2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WQsRouteTermination.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WRenewal2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WRenewalProcess2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WWhatifFreqs2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WSelectEffectiveDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WRouteAudit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\NFrequencyAdjustment.cs" />
+    <Compile Include="Windows\Ruralwin\UTabAddressSearch.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WQsContractor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WQsOutlet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddArticleCounts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddressSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractAdjustmentsImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractAdjustmentsImport.Designer.cs">
+      <DependentUpon>WContractAdjustmentsImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractorSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractRate2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractRate2001.Designer.cs">
+      <DependentUpon>WContractRate2001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WNationalFuelOverride.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractSearch.Designer.cs">
+      <DependentUpon>WContractSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractVehicalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractVehicalForm.Designer.cs">
+      <DependentUpon>WContractVehicalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomer.Designer.cs">
+      <DependentUpon>WCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerSequencer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerSequencer.Designer.cs">
+      <DependentUpon>WCustomerSequencer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerTransfer.Designer.cs">
+      <DependentUpon>WCustomerTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WExtentions2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WExtentions2001.Designer.cs">
+      <DependentUpon>WExtentions2001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WMainMdi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddressContractInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddressMoveoutOccupants.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddressTransferOccupants.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddressSearchSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddAllowance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddFixedAsset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAllowanceBreakdown.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WArticalCountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAssignArticalCountToRenewal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAssignArticleCountsBulk2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WBenchmarkRates2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCmbAddressDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContractor2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WContract2001.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WMaintainAddress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WMaintainAddress.Designer.cs">
+      <DependentUpon>WMaintainAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WMaintainAddressOnly.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WRestoreCusts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZPostOffice.DataControls\NZPostOffice.DataControls.csproj">
+      <Project>{55C392CF-5BD7-40D8-946F-0C21674599FC}</Project>
+      <Name>NZPostOffice.DataControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.DataService\NZPostOffice.DataService.csproj">
+      <Project>{7073136B-CCD3-4128-9B3E-9BE7C555E482}</Project>
+      <Name>NZPostOffice.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
+      <Project>{6D5CE23C-C567-4E5D-8245-F383554C6DC6}</Project>
+      <Name>NZPostOffice.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDS.DataControls\NZPostOffice.RDS.DataControls.csproj">
+      <Project>{B22852B4-760D-4D92-9718-BB84EEC932AA}</Project>
+      <Name>NZPostOffice.RDS.DataControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDS.DataService\NZPostOffice.RDS.DataService.csproj">
+      <Project>{E980E461-4615-401E-9EC9-F4A9AD09DF0A}</Project>
+      <Name>NZPostOffice.RDS.DataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDS.Entity\NZPostOffice.RDS.Entity.csproj">
+      <Project>{2DB6C3D1-4F3F-49D5-888E-7A51201E2350}</Project>
+      <Name>NZPostOffice.RDS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDS.DataControls\NZPostOffice.RDS.DataControls.csproj">
+      <Project>{B22852B4-760D-4D92-9718-BB84EEC932AA}</Project>
+      <Name>NZPostOffice.RDS.DataControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.RDS.Entity\NZPostOffice.RDS.Entity.csproj">
+      <Project>{2DB6C3D1-4F3F-49D5-888E-7A51201E2350}</Project>
+      <Name>NZPostOffice.RDS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Shared\NZPostOffice.Shared.csproj">
+      <Project>{D9C16BDE-6368-4221-8319-B7AF123357C1}</Project>
+      <Name>NZPostOffice.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="Word">
+      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RDSYSTAB.ICO" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

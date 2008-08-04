@@ -1,0 +1,2174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="NZPostOffice.RDS.Entity.Ruralbase.Datadict" Collapsed="true">
+    <Position X="26.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\Datadict.cs</FileName>
+      <HashCode>AAAEAgAEAAAFAACAAABAAARAAiCAAUACBAAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralbase.Password" Collapsed="true">
+    <Position X="30.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\Password.cs</FileName>
+      <HashCode>AAAAAQAAAAAAAAAAABAAAIAAAEAQAQAAAAAQAIAEgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralbase.PrintOptions" Collapsed="true">
+    <Position X="21.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\PrintOptions.cs</FileName>
+      <HashCode>AAAAAAAgBAAWAEAAEABAAAAAAAAAAQAAAAACACUEgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralbase.SystemTitle" Collapsed="true">
+    <Position X="4" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralbase\SystemTitle.cs</FileName>
+      <HashCode>AAAEAAAAAAQAAQAQAAAAAAAAAACAAQAAAAAAAAgAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddArticalCounts" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddArticalCounts.cs</FileName>
+      <HashCode>IBAAAIAAAAwgAAAAABSAEAABAACQgQCEQAAABgEykAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddFixedAsset" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddFixedAsset.cs</FileName>
+      <HashCode>EAABAIAAEAAAAAAAAAAEAAAAAARABQAAAQABAAAxgCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressDetails" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressDetails.cs</FileName>
+      <HashCode>MQggMEQIkQAxRgCkAWQFAAHAQQWQA0AEYUBJiUJonag=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressList" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressList.cs</FileName>
+      <HashCode>AAAgEIAAAQABAEAHAEQAAABAAQCAEwACAEApCAAkiDA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressOccupants" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressOccupants.cs</FileName>
+      <HashCode>EEAUgIBAEAABAEAECEBMAIgAQhAgFQQAAgAKLBIgiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressOccupantsMovement" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressOccupantsMovement.cs</FileName>
+      <HashCode>EAAEAABAEBQBAAAFAABEBAAABQAiAQQAggAKABAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressSearchPrimContact" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressSearchPrimContact.cs</FileName>
+      <HashCode>AAAEgAAAAAAAAAAAgEAAAgAAQAAAAQAAAAAiBAIggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AddressSelectOccupants" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AddressSelectOccupants.cs</FileName>
+      <HashCode>EAAEgABAEAAAAgAEgEBUIAQAQAAggQQBAggKBBIgiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ArticalCountDateStart" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ArticalCountDateStart.cs</FileName>
+      <HashCode>AAQEAAAAAAAABgBAAAAAAAAAAAAIAQAUAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AssignArticalCountToRenewal" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\AssignArticalCountToRenewal.cs</FileName>
+      <HashCode>EAAAAAAAAAAAAAFAAAAEAAAAAACAASAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.BenchmarkCalcCriteria" Collapsed="true">
+    <Position X="28.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\BenchmarkCalcCriteria.cs</FileName>
+      <HashCode>AAQEAAAAAAAABAAAABABAAAAAAAAAQAQAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Coldef" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Coldef.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAgAAAAAQBAAAAAAAAggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Contract" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Contract.cs</FileName>
+      <HashCode>HCREANgAOAggBACSgAwEQUAQEwIiA0Q0gACEDiygiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractAdjustmentsImport" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractAdjustmentsImport.cs</FileName>
+      <HashCode>AAAAAAQAAAAAACAAAAAAAAAAAAAgAQAAAIAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractAllowances" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractAllowances.cs</FileName>
+      <HashCode>EAAEAIAAAAAgAAAAAQAAAAAEIQAAAQAEABgACAAihAw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractArticalCountForm" Collapsed="true">
+    <Position X="18" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractArticalCountForm.cs</FileName>
+      <HashCode>IBAAAIAAhA0gACAAARSEEACBCACAiSCUYgBABgAykAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractArticalCounts" Collapsed="true">
+    <Position X="19.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractArticalCounts.cs</FileName>
+      <HashCode>IBAAAIAAhA1gACAAARSEUACBCACAgSCUYABABgAykAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractContractor" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractContractor.cs</FileName>
+      <HashCode>EAAAAIAAkAAgAAAABAAEAAAgAAAAASgEAAAAAAgogAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractFixedAssets" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractFixedAssets.cs</FileName>
+      <HashCode>EAABAIAAEAAgAAAAAAAEAAACAARABYAEIQAAAAAhgCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractListing" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractListing.cs</FileName>
+      <HashCode>AAAAAJAAAAAgAAAAAAAAAQCAACCAAQAEAAAAAACggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractNoEntry2001" Collapsed="true">
+    <Position X="28.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractNoEntry2001.cs</FileName>
+      <HashCode>IAAAAIAAIAAgICAAAQAAAACACACAAQAEIABAAAAAkAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Contractor" Collapsed="true">
+    <Position X="30.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Contractor.cs</FileName>
+      <HashCode>RAAAAAgAgAAAoAAIAAAWAAAEBCAAIQgAAEABAAAogAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorDs" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorDs.cs</FileName>
+      <HashCode>EAAAAAAAEAAAAAAAAEAEAAAAAAAAAQkAAARAAAAogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorFull" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorFull.cs</FileName>
+      <HashCode>MAkCBAhgmYgCoAAJQQAWAACEBGAAMQgAAlARAAcowIU=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorInfo" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorInfo.cs</FileName>
+      <HashCode>AEAAAAAAAAIhAEIAAAAAAMIAAEAEAwhAAwAAAAApgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorList" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorList.cs</FileName>
+      <HashCode>AAAIAICAAAAgAAAAAAAAAAAAAAAAAQgAAAAAAAAogAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorProcurement" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorProcurement.cs</FileName>
+      <HashCode>EAAAAAAAEAAAAAAAAAAEAAAAAAAABQgAAEBQAAAogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorsContracts" Collapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorsContracts.cs</FileName>
+      <HashCode>AAAAAJAAAAAgAAAAAAAAAAQAAAAAAQBEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractorSearch" Collapsed="true">
+    <Position X="18" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractorSearch.cs</FileName>
+      <HashCode>CAAEAAAAAAAggBAAAAgGAAEAAAAAIQgUAEAAAAAIgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractPieceRates" Collapsed="true">
+    <Position X="19.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractPieceRates.cs</FileName>
+      <HashCode>BEAAACAAAAQAASBAAAAAAAAIAJAACQAAAACAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractRates" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractRates.cs</FileName>
+      <HashCode>EYkQhCAAECAgbECAJAE0NAAJAIAAASAFAAkCAGBogEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractRouteFrequencySelect2001" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractRouteFrequencySelect2001.cs</FileName>
+      <HashCode>IAABKgACIAAgICRAEAEAAACAAAEAAxAUCAAUAAAggiA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractsBenchmark" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractsBenchmark.cs</FileName>
+      <HashCode>CQQAABAAghCgVAgAAAAAAFAQACAEAQAEAAAAAIAggQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractsBenchmarkForRates" Collapsed="true">
+    <Position X="26.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractsBenchmarkForRates.cs</FileName>
+      <HashCode>GYQAABAAggCgFAAAAAAAABAQAAAAAQAEIAIAAgAggQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractSearch" Collapsed="true">
+    <Position X="28.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractSearch.cs</FileName>
+      <HashCode>CAQEAJAAAAIoAACEAAgEAAAiAAAAAUAUAAEAAgAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractVehicalForm" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractVehicalForm.cs</FileName>
+      <HashCode>CgIAAhDEEIAoAiAAAAIkGAAAEZBEBSCEAADAIACghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle" Collapsed="true">
+    <Position X="16.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ContractVehicle.cs</FileName>
+      <HashCode>MQmANAASGAAgQQEgAAQEAAICAAAgESAEMUEiRgDgwFw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerDetails" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerDetails.cs</FileName>
+      <HashCode>MEAUgIRAkABAAGAAgEMMAKAAQBAAFYCAABAKLFIggFA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerDetails2" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerDetails2.cs</FileName>
+      <HashCode>EEAUiIRAkABAAGAAgEMMAKAAQBAAFYCAABAKLFIggFA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerInterest" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerInterest.cs</FileName>
+      <HashCode>EAAEgAAAEAAAAAAAAAAEAAQABAAAAQAAAAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerMailCategory" Collapsed="true">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerMailCategory.cs</FileName>
+      <HashCode>AAAEAAQBIAAAAAAAAAAAAAAAAAAAAQAAAAACAAAggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerMailCategoryall" Collapsed="true">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerMailCategoryall.cs</FileName>
+      <HashCode>AAAEAAABIAAAAAAABAAAAAAAAAAAAQAAAAACAAAggAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerOccupation" Collapsed="true">
+    <Position X="19.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerOccupation.cs</FileName>
+      <HashCode>GAAEAAAgEAAAAAAAAAAEAAAAAAAAAQABEAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerRecipients" Collapsed="true">
+    <Position X="21.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerRecipients.cs</FileName>
+      <HashCode>EAAFAAAAEAAAAAAAAAAEAAAAEAAAAQAAAAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.CustomerTransfer" Collapsed="true">
+    <Position X="23.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\CustomerTransfer.cs</FileName>
+      <HashCode>AAAAAAAAAAAgAAIAAAAgAAAAAAAAAQAEAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwAccountCodes" Collapsed="true">
+    <Position X="28.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwAccountCodes.cs</FileName>
+      <HashCode>AAgAAAAAAAAAAAAEAIAAAAAAAAAEAQAAAAggBARggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwAllowanceTypes" Collapsed="true">
+    <Position X="30.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwAllowanceTypes.cs</FileName>
+      <HashCode>AAAAAAAAAAgAACEAAAAAAAAAIAAAAQAAAAoAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwContractTypesNew" Collapsed="true">
+    <Position X="4" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwContractTypesNew.cs</FileName>
+      <HashCode>CAAAAAAAAAAAAAAAAAgAEAAAAAAAEQEAAAAAAAAggAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwCustomer" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwCustomer.cs</FileName>
+      <HashCode>EAAEIAAAEAAAAAAAAAAFAAQAAAAAAQAAABACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwCustomerInterest" Collapsed="true">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwCustomerInterest.cs</FileName>
+      <HashCode>EAAAgAAgEAAAAAIAAAAEAACAAAAAAQAAAAgAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwCustomerOccupation" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwCustomerOccupation.cs</FileName>
+      <HashCode>GACAAAAgEAAAAAAAAAAEAAAAAACEAQAAAEAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwFixedAssetType" Collapsed="true">
+    <Position X="16.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwFixedAssetType.cs</FileName>
+      <HashCode>AAAIAAAAAAAAAQAAAAAAAAAAAAAABQCAAAAEAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwFuewTypes" Collapsed="true">
+    <Position X="18" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwFuewTypes.cs</FileName>
+      <HashCode>EAABEAAAECAAEQAAAAAEAAAAAAAAAQAAAEAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwMailCategory" Collapsed="true">
+    <Position X="19.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwMailCategory.cs</FileName>
+      <HashCode>AAAABEABIAAQAAAAAUYAAAABAAAAAQAAAEAEAAAghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwMailCategoryAll" Collapsed="true">
+    <Position X="21.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwMailCategoryAll.cs</FileName>
+      <HashCode>AAAABAABIAAAAAAAAAAAAAAAAAAAAQAACAAAAAAihAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwMailCategoryFixed" Collapsed="true">
+    <Position X="23.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwMailCategoryFixed.cs</FileName>
+      <HashCode>AAAIAAAAAAAAAAAAACAgAAAAAACAAQAAAAAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwOutlet" Collapsed="true">
+    <Position X="25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwOutlet.cs</FileName>
+      <HashCode>MAAAAQAAEAAAAAAAgCAEAAAAAAgQAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPaymentComponents" Collapsed="true">
+    <Position X="26.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPaymentComponents.cs</FileName>
+      <HashCode>EAAAAACAAAAAAAAEAQAAAAAAAAAAAQAACAAAEAAigBQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPbuCodes" Collapsed="true">
+    <Position X="28.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPbuCodes.cs</FileName>
+      <HashCode>AAIAAAoAIAAAAAAEAAAAAAAAACAAAQAAQAAAiAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPieceRates" Collapsed="true">
+    <Position X="30.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPieceRates.cs</FileName>
+      <HashCode>AAAAgAAAAAAAgQAAAQAAAAAAAAAAAQAAAAACAAgkgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPieceRateSuppliers" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPieceRateSuppliers.cs</FileName>
+      <HashCode>AAAAgAAAAAAAAQAAAAAAAAAIAAAAAQAAAAACAAAgkQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPointTypes" Collapsed="true">
+    <Position X="2.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPointTypes.cs</FileName>
+      <HashCode>AAAAAAAAAAAAARAAAAIgAAAAAAAAAQEAAAAAAEAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwPrimContactsForAnAddress" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwPrimContactsForAnAddress.cs</FileName>
+      <HashCode>AAAEAQAAAAQAABAEAAAAAAAAQAACAQAAgAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwProcurement" Collapsed="true">
+    <Position X="5.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwProcurement.cs</FileName>
+      <HashCode>EAEAAAAAEAIAAAAAAAAEAAAAAAAAAQAAAABSAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwRegionList" Collapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwRegionList.cs</FileName>
+      <HashCode>AAAAAAQQAAACAAAAAAAACAAAAAoAFQAAEBAIAACggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwRenewalgroup" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwRenewalgroup.cs</FileName>
+      <HashCode>AAQAAAAAgAAAhAAAAAAAAAIAAAAAAQAAAAAACAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwRenewalGroups" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwRenewalGroups.cs</FileName>
+      <HashCode>AAQAAAAAAAEAhAAAEAAAAAIAAAAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwRoadSuffix" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwRoadSuffix.cs</FileName>
+      <HashCode>EBAAAAAAEAAKAAAAACAEAAAAAAAAAQAAAAAAiAAggAw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwRoadType" Collapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwRoadType.cs</FileName>
+      <HashCode>EBAAAAAAEAAAAAAAAABEAAAAAAAAAQBAAAAAAQBggAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwStandardFrequency" Collapsed="true">
+    <Position X="16.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwStandardFrequency.cs</FileName>
+      <HashCode>AAAQEEAAAAAAICAAAAAAAAAAEAEAAQAAAAgAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwSuburb" Collapsed="true">
+    <Position X="18" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwSuburb.cs</FileName>
+      <HashCode>EQAgAAAAEEAAAAAAAAAEAAAAAACABQAAAAAAAAIggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwTown" Collapsed="true">
+    <Position X="23.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwTown.cs</FileName>
+      <HashCode>AAgEIIAAAAAAAEAgASAAAAAAAAAAAQAQIAAAgAIggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwTownOnly" Collapsed="true">
+    <Position X="25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwTownOnly.cs</FileName>
+      <HashCode>EAAAAIAAEIAAAEAgACAEAAAAAAAAAQAAAAAACAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwVehicalStyles" Collapsed="true">
+    <Position X="26.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwVehicalStyles.cs</FileName>
+      <HashCode>AAAAAAAAECAAAAIAAAAEAAIAAAAAAQAAAAAAAAAigAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwVehicalTypes" Collapsed="true">
+    <Position X="28.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwVehicalTypes.cs</FileName>
+      <HashCode>EAAAAAAEEAEEAAAAAAAEAAAAAAAAAQAAAAAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DddwVerbs" Collapsed="true">
+    <Position X="30.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DddwVerbs.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAIAAACAQAAAAABAAAhgAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.DeliveryDays" Collapsed="true">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DeliveryDays.cs</FileName>
+      <HashCode>BAAAAAAQAFEQRAAAABAAAAAAAAQAAUBAEAEEAAAAgIQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.AllPostTaxDeductions" Collapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DwAllPostTaxDeductions.cs</FileName>
+      <HashCode>FBAAgEAAEBAAAAAAABAFAEAAAIAAAQASAAAAAAAggQQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.NationalFuelOverride" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DwNationalFuelOverride.cs</FileName>
+      <HashCode>AARAEAAAAAAgRAAEAAAAAAEAAAAkAQAAAEAAAAoggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PostTaxDeductions" Collapsed="true">
+    <Position X="19.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DwPostTaxDeductions.cs</FileName>
+      <HashCode>FBEIgGAAEBABoAAIgAAFAMiCAICQAQgSAIACAoAomAw=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RunningSheetHeader" Collapsed="true">
+    <Position X="4" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\DwRunningSheetHeader.cs</FileName>
+      <HashCode>AAQAAJAAAgAgAAAAAAQIBAAAAAAAASBGAAAAAgAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Extension2001b" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Extension2001b.cs</FileName>
+      <HashCode>RRSQtpcEACAgAB4ZJQwjSPmRQEuHAYhERPRlKAcotQs=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Extension2005" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Extension2005.cs</FileName>
+      <HashCode>RxSQtpdEACAiAI4ZJQwjSPmRQEqHAYhERPRlLAcotAs=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FreqDescription" Collapsed="true">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FreqDescription.cs</FileName>
+      <HashCode>MAAEQQAgMEAiKCAUAAAESAAAAAQCEQAPBAALSAAhgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FrequenceDistances" Collapsed="true">
+    <Position X="18" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FrequenceDistances.cs</FileName>
+      <HashCode>KACACABEIIEgIKADABAICAQDBCEgAQAEQACACBAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FrequenceDistancesForm" Collapsed="true">
+    <Position X="19.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FrequenceDistancesForm.cs</FileName>
+      <HashCode>KACACAAEIIEgIKADABAICAADBCEgAQAEQACQCBAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FrequencyAnnotation" Collapsed="true">
+    <Position X="21.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FrequencyAnnotation.cs</FileName>
+      <HashCode>MAAAAAAAOAAgICACAAAEAAAAEAAAARAEACAgAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FrequencyTabbar" Collapsed="true">
+    <Position X="26.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FrequencyTabbar.cs</FileName>
+      <HashCode>AAAAUAAAAAAACgUAAADQPwAAAAAgERACAQAACAChgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FrequencyTitle" Collapsed="true">
+    <Position X="28.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FrequencyTitle.cs</FileName>
+      <HashCode>IABEEJAQIFEwZCAAAAAAAAAAAAQAAUBEEAgEAAAAgIQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FuelOverrideFields" Collapsed="true">
+    <Position X="30.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FuelOverrideFields.cs</FileName>
+      <HashCode>AAAAAAABAAAAgAEAAACAAAAAAAABAQAAABAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.FuelRates2001" Collapsed="true">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\FuelRates2001.cs</FileName>
+      <HashCode>EAZAkAAAECAAFQEAAAAEAAEAAAABAQAACEAAAAgggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Interestlist" Collapsed="true">
+    <Position X="5.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Interestlist.cs</FileName>
+      <HashCode>AAACAAAAAAAgAAAEAABAAAAAAAAAAQAAEAAAAAAggAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ListContractsForProcessing2001" Collapsed="true">
+    <Position X="7.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ListContractsForProcessing2001.cs</FileName>
+      <HashCode>AAAAAJAAAAAgAAAAAAAAAABCAAigAQAEAKAAAIAoiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.MailCarried" Collapsed="true">
+    <Position X="9.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\MailCarried.cs</FileName>
+      <HashCode>IAAAOACAchAgIGDIAAQAAIAABBAAAQQEAQBCAQAghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.MailCarriedForm" Collapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\MailCarriedForm.cs</FileName>
+      <HashCode>MAoAKAAAcAAgICJYAAAEhCAAEhAAAQEUAQBCAAAwhQI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.MiscRates2001" Collapsed="true">
+    <Position X="30.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\MiscRates2001.cs</FileName>
+      <HashCode>EAYAAAAIGAAABAABAAAkAACAgAAgAQAQKQAEAAAggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.NationalRatesOverrideFields" Collapsed="true">
+    <Position X="2.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\NationalRatesOverrideFields.cs</FileName>
+      <HashCode>AAAgAAgAAAAAAAAQAAAAAAAAAAAAAQAAAAIAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.NonVehicleOverrideRates" Collapsed="true">
+    <Position X="9.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\NonVehicleOverrideRates.cs</FileName>
+      <HashCode>CMAACwAAAAAhAAAgCAQEBgBACCCIASAkCQICBAEhoAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.NonVehicleRates2001" Collapsed="true">
+    <Position X="11" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\NonVehicleRates2001.cs</FileName>
+      <HashCode>QIQAIBIEAAAAFCBABMAAAZAQAMyEBQAAQEIEAAAggBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.NonVehicleRates2005" Collapsed="true">
+    <Position X="12.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\NonVehicleRates2005.cs</FileName>
+      <HashCode>UIYAIBIEEIAEFCBABMAAIZAQAMyEQQAARAIEAAAggBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Occupationlist" Collapsed="true">
+    <Position X="16.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Occupationlist.cs</FileName>
+      <HashCode>AAACAAAAAAAgAAAEAABAAAAEAAAAAQAAAAAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.OtherOverrideRates" Collapsed="true">
+    <Position X="19.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\OtherOverrideRates.cs</FileName>
+      <HashCode>AAAAAAAgAAAgAAAAAAAEAACEKAAIBSIEQAAAAAAggAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRateBreakdown" Collapsed="true">
+    <Position X="4" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRateBreakdown.cs</FileName>
+      <HashCode>AAAAAAABAAAAAgGAAAAAAAAAAAAAAQCIAAAAAAgggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRateImport" Collapsed="true">
+    <Position X="5.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRateImport.cs</FileName>
+      <HashCode>FAEABAwIEAAgQyEBAIAEAAAAAAAEJQAEAEAIAMAEgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRateImportDiffRateReport" Collapsed="true">
+    <Position X="7.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRateImportDiffRateReport.cs</FileName>
+      <HashCode>BAkABAAIAAAgQyMBAIAAAAAAAAAAJQAEAAAIAMAEwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRateImportExeptionReport" Collapsed="true">
+    <Position X="9.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRateImportExeptionReport.cs</FileName>
+      <HashCode>BAEABAAIAAAgQyEIAYAAAAAAAAAAJQAEAAAKAMAEgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRateImportInvalidDate" Collapsed="true">
+    <Position X="11" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRateImportInvalidDate.cs</FileName>
+      <HashCode>JAMABAAIAAAgQyEBAIAAAAAAAAAAJQAEAAAIAMAUgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRates" Collapsed="true">
+    <Position X="14.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRates.cs</FileName>
+      <HashCode>AAQACAAAAAgABQBEAQAAAAAAAAAAAQAMAAACAAgsgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.PieceRates2001" Collapsed="true">
+    <Position X="16.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\PieceRates2001.cs</FileName>
+      <HashCode>EAYACAAAEAgiBSAAAQAEAAAAAAAAASAMAAACAAgsgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsContractList" Collapsed="true">
+    <Position X="9.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsContractList.cs</FileName>
+      <HashCode>EAAAAAAAEAAAgAAAAAAEAAAQAACAIQgAAAAAAAAogQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsContractorCriteria" Collapsed="true">
+    <Position X="11" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsContractorCriteria.cs</FileName>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAABAAIQQAQAAAAAAAAgEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsContractorList" Collapsed="true">
+    <Position X="12.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsContractorList.cs</FileName>
+      <HashCode>EAAAAACAEAAAgAIAAAAEAAAAAAAAIQgAAAAAAAAogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsOutlets" Collapsed="true">
+    <Position X="14.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsOutlets.cs</FileName>
+      <HashCode>AAAAAQgAQAAAAAAAACAAAAACAAgQAQAAAAAAAAQggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsOutletsCriteria" Collapsed="true">
+    <Position X="16.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsOutletsCriteria.cs</FileName>
+      <HashCode>AAAMAQAAAAAAAAAAACIAAAAAAAAAAQAQAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsRouteTerminationCriteria" Collapsed="true">
+    <Position X="18" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsRouteTerminationCriteria.cs</FileName>
+      <HashCode>AAAAAAAAAAAEAECAAAAAAAAAAAAEAQAAAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.QsRouteTerminationList" Collapsed="true">
+    <Position X="19.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\QsRouteTerminationList.cs</FileName>
+      <HashCode>AAAAAAAgEAAAACAAAAAEAACICAAAAQAAAAAAAIAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RateDays" Collapsed="true">
+    <Position X="21.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RateDays.cs</FileName>
+      <HashCode>AAAIAAAAEAAEEAAAAACEAADACgAAAUAAABAAAACoghA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RateDays2001" Collapsed="true">
+    <Position X="23.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RateDays2001.cs</FileName>
+      <HashCode>EQYQEEAAEAAAJCAAAAAEAAIgAACAgQAAAAgAAAgggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Recipient" Collapsed="true">
+    <Position X="28.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Recipient.cs</FileName>
+      <HashCode>EAAEgARAkAAAAAAAAAEEAAAAQAAAAQAAAAACBBIggUA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RegionalArticalCounts" Collapsed="true">
+    <Position X="30.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RegionalArticalCounts.cs</FileName>
+      <HashCode>MBAAAIAAEA0gAAAQABSgEIABAACAgwCEQAAABgAykAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Regions" Collapsed="true">
+    <Position X="0.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Regions.cs</FileName>
+      <HashCode>AAAkAABAAAAAAAAAAAAAAAAAAAAAASAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Renewal" Collapsed="true">
+    <Position X="2.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Renewal.cs</FileName>
+      <HashCode>MAAKAJAAGcFkkMCABAQsJECYYAAAFSJMAKAAEMAshwA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RenewalAdjustments" Collapsed="true">
+    <Position X="4" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RenewalAdjustments.cs</FileName>
+      <HashCode>GAAAIQGQECAgAAABAAAEQAAAAAAAASgMAAAAAgAggCQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RenewalArticalCounts" Collapsed="true">
+    <Position X="5.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RenewalArticalCounts.cs</FileName>
+      <HashCode>IBAAAIAAhA0gACAAARSEEACBCACAgSCUYABARgAylAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RenewalDates2001a" Collapsed="true">
+    <Position X="7.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RenewalDates2001a.cs</FileName>
+      <HashCode>AIQAAIQEAAAABAAAAAAgAAAAAAAAAQAAAAAAAAiogEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RenewalFreqAdjust" Collapsed="true">
+    <Position X="9.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RenewalFreqAdjust.cs</FileName>
+      <HashCode>MAAgAAAAcAAiICABAgoEQAAAECCgASAEAAAAMAAkgCQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RenewalProcessCriteria" Collapsed="true">
+    <Position X="11" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RenewalProcessCriteria.cs</FileName>
+      <HashCode>AAQEAAAAAAIgBAAAAAAAAAAIAAAAAQAUAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.Renewals" Collapsed="true">
+    <Position X="12.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\Renewals.cs</FileName>
+      <HashCode>AAAgABAEAAAgEAAAAAAEAgAQgICAASAEACAAAAAogQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ReportGenericCriteria" Collapsed="true">
+    <Position X="18" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ReportGenericCriteria.cs</FileName>
+      <HashCode>CAQEQQQAAABAJCAAACgAAAAAAAgQAQAQAgAAAAAggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ReportGenericOutletCriteriawithrg" Collapsed="true">
+    <Position X="23.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ReportGenericOutletCriteriawithrg.cs</FileName>
+      <HashCode>CCUEAQSIAAMAJCAAACgACAAAAAgQAQAQAAAAAAAggAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ReportGenericRegOutletContcriteria" Collapsed="true">
+    <Position X="26.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ReportGenericRegOutletContcriteria.cs</FileName>
+      <HashCode>CAUEAQQIAAMgJCAEgCgACAAAAQgQASAUAAAAAAAggAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.ReportRegionoutletcontractResults" Collapsed="true">
+    <Position X="2.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\ReportRegionoutletcontractResults.cs</FileName>
+      <HashCode>BAAAAJAAAAAgAAAAQAAAAAAAAACAAQAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadMap" Collapsed="true">
+    <Position X="9.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadMap.cs</FileName>
+      <HashCode>ABCAAAQAAAAIAAAAAAQAAAAAAAAAAQBAAAAAiQAogCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadMapV2" Collapsed="true">
+    <Position X="11" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadMapV2.cs</FileName>
+      <HashCode>ABAAAAQAAAAIAAAgACQAAAAAAAAAAQJAAAAAqQAggCo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadSuburbMap" Collapsed="true">
+    <Position X="12.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadSuburbMap.cs</FileName>
+      <HashCode>ARAgAAQAAAAAAAAAAAQAAAAAAICAAQhAAAAACQIggCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadSuburbMapV2" Collapsed="true">
+    <Position X="14.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadSuburbMapV2.cs</FileName>
+      <HashCode>ARAgAAQAAQAAAABAAAQAAAAAAACAAQBIACAACQIggCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadTownMap" Collapsed="true">
+    <Position X="16.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadTownMap.cs</FileName>
+      <HashCode>AAAAAAQAAQAAAAAgACAAAAAAAAAAAQAAAAAAGQAggAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RoadTownMapV2" Collapsed="true">
+    <Position X="18" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RoadTownMapV2.cs</FileName>
+      <HashCode>AAAAAAQAAAAAQAAgACQAAAAAAAAEAQAAAAAAiQAggCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteAudit" Collapsed="true">
+    <Position X="19.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteAudit.cs</FileName>
+      <HashCode>EIkAAIgIFiAhEAJSACAEJChEAAKAAQwEFhEICAAghBg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteAuditDe" Collapsed="true">
+    <Position X="21.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteAuditDe.cs</FileName>
+      <HashCode>0+0GxC26P2O1OBNG9WaMY3v+0Wekpxtm9oXpGJHgndQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteAuditDePrint" Collapsed="true">
+    <Position X="23.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteAuditDePrint.cs</FileName>
+      <HashCode>0+0GxCk6P2O1OBNG9WaMZzu20Wakpxtm1oXpCJHgndQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteAuditDePrintBlank" Collapsed="true">
+    <Position X="25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteAuditDePrintBlank.cs</FileName>
+      <HashCode>0+0GxCk6P2O1OFNG9WaMYzu20Wakpxtm1oXpCJHgndQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteAuditListing" Collapsed="true">
+    <Position X="26.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteAuditListing.cs</FileName>
+      <HashCode>UABEAAAAEEAgAAAAAAAEIBAAAAIAAQAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteFrequency" Collapsed="true">
+    <Position X="30.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteFrequency.cs</FileName>
+      <HashCode>MAAAKgACMAAgICRQ0ACEAACAAAEAA0BUCAAMACAgsiE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.RouteFrequencyForRouteAudit" Collapsed="true">
+    <Position X="2.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\RouteFrequencyForRouteAudit.cs</FileName>
+      <HashCode>IAAAKgACIAAoICVA0AAAAACAEAEAA0BUCAAEACAgsiA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SearchAddress" Collapsed="true">
+    <Position X="9.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SearchAddress.cs</FileName>
+      <HashCode>ASAgMAQAAAAhAAAkBWQAAgBAARCAAwAEAEAJiQJgqCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SearchAddressResults" Collapsed="true">
+    <Position X="11" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SearchAddressResults.cs</FileName>
+      <HashCode>AQAkkAQAAAABAAAkACQAAABAQQAAEwAAAEALDQJggCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SearchAddressResultsV1b" Collapsed="true">
+    <Position X="12.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SearchAddressResultsV1b.cs</FileName>
+      <HashCode>IQAkkAQAAAABgAAkACQAAABAQQAAAwAAAEALDQJggCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SeqAddresses" Collapsed="true">
+    <Position X="18" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SeqAddresses.cs</FileName>
+      <HashCode>IQEgEAAAIiAhIKAEIgQAACBAAQAACwAEAUALgAEghCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SetArticalCountsScalingFactor" Collapsed="true">
+    <Position X="19.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SetArticalCountsScalingFactor.cs</FileName>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAgAAAQAAQAAAAAAgAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.SetScalingFactor" Collapsed="true">
+    <Position X="21.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\SetScalingFactor.cs</FileName>
+      <HashCode>AAAQAIAAAAAAAAAAAAAAAA4AAAQAQQAAAIAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.StandardFuelRates" Collapsed="true">
+    <Position X="23.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\StandardFuelRates.cs</FileName>
+      <HashCode>EARgkAAAEACABAAAAAAEAAEAAAABAQAAAEAAAAgggEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.TownSuburbMap" Collapsed="true">
+    <Position X="9.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\TownSuburbMap.cs</FileName>
+      <HashCode>AQAkAIAAAAAAAEAgAKgAAAAAAACAAQAQAAAAAAIggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.TypesForContract" Collapsed="true">
+    <Position X="11" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\TypesForContract.cs</FileName>
+      <HashCode>GAAAAAAAEAAgAAAAAAgECAAAAAAAAQIEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.TypesForContractor" Collapsed="true">
+    <Position X="12.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\TypesForContractor.cs</FileName>
+      <HashCode>GAEAAAAAEAAAEAAAAAgEAAAAAAAAAQgAAAAAAAAogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.UnseqAddresses" Collapsed="true">
+    <Position X="16.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\UnseqAddresses.cs</FileName>
+      <HashCode>IAEgEEAEIAAhIKAEIgQAACBAAQAACwAEAUAJgAEghCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.UserGroupTest" Collapsed="true">
+    <Position X="28.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\UserGroupTest.cs</FileName>
+      <HashCode>FCAAASCQEACBAKgIAIAGEAwIAFAIAYQAgGgABAQjgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.VehicalTypesList" Collapsed="true">
+    <Position X="4" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\VehicalTypesList.cs</FileName>
+      <HashCode>EAAAAAAAEAEAAAAAAAAEAAAAAAAAAQAAQAAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.VehicleOverrideRates" Collapsed="true">
+    <Position X="12.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\VehicleOverrideRates.cs</FileName>
+      <HashCode>AAgAEEAAGgCgAIjQAABkAAQCCgCIASgEEAAQCEEggAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.VehicleRates2001" Collapsed="true">
+    <Position X="23.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\VehicleRates2001.cs</FileName>
+      <HashCode>ESJAQACQUAAAAAABAAQmAAAQAAAAAQAEQGECSIAgoEE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.WhatifCalculatorReport2001bf5" Collapsed="true">
+    <Position X="26.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\WhatifCalculatorReport2001bf5.cs</FileName>
+      <HashCode>dTbzoLl09un8Km7IvS+2HNvHd5rNMezWM8L+YSXg3s4=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.WhatifCalulator2001c" Collapsed="true">
+    <Position X="30.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\WhatifCalulator2001c.cs</FileName>
+      <HashCode>dTazoLk09qn0KC6IlS+2HJrHdxrNMeyWA4L8ASXg3M4=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.WhatifContractSelection" Collapsed="true">
+    <Position X="2.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\WhatifContractSelection.cs</FileName>
+      <HashCode>AAAAAJAIAAAgAAAAAAAEAAAAAAAAAyAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.WhatifDistribution2001" Collapsed="true">
+    <Position X="4" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\WhatifDistribution2001.cs</FileName>
+      <HashCode>AgAhEQAAACAAAAAAECQQgAFAAgAIQQAgAABICCEAgQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruraldw.WhatifFreqs" Collapsed="true">
+    <Position X="5.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruraldw\WhatifFreqs.cs</FileName>
+      <HashCode>AAABKgACCAAAICRAEgAAAACAAAEAAwAQCAAUAAAAgiA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.MailmergeCustDownloadData" Collapsed="true">
+    <Position X="21.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\MailmergeCustDownloadData.cs</FileName>
+      <HashCode>ICdCQNJQQIZjhi5ErABRo0IgIskOUQrAh1ZAQIkpgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.MailmergeCustomerDownloadSearch" Collapsed="true">
+    <Position X="23.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\MailmergeCustomerDownloadSearch.cs</FileName>
+      <HashCode>igQAAQSAAABgJCIAACgAAEAAAAgQAQEgAQCRFQAghA0=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.MailmergeDownloadSearchResults" Collapsed="true">
+    <Position X="25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\MailmergeDownloadSearchResults.cs</FileName>
+      <HashCode>AAAAAJAAAABgAAAAAAAAAAAAAACgAQAEAAAABACgiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.MailmergeOdDownloadData" Collapsed="true">
+    <Position X="26.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\MailmergeOdDownloadData.cs</FileName>
+      <HashCode>IksAQMAEgBDhoK4JIAhDwMEAAkkEEwiIglADQMkgggU=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.MailmergeOwnerdriverDownloadSearch" Collapsed="true">
+    <Position X="28.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\MailmergeOwnerdriverDownloadSearch.cs</FileName>
+      <HashCode>CAQEAQQAAAIAJCAACCgAAAAAAAgQAQAQAAABAQAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralmailmerge.SelectProcurements" Collapsed="true">
+    <Position X="16.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralmailmerge\SelectProcurements.cs</FileName>
+      <HashCode>AAAAAAAAEAIAgAAAAAAECAAAAAAIEQAAAABSAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ConCriteria" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ConCriteria.cs</FileName>
+      <HashCode>AAAAAJAACAAgAAAAAAAAAIAAAAAAAQAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCount" Collapsed="true">
+    <Position X="18" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCount.cs</FileName>
+      <HashCode>AQAgCZJABEAwAAEAAWAAAAAEAAQAIQAEACAAMAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCountcriteria" Collapsed="true">
+    <Position X="19.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCountcriteria.cs</FileName>
+      <HashCode>CAUEAQQIAAMAJCAAACgACAgAAAgQAQAQAAAAAAAigAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCountExport" Collapsed="true">
+    <Position X="21.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCountExport.cs</FileName>
+      <HashCode>AQAgAZBABEAwAAAAASAAAAAEAIAAAQAECCgAIAAggAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCountUnconfirmed" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCountUnconfirmed.cs</FileName>
+      <HashCode>AAAgCZBAAAAgAAAAASAAAAIAAABAAQAEAAAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCriteriaDeldays" Collapsed="true">
+    <Position X="25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCriteriaDeldays.cs</FileName>
+      <HashCode>DxUlTRQq0BAgNAMABKqbiQqGABkSAwF8CJGGSRIhwA0=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustCriteriaDelfreq" Collapsed="true">
+    <Position X="26.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustCriteriaDelfreq.cs</FileName>
+      <HashCode>DwQFTRWK0BAgNAMABKqaAQqCABkSAwF8DJCGSAIhxg0=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustDetailsExport" Collapsed="true">
+    <Position X="28.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustDetailsExport.cs</FileName>
+      <HashCode>CAQEgAAAAgAAAAIAgEAAAAAAQAAAAYCQCIAiDUIkgBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustInterestStat" Collapsed="true">
+    <Position X="30.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustInterestStat.cs</FileName>
+      <HashCode>AAAgAgACgAAAIAAAAAAAACEEAAAAAQAAAAAAABAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustListFreq" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustListFreq.cs</FileName>
+      <HashCode>EAAAAAAAEAgAAgAAAAAUAAAAAAAABQAAAEAIAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustlistSelect" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustlistSelect.cs</FileName>
+      <HashCode>AAAEgAAAAgQGAQgAjEQAAAAAZACAQQAAAAICAAAgkCE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustListTown" Collapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustListTown.cs</FileName>
+      <HashCode>EAAAAAAAEkAAAAAAAAAEAAAAAAAABQAAAAAIAAAggAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustOccupationStat" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustOccupationStat.cs</FileName>
+      <HashCode>AAAgCgACgAAAIAAAAAAAACAEAAAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustSequenceSearch" Collapsed="true">
+    <Position X="25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\CustSequenceSearch.cs</FileName>
+      <HashCode>AAABQACAAAQgICAEAAJAAAAAAICAEQIEAAAIAAAglQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.DeedCompRegAddr" Collapsed="true">
+    <Position X="2.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\DeedCompRegAddr.cs</FileName>
+      <HashCode>oWey78+eDXWupdV+Hd/vn/W4+6GQazq3c+7tFYAksFo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.DeedCompRegCust" Collapsed="true">
+    <Position X="4" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\DeedCompRegCust.cs</FileName>
+      <HashCode>oWey78+eDXWupdV+Hd/vn/W466GQazp3c+7tFYAksFo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.DeedCompRegOccupied" Collapsed="true">
+    <Position X="5.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\DeedCompRegOccupied.cs</FileName>
+      <HashCode>oWey78+eDTWupdV+Hd/vn/W46+GQazr3c+7tFYAksFo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ExtRegion" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ExtRegion.cs</FileName>
+      <HashCode>AABAAAAAAAAAAAAAAAACAAAAAAAAAQAAAAAAAAAgiEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.FrequencyList" Collapsed="true">
+    <Position X="25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\FrequencyList.cs</FileName>
+      <HashCode>AAgAAIAAAAAAICAAAAAAAAAAICAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.InterestCriteria" Collapsed="true">
+    <Position X="4" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\InterestCriteria.cs</FileName>
+      <HashCode>AAGAAAIAAAAAAAAAAAAAACAAIAAAAQEAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.MailCountSearchResults" Collapsed="true">
+    <Position X="18" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\MailCountSearchResults.cs</FileName>
+      <HashCode>AAAAAJAAAAIgAAAAAAAAAAAAAACgAQgEAAAAAAAgiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.MailListResult" Collapsed="true">
+    <Position X="19.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\MailListResult.cs</FileName>
+      <HashCode>BEAAACAAAIAAAEAEgESAghAIgABAQRAAggAAoAAgyiA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OccupationCriteria" Collapsed="true">
+    <Position X="14.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\OccupationCriteria.cs</FileName>
+      <HashCode>AQAAAABAAAAAAAAEAAAIAAAAAAAAAQEAEAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OutletReportCriteria" Collapsed="true">
+    <Position X="25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\OutletReportCriteria.cs</FileName>
+      <HashCode>QAAwAABAFAABAAAAAAAEAAAAAAAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OutValList" Collapsed="true">
+    <Position X="26.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\OutValList.cs</FileName>
+      <HashCode>CAAIAAACgAQgAEAAIAAAgAICMAgAAQAEBAAAIAIggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OwnerDriverReportCriteria" Collapsed="true">
+    <Position X="28.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\OwnerDriverReportCriteria.cs</FileName>
+      <HashCode>CAQEAAQAAAAAJCAAAAgAgAAAAAgVAQAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PostCriteria" Collapsed="true">
+    <Position X="18" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\PostCriteria.cs</FileName>
+      <HashCode>AAAAAAACAAAAAAEAQAAAAAAAAAAAAQAAgAAAAAggiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsReportCriteria" Collapsed="true">
+    <Position X="2.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\PsReportCriteria.cs</FileName>
+      <HashCode>CAQEAQQAAAAAJCAAAAgAgAAAAAgUAQAQAAQAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.AllowanceDetail" Collapsed="true">
+    <Position X="19.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RAllowanceDetail.cs</FileName>
+      <HashCode>BAEgAABAAAAAAAAAAAAAABAAAQAAAQAIAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.AllowanceReport" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RAllowanceReport.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQACAAAAAAAAgAAAAAQAAAAAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.BenchmarkReport2006" Collapsed="true">
+    <Position X="30.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RBenchmarkReport2006.cs</FileName>
+      <HashCode>d7bDpPn0M4juiEqIiQekBpqFdB6ONXiWLqLoASegyc4=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.BenchmarkReportFrequencies" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RBenchmarkReportFrequencies.cs</FileName>
+      <HashCode>AAgACAAAAAAAAAAAAgCACAAACAAAAQAAgAAAAAAogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractorLabel" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractorLabel.cs</FileName>
+      <HashCode>AQAAAAgAIAAAgAAICAAUAAAABAAAIQIAAAAAAEAgggA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractorLabelFast" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractorLabelFast.cs</FileName>
+      <HashCode>AABAAAgAEAAEgAAIABAUAAAEBCAAIQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractorProcurementDetail" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractorProcurementDetail.cs</FileName>
+      <HashCode>AAAAABCSgAAgAAgQAAAAAAAggIAABQAAAAAIAAKggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractorProcurementSummary" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractorProcurementSummary.cs</FileName>
+      <HashCode>AAAEAAACgICACAgQAAAAAAQQgAAAAQAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummary" Collapsed="true">
+    <Position X="30.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummary.cs</FileName>
+      <HashCode>AAACAAAAAAAhAAACAAAECAAAAAAAASAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryDetails" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryDetails.cs</FileName>
+      <HashCode>AARgAZBAAIAwEAEihiAAQEAQAkAkEUAUgCAkAkAoiwA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryFrequencies" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryFrequencies.cs</FileName>
+      <HashCode>KQCBGAAEIIAAIKADABAICAIDBCEgAQAAQQiQGBAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryOwnerDriver" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryOwnerDriver.cs</FileName>
+      <HashCode>AAAAAEABAAIAAAAAAAAAgABABAAEARACAAAAAEAkgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryPayments" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryPayments.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAEJAAAAAAIAAAAAAAQAAQAAgAAAgxAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryPieceRates" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryPieceRates.cs</FileName>
+      <HashCode>AL5hoAAAAAAAAQgAAAAAAAAcAQQAAQAAAAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryVehicle" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryVehicle.cs</FileName>
+      <HashCode>AAAAAIAQICEBAQAAAkAABQAAQAICQSAAAAgBAAIogCo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ContractSummaryVolume" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RContractSummaryVolume.cs</FileName>
+      <HashCode>IAQAACAAAAAgAQgEAAIQACAABAAAgQAFAAEgAkAggAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustlistLabelFast" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RCustlistLabelFast.cs</FileName>
+      <HashCode>AEEWgJBhAEEoFDAAgUMIIISATJCEKYAUAQAGLEJgkVY=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.CustlistRandomLabel" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RCustlistRandomLabel.cs</FileName>
+      <HashCode>AAEEkABAAEEAECAAgUAAIAAAQBAAAQAQAQEEBAJggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.DeedCompliance" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RDeecompliance.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAQAAAAAAIEAggAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.DetailedCustomerListing" Collapsed="true">
+    <Position X="9.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RDetailecustomerListing.cs</FileName>
+      <HashCode>AAC0gAQAgAAAAAAAgEMAAJAAQAAAAYyAAAACDEKg8VA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportAllowanceCriteria" Collapsed="true">
+    <Position X="14.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportAllowanceCriteria.cs</FileName>
+      <HashCode>CAQEAAAAAAAAJKAAAAgAAAAAAAgQAQAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportCustomerStatisticsCriteria" Collapsed="true">
+    <Position X="16.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportCustomerStatisticsCriteria.cs</FileName>
+      <HashCode>CAQEAQQEAAAAJCAAACgAAAAAAAgQAQAQAAAABAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericCriteriaWithMonth" Collapsed="true">
+    <Position X="19.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportGenericCriteriaWithMonth.cs</FileName>
+      <HashCode>CAQEAQYAAAAAJCAAACkAAAAAAAgQAQAwAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericCriteriaWithRegion" Collapsed="true">
+    <Position X="21.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportGenericCriteriaWithRegion.cs</FileName>
+      <HashCode>CAQEAAQAAAAAJCAAAEgAgAAAAAgUAQAQAAAAAAAgwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericOutletCriteriawithrgct" Collapsed="true">
+    <Position X="25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportGenericOutletCriteriawithrgct.cs</FileName>
+      <HashCode>CAUEAQQIAAMAJCAAACgECAAAAAgQAQAQAAAAAAAkgAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericRegOutletCriteria" Collapsed="true">
+    <Position X="28.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportGenericRegOutletCriteria.cs</FileName>
+      <HashCode>CAUEAQQIAAMgJCAAACgQCAAAAAgQAQAQAAAAAAIkhAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericResults" Collapsed="true">
+    <Position X="30.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportGenericResults.cs</FileName>
+      <HashCode>AAABAJAAAAAgAAAAAAAAAAAAEACgAQAEAAAAAAAgiAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ReportRcmCriteria" Collapsed="true">
+    <Position X="0.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ReportRcmCriteria.cs</FileName>
+      <HashCode>CAQEAQQBAAAAJCAAACgAAAAAAAgQAQAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.MailCarriedSingleContract" Collapsed="true">
+    <Position X="12.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RMailCarriesingleContract.cs</FileName>
+      <HashCode>IAAgMZBAYACgkAAIACAEEAAQBBAgISAUAghGAAAghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.MailCount" Collapsed="true">
+    <Position X="14.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RMailCount.cs</FileName>
+      <HashCode>QAEEAAAIAACBAAAIIBAAKAAAAgAAAQAAAAACAAAigAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.MailCountOld" Collapsed="true">
+    <Position X="16.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RMailCountOld.cs</FileName>
+      <HashCode>gAAEAAAAAACBIBAIIAAAIAAAAwAAAQAAAAACAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.NoCommencement" Collapsed="true">
+    <Position X="4" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RNoCommencement.cs</FileName>
+      <HashCode>AAAAgAAgAAAgAIIAgEAAAEAASEAACQhEAAAABAIogAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.Od" Collapsed="true">
+    <Position X="18" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ROd.cs</FileName>
+      <HashCode>AAAAAAAAAACBAQAIAAAAAAAAAEAAAQgAAAACAEAgkgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OutletBaseOfficeReport" Collapsed="true">
+    <Position X="21.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ROutletBaseOfficeReport.cs</FileName>
+      <HashCode>gAgAAsQAAAAAkAEEAgABgAAgAgkAMQAggAACQIAgkAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.OutletLabel" Collapsed="true">
+    <Position X="23.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\ROutletLabel.cs</FileName>
+      <HashCode>AAEAAQAAAABAQQAAACAAAAAAQAAAAQAAAYAAQAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PaymentProcess" Collapsed="true">
+    <Position X="0.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPaymentProcess.cs</FileName>
+      <HashCode>AAAAAZSIAIAhAAAAAIBEAJAAABAAESwEAAAAAIAohAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PerformanceSummary" Collapsed="true">
+    <Position X="2.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPerformanceSummary.cs</FileName>
+      <HashCode>AAAAABACAAAgAAAEAgAAIqEAAAAAAYAEAEABAAgggQA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PieceRateReport" Collapsed="true">
+    <Position X="12.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPieceRateReport.cs</FileName>
+      <HashCode>AAAAgQAIAAgAgABQAwAAAAAAAAAAAQACAAACAIAggBA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsCustListAny" Collapsed="true">
+    <Position X="23.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsCustListAny.cs</FileName>
+      <HashCode>RQAAIAESAEAAcAQAAASAAhABgEABGQAAACAAoGiiwGg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsCustListCon" Collapsed="true">
+    <Position X="25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsCustListCon.cs</FileName>
+      <HashCode>RQBAKAESAEAAcAQAAASIAhABgEABGQAAACQAqEjgwGg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsCustListConExport" Collapsed="true">
+    <Position X="26.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsCustListConExport.cs</FileName>
+      <HashCode>RQAAIJESAEAgcAQAAASIAhABgEABEQAEECABqEggwGg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsCustListTown" Collapsed="true">
+    <Position X="28.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsCustListTown.cs</FileName>
+      <HashCode>RQAAKAESAEAAcAQAAASIAhABgEABGQAAACQAqEigwHg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsNonumberCon" Collapsed="true">
+    <Position X="30.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsNonumberCon.cs</FileName>
+      <HashCode>QAAAAAAAQgAAgAAAAAQgABAAggAAAQBAAEACCQgggCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsNonumberTown" Collapsed="true">
+    <Position X="0.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsNonumberTown.cs</FileName>
+      <HashCode>QAAAAAAAQgAAAAAAAAQgABAAggACASBAAEACCQAggCg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsRoadnameCon" Collapsed="true">
+    <Position X="4" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsRoadnameCon.cs</FileName>
+      <HashCode>AAAACIAAAAAAAEAAAAQAgAAAAAAAAQAAAAAABQAggKg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsRoadnameTown" Collapsed="true">
+    <Position X="5.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsRoadnameTown.cs</FileName>
+      <HashCode>AAAAAIAAAAAAAEAAAAQAAAAIAAAAAQACAAAABQAggKg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.PsUnoccupiedRpt" Collapsed="true">
+    <Position X="7.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RPsUnoccupierpt.cs</FileName>
+      <HashCode>BAAAAAAAAoAAAAAAAAQAAhAAgAAAYQAAgAAAoAAogCE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.RcmStatisticalReport" Collapsed="true">
+    <Position X="25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RRcmStatisticalReport.cs</FileName>
+      <HashCode>AAAIBAACkACgAAAEAAgAAAAAAAAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.RcmStatNestedReport" Collapsed="true">
+    <Position X="26.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RRcmStatNestereport.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAACAAAQAAAIAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.RouteDescriptionSingleContract" Collapsed="true">
+    <Position X="28.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RRouteDescriptionSingleContract.cs</FileName>
+      <HashCode>IAAkEZBAKEAgqSAYACIEQAAYFAQAITAeACgmQAAhoIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.ScheduleaSingleContract" Collapsed="true">
+    <Position X="5.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RScheduleaSingleContract.cs</FileName>
+      <HashCode>ICQABZgAgYAgpIGIBSIWAAKUBGCAISBEKFBBAAAhkAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SchedulebSingleContract" Collapsed="true">
+    <Position X="7.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSchedulebSingleContract.cs</FileName>
+      <HashCode>AAAAAZAAAYAgAAgAAAIUCAgAAAAAESAECCAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustList" Collapsed="true">
+    <Position X="25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustList.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAQAAAAQAEAAAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustListCust" Collapsed="true">
+    <Position X="26.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustListCust.cs</FileName>
+      <HashCode>AAAAAAAAAAQAQAAAAAAAAAAAAAAAAQAAAAAAIAAgwAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustListCustSeq" Collapsed="true">
+    <Position X="28.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustListCustSeq.cs</FileName>
+      <HashCode>ABAAkEAAAAAAAAAAgkQAABAAwAAAAwBAAEABBAYghCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustListHdr" Collapsed="true">
+    <Position X="30.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustListHdr.cs</FileName>
+      <HashCode>IAAgEZhAIAAgoCAIACAUQAAABAAAISAUAAgEAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustListSeq" Collapsed="true">
+    <Position X="0.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustListSeq.cs</FileName>
+      <HashCode>ABAAkAAAAAAAAAAAgkRAABAAwAAAAwBAAEABBAIghCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.SummaryCustListUnseq" Collapsed="true">
+    <Position X="2.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RSummaryCustListUnseq.cs</FileName>
+      <HashCode>ABAAkAAAAAAAAAAAgkQAABAAwgAAAwBACEABBAIghCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehExpRegReport" Collapsed="true">
+    <Position X="0.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehExpRegReport.cs</FileName>
+      <HashCode>KAA4AAAAAAAAAAQBAwgQAIgBQIAAAQAGDAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehExpRenewReport" Collapsed="true">
+    <Position X="2.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehExpRenewReport.cs</FileName>
+      <HashCode>KAA4AQAAAAAAgAABAygQAIgBQIAAAQAGCAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehicleAge" Collapsed="true">
+    <Position X="5.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehicleAge.cs</FileName>
+      <HashCode>AACgAABAAAAgkEAAAAAAAEMEAAAgESAEAQAAAAAgiQQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehicleAgedetails" Collapsed="true">
+    <Position X="7.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehicleAgedetails.cs</FileName>
+      <HashCode>IAmANBACKAAkEEAgAAAEAECQAIAAESAEAAACAABggVQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehiclePerf" Collapsed="true">
+    <Position X="14.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehiclePerf.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQIAAAAAIAAAAAAAAAQAAAAAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehiclePerfAge" Collapsed="true">
+    <Position X="16.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehiclePerfAge.cs</FileName>
+      <HashCode>AQCAAAAAAAAAAAAIAAAAAAAAAgIAAQAAAAEAAAAgiAU=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehiclePerfCapacity" Collapsed="true">
+    <Position X="18" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehiclePerfCapacity.cs</FileName>
+      <HashCode>AAAACAAAAAAACEAIAAAIAAACAgAAAQAAAACACACgghA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehiclePerfFueltype" Collapsed="true">
+    <Position X="19.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehiclePerfFueltype.cs</FileName>
+      <HashCode>AAAAABAAAIAAAAAQAIAAAAAAAAAAAQAAAABAAAAggCA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehiclePerfVehicletype" Collapsed="true">
+    <Position X="21.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehiclePerfVehicletype.cs</FileName>
+      <HashCode>AAAAAAAIAAAAAAAQAAAAAAIAAAAAAYAAAABEAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehicleScheduleSingleContractv2" Collapsed="true">
+    <Position X="25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\RVehicleScheduleSingleContractv2.cs</FileName>
+      <HashCode>QkABQFDEEICBCiIIARIACEAAEdhEEQgAAoDCQAQghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.TownList" Collapsed="true">
+    <Position X="5.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\TownList.cs</FileName>
+      <HashCode>AAAiAIAAAAAAAEAgACAAAAAAAAAAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.TownSelect" Collapsed="true">
+    <Position X="7.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\TownSelect.cs</FileName>
+      <HashCode>EAAAAAAAEgAAAAAAAAAEAEAAAAAABUAAAAAIAAAggAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.UnoccupiedCriteria" Collapsed="true">
+    <Position X="14.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\UnoccupiedCriteria.cs</FileName>
+      <HashCode>CAQEAQQBAABAJCAAADgAAAAAAAgQAQAQAgAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralrpt.VehicleExpCriteria" Collapsed="true">
+    <Position X="9.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralrpt\VehicleExpCriteria.cs</FileName>
+      <HashCode>CAUEAYQIAAMAJCAAACgACAAIAAgQAQAQAAAAAAAggAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.Componentlist" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\Componentlist.cs</FileName>
+      <HashCode>EAACIAAAEAAgAAAEAABEAAQAABAAAQAAAAAAAAAhgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.DddwFilteredContractTypes" Collapsed="true">
+    <Position X="12.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\DddwFilteredContractTypes.cs</FileName>
+      <HashCode>CAAAAABAAAAAAAEAAAgAAAAAAAAAEQAAAQBAAAAggAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.DddwFilteredRegions" Collapsed="true">
+    <Position X="14.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\DddwFilteredRegions.cs</FileName>
+      <HashCode>AAAkAABAIgAAAAAAAAAAAAAAAAAAAQAQAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.GroupDetails" Collapsed="true">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\GroupDetails.cs</FileName>
+      <HashCode>EgABLAAMEAAgAAAEAAAEACQAAgAAAQAAAgCAAAEogAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserComponentRegionlist" Collapsed="true">
+    <Position X="18" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserComponentRegionlist.cs</FileName>
+      <HashCode>IAAEAAAAAAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAggIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserContractTypes" Collapsed="true">
+    <Position X="19.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserContractTypes.cs</FileName>
+      <HashCode>CAABAAAAAAAAAAAABAgAgAAAAAAAAQIABAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserDetails" Collapsed="true">
+    <Position X="21.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserDetails.cs</FileName>
+      <HashCode>ACQ3LAAAhAgAAIgEBAJAACwAAgBAAYDSBjAAYAAqgBE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserGrouplist" Collapsed="true">
+    <Position X="23.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserGrouplist.cs</FileName>
+      <HashCode>AAACAAAAACAAAAAAAABAAAAAAACAAQAAABAAIAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserGroupRights" Collapsed="true">
+    <Position X="25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserGroupRights.cs</FileName>
+      <HashCode>EAAEYACAEAAgEEAgBABEAAQAAAgEAQAQQAAAAAIggUg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserGroups" Collapsed="true">
+    <Position X="26.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserGroups.cs</FileName>
+      <HashCode>AgABDAAECAAAACAEAAAAQKAAAgAAAQAAAgAAAAEogBE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralsec.UserTest" Collapsed="true">
+    <Position X="30.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralsec\UserTest.cs</FileName>
+      <HashCode>GEIIoIwBDAIACCAAIAEAAQAwAAhSEQgBAIiQAxQghAg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.AddAllowance" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\AddAllowance.cs</FileName>
+      <HashCode>EAAwACAAEAAgQAAAAAAkEAEIIoAAAQAEAAhAAAAghAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.AddrSequenceInd" Collapsed="true">
+    <Position X="16.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\AddrSequenceInd.cs</FileName>
+      <HashCode>MAAAAIAAMEAgICAAABAEAAAQAgAAAYAEAAAAAAIgoAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.AllowanceBreakdown" Collapsed="true">
+    <Position X="18" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\AllowanceBreakdown.cs</FileName>
+      <HashCode>EAAwACAAEAAgQCMAAAAEEAEAIoAAAQAEAAggAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.CmbAddressDetail" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\CmbAddressDetail.cs</FileName>
+      <HashCode>FIgAIIAAEBAgQCggASAEAAAAACIAAQOGIggAoAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.CmbAddressList" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\CmbAddressList.cs</FileName>
+      <HashCode>EAgAIIIAEAAgSGAgASAEAAAAAAKAAQCGAggAgABggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.ContractAllowancesV2" Collapsed="true">
+    <Position X="16.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\ContractAllowancesV2.cs</FileName>
+      <HashCode>AABAAAAAAAAgACEAAAAAAAAAIQAAEQAEAAgAAAAhlAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.ContractMailtown" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\ContractMailtown.cs</FileName>
+      <HashCode>AAAAAAACAAAgAAAoACAAAAAAAgABAQAEAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.ContractTown" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\ContractTown.cs</FileName>
+      <HashCode>AEgAIIAAAAQgAEAgASAAAAAAAAAAAQAEAAAAgAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.DddwContractMailtown" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\DddwContractMailtown.cs</FileName>
+      <HashCode>ABgAIAACAAAgAAAgASAAAAAAAAABAQAFAAAAgAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.DddwContractRd" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\DddwContractRd.cs</FileName>
+      <HashCode>BAgAIAACAAggAAAgASAAAAAAAAABAYAEAAAAoAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.DddwCustTitle" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\DddwCustTitle.cs</FileName>
+      <HashCode>QAAAAAABAAAAAAAAQAAEAAAAAAAAAQAAAABgAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames" Collapsed="true">
+    <Position X="19.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\DddwSuburbNames.cs</FileName>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAQAAAAACAAQAAAAgAAAAkgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbs" Collapsed="true">
+    <Position X="21.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\DddwSuburbs.cs</FileName>
+      <HashCode>ACAgAAAAAAAAAAAAAgAAAAAAAACAAQAAAAAAAAAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.RestoreCust" Collapsed="true">
+    <Position X="4" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\RestoreCust.cs</FileName>
+      <HashCode>EAAEgABAEAQAAgAEgEFUIAAAQAAgAQQAAgAKBBIgkIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.RestoreCusts" Collapsed="true">
+    <Position X="5.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\RestoreCusts.cs</FileName>
+      <HashCode>EAAEgABAEAQAAgAEgEFUIAAAQAAgAQQAAgAKBBIgkIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.RoadList" Collapsed="true">
+    <Position X="7.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\RoadList.cs</FileName>
+      <HashCode>ARAgAIAAAAAIAEAgACQAAAAAAACAAQBAACAAgQIggCo=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin.SearchAddressResultsV2b" Collapsed="true">
+    <Position X="14.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ruralwin\SearchAddressResultsV2b.cs</FileName>
+      <HashCode>AQEkkAQAAAABEAMkACQAAABAQQAAAwAAAFALDQJggGA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.FrequencyDistances" Collapsed="true">
+    <Position X="23.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\DsFrequencyDistances.cs</FileName>
+      <HashCode>OACACABEMIEgIKADABAMCAQDBCEgAQAEQACACBAggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.NonVehicleOverrideRate" Collapsed="true">
+    <Position X="5.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\DsNonVehicleOverrideRate.cs</FileName>
+      <HashCode>GIAACwAAEAChAAAgCAQEBgAACCCIASAkCQICBAEhoAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.NonVehicleOverrideRateHistory" Collapsed="true">
+    <Position X="7.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\DsNonVehicleOverrideRateHistory.cs</FileName>
+      <HashCode>GIAACwAAEAAhAAAgCAQEBgAACCCKQSAkCQICBAEjoAQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.RouteFrequency" Collapsed="true">
+    <Position X="0.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\DsRouteFrequency.cs</FileName>
+      <HashCode>MAABAAAAMAAgICAQEAAEAACAAAAAAQAEAAAQAAAggAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.VehicleOverrideRate" Collapsed="true">
+    <Position X="11" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\DsVehicleOverrideRate.cs</FileName>
+      <HashCode>EAAAEEAAGgCgAIjQAABkAAQCCgAIASgEEAAQCEEggAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.WhatifCalculatorReport2005" Collapsed="true">
+    <Position X="28.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\WhatifCalculatorReport2005.cs</FileName>
+      <HashCode>ff7/qb329+n/en7vvS+2n/v3d//tP+neu8//c6fo384=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NZPostOffice.RDS.Entity.Ruralwin2.WhatifCalulator2005" Collapsed="true">
+    <Position X="0.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Ruralwin2\WhatifCalulator2005.cs</FileName>
+      <HashCode>dbK7qLk09un8Or6IvS+2HNrHd5rNMemWh8L6ESXg384=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>
