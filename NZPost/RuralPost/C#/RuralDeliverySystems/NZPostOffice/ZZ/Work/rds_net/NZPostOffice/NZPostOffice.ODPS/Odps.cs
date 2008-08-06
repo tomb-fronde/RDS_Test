@@ -28,7 +28,7 @@ namespace NZPostOffice.ODPS
             bool ret = LoginService.TryConnectNZPO();
             LogonAttrib lg = new LogonAttrib();
             lg.appName = config.AppSettings.Settings["AppName"].Value.ToString();
-            lg.version = "Version " + config.AppSettings.Settings["Version"].Value.ToString() + "( Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")";
+            lg.version = "Version " + config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")";
             lg.userID = config.AppSettings.Settings["DefaultUserName"].Value.ToString();
             WLogon wLogonDlg = new WLogon(lg);
             if (wLogonDlg.ShowDialog() == DialogResult.Yes)
