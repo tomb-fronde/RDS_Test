@@ -45,6 +45,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
 
             nat_adpost_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
             nat_xp_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
+            nat_pp_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
          
         }
 
