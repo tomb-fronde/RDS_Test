@@ -33,7 +33,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // cb_new
             // 
-            cb_new.Enabled = false;
+            // cb_new.Enabled = false;
+            cb_new.Enabled = true;
          
             // 
             // dw_selection

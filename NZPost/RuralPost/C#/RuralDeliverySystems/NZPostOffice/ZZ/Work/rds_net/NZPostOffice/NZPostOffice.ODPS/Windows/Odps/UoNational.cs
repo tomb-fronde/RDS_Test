@@ -34,8 +34,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
         public override void ue_open()
         {
             //base.ue_open();
+            int ll_natID;                                           // tjb
             int ll_row;
+
             ll_row = this.dw_selection.GetSelectedRow(0);
+
             if (ll_row >= 0)
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -43,7 +46,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("uo", "callinguo", this);
 
                 //OpenSheetWithParm(w_national_maintenance, dw_selection.getitemnumber(ll_row, "nat_id"), gnv_app.of_getframe(), 0, original!);
-                StaticMessage.IntegerParm = this.dw_selection.GetValue<int>(ll_row, "nat_id");
+                //StaticMessage.IntegerParm = this.dw_selection.GetValue<int>(ll_row, "nat_id");
+                ll_natID = this.dw_selection.GetValue<int>(ll_row, "nat_id");                      // tjb
+                StaticMessage.IntegerParm = ll_natID;                                              // tjb
                 WNationalMaintenance w_national_maintenance = new WNationalMaintenance();
                 w_national_maintenance.MdiParent = StaticVariables.MainMDI;
                 w_national_maintenance.Show();
@@ -52,9 +57,16 @@ namespace NZPostOffice.ODPS.Windows.Odps
 
         public override void ue_new()
         {
+            int ll_natID;                                           // tjb
+            int ll_row = this.dw_selection.GetSelectedRow(0);       // tjb
+            ll_row = (ll_row >= 0) ? ll_row : 0;                    // tjb
+
             Cursor.Current = Cursors.WaitCursor;
             //OpenSheetWithParm(w_national_maintenance, "New", gnv_app.of_getframe(), 0, original!);
-            StaticMessage.IntegerParm = 0; //added by jlwang
+            //StaticMessage.IntegerParm = 0; //added by jlwang
+            StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("uo", "callinguo", this);          // tjb
+            ll_natID = this.dw_selection.GetValue<int>(ll_row, "nat_id");                      // tjb
+            StaticMessage.IntegerParm = ll_natID;                                              // tjb
             StaticMessage.StringParm = "New";
             WNationalMaintenance w_national_maintenance = new WNationalMaintenance();
             w_national_maintenance.MdiParent = StaticVariables.MainMDI;
