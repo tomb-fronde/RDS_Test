@@ -973,6 +973,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Odps\DwNationalDetail.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwNationalDetail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\REDDatadict.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REDDatadict.cs</LastGenOutput>
