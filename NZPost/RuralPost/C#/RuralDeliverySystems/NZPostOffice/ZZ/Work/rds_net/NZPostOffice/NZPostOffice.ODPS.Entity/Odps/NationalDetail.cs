@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.Common;
+using NZPostOffice.Shared;
 using Metex.Core;
 using Metex.Core.Security;
+
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
@@ -60,7 +62,9 @@ namespace NZPostOffice.ODPS.Entity.Odps
     [MapInfo("nat_deductions_defaultcomptype", "_nat_deductions_defaultcomptype", "odps.[national]")]
     [MapInfo("nat_courierpost_defaultcomptype", "_nat_courierpost_defaultcomptype", "odps.[national]")]
 
-    [MapInfo("nat_xp_defaultcomptype", "_nat_xp_defaultcomptype", "national")]
+    [MapInfo("nat_xp_defaultcomptype", "_nat_xp_defaultcomptype", "odps.[national]")]
+    [MapInfo("nat_pp_defaultcomptype", "_nat_pp_defaultcomptype", "odps.[national]")]
+
     [System.Serializable()]
 
     public class NationalDetail : Entity<NationalDetail>
@@ -176,6 +180,9 @@ namespace NZPostOffice.ODPS.Entity.Odps
 
         [DBField()]
         private int? _nat_xp_defaultcomptype;
+
+        [DBField()]
+        private int? _nat_pp_defaultcomptype;
 
         private int? _nat_pbu_code_accrualbalance_gl;
 
@@ -845,6 +852,24 @@ namespace NZPostOffice.ODPS.Entity.Odps
             }
         }
 
+        public virtual int? NatPpDefaultcomptype
+        {
+            get
+            {
+                CanReadProperty("NatPpDefaultcomptype", true);
+                return _nat_pp_defaultcomptype;
+            }
+            set
+            {
+                CanWriteProperty("NatPpDefaultcomptype", true);
+                if (_nat_pp_defaultcomptype != value)
+                {
+                    _nat_pp_defaultcomptype = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual int? NatPbuCodeAccrualbalanceGl
         {
             get
@@ -902,7 +927,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
                                         odps.[national].nat_pbu_code_whtax_gl, odps.[national].nat_pbu_code_gst_gl, odps.[national].nat_pbu_code_netpay_gl, odps.[national].nat_invoice_number_prefix,
                                         odps.[national].nat_pbu_code_accrualbalance_gl, odps.[national].nat_freqadj_defaultcomptype, odps.[national].nat_adpost_defaultcomptype, 
                                         odps.[national].nat_contadj_defaultcomptype, odps.[national].nat_contallow_defaultcomptype, odps.[national].nat_deductions_defaultcomptype, 
-                                        odps.[national].nat_courierpost_defaultcomptype
+                                        odps.[national].nat_courierpost_defaultcomptype, odps.[national].nat_pp_defaultcomptype
                                         FROM odps.[national]
                                         WHERE ( odps.[national].nat_id = :a_national_id )";
                     //GenerateSelectCommandText(cm, "national");
@@ -951,7 +976,13 @@ namespace NZPostOffice.ODPS.Entity.Odps
                             instance._nat_contallow_defaultcomptype = GetValueFromReader<Int32?>(dr, 34);
                             instance._nat_deductions_defaultcomptype = GetValueFromReader<Int32?>(dr, 35);
                             instance._nat_courierpost_defaultcomptype = GetValueFromReader<Int32?>(dr, 36);
+                            instance._nat_pp_defaultcomptype = GetValueFromReader<Int32?>(dr, 37);
+                                // TJB  Set default value for Parcel Post entries
+                            if (instance._nat_pp_defaultcomptype == null)
+                                instance._nat_pp_defaultcomptype = 15;
+
                             instance.MarkOld();
+
                             instance.StoreInitialValues();
                             _list.Add(instance);
                         }
@@ -964,8 +995,10 @@ namespace NZPostOffice.ODPS.Entity.Odps
         [ServerMethod()]
         private void UpdateEntity()
         {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            if (string.Compare(StaticMessage.StringParm, "New") != 0)
             {
+                using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+                {
                 DbCommand cm = cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
@@ -1008,6 +1041,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     //"[national].nat_deductions_defaultcomptype = @nat_deductions_defaultcomptype AND " +
                     //"[national].nat_courierpost_defaultcomptype = @nat_courierpost_defaultcomptype AND " +
                     //"[national].nat_xp_defaultcomptype = @nat_xp_defaultcomptype ";
+                    //"[national].nat_pp_defaultcomptype = @nat_pp_defaultcomptype ";
                     pList.Add(cm, "nat_id", GetInitialValue("_nat_id"));
 
                     //pList.Add(cm, "ac_id", GetInitialValue("_ac_id"));
@@ -1046,10 +1080,12 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     //pList.Add(cm, "nat_deductions_defaultcomptype", GetInitialValue("_nat_deductions_defaultcomptype"));
                     //pList.Add(cm, "nat_courierpost_defaultcomptype", GetInitialValue("_nat_courierpost_defaultcomptype"));
                     //pList.Add(cm, "nat_xp_defaultcomptype", GetInitialValue("_nat_xp_defaultcomptype"));
+                    //pList.Add(cm, "nat_pp_defaultcomptype", GetInitialValue("_nat_pp_defaultcomptype"));
                     DBHelper.ExecuteNonQuery(cm, pList);
                 }
                 // reinitialize original key/value list
                 StoreInitialValues();
+                }
             }
         }
 
@@ -1068,6 +1104,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
                 StoreInitialValues();
             }
         }
+
         [ServerMethod()]
         private void DeleteEntity()
         {
@@ -1080,8 +1117,8 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "nat_id", GetInitialValue("_nat_id"));
-                    cm.CommandText = "DELETE FROM [national] WHERE " +
-                    "[national].nat_id = @nat_id ";
+                    cm.CommandText = "DELETE FROM [national] " 
+                                      + "WHERE " + "[national].nat_id = @nat_id ";
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
