@@ -35,61 +35,71 @@ namespace NZPostOffice.ODPS.Windows.Odps
         /// </summary>
         private void InitializeComponent()
         {
+            this.dw_single = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.cb_1 = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_2 = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
             this.SuspendLayout();
-
-            this.dw_single = new URdsDw();
-            this.cb_1 = new UCb();
-            this.cb_2 = new UCb();
-            Controls.Add(dw_single);
-            Controls.Add(cb_1);
-            Controls.Add(cb_2);
-            Controls.Add(dw_1);
-            this.MaximizeBox = false;
-            this.Tag = "color=window;";
-            this.Text = "National Maintenance";
-            this.ControlBox = true;
-            this.Location = new System.Drawing.Point(114, 128);
-            this.Size = new System.Drawing.Size(810, 520);
-           
             // 
             // dw_single
             // 
-            dw_single.DataObject = new DwNationalDetail();
-            dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_single.Tag = "resize=scale;color=window;";
-            dw_single.TabIndex = 1;
-            dw_single.Location = new System.Drawing.Point(3, 4);
-            dw_single.Size = new System.Drawing.Size(795, 455);
-           
+            this.dw_single.DataObject = new DwNationalDetail();
+            this.dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dw_single.FireConstructor = true;
+            this.dw_single.Location = new System.Drawing.Point(3, 4);
+            this.dw_single.Name = "dw_single";
+            this.dw_single.Size = new System.Drawing.Size(795, 492);
+            this.dw_single.TabIndex = 1;
+            this.dw_single.Tag = "resize=scale;color=window;";
             // 
             // cb_1
-            //
-            this.AcceptButton = cb_1;
-            cb_1.Text = "&Ok";
-            cb_1.TabIndex = 2;
-            cb_1.Location = new System.Drawing.Point(8, 460);
-            cb_1.Size = new System.Drawing.Size(60, 23);
-            cb_1.Click += new EventHandler(cb_1_clicked);
-           
+            // 
+            this.cb_1.Location = new System.Drawing.Point(11, 499);
+            this.cb_1.Name = "cb_1";
+            this.cb_1.Size = new System.Drawing.Size(60, 23);
+            this.cb_1.TabIndex = 2;
+            this.cb_1.Text = "&Ok";
+            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
             // 
             // cb_2
             // 
-            cb_2.Text = "Ca&ncel";
-            cb_2.TabIndex = 3;
-            cb_2.Location = new System.Drawing.Point(76, 460);
-            cb_2.Size = new System.Drawing.Size(60, 23);
-            cb_2.Click += new EventHandler(cb_2_clicked);
-           
+            this.cb_2.Location = new System.Drawing.Point(79, 499);
+            this.cb_2.Name = "cb_2";
+            this.cb_2.Size = new System.Drawing.Size(60, 23);
+            this.cb_2.TabIndex = 3;
+            this.cb_2.Text = "Ca&ncel";
+            this.cb_2.Click += new System.EventHandler(this.cb_2_clicked);
             // 
             // dw_1
             // 
-            dw_1 = new URdsDw();
-            dw_1.DataObject = new DwNationalDetail();
-            dw_1.Visible = false;
-            dw_1.TabIndex = 0;
-            dw_1.Location = new System.Drawing.Point(338, 443);
-       
-            this.ResumeLayout();
+            this.dw_1.DataObject = new DwNationalDetail();
+            this.dw_1.FireConstructor = true;
+            this.dw_1.Location = new System.Drawing.Point(338, 443);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(162, 139);
+            this.dw_1.TabIndex = 0;
+            this.dw_1.Visible = false;
+            // 
+            // WNationalMaintenance
+            // 
+            this.AcceptButton = this.cb_1;
+            this.ClientSize = new System.Drawing.Size(802, 528);
+            this.Controls.Add(this.dw_single);
+            this.Controls.Add(this.cb_1);
+            this.Controls.Add(this.cb_2);
+            this.Controls.Add(this.dw_1);
+            this.Location = new System.Drawing.Point(114, 128);
+            this.MaximizeBox = false;
+            this.Name = "WNationalMaintenance";
+            this.Tag = "color=window;";
+            this.Text = "National Maintenance";
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.Controls.SetChildIndex(this.cb_2, 0);
+            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.dw_single, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
