@@ -184,6 +184,22 @@
     <EmbeddedResource Include="Windows\OdpsPayrun\WPaymentRunSearch.resx">
       <DependentUpon>WPaymentRunSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Odps\WAbout.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Odps\WNationalMaintenance.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WNationalMaintenance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralbase\WOpeningScreen.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WOpeningScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralbase\WSystemAbout.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WSystemAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
