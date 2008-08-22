@@ -1796,8 +1796,7 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                             instance._denddate = GetValueFromReader<DateTime?>(dr,66);
                             instance._prstartdate = GetValueFromReader<DateTime?>(dr,67);
                             instance._prenddate = GetValueFromReader<DateTime?>(dr,68);
-                            //!p stored prcedure does not have this field; update database before using this field otherwise there is exception on this line
-                            //!instance._dexpirydate = GetValueFromReader<DateTime?>(dr, 69);
+                            instance._dexpirydate = GetValueFromReader<DateTime?>(dr, 69);
 							instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);

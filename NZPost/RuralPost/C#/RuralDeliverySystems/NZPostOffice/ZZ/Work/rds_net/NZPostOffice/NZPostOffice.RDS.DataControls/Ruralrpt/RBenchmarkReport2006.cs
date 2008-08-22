@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Metex.Core;
 using NZPostOffice.RDS.Entity.Ruralrpt;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
@@ -64,19 +65,112 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 //! if( isnull(denddate), relativedate(dstartdate,364), denddate) 
             if (source.Count > 0)
             {
-                if (!source[0].Denddate.HasValue)
+                // TJB  RD7_0005 Aug 2008:
+                //     If not all Piece Rate Suppliers are included, slide the total up
+                //     under the ones that are.  Since Crystal Reports doesn't appear to
+                //     have a function for "sliding" things (whichever direction), we have 
+                //     to do it manually.
+                //
+                //     NOTE: there's a bug (in Crystal?, C#?, the interface between them?) 
+                //           that means we can't change the position of the line under the 
+                //           column of values the way we can change the position of the total
+                //           field.  The following hack involves having lines under each of 
+                //           the numbers in the column, and turning them off by changing them 
+                //           to "noline"s (can't even change the line's visibility!) except
+                //           for the one we want to see.
+                //
+                //     The code assumes there will always be two suppliers ...
+                //     It also assumes any "missing" suppliers will always be the last ones ...
+                
+                if (source[0].PrsSupplier3 == null)
                 {
-                    if (source[0].Dstartdate.HasValue)
-                    {
-                        (this.report.ReportDefinition.ReportObjects["EndDate"] as
-                            CrystalDecisions.CrystalReports.Engine.TextObject).Text 
-                                     = string.Format("{0:dd-MMM-yyyy}",source[0].Dstartdate.GetValueOrDefault().AddDays(364));
-                    }  //! else is empty
+                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+
+                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost21"] as
+                                    CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
+
+                    (this.report.ReportDefinition.ReportObjects["prtotal1"] as
+                             CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
+
+                    // Hide the lower lines
+                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                }
+                else if (source[0].PrsSuppleir4 == null)
+                {
+                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+
+                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost31"] as
+                                    CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
+
+                    (this.report.ReportDefinition.ReportObjects["prtotal1"] as
+                             CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
+
+                    // Hide the other lines
+                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                }
+                else if (source[0].PrsSupplier5 == null)
+                {
+                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+
+                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost41"] as
+                                    CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
+
+                    (this.report.ReportDefinition.ReportObjects["prtotal1"] as
+                             CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
+
+                    // Hide the other lines
+                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else
                 {
+                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+
+                    // Hide the other lines
+                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                }
+
+                // Determine the report's end date
+                //
+                // TJB  RD7_0005 Aug 2008:  Changed to use either the EndDate or ExpiryDate
+                // If EndDate is null, use ExpiryDate, otherwise EndDate
+
+                if (source[0].Denddate.HasValue)
+                {
                     (this.report.ReportDefinition.ReportObjects["EndDate"] as
-                        CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].DEnddate);
+                        CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Denddate);
+                }
+                else
+                {
+                    if (source[0].Dexpirydate.HasValue)
+                    {
+                        (this.report.ReportDefinition.ReportObjects["EndDate"] as
+                            CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Dexpirydate);
+                    }
+                    else  // If neither an end date nor expiry date is specified, use the start date + 364 days
+                    {
+                        if (source[0].Dstartdate.HasValue)
+                        {
+                            (this.report.ReportDefinition.ReportObjects["EndDate"] as
+                                CrystalDecisions.CrystalReports.Engine.TextObject).Text
+                                         = string.Format("{0:dd-MMM-yyyy}", source[0].Dstartdate.GetValueOrDefault().AddDays(364));
+                        }
+                    }   // Finally, if there's no start date either, leave the displayed end date blank
                 }
             }
 

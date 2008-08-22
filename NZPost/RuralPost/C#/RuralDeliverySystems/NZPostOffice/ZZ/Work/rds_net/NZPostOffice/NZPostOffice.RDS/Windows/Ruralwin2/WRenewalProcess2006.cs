@@ -842,6 +842,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+                // TJB  Aug-2008:  Added from cb_bm_clicked
+            ((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
+
             while (lRow >= 0)
             {
                 ll_Ctr++;
