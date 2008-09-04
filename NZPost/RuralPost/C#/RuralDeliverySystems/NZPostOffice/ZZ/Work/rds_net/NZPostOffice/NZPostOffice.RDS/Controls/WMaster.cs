@@ -47,13 +47,16 @@ namespace NZPostOffice.RDS.Controls
 
         public void WMaster_Shown(object sender, EventArgs e)
         {
-            this.Resize += new EventHandler(resize);
-            //RaiseDwConstructor();
-            InvokeDwConstructor(this);
-            pfc_preopen();
-            open();
-            show();
-            pfc_postopen();
+            if (!this.DesignMode)
+            {
+                this.Resize += new EventHandler(resize);
+                //RaiseDwConstructor();
+                InvokeDwConstructor(this);
+                pfc_preopen();
+                open();
+                show();
+                pfc_postopen();
+            }
         }
 
         protected virtual void FormBase_FormClosing(object sender, FormClosingEventArgs e)
