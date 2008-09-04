@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using NZPostOffice.ODPS.Controls;
 using NZPostOffice.Shared;
 using Microsoft.Win32;
+using NZPostOffice.ODPS.DataControls.Odps;
 
 namespace NZPostOffice.ODPS.Windows.OdpsRep
 {
@@ -23,6 +24,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
         public WReportCriteria()
         {
             this.InitializeComponent();
+
+            dw_1.DataObject = new DwReportCriteria();
+            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).LostFocus += new EventHandler(dw_1_itemchanged);
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).KeyPress += new KeyPressEventHandler(WReportCriteria_KeyPress1);
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("sdate")).KeyPress += new KeyPressEventHandler(WReportCriteria_KeyPress);
@@ -30,6 +35,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
 
         public virtual void ue_aftershow()
         {
+            if (DesignMode)
+            {
+                return;
+            }
+
             string ls_saccess;
             ls_saccess = of_getaccess();
             /*?
@@ -84,6 +94,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
 
         public override void open()
         {
+            if (DesignMode)
+            {
+                return;
+            }
+
             base.open();
             string ls_saccess;
             DateTime dt_sdate = new DateTime();

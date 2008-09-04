@@ -51,19 +51,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
             //this.r_1 = new GroupBox();
             Controls.Add(r_2);
             Controls.Add(cbx_ctype);
-            this.r_2.Controls.Add(cbx_1);
-            this.r_2.Controls.Add(cbx_2);
-            this.r_2.Controls.Add(cbx_3);
-            this.r_2.Controls.Add(cbx_4);
-            this.r_2.Controls.Add(cbx_5);
-            this.r_2.Controls.Add(cbx_6);
-            this.r_2.Controls.Add(cbx_7);
-            this.r_2.Controls.Add(cbx_8);
-            this.r_2.Controls.Add(cbx_9);
-            this.r_2.Controls.Add(cbx_10);
-            //Controls.Add(st_2);
-            this.r_2.Controls.Add(cbx_all);
-            //Controls.Add(r_1);
+         
             //?         this.toolbaralignment = floating!;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Size = new System.Drawing.Size(463, 270);
@@ -226,6 +214,20 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
             //// 
             //r_1.Location = new System.Drawing.Point(257, 17);
             //r_1.Size = new System.Drawing.Size(190, 198);
+
+            this.r_2.Controls.Add(cbx_1);
+            this.r_2.Controls.Add(cbx_2);
+            this.r_2.Controls.Add(cbx_3);
+            this.r_2.Controls.Add(cbx_4);
+            this.r_2.Controls.Add(cbx_5);
+            this.r_2.Controls.Add(cbx_6);
+            this.r_2.Controls.Add(cbx_7);
+            this.r_2.Controls.Add(cbx_8);
+            this.r_2.Controls.Add(cbx_9);
+            this.r_2.Controls.Add(cbx_10);
+            //Controls.Add(st_2);
+            this.r_2.Controls.Add(cbx_all);
+            //Controls.Add(r_1);
 
             this.ResumeLayout();
         }

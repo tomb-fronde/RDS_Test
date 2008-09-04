@@ -72,8 +72,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsRep
             // 
             // dw_1
             // 
-            dw_1.DataObject = new DwReportCriteria();
-            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_1.DataObject = new DwReportCriteria();
+            //!dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_1.VerticalScroll.Visible = false;
             dw_1.TabIndex = 1;
             dw_1.Size = new System.Drawing.Size(247, 132);
