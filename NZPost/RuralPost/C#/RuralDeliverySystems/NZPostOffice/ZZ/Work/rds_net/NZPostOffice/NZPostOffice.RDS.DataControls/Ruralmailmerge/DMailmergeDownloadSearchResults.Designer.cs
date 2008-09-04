@@ -69,7 +69,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralmailmerge
             this.grid.ColumnHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(638, 252);
-            this.grid.BorderStyle = BorderStyle.None;
+            //this.grid.BorderStyle = BorderStyle.None;
             this.grid.TabIndex = 0;
 
             //
