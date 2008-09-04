@@ -38,6 +38,10 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+
+            dw_1.DataObject = new DPassword();
+            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
             this.Load += new EventHandler(WPasswordChange_Load);
 
             //jlwang:moved from IC
@@ -85,7 +89,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            dw_1.DataObject = new DPassword();
+            //!dw_1.DataObject = new DPassword();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_1);
@@ -100,7 +104,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             // dw_1
             // 
             dw_1.VerticalScroll.Visible = false;
-            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_1.TabIndex = 1;
             dw_1.Size = new Size(212, 85);
             dw_1.Location = new Point(0, 0);

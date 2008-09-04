@@ -108,22 +108,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.cb_ok = new Button();
             this.p_slide = new PictureBox();
             this.p_guide = new PictureBox();
-            Controls.Add(st_11);
-            Controls.Add(st_10);
-            Controls.Add(st_9);
-            Controls.Add(st_8);
-            Controls.Add(st_7);
-            Controls.Add(st_6);
-            Controls.Add(st_5);
-            Controls.Add(st_4);
-            Controls.Add(st_3);
-            Controls.Add(st_2);
-            Controls.Add(st_1);
-            Controls.Add(cb_cancel);
-            Controls.Add(st_percent);
-            Controls.Add(cb_ok);
-            Controls.Add(p_slide);
-            Controls.Add(p_guide);
+           
             this.Text = "Zoom";
             this.ControlBox = true;
             this.Size = new Size(190, 236);
@@ -317,6 +302,23 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             p_guide.Top = 18;
             p_guide.Left = 14;
             p_guide.Click += new EventHandler(p_guide_clicked);
+
+            Controls.Add(st_11);
+            Controls.Add(st_10);
+            Controls.Add(st_9);
+            Controls.Add(st_8);
+            Controls.Add(st_7);
+            Controls.Add(st_6);
+            Controls.Add(st_5);
+            Controls.Add(st_4);
+            Controls.Add(st_3);
+            Controls.Add(st_2);
+            Controls.Add(st_1);
+            Controls.Add(cb_cancel);
+            Controls.Add(st_percent);
+            Controls.Add(cb_ok);
+            Controls.Add(p_slide);
+            Controls.Add(p_guide);
             this.ResumeLayout();
         }
 

@@ -54,9 +54,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.cb_1 = new Button();
             this.st_bar = new Label();
             this.st_limit = new Label();
-            Controls.Add(cb_1);
-            Controls.Add(st_bar);
-            Controls.Add(st_limit);
+          
 
             this.BringToFront();
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -96,6 +94,10 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             st_limit.TabStop = false;
             st_limit.Size=new Size(299,22);
             st_limit.Location = new Point(12, 15);
+
+            Controls.Add(cb_1);
+            Controls.Add(st_bar);
+            Controls.Add(st_limit);
             this.ResumeLayout();
         }
       

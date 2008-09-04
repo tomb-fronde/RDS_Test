@@ -56,9 +56,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.dw_title = new DSystemTitle();
             this.mle_copyright = new TextBox();
             this.p_logo = new PictureBox();
-            Controls.Add(dw_title);
-            Controls.Add(mle_copyright);
-            Controls.Add(p_logo);
+         
             this.BackColor = System.Drawing.SystemColors.Control;
             this.Size = new Size(389, 351);
             this.Location=new Point( 115,77);
@@ -85,6 +83,11 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             p_logo.Image = global::NZPostOffice.Shared.Properties.Resources.Logo;
             p_logo.Size = new Size(378, 264);
             p_logo.Location = new Point(3, 4);
+
+            Controls.Add(dw_title);
+            Controls.Add(mle_copyright);
+            Controls.Add(p_logo);
+
             this.ResumeLayout();
         }
 
