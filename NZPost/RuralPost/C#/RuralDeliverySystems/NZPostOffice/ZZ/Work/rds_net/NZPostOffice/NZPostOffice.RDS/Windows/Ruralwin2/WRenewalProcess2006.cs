@@ -98,6 +98,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
 
+            dw_schedule.DataObject = new RScheduleaSingleContract();
+            dw_criteria1.DataObject = new DRenewalProcessCriteria();
+            dw_listings.DataObject = new DListContractsForProcessing2001();
+            dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_bm_report.DataObject = new RBenchmarkReport2006();
+            dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //pp! following lines moved from InitializeComponent to the ctnructor of windiw in order to open design mode of this window
             dw_criteria1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria1_constructor);
             ((DListContractsForProcessing2001)dw_listings.DataObject).CellDoubleClick += new EventHandler(dw_listings_doubleclicked);
@@ -154,7 +162,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_schedule = new URdsDw();
-            dw_schedule.DataObject = new RScheduleaSingleContract();
+            //!dw_schedule.DataObject = new RScheduleaSingleContract();
             this.tab_1 = new TabControl();
             Controls.Add(tab_1);
             Controls.Add(dw_schedule);
@@ -194,9 +202,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_clear = new UCb();
             l_1 = new Panel();
             dw_criteria1 = new URdsDw();
-            dw_criteria1.DataObject = new DRenewalProcessCriteria();
+            //!dw_criteria1.DataObject = new DRenewalProcessCriteria();
             dw_listings = new URdsDw();
-            dw_listings.DataObject = new DListContractsForProcessing2001();
+            //!dw_listings.DataObject = new DListContractsForProcessing2001();
             cb_create_pending = new Button();
             cb_bm = new Button();
             cb_2s = new Button();
@@ -240,7 +248,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             //?dw_criteria1.vscrollbar = false;
             dw_criteria1.TabIndex = 12;
-            dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_criteria1.Location = new System.Drawing.Point(51, 4);
             dw_criteria1.Size = new System.Drawing.Size(350, 90);
             dw_criteria1.ItemChanged += new EventHandler(dw_criteria1_itemchanged);
@@ -260,7 +268,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_listings.TabIndex = 4;
             dw_listings.Location = new System.Drawing.Point(51, 95);
             dw_listings.Size = new System.Drawing.Size(350, 275);
-            dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //p!            ((DListContractsForProcessing2001)dw_listings.DataObject).CellDoubleClick += new EventHandler(dw_listings_doubleclicked);
             //p!            dw_listings.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listings_constructor);
             // 
@@ -351,8 +359,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // Gegerated from create event for tabpage_2
             dw_bm_report = new URdsDw();
-            dw_bm_report.DataObject = new RBenchmarkReport2006();
-            dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_bm_report.DataObject = new RBenchmarkReport2006();
+            //!dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
             cb_printbm = new Button();
             tabpage_2.Controls.Add(dw_bm_report);
             tabpage_2.Controls.Add(cb_printbm);
@@ -843,7 +851,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
-                // TJB  Aug-2008:  Added from cb_bm_clicked
+            // TJB  Aug-2008:  Added from cb_bm_clicked
             ((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
 
             while (lRow >= 0)

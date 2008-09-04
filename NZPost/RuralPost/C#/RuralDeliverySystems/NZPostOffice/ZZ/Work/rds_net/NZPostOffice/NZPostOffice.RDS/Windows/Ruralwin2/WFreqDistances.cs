@@ -22,6 +22,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public WFreqDistances()
         {
             this.InitializeComponent();
+            this.dw_1.DataObject = new DFrequenceDistancesForm();
+            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             //jlwang:moved from IC 
             dw_1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_constructor);
@@ -37,7 +39,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DFrequenceDistancesForm();
+            //!this.dw_1.DataObject = new DFrequenceDistancesForm();
             Controls.Add(dw_1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -50,7 +52,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // dw_1
             // 
             dw_1.VerticalScroll.Visible = false;
-            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             //dw_1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_constructor);
             dw_1.Location = new System.Drawing.Point(0, 0);
             dw_1.Size = new System.Drawing.Size(350, 206);

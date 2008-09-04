@@ -79,6 +79,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public WPvtBagsUpdate()
         {
             this.InitializeComponent();
+            this.dw_regions.DataObject = new DDddwRegionList();
+            dw_regions.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             //jlwang;moved from IC
             ((Metex.Windows.DataEntityCombo)dw_regions.GetControlByName("region_list")).GotFocus += new EventHandler(dw_regions_got_focus);
@@ -113,7 +115,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.st_bag_count = new Label();
             this.st_freq_header = new Label();
             this.dw_regions = new URdsDw();
-            this.dw_regions.DataObject = new DDddwRegionList();
+            //!this.dw_regions.DataObject = new DDddwRegionList();
             this.st_region = new Label();
             Controls.Add(cb_update);
             Controls.Add(sle_5);
@@ -311,7 +313,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_regions
             // 
-            dw_regions.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_regions.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_regions.VerticalScroll.Visible = false;
             dw_regions.TabIndex = 2;
             dw_regions.Location = new System.Drawing.Point(84, 17);

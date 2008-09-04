@@ -108,6 +108,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public WShowRates2001()
         {
             this.InitializeComponent();
+
+            dw_vehiclerates.DataObject = new DVehicleRates2001();
+            dw_vehicletypes.DataObject = new DVehicalTypesList();
+            dw_nonvehicle.DataObject = new DNonVehicleRates2005();
+            dw_piecerate.DataObject = new DPieceRates2001();
+            dw_fuelrate.DataObject = new DFuelRates2001();
+            dw_ratedays.DataObject = new DRateDays2001();
+            dw_other.DataObject = new DMiscRates2001();
+
             //? this.tab_main.Controls[0].Controls[0].Controls[4].Visible = false;
 
             //jlwang:moved from IC
@@ -228,10 +237,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_vehiclerates
             // 
             dw_vehiclerates = new URdsDw();
-            dw_vehiclerates.DataObject = new DVehicleRates2001();
+            //!dw_vehiclerates.DataObject = new DVehicleRates2001();
 
             dw_vehicletypes = new URdsDw();
-            dw_vehicletypes.DataObject = new DVehicalTypesList();
+            //!dw_vehicletypes.DataObject = new DVehicalTypesList();
 
             tabpage_vehiclerates.Controls.Add(dw_vehiclerates);
             tabpage_vehiclerates.Controls.Add(dw_vehicletypes);
@@ -261,7 +270,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_nonvehiclerates
             //
             dw_nonvehicle = new URdsDw();
-            dw_nonvehicle.DataObject = new DNonVehicleRates2005();
+            //!dw_nonvehicle.DataObject = new DNonVehicleRates2005();
             tabpage_nonvehiclerates.Controls.Add(dw_nonvehicle);
             tabpage_nonvehiclerates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_nonvehiclerates.Text = "Non-Vehicle Rates";
@@ -284,7 +293,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_piecerates
             // 
             dw_piecerate = new URdsDw();
-            dw_piecerate.DataObject = new DPieceRates2001();
+            //!dw_piecerate.DataObject = new DPieceRates2001();
             tabpage_piecerates.Controls.Add(dw_piecerate);
             //?tabpage_piecerates.powertiptext = "Piece rates for the renewal group";
             tabpage_piecerates.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -307,7 +316,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_fuelrates
             // 
             dw_fuelrate = new URdsDw();
-            dw_fuelrate.DataObject = new DFuelRates2001();
+            //!dw_fuelrate.DataObject = new DFuelRates2001();
 
             tabpage_fuelrates.Controls.Add(dw_fuelrate);
             tabpage_fuelrates.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -329,7 +338,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_ratedays
             // 
             dw_ratedays = new URdsDw();
-            dw_ratedays.DataObject = new DRateDays2001();
+            //!dw_ratedays.DataObject = new DRateDays2001();
             tabpage_ratedays.Controls.Add(dw_ratedays);
             //?tabpage_ratedays.powertiptext = "Days per annum for the renewal group";
             tabpage_ratedays.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -352,7 +361,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_miscrates
             // 
             dw_other = new URdsDw();
-            dw_other.DataObject = new DMiscRates2001();
+            //!dw_other.DataObject = new DMiscRates2001();
             tabpage_miscrates.Controls.Add(dw_other);
             tabpage_miscrates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_miscrates.Text = "Other Rates";

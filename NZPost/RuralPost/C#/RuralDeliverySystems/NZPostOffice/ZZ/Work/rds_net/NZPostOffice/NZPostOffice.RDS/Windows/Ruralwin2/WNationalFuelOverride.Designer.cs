@@ -67,7 +67,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel = new UCb();
             this.tab_rates = new TabControl();
             this.dw_criteria = new URdsDw();
-            this.dw_criteria.DataObject = new DFuelOverrideFields();
+            //!this.dw_criteria.DataObject = new DFuelOverrideFields();
             Controls.Add(st_1);
             Controls.Add(cb_ok);
             Controls.Add(cb_cancel);
@@ -132,7 +132,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             description_2 = new Label();
             gb_fuel = new UGb();
             dw_details = new URdsDw();
-            dw_details.DataObject = new DwNationalFuelOverride();
+            //!dw_details.DataObject = new DwNationalFuelOverride();
             description_1 = new Label();
             tabpage_fuel.Controls.Add(description_10);
             tabpage_fuel.Controls.Add(description_9);
@@ -251,7 +251,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_details
             // 
-            dw_details.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_details.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_details.Location = new System.Drawing.Point(144, 17);
             dw_details.Size = new System.Drawing.Size(88, 224);
             dw_details.LostFocus += new EventHandler(dw_details_losefocus);
@@ -270,7 +270,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_other_rates
             // 
             dw_rates = new URdsDw();
-            dw_rates.DataObject = new DNationalRatesOverrideFields();
+            //!dw_rates.DataObject = new DNationalRatesOverrideFields();
             gb_other = new UGb();
             tabpage_other_rates.Controls.Add(dw_rates);
             tabpage_other_rates.Controls.Add(gb_other);
@@ -284,7 +284,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_rates
             // 
-            dw_rates.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_rates.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_rates.Location = new System.Drawing.Point(16, 19);
             dw_rates.Size = new System.Drawing.Size(208, 72);
             dw_rates.LostFocus += new EventHandler(dw_rates_losefocus);
@@ -299,7 +299,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_criteria.TabIndex = 1;
             dw_criteria.Location = new System.Drawing.Point(7, 3);
             dw_criteria.Size = new System.Drawing.Size(239, 46);

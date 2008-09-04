@@ -82,6 +82,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
 
+            dw_summary.DataObject = new DWhatifCalulator2005();
+            dw_whatifreport.DataObject = new DWhatifCalculatorReport2005();
+            dw_distribution.DataObject = new DWhatifDistribution2001();
+
             //jlwang:moved from IC
 
             //((DWhatifCalulator2005)dw_summary.DataObject).CellDoubleClick += new EventHandler(dw_summary_doubleclicked);
@@ -162,7 +166,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_1
             // 
             dw_summary = new URdsDw();
-            dw_summary.DataObject = new DWhatifCalulator2005();
+            //!dw_summary.DataObject = new DWhatifCalulator2005();
             tabpage_1.Controls.Add(dw_summary);
             tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_1.Text = "Summary Report";
@@ -189,7 +193,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_2
             // 
             dw_whatifreport = new URdsDw();
-            dw_whatifreport.DataObject = new DWhatifCalculatorReport2005();
+            //!dw_whatifreport.DataObject = new DWhatifCalculatorReport2005();
             tabpage_2.Controls.Add(dw_whatifreport);
             tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_2.Text = "Full Report";
@@ -213,7 +217,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_3
             // 
             dw_distribution = new URdsDw();
-            dw_distribution.DataObject = new DWhatifDistribution2001();
+            //!dw_distribution.DataObject = new DWhatifDistribution2001();
             tabpage_3.Controls.Add(dw_distribution);
             tabpage_3.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_3.Text = "Distribution Report";

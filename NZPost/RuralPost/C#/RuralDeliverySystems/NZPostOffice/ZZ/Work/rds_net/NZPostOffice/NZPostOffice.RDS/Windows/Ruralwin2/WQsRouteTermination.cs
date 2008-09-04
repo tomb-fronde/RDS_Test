@@ -32,6 +32,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+            this.dw_1.DataObject = new DQsRouteTerminationCriteria();
+            this.dw_2.DataObject = new DQsRouteTerminationList();
 
             //jlwang:moved from IC
             dw_1.Constructor += new UserEventDelegate(dw_1_constructor);
@@ -50,9 +52,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DQsRouteTerminationCriteria();
+            //!this.dw_1.DataObject = new DQsRouteTerminationCriteria();
             this.dw_2 = new URdsDw();
-            this.dw_2.DataObject = new DQsRouteTerminationList();
+            //!this.dw_2.DataObject = new DQsRouteTerminationList();
             this.pb_search = new Button();
             this.pb_return = new Button();
             this.pb_cancel = new Button();

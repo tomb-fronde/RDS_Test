@@ -29,6 +29,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            this.dw_scale.DataObject = new DSetArticalCountsScalingFactor();
+
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             dw_scale.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_scale_constructor);
@@ -45,7 +47,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_scale = new URdsDw();
-            this.dw_scale.DataObject = new DSetArticalCountsScalingFactor();
+            //!this.dw_scale.DataObject = new DSetArticalCountsScalingFactor();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_scale);

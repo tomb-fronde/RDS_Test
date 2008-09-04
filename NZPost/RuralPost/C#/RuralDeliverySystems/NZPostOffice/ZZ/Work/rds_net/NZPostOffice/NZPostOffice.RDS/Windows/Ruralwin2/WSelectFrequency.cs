@@ -27,9 +27,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+
+
+            this.dw_list.DataObject = new DContractRouteFrequencySelect2001();
+            dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.KeyDown += new KeyEventHandler(WSelectFrequency_KeyDown);
+
+            ((DContractRouteFrequencySelect2001)dw_list.DataObject).CellDoubleClick += new EventHandler(dw_list_doubleclicked);
         }
 
         public override void open()
@@ -40,7 +48,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_list.DataObject.FilterString = "rf_active = 'Y'";
             dw_list.DataObject.Filter<ContractRouteFrequencySelect2001>();
             //?dw_list.setrowfocusindicator(focusrect!);
-            StaticVariables.gnv_app.of_get_parameters().stringparm = "NotFound";
+            StaticVariables.gnv_app.of_get_parameters().stringparm = "NotFound";         
         }
 
         #region Form Design
@@ -52,7 +60,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_list = new URdsDw();
-            this.dw_list.DataObject = new DContractRouteFrequencySelect2001();
+//!            this.dw_list.DataObject = new DContractRouteFrequencySelect2001();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_list);
@@ -68,13 +76,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // dw_list
             // 
             dw_list.AutoScroll = true;
-            dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_list.TabIndex = 1;
             dw_list.Location = new System.Drawing.Point(5, 6);
             dw_list.Size = new System.Drawing.Size(306, 125);
             dw_list.Click += new EventHandler(dw_list_clicked);
             dw_list.RowFocusChanged += new EventHandler(dw_list_rowfocuschanged);
-            ((DContractRouteFrequencySelect2001)dw_list.DataObject).CellDoubleClick += new EventHandler(dw_list_doubleclicked);
+//!            ((DContractRouteFrequencySelect2001)dw_list.DataObject).CellDoubleClick += new EventHandler(dw_list_doubleclicked);
             // 
             // cb_ok
             // 

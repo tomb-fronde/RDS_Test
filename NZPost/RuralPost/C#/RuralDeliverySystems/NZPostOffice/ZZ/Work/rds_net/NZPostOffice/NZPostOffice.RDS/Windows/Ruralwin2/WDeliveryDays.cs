@@ -26,6 +26,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+
+            this.dw_1.DataObject = new DDeliveryDays();
+            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
         }
 
         public override void open()
@@ -55,7 +58,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DDeliveryDays();
+            //!this.dw_1.DataObject = new DDeliveryDays();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_1);
@@ -70,7 +73,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_1.VerticalScroll.Visible = false;
             dw_1.HorizontalScroll.Visible = true;
-            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_1.TabIndex = 1;
             dw_1.Location = new System.Drawing.Point(3, 1);
             dw_1.Size = new System.Drawing.Size(188, 74);

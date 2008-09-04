@@ -24,6 +24,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public WSetScalingFactors()
         {
             this.InitializeComponent();
+            this.dw_1.DataObject = new DSetScalingFactor();
+            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:mvoed from IC
             this.FormClosing -= new FormClosingEventHandler(FormBase_FormClosing);
         }
@@ -59,7 +62,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DSetScalingFactor();
+            //!this.dw_1.DataObject = new DSetScalingFactor();
             this.cb_update = new Button();
             Controls.Add(cb_update);
             Controls.Add(dw_1);
@@ -83,7 +86,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_1.TabIndex = 1;
             dw_1.Size = new System.Drawing.Size(175, 66);
-            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_1.Location = new System.Drawing.Point(3, 5);
             //?dw_1.Constructor += new UserEventDelegate(dw_1_constructor);
 

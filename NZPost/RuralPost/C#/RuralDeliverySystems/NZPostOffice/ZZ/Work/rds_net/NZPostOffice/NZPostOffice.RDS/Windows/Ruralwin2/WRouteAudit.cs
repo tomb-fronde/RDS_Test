@@ -75,12 +75,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             m_sheet = new NZPostOffice.RDS.Menus.MSheet(this);
             this.InitializeComponent();
+
+            dw_11.DataObject = new DRouteAuditDe();
+            dw_report1.DataObject = new DRouteAuditDePrint();
+            dw_11.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_2.DataObject = new DwRunningSheetHeader();
+
             m_sheet.m_print.Visible = false;
             m_sheet._m_print.Visible = false;
 
             this.ShowInTaskbar = false;
             AttachItemChangeEvent(); //added by jlwang for call itemchange
 
+
+            dw_1.DataObject = new DRouteFrequencyForRouteAudit();
+            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //jlwang:moved fromIC
             //dw_11.DataObject.ItemChanged += new EventHandler(dw_11_itemchanged);
             dw_11.PfcValidation += new UserEventDelegate1(dw_11_pfcValidation);
@@ -151,9 +160,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             st_contract = new Label();
             gb_print1 = new GroupBox();
             dw_11 = new URdsDw();
-            dw_11.DataObject = new DRouteAuditDe();
+            //!dw_11.DataObject = new DRouteAuditDe();
             dw_report1 = new URdsDw();
-            dw_report1.DataObject = new DRouteAuditDePrint();
+            //!dw_report1.DataObject = new DRouteAuditDePrint();
             tabpage_1.Controls.Add(rb_blank1);
             tabpage_1.Controls.Add(rb_audit1);
             tabpage_1.Controls.Add(gb_print1);
@@ -215,7 +224,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // dw_11
             // 
             dw_11.TabIndex = 0;
-            dw_11.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_11.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_11.Location = new System.Drawing.Point(1, 3);
             dw_11.Size = new System.Drawing.Size(606, 319);
 
@@ -258,7 +267,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_3
             // 
             dw_1 = new URdsDw();
-            dw_1.DataObject = new DRouteFrequencyForRouteAudit();
+//!            dw_1.DataObject = new DRouteFrequencyForRouteAudit();
             tabpage_3.Controls.Add(dw_1);
             tabpage_3.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_3.Text = "Frequencies";
@@ -271,7 +280,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_1.TabIndex = 0;
             dw_1.Location = new System.Drawing.Point(5, 13);
-            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_1.Size = new System.Drawing.Size(573, 338);
             dw_1.Location = new System.Drawing.Point(5, 13);
             dw_1.Click += new EventHandler(dw_1_clicked);
@@ -280,7 +289,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_4
             // 
             dw_2 = new URdsDw();
-            dw_2.DataObject = new DwRunningSheetHeader();
+            //!dw_2.DataObject = new DwRunningSheetHeader();
             rb_blank2 = new RadioButton();
             rb_details2 = new RadioButton();
             gb_1 = new GroupBox();

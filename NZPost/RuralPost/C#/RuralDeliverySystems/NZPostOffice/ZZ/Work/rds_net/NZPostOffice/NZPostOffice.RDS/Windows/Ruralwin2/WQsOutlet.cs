@@ -37,6 +37,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+            dw_criteria.DataObject = new DQsOutletsCriteria();
+            dw_results.DataObject = new DQsOutlets();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -59,9 +62,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.st_1 = new Label();
             this.l_1 = new Panel();
             this.dw_criteria = new URdsDw();
-            dw_criteria.DataObject = new DQsOutletsCriteria();
+            //!dw_criteria.DataObject = new DQsOutletsCriteria();
             this.dw_results = new URdsDw();
-            dw_results.DataObject = new DQsOutlets();
+            //!dw_results.DataObject = new DQsOutlets();
             this.pb_search = new Button();
             this.pb_cancel = new Button();
             this.pb_return = new Button();
@@ -91,7 +94,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // dw_criteria
             // 
             dw_criteria.TabIndex = 1;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_criteria.Location = new System.Drawing.Point(3, 0);
             dw_criteria.Size = new System.Drawing.Size(327, 64);
             //((DataEntityCombo)dw_criteria.GetControlByName("region_id")).SelectedValueChanged += new EventHandler(dw_criteria_itemchanged);

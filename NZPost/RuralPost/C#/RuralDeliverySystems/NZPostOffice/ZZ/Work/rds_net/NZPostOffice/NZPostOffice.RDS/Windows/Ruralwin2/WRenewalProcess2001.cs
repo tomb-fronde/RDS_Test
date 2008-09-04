@@ -93,6 +93,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
 
+            this.dw_schedule.DataObject = new RScheduleaSingleContract();
+            dw_criteria1.DataObject = new DRenewalProcessCriteria();
+            dw_listings.DataObject = new DListContractsForProcessing2001();
+
             //jlwang:moved from IC
             dw_criteria1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria1_constructor);
             ((DListContractsForProcessing2001)dw_listings.DataObject).CellDoubleClick += new EventHandler(dw_listings_doubleclicked);
@@ -111,7 +115,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.dw_schedule = new URdsDw();
-            this.dw_schedule.DataObject = new RScheduleaSingleContract();
+            //!this.dw_schedule.DataObject = new RScheduleaSingleContract();
             this.tab_1 = new TabControl();
 
             Controls.Add(tab_1);
@@ -153,9 +157,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             cb_clear = new UCb();
             dw_criteria1 = new URdsDw();
-            dw_criteria1.DataObject = new DRenewalProcessCriteria();
+            //!dw_criteria1.DataObject = new DRenewalProcessCriteria();
             dw_listings = new URdsDw();
-            dw_listings.DataObject = new DListContractsForProcessing2001();
+            //!dw_listings.DataObject = new DListContractsForProcessing2001();
             cb_create_pending = new Button();
             cb_bm = new Button();
             cb_2s = new Button();

@@ -35,6 +35,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            this.dw_criteria.DataObject = new DFuelOverrideFields();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            dw_details.DataObject = new DwNationalFuelOverride();
+            dw_details.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            dw_rates.DataObject = new DNationalRatesOverrideFields();
+            dw_rates.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
             //jlwang:moved from IC
             dw_details.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_details_constructor);
             dw_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_rates_constructor);

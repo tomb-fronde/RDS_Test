@@ -81,6 +81,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
 
+            dw_frequency_description.DataObject = new DFreqDescription();
+            dw_frequency_description.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_header.DataObject = new DFrequencyTitle();
+            dw_extensions.DataObject = new DFrequenceDistances();
+            dw_mail_carried.DataObject = new DMailCarriedForm();
+            dw_annotation.DataObject = new DFrequencyAnnotation();
+            dw_annotation.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+
             //jlwang:moved from IC
             dw_extensions.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_extensions_constructor);
             dw_extensions.DataObject.BorderStyle = BorderStyle.Fixed3D;
@@ -105,6 +115,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             //jlwang:end
 
+            ((DMailCarriedForm)dw_mail_carried.DataObject).CellButtonClick += new EventHandler(dw_mail_carried_clicked);
+
             //! used to get rfpt_id old value before changing it
             ((DFreqDescription)(dw_frequency_description.DataObject)).Grid.CellEnter += new DataGridViewCellEventHandler(Grid_CellEnter);
 
@@ -121,7 +133,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tab_frequencies = new TabControl();
 
             dw_header = new URdsDw();
-            this.dw_header.DataObject = new DFrequencyTitle();
+            //!this.dw_header.DataObject = new DFrequencyTitle();
             this.cb_seq = new UCb();
 
             Controls.Add(dw_header);
@@ -156,7 +168,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_extensions
             // 
             dw_extensions = new URdsDw();
-            dw_extensions.DataObject = new DFrequenceDistances();
+            //!dw_extensions.DataObject = new DFrequenceDistances();
             tabpage_extensions.Controls.Add(dw_extensions);
             tabpage_extensions.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_extensions.Text = "Extensions";
@@ -180,7 +192,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // tabpage_description
             // 
             dw_frequency_description = new URdsDw();
-            dw_frequency_description.DataObject = new DFreqDescription();
+//!            dw_frequency_description.DataObject = new DFreqDescription();
             tabpage_description.Controls.Add(dw_frequency_description);
             tabpage_description.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_description.Text = "Description";
@@ -195,7 +207,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_frequency_description.TabIndex = 2;
             dw_frequency_description.Location = new System.Drawing.Point(5, 70);
-            dw_frequency_description.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_frequency_description.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_frequency_description.Size = new System.Drawing.Size(540, 239);
             dw_frequency_description.ItemChanged += new EventHandler(dw_frequency_description_itemchanged);
             dw_frequency_description.LostFocus += new EventHandler(dw_frequency_description_losefocus);
@@ -214,7 +226,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // Gegerated from create event for tabpage_mail_carried
             dw_mail_carried = new URdsDw();
-            dw_mail_carried.DataObject = new DMailCarriedForm();
+            //!dw_mail_carried.DataObject = new DMailCarriedForm();
             //dw_mail_carried.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_mail_carried.Controls.Add(dw_mail_carried);
             tabpage_mail_carried.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -230,8 +242,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_mail_carried.TabIndex = 2;
             dw_mail_carried.Location = new System.Drawing.Point(5, 70);
-            dw_mail_carried.Size = new System.Drawing.Size(540, 235);
-            ((DMailCarriedForm)dw_mail_carried.DataObject).CellButtonClick += new EventHandler(dw_mail_carried_clicked);
+            dw_mail_carried.Size = new System.Drawing.Size(540, 235);            
             dw_mail_carried.ItemChanged += new EventHandler(dw_mail_carried_itemchanged);
             //?dw_mail_carried.ItemFocusChanged += new Metex.PBLib.Type.DataWindowEventHandler(dw_mail_carried_itemfocuschanged);
             dw_mail_carried.LostFocus += new EventHandler(dw_mail_carried_losefocus);
@@ -244,7 +255,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             mle_annotation = new TextBox();
             dw_annotation = new URdsDw();
-            dw_annotation.DataObject = new DFrequencyAnnotation();
+            //!dw_annotation.DataObject = new DFrequencyAnnotation();
             tabpage_annotation.Controls.Add(mle_annotation);
             tabpage_annotation.Controls.Add(dw_annotation);
             tabpage_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -269,7 +280,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_annotation
             // 
-            dw_annotation.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_annotation.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_annotation.TabIndex = 2;
             dw_annotation.Location = new System.Drawing.Point(8, 65);
             dw_annotation.Size = new System.Drawing.Size(529, 24);
@@ -279,7 +290,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_header
             // 
-            dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_header.TabIndex = 3;
             dw_header.Location = new System.Drawing.Point(20, 30);
             dw_header.Size = new System.Drawing.Size(519, 60);

@@ -30,6 +30,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+            this.dw_1.DataObject = new DQsContractorCriteria();
+            this.dw_2.DataObject = new DQsContractorList();
 
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -41,6 +43,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ((DQsContractorList)dw_2.DataObject).CellDoubleClick += new EventHandler(dw_2_doubleclicked);
             dw_2.Constructor += new UserEventDelegate(dw_2_constructor);
             dw_2.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_1.DataObject.GotFocus += new EventHandler(dw_1_getfocus);
 
             //jlwnag:end
         }
@@ -55,8 +59,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
             this.dw_2 = new URdsDw();
-            this.dw_1.DataObject = new DQsContractorCriteria();
-            this.dw_2.DataObject = new DQsContractorList();
+            //!this.dw_1.DataObject = new DQsContractorCriteria();
+            //!this.dw_2.DataObject = new DQsContractorList();
             this.pb_search = new Button();
             this.pb_return = new Button();
             this.pb_cancel = new Button();
@@ -77,7 +81,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_1.TabIndex = 1;
             dw_1.Location = new System.Drawing.Point(3, 4);
             dw_1.Size = new System.Drawing.Size(277, 60);
-            dw_1.DataObject.GotFocus += new EventHandler(dw_1_getfocus);
+//!            dw_1.DataObject.GotFocus += new EventHandler(dw_1_getfocus);
 
             //dw_1.GetControlByName("suppno").GotFocus += new EventHandler(dw_1_getfocus);
             //dw_1.GetControlByName("suppname").GotFocus += new EventHandler(dw_1_getfocus);

@@ -61,6 +61,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public WPieceRateImport()
         {
             this.InitializeComponent();
+
+            dw_1.DataObject = new DPieceRateImport();
             //jlwang:moved from IC
             dw_wrong_rate.DataObject = new DPieceRateImportDiffRateReport();
             dw_wrong_rate.Constructor += new UserEventDelegate(dw_wrong_rate_constructor);
@@ -132,7 +134,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.SuspendLayout();
 
             this.dw_1 = new URdsDw();
-            dw_1.DataObject = new DPieceRateImport();
+//!            dw_1.DataObject = new DPieceRateImport();
             dw_1.TabIndex = 1;
 
             this.sle_1 = new TextBox();

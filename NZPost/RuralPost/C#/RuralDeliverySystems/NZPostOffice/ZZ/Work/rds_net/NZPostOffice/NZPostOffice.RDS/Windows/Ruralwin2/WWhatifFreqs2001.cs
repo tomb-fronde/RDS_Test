@@ -63,6 +63,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            this.dw_1.DataObject = new DWhatifFreqs();
+            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             dw_1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_constructor);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -86,7 +89,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.em_2 = new NumericalMaskedTextBox();
             this.st_2 = new Label();
             dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DWhatifFreqs();
+//!            this.dw_1.DataObject = new DWhatifFreqs();
             this.gb_2 = new GroupBox();
             this.gb_1 = new GroupBox();
             Controls.Add(cb_ok);
@@ -181,7 +184,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_1
             // 
-            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_1.TabIndex = 1;
             dw_1.Size = new System.Drawing.Size(369, 167);
             dw_1.Location=new System.Drawing.Point(17,27);
