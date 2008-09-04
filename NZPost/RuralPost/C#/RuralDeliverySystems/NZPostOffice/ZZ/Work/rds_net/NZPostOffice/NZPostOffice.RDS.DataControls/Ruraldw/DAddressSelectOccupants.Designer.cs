@@ -68,7 +68,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			move_ind = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.move_ind.DataPropertyName = "MoveInd";
 			this.move_ind.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.move_ind.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;;
+            this.move_ind.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.move_ind.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.move_ind.DefaultCellStyle.BackColor = System.Drawing.Color.White;//.SystemColors.ButtonFace;
 			this.move_ind.DefaultCellStyle.NullValue = false;
