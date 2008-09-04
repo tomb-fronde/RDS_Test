@@ -62,6 +62,8 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+
+            this.dw_download.DataObject = new DMailmergeCustDownloadData();
         }
 
         #region Form Design
@@ -89,7 +91,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             this.st_wppath = new Label();
             this.sle_wppath = new TextBox();
             this.dw_download = new URdsDw();
-            this.dw_download.DataObject = new DMailmergeCustDownloadData();
+            //!this.dw_download.DataObject = new DMailmergeCustDownloadData();
             Controls.Add(cb_5);
             Controls.Add(cb_4);
             Controls.Add(cb_wppath);

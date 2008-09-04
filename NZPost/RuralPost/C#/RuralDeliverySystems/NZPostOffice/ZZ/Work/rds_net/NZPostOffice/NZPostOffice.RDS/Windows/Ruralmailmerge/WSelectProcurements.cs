@@ -38,6 +38,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.InitializeComponent();
             this.ShowInTaskbar = false;
+            this.dw_select.DataObject = new DSelectProcurements();
 
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -54,7 +55,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.SuspendLayout();
             this.dw_select = new URdsDw();
-            this.dw_select.DataObject = new DSelectProcurements();
+            //!this.dw_select.DataObject = new DSelectProcurements();
             this.cb_ok = new UCb();
             this.cb_cancel = new UCb();
             this.st_title = new USt();

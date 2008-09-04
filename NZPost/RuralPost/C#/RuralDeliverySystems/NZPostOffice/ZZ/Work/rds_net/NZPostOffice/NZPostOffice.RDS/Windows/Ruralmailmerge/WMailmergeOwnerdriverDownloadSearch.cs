@@ -40,6 +40,12 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.InitializeComponent();
 
+            this.dw_syntax.DataObject = new DMailmergeOdDownloadData();
+            this.dw_criteria.DataObject = new DMailmergeOwnerdriverDownloadSearch();
+            this.dw_results.DataObject = new DMailmergeDownloadSearchResults();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("procur_bmp"))).Click += new System.EventHandler(dw_criteria_Clicked);
@@ -57,9 +63,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.SuspendLayout();
             this.dw_syntax = new URdsDw();
-            this.dw_syntax.DataObject = new DMailmergeOdDownloadData();
-            this.dw_criteria.DataObject = new DMailmergeOwnerdriverDownloadSearch();
-            this.dw_results.DataObject = new DMailmergeDownloadSearchResults();
+           
             Controls.Add(dw_syntax);
             //?Controls.Add(dw_results);
             this.Height = 468;
@@ -79,7 +83,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             dw_criteria.Width = 300;
             dw_criteria.Top = -2;
             dw_criteria.Left = 0;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+           
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("procur_bmp"))).Click += new System.EventHandler(dw_criteria_Clicked);
             //
@@ -89,7 +93,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             dw_results.Width = 300;
             dw_results.Top = 260;
             dw_results.Left = 3;
-            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            
             //((DMailmergeDownloadSearchResults)dw_results.DataObject).DoubleClick += new EventHandler(dw_results_doubleclicked);
             // pb_search
             // 

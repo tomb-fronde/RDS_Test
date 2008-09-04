@@ -31,6 +31,14 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.InitializeComponent();
 
+            this.dw_syntax.DataObject = new DMailmergeCustDownloadData();           
+            this.dw_criteria.DataObject = new DMailmergeCustomerDownloadSearch();            
+            this.dw_results.DataObject = new DMailmergeDownloadSearchResults();
+
+            dw_syntax.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             ((DMailmergeDownloadSearchResults)dw_results.DataObject).DoubleClick += new EventHandler(dw_results_doubleclicked);
@@ -46,9 +54,6 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             this.SuspendLayout();
             this.dw_syntax = new URdsDw();
-            this.dw_syntax.DataObject = new DMailmergeCustDownloadData();
-            this.dw_criteria.DataObject = new DMailmergeCustomerDownloadSearch();
-            this.dw_results.DataObject = new DMailmergeDownloadSearchResults();
             this.Controls.Add(dw_syntax);
             this.Name = "w_mailmerge_customer_download_search";
             this.Height = 390;
@@ -65,14 +70,14 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             // 
             dw_criteria.Height = 177;
             dw_criteria.Top = 4;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             // 
             // dw_results
             // 
             dw_results.Height = 160;
             dw_results.Top = 185;
-            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //((DMailmergeDownloadSearchResults)dw_results.DataObject).DoubleClick += new EventHandler(dw_results_doubleclicked);
             // 
             // pb_search
@@ -87,7 +92,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             // 
             // dw_syntax
             // 
-            dw_syntax.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //dw_syntax.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_syntax.HorizontalScroll.Visible = true;
             dw_syntax.TabIndex = 5;
             dw_syntax.Size = new Size(70, 56);
