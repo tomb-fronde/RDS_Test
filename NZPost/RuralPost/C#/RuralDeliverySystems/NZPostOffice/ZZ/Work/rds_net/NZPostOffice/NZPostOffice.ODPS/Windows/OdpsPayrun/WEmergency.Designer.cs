@@ -44,13 +44,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             this.cb_2 = new Button();
             
             dw_1 = new URdsDw();
-            Controls.Add(dw_1);
-            Controls.Add(sle_1);
-            Controls.Add(sle_2);
-            Controls.Add(st_1);
-            Controls.Add(st_2);
-            Controls.Add(cb_1);
-            Controls.Add(cb_2);
+            
             this.Text = "QUICK AND DIRTY";
             this.ControlBox = true;
             this.Size = new System.Drawing.Size(468, 369);
@@ -58,7 +52,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // 
             // dw_1
             // 
-            dw_1.DataObject  = new DwEmergency();
+//!            dw_1.DataObject  = new DwEmergency();
             dw_1.TabIndex = 5;
             dw_1.Location = new System.Drawing.Point(3, 35);
             dw_1.Size = new System.Drawing.Size(457, 300);
@@ -119,6 +113,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             cb_2.Location = new System.Drawing.Point(398, 3);
             cb_2.Size = new System.Drawing.Size(54, 27);
             cb_2.Click += new EventHandler(cb_2_clicked);
+
+            Controls.Add(dw_1);
+            Controls.Add(sle_1);
+            Controls.Add(sle_2);
+            Controls.Add(st_1);
+            Controls.Add(st_2);
+            Controls.Add(cb_1);
+            Controls.Add(cb_2);
             this.ResumeLayout();
         }
 

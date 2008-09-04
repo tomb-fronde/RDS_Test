@@ -23,6 +23,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         public WPaymentRunSearch()
         {
             this.InitializeComponent();
+            this.dw_search.DataObject = new DwPaymentRunPeriod();
+            dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_results.DataObject = new DwPaymentRunContractors();
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //? dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
             ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("start_date")).KeyPress += new KeyPressEventHandler(WPaymentRunSearch_KeyPress);
             ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).KeyPress += new KeyPressEventHandler(WPaymentRunSearch_KeyPress1);

@@ -38,7 +38,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DwPaymentManualAdjustment();
+            //!this.dw_1.DataObject = new DwPaymentManualAdjustment();
 
             this.cb_ok = new Button();
             this.cb_print = new Button();

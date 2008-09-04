@@ -38,9 +38,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             dw_2 = new URdsDw();
             dw_negative = new URdsDw();
 
-            this.dw_2.DataObject = new DwAcceptRejectMainrundetailGrid();
-            this.dw_1.DataObject = new DwAcceptRejectMainrunGrid();
-            this.dw_negative.DataObject = new DwPaymentRunNegativepay();
+            //!this.dw_2.DataObject = new DwAcceptRejectMainrundetailGrid();
+            //!this.dw_1.DataObject = new DwAcceptRejectMainrunGrid();
+            //!this.dw_negative.DataObject = new DwPaymentRunNegativepay();
             Controls.Add(cb_accept);
             Controls.Add(cb_reject);
             Controls.Add(st_processingtime);
@@ -138,7 +138,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // 
             // dw_negative
             // 
-            dw_negative.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_negative.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_negative.TabIndex = 7;
             dw_negative.Location = new System.Drawing.Point(87, 319);
             dw_negative.Size = new System.Drawing.Size(108, 90);

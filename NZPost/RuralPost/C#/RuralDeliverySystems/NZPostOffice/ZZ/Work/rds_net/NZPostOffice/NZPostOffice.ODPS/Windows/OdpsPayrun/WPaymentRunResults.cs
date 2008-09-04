@@ -24,6 +24,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         public WPaymentRunResults()
         {
             this.InitializeComponent();
+
+            this.dw_2.DataObject = new DwAcceptRejectMainrundetailGrid();
+            this.dw_1.DataObject = new DwAcceptRejectMainrunGrid();
+            this.dw_negative.DataObject = new DwPaymentRunNegativepay();
+            dw_negative.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             ((Metex.Windows.DataEntityGrid)dw_1.GetControlByName("grid")).DoubleClick += new EventHandler(dw_1_doubleclicked);
         }

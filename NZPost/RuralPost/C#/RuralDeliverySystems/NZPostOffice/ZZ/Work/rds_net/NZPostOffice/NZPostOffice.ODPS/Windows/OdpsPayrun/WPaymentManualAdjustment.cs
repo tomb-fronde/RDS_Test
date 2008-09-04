@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using NZPostOffice.Shared.VisualComponents;
+using NZPostOffice.ODPS.DataControls.OdpsPayrun;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
@@ -14,6 +15,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         public WPaymentManualAdjustment()
         {
             InitializeComponent();
+
+            this.dw_1.DataObject = new DwPaymentManualAdjustment();
         }
 
         public override void open()

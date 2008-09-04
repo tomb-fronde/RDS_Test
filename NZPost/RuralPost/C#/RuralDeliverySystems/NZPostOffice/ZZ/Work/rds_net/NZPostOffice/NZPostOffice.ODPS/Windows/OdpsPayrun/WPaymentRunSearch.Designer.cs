@@ -35,15 +35,15 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             pb_1.BringToFront();
             Controls.Add(pb_1);
 
-            this.dw_search.DataObject = new DwPaymentRunPeriod();
-            this.dw_results.DataObject = new DwPaymentRunContractors();
+            //!this.dw_search.DataObject = new DwPaymentRunPeriod();
+            //!this.dw_results.DataObject = new DwPaymentRunContractors();
             this.Text = "Payment Run";
             this.Size = new System.Drawing.Size(392, 310);
             // 
             // dw_search
             // 
 
-            dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_search.Location = new System.Drawing.Point(3, 8);
             dw_search.Size = new System.Drawing.Size(302, 64);
             dw_search.ItemChanged += new EventHandler(dw_search_itemchanged);
@@ -64,7 +64,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // dw_results
             // 
             dw_results.TabIndex = 4;
-            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_results.Location = new System.Drawing.Point(3, 80);
             dw_results.Size = new System.Drawing.Size(302, 188);
             dw_results.DoubleClick += new EventHandler(dw_results_doubleclicked);

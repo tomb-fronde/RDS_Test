@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using NZPostOffice.ODPS.Controls;
 using NZPostOffice.Shared;
 
+using NZPostOffice.ODPS.DataControls.OdpsPayrun;
+
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
     public partial class WEmergency : WMaster
@@ -15,6 +17,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         public WEmergency()
         {
             InitializeComponent();
+
+            dw_1.DataObject = new DwEmergency();
         }
 
         public override void open()
