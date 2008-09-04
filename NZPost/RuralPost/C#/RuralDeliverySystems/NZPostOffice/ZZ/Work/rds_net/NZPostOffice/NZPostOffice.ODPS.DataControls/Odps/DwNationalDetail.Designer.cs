@@ -994,8 +994,6 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_effective_date.TabIndex = 340;
             this.nat_effective_date.Text = "00000000";
             this.nat_effective_date.Value = null;
-            // tjb Commented out:
-            // this.nat_effective_date.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.nat_effective_date_MaskInputRejected);
             // 
             // nat_acc_percentage
             // 
@@ -1023,7 +1021,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             // 
             this.nat_day_of_month.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "NatDayOfMonth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.nat_day_of_month.Font = new System.Drawing.Font("Arial", 8F);
-            this.nat_day_of_month.Location = new System.Drawing.Point(214, 150);
+            this.nat_day_of_month.Location = new System.Drawing.Point(214, 149);
             this.nat_day_of_month.Name = "nat_day_of_month";
             this.nat_day_of_month.Size = new System.Drawing.Size(124, 20);
             this.nat_day_of_month.TabIndex = 370;
@@ -1091,7 +1089,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             // nat_day_of_month_t
             // 
             this.nat_day_of_month_t.Font = new System.Drawing.Font("Arial", 8F);
-            this.nat_day_of_month_t.Location = new System.Drawing.Point(18, 153);
+            this.nat_day_of_month_t.Location = new System.Drawing.Point(18, 152);
             this.nat_day_of_month_t.Name = "nat_day_of_month_t";
             this.nat_day_of_month_t.Size = new System.Drawing.Size(190, 14);
             this.nat_day_of_month_t.TabIndex = 0;
