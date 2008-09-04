@@ -31,6 +31,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
             m_odps_maintenance = new MOdpsMaintenance(this);
             this.InitializeComponent();
 
+            this.dw_single.DataObject = new DwNationalDetail();
+            this.dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            this.dw_1.DataObject = new DwNationalDetail();
+
             //? m_odps_maintenance_menu.SetFunctionalPart(m_odps_maintenance);
             //? m_odps_maintenance_toolbar.SetFunctionalPart(m_odps_maintenance);
         }

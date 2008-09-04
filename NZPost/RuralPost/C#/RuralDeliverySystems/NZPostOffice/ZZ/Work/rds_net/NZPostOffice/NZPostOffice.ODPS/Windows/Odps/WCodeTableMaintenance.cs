@@ -26,6 +26,21 @@ namespace NZPostOffice.ODPS.Windows.Odps
         public WCodeTableMaintenance()
         {
             this.InitializeComponent();
+
+            uo_3 = new UoPaymentComponentType();
+            tabpage_pct.Controls.Add(uo_3);
+
+            uo_3.TabIndex = 0;
+            uo_3.Location = new System.Drawing.Point(0, 8);
+            uo_3.Size = new System.Drawing.Size(733, 292);
+
+            uo_4 = new UoNational();
+            tabpage_national.Controls.Add(uo_4);
+
+            uo_4.TabIndex = 0;
+            uo_4.Size = new System.Drawing.Size(733, 300);
+            uo_4.Location = new System.Drawing.Point(0, 8);
+
             m_odps_maintenance = new MOdpsMaintenance(this);
 
             //? m_odps_maintenance_menu.SetFunctionalPart(m_odps_maintenance);

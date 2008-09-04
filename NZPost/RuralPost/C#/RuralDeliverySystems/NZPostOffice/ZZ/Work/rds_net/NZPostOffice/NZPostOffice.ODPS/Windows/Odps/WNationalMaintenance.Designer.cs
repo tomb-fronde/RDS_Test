@@ -43,8 +43,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // dw_single
             // 
-            this.dw_single.DataObject = new DwNationalDetail();
-            this.dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!this.dw_single.DataObject = new DwNationalDetail();
+            //!this.dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dw_single.FireConstructor = true;
             this.dw_single.Location = new System.Drawing.Point(3, 4);
             this.dw_single.Name = "dw_single";
@@ -72,7 +72,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // dw_1
             // 
-            this.dw_1.DataObject = new DwNationalDetail();
+            //!this.dw_1.DataObject = new DwNationalDetail();
             this.dw_1.FireConstructor = true;
             this.dw_1.Location = new System.Drawing.Point(338, 443);
             this.dw_1.Name = "dw_1";

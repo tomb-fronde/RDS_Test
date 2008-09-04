@@ -106,8 +106,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // tabpage_pct
             // 
-            uo_3 = new UoPaymentComponentType();
-            tabpage_pct.Controls.Add(uo_3);
+//!            uo_3 = new UoPaymentComponentType();
+//!            tabpage_pct.Controls.Add(uo_3);
             tabpage_pct.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_pct.Text = "Payment Component Type";
             tabpage_pct.Name = tabpage_pct.Text;
@@ -119,15 +119,15 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // uo_3
             //
-            uo_3.TabIndex = 0;
-            uo_3.Location = new System.Drawing.Point(0, 8);
-            uo_3.Size = new System.Drawing.Size(733, 292);
+//!            uo_3.TabIndex = 0;
+//!            uo_3.Location = new System.Drawing.Point(0, 8);
+//!            uo_3.Size = new System.Drawing.Size(733, 292);
 
             // 
             // tabpage_national
             // 
-            uo_4 = new UoNational();
-            tabpage_national.Controls.Add(uo_4);
+//!            uo_4 = new UoNational();
+//!            tabpage_national.Controls.Add(uo_4);
             tabpage_national.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_national.Text = "National";
             tabpage_national.Name = tabpage_national.Text;
@@ -139,9 +139,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // uo_4
             // 
-            uo_4.TabIndex = 0;
-            uo_4.Size = new System.Drawing.Size(733, 300);
-            uo_4.Location = new System.Drawing.Point(0, 8);
+//!            uo_4.TabIndex = 0;
+//!            uo_4.Size = new System.Drawing.Size(733, 300);
+//!            uo_4.Location = new System.Drawing.Point(0, 8);
 
             this.ResumeLayout();
         }

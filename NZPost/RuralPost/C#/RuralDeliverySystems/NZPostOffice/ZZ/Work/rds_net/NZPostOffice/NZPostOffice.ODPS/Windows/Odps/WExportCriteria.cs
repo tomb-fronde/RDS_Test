@@ -23,6 +23,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
         public WExportCriteria()
         {
             InitializeComponent();
+
+            this.dw_1.DataObject = new DwReportCriteria();
+
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).LostFocus += new EventHandler(dw_1_itemchanged);
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).KeyPress += new KeyPressEventHandler(WReportCriteria_KeyPress1);
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("sdate")).KeyPress += new KeyPressEventHandler(WReportCriteria_KeyPress);

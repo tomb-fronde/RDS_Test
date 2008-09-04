@@ -40,7 +40,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.cb_cancel = new UCb();
             
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DwReportCriteria();
+            //!this.dw_1.DataObject = new DwReportCriteria();
 
             this.dw_primary = new URdsDw();
             this.dw_secondary = new URdsDw();

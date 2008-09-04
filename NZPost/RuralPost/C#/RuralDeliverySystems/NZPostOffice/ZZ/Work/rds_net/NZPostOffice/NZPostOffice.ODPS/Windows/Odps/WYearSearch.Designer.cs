@@ -41,8 +41,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // dw_search
             // 
             dw_search = new URdsDw();
-            dw_search.DataObject = new DwYearSearch();
-            dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_search.DataObject = new DwYearSearch();
+            //!dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_search.Location = new System.Drawing.Point(3, 6);
             dw_search.Size = new System.Drawing.Size(112, 52);
             
