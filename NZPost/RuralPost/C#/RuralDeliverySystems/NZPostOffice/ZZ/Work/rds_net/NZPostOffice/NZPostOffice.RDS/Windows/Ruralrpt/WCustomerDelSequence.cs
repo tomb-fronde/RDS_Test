@@ -29,6 +29,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustomerDelSequence()
         {
             InitializeComponent();
+            dw_criteria.DataObject = new DCustSequenceSearch();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+
+            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             //jlwang:moved from IC
             ((System.Windows.Forms.CheckBox)(dw_criteria.GetControlByName("summaryreport"))).CheckedChanged += new System.EventHandler(dw_criteria_CheckedChanged);

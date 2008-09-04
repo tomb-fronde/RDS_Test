@@ -129,7 +129,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.rb_contract = new System.Windows.Forms.RadioButton();
             this.st_town = new System.Windows.Forms.Label();
             this.dw_town = new NZPostOffice.RDS.Controls.URdsDw();
-            this.dw_town.DataObject = new DCustListTown();
+            //!this.dw_town.DataObject = new DCustListTown();
             this.st_header = new System.Windows.Forms.Label();
             this.st_display_options = new System.Windows.Forms.Label();
             this.gb_optional = new System.Windows.Forms.GroupBox();
@@ -154,10 +154,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.cbx_street = new System.Windows.Forms.CheckBox();
             this.cbx_cat = new System.Windows.Forms.CheckBox();
             this.dw_export = new NZPostOffice.RDS.Controls.URdsDw();
-            this.dw_export.DataObject = new RPsCustListTown();
+            //!this.dw_export.DataObject = new RPsCustListTown();
             this.st_limit = new System.Windows.Forms.Label();
             this.dw_contract = new NZPostOffice.RDS.Controls.URdsDw();
-            this.dw_contract.DataObject = new DConCriteria();
+            //!this.dw_contract.DataObject = new DConCriteria();
             this.st_allcontract = new System.Windows.Forms.Label();
             this.rb_allcontract = new System.Windows.Forms.RadioButton();
             this.gb_optional.SuspendLayout();
@@ -534,7 +534,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             this.dw_contract.Location = new System.Drawing.Point(91, 84);
             this.dw_contract.Name = "dw_contract";
-            this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_contract.Size = new System.Drawing.Size(237, 410);
             this.dw_contract.TabIndex = 2;
             dw_contract.Click += new EventHandler(dw_contract_clicked);

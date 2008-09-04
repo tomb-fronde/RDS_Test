@@ -34,6 +34,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            this.dw_criteria.DataObject = new DReportGenericCriteria();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_results.DataObject = new DReportGenericResults();
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
             dw_criteria.URdsDwItemFocuschanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_criteria_itemfocuschanged);
@@ -178,11 +183,19 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
        
         public virtual void dw_criteria_constructor()
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             dw_criteria.of_SetUpdateable(false);
         }
   
         public virtual void dw_results_constructor()
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             dw_results.of_SetUpdateable(false);
             dw_results.of_SetRowSelect(true);
             dw_results.of_SetStyle(1);//.inv_rowselect.of_SetStyle(1);
@@ -415,6 +428,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         #region Events
         public virtual void dw_criteria_itemchanged(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             //  base.itemchanged();
             dw_criteria.URdsDw_Itemchanged(sender, e);
             string sOutlet;
@@ -459,6 +476,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_criteria_itemfocuschanged(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             // WARNING: Call not Isimmediate Ancestor Event : change manually
             //?URdsDw.itemfocuschanged();
             if (dw_criteria.GetColumnName() == "outlet_picklist")
@@ -473,6 +494,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_criteria_getfocus(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             // WARNING: Call not Isimmediate Ancestor Event : change manually
             //?URdsDw.getfocus();
             //  pb_open.Default = false;
@@ -482,6 +507,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_criteria_clicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             // WARNING: Call not Isimmediate Ancestor Event : change manually
             //? URdsDw.clicked();
             string sObjectAtPointer;
@@ -498,6 +527,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_results_clicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             //? base.clicked();
             // long lRow
             // 
@@ -514,6 +547,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_results_doubleclicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             //? base.doubleclicked();
             //  TJB  SR4684  June06   Added
             //  If the user double-clicks a contract, trigger the search.
@@ -526,6 +563,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_results_getfocus(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             // WARNING: Call not Isimmediate Ancestor Event : change manually
             //? URdsDw.getfocus();
             // pb_search.Default = false;
@@ -535,11 +576,19 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void pb_search_clicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             wf_gosearch();
         }
 
         public virtual void pb_open_clicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
             string sTitle;
             WGenericReportPreview wNewWindow;
             Form lw_FindWindow;

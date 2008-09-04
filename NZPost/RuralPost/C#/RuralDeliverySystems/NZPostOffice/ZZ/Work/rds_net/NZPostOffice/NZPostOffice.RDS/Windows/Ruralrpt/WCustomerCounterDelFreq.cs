@@ -37,6 +37,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_criteria.DataObject = new DCustCriteriaDelfreq();
             dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             st_max.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dw_export.DataObject = new DCustDetailsExport();
 
 
 

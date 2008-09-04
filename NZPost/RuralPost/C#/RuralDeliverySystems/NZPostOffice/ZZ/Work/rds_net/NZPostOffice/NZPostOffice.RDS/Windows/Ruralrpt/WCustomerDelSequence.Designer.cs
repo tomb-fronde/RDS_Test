@@ -30,7 +30,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            dw_criteria.DataObject = new DCustSequenceSearch();
+            //!dw_criteria.DataObject = new DCustSequenceSearch();
             this.Text = "Contract Customer Sequence";
             this.Height = 280;
             this.Name = "w_customer_del_sequence";
@@ -45,7 +45,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_criteria
             // 
             dw_criteria.Height = 220;
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
             //((System.Windows.Forms.CheckBox)(dw_criteria.GetControlByName("summaryreport"))).CheckedChanged += new System.EventHandler(dw_criteria_CheckedChanged);
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("freq_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
@@ -56,7 +56,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_results.Height = 130;
             dw_results.Top = 320;
             dw_results.Visible = false;
-            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
              
             // pb_search
             // 

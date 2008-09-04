@@ -52,8 +52,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.SuspendLayout();
             this.Height = 383;
             this.Width = 380;
-            this.dw_criteria.DataObject = new DReportGenericRegOutletContcriteria();
-            this.dw_results.DataObject = new DReportRegionoutletcontractResults();
+            //!this.dw_criteria.DataObject = new DReportGenericRegOutletContcriteria();
+            //!this.dw_results.DataObject = new DReportRegionoutletcontractResults();
             // 
             // st_label
             // 

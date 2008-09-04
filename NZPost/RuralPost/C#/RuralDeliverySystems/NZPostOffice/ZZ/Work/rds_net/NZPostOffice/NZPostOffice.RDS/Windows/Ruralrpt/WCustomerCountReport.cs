@@ -25,6 +25,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustomerCountReport()
         {
             InitializeComponent();
+
+            this.dw_report.DataObject = new DCustCount();
         }
 
         public override void ue_abort()

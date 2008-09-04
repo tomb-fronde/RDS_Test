@@ -24,6 +24,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WAllowanceSearch()
         {
             InitializeComponent();
+
+            this.dw_criteria.DataObject = new DReportAllowanceCriteria();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+
             //? _menu.SetFunctionalPart();
             //?_toolbar.SetFunctionalPart();
         }

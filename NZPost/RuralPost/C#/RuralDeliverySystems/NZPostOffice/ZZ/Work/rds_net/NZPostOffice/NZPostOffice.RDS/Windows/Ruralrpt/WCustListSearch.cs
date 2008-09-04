@@ -58,6 +58,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            this.dw_town.DataObject = new DCustListTown();
+            this.dw_export.DataObject = new RPsCustListTown();
+            this.dw_contract.DataObject = new DConCriteria();
+            this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             this.dw_town.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_town_constructor);
             ((DConCriteria)dw_contract.DataObject).CellDoubleClick += new EventHandler(dw_contract_doubleclicked);

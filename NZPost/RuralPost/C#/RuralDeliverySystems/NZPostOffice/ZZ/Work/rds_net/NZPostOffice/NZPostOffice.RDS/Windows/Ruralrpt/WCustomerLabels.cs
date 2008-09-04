@@ -34,6 +34,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustomerLabels()
         {
             InitializeComponent();
+            dw_report.DataObject = new RCustlistLabelFast();
+
             if (string.IsNullOrEmpty(this.Text))
             {
                 this.Text = "Rural Delivery System with NPAD Extensions (enabled)";

@@ -40,7 +40,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            this.dw_report.DataObject = new DCustCount();
+            //!this.dw_report.DataObject = new DCustCount();
             this.dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Controls.Add(this.dw_report);
             this.ResumeLayout();

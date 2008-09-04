@@ -28,6 +28,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            this.dw_list.DataObject = new DOccupationlist();
+            dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_criteria.DataObject = new DReportCustomerStatisticsCriteria();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang;moved from IC
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             //jlwang:end

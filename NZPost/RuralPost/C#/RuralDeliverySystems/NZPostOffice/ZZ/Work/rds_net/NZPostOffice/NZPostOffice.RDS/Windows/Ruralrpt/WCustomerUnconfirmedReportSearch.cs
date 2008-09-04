@@ -25,6 +25,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustomerUnconfirmedReportSearch()
         {
             InitializeComponent();
+
+            this.dw_criteria.DataObject = new DReportGenericRegOutletContcriteria();
+            this.dw_results.DataObject = new DReportRegionoutletcontractResults();
         }
 
         public override int wf_gosearch()

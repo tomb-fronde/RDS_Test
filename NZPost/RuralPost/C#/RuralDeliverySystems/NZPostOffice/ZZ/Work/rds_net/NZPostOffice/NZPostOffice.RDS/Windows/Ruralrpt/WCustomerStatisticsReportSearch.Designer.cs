@@ -54,8 +54,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             this.SuspendLayout();
             this.dw_list = new URdsDw();
-            this.dw_list.DataObject = new DOccupationlist();
-            this.dw_criteria.DataObject = new DReportCustomerStatisticsCriteria();
+            //!this.dw_list.DataObject = new DOccupationlist();
+            //!this.dw_criteria.DataObject = new DReportCustomerStatisticsCriteria();
             this.cbx_privacy = new CheckBox();
             Controls.Add(dw_list);
             Controls.Add(cbx_privacy);
@@ -73,7 +73,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_criteria
             // 
             dw_criteria.TabIndex = 2;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_criteria.Height = 132;
             dw_criteria.Width = 294;
             dw_criteria.Top = 5;
@@ -111,7 +111,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_list.Width = 294;
             dw_list.Top = 140;
             dw_list.Left = 3;
-            dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_list.DataObject.BorderStyle = BorderStyle.Fixed3D;
             // 
             // cbx_privacy
             // 

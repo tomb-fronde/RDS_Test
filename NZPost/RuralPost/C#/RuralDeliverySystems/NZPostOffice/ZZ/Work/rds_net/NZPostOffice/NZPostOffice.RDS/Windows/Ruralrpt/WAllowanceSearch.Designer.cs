@@ -34,7 +34,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.Text = "Contract Allowance Summary Report";
             this.Location = new System.Drawing.Point(46, 55);
             this.Size = new System.Drawing.Size(380, 230);
-            this.dw_criteria.DataObject = new DReportAllowanceCriteria();
+            //!this.dw_criteria.DataObject = new DReportAllowanceCriteria();
             // 
             // st_label
             // 
@@ -43,7 +43,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dw_criteria.Location = new System.Drawing.Point(3, 10);
             dw_criteria.Size = new System.Drawing.Size(280, 160);
             // 

@@ -25,6 +25,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WGenericReportRegionSearch()
         {
             InitializeComponent();
+
+            this.dw_criteria.DataObject = new DReportGenericCriteriaWithRegion();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
         }
 
         public override void pfc_preopen()

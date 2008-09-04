@@ -46,7 +46,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new RDetailedCustomerListing();
+            //!dw_report.DataObject = new RDetailedCustomerListing();
             dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
 
             this.ResumeLayout();

@@ -44,8 +44,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            this.dw_report.DataObject = new RDeedCompliance();
-            this.dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
+            //!this.dw_report.DataObject = new RDeedCompliance();
+            //!this.dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ResumeLayout();
         }
         #endregion

@@ -58,7 +58,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.st_max = new Label();
             this.cb_export = new Button();
             this.dw_export = new URdsDw();
-            this.dw_export.DataObject = new DCustDetailsExport();
+            //!this.dw_export.DataObject = new DCustDetailsExport();
             Controls.Add(st_max);
             Controls.Add(cb_export);
             Controls.Add(dw_export);

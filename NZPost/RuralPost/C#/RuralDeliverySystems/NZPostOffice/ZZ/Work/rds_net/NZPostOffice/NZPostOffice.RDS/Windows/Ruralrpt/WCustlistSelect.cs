@@ -27,6 +27,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustlistSelect()
         {
             InitializeComponent();
+            this.dw_custlist.DataObject = new DCustlistSelect();
 
             //jlwang:moved from IC
             this.dw_custlist.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_custlist_constructor);

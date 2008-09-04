@@ -76,7 +76,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new RCustlistLabelFast();
+            //!dw_report.DataObject = new RCustlistLabelFast();
             dw_report.Dock = DockStyle.Fill;
             dw_report.TabIndex = 1;
             // 

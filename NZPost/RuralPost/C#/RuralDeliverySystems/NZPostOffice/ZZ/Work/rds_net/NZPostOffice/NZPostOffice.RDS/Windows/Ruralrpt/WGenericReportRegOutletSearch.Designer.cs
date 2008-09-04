@@ -32,7 +32,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.SuspendLayout();
             this.Height = 195;
             this.Name = "w_generic_report_reg_outlet_search";
-            this.dw_criteria.DataObject = new DReportGenericOutletCriteriawithrg();
+            //!this.dw_criteria.DataObject = new DReportGenericOutletCriteriawithrg();
            
             // 
             // st_label
@@ -44,7 +44,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_criteria
             // 
             dw_criteria.Size = new System.Drawing.Size(295, 140);
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             // ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
          
             // 

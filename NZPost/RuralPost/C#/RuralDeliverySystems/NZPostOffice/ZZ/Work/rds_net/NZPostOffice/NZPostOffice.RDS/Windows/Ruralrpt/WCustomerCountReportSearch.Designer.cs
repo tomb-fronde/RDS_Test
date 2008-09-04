@@ -55,8 +55,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.SuspendLayout();
             this.cb_export = new Button();
             this.dw_export = new URdsDw();
-            this.dw_export.DataObject = new DCustCountExport();
-            this.dw_criteria.DataObject = new DCustCountcriteria();
+            //!this.dw_export.DataObject = new DCustCountExport();
+            //!this.dw_criteria.DataObject = new DCustCountcriteria();
             Controls.Add(cb_export);
             Controls.Add(dw_export);
             this.Height = 189;
@@ -76,7 +76,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_criteria.Width = 312;
             dw_criteria.Top = 0;
             dw_criteria.Left = 0;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
            

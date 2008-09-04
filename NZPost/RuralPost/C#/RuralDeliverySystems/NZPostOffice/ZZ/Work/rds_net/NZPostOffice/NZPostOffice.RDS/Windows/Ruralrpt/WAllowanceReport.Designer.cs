@@ -31,7 +31,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             this.SuspendLayout();
             this.Text = "Piece Rate Report";
-            this.dw_report.DataObject = new RAllowanceReport();
+            //!this.dw_report.DataObject = new RAllowanceReport();
             this.dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Height = 418;
            

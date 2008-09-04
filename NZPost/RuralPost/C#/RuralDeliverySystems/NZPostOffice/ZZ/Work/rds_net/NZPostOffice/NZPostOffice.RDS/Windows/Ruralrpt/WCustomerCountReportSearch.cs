@@ -28,6 +28,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            this.dw_export.DataObject = new DCustCountExport();
+            this.dw_criteria.DataObject = new DCustCountcriteria();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             //jlwang;end

@@ -39,6 +39,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WCustomerCounterDelDays()
         {
             InitializeComponent();
+            this.dw_export.DataObject = new DCustDetailsExport();
+            dw_criteria.DataObject = new DCustCriteriaDeldays();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang:moved from IC
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new EventHandler(dw_criteria_clicked);

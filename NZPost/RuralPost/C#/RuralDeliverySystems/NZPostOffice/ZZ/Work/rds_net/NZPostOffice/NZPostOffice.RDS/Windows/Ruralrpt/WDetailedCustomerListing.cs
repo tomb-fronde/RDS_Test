@@ -28,6 +28,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WDetailedCustomerListing()
         {
             InitializeComponent();
+
+            dw_report.DataObject = new RDetailedCustomerListing();            
         }
 
         public override void pfc_preopen()

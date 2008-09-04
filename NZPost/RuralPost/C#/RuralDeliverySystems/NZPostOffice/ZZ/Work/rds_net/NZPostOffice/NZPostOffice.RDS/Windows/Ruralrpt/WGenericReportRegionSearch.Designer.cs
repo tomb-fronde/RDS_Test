@@ -52,7 +52,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             this.SuspendLayout();
             this.cbx_phy_address = new CheckBox();
-            this.dw_criteria.DataObject = new DReportGenericCriteriaWithRegion();
+            //!this.dw_criteria.DataObject = new DReportGenericCriteriaWithRegion();
             Controls.Add(cbx_phy_address);
             this.Height = 153;
             this.Name = "w_generic_report_region_search";
@@ -64,7 +64,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_criteria.Height = 50;
             dw_criteria.Top = 5;
             // 

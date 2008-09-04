@@ -54,15 +54,12 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             this.SuspendLayout();
             this.dw_criteria = new URdsDw();
-            this.dw_criteria.DataObject = new DReportGenericCriteria();
+            //!this.dw_criteria.DataObject = new DReportGenericCriteria();
             this.dw_results = new URdsDw();
-            this.dw_results.DataObject = new DReportGenericResults();
+            //!this.dw_results.DataObject = new DReportGenericResults();
             this.pb_search = new Button();
             this.pb_open = new Button();
-            Controls.Add(dw_criteria);
-            Controls.Add(dw_results);
-            Controls.Add(pb_search);
-            Controls.Add(pb_open);
+           
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Text = "Report Search";
             this.Name = "w_generic_report_search";
@@ -81,7 +78,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_criteria.TabIndex = 1;
             dw_criteria.Location = new Point(3, 7);
             dw_criteria.Size = new Size(293, 140);
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_criteria.GotFocus += new EventHandler(dw_criteria_getfocus);
             dw_criteria.ItemChanged += new EventHandler(dw_criteria_itemchanged);
 
@@ -95,7 +92,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_results.TabIndex = 4;
             dw_results.Location = new Point(3, 150);
             dw_results.Size = new Size(293, 190);
-            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_results.Click += new EventHandler(dw_results_clicked); 
             dw_results.GotFocus += new EventHandler(dw_results_getfocus);
 
@@ -122,6 +119,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             pb_open.Location = new Point(302, 147);
             pb_open.Size = new Size(59, 31);
             pb_open.Click += new EventHandler(pb_open_clicked);
+            Controls.Add(dw_criteria);
+            Controls.Add(dw_results);
+            Controls.Add(pb_search);
+            Controls.Add(pb_open);
             this.ResumeLayout();
         }
 

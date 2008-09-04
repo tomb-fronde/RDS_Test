@@ -70,7 +70,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             this.cb_close = new System.Windows.Forms.Button();
             this.dw_custlist = new URdsDw();
-            this.dw_custlist.DataObject = new DCustlistSelect();
+            //!this.dw_custlist.DataObject = new DCustlistSelect();
             this.cb_all = new System.Windows.Forms.Button();
             this.cb_select = new System.Windows.Forms.Button();
             this.cb_labels = new System.Windows.Forms.Button();

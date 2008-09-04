@@ -58,7 +58,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.st_max = new Label();
             this.cb_export = new Button();
             dw_export = new URdsDw();
-            this.dw_export.DataObject = new DCustDetailsExport();
+            //!this.dw_export.DataObject = new DCustDetailsExport();
             Controls.Add(st_max);
             Controls.Add(cb_export);
             Controls.Add(dw_export);
@@ -81,8 +81,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_criteria.Width = 415;
             dw_criteria.Top = 0;
             dw_criteria.Left = 0;
-            dw_criteria.DataObject = new DCustCriteriaDeldays();
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject = new DCustCriteriaDeldays();
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new EventHandler(dw_criteria_clicked);
             //((System.Windows.Forms.CheckBox)(dw_criteria.GetControlByName("use_printedon"))).CheckedChanged += new EventHandler(dw_criteria_CheckBoxCheckedChanged);

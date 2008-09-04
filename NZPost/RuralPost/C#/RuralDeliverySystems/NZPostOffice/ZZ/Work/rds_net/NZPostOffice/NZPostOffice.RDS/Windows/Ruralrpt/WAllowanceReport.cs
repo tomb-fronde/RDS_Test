@@ -29,6 +29,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WAllowanceReport()
         {
             InitializeComponent();
+
+            this.dw_report.DataObject = new RAllowanceReport();
         }
 
         public override void pfc_preopen()

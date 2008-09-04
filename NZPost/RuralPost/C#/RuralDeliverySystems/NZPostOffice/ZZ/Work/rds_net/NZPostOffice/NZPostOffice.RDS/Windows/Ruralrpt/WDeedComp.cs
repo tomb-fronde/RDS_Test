@@ -25,6 +25,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WDeedComp()
         {
             InitializeComponent();
+
+            this.dw_report.DataObject = new RDeedCompliance();
+            this.dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
         }
 
         public override void ue_report()
