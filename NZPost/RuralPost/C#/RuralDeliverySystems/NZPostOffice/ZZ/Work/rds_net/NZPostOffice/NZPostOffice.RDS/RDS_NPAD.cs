@@ -51,6 +51,7 @@ namespace NZPostOffice.RDS
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
             Application.Run(new RDS_NPAD());
         }
     }
