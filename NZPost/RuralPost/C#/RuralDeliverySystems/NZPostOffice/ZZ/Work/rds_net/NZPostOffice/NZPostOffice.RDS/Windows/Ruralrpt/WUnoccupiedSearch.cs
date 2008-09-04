@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 using NZPostOffice.Shared;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -16,6 +17,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WUnoccupiedSearch()
         {
             InitializeComponent();
+            dw_criteria.DataObject = new DUnoccupiedCriteria();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+
 
             //jlwang:
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);

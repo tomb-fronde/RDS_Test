@@ -18,6 +18,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WRoadnameSearch()
         {
             InitializeComponent();
+            dw_select.DataObject = new DTownSelect();
+            dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             dw_select.Constructor += new UserEventDelegate(dw_select_constructor);
             this.Load += new EventHandler(WRoadnameSearch_Load);
             this.Activated += new EventHandler(WRoadnameSearch_Activated);

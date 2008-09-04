@@ -48,7 +48,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //
             //dw_report
             //?dw_report.Width = 500;
-            this.dw_report.DataObject = new RRcmStatNestedReport();
+            //!this.dw_report.DataObject = new RRcmStatNestedReport();
             this.dw_report.Dock = DockStyle.Fill;
 
             // 

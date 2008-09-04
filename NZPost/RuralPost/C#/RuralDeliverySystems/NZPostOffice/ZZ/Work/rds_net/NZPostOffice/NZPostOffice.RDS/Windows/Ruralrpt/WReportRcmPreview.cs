@@ -15,6 +15,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WReportRcmPreview()
         {
             InitializeComponent();
+            this.dw_report.DataObject = new RRcmStatNestedReport();
+
             this.SizeChanged += new EventHandler(WReportRcmPreview_SizeChanged);
         }
 

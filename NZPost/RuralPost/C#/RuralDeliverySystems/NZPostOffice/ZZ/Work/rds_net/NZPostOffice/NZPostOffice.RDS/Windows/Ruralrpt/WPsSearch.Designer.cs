@@ -44,13 +44,13 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DPsReportCriteria();
+            //!dw_criteria.DataObject = new DPsReportCriteria();
             dw_criteria.Height = 78;
             dw_criteria.Top = 5;
             // 
             // dw_results
             // 
-            dw_results.DataObject = new DReportGenericResults();
+            //!dw_results.DataObject = new DReportGenericResults();
             dw_results.Visible = false;
             dw_results.Height = 259;
             dw_results.Top = 79;

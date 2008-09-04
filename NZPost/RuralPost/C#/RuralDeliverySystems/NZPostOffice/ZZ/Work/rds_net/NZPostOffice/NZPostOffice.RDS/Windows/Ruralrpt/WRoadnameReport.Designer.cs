@@ -51,7 +51,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new RPsRoadnameTown();
+            //!dw_report.DataObject = new RPsRoadnameTown();
             dw_report.Height = 461;
             dw_report.Width = 720;
             //dw_report.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_report_constructor);

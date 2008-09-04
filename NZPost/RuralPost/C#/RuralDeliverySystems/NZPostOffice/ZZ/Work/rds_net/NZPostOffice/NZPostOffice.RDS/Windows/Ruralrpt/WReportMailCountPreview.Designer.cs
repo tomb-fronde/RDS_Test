@@ -56,7 +56,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new RMailCount();
+            //!dw_report.DataObject = new RMailCount();
             dw_report.Top = 4;
             dw_report.Left = 3;
             dw_report.Dock = System.Windows.Forms.DockStyle.Fill;

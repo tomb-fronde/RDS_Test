@@ -39,7 +39,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //dw_report
             dw_report.Top = 4;
             dw_report.Left = 3;
-            this.dw_report.DataObject = new RContractorProcurementDetail();
+            //!this.dw_report.DataObject = new RContractorProcurementDetail();
             this.Controls.Add(dw_report);
             this.ResumeLayout();
         }

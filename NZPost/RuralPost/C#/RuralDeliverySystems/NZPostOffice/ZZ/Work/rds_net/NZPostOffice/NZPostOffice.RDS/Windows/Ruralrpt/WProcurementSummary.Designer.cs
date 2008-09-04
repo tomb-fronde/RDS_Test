@@ -37,7 +37,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             st_label.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.Controls.Add(st_label);
             //dw_report
-            dw_report.DataObject = new RContractorProcurementSummary();
+            //!dw_report.DataObject = new RContractorProcurementSummary();
             this.Controls.Add(dw_report);
             this.ResumeLayout();
         }

@@ -170,8 +170,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_select
             // 
-            dw_select.DataObject=new DTownSelect();
-            dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_select.DataObject=new DTownSelect();
+            //!dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_select.TabIndex = 2;
             dw_select.Height = 83;
             dw_select.Width = 273;

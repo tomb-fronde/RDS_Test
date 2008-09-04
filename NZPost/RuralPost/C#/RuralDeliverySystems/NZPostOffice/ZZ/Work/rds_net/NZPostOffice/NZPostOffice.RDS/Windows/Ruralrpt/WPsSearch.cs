@@ -9,6 +9,7 @@ using Metex.Windows;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 using NZPostOffice.RDS.DataService;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -17,6 +18,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WPsSearch()
         {
             InitializeComponent();
+
+            dw_criteria.DataObject = new DPsReportCriteria();
+            dw_results.DataObject = new DReportGenericResults();
         }
 
         public override void pfc_preopen()

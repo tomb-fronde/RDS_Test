@@ -19,6 +19,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WReportMailCountPreview()
         {
             InitializeComponent();
+
+            dw_report.DataObject = new RMailCount();
         }
 
         public override void ue_report()

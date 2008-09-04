@@ -46,16 +46,16 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DUnoccupiedCriteria();
+            //!dw_criteria.DataObject = new DUnoccupiedCriteria();
             dw_criteria.Height = 83;
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
 
             // 
             // dw_results
             // 
             dw_results.Top = 93;
-            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             //dw_results.Constructor += new UserEventDelegate(dw_results_constructor);
             // 
             // pb_search

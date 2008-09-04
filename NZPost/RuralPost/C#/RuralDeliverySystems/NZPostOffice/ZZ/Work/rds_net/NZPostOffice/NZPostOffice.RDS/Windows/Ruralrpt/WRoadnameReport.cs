@@ -16,6 +16,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WRoadnameReport()
         {
             InitializeComponent();
+            dw_report.DataObject = new RPsRoadnameTown();
 
             //jlwang:
             dw_report.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_report_constructor);

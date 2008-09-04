@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WProcurementDetail()
         {
             InitializeComponent();
+            dw_report.DataObject = new RContractorProcurementDetail();
         }
 
         public override  void pfc_preopen()

@@ -44,8 +44,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DReportRcmCriteria();
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject = new DReportRcmCriteria();
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dw_criteria.Size = new System.Drawing.Size(296, 127);
             dw_criteria.Location = new System.Drawing.Point(3, 5);
             

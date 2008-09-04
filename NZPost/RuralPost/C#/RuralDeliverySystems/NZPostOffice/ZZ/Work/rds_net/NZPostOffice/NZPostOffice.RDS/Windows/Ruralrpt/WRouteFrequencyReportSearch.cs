@@ -9,6 +9,7 @@ using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.DataControls.Ruralrpt;
+using NZPostOffice.RDS.DataControls.Ruraldw;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -17,6 +18,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WRouteFrequencyReportSearch()
         {
             InitializeComponent();
+            dw_criteria.DataObject = new DReportGenericCriteria();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_results.DataObject = new DReportGenericResults();
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             ((DReportGenericResults)dw_results.DataObject).DoubleClick += new EventHandler(this.dw_results_doubleclicked);
