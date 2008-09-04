@@ -17,8 +17,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 		public DReportGenericRegOutletCriteria()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//!InitializeDropdown();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            base.OnHandleCreated(e);
+        }
 
 		private void InitializeDropdown()
 		{
