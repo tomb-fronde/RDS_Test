@@ -15,8 +15,18 @@ namespace NZPostOffice.ODPS.DataControls.Odps
 		public DwReportCriteria()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 
         private void InitializeDropdown()
         {
