@@ -43,8 +43,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DReportGenericOutletCriteriawithrgct();
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject = new DReportGenericOutletCriteriawithrgct();
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dw_criteria.Location = new System.Drawing.Point(3, 3);
             dw_criteria.Size = new System.Drawing.Size(300, 130);
             //((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);

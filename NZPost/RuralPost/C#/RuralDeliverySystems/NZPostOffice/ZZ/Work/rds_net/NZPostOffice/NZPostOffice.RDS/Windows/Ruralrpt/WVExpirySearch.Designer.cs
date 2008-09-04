@@ -44,9 +44,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.rb_region = new RadioButton();
             this.rb_renewal = new RadioButton();
             this.st_1 = new Label();
-            Controls.Add(rb_region);
-            Controls.Add(rb_renewal);
-            Controls.Add(st_1);
+            
             this.MaximizeBox = false;
             this.Name = "w_v_expiry_search";
             this.BackColor = System.Drawing.SystemColors.Control;
@@ -62,7 +60,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DVehicleExpCriteria();
+            //!dw_criteria.DataObject = new DVehicleExpCriteria();
             dw_criteria.TabIndex = 4;
             dw_criteria.Size = new System.Drawing.Size(274, 81);
             dw_criteria.Location = new System.Drawing.Point(38, 20);
@@ -70,7 +68,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_results
             // 
-            dw_results.DataObject = new DReportGenericResults();
+            //!dw_results.DataObject = new DReportGenericResults();
             dw_results.Tag = "ComponentName=Disabled;";
             dw_results.Visible = false;
             dw_results.TabIndex = 6;
@@ -120,6 +118,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             st_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             st_1.Location = new System.Drawing.Point(7, 7);
             st_1.Size = new System.Drawing.Size(313, 100);
+            Controls.Add(rb_region);
+            Controls.Add(rb_renewal);
+            Controls.Add(st_1);
             this.ResumeLayout();
         }
 

@@ -9,6 +9,7 @@ using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 using NZPostOffice.RDS.DataService;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -17,6 +18,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WVExpirySearch()
         {
             InitializeComponent();
+            dw_criteria.DataObject = new DVehicleExpCriteria();
+            dw_results.DataObject = new DReportGenericResults();
 
             //jlwang:
             dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
