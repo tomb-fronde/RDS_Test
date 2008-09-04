@@ -17,11 +17,21 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         public DwPaymentComponentType()
         {
             InitializeComponent();
-            InitializeDropdown();
+            //InitializeDropdown();
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
         }
 
         private void InitializeDropdown()
-        {
+        {            
             pcg_id.AssignDropdownType<PaymentComponentGroup>();
             ac_id.AssignDropdownType<AccountId>();
         }
