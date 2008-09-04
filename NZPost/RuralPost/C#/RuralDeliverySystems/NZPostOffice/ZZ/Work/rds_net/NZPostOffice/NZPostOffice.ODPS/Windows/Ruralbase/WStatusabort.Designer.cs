@@ -33,7 +33,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
             Controls.Add(cb_1);
             Controls.Add(st_bar);
             Controls.Add(st_limit);
-            this.Icon = new System.Drawing.Icon("Information!");
+//!            this.Icon = new System.Drawing.Icon("Information!");
             this.Text = "Printing your document ( s)...";
             this.Location = new System.Drawing.Point(128, 116);
             this.Size = new System.Drawing.Size(333, 96);

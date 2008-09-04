@@ -37,7 +37,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
 
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new NZPostOffice.ODPS.DataControls.Ruralbase.DPassword();
+            //!this.dw_1.DataObject = new NZPostOffice.ODPS.DataControls.Ruralbase.DPassword();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_1);

@@ -14,6 +14,9 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
         public WPreviewZoom()
         {
             InitializeComponent();
+
+            p_slide.Image = new System.Drawing.Bitmap("..\\bitmaps\\slide.bmp");
+            p_guide.Image = new System.Drawing.Bitmap("..\\bitmaps\\guide.bmp");
         }
 
         public bool i_lDown = false;

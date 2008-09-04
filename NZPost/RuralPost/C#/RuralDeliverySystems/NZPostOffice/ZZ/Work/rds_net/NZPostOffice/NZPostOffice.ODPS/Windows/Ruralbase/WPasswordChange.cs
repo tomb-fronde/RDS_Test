@@ -25,6 +25,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
         public WPasswordChange()
         {
             InitializeComponent();
+            this.dw_1.DataObject = new NZPostOffice.ODPS.DataControls.Ruralbase.DPassword();
         }
 
         public override void open()

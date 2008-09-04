@@ -50,22 +50,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
             this.cb_ok = new Button();
             this.p_slide = new PictureBox();
             this.p_guide = new PictureBox();
-            Controls.Add(st_11);
-            Controls.Add(st_10);
-            Controls.Add(st_9);
-            Controls.Add(st_8);
-            Controls.Add(st_7);
-            Controls.Add(st_6);
-            Controls.Add(st_5);
-            Controls.Add(st_4);
-            Controls.Add(st_3);
-            Controls.Add(st_2);
-            Controls.Add(st_1);
-            Controls.Add(cb_cancel);
-            Controls.Add(st_percent);
-            Controls.Add(cb_ok);
-            Controls.Add(p_slide);
-            Controls.Add(p_guide);
+         
             this.Text = "Zoom";
             this.ControlBox = true;
             this.Height = 236;
@@ -270,7 +255,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
             // Metex Migrator Warning: property originalsize was not converted
 //?         p_slide.originalsize = true;
             p_slide.TabStop = false;
-            p_slide.Image = new System.Drawing.Bitmap("..\\bitmaps\\slide.bmp");
+//!            p_slide.Image = new System.Drawing.Bitmap("..\\bitmaps\\slide.bmp");
             p_slide.Height = 12;
             p_slide.Width = 30;
             p_slide.Top = 176;
@@ -282,12 +267,31 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
             // Metex Migrator Warning: property originalsize was not converted
 //?         p_guide.originalsize = true;
             p_guide.TabStop = false;
-            p_guide.Image = new System.Drawing.Bitmap("..\\bitmaps\\guide.bmp");
+//!            p_guide.Image = new System.Drawing.Bitmap("..\\bitmaps\\guide.bmp");
             p_guide.Height = 183;
             p_guide.Width = 50;
             p_guide.Top = 18;
             p_guide.Left = 14;
 //?         p_guide.Click += new EventHandler(p_guide_clicked);
+
+
+            Controls.Add(st_11);
+            Controls.Add(st_10);
+            Controls.Add(st_9);
+            Controls.Add(st_8);
+            Controls.Add(st_7);
+            Controls.Add(st_6);
+            Controls.Add(st_5);
+            Controls.Add(st_4);
+            Controls.Add(st_3);
+            Controls.Add(st_2);
+            Controls.Add(st_1);
+            Controls.Add(cb_cancel);
+            Controls.Add(st_percent);
+            Controls.Add(cb_ok);
+            Controls.Add(p_slide);
+            Controls.Add(p_guide);
+
             this.ResumeLayout();
         }
 

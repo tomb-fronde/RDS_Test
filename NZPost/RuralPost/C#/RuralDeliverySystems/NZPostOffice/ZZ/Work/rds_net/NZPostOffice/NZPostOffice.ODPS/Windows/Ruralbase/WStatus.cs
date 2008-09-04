@@ -13,6 +13,8 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
         public WStatus()
         {
             InitializeComponent();
+
+            this.Icon = new System.Drawing.Icon("Information!");
         }
 
         public virtual void open(object sender, EventArgs e) 

@@ -26,6 +26,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
 
             this.Text = StaticVariables.gnv_app.of_get_title();
             dw_title.SetValue(0, "SystemTitle", StaticVariables.gnv_app.of_get_title());
+            this.Text = StaticVariables.gnv_app.of_getversion();
             dw_title.SetValue(0, "SystemVersion", StaticVariables.gnv_app.of_getversion());
             this.show();
         }

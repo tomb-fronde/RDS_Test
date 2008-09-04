@@ -17,6 +17,8 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
         public WStatusabort()
         {
             this.InitializeComponent();
+
+            this.Icon = new System.Drawing.Icon("Information!");
         }
 
         public virtual void ue_abort()

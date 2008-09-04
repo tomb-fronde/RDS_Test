@@ -42,7 +42,7 @@ namespace NZPostOffice.ODPS.Windows.Ruralbase
             Controls.Add(st_bar);
             Controls.Add(st_limit);
             // Please add the corespondent full path of the icon
-            this.Icon = new System.Drawing.Icon("Information!");
+//!            this.Icon = new System.Drawing.Icon("Information!");
             //? this.BackColor = System.Drawing.Color.FromArgb(4, 212, 208, 200);
             this.Text = "Please wait while I process your request....";
             this.ControlBox = true;
