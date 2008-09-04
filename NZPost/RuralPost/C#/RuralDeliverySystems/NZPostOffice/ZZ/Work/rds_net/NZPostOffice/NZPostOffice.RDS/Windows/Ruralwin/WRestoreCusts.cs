@@ -58,6 +58,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            dw_restore_custs.DataObject = new DRestoreCusts();
+
             //jlwang:moved from IC
             dw_restore_custs.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_restore_custs_constructor);
             ((DRestoreCusts)dw_restore_custs.DataObject).CellClick += new EventHandler(dw_restore_custs_clicked);
@@ -155,7 +157,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_restore_custs
             // 
             //? dw_restore_custs.ib_filter_contracttypes = false;
-            dw_restore_custs.DataObject = new DRestoreCusts();
+            //!dw_restore_custs.DataObject = new DRestoreCusts();
             dw_restore_custs.Text = "none";
             dw_restore_custs.BackColor = System.Drawing.Color.White;
             dw_restore_custs.TabIndex = 1;
