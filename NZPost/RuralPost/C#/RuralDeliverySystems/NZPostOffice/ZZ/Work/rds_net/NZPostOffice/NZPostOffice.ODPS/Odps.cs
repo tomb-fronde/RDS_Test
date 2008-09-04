@@ -52,6 +52,7 @@ namespace NZPostOffice.ODPS
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
             Application.Run(new Odps());
         }
     }
