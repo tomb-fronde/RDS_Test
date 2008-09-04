@@ -52,7 +52,7 @@ namespace NZPostOffice.ODPS.DataControls.Ruralbase
             this.systemtitle.Font = new System.Drawing.Font("MS Sans Serif", 10);
             this.systemtitle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.systemtitle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Systemtitle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.systemtitle.BorderStyle = BorderStyle.None;
+            //this.systemtitle.BorderStyle = BorderStyle.None;
             this.Controls.Add(systemtitle);
 
             this.compute_1 = new System.Windows.Forms.TextBox();
@@ -63,7 +63,7 @@ namespace NZPostOffice.ODPS.DataControls.Ruralbase
             this.compute_1.Font = new System.Drawing.Font("MS Sans Serif", 8);
             this.compute_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.compute_1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.compute_1.BorderStyle = BorderStyle.None;
+            //this.compute_1.BorderStyle = BorderStyle.None;
             this.Controls.Add(compute_1);
 
             this.Size = new System.Drawing.Size(650, 300);

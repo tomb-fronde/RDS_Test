@@ -16,6 +16,9 @@ namespace NZPostOffice.ODPS.DataControls.Ruralbase
         public DSystemTitle()
         {
             InitializeComponent();
+
+            this.systemtitle.BorderStyle = BorderStyle.None;
+            this.compute_1.BorderStyle = BorderStyle.None;
         }
 
         public override int Retrieve()
