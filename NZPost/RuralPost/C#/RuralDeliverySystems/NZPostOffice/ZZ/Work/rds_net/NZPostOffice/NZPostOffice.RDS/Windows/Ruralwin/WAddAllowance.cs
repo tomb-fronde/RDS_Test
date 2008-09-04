@@ -38,6 +38,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
 
+            this.dw_allowance.DataObject = new DAddAllowance();
+            dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             dw_allowance.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_allowance_constructor);
             //jlwang:end
@@ -54,7 +57,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_allowance = new URdsDw();
-            this.dw_allowance.DataObject = new DAddAllowance();
+            //!this.dw_allowance.DataObject = new DAddAllowance();
             this.cb_save = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_allowance);
@@ -75,7 +78,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_allowance
             // 
             dw_allowance.VerticalScroll.Visible = false;
-            dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_allowance.TabIndex = 1;
             dw_allowance.Location = new System.Drawing.Point(8, 8);
             dw_allowance.Size = new System.Drawing.Size(449, 168);

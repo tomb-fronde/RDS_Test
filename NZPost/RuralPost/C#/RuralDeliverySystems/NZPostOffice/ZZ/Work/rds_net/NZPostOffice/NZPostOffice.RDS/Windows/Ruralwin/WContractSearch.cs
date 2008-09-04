@@ -17,6 +17,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WContractSearch()
         {
             this.InitializeComponent();
+            this.dw_results.DataObject = new DContractListing();
+
+            this.dw_criteria.DataObject = new DContractSearch();
+            this.dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang: moved from InitializeComponent
             dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);

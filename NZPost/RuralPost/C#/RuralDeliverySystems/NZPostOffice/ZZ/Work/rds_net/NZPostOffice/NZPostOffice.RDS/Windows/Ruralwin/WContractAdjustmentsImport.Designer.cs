@@ -29,7 +29,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.SuspendLayout();
             this.cb_import = new Button();
             this.dw_import = new URdsDw();
-            this.dw_import.DataObject = new DContractAdjustmentsImport();
+            //!this.dw_import.DataObject = new DContractAdjustmentsImport();
             this.sle_filename = new TextBox();
             this.cb_browse = new Button();
             this.cb_close = new Button();

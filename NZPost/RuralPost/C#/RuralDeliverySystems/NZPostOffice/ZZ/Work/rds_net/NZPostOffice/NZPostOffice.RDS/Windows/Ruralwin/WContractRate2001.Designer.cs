@@ -50,12 +50,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             this.cb_newrates = new Button();
-            Controls.Add(st_1);
-            Controls.Add(tab_override_rates);
-            Controls.Add(cb_ok);
-            Controls.Add(cb_cancel);
-            Controls.Add(cb_newrates);
-           
+            
             this.BackColor = System.Drawing.SystemColors.Control;
             this.Text = "Override Rates";
             this.Height = 412;
@@ -102,7 +97,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_vehicle_rates
             // 
             dw_vehicle_rates = new URdsDw();
-            dw_vehicle_rates.DataObject = new DVehicleOverrideRates();
+            //!dw_vehicle_rates.DataObject = new DVehicleOverrideRates();
             tabpage_vehicle_rates.Controls.Add(dw_vehicle_rates);
             tabpage_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_vehicle_rates.Text = "Vehicle Rates";
@@ -120,8 +115,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_vehicle_rates.Top = 5;
             dw_vehicle_rates.Location = new System.Drawing.Point(3, 5);
             
-            dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
-            ((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
+            //!dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
+            //!((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
             
             //dw_vehicle_rates.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicle_constructor);
             //dw_vehicle_rates.PfcUpdate +=new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_vehicle_rates_pfc_update);
@@ -131,7 +126,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_non_vehicle_rates
             // 
             dw_non_vehicle_rates = new URdsDw();
-            dw_non_vehicle_rates.DataObject = new DNonVehicleOverrideRates();
+            //!dw_non_vehicle_rates.DataObject = new DNonVehicleOverrideRates();
             tabpage_non_vehicle_rates.Controls.Add(dw_non_vehicle_rates);
             tabpage_non_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_non_vehicle_rates.Text = "Non Vehicle Rates";
@@ -150,8 +145,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_non_vehicle_rates.Size = new System.Drawing.Size(296, 256);
             dw_non_vehicle_rates.Location = new System.Drawing.Point(1, 11);    
             
-            dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
-            dw_non_vehicle_rates.ItemChanged+= new EventHandler(dw_non_vehicle_rates_itemchanged);
+            //!dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
+            //!dw_non_vehicle_rates.ItemChanged+= new EventHandler(dw_non_vehicle_rates_itemchanged);
 
             //dw_non_vehicle_rates.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_ratesconstructor);
             //dw_non_vehicle_rates.PfcPostUpdate +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_rates_pfc_postupdate);
@@ -160,7 +155,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_other_rates
             // 
             dw_other_rates = new URdsDw();
-            dw_other_rates.DataObject = new DOtherOverrideRates();
+            //!dw_other_rates.DataObject = new DOtherOverrideRates();
             tabpage_other_rates.Controls.Add(dw_other_rates);
             tabpage_other_rates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_other_rates.Text = "Other Rates";
@@ -213,6 +208,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_newrates.Width = 112;
             cb_newrates.Location = new System.Drawing.Point(5, 350);
             cb_newrates.Click += new EventHandler(cb_newrates_clicked);
+
+
+            Controls.Add(st_1);
+            Controls.Add(tab_override_rates);
+            Controls.Add(cb_ok);
+            Controls.Add(cb_cancel);
+            Controls.Add(cb_newrates);
+           
             this.ResumeLayout();
         }
 

@@ -50,6 +50,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WCmbAddressDetail()
         {
             this.InitializeComponent();
+
+            this.dw_cmb_detail.DataObject = new DCmbAddressDetail();
             //idw_cmb = dw_cmb_detail;
 
             //jlwang:moved from IC
@@ -72,7 +74,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_save = new Button();
             this.cb_cancel = new Button();
             this.dw_cmb_detail = new URdsDw();
-            this.dw_cmb_detail.DataObject = new DCmbAddressDetail();
+            //!this.dw_cmb_detail.DataObject = new DCmbAddressDetail();
             this.cb_add = new Button();
             Controls.Add(cb_save);
             Controls.Add(cb_cancel);

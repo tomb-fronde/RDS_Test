@@ -170,6 +170,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
 
+            dw_contract.DataObject = new DContract();
+            dw_contract.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            dw_contract_address.DataObject = new DAddressList();
+            dw_contract_address.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_renewals.DataObject = new DRenewals();
+            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_route_audit.DataObject = new DRouteAuditListing();
+            dw_route_audit.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_contract_allowances.DataObject = new DContractAllowancesV2();
+            dw_contract_allowances.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_artical_counts.DataObject = new DContractArticalCounts();
+            dw_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_fixed_assets.DataObject = new DContractFixedAssets();
+            dw_fixed_assets.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_cmbs.DataObject = new DCmbAddressList();
+            dw_cmbs.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+
+
+            dw_route_frequency.DataObject = new DRouteFrequency();
+            dw_route_frequency.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_types.DataObject = new DTypesForContract();
+            dw_types.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            dw_piece_rates.DataObject = new DContractPieceRates();
+            dw_piece_rates.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from InitializeComponent
             dw_contract.Constructor += new UserEventDelegate(dw_contract_constructor);
             dw_contract.URdsDwItemFocuschanged += new EventDelegate(dw_contract_itemfocuschanged);
@@ -524,7 +559,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_contract
             // 
             dw_contract = new URdsDw();
-            dw_contract.DataObject = new DContract();
+            //!dw_contract.DataObject = new DContract();
             tabpage_contract.Controls.Add(dw_contract);
             tabpage_contract.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_contract.Text = "Contract";
@@ -537,7 +572,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_contract
             // 
-            dw_contract.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_contract.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_contract.VerticalScroll.Visible = false;
             dw_contract.TabIndex = 2;
             dw_contract.Top = 1;
@@ -560,8 +595,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_customers
             // 
             dw_contract_address = new URdsDw();
-            dw_contract_address.DataObject = new DAddressList();
-            dw_contract_address.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_contract_address.DataObject = new DAddressList();
+            //!dw_contract_address.DataObject.BorderStyle = BorderStyle.Fixed3D;
             st_custlist_print = new Label();
             st_custlist_updated = new Label();
             em_custlist_printed = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();// MaskedTextBox();
@@ -647,8 +682,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_renewals
             // 
             dw_renewals = new URdsDw();
-            dw_renewals.DataObject = new DRenewals();
-            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_renewals.DataObject = new DRenewals();
+            //!dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_renewals.Controls.Add(dw_renewals);
             tabpage_renewals.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_renewals.Text = "Renewals";
@@ -675,8 +710,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_frequencies
             // 
             dw_route_frequency = new URdsDw();
-            dw_route_frequency.DataObject = new DRouteFrequency();
-            dw_route_frequency.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_route_frequency.DataObject = new DRouteFrequency();
+//!            dw_route_frequency.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_frequencies.Controls.Add(dw_route_frequency);
             tabpage_frequencies.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_frequencies.Text = "Frequencies";
@@ -703,8 +738,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_route_audit
             // 
             dw_route_audit = new URdsDw();
-            dw_route_audit.DataObject = new DRouteAuditListing();
-            dw_route_audit.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_route_audit.DataObject = new DRouteAuditListing();
+            //!dw_route_audit.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_route_audit.Controls.Add(dw_route_audit);
             tabpage_route_audit.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_route_audit.Text = "Route Audit";
@@ -731,8 +766,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_types
             // 
             dw_types = new URdsDw();
-            dw_types.DataObject = new DTypesForContract();
-            dw_types.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_types.DataObject = new DTypesForContract();
+//!            dw_types.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_types.Controls.Add(dw_types);
             tabpage_types.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_types.Text = "Types";
@@ -758,7 +793,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_allowances
             // 
             dw_contract_allowances = new URdsDw();
-            dw_contract_allowances.DataObject = new DContractAllowancesV2();
+            //!dw_contract_allowances.DataObject = new DContractAllowancesV2();
             tabpage_allowances.Controls.Add(dw_contract_allowances);
             tabpage_allowances.BackColor = System.Drawing.SystemColors.ButtonFace;
             tabpage_allowances.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -773,7 +808,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_contract_allowances
             // 
-            dw_contract_allowances.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_contract_allowances.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_contract_allowances.AutoScroll = true;
             dw_contract_allowances.TabIndex = 1;
             dw_contract_allowances.Location = new System.Drawing.Point(5, 7);
@@ -790,8 +825,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_article_count
             // 
             dw_artical_counts = new URdsDw();
-            dw_artical_counts.DataObject = new DContractArticalCounts();
-            dw_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_artical_counts.DataObject = new DContractArticalCounts();
+            //!dw_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_article_count.Controls.Add(dw_artical_counts);
             tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_article_count.Text = "Article Count";
@@ -811,15 +846,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_artical_counts.DoubleClick += new EventHandler(dw_artical_counts_doubleclicked);
             dw_artical_counts.LostFocus += new EventHandler(dw_artical_counts_losefocus);
 
-            //dw_artical_counts.Constructor += new UserEventDelegate(dw_artical_counts_constructor);
-            //dw_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_artical_counts_pfc_preinsertrow);
-            //dw_artical_counts.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
             // 
             // tabpage_piece_rates
             // 
             dw_piece_rates = new URdsDw();
-            dw_piece_rates.DataObject = new DContractPieceRates();
-            dw_piece_rates.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_piece_rates.DataObject = new DContractPieceRates();
+//!            dw_piece_rates.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_piece_rates.Controls.Add(dw_piece_rates);
             tabpage_piece_rates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_piece_rates.Text = "Piece Rates";
@@ -844,8 +876,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_fixed_assets
             // 
             dw_fixed_assets = new URdsDw();
-            dw_fixed_assets.DataObject = new DContractFixedAssets();
-            dw_fixed_assets.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_fixed_assets.DataObject = new DContractFixedAssets();
+            //!dw_fixed_assets.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_fixed_assets.Controls.Add(dw_fixed_assets);
             tabpage_fixed_assets.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_fixed_assets.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -876,8 +908,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_cmb
             // 
             dw_cmbs = new URdsDw();
-            dw_cmbs.DataObject = new DCmbAddressList();
-            dw_cmbs.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_cmbs.DataObject = new DCmbAddressList();
+            //!dw_cmbs.DataObject.BorderStyle = BorderStyle.Fixed3D;
             tabpage_cmb.Controls.Add(dw_cmbs);
             tabpage_cmb.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_cmb.Text = "CMBs";

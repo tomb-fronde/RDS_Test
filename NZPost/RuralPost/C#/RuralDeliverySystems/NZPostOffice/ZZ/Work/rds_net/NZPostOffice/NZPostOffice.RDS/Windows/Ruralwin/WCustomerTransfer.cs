@@ -26,6 +26,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             this.ShowInTaskbar = false;
 
+            dw_transfer.DataObject = new DCustomerTransfer();
+
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             dw_transfer.EditChanged += new EventHandler(dw_transfer_editchanged);

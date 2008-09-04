@@ -49,6 +49,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            dw_vehicle_rates.DataObject = new DVehicleOverrideRates();
+            dw_non_vehicle_rates.DataObject = new DNonVehicleOverrideRates();
+            dw_other_rates.DataObject = new DOtherOverrideRates();
+
             //jlwang:moved from IC
             dw_vehicle_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicle_constructor);
             dw_vehicle_rates.PfcUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_vehicle_rates_pfc_update);
@@ -59,6 +63,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_other_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_rates_constructor);
             dw_other_rates.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_other_rateseditchanged);
+
+            dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
+            ((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
+
+            dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
+            dw_non_vehicle_rates.ItemChanged += new EventHandler(dw_non_vehicle_rates_itemchanged);
 
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
 

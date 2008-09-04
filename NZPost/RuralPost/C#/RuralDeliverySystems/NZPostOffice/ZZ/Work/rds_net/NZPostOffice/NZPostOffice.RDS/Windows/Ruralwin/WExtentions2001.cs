@@ -30,6 +30,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WExtentions2001()
         {
             this.InitializeComponent();
+            this.dw_ext.DataObject = new DExtension2005();
+            this.dw_ext.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            this.dw_contract.DataObject = new DContractNoEntry2001();
+            this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
 
             //jlwang:moved from IC
             this.dw_ext.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_constructor);

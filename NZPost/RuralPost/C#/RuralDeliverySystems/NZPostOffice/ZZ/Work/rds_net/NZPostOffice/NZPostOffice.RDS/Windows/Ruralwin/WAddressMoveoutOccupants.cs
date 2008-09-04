@@ -33,6 +33,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WAddressMoveoutOccupants()
         {
             this.InitializeComponent();
+            dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -55,13 +56,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.rb_other = new RadioButton();
             this.sle_other = new TextBox();
             this.gb_source = new GroupBox();
-            Controls.Add(rb_rmd);
-            Controls.Add(rb_po);
-            Controls.Add(rb_validation);
-            Controls.Add(rb_duplication);
-            Controls.Add(rb_other);
-            Controls.Add(sle_other);
-            Controls.Add(gb_source);
+           
             this.Text = "Address Move Out: Select Customers";
             this.Height = 282;
             this.Width = 421;
@@ -71,7 +66,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             dw_select.Width = 233;
             dw_select.Top = 38;
-            dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
             // 
             // cb_ok
             // 
@@ -168,6 +163,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             gb_source.Width = 160;
             gb_source.Top = 38;
             gb_source.Left = 248;
+
+
+            Controls.Add(rb_rmd);
+            Controls.Add(rb_po);
+            Controls.Add(rb_validation);
+            Controls.Add(rb_duplication);
+            Controls.Add(rb_other);
+            Controls.Add(sle_other);
+            Controls.Add(gb_source);
             this.ResumeLayout();
         }
 

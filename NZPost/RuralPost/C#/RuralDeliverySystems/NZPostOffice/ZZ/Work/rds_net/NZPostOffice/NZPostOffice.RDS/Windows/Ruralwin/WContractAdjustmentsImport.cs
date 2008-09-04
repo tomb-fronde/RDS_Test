@@ -19,6 +19,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WContractAdjustmentsImport()
         {
             this.InitializeComponent();
+
+            this.dw_import.DataObject = new DContractAdjustmentsImport();
         }
 
         public override int closequery()

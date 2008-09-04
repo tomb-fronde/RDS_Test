@@ -20,6 +20,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WAddressContractInfo()
         {
             this.InitializeComponent();
+            this.dw_info.DataObject = new DContractorInfo();
+            dw_info.DataObject.BorderStyle = BorderStyle.None;
+            dw_info.DataObject.VerticalScroll.Visible = false;
 
             //jlwang:moved from IC
             dw_info.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_info_constructor);
@@ -36,7 +39,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_info = new URdsDw();
-            this.dw_info.DataObject = new DContractorInfo();
+            //!this.dw_info.DataObject = new DContractorInfo();
             Controls.Add(dw_info);
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -47,8 +50,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_info
             // 
-            dw_info.DataObject.BorderStyle = BorderStyle.None;
-            dw_info.DataObject.VerticalScroll.Visible = false;
+            //!dw_info.DataObject.BorderStyle = BorderStyle.None;
+            //!dw_info.DataObject.VerticalScroll.Visible = false;
             dw_info.TabIndex = 1;
             dw_info.Size = new System.Drawing.Size(320, 142);
             dw_info.LostFocus += new EventHandler(dw_info_losefocus);

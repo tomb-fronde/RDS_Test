@@ -62,6 +62,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WCustomerSequencer()
         {
             this.InitializeComponent();
+            this.dw_unseq.DataObject = new DUnseqAddresses();
+            dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            this.dw_seq.DataObject = new DSeqAddresses();
+            dw_seq.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
+            this.dw_addr_sequence_ind.DataObject = new DAddrSequenceInd();
+
             //jlwang:mvoed from IC
             dw_unseq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_unseq_constructor);
             //((DUnseqAddresses)dw_unseq.DataObject).CellClick += new EventHandler(dw_unseq_clicked);

@@ -31,6 +31,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WAddressTransferOccupants()
         {
             this.InitializeComponent();
+            dw_select.DataObject = new DAddressSelectOccupants();
 
             // jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -49,7 +50,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_select = new URdsDw();
-            dw_select.DataObject = new DAddressSelectOccupants();
+            //!dw_select.DataObject = new DAddressSelectOccupants();
 
             this.cb_ok = new UCb();
             this.cb_cancel = new UCb();

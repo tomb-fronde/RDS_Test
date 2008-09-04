@@ -103,13 +103,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_ext
             // 
 
-            this.dw_ext.DataObject = new DExtension2005();
+            //!this.dw_ext.DataObject = new DExtension2005();
             this.dw_ext.Controls.Add(this.st_showcalcs);
             this.dw_ext.Location = new System.Drawing.Point(0, 0);
             this.dw_ext.Name = "dw_ext";
             this.dw_ext.Size = new System.Drawing.Size(627, 325);
             this.dw_ext.TabIndex = 5;
-            this.dw_ext.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!this.dw_ext.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //this.dw_ext.GotFocus += new System.EventHandler(this.dw_ext_getfocus);
             //this.dw_ext.ItemChanged += new EventHandler(this.dw_ext_itemchanged);
 
@@ -152,7 +152,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_bm
             // 
 
-            this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
+            //!this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
             this.dw_bm.Location = new System.Drawing.Point(3, 7);
             this.dw_bm.Name = "dw_bm";
             this.dw_bm.Size = new System.Drawing.Size(572, 283);
@@ -173,10 +173,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_contract
             // 
             this.dw_contract = new URdsDw();
-            this.dw_contract.DataObject = new DContractNoEntry2001();
+            //!this.dw_contract.DataObject = new DContractNoEntry2001();
             this.dw_contract.Location = new System.Drawing.Point(8, 4);
             this.dw_contract.Name = "dw_contract";
-            this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_contract.Size = new System.Drawing.Size(373, 62);
             this.dw_contract.TabIndex = 1;
             //this.dw_contract.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_contract_constructor);

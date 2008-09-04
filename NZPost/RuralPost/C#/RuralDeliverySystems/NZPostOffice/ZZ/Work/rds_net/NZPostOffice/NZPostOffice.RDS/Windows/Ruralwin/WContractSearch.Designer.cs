@@ -52,9 +52,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.SuspendLayout();
             this.l_2 = new Panel();
             this.dw_results = new URdsDw();
-            this.dw_results.DataObject = new DContractListing();
+            //!this.dw_results.DataObject = new DContractListing();
             this.dw_criteria = new URdsDw();
-            this.dw_criteria.DataObject = new DContractSearch();
+            //!this.dw_criteria.DataObject = new DContractSearch();
 
             this.pb_search = new Button();
             this.pb_new = new Button();
@@ -100,7 +100,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_criteria
             // 
-            this.dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!this.dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_criteria.Size = new System.Drawing.Size(350,185);
             this.dw_criteria.Location = new System.Drawing.Point(3, 4);
             dw_criteria.GotFocus += new EventHandler(dw_criteria_getfocus);

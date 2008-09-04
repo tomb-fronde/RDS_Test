@@ -24,6 +24,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WAddFixedAsset()
         {
             this.InitializeComponent();
+            this.dw_fixedasset.DataObject = new DAddFixedAsset();
+
             //jlwang:removed from IC
             dw_fixedasset.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
         }
@@ -45,7 +47,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_fixedasset = new URdsDw();
-            this.dw_fixedasset.DataObject = new DAddFixedAsset();
+            //!this.dw_fixedasset.DataObject = new DAddFixedAsset();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_fixedasset);

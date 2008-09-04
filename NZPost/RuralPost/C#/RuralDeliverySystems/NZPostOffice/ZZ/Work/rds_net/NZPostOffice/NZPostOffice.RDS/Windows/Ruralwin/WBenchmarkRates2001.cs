@@ -56,6 +56,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WBenchmarkRates2001()
         {
             this.InitializeComponent();
+
+            this.dw_renewals.DataObject = new DRenewalDates2001a();
+            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_criteria.DataObject = new DBenchmarkCalcCriteria();
+            this.dw_listing.DataObject = new DWhatifContractSelection();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dw_listing.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             //jlwang:moved from IC
             ((DRenewalDates2001a)dw_renewals.DataObject).CellDoubleClick += new EventHandler(dw_renewals_doubleclicked);
             dw_renewals.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_renewals_constructor);
@@ -63,6 +71,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DWhatifContractSelection)dw_listing.DataObject).CellDoubleClick += new EventHandler(dw_listing_doubleclicked);
             dw_listing.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listing_constructor);
             //jlwagn:end
+           
         }
 
         #region Form Design
@@ -74,11 +83,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_renewals = new URdsDw();
-            this.dw_renewals.DataObject = new DRenewalDates2001a();
+//!            this.dw_renewals.DataObject = new DRenewalDates2001a();
             this.dw_criteria = new URdsDw();
-            this.dw_criteria.DataObject = new DBenchmarkCalcCriteria();
+//!            this.dw_criteria.DataObject = new DBenchmarkCalcCriteria();
             this.dw_listing = new URdsDw();
-            this.dw_listing.DataObject = new DWhatifContractSelection();
+//!            this.dw_listing.DataObject = new DWhatifContractSelection();
             this.rb_last_article_count = new RadioButton();
             this.rb_last_but_one_article_count = new RadioButton();
             this.rb_average_article_count = new RadioButton();
@@ -93,22 +102,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_1 = new Button();
             this.cb_newrates = new Button();
 
-            Controls.Add(rb_last_article_count);
-            Controls.Add(rb_last_but_one_article_count);
-            Controls.Add(rb_average_article_count);
-            Controls.Add(rb_last_renewal);
-            Controls.Add(cb_selectall);
-            Controls.Add(cb_deselectall);
-            Controls.Add(cb_runwhatif);
-            Controls.Add(cb_showrates);
-            Controls.Add(cb_1);
-            Controls.Add(cb_newrates);
-            Controls.Add(dw_renewals);
-            Controls.Add(dw_criteria);
-            Controls.Add(dw_listing);
-            Controls.Add(gb_3);
-            Controls.Add(gb_2);
-            Controls.Add(gb_1);
+           
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Text = "Rates/What-If";
@@ -127,16 +121,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_renewals.Location = new System.Drawing.Point(10, 80);
             dw_renewals.Size = new System.Drawing.Size(284, 253);
             dw_renewals.Cursor = System.Windows.Forms.Cursors.Hand;
-            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_renewals.RowFocusChanged += new EventHandler(dw_renewals_rowfocuschanged);
-            dw_renewals.Click += new EventHandler(dw_renewals_Click);
-            //((DRenewalDates2001a)dw_renewals.DataObject).CellDoubleClick += new EventHandler(dw_renewals_doubleclicked);
-            //dw_renewals.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_renewals_constructor);
+            dw_renewals.Click += new EventHandler(dw_renewals_Click);            
 
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+//!            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_criteria.VerticalScroll.Visible = false;
             dw_criteria.TabIndex = 8;
             dw_criteria.Location = new System.Drawing.Point(319, 16);
@@ -148,7 +140,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_listing.TabIndex = 10;
             dw_listing.Location = new System.Drawing.Point(317, 80);
             dw_listing.Size = new System.Drawing.Size(297, 253);
-            dw_listing.DataObject.BorderStyle = BorderStyle.Fixed3D;
+//!            dw_listing.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //((DWhatifContractSelection)dw_listing.DataObject).CellDoubleClick += new EventHandler(dw_listing_doubleclicked);
             //dw_listing.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listing_constructor);
@@ -287,6 +279,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_newrates.Size = new System.Drawing.Size(87, 22);
             cb_newrates.Tag = "ComponentName=New Rates;";
             cb_newrates.Click += new EventHandler(cb_newrates_clicked);
+
+            Controls.Add(rb_last_article_count);
+            Controls.Add(rb_last_but_one_article_count);
+            Controls.Add(rb_average_article_count);
+            Controls.Add(rb_last_renewal);
+            Controls.Add(cb_selectall);
+            Controls.Add(cb_deselectall);
+            Controls.Add(cb_runwhatif);
+            Controls.Add(cb_showrates);
+            Controls.Add(cb_1);
+            Controls.Add(cb_newrates);
+            Controls.Add(dw_renewals);
+            Controls.Add(dw_criteria);
+            Controls.Add(dw_listing);
+            Controls.Add(gb_3);
+            Controls.Add(gb_2);
+            Controls.Add(gb_1);
             this.ResumeLayout();
         }
 

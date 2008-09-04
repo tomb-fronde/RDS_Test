@@ -26,10 +26,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
 
+            this.dw_date.DataObject = new DArticalCountDateStart();
             //jlwang:moved from IC
             this.dw_date.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_date_constructor);
             ((DArticalCountDateStart)this.dw_date.DataObject).SelectedItemChanged += new EventHandler(WAddArticleCounts_SelectedItemChanged);
-            //jlwnag:end
+            //jlwnag:end           
+            this.dw_date.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_date.DataObject.FilterString = "";
+            this.dw_date.DataObject.SortString = "";
+
+            this.dw_generic.DataObject = new DRegionalArticalCounts();
+            this.dw_generic.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            this.dw_generic.DataObject.FilterString = "";
+            this.dw_generic.DataObject.SortString = "";
+
+            ((DArticalCountDateStart)dw_date.DataObject).SelectedItemChanged += new EventHandler(dw_date_itemchanged);
+            ((DArticalCountDateStart)dw_date.DataObject).TextBoxLostFocus += new EventHandler(dw_date_itemchanged);
+
         }
 
         #region Form Design
@@ -37,37 +50,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.dw_generic = new URdsDw();
             this.dw_date = new URdsDw();
-            this.dw_date.DataObject = new DArticalCountDateStart();
+         
             this.cb_save = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // dw_generic
             // 
-            this.dw_generic.DataObject = new DRegionalArticalCounts();
+           
             this.dw_generic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dw_generic.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            this.dw_generic.DataObject.FilterString = "";
+                        | System.Windows.Forms.AnchorStyles.Right)));            
+            
             this.dw_generic.Location = new System.Drawing.Point(2, 80);
             this.dw_generic.Name = "dw_generic";
             this.dw_generic.Size = new System.Drawing.Size(450, 150);
-            this.dw_generic.DataObject.SortString = "";
+         
             this.dw_generic.TabIndex = 1;
             // 
             // dw_date
             // 
-            this.dw_date.DataObject.FilterString = "";
+          
             this.dw_date.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dw_date.DataObject.BorderStyle = BorderStyle.Fixed3D;
+          
             this.dw_date.Location = new System.Drawing.Point(2, 2);
             this.dw_date.Name = "dw_date";
             this.dw_date.Size = new System.Drawing.Size(450, 76);
-            this.dw_date.DataObject.SortString = "";
+          
             this.dw_date.TabIndex = 2;
-            ((DArticalCountDateStart)dw_date.DataObject).SelectedItemChanged += new EventHandler(dw_date_itemchanged);
-            ((DArticalCountDateStart)dw_date.DataObject).TextBoxLostFocus += new EventHandler(dw_date_itemchanged);
+          
             //this.dw_date.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_date_constructor);
             //((DArticalCountDateStart)this.dw_date.DataObject).SelectedItemChanged += new EventHandler(WAddArticleCounts_SelectedItemChanged);
 

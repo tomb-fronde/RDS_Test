@@ -70,8 +70,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_header
             // 
             //? dw_header.vscrollbar = false;
-            dw_header.DataObject = new DAddressDetails();
-            dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_header.DataObject = new DAddressDetails();
+            //!dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_header.TabIndex = 1;
             this.dw_header.Size = new Size(650, 200);
             this.dw_header.Location = new Point(5, 5);
@@ -88,7 +88,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_details
             // 
-            dw_details.DataObject = new DAddressOccupants();
+            //!dw_details.DataObject = new DAddressOccupants();
             dw_details.TabIndex = 2;
             this.dw_details.Location = new Point(16, 225);
             this.dw_details.Size = new Size(457, 168);
@@ -155,7 +155,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_movement
             // 
-            dw_movement.DataObject = new DAddressOccupantsMovement();
+            //!dw_movement.DataObject = new DAddressOccupantsMovement();
             dw_movement.TabIndex = 0;
             this.dw_movement.Location = new Point(196, 517);
             dw_movement.Visible = false;

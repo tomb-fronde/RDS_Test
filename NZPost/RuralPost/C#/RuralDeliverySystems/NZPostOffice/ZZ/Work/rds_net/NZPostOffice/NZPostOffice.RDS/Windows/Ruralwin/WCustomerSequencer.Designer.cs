@@ -43,9 +43,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_unseq = new URdsDw();
-            this.dw_unseq.DataObject = new DUnseqAddresses();
+            //!this.dw_unseq.DataObject = new DUnseqAddresses();
             this.dw_seq = new URdsDw();
-            this.dw_seq.DataObject = new DSeqAddresses();
+            //!this.dw_seq.DataObject = new DSeqAddresses();
             this.cb_seq = new UCb();
             this.cb_unseq = new UCb();
             this.gb_seq = new GroupBox();
@@ -54,7 +54,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_save = new UCb();
             this.cb_stripmaker = new Button();
             this.dw_addr_sequence_ind = new URdsDw();
-            this.dw_addr_sequence_ind.DataObject = new DAddrSequenceInd();
+            //!this.dw_addr_sequence_ind.DataObject = new DAddrSequenceInd();
             Controls.Add(dw_unseq);
             Controls.Add(dw_seq);
             Controls.Add(cb_seq);
@@ -88,7 +88,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_unseq.Width = 373;
             dw_unseq.Top = 48;
             dw_unseq.Left = 10;
-            dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //dw_unseq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_unseq_constructor);
             //((DUnseqAddresses)dw_unseq.DataObject).CellClick += new EventHandler(dw_unseq_clicked);
@@ -104,7 +104,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_seq.Width = 373;
             dw_seq.Top = 48;
             dw_seq.Left = 403;
-            dw_seq.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_seq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             //dw_seq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_seq_constructor);
             //((DSeqAddresses)dw_seq.DataObject).CellClick += new EventHandler(dw_seq_clicked);
             // 

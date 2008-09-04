@@ -38,6 +38,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WContractorSearch()
         {
             this.InitializeComponent();
+            this.dw_results.DataObject = new DContractorList();
+            this.dw_criteria.DataObject = new DContractorSearch();
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang:moved from IC
             dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_results_constructor);
@@ -47,6 +50,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_criteria_constructor);
             ((DContractorSearch)this.dw_criteria.DataObject).ChildControlClick += new EventHandler(ChildControl_Click);
             //jlwang:end
+
+            ((Metex.Windows.DataEntityGrid)this.dw_results.DataObject.GetControlByName("grid")).KeyDown += new KeyEventHandler(WContractorSearch_KeyDown);
+            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
+            dw_results.GotFocus += new EventHandler(dw_results_getfocus);
+            dw_criteria.GotFocus += new EventHandler(dw_criteria_getfocus);       
+
         }
 
         #region Form Design
@@ -60,10 +69,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.SuspendLayout();
             this.l_2 = new Panel();
             this.dw_results = new URdsDw();
-            this.dw_results.DataObject = new DContractorList();
+            //!this.dw_results.DataObject = new DContractorList();
 
             this.dw_criteria = new URdsDw();
-            this.dw_criteria.DataObject = new DContractorSearch();
+            //!this.dw_criteria.DataObject = new DContractorSearch();
 
 
             this.pb_search = new Button();
@@ -106,26 +115,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_results.Location = new System.Drawing.Point(3, 176);
             dw_results.Size = new System.Drawing.Size(326, 178);
             dw_results.TabIndex = 5;
-            //dw_results.URdsDwClick -= new EventDelegate(dw_results.URdsDw_Clicked);
+            
 
-            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
-            dw_results.GotFocus += new EventHandler(dw_results_getfocus);
-
-            //dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_results_constructor); 
-            //((DContractorList)dw_results.DataObject).Click += new EventHandler(WContractorSearch_Click);
-            //((DContractorList)dw_results.DataObject).DoubleClick += new EventHandler(this.dw_results_doubleclicked);
+//!            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
+//!            dw_results.GotFocus += new EventHandler(dw_results_getfocus);            
 
             // 
             // dw_criteria
             // 
             dw_criteria.VerticalScroll.Visible = false;
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_criteria.TabIndex = 1;
             dw_criteria.Size = new System.Drawing.Size(326, 172);
             dw_criteria.Location = new System.Drawing.Point(3, 4);
-            dw_criteria.GotFocus += new EventHandler(dw_criteria_getfocus);
-            //dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_criteria_constructor);
-            //((DContractorSearch)this.dw_criteria.DataObject).ChildControlClick += new EventHandler(ChildControl_Click);
+//!            dw_criteria.GotFocus += new EventHandler(dw_criteria_getfocus);           
 
             // 
             // pb_search
@@ -165,7 +168,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_clear.Location = new System.Drawing.Point(336, 86);
             cb_clear.Size = new System.Drawing.Size(59, 31);
             cb_clear.Click += new EventHandler(cb_clear_clicked);
-            ((Metex.Windows.DataEntityGrid)this.dw_results.DataObject.GetControlByName("grid")).KeyDown += new KeyEventHandler(WContractorSearch_KeyDown);
+//!            ((Metex.Windows.DataEntityGrid)this.dw_results.DataObject.GetControlByName("grid")).KeyDown += new KeyEventHandler(WContractorSearch_KeyDown);
             this.ResumeLayout();
         }
 

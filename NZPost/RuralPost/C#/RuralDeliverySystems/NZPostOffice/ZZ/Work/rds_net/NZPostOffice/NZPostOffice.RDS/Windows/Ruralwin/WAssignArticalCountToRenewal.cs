@@ -27,6 +27,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
             this.ShowInTaskbar = false;
 
+            dw_renewal.DataObject = new DAssignArticalCountToRenewal();
+            dw_renewal.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
             //jlwang:moved from IC
             ((DAssignArticalCountToRenewal)dw_renewal.DataObject).CellDoubleClick += new EventHandler(dw_renewal_doubleclicked);
             ((DAssignArticalCountToRenewal)dw_renewal.DataObject).CellClick += new EventHandler(dw_renewal_clicked);
@@ -42,7 +45,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_renewal = new URdsDw();
-            dw_renewal.DataObject = new DAssignArticalCountToRenewal();
+            //!dw_renewal.DataObject = new DAssignArticalCountToRenewal();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_renewal);
@@ -55,7 +58,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_renewal
             // 
             dw_renewal.VerticalScroll.Visible = true;
-            dw_renewal.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_renewal.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_renewal.TabIndex = 1;
             dw_renewal.Location = new System.Drawing.Point(3, 4);
             dw_renewal.Size = new System.Drawing.Size(111, 187);

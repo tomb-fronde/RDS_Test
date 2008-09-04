@@ -71,12 +71,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_cancel.Visible = false;
             this.cb_select.Visible = false;
 
+//!?            this.dw_results.DataObject = new DSearchAddressResultsV2b();
+            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
             //jlwang:moved from InitializeComponent
-            ((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
-            ((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);
-            dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
+//!?            ((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
+//!?            ((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);
+//!?            dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
             //jlwang:end
 
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                this.dw_results.DataObject = new DSearchAddressResultsV2b();
+
+                //jlwang:moved from InitializeComponent
+                ((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
+                ((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);
+                dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
+                //jlwang:end
+            }
+            
+            base.OnHandleCreated(e);
         }
 
         #region Form Design
@@ -93,7 +111,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_open = new UCb();
             this.cb_new = new UCb();
             this.dw_results = new URdsDw();
-            this.dw_results.DataObject = new DSearchAddressResultsV2b();
+        
             this.cb_select = new UCb();
             this.cb_cancel = new UCb();
             this.st_count = new USt();
@@ -167,7 +185,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_results.TabIndex = 4;
             dw_results.Location = new System.Drawing.Point(8, 136);
             dw_results.Size = new System.Drawing.Size(545, 224);
-            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
+           
 
             //((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
             //((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);

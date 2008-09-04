@@ -31,6 +31,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WArticalCountForm()
         {
             this.InitializeComponent();
+            this.dw_artical_count.DataObject = new DContractArticalCountForm();
+            dw_artical_count.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             this.ShowInTaskbar = false;
         }
 
@@ -83,7 +86,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_artical_count = new URdsDw();
-            this.dw_artical_count.DataObject = new DContractArticalCountForm();
+            //!this.dw_artical_count.DataObject = new DContractArticalCountForm();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             this.cb_1 = new Button();
@@ -100,7 +103,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             dw_artical_count.VerticalScroll.Visible = false;
             dw_artical_count.TabIndex = 1;
-            dw_artical_count.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_artical_count.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_artical_count.Size = new System.Drawing.Size(474, 120);
             dw_artical_count.Location = new System.Drawing.Point(3, 4);
 

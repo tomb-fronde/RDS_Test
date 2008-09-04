@@ -22,6 +22,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
 
             this.ShowInTaskbar = false;
+
+            dw_1.DataObject = new DContractVehicalForm();
         }
 
         public override void pfc_postopen()

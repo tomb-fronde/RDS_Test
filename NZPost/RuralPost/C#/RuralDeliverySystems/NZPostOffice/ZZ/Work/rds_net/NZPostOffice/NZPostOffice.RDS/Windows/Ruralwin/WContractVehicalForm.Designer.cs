@@ -28,7 +28,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            dw_1.DataObject = new DContractVehicalForm();
+            //!dw_1.DataObject = new DContractVehicalForm();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_1);

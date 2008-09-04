@@ -129,6 +129,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WMaintainAddress()
         {
             this.InitializeComponent();
+            dw_header.DataObject = new DAddressDetails();
+            dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dw_details.DataObject = new DAddressOccupants();
+            dw_movement.DataObject = new DAddressOccupantsMovement();
+
+
             this.AttachDwEvents();
 
             //jlwang:moved from IC

@@ -34,6 +34,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             m_sheet = new MSheet(this);
             this.InitializeComponent();
+            dw_1.DataObject = new DAllowanceBreakdown();
+            this.dw_1.DataObject.BorderStyle = BorderStyle.None;
 
             idw_1 = dw_1;
             //m_sheet_menu.SetFunctionalPart(m_sheet);
@@ -58,7 +60,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             this.cb_close = new Button();
             this.dw_1 = new URdsDw();
-            dw_1.DataObject = new DAllowanceBreakdown();
+            //!dw_1.DataObject = new DAllowanceBreakdown();
             Controls.Add(cb_close);
             Controls.Add(dw_1);
 
@@ -82,7 +84,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_1
             // 
-            this.dw_1.DataObject.BorderStyle = BorderStyle.None;
+            //!this.dw_1.DataObject.BorderStyle = BorderStyle.None;
             dw_1.VerticalScroll.Visible = false;
             dw_1.Size = new System.Drawing.Size(641, 272);
             dw_1.RowFocusChanged += new EventHandler(dw_1_rowfocuschanged);

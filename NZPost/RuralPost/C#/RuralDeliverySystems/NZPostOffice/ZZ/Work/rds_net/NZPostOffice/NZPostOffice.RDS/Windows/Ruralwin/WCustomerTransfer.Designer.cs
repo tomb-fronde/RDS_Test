@@ -32,7 +32,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_transfer = new URdsDw();
-            dw_transfer.DataObject = new DCustomerTransfer();
+            //!dw_transfer.DataObject = new DCustomerTransfer();
             this.st_1 = new Label();
             this.cb_transfer = new Button();
             this.cb_cancel = new Button();

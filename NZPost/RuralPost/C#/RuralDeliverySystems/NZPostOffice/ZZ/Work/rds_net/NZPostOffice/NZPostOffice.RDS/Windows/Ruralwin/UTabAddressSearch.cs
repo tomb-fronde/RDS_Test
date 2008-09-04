@@ -55,55 +55,113 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         #endregion
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                this.constructor();
+                dw_address.DataObject = new DSearchAddress();
+                dw_contact.DataObject = new DAddressSearchPrimContact();
+                dw_address.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+                dw_contact.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+                this.tabpage_address_constructor();
+
+
+                dw_address.URdsDwItemFocuschanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_itemfocuschanged);
+                dw_address.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_editchanged);
+
+                //!dw_address.ItemChanged += new EventHandler(dw_address_itemchanged);
+
+                //! added to trigger edit changed for the Road name textbox
+                ((TextBox)(dw_address.GetControlByName("adr_rd_no"))).Validating += new CancelEventHandler(dw_address_validating);
+                /* this event will unceasing touch off event dw_address_itemchanged :remarked by ygu*/
+                ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rt_id"))).SelectedIndexChanged +=
+                    new EventHandler(dw_address_itemchanged);
+                ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rs_id"))).SelectedIndexChanged +=
+                    new EventHandler(dw_address_itemchanged);
+                ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("tc_id"))).SelectedIndexChanged +=
+                  new EventHandler(dw_address_itemchanged);
+                ((ComboBox)(dw_address.GetControlByName("sl_name"))).SelectedIndexChanged +=
+                    new EventHandler(dw_address_itemchanged);
+
+                ((CheckBox)dw_address.GetControlByName("rd_contract_select")).CheckedChanged += new EventHandler(dw_address_itemchanged);
+                ((TextBox)(dw_address.GetControlByName("road_name"))).TextChanged += new EventHandler(dw_address_editchanged);
+                ((TextBox)(dw_address.GetControlByName("road_name"))).Validating += new CancelEventHandler(dw_address_validating);
+
+                dw_address.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_address_constructor);
+                dw_contact.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_contact_constructor);
+
+                //jlwang:end
+
+                //pp! GetFocus for dw_address not working - attaching the GetFocusEvent to controls of the data window
+                foreach (Control c in dw_address.DataObject.Controls)
+                {
+                    c.GotFocus += new EventHandler(dw_address_getfocus);
+                }
+
+                Control col = dw_address.GetControlByName("sl_name");
+                col.TextChanged += new EventHandler(this.dw_address_pfc_EditChanged);         
+
+            }
+            
+            base.OnHandleCreated(e);
+        }
+
         public UTabAddressSearch()
         {
             InitializeComponent();
 
-            this.constructor();
-            dw_address.DataObject = new DSearchAddress();
-            dw_contact.DataObject = new DAddressSearchPrimContact();
-            dw_address.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_contact.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tabpage_address_constructor();
-            //this.dw_address_constructor();
-            //this.dw_contact_constructor();   
 
-            //jlwang:moved from IC
+            //! code below moved to OnHandleCreated in order not to break the designer
 
-            dw_address.URdsDwItemFocuschanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_itemfocuschanged);
-            dw_address.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_editchanged);
+            //if (!DesignMode)
+            //{
+            //    this.constructor();
+            //    dw_address.DataObject = new DSearchAddress();
+            //    dw_contact.DataObject = new DAddressSearchPrimContact();
+            //    dw_address.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //    dw_contact.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //    this.tabpage_address_constructor();
+            //}
+            ////this.dw_address_constructor();
+            ////this.dw_contact_constructor();   
 
-            //!dw_address.ItemChanged += new EventHandler(dw_address_itemchanged);
+            ////jlwang:moved from IC
+           
+            //    dw_address.URdsDwItemFocuschanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_itemfocuschanged);
+            //    dw_address.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_address_editchanged);
 
-            //! added to trigger edit changed for the Road name textbox
-            ((TextBox)(dw_address.GetControlByName("adr_rd_no"))).Validating += new CancelEventHandler(dw_address_validating);
-            /* this event will unceasing touch off event dw_address_itemchanged :remarked by ygu*/
-            ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rt_id"))).SelectedIndexChanged +=
-                new EventHandler(dw_address_itemchanged);
-            ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rs_id"))).SelectedIndexChanged +=
-                new EventHandler(dw_address_itemchanged);
-            ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("tc_id"))).SelectedIndexChanged +=
-              new EventHandler(dw_address_itemchanged);
-            ((ComboBox)(dw_address.GetControlByName("sl_name"))).SelectedIndexChanged +=
-                new EventHandler(dw_address_itemchanged);
+            //    //!dw_address.ItemChanged += new EventHandler(dw_address_itemchanged);
 
-            ((CheckBox)dw_address.GetControlByName("rd_contract_select")).CheckedChanged += new EventHandler(dw_address_itemchanged);
-            ((TextBox)(dw_address.GetControlByName("road_name"))).TextChanged += new EventHandler(dw_address_editchanged);
-            ((TextBox)(dw_address.GetControlByName("road_name"))).Validating += new CancelEventHandler(dw_address_validating);
+            //    //! added to trigger edit changed for the Road name textbox
+            //    ((TextBox)(dw_address.GetControlByName("adr_rd_no"))).Validating += new CancelEventHandler(dw_address_validating);
+            //    /* this event will unceasing touch off event dw_address_itemchanged :remarked by ygu*/
+            //    ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rt_id"))).SelectedIndexChanged +=
+            //        new EventHandler(dw_address_itemchanged);
+            //    ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("rs_id"))).SelectedIndexChanged +=
+            //        new EventHandler(dw_address_itemchanged);
+            //    ((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName("tc_id"))).SelectedIndexChanged +=
+            //      new EventHandler(dw_address_itemchanged);
+            //    ((ComboBox)(dw_address.GetControlByName("sl_name"))).SelectedIndexChanged +=
+            //        new EventHandler(dw_address_itemchanged);
 
-            dw_address.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_address_constructor);
-            dw_contact.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_contact_constructor);
+            //    ((CheckBox)dw_address.GetControlByName("rd_contract_select")).CheckedChanged += new EventHandler(dw_address_itemchanged);
+            //    ((TextBox)(dw_address.GetControlByName("road_name"))).TextChanged += new EventHandler(dw_address_editchanged);
+            //    ((TextBox)(dw_address.GetControlByName("road_name"))).Validating += new CancelEventHandler(dw_address_validating);
 
-            //jlwang:end
+            //    dw_address.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_address_constructor);
+            //    dw_contact.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_contact_constructor);
 
-            //pp! GetFocus for dw_address not working - attaching the GetFocusEvent to controls of the data window
-            foreach (Control c in dw_address.DataObject.Controls)
-            {
-                c.GotFocus += new EventHandler(dw_address_getfocus);
-            }
+            //    //jlwang:end
 
-            Control col = dw_address.GetControlByName("sl_name");
-            col.TextChanged += new EventHandler(this.dw_address_pfc_EditChanged);
+            //    //pp! GetFocus for dw_address not working - attaching the GetFocusEvent to controls of the data window
+            //    foreach (Control c in dw_address.DataObject.Controls)
+            //    {
+            //        c.GotFocus += new EventHandler(dw_address_getfocus);
+            //    }
+
+            //    Control col = dw_address.GetControlByName("sl_name");
+            //    col.TextChanged += new EventHandler(this.dw_address_pfc_EditChanged);         
 
         }
 
@@ -176,21 +234,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void ue_post_constructor()
         {
-            //inv_road = StaticVariables.gnv_app.of_get_road_map();
-            if (StaticVariables.gnv_app.of_get_road_map() == null)
+            if (!DesignMode)
             {
-                //! NRoad uses only list of BEntities instead of data windows now, otherwise is very slow loading
-                inv_road = ((NRoad)StaticVariables.gnv_app.of_set_road_map(new NRoad("arraysUsed")));
-            }
-            else
-            {
-                inv_road = ((NRoad)StaticVariables.gnv_app.of_get_road_map());
+
+
+                //inv_road = StaticVariables.gnv_app.of_get_road_map();
+                if (StaticVariables.gnv_app.of_get_road_map() == null)
+                {
+                    //! NRoad uses only list of BEntities instead of data windows now, otherwise is very slow loading
+                    inv_road = ((NRoad)StaticVariables.gnv_app.of_set_road_map(new NRoad("arraysUsed")));
+                }
+                else
+                {
+                    inv_road = ((NRoad)StaticVariables.gnv_app.of_get_road_map());
+                }
             }
         }
 
         public virtual void constructor()
         {
-            this.ue_post_constructor();
+            if (!DesignMode)
+            {
+                this.ue_post_constructor();
+            }
         }
 
         public virtual bool of_search_v2(ref URdsDw adw_result)
