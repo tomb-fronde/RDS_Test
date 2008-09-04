@@ -15,12 +15,22 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DRenewalDates2001a()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//!InitializeDropdown();
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
 		}
 
-        void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        protected override void OnHandleCreated(EventArgs e)
         {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+
+            base.OnHandleCreated(e);
+        }
+
+        void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {          
             if (CellDoubleClick != null)
             {
                 CellDoubleClick(sender,e);

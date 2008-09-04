@@ -98,7 +98,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			pr_active_status = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.pr_active_status.DataPropertyName = "PrActiveStatus";
 			this.pr_active_status.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.pr_active_status.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.pr_active_status.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.pr_active_status.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.pr_active_status.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.pr_active_status.DefaultCellStyle.NullValue = false;

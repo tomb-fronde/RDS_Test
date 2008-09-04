@@ -15,11 +15,21 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DRouteFrequency()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
 
             this.grid.CellClick += new DataGridViewCellEventHandler(grid_CellClick);
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+
+            base.OnHandleCreated(e);
+        }
 
         void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {

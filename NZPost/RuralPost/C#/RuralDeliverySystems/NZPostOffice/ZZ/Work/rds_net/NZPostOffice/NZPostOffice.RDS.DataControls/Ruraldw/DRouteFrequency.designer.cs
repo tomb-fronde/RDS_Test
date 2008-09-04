@@ -52,7 +52,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			// grid
 			// 
             this.grid.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.grid.BorderStyle = BorderStyle.None;
+            //this.grid.BorderStyle = BorderStyle.None;
 			this.grid.AllowUserToAddRows = false;
 			this.grid.AllowUserToResizeRows = false;
 			this.grid.AutoGenerateColumns = false;

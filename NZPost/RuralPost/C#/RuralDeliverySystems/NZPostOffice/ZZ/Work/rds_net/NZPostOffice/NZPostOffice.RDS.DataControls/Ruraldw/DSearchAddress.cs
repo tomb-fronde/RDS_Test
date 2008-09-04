@@ -16,8 +16,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DSearchAddress()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//!InitializeDropdown();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            base.OnHandleCreated(e);
+        }
 
         public ComboBox SuburbsCombo
         {

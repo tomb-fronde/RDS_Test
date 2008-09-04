@@ -15,9 +15,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DRenewal()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
 		}
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 		private void InitializeDropdown()
 		{
 			con_rg_code_at_renewal.AssignDropdownType<DDddwRenewalgroup>();

@@ -74,7 +74,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             grid.BackgroundColor = System.Drawing.SystemColors.Control;
             this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
             this.grid.CurrentCellDirtyStateChanged += new EventHandler(grid_CurrentCellDirtyStateChanged);
-            this.grid.BorderStyle = BorderStyle.None;
+            //this.grid.BorderStyle = BorderStyle.None;
             this.grid.CellValidating += new DataGridViewCellValidatingEventHandler(grid_Validating);
             this.Controls.Add(grid);
 

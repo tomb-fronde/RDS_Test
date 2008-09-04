@@ -213,7 +213,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			fd_confirmed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.fd_confirmed.DataPropertyName = "FdConfirmed";
 			this.fd_confirmed.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			//this.fd_confirmed.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.fd_confirmed.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.fd_confirmed.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.fd_confirmed.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.fd_confirmed.DefaultCellStyle.NullValue = false;

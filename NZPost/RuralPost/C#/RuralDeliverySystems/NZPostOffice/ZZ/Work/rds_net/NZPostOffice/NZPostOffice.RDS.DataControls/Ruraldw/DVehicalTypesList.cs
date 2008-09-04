@@ -16,6 +16,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DVehicalTypesList()
 		{
 			InitializeComponent();
+
+            this.grid.BorderStyle = BorderStyle.Fixed3D;
 		}
 
 		public override int Retrieve( )

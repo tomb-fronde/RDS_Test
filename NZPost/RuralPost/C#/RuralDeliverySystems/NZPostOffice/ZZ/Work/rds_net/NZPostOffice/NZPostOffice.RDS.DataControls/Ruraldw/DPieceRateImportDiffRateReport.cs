@@ -15,13 +15,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DPieceRateImportDiffRateReport()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//!InitializeDropdown();
 		}
 
 		private void InitializeDropdown()
 		{
 			//?prt_key.AssignDropdownType<DddwPieceRates>();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 
 		public override int Retrieve( )
 		{

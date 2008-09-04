@@ -447,27 +447,27 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            ActiveEvent();
+            //!ActiveEvent(); - moved to constructor
         }
 
-        void Value_Validated(object sender, System.EventArgs e)
-        {
-            if (((TextBox)sender).Text == "")
-            {
-            }
-            else
-            {
-                ((TextBox)sender).Text = System.Math.Round(System.Convert.ToDecimal(((TextBox)sender).Text), 2).ToString("0.00");
-            }
-        }
+        //void Value_Validated(object sender, System.EventArgs e)
+        //{
+        //    if (((TextBox)sender).Text == "")
+        //    {
+        //    }
+        //    else
+        //    {
+        //        ((TextBox)sender).Text = System.Math.Round(System.Convert.ToDecimal(((TextBox)sender).Text), 2).ToString("0.00");
+        //    }
+        //}
 
-        private void ActiveEvent()
-        {
-            foreach (Control var in this.Controls)
-            {
-                var.GotFocus += new System.EventHandler(var_GotFocus);
-            }
-        }
+        //!private void ActiveEvent()
+        //{
+        //    foreach (Control var in this.Controls)
+        //    {
+        //        var.GotFocus += new System.EventHandler(var_GotFocus);
+        //    }
+        //}
 
         void var_GotFocus(object sender, System.EventArgs e)
         {

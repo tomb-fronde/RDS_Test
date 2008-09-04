@@ -15,8 +15,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DRouteFrequencyForRouteAudit()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!this.DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
+
 
 		private void InitializeDropdown()
 		{

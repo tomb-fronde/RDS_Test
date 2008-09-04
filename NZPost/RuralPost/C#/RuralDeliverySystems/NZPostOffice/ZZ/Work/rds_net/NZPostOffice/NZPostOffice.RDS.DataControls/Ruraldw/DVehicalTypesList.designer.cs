@@ -68,7 +68,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.TabIndex = 0;
-            this.grid.BorderStyle = BorderStyle.Fixed3D;
+//            this.grid.BorderStyle = BorderStyle.Fixed3D;
 
             //
             // vt_description

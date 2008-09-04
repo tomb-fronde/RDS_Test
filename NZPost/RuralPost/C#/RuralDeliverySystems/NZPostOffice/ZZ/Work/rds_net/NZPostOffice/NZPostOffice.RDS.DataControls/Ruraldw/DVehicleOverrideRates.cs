@@ -16,7 +16,28 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DVehicleOverrideRates()
 		{
 			InitializeComponent();
+
+            ActiveEvent();
 		}
+
+        private void ActiveEvent()
+        {
+            foreach (Control var in this.Controls)
+            {
+                var.GotFocus += new System.EventHandler(var_GotFocus);
+            }
+        }
+
+        void Value_Validated(object sender, System.EventArgs e)
+        {
+            if (((TextBox)sender).Text == "")
+            {
+            }
+            else
+            {
+                ((TextBox)sender).Text = System.Math.Round(System.Convert.ToDecimal(((TextBox)sender).Text), 2).ToString("0.00");
+            }
+        }
 
 		public int Retrieve( int? incontract_no, int? incontract_seq_no )
         {

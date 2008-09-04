@@ -2124,7 +2124,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(87, 66);
             this.panel1.TabIndex = 867;
-            this.panel1.BorderStyle = BorderStyle.None;
+            //this.panel1.BorderStyle = BorderStyle.None;
             this.panel1.TabStop = false;
             // 
             // radioButton3
@@ -2179,7 +2179,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(86, 66);
             this.panel2.TabIndex = 868;
-            this.panel2.BorderStyle = BorderStyle.None;
+//!            this.panel2.BorderStyle = BorderStyle.None;
             this.panel2.TabStop = false;
             // 
             // radioButton6
@@ -2231,7 +2231,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel3.Controls.Add(this.radioButton7);
             this.panel3.Location = new System.Drawing.Point(455, 667);
             this.panel3.Name = "panel3";
-            this.panel3.BorderStyle = BorderStyle.None;
+//!            this.panel3.BorderStyle = BorderStyle.None;
             this.panel3.Size = new System.Drawing.Size(85, 66);
             this.panel3.TabIndex = 869;
             this.panel3.TabStop = false;
@@ -2284,7 +2284,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel4.Controls.Add(this.radioButton10);
             this.panel4.Location = new System.Drawing.Point(329, 1346);
             this.panel4.Name = "panel4";
-            this.panel4.BorderStyle = BorderStyle.None;
+//!            this.panel4.BorderStyle = BorderStyle.None;
             this.panel4.Size = new System.Drawing.Size(112, 28);
             this.panel4.TabIndex = 870;
             this.panel4.TabStop = false;
@@ -2323,7 +2323,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel5.Controls.Add(this.radioButton12);
             this.panel5.Location = new System.Drawing.Point(333, 1424);
             this.panel5.Name = "panel5";
-            this.panel5.BorderStyle = BorderStyle.None;
+//!            this.panel5.BorderStyle = BorderStyle.None;
             this.panel5.Size = new System.Drawing.Size(112, 28);
             this.panel5.TabIndex = 871;
             this.panel5.TabStop = false;
@@ -2363,7 +2363,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel6.Location = new System.Drawing.Point(390, 1456);
             this.panel6.Name = "panel6";
-            this.panel6.BorderStyle = BorderStyle.None;
+//!            this.panel6.BorderStyle = BorderStyle.None;
             this.panel6.Size = new System.Drawing.Size(116, 33);
             this.panel6.TabIndex = 872;
             this.panel6.TabStop = false;
@@ -2428,7 +2428,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel7.Controls.Add(this.radioButton16);
             this.panel7.Location = new System.Drawing.Point(268, 1539);
             this.panel7.Name = "panel7";
-            this.panel7.BorderStyle = BorderStyle.None;
+//!            this.panel7.BorderStyle = BorderStyle.None;
             this.panel7.Size = new System.Drawing.Size(122, 27);
             this.panel7.TabIndex = 873;
             this.panel7.TabStop = false;
@@ -2671,7 +2671,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel8.Location = new System.Drawing.Point(268, 1563);
             this.panel8.Name = "panel8";
-            this.panel8.BorderStyle = BorderStyle.None;
+//!            this.panel8.BorderStyle = BorderStyle.None;
             this.panel8.Size = new System.Drawing.Size(122, 33);
             this.panel8.TabIndex = 874;
             this.panel8.TabStop = false;
@@ -2682,7 +2682,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel9.Controls.Add(this.radioButton20);
             this.panel9.Location = new System.Drawing.Point(268, 1650);
             this.panel9.Name = "panel9";
-            this.panel9.BorderStyle = BorderStyle.None;
+//!            this.panel9.BorderStyle = BorderStyle.None;
             this.panel9.Size = new System.Drawing.Size(122, 30);
             this.panel9.TabIndex = 875;
             this.panel9.TabStop = false;
@@ -2722,7 +2722,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel10.Location = new System.Drawing.Point(49, 1827);
             this.panel10.Name = "panel10";
-            this.panel10.BorderStyle = BorderStyle.None;
+//!            this.panel10.BorderStyle = BorderStyle.None;
             this.panel10.Size = new System.Drawing.Size(167, 48);
             this.panel10.TabIndex = 876;
             this.panel10.TabStop = false;
@@ -2758,7 +2758,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel11.Location = new System.Drawing.Point(48, 1957);
             this.panel11.Name = "panel11";
-            this.panel11.BorderStyle = BorderStyle.None;
+//!            this.panel11.BorderStyle = BorderStyle.None;
             this.panel11.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.panel11.Size = new System.Drawing.Size(269, 48);
             this.panel11.TabIndex = 877;
