@@ -16,8 +16,18 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		public DwTownDddw()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 
 		private void InitializeDropdown()
 		{

@@ -139,7 +139,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.sl_id.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
             this.sl_id.HeaderText = "";
             this.sl_id.Visible = false;
-            this.sl_id.Name = "tc_id";
+            this.sl_id.Name = "si_id";
             this.sl_id.Width = 46;            
             this.grid.Columns.Add(sl_id);
             // 

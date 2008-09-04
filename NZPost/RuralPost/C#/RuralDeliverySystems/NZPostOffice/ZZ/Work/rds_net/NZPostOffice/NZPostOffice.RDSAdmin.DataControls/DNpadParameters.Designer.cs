@@ -86,7 +86,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			npad_enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.npad_enabled.DataPropertyName = "NpadEnabled";
 			this.npad_enabled.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			this.npad_enabled.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;;
+			this.npad_enabled.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.npad_enabled.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 10F);
 			this.npad_enabled.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.npad_enabled.DefaultCellStyle.NullValue = false;

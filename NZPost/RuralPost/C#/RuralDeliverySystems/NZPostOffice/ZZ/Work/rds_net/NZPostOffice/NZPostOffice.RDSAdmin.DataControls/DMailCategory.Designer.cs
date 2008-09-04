@@ -81,7 +81,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			mc_mail_category = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.mc_mail_category.DataPropertyName = "McMailCategory";
 			this.mc_mail_category.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1090519039);
-			this.mc_mail_category.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.mc_mail_category.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mc_mail_category.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.mc_mail_category.HeaderText = "Customer Type";
 			this.mc_mail_category.Name = "mc_mail_category";

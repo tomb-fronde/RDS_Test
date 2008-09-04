@@ -113,7 +113,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			prt_print_on_schedule = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.prt_print_on_schedule.DataPropertyName = "PrtPrintOnSchedule";
 			this.prt_print_on_schedule.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.prt_print_on_schedule.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.prt_print_on_schedule.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.prt_print_on_schedule.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.prt_print_on_schedule.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1090519039);
 			this.prt_print_on_schedule.DefaultCellStyle.NullValue = false;
@@ -131,7 +131,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			prs_true_value = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.prs_true_value.DataPropertyName = "PrsTrueValue";
 			this.prs_true_value.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.prs_true_value.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.prs_true_value.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.prs_true_value.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
 			this.prs_true_value.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1090519039);
 			this.prs_true_value.DefaultCellStyle.NullValue = false;

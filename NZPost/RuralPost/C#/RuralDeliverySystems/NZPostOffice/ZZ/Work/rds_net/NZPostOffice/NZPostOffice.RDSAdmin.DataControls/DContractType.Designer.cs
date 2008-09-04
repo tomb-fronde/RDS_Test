@@ -106,7 +106,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			ct_rd_ref_mandatory = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.ct_rd_ref_mandatory.DataPropertyName = "CtRdRefMandatory";
 			this.ct_rd_ref_mandatory.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.ct_rd_ref_mandatory.DefaultCellStyle.ForeColor = System.Drawing.Color.White;;
+			this.ct_rd_ref_mandatory.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
 			this.ct_rd_ref_mandatory.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.ct_rd_ref_mandatory.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(553648127);
 			this.ct_rd_ref_mandatory.DefaultCellStyle.NullValue = false;
