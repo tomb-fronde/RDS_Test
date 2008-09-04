@@ -56,7 +56,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.contract_title.Size = new System.Drawing.Size(300, 20);
             this.contract_title.TabIndex = 0;
             this.contract_title.BackColor = System.Drawing.SystemColors.Control;
-            this.contract_title.BorderStyle = BorderStyle.None;
+            //this.contract_title.BorderStyle = BorderStyle.None;
             this.contract_title.Enabled = true;
             this.contract_title.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Bold);
             this.contract_title.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -176,7 +176,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.paid_to_date.Mask = "00/00/0000";
             //this.paid_to_date.PromptChar = '0';
             this.paid_to_date.BackColor = System.Drawing.SystemColors.Control;
-            this.paid_to_date.BorderStyle = BorderStyle.None;
+            //this.paid_to_date.BorderStyle = BorderStyle.None;
             //this.paid_to_date.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.paid_to_date.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             this.paid_to_date.Font = new System.Drawing.Font("Arial", 8);

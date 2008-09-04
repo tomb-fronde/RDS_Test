@@ -16,11 +16,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public DSearchAddressResultsV2b()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//!InitializeDropdown();
 
             this.grid.CellClick += new DataGridViewCellEventHandler(grid_CellClick);
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+
+            base.OnHandleCreated(e);
+        }
 
         private void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {

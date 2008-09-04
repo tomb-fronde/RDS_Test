@@ -15,7 +15,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         public DCmbAddressDetail()
         {
             InitializeComponent();
-            InitializeDropdown();
+            //InitializeDropdown();
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
         }
 
         private void InitializeDropdown()

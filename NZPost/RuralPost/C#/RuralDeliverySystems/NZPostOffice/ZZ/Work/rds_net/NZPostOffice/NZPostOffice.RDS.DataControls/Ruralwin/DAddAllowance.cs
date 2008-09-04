@@ -16,8 +16,22 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public DAddAllowance()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
+
+            this.contract_title.BorderStyle = BorderStyle.None;
+            this.paid_to_date.BorderStyle = BorderStyle.None;
+
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 
 		private void InitializeDropdown()
 		{

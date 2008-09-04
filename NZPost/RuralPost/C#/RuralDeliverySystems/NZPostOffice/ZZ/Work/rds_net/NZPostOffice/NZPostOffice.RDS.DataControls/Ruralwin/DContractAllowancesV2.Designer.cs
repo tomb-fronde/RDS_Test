@@ -87,7 +87,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.grid.TabIndex = 0;
             this.grid.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            this.grid.BorderStyle = BorderStyle.None;
+            //this.grid.BorderStyle = BorderStyle.None;
             this.grid.ScrollBars = ScrollBars.Vertical;
 
             //
@@ -148,7 +148,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.allowance_total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.allowance_total.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             this.allowance_total.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.allowance_total.BorderStyle = BorderStyle.None;
+            //this.allowance_total.BorderStyle = BorderStyle.None;
             this.allowance_total.ForeColor = System.Drawing.Color.Black;
             this.allowance_total.Location = new System.Drawing.Point(380, 244);
             this.allowance_total.Name = "allowance_total";
