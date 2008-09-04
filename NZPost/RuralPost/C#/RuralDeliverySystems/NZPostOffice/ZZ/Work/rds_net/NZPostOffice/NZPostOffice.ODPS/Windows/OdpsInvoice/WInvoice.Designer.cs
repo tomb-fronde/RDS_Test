@@ -64,7 +64,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             // 
             // dw_1
             // 
-            this.dw_1.DataObject = new DwInvoiceHeaderv5();
+            //!this.dw_1.DataObject = new DwInvoiceHeaderv5();
             dw_1.TabIndex = 1;
             dw_1.Location = new System.Drawing.Point(16, 3);
             dw_1.Size = new System.Drawing.Size(629, 368);

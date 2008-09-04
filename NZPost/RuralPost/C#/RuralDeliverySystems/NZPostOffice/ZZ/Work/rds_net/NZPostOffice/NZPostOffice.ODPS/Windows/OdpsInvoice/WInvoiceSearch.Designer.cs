@@ -47,8 +47,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             // 
             // dw_search
             // 
-            dw_search.DataObject = new DwInvoiceSearch();
-            dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_search.DataObject = new DwInvoiceSearch();
+            //!dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_search.Size = new System.Drawing.Size(302, 128);
             dw_search.Location=new System.Drawing.Point(3,8);
             //? dw_search.ItemChanged += new System.Data.DataColumnChangeEventHandler(dw_search_itemchanged);
@@ -66,8 +66,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             // dw_results
             // 
 
-            dw_results.DataObject = new DwInvoiceSearchResults();
-            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            //!dw_results.DataObject = new DwInvoiceSearchResults();
+            //!dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_results.Size = new System.Drawing.Size(302, 161);
             dw_results.Location = new System.Drawing.Point(3, 144);
             dw_results.DoubleClick += new EventHandler(dw_results_doubleclicked);

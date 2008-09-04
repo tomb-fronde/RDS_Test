@@ -29,6 +29,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
         public WInvoiceSearch()
         {
             InitializeComponent();
+
+            dw_search.DataObject = new DwInvoiceSearch();
+            dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_results.DataObject = new DwInvoiceSearchResults();
+            dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             ((NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).LostFocus += new EventHandler(dw_search_itemchanged);
             ((NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).KeyPress += new KeyPressEventHandler(WInvoiceSearch_KeyPress);
         }
