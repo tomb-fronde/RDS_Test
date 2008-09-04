@@ -41,7 +41,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             this.st_1 = new Label();
             
             this.dw_import = new URdsDw();
-            this.dw_import.DataObject = new DTelecomImport();
+            //!this.dw_import.DataObject = new DTelecomImport();
 
             this.sle_filename = new TextBox();
             this.cb_import = new Button();
@@ -77,7 +77,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             // 
             // dw_import
             // 
-            dw_import.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_import.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dw_import.TabIndex = 5;
             dw_import.Location = new System.Drawing.Point(8, 40);
             dw_import.Size = new System.Drawing.Size(690, 400);

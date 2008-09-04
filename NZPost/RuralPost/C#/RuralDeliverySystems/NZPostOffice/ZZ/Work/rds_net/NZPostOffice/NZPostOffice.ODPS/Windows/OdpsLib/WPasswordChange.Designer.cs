@@ -35,7 +35,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
         {
             this.SuspendLayout();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DPassword();
+            //!this.dw_1.DataObject = new DPassword();
             this.cb_ok = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_1);

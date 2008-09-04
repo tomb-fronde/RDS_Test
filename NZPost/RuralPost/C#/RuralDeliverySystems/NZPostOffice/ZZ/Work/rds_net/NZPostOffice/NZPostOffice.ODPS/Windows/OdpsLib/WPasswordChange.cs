@@ -25,6 +25,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
         public WPasswordChange()
         {
             InitializeComponent();
+
+            this.dw_1.DataObject = new DPassword();
         }
 
         public override void open()

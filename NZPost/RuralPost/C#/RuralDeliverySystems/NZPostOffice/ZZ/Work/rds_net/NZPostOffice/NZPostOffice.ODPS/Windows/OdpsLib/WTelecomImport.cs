@@ -9,6 +9,7 @@ using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.ODPS.Controls;
 using NZPostOffice.ODPS.DataService;
 using NZPostOffice.ODPS.Entity.OdpsLib;
+using NZPostOffice.ODPS.DataControls.OdpsLib;
 using System.IO;
 
 namespace NZPostOffice.ODPS.Windows.OdpsLib
@@ -27,6 +28,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
         public WTelecomImport()
         {
             InitializeComponent();
+
+            this.dw_import.DataObject = new DTelecomImport();
+            dw_import.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
         }
 
         public override void close()

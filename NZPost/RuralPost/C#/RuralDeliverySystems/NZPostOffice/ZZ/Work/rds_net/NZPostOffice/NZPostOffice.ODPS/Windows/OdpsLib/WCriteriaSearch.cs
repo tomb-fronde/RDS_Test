@@ -50,8 +50,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             // 	Object:			cs_Template_w_Singledw
             // 	Method:			pfc_PostOpen
             // 	Description:	retrieve the datawindow stuff
-
-            dw_search.InsertRow(0);//dw_search.insertrow(1);
+            if (!DesignMode)
+            {
+                dw_search.InsertRow(0);//dw_search.insertrow(1);
+            }
             //?dw_search.Focus();
             //? this.SetMicroHelp("Ready");
         }
