@@ -43,7 +43,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new RPieceRateReport();
+            //!dw_report.DataObject = new RPieceRateReport();
             dw_report.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Controls.Add(dw_report);
             this.ResumeLayout();

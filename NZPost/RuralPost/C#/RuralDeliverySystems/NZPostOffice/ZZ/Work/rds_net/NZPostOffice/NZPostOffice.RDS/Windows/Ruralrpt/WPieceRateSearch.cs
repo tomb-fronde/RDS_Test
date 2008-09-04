@@ -18,11 +18,21 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            dw_results.DataObject = new DReportGenericResults();
+
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).GotFocus += new EventHandler(dw_criteria_GotFocus);
+
+            dw_criteria.DataObject = new DReportGenericCriteriaWithMonth();
+            ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
+            ((DReportGenericCriteriaWithMonth)dw_criteria.DataObject).TextBoxLostFocus += new System.EventHandler(dw_criteria_ItemChange);
+            ((Metex.Windows.DataEntityGrid)dw_results.GetControlByName("grid")).CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(pb_open_clicked);
+
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
         }
 
         public override void pfc_preopen()
-        {
+        {           
             base.pfc_preopen();
             DateTime dDate = DateTime.Today;
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).Enabled = false;
@@ -113,14 +123,15 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         #region Events
         public void dw_criteria_GotFocus(object sender, EventArgs e)
-        {
+        {           
             ((MaskedTextBox)dw_criteria.GetControlByName("monthyear")).BringToFront();
             dw_criteria.GetControlByName("monthyear").Text = ((System.Windows.Forms.TextBox)dw_criteria.GetControlByName("monthyear1")).Text;
             ((MaskedTextBox)dw_criteria.GetControlByName("monthyear")).Focus();
         }
 
         public override void pb_open_clicked(object sender, EventArgs e)
-        {
+        {           
+
             //WPieceRateReport wNewReport;
             //!if (dw_results.GetSelectedRow(0) == 0)
             if (dw_results.GetSelectedRow(0) < 0)
@@ -156,7 +167,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         }
 
         public virtual void dw_criteria_ItemChange(object sender, EventArgs e)
-        {
+        {           
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).Text = dw_criteria.GetControlByName("monthyear").Text;
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).BringToFront();
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).Enabled = true;

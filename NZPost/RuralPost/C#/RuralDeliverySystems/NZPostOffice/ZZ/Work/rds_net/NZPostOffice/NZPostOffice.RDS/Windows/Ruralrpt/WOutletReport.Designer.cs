@@ -50,7 +50,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_report
             // 
             //?dw_report.border = false;
-            dw_report.DataObject = new ROutletBaseOfficeReport();
+            //!dw_report.DataObject = new ROutletBaseOfficeReport();
             dw_report.Height = 336;
             dw_report.Width = 537;
             dw_report.Top = 8;

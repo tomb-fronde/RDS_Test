@@ -45,8 +45,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_criteria
             // 
 
-            dw_criteria.DataObject = new DOutletReportCriteria();
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            //!dw_criteria.DataObject = new DOutletReportCriteria();
+            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dw_criteria.Height = 96;
             dw_criteria.Width = 328;
             dw_criteria.Left = 8;
@@ -54,7 +54,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // dw_results
             // 
 
-            dw_results.DataObject = new DReportGenericResults();
+            //!dw_results.DataObject = new DReportGenericResults();
             dw_results.Height = 165;
             dw_results.Width = 295;
             dw_results.Top = 170;

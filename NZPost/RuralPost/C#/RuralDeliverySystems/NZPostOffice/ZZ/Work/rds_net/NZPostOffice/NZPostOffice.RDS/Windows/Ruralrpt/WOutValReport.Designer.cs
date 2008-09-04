@@ -45,7 +45,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_report
             // 
-            dw_report.DataObject = new DOutValList();
+            //!dw_report.DataObject = new DOutValList();
             this.ResumeLayout();
         }
 

@@ -33,8 +33,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.SuspendLayout();
             this.pb_1 = new Button();
             this.st_1 = new Label();
-            Controls.Add(pb_1);
-            Controls.Add(st_1);
+          
             this.Height = 396;
             // 
             // st_label
@@ -44,20 +43,20 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DReportGenericRegOutletCriteria();
+           
             dw_criteria.Size = new System.Drawing.Size(293, 169);
             dw_criteria.Location = new System.Drawing.Point(3, 5);
-            dw_criteria.EditChanged += new System.EventHandler(dw_criteria_editchanged);
-            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
+            
+            
+           
             // 
             // dw_results
             // 
-            dw_results.DataObject = new DMailCountSearchResults();
+            
             dw_results.TabIndex = 5;
             dw_results.Size = new System.Drawing.Size(293, 164);
             dw_results.Location = new System.Drawing.Point(3, 176);
-            ((DMailCountSearchResults)dw_results.DataObject).DoubleClick += new System.EventHandler(dw_results_doubleclicked);
+           
             // 
             // pb_search
             // 
@@ -77,7 +76,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             pb_1.Location = new System.Drawing.Point(195, 82);
             pb_1.Size = new System.Drawing.Size(21, 21);
             pb_1.BringToFront();
-            this.pb_1.Click += new System.EventHandler(pb_1_clicked);
+            
             // 
             // st_1
             // 
@@ -88,6 +87,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             st_1.Location = new System.Drawing.Point(215, 153);
             st_1.Size = new System.Drawing.Size(73, 18);
 
+
+            Controls.Add(pb_1);
+            Controls.Add(st_1);
             this.Name = "w_mail_count_search";
             this.ResumeLayout();
         }

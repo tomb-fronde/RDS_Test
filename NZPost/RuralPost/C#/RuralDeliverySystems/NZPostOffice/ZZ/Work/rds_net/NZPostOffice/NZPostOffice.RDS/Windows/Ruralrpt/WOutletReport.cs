@@ -24,6 +24,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WOutletReport()
         {
             InitializeComponent();
+            dw_report.DataObject = new ROutletBaseOfficeReport();
+
             this.Load += new EventHandler(WOutletReport_Load);
             this.Activated += new EventHandler(WOutletReport_Activated);
         }

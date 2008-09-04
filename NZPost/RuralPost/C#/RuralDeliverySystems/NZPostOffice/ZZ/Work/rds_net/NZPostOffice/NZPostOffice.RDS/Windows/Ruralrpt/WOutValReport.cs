@@ -15,6 +15,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WOutValReport()
         {
             InitializeComponent();
+            dw_report.DataObject = new DOutValList();
+
             this.Load += new EventHandler(WOutValReport_Load);
             this.Activated += new EventHandler(WOutValReport_Activated);
         }

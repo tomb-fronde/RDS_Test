@@ -20,6 +20,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WPieceRateReport()
         {
             InitializeComponent();
+
+            dw_report.DataObject = new RPieceRateReport();
         }
 
         //added 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralrpt;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -15,6 +16,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WOwnerDriverLabelsCriteria()
         {
             InitializeComponent();
+
+            dw_criteria.DataObject = new DOwnerDriverReportCriteria();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            dw_results.DataObject = new DReportGenericResults();
         }
 
         public override void pfc_preopen()

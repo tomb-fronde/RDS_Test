@@ -20,6 +20,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WNoRoadnumSearch()
         {
             InitializeComponent();
+            dw_select.DataObject = new DTownSelect();
+            dw_select.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             this.Load += new EventHandler(WNoRoadnumSearch_Load);
             this.Activated += new EventHandler(WNoRoadnumSearch_Activated);
             dw_select.Constructor += new UserEventDelegate(dw_select_constructor);

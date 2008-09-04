@@ -20,6 +20,16 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WMailCountSearch()
         {
             InitializeComponent();
+
+            dw_criteria.DataObject = new DReportGenericRegOutletCriteria();
+            dw_results.DataObject = new DMailCountSearchResults();
+
+            dw_criteria.EditChanged += new System.EventHandler(dw_criteria_editchanged);
+            ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
+            ((DMailCountSearchResults)dw_results.DataObject).DoubleClick += new System.EventHandler(dw_results_doubleclicked);
+            this.pb_1.Click += new System.EventHandler(pb_1_clicked);
+
+            dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
         }
 
         public override void pfc_postopen()
@@ -287,6 +297,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void pb_1_clicked(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
+
             dw_criteria.AcceptText();
             DateTime mcdate;
             int LCOUNT;

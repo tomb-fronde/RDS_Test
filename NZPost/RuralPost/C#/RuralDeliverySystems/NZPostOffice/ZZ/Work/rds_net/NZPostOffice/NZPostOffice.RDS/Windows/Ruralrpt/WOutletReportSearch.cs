@@ -9,6 +9,8 @@ using Metex.Windows;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.DataService;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
+
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -17,6 +19,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WOutletReportSearch()
         {
             InitializeComponent();
+
+            dw_criteria.DataObject = new DOutletReportCriteria();
+            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            
+            dw_results.DataObject = new DReportGenericResults();
             //_menu.SetFunctionalPart();
             //_toolbar.SetFunctionalPart();
         }

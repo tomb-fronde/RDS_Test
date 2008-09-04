@@ -38,7 +38,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.em_1 = new MaskedTextBox();
             this.pb_1 = new Button();
             this.dw_1 = new URdsDw();
-            this.dw_1.DataObject = new DExtRegion();
+            //!this.dw_1.DataObject = new DExtRegion();
             Controls.Add(st_1);
             Controls.Add(st_2);
             Controls.Add(em_1);
@@ -103,7 +103,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_1
             // 
-            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //!dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_1.TabIndex = 2;
             dw_1.Height = 22;
             dw_1.Width = 169;

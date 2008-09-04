@@ -43,22 +43,21 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // dw_criteria
             // 
-            dw_criteria.DataObject = new DReportGenericCriteriaWithMonth();
+           
             dw_criteria.Height = 163;
             dw_criteria.Width = 295;
             dw_criteria.Top = 2;
-            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
-            ((DReportGenericCriteriaWithMonth)dw_criteria.DataObject).TextBoxLostFocus +=new System.EventHandler(dw_criteria_ItemChange);
+          
+           
             // 
             // dw_results
             // 
-            dw_results.DataObject = new DReportGenericResults();
+            //!dw_results.DataObject = new DReportGenericResults();
             dw_results.Height = 165;
             dw_results.Width = 295;
             dw_results.Top = 170;
-            dw_results.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            ((DataEntityGrid)dw_results.GetControlByName("grid")).CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(pb_open_clicked);
+            
+           
             // 
             // pb_search
             // 

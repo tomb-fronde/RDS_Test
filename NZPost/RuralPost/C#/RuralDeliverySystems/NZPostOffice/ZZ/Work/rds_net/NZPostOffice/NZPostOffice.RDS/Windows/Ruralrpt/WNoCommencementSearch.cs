@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using NZPostOffice.RDS.Controls;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 using NZPostOffice.Shared;
+using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
@@ -16,6 +17,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public WNoCommencementSearch()
         {
             InitializeComponent();
+            this.dw_1.DataObject = new DExtRegion();
+            dw_1.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             dw_1.Constructor += new UserEventDelegate(dw_1_constructor);
         }
