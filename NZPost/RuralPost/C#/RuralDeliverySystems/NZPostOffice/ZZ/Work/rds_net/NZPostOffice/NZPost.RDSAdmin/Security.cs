@@ -148,6 +148,7 @@ namespace NZPostOffice.RDSAdmin
         [STAThread()]
         public static void Main() 
         {
+            Application.EnableVisualStyles();
             Application.Run(new Security());
         }
     }
