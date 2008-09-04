@@ -977,12 +977,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
                             instance._nat_deductions_defaultcomptype = GetValueFromReader<Int32?>(dr, 35);
                             instance._nat_courierpost_defaultcomptype = GetValueFromReader<Int32?>(dr, 36);
                             instance._nat_pp_defaultcomptype = GetValueFromReader<Int32?>(dr, 37);
-                                // TJB  Set default value for Parcel Post entries
-                            if (instance._nat_pp_defaultcomptype == null)
-                                instance._nat_pp_defaultcomptype = 15;
-
                             instance.MarkOld();
-
                             instance.StoreInitialValues();
                             _list.Add(instance);
                         }
