@@ -64,6 +64,9 @@ namespace NZPostOffice.RDSAdmin
         public WMainMdi()
         {
             this.InitializeComponent();
+
+            this.dw_detail.DataObject = new DwGroupDetails();
+
             dw_detail.DoubleClick += new EventHandler(dw_detail_DoubleClick);
             dw_detail.DataObjectChanged += new EventHandler(dw_detail_DataObjectChanged);
             dw_detail_DataObjectChanged(this, new EventArgs());
@@ -833,7 +836,7 @@ namespace NZPostOffice.RDSAdmin
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WMainMdi));
             this.dw_user_region = new NZPostOffice.RDSAdmin.DataControls.Security.DwUserRegion();
             this.dw_detail = new Metex.Windows.DataUserControlContainer();
-            this.dw_detail.DataObject = new DwGroupDetails();
+            //!this.dw_detail.DataObject = new DwGroupDetails();
             this.dw_1 = new NZPostOffice.RDSAdmin.DataControls.Security.DwGroupDetails();
             this.st_1 = new NZPostOffice.Shared.VisualComponents.USt();
             this.tv_1 = new NZPostOffice.RDSAdmin.Controls.USecurityTvs();
