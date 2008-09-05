@@ -1,10 +1,20 @@
-/****** Object:  StoredProcedure [rd].[mpt_customers_delta]    Script Date: 08/05/2008 10:17:04 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [rd].[mpt_customers_delta] ( 
+if exists (select 1 from sysobjects 
+            where name = 'mpt_customers_delta' and type = 'P') 
+begin 
+    print 'Dropping mpt_customers_delta';
+    drop procedure mpt_customers_delta;
+end;
+go
+
+print 'Create procedure mpt_customers_delta';
+go
+
+CREATE PROCEDURE mpt_customers_delta ( 
         @last_run_date   datetime 
 )
 /******************************************************************
@@ -40,7 +50,7 @@ CREATE PROCEDURE [rd].[mpt_customers_delta] (
  *    Tom Britton, Fronde Systems Group
  *
  * Created on
- *    June 2008
+ *    July 2008
  *
  * Modification history
  * 13 Jun 2008  TJB  Fixed bug with excluding duplicate records
@@ -100,9 +110,6 @@ BEGIN
         -- Purge expired deleted entries from mpt_customers_old
     if @status = 0 
     begin
-        print 'Purge expired deleted entries from mpt_customers_old'
-              +': Purge date = '+convert(varchar,@purge_date)
-        
         delete from mpt_customers_old
          where change_date <= @purge_date
            and change_type = 'D';
@@ -119,10 +126,6 @@ BEGIN
         -- Remove and "New" records added after the last run     
     if @status = 0 
     begin
-        print 'Remove and "New" records added after the last run'
-        print '    - delete from mpt_customers_old'
-        print '       where change_date between '+convert(varchar,@last_run_date)+' and '+convert(varchar,@twoWeeksHence)
-     
         delete from mpt_customers_old
          where change_date between @last_run_date and @twoWeeksHence
            and change_type = 'N';
@@ -140,9 +143,6 @@ BEGIN
         --     original 'new' date was)
     if @status = 0 
     begin
-        print 'Undo any "Delete"d records changed after the last run'
-        print '    - update mpt_customers_old'
-
         update mpt_customers_old
            set change_type = 'N'
              , change_date = @purge_date
@@ -163,8 +163,6 @@ BEGIN
      
     if @status = 0 
     begin
-        print 'truncate TABLE #tmp_mpt_customers_delta'
-
         truncate TABLE #tmp_mpt_customers_delta;
     
         if @@error <> 0 
@@ -183,8 +181,6 @@ BEGIN
 
     if @status = 0 
     begin
-        print 'Gather "new" customers data'
-
         insert into #tmp_mpt_customers_delta
             (change_type, cust_id, dp_id, title, initial, surname, 
              classification, move_in_date, move_out_date, opt_in_ind)
@@ -234,8 +230,6 @@ BEGIN
 
     if @status = 0 
     begin
-        print 'Gather "moved" customers data'
-
         insert into #tmp_mpt_customers_delta
             (change_type, cust_id, dp_id, title, initial, surname, 
              classification, move_in_date, move_out_date, opt_in_ind)
@@ -285,8 +279,6 @@ BEGIN
 
     if @status = 0 
     begin
-        print 'Gather "deleted" customers data'
-
         insert into #tmp_mpt_customers_delta
             (change_type, cust_id, dp_id, title, initial, surname, 
              classification, move_in_date, move_out_date, opt_in_ind)
@@ -341,8 +333,6 @@ BEGIN
         -- customers against.
     if @status = 0 
     begin
-        print 'Gather "changed" customers data'
-
         insert into #tmp_mpt_customers ( cust_id )
         select cust_id from #tmp_mpt_customers_delta;
 
@@ -354,11 +344,9 @@ BEGIN
         end;
     end;
 
-        -- Add the "Changed" customers to the customers_delta list
+        -- Add the 'Changed" customers to the customers_delta list
     if @status = 0 
     begin
-        print 'Add the "Changed" customers to the customers_delta list'
-
         insert into #tmp_mpt_customers_delta
             (change_type, cust_id, dp_id, title, initial, surname, 
              classification, move_in_date, move_out_date, opt_in_ind)
@@ -424,9 +412,6 @@ BEGIN
         -- Look for recipient-->master changes
     if @status = 0 
     begin
-        print 'Look for recipient-->master changes'
-        print '    - update #tmp_mpt_customers_delta'
-
         update #tmp_mpt_customers_delta
            set change_type = 'N'
          where change_type = 'C'
@@ -444,9 +429,6 @@ BEGIN
         -- Look for master-->recipient changes
     if @status = 0 
     begin
-        print 'Look for master-->recipient changes'
-        print '    - insert into #tmp_mpt_customers_delta'
-
         insert into #tmp_mpt_customers_delta
             (change_type, cust_id, dp_id, title, initial, surname, 
              classification, move_in_date, move_out_date, opt_in_ind)
@@ -493,9 +475,6 @@ BEGIN
         -- Flag any deleted customers
     if @status = 0 
     begin
-        print 'Flag any deleted customers'
-        print '    - update mpt_customers_old'
-
         update mpt_customers_old
            set change_type = 'D'
              , change_date = @now
@@ -514,8 +493,6 @@ BEGIN
         -- Add any new customers
     if @status = 0 
     begin
-        print 'Insert any new customers'
-
         insert into mpt_customers_old
                ( cust_id, change_type, change_date )
             select cust_id, change_type, @now
@@ -536,8 +513,6 @@ BEGIN
 
     if @status = 0 
     begin
-        print 'Return the result set'
-
         select * from #tmp_mpt_customers_delta
          order by cust_id, change_type;
 
@@ -587,4 +562,11 @@ BEGIN
         print @description;
     
 END
-GO
+go
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_customers_delta' and type = 'P') 
+    print 'Procedure mpt_customers_delta created';
+else
+    print 'Error: ***** Procedure mpt_customers_delta NOT created ****';
+go

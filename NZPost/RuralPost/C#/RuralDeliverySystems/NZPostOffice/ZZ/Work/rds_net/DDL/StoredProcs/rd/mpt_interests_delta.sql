@@ -1,10 +1,20 @@
-/****** Object:  StoredProcedure [rd].[mpt_interests_delta]    Script Date: 08/05/2008 10:17:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [rd].[mpt_interests_delta] (
+if exists (select 1 from sysobjects 
+            where name = 'mpt_interests_delta' and type = 'P') 
+begin 
+    print 'Dropping procedure mpt_interests_delta';
+    drop procedure mpt_interests_delta;
+end;
+go
+
+print 'Create procedure mpt_interests_delta';
+go
+
+CREATE PROCEDURE mpt_interests_delta (
       @run_date     datetime 
     )
 /*****************************************************************************
@@ -24,7 +34,6 @@ CREATE PROCEDURE [rd].[mpt_interests_delta] (
  *          type         char(1)      NOT NULL
  *          code         integer      NOT NULL
  *          change_type  char(1)      NOT NULL
- *          change_date  datetime     NOT NULL
  *
  * System
  *    VAS Programme
@@ -45,6 +54,11 @@ CREATE PROCEDURE [rd].[mpt_interests_delta] (
  * 16 Jul 2008  TJB  Changed column names to be consistent with specifications
  *                   (changed type_ind --> type, value --> code)
  * 17 Jul 2008  TJB  Converted to SQL Server syntax
+ * 15 Aug 2008  TJB  Removed unnecessary summary statistic ("Changes").
+ * 25 Aug 2008  TJB  Removed table mpt_interests_new replaced with use of view 
+ *                   v_cust_interests_occupations. 
+ *                   Replaced mpt_interests_changes with a temporary table called 
+ *                   mpt_interests_delta.
  *****************************************************************************/
 AS
 BEGIN
@@ -62,147 +76,14 @@ BEGIN
 
     set @status = 0;
     set @purge_date = dateadd( day, -14, @run_date );
-
-    /************************************************************
-     * Create required tables, if they don't already exist
-     ************************************************************/
-
-    if @status = 0 
-    begin
-        if not exists (select 1 from sysobjects where name = 'mpt_interests_old') 
-        begin
-
-            CREATE TABLE mpt_interests_old
-               (    cust_id         integer NOT NULL
-                  , code            integer NOT NULL
-                  , type            char(1) NOT NULL        -- 'O' (occupation) or 'I' (interest)
-                  , change_type     char(1) NOT NULL        -- 'N' (new) or 'D' (deleted)
-                  , change_date     datetime    NOT NULL
-               );
-
-            if @@error <> 0 
-            begin
-                set @status = -1;
-                set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                   +' creating table mpt_interests_old';
-            end;
-
-            if @status = 0 
-            begin
-                CREATE INDEX mpt_interests_old_ndx
-                    ON mpt_interests_old (cust_id ASC);
-
-                if @@error <> 0 
-                begin
-                    set @status = -1;
-                    set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                       +' creating index on mpt_interests_old';
-                end;
-            end;
-        end;
-    end;
-
-    if @status = 0 
-    begin
-        if not exists (select 1 from sysobjects where name = 'mpt_interests_new') 
-        begin
-
-            CREATE TABLE mpt_interests_new
-               (    cust_id         integer NOT NULL
-                  , code            integer NOT NULL
-                  , type            char(1) NOT NULL        -- 'O' (occupation) or 'I' (interest)
-               );
-
-            if @@error <> 0 
-            begin
-                set @status = -1;
-                set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                   +' creating table mpt_interests_new';
-            end;
-
-            if @status = 0 
-            begin
-                CREATE INDEX mpt_interests_new_ndx
-                    ON mpt_interests_new (cust_id ASC);
-
-                if @@error <> 0 
-                begin
-                    set @status = -1;
-                    set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                       +' creating index on mpt_interests_new';
-                end;
-            end;
-        end;
-    end;
-
-    if @status = 0 
-    begin
-        if not exists (select 1 from sysobjects where name = 'mpt_interests_changes') 
-        begin
-
-            CREATE TABLE mpt_interests_changes
-               (    cust_id         integer NOT NULL
-                  , type            char(1) NOT NULL        -- 'O' (occupation) or 'I' (interest)
-                  , code            integer NOT NULL
-                  , change_type     char(1) NOT NULL        -- 'N' (new) or 'D' (deleted)
-               );
-
-            if @@error <> 0 
-            begin
-                set @status = -1;
-                set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                   +' creating table mpt_interests_changes';
-            end;
-
-            if @status = 0 
-            begin
-               CREATE INDEX mpt_interests_changes_ndx
-                   ON mpt_interests_changes (cust_id ASC);
-
-                if @@error <> 0 
-                begin
-                    set @status = -1;
-                    set @description = 'SQL Error '+convert(varchar(10),@@error)
-                                       +' creating index on mpt_interests_changes';
-                end;
-            end;
-        end;
-    end;
-
-    /************************************************************
-     * Clear the current interests and changes tables
-     ************************************************************/
-     
-    if @status = 0 
-    begin
-
-        print 'truncate TABLE mpt_interests_new'
-        
-        truncate TABLE mpt_interests_new;
-
-        if @@error <> 0 
-        begin
-            set @status = -1;
-            set @description = 'SQL Error '+convert(varchar(10),@@error)
-                               +' truncating table mpt_interests_new';
-        end;
-    end;
-
-    if @status = 0 
-    begin
-
-        print 'truncate TABLE mpt_interests_changes'
-        
-        truncate TABLE mpt_interests_changes;
-
-        if @@error <> 0 
-        begin
-            set @status = -1;
-            set @description = 'SQL Error '+convert(varchar(10),@@error)
-                               +' truncating table mpt_interests_changes';
-        end;
-    end;
-
+    
+    CREATE TABLE #tmp_mpt_interests_delta
+    (    cust_id         integer NOT NULL
+       , type            char(1) NOT NULL        -- 'O' (occupation) or 'I' (interest)
+       , code            integer NOT NULL
+       , change_type     char(1) NOT NULL        -- 'N' (new) or 'D' (deleted)
+    );
+    
 
     /************************************************************
      * Prepare the mpt_interests_old table
@@ -268,91 +149,26 @@ BEGIN
                                +' undeleting post run_date "deleted" records';
         end;
     end;
-     
-
-    /************************************************************
-     * Gather current interest and occupation data
-     ************************************************************/
-
-           -- Select all current interests into 
-           -- the mpt_interests_new table.
-    if @status = 0 
-    begin
-        print 'insert current interests into mpt_interests_new'
-        
-        insert into mpt_interests_new
-             ( cust_id, code,        type  )
-        select cust_id, interest_id, 'I' 
-          from customer_interest
-         where cust_id in (select c.cust_id
-                             from rds_customer c
-                                , address a
-                                , customer_address_moves cam
-                            where c.master_cust_id is null
-                              and c.cust_surname_company != 'Dummy'
-                              and cam.cust_id = c.cust_id
-                              and cam.move_out_date is null
-                              and a.adr_id = cam.adr_id
-                              and a.contract_no < 6000      -- Rural Delivery contracts only
-                              and a.dp_id is not null );
-
-        if @@error <> 0 
-        begin
-            set @status = -1;
-            set @description = 'SQL Error '+convert(varchar(10),@@error)
-                               +' gathering current interest data';
-        end;
-    end;
-
-           -- Select all current occupations into 
-           -- the mpt_interests_new table.
-    if @status = 0 
-    begin
-        print 'insert current occupations into mpt_interests_new'
-
-        insert into mpt_interests_new
-             ( cust_id, code,          type  )
-        select cust_id, occupation_id, 'O' 
-          from customer_occupation
-         where cust_id in (select c.cust_id
-                             from rds_customer c
-                                , address a
-                                , customer_address_moves cam
-                            where c.master_cust_id is null
-                              and c.cust_surname_company != 'Dummy'
-                              and cam.cust_id = c.cust_id
-                              and cam.move_out_date is null
-                              and a.adr_id = cam.adr_id
-                              and a.contract_no < 6000      -- Rural Delivery contracts only
-                              and a.dp_id is not null );
-
-        if @@error <> 0 
-        begin
-            set @status = -1;
-            set @description = 'SQL Error '+convert(varchar(10),@@error)
-                               +' gathering current occupation data';
-        end;
-    end;
 
     /************************************************************
      * Determine what's changed since the run_date
      ************************************************************/
 
-           -- Add any 'new' records to the "changes" table
+           -- Add any 'new' records to the "delta" table
            -- 'New' records are those that exist in the "New" table 
            -- but not in the "Old" table.
     if @status = 0 
     begin
-        print 'Add "new" records to mpt_interests_changes'
+        print 'Add "new" records to #tmp_mpt_interests_delta'
         
-        insert into mpt_interests_changes
+        insert into #tmp_mpt_interests_delta
 	     ( cust_id, type, code, change_type )
         select cust_id, type, code, 'N'
-          from mpt_interests_new inew
+          from v_cust_interests_occupations v
          where not exists ( select 1 from mpt_interests_old iold
-                             where iold.cust_id = inew.cust_id
-                               and iold.code    = inew.code
-                               and iold.type    = inew.type 
+                             where iold.cust_id = v.cust_id
+                               and iold.code    = v.code
+                               and iold.type    = v.type 
                                and iold.change_type = 'N' );
 
         if @@error <> 0 
@@ -363,22 +179,22 @@ BEGIN
         end;
     end;
 
-           -- Add any 'deleted' records to the "changes" table
+           -- Add any 'deleted' records to the "delta" table
            -- 'Deleted' records are those that exist in the "Old" table but
            -- not in the "New" table.
     if @status = 0 
     begin
-        print 'Add "Deleted" records to mpt_interests_changes'
+        print 'Add "Deleted" records to #tmp_mpt_interests_delta'
 
-        insert into mpt_interests_changes
+        insert into #tmp_mpt_interests_delta
              ( cust_id, type, code, change_type )
         select cust_id, type, code, 'D'
           from mpt_interests_old iold
          where iold.change_type = 'N'
-           and not exists ( select 1 from mpt_interests_new inew
-                             where inew.cust_id = iold.cust_id
-                               and inew.code    = iold.code
-                               and inew.type    = iold.type  );
+           and not exists ( select 1 from v_cust_interests_occupations v
+                             where v.cust_id = iold.cust_id
+                               and v.code    = iold.code
+                               and v.type    = iold.type  );
 
         if @@error <> 0 
         begin
@@ -394,7 +210,7 @@ BEGIN
      ************************************************************/
 
            -- Mark any 'New' records in the "Old" table as 'deleted' that 
-           -- are marked 'deleted' in the "Change" table.
+           -- are marked 'deleted' in the "Delta" table.
            -- Set the change date to the run_date
     if @status = 0 
     begin
@@ -403,12 +219,12 @@ BEGIN
         update mpt_interests_old
            set change_type = 'D'
              , change_date = @run_date
-          from mpt_interests_changes change
-         where mpt_interests_old.cust_id = change.cust_id
-           and mpt_interests_old.code    = change.code
-           and mpt_interests_old.type    = change.type 
+          from #tmp_mpt_interests_delta delta
+         where mpt_interests_old.cust_id = delta.cust_id
+           and mpt_interests_old.code    = delta.code
+           and mpt_interests_old.type    = delta.type 
            and mpt_interests_old.change_type = 'N'
-           and change.change_type = 'D';
+           and delta.change_type = 'D';
            
         if @@error <> 0 
         begin
@@ -418,17 +234,17 @@ BEGIN
         end;
     end;
 
-           -- Add any 'new' records in the "Change" table to the "Old" table.
+           -- Add any 'new' records in the "Delta" table to the "Old" table.
            -- Set the change date to the run_date
     if @status = 0 
     begin
-        print 'Add any "new" records in the "Change" table to the "Old" table'
+        print 'Add any "new" records in the "Delta" table to the "Old" table'
 
         insert into mpt_interests_old
              ( cust_id, code, type, change_type, change_date )
         select cust_id, code, type, 'N',         @run_date
-          from mpt_interests_changes change
-         where change.change_type = 'N';
+          from #tmp_mpt_interests_delta delta
+         where delta.change_type = 'N';
 
         if @@error <> 0 
         begin
@@ -439,17 +255,17 @@ BEGIN
     end;
 
            -- Purge any 'deleted' records in the "old" table that exist 
-           -- in the "change" table as 'new'.  This prevents there being 
+           -- in the "delta" table as 'new'.  This prevents there being 
            -- 'new' and 'deleted' records for the same customer/value/type.
     if @status = 0 
     begin
-        print 'Purge any "deleted" records in the "old" table that exist in the "change" table as "new"'
+        print 'Purge any "deleted" records in the "old" table that exist in the "delta" table as "new"'
 
         delete 
           from mpt_interests_old
-          from mpt_interests_changes as change
+          from #tmp_mpt_interests_delta as delta
          where mpt_interests_old.change_type   = 'D'
-           and change.change_type = 'N';
+           and delta.change_type = 'N';
 
         if @@error <> 0 
         begin
@@ -467,7 +283,7 @@ BEGIN
     begin
         print 'Return the result set'
 
-        select * from mpt_interests_changes
+        select * from #tmp_mpt_interests_delta
          order by cust_id, type, code;
 
         if @@error <> 0 
@@ -489,26 +305,28 @@ BEGIN
     if @status = 0 
     begin
         select @newcusts = count(*)
-          from mpt_interests_changes
+          from #tmp_mpt_interests_delta
          where change_type = 'N';
 
         select @deletedcusts = count(*)
-          from mpt_interests_changes
+          from #tmp_mpt_interests_delta
          where change_type = 'D';
-
-        select @changedcusts = count(*)
-          from mpt_interests_changes
-         where change_type = 'C';
     end
     
     if @status = 0 
         print 'Completed successfully: '
               + convert(varchar(10),@newcusts) + ' new, '
-              + convert(varchar(10),@deletedcusts) + ' deleted, '
-              + convert(varchar(10),@changedcusts) + ' changed'
+              + convert(varchar(10),@deletedcusts) + ' deleted'
     else
         print @description;
     
 
 END
-GO
+go
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_interests_delta' and type = 'P') 
+    print 'Procedure mpt_interests_delta created';
+else
+    print 'Error: ***** Procedure mpt_interests_delta NOT created ****';
+go

@@ -1,8 +1,18 @@
-/****** Object:  StoredProcedure [rd].[mpt_transfer_customers]    Script Date: 08/05/2008 10:17:06 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_transfer_customers' and type = 'P') 
+begin 
+    print 'Dropping mpt_transfer_customers';
+    drop procedure mpt_transfer_customers;
+end;
+go
+
+print 'Create procedure mpt_transfer_customers';
+go
 
 CREATE PROCEDURE [rd].[mpt_transfer_customers]
 /******************************************************************
@@ -355,4 +365,12 @@ BEGIN
          , @errmsg      as description
 
 END
-GO
+go
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_transfer_customers' and type = 'P') 
+    print 'Procedure mpt_transfer_customers created';
+else
+    print 'ERROR: **** Procedure mpt_transfer_customers NOT created ****';
+
+go

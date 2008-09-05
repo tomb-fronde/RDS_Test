@@ -1,8 +1,18 @@
-/****** Object:  StoredProcedure [rd].[mpt_transfer_interests]    Script Date: 08/05/2008 10:17:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_transfer_interests' and type = 'P') 
+begin
+    print 'Dropping mpt_transfer_interests';
+    drop procedure mpt_transfer_interests;
+end;
+
+go
+print 'Create procedure mpt_transfer_interests';
+go
 
 CREATE PROCEDURE [rd].[mpt_transfer_interests]
 /***********************************************************************
@@ -345,4 +355,11 @@ BEGIN
     select @status      as Status
          , @description as Description
 END
-GO
+go
+
+if exists (select 1 from sysobjects 
+            where name = 'mpt_transfer_interests' and type = 'P') 
+    print 'Procedure mpt_transfer_interests created';
+else
+    print 'Error: ***** Procedure mpt_transfer_interests NOT created ****';
+go
