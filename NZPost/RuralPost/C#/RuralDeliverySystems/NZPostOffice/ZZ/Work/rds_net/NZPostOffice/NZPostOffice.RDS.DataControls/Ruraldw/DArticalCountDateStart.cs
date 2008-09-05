@@ -22,10 +22,21 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public DArticalCountDateStart()
         {
             InitializeComponent();
-            InitializeDropdown();
+            //!InitializeDropdown();
 
-            this.Load += new EventHandler(DArticalCountDateStart_Load);
+            //!this.Load += new EventHandler(DArticalCountDateStart_Load);
             //this.RetrieveEnd += new EventHandler(DArticalCountDateStart_Load);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+                this.Load += new EventHandler(DArticalCountDateStart_Load);
+            }
+
+            base.OnHandleCreated(e);
         }
 
         private void DArticalCountDateStart_Load(object sender, EventArgs e)
