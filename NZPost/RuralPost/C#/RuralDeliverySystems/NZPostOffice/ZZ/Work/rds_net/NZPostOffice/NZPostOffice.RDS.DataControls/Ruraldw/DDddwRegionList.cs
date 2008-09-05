@@ -16,8 +16,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public DDddwRegionList()
         {
             InitializeComponent();
-            InitializeDropdown();
+           // InitializeDropdown();
             this.region_list.SelectedValueChanged += new EventHandler(region_list_SelectedIndexChanged);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
         }
 
         void region_list_SelectedIndexChanged(object sender, EventArgs e)

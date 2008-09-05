@@ -97,7 +97,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_active = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_active.DataPropertyName = "RfActive";
 			this.rf_active.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.rf_active.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_active.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_active.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_active.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_active.DefaultCellStyle.NullValue = false;
@@ -116,7 +116,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_monday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_monday.DataPropertyName = "RfMonday";
 			this.rf_monday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_monday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_monday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_monday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_monday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_monday.DefaultCellStyle.NullValue = false;
@@ -135,7 +135,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_tuesday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_tuesday.DataPropertyName = "RfTuesday";
 			this.rf_tuesday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_tuesday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_tuesday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_tuesday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_tuesday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_tuesday.DefaultCellStyle.NullValue = false;
@@ -154,7 +154,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_wednesday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_wednesday.DataPropertyName = "RfWednesday";
 			this.rf_wednesday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_wednesday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_wednesday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_wednesday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_wednesday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_wednesday.DefaultCellStyle.NullValue = false;
@@ -173,7 +173,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_thursday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_thursday.DataPropertyName = "RfThursday";
 			this.rf_thursday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_thursday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_thursday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_thursday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_thursday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_thursday.DefaultCellStyle.NullValue = false;
@@ -192,7 +192,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_friday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_friday.DataPropertyName = "RfFriday";
 			this.rf_friday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_friday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_friday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_friday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_friday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_friday.DefaultCellStyle.NullValue = false;
@@ -211,7 +211,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_saturday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_saturday.DataPropertyName = "RfSaturday";
 			this.rf_saturday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_saturday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_saturday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_saturday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_saturday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_saturday.DefaultCellStyle.NullValue = false;
@@ -230,7 +230,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			rf_sunday = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.rf_sunday.DataPropertyName = "RfSunday";
 			this.rf_sunday.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.rf_sunday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.rf_sunday.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.rf_sunday.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.rf_sunday.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.rf_sunday.DefaultCellStyle.NullValue = false;

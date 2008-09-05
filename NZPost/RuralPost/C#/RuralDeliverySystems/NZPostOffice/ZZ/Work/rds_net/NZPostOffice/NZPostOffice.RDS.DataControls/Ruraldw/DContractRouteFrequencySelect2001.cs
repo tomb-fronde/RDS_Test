@@ -15,9 +15,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		public DContractRouteFrequencySelect2001()
 		{
 			InitializeComponent();
-			InitializeDropdown();
+			//InitializeDropdown();
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
 		}
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            
+            base.OnHandleCreated(e);
+        }
 
         void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {

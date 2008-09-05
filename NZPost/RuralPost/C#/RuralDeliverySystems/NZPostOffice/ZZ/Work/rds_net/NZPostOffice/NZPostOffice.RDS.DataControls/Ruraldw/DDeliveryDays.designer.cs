@@ -86,7 +86,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			mon = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.mon.DataPropertyName = "Mon";
 			this.mon.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.mon.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.mon.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mon.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.mon.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.mon.DefaultCellStyle.NullValue = false;
@@ -104,7 +104,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			tue = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.tue.DataPropertyName = "Tue";
 			this.tue.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.tue.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.tue.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.tue.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.tue.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.tue.DefaultCellStyle.NullValue = false;
@@ -122,7 +122,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			wed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.wed.DataPropertyName = "Wed";
 			this.wed.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.wed.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.wed.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.wed.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.wed.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.wed.DefaultCellStyle.NullValue = false;
@@ -140,7 +140,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			thu = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.thu.DataPropertyName = "Thu";
 			this.thu.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.thu.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.thu.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.thu.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.thu.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.thu.DefaultCellStyle.NullValue = false;
@@ -158,7 +158,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			fri = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.fri.DataPropertyName = "Fri";
 			this.fri.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.fri.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.fri.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.fri.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.fri.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.fri.DefaultCellStyle.NullValue = false;
@@ -176,7 +176,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			sat = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.sat.DataPropertyName = "Sat";
 			this.sat.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.sat.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.sat.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.sat.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.sat.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.sat.DefaultCellStyle.NullValue = false;
@@ -194,7 +194,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			sun = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.sun.DataPropertyName = "Sun";
 			this.sun.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.sun.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.sun.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.sun.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.sun.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.sun.DefaultCellStyle.NullValue = false;

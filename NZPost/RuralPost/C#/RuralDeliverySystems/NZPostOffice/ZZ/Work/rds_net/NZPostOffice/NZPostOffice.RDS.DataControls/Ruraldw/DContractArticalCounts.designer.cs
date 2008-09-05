@@ -69,9 +69,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.compute_1.Location = new System.Drawing.Point(6, 0);
             this.compute_1.Name = "compute_1";
-            this.compute_1.BorderStyle = BorderStyle.None; 
+            //this.compute_1.BorderStyle = BorderStyle.None; 
             this.compute_1.Size = new System.Drawing.Size(49, 20);
-            this.compute_1.BorderStyle = BorderStyle.None;
+            //this.compute_1.BorderStyle = BorderStyle.None;
             this.compute_1.BackColor = System.Drawing.Color.Transparent;
             this.compute_1.TabIndex = 0;
             //this.compute_1.ReadOnly = true; 
@@ -82,11 +82,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //this.ac_start_week_period.ReadOnly = true;
             this.ac_start_week_period.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_start_week_period.Location = new System.Drawing.Point(66, 0);
-            this.ac_start_week_period.BorderStyle = BorderStyle.None;
+            //this.ac_start_week_period.BorderStyle = BorderStyle.None;
             this.ac_start_week_period.Name = "ac_start_week_period";
             this.ac_start_week_period.Size = new System.Drawing.Size(85, 20);
             this.ac_start_week_period.TabIndex = 0;
-            this.ac_start_week_period.BorderStyle = BorderStyle.None;
+            //this.ac_start_week_period.BorderStyle = BorderStyle.None;
             // 
             // ac_w1_inward_mail
             // 
@@ -98,13 +98,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //this.ac_w1_inward_mail.EditMask = "#,###";
             this.ac_w1_inward_mail.Name = "ac_w1_inward_mail";
             this.ac_w1_inward_mail.Size = new System.Drawing.Size(44, 20);
-            this.ac_w1_inward_mail.BorderStyle = BorderStyle.None;
+            //this.ac_w1_inward_mail.BorderStyle = BorderStyle.None;
             this.ac_w1_inward_mail.TabIndex = 0;
             this.ac_w1_inward_mail.DataBindings[0].FormatString = "#,###";
             //this.ac_w1_inward_mail.InsertKeyMode = InsertKeyMode.Overwrite;
             this.ac_w1_inward_mail.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.ac_w1_inward_mail.PromptChar = ' ';
-            this.ac_w1_inward_mail.BorderStyle = BorderStyle.None;
+            //this.ac_w1_inward_mail.BorderStyle = BorderStyle.None;
             // 
             // t_8
             // 
@@ -126,13 +126,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //this.ac_w1_medium_letters.PromptChar = ' ';            
             this.ac_w1_medium_letters.Name = "ac_w1_medium_letters";
             this.ac_w1_medium_letters.Size = new System.Drawing.Size(44, 20);
-            this.ac_w1_medium_letters.BorderStyle = BorderStyle.None;
+            //this.ac_w1_medium_letters.BorderStyle = BorderStyle.None;
             this.ac_w1_medium_letters.TabIndex = 0;
             this.ac_w1_medium_letters.DataBindings[0].FormatString = "#,###";
             //this.ac_w1_medium_letters.InsertKeyMode = InsertKeyMode.Overwrite;
             this.ac_w1_medium_letters.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.ac_w1_medium_letters.PromptChar = ' ';
-            this.ac_w1_medium_letters.BorderStyle = BorderStyle.None;
+            //this.ac_w1_medium_letters.BorderStyle = BorderStyle.None;
             // 
             // ac_w1_other_envelopes
             // 
@@ -148,7 +148,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_other_envelopes.DataBindings[0].FormatString = "#,###";
             //this.ac_w1_other_envelopes.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w1_other_envelopes.PromptChar = ' ';
-            this.ac_w1_other_envelopes.BorderStyle = BorderStyle.None;
+            //this.ac_w1_other_envelopes.BorderStyle = BorderStyle.None;
             // 
             // week1del
             // 
@@ -160,7 +160,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.week1del.TabIndex = 0;
             this.week1del.TextAlign = System.Drawing.ContentAlignment.TopRight;
             //this.week1del.ReadOnly = true;
-            this.week1del.BorderStyle = BorderStyle.None;
+            //this.week1del.BorderStyle = BorderStyle.None;
             this.week1del.DataBindings[0].FormatString = "#,##0";
             // 
             // ac_w2_inward_mail
@@ -177,7 +177,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //this.ac_w2_inward_mail.InsertKeyMode = InsertKeyMode.Overwrite;
             this.ac_w2_inward_mail.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.ac_w2_inward_mail.PromptChar = ' ';
-            this.ac_w2_inward_mail.BorderStyle = BorderStyle.None;
+            //this.ac_w2_inward_mail.BorderStyle = BorderStyle.None;
             // 
             // t_9
             // 
@@ -194,7 +194,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             l_1.Height = 1;
             l_1.Width = 342;
-            l_1.BorderStyle = BorderStyle.None;
+            //l_1.BorderStyle = BorderStyle.None;
             l_1.BackColor = System.Drawing.Color.Black;
             l_1.Location = new System.Drawing.Point(150, 40);
 
@@ -213,7 +213,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //this.ac_w2_medium_letters.InsertKeyMode = InsertKeyMode.Overwrite;
             this.ac_w2_medium_letters.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.ac_w2_medium_letters.PromptChar = ' ';
-            this.ac_w2_medium_letters.BorderStyle = BorderStyle.None;
+            //this.ac_w2_medium_letters.BorderStyle = BorderStyle.None;
             // 
             // ac_w2_other_envelopes
             // 
@@ -229,7 +229,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_other_envelopes.DataBindings[0].FormatString = "#,###";
             //this.ac_w2_other_envelopes.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w2_other_envelopes.PromptChar = ' ';
-            this.ac_w2_other_envelopes.BorderStyle = BorderStyle.None;
+            //this.ac_w2_other_envelopes.BorderStyle = BorderStyle.None;
             // 
             // week2del
             // 
@@ -241,10 +241,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.week2del.TabIndex = 0;
             this.week2del.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.week2del.ReadOnly = true;
-            this.week2del.BorderStyle = BorderStyle.None;
+            //this.week2del.BorderStyle = BorderStyle.None;
             //this.week2del.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.week2del.ReadOnly = true;
-            this.week2del.BorderStyle = BorderStyle.None;
+            //this.week2del.BorderStyle = BorderStyle.None;
             this.week2del.DataBindings[0].FormatString = "#,##0";
             // 
             // t_7
@@ -262,7 +262,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             l_2.Height = 1;
             l_2.Width = 342;
-            l_2.BorderStyle = BorderStyle.None;
+            //l_2.BorderStyle = BorderStyle.None;
             l_2.BackColor = System.Drawing.Color.Black;
             l_2.Location = new System.Drawing.Point(150, 62);
 
@@ -271,7 +271,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             l_3.Height = 1;
             l_3.Width = 342;
-            l_3.BorderStyle = BorderStyle.None;
+            //l_3.BorderStyle = BorderStyle.None;
             l_3.BackColor = System.Drawing.Color.Black;
             l_3.Location = new System.Drawing.Point(150, 64);
 
@@ -288,10 +288,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_5.TabIndex = 0;
             this.compute_5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_5.ReadOnly = true;
-            this.compute_5.BorderStyle = BorderStyle.None;
+            //this.compute_5.BorderStyle = BorderStyle.None;
             //this.compute_5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_5.ReadOnly = true;
-            this.compute_5.BorderStyle = BorderStyle.None;
+            //this.compute_5.BorderStyle = BorderStyle.None;
             // 
             // compute_6
             // 
@@ -304,10 +304,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_6.TabIndex = 0;
             this.compute_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_6.ReadOnly = true;
-            this.compute_6.BorderStyle = BorderStyle.None;
+            //this.compute_6.BorderStyle = BorderStyle.None;
             //this.compute_6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_6.ReadOnly = true;
-            this.compute_6.BorderStyle = BorderStyle.None;
+            //this.compute_6.BorderStyle = BorderStyle.None;
             // 
             // compute_7
             // 
@@ -320,10 +320,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_7.TabIndex = 0;
             this.compute_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_7.ReadOnly = true;
-            this.compute_7.BorderStyle = BorderStyle.None;
+            //this.compute_7.BorderStyle = BorderStyle.None;
             //this.compute_7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_7.ReadOnly = true;
-            this.compute_7.BorderStyle = BorderStyle.None;
+            //this.compute_7.BorderStyle = BorderStyle.None;
             // 
             // compute_2
             // 
@@ -336,10 +336,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_2.TabIndex = 0;
             this.compute_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_2.ReadOnly = true;
-            this.compute_2.BorderStyle = BorderStyle.None;
+            //this.compute_2.BorderStyle = BorderStyle.None;
             //this.compute_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_2.ReadOnly = true;
-            this.compute_2.BorderStyle = BorderStyle.None;
+            //this.compute_2.BorderStyle = BorderStyle.None;
             // 
             // ac_w1_small_parcels
             // 
@@ -355,7 +355,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_small_parcels.DataBindings[0].FormatString = "#,###";
             //this.ac_w1_small_parcels.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w1_small_parcels.PromptChar = ' ';
-            this.ac_w1_small_parcels.BorderStyle = BorderStyle.None;
+            //this.ac_w1_small_parcels.BorderStyle = BorderStyle.None;
             // 
             // ac_w2_small_parcels
             // 
@@ -371,7 +371,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_small_parcels.DataBindings[0].FormatString = "#,###";
             //this.ac_w2_small_parcels.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w2_small_parcels.PromptChar = ' ';
-            this.ac_w2_small_parcels.BorderStyle = BorderStyle.None;
+            //this.ac_w2_small_parcels.BorderStyle = BorderStyle.None;
             // 
             // compute_3
             // 
@@ -384,10 +384,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_3.TabIndex = 0;
             this.compute_3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_3.ReadOnly = true;
-            this.compute_3.BorderStyle = BorderStyle.None;
+            //this.compute_3.BorderStyle = BorderStyle.None;
             //this.compute_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_3.ReadOnly = true;
-            this.compute_3.BorderStyle = BorderStyle.None;
+            //this.compute_3.BorderStyle = BorderStyle.None;
             // 
             // ac_w1_large_parcels
             // 
@@ -403,7 +403,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_large_parcels.DataBindings[0].FormatString = "#,###";
             //this.ac_w1_large_parcels.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w1_large_parcels.PromptChar = ' ';
-            this.ac_w1_large_parcels.BorderStyle = BorderStyle.None;
+            //this.ac_w1_large_parcels.BorderStyle = BorderStyle.None;
             // 
             // ac_w2_large_parcels
             // 
@@ -419,7 +419,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_large_parcels.DataBindings[0].FormatString = "#,###";
             //this.ac_w2_large_parcels.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.ac_w2_large_parcels.PromptChar = ' ';
-            this.ac_w2_large_parcels.BorderStyle = BorderStyle.None;
+            //this.ac_w2_large_parcels.BorderStyle = BorderStyle.None;
             // 
             // compute_4
             // 
@@ -432,10 +432,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_4.TabIndex = 0;
             this.compute_4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //this.compute_4.ReadOnly = true;
-            this.compute_4.BorderStyle = BorderStyle.None;
+            //this.compute_4.BorderStyle = BorderStyle.None;
             //this.compute_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             //this.compute_4.ReadOnly = true;
-            this.compute_4.BorderStyle = BorderStyle.None;
+            //this.compute_4.BorderStyle = BorderStyle.None;
             
             // 
             // DContractArticalCounts

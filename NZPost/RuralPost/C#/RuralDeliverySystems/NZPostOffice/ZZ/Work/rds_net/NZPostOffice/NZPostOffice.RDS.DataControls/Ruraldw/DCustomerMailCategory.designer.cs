@@ -89,7 +89,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			this.mc_key_2.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mc_key_2.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.mc_key_2.HeaderText = "";
-			this.mc_key_2.Name = "d_dddw_mail_category";
+			this.mc_key_2.Name = "d_dddw_mail_category1";
 			this.mc_key_2.Width = 153;
 			this.mc_key_2.DropDownWidth = 214;
 			this.grid.Columns.Add(mc_key_2);
@@ -104,7 +104,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			this.mc_key_3.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mc_key_3.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
 			this.mc_key_3.HeaderText = "";
-			this.mc_key_3.Name = "d_dddw_mail_category";
+			this.mc_key_3.Name = "d_dddw_mail_category2";
 			this.mc_key_3.Width = 154;
 			this.grid.Columns.Add(mc_key_3);
 

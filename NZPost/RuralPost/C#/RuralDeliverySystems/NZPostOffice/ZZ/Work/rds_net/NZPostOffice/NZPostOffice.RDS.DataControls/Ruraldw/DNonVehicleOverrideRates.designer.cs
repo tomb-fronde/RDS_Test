@@ -410,16 +410,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
 			this.ResumeLayout(false);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ActiveEvent();
+            //!ActiveEvent();   - moved to constructor
 		}
 
-        private void ActiveEvent()
-        {
-            foreach (Control var in this.Controls)
-            {
-                var.GotFocus += new System.EventHandler(var_GotFocus);
-            }
-        }
+        //private void ActiveEvent()
+        //{
+        //    foreach (Control var in this.Controls)
+        //    {
+        //        var.GotFocus += new System.EventHandler(var_GotFocus);
+        //    }
+        //}
 
         void var_GotFocus(object sender, System.EventArgs e)
         {

@@ -101,7 +101,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			mr_km_flag = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.mr_km_flag.DataPropertyName = "MrKmFlag";
 			this.mr_km_flag.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.mr_km_flag.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.mr_km_flag.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mr_km_flag.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
 			this.mr_km_flag.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.mr_km_flag.DefaultCellStyle.NullValue = false;
@@ -119,7 +119,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			mr_annual_flag = new System.Windows.Forms.DataGridViewCheckBoxColumn();
 			this.mr_annual_flag.DataPropertyName = "MrAnnualFlag";
 			this.mr_annual_flag.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.mr_annual_flag.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.mr_annual_flag.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mr_annual_flag.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
 			this.mr_annual_flag.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
 			this.mr_annual_flag.DefaultCellStyle.NullValue = false;

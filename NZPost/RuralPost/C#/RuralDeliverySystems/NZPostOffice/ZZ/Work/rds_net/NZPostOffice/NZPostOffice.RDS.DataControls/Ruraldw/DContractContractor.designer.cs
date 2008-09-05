@@ -69,7 +69,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			this.grid.Size = new System.Drawing.Size(570, 252);
 			this.grid.TabIndex = 0;
             this.grid.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.grid.BorderStyle = BorderStyle.None;
+            //this.grid.BorderStyle = BorderStyle.None;
             this.grid.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
 
             //this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(grid_CurrentCellDirtyStateChanged);

@@ -69,7 +69,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			mc_mail_category = new Metex.Windows.DataGridViewEntityComboColumn();
 			this.mc_mail_category.DataPropertyName = "McMailCategory";
 			//this.mc_mail_category.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(553648127);
-			this.mc_mail_category.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;;
+			this.mc_mail_category.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
 			this.mc_mail_category.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
             this.mc_mail_category.HeaderText = "Customer Type";
 			this.mc_mail_category.Name = "mc_mail_category";
