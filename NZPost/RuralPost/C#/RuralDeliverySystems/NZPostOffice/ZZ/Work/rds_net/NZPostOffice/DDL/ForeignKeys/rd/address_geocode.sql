@@ -1,8 +1,0 @@
-ALTER TABLE [rd].[address_geocode] WITH CHECK 
-  ADD CONSTRAINT [FK_ADDRESS__REF_585_ADDRESS] 
-  FOREIGN KEY([adr_id])
-    REFERENCES [rd].[address] ([adr_id])
-ON DELETE CASCADE
-GO
-ALTER TABLE [rd].[address_geocode] CHECK CONSTRAINT [FK_ADDRESS__REF_585_ADDRESS]
-GO

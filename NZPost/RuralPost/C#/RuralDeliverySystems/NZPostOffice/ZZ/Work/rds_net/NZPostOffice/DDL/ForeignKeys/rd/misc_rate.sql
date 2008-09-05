@@ -1,7 +1,0 @@
-ALTER TABLE [rd].[misc_rate] WITH CHECK 
-  ADD CONSTRAINT [FK_MISC_RAT_REF_1010_RENEWAL_] 
-  FOREIGN KEY([rg_code])
-    REFERENCES [rd].[renewal_group] ([rg_code])
-GO
-ALTER TABLE [rd].[misc_rate] CHECK CONSTRAINT [FK_MISC_RAT_REF_1010_RENEWAL_]
-GO
