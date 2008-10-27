@@ -127,8 +127,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             //jlwang:end
 
-
-            ((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
+            //((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
             dw_contract_types.LostFocus += new EventHandler(dw_contract_types_losefocus);
             dw_contracts_held.RowFocusChanged += new EventHandler(dw_contracts_held_rowfocuschanged);
             dw_post_tax_deductions.GotFocus += new EventHandler(dw_post_tax_deductions_getfocus);
@@ -372,7 +371,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             base.pfc_postopen();
             string ls_Title;
-            string ls_phone;
+            string ls_phone_day, ls_phone_night;
             int? ll_RegionId;
             int? ll_UserRegionID;
             NRdsMsg lnv_msg;
@@ -392,28 +391,61 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ls_Title = ls_Title + ", " + idw_owner_driver.GetItem<ContractorFull>(0).CInitials;
                 }
-                ls_phone = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneDay;
-                if (ls_phone != null && ls_phone.Length > 1 && (ls_phone.Substring(0, 2) == "02"))
+                ls_phone_day = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneDay;
+                if (ls_phone_day != null && ls_phone_day.Length > 1 && (ls_phone_day.Substring(0, 2) == "02"))
                 {
-                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_day")).Mask = "(###) ###-#####";
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_day")).Mask = "(000) 000-0009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
                 else
                 {
-                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_day")).Mask = "(##) ###-#####";
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_day")).Mask = "(00) 000-00009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
-                ls_phone = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneNight;
-                if (ls_phone != null && ls_phone.Length > 1 && (ls_phone.Substring(0, 2) == "02"))
+                ls_phone_night = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneNight;
+                if (ls_phone_night != null && ls_phone_night.Length > 1 && (ls_phone_night.Substring(0, 2) == "02"))
                 {
-                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_night")).Mask = "(###) ###-#####";
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_night")).Mask = "(000) 000-0009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
                 else
                 {
-                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_night")).Mask = "(##) ###-#####";
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_night")).Mask = "(00) 000-00009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
+                //+++++ TJB  RD7_0007  Sept 2008 ++++++
+                string ls_IrdNo, ls_GstNo;
+                string ls_IrdNo_Mask, ls_GstNo_Mask;
+                ls_IrdNo = idw_owner_driver.GetItem<ContractorFull>(0).CIrdNo;
+                ls_GstNo = idw_owner_driver.GetItem<ContractorFull>(0).CGstNumber;
+                ls_IrdNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask;
+                ls_GstNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask;
+
+                //MessageBox.Show(  "CIrdNo = <" + ls_IrdNo + ">, Length = " + ls_IrdNo.Length.ToString() + ", Mask = <" + ls_IrdNo_Mask + ">\r"
+                //                + "CGstNo = <" + ls_GstNo + ">, Length = " + ls_GstNo.Length.ToString() + ", Mask = <" + ls_GstNo_Mask + ">\r"
+                //                , "WContractor2001.pfc_postopen"
+                //               );
+                if (ls_IrdNo != null && ls_IrdNo.Length > 8)
+                {
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask = "000-000-009";
+                    idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
+                }
+                else
+                {
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask = "00-000-0009";
+                    idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
+                }
+                if (ls_GstNo != null && ls_GstNo.Length > 8)
+                {
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask = "000-000-009";
+                    idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
+                }
+                else
+                {
+                    ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask = "00-000-0009";
+                    idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
+                }
+                //++++++++++++++++++++++++++++++++++++++++++
             }
             else
             {
@@ -533,8 +565,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (idw_owner_driver.DataObject is DContractorFull)// == "d_contractor_full")
             {
-                sBankAccount = idw_owner_driver.GetItem<ContractorFull>(0).CBankAccountNo;
                 string str = "";
+                sBankAccount = idw_owner_driver.GetItem<ContractorFull>(0).CBankAccountNo;
                 if (!(StaticVariables.gnv_app.of_isempty(sBankAccount)))
                 {
                     if (sBankAccount.Length >= 6)
@@ -551,9 +583,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     //   sBankAccount = str;
                     //+sBankAccount.Substring(8, 14) + sBankAccount.Substring(16, 18);
-                    if (StaticVariables.gnv_app.of_checkdigit(str) != 0)
-                    {
-                        if (MessageBox.Show("Warning:  The bank account entered does not pass the modulus 11 check.\r\r" + "Do you want to keep the bank account entered?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) //if (MessageBox(this.Title, "Warning:  The bank account entered does not pass the modulus 11 check.\r\r" + "Do you want to keep the bank account entered?", question!, yesno!) == 2) 
+                    // if (StaticVariables.gnv_app.of_checkdigit(str) != 0)
+                    if (StaticVariables.gnv_app.of_checkdigit(sBankAccount) != 0)
+                        {
+                        if (MessageBox.Show("Warning:  The bank account entered does not pass the modulus 11 check.\r"
+                                            + "          (" + sBankAccount + ")\r"
+                                            + "Do you want to keep the bank account entered?"
+                                            , this.Text
+                                            , MessageBoxButtons.YesNo
+                                            , MessageBoxIcon.Question) 
+                           == DialogResult.No) 
                         {
                             sReturn = "c_bank_account_no";
                         }
@@ -757,7 +796,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_owner_driver_updateend()
         {
-            ii_contractor = dw_owner_driver.GetItem<ContractorFull>(0).ContractorSupplierNo.GetValueOrDefault();// GetItemNumber(1, "contractor_supplier_no");
+            ii_contractor = dw_owner_driver.GetItem<ContractorFull>(0).ContractorSupplierNo.GetValueOrDefault();// GetItemNumber(1, "contractor_supplier_no");        }
         }
 
         private string getReadioButton()
@@ -1254,14 +1293,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     sText = dw_owner_driver.GetControlByName(dw_owner_driver.GetColumnName()).Text;//dw_owner_driver.GetText();
                     System.Console.Beep();
-                    if (MessageBox.Show("Do not modify this if this is an assignment.\r\n" + "Contact your system administrator if in doubt.\r\n" + "Do you still want to continue editing?", "Warning!!!", MessageBoxButtons.YesNo, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button2) == DialogResult.Yes) //if (MessageBox("Warning!!!", "Do not modify this if this is an assignment.\r\n" + "Contact your system administrator if in doubt.\r\n" + "Do you still want to continue editing?", stopsign!, yesno!, 2) == 1) {
+                    if (MessageBox.Show("Do not modify this if this is an assignment.\r\n" 
+                                       + "Contact your system administrator if in doubt.\r\n" 
+                                       + "Do you still want to continue editing?"
+                                       , "Warning!!!"
+                                       , MessageBoxButtons.YesNo
+                                       , MessageBoxIcon.Stop
+                                       , MessageBoxDefaultButton.Button2) 
+                          == DialogResult.Yes)
                     {
                         ib_ContinueEdit = true;
                     }
                     else
                     {
                         ib_AutoExit = true;
-                        idw_owner_driver.GetItem<ContractorFull>(0).MarkNotModified();//idw_owner_driver.SetItemStatus(1, 0, primary!, notmodified!);
+                        idw_owner_driver.GetItem<ContractorFull>(0).MarkNotModified();
+                        //idw_owner_driver.SetItemStatus(1, 0, primary!, notmodified!);
                         //PostEvent("ue_close");-- there are no then event ue_close
                         return;
                     }
@@ -1300,19 +1347,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
+        //++++++++++++++++++ tjb +++++++++++++++++++++
+        public virtual void WContractor2001_TextBoxLostFocus(object sender, EventArgs e)
+        {
+            string ls_temp = dw_owner_driver.GetColumnName();
+            if (!string.IsNullOrEmpty(ls_temp))
+            {
+                ls_temp = "null";
+            }
+            MessageBox.Show("ls_dwoName = <" + ls_temp + ">", "WContractor2001_TextBoxLostFocus");
+        }
+        //++++++++++++++++++++++++++++++++++++++++++++
+
         public virtual void dw_owner_driver_itemchanged(object sender, EventArgs e)
         {
+        /*++++++++++++++++++ tjb Sept 2008 +++++++++++++++++++//
+            // NOTE:  This code does not appear to be called
+            
+            string ls_temp = dw_owner_driver.GetColumnName();
+            if (!string.IsNullOrEmpty(ls_temp))
+            {
+                ls_temp = "null";
+            }
+            MessageBox.Show("ls_dwoName = <" + ls_temp + ">"
+                            , "WContractor2001.dw_owner_driver_itemchanged");
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
             dw_owner_driver.URdsDw_Itemchanged(sender, e);
             int ll_return;
             int? ll_prime;
             string ls_email_address;
-            Dictionary<int, string> ls_phone = new Dictionary<int, string>(); //StringArray ls_phone = new StringArray();
+            //StringArray ls_phone = new StringArray();
+            Dictionary<int, string> ls_phone = new Dictionary<int, string>(); 
             string ls_phoneNo;
             string ls_dwoName;
+
             ll_return = 0;
             ls_dwoName = dw_owner_driver.GetColumnName();
+
             if (!string.IsNullOrEmpty(ls_dwoName))
-            {
+                {
                 string TestExpr = ls_dwoName.ToLower();
 
                 if (TestExpr == "cust_phone_day")
@@ -1345,7 +1419,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         }
                     }
                 }
-                if (ls_dwoName == "c_email_address")
+                // if (ls_dwoName == "c_email_address")
+                else if (TestExpr == "c_email_address")
                 {
                     ls_email_address = dw_owner_driver.GetItem<ContractorFull>(dw_owner_driver.GetRow()).CEmailAddress;//data;
                     if (!((ls_email_address == null)) && !(ls_email_address == ""))
@@ -1358,7 +1433,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         // if (!(ls_email_address.IndexOfAny("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$".ToCharArray()) >= 0))
                         if (!(m.Success))
                         {
-                            MessageBox.Show("Incorrect format for email address.\n" + "Format should be name@address with no spaces" + "\n\n" + ls_email_address, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Incorrect format for email address.\n" 
+                                            + "Format should be name@address with no spaces" + "\n\n" 
+                                            + ls_email_address
+                                            , "ERROR"
+                                            , MessageBoxButtons.OK
+                                            , MessageBoxIcon.Exclamation);
                             ll_return = 2;
                         }
                     }
@@ -1375,7 +1455,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ls_phoneNo = dw_owner_driver.GetValue(dw_owner_driver.GetRow(), ls_phone[ll_prime.GetValueOrDefault()]) as string;//Trim(dw_owner_driver.GetItemString(row, ls_phone[ll_prime]));
                         if ((ls_phoneNo == null) || ls_phoneNo == "")
                         {
-                            MessageBox.Show("There must be a number for the primary contact." + "\n\nPlease select a valid number or enter one.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("There must be a number for the primary contact.\n\n"
+                                            + "Please select a valid number or enter one."
+                                            , "Error"
+                                            , MessageBoxButtons.OK
+                                            , MessageBoxIcon.Exclamation);
                             dw_owner_driver.GetItem<ContractorFull>(dw_owner_driver.GetRow()).CPrimeContact = dw_owner_driver.GetItem<ContractorFull>(dw_owner_driver.GetRow()).GetInitialValue<int?>("CPrimeContact");//ll_return = 2;
                             dw_owner_driver.DataObject.BindingSource.CurrencyManager.Refresh();
                             if (checkString != "")
