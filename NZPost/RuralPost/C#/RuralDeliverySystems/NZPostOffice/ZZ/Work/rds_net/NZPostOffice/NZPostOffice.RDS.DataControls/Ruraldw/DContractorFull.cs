@@ -16,6 +16,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
             InitializeComponent();
             //InitializeDropdown();
+            this.c_phone_day.LostFocus += new System.EventHandler(this.c_phone_day_LostFocus);
+            this.c_phone_night.LostFocus += new System.EventHandler(this.c_phone_night_LostFocus);
+            this.c_ird_no.LostFocus += new System.EventHandler(this.c_ird_no_LostFocus);
+            this.c_gst_number.LostFocus += new System.EventHandler(this.c_gst_number_LostFocus);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -59,7 +63,58 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
 		public int Retrieve( int? in_contractor )
         {
-            return RetrieveCore<ContractorFull>(ContractorFull.GetAllContractorFull(in_contractor));
+            int rc;
+            rc = RetrieveCore<ContractorFull>(ContractorFull.GetAllContractorFull(in_contractor));
+            return rc;
+        }
+
+        private void c_ird_no_LostFocus(object sender, System.EventArgs e)
+        {
+            string ls_temp = this.c_ird_no.Text;
+            if (ls_temp.Length > 8)
+            {
+                this.c_ird_no.Mask = "000-000-009";
+            }
+            else
+            {
+                this.c_ird_no.Mask = "00-000-0009";
+            }
+        }
+        private void c_gst_number_LostFocus(object sender, System.EventArgs e)
+        {
+            string ls_temp = this.c_gst_number.Text;
+            if (ls_temp.Length > 8)
+            {
+                this.c_gst_number.Mask = "000-000-009";
+            }
+            else
+            {
+                this.c_gst_number.Mask = "00-000-0009";
+            }
+        }
+        private void c_phone_day_LostFocus(object sender, System.EventArgs e)
+        {
+            string ls_temp = this.c_phone_day.Text;
+            if (ls_temp != null && ls_temp.Length > 1 && ls_temp.Substring(0, 2) == "02")
+            {
+                this.c_phone_day.Mask = "(000) 000-0009";
+            }
+            else
+            {
+                this.c_phone_day.Mask = "(00) 000-00009";
+            }
+        }
+        private void c_phone_night_LostFocus(object sender, System.EventArgs e)
+        {
+            string ls_temp = this.c_phone_night.Text;
+            if (ls_temp != null && ls_temp.Length > 1 && ls_temp.Substring(0, 2) == "02")
+            {
+                this.c_phone_night.Mask = "(000) 000-0009";
+            }
+            else
+            {
+                this.c_phone_night.Mask = "(00) 000-00009";
+            }
         }
     }
 }

@@ -275,7 +275,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.gb_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.gb_2.Location = new System.Drawing.Point(294, 5);
             this.gb_2.Name = "gb_2";
-            this.gb_2.Size = new System.Drawing.Size(205, 125);
+            this.gb_2.Size = new System.Drawing.Size(212, 125);
             this.gb_2.TabIndex = 9;
             this.gb_2.TabStop = false;
             this.gb_2.Text = "Phones";
@@ -284,7 +284,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_prime_contact_3.AutoSize = true;
             this.c_prime_contact_3.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CPrimeContact3", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.c_prime_contact_3.Location = new System.Drawing.Point(475, 71);
+            this.c_prime_contact_3.Location = new System.Drawing.Point(475, 68);
             this.c_prime_contact_3.Name = "c_prime_contact_3";
             this.c_prime_contact_3.Size = new System.Drawing.Size(14, 13);
             this.c_prime_contact_3.TabIndex = 151;
@@ -296,7 +296,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_prime_contact_2.AutoSize = true;
             this.c_prime_contact_2.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CPrimeContact2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.c_prime_contact_2.Location = new System.Drawing.Point(475, 51);
+            this.c_prime_contact_2.Location = new System.Drawing.Point(475, 48);
             this.c_prime_contact_2.Name = "c_prime_contact_2";
             this.c_prime_contact_2.Size = new System.Drawing.Size(14, 13);
             this.c_prime_contact_2.TabIndex = 152;
@@ -308,7 +308,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_prime_contact_1.AutoSize = true;
             this.c_prime_contact_1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CPrimeContact1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.c_prime_contact_1.Location = new System.Drawing.Point(475, 31);
+            this.c_prime_contact_1.Location = new System.Drawing.Point(475, 28);
             this.c_prime_contact_1.Name = "c_prime_contact_1";
             this.c_prime_contact_1.Size = new System.Drawing.Size(14, 13);
             this.c_prime_contact_1.TabIndex = 40;
@@ -319,7 +319,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_phone_day_t
             // 
             this.c_phone_day_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_phone_day_t.Location = new System.Drawing.Point(304, 31);
+            this.c_phone_day_t.Location = new System.Drawing.Point(304, 28);
             this.c_phone_day_t.Name = "c_phone_day_t";
             this.c_phone_day_t.Size = new System.Drawing.Size(60, 13);
             this.c_phone_day_t.TabIndex = 153;
@@ -329,7 +329,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_phone_night_t
             // 
             this.c_phone_night_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_phone_night_t.Location = new System.Drawing.Point(304, 50);
+            this.c_phone_night_t.Location = new System.Drawing.Point(304, 47);
             this.c_phone_night_t.Name = "c_phone_night_t";
             this.c_phone_night_t.Size = new System.Drawing.Size(60, 13);
             this.c_phone_night_t.TabIndex = 154;
@@ -339,7 +339,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_mobile_t
             // 
             this.c_mobile_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_mobile_t.Location = new System.Drawing.Point(304, 69);
+            this.c_mobile_t.Location = new System.Drawing.Point(304, 66);
             this.c_mobile_t.Name = "c_mobile_t";
             this.c_mobile_t.Size = new System.Drawing.Size(60, 13);
             this.c_mobile_t.TabIndex = 155;
@@ -349,7 +349,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_mobile2_t
             // 
             this.c_mobile2_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_mobile2_t.Location = new System.Drawing.Point(304, 88);
+            this.c_mobile2_t.Location = new System.Drawing.Point(304, 85);
             this.c_mobile2_t.Name = "c_mobile2_t";
             this.c_mobile2_t.Size = new System.Drawing.Size(60, 13);
             this.c_mobile2_t.TabIndex = 156;
@@ -359,72 +359,82 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_primary_contact_t
             // 
             this.c_primary_contact_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.c_primary_contact_t.Location = new System.Drawing.Point(457, 15);
+            this.c_primary_contact_t.Location = new System.Drawing.Point(457, 12);
             this.c_primary_contact_t.Name = "c_primary_contact_t";
-            this.c_primary_contact_t.Size = new System.Drawing.Size(38, 13);
+            this.c_primary_contact_t.Size = new System.Drawing.Size(43, 13);
             this.c_primary_contact_t.TabIndex = 157;
             this.c_primary_contact_t.Text = "Primary";
-            this.c_primary_contact_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.c_primary_contact_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // c_phone_day
             // 
+            this.c_phone_day.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_phone_day.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CPhoneDay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_phone_day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.c_phone_day.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.c_phone_day.Location = new System.Drawing.Point(373, 28);
+            this.c_phone_day.Location = new System.Drawing.Point(373, 25);
             this.c_phone_day.Mask = "(##) ###-######";
             this.c_phone_day.Name = "c_phone_day";
             this.c_phone_day.PromptChar = ' ';
             this.c_phone_day.Size = new System.Drawing.Size(97, 20);
             this.c_phone_day.TabIndex = 10;
+            this.c_phone_day.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_phone_night
             // 
+            this.c_phone_night.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CPhoneNight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_phone_night.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_phone_night.Location = new System.Drawing.Point(373, 48);
+            this.c_phone_night.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.c_phone_night.Location = new System.Drawing.Point(373, 45);
             this.c_phone_night.Mask = "(##) ###-######";
             this.c_phone_night.Name = "c_phone_night";
             this.c_phone_night.PromptChar = ' ';
             this.c_phone_night.Size = new System.Drawing.Size(97, 20);
             this.c_phone_night.TabIndex = 11;
+            this.c_phone_night.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_mobile
             // 
+            this.c_mobile.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CMobile", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_mobile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_mobile.Location = new System.Drawing.Point(373, 68);
+            this.c_mobile.Location = new System.Drawing.Point(373, 65);
             this.c_mobile.Mask = "(###) ###-#####";
             this.c_mobile.Name = "c_mobile";
             this.c_mobile.PromptChar = ' ';
             this.c_mobile.Size = new System.Drawing.Size(97, 20);
             this.c_mobile.TabIndex = 12;
+            this.c_mobile.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_mobile2
             // 
+            this.c_mobile2.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_mobile2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CMobile2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_mobile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_mobile2.Location = new System.Drawing.Point(373, 88);
+            this.c_mobile2.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.c_mobile2.Location = new System.Drawing.Point(373, 85);
             this.c_mobile2.Mask = "(###) ###-#####";
             this.c_mobile2.Name = "c_mobile2";
             this.c_mobile2.PromptChar = ' ';
             this.c_mobile2.Size = new System.Drawing.Size(97, 20);
             this.c_mobile2.TabIndex = 13;
+            this.c_mobile2.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_notes
             // 
             this.c_notes.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CNotes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_notes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_notes.Location = new System.Drawing.Point(45, 216);
+            this.c_notes.Location = new System.Drawing.Point(45, 223);
             this.c_notes.Multiline = true;
             this.c_notes.Name = "c_notes";
-            this.c_notes.Size = new System.Drawing.Size(234, 35);
+            this.c_notes.Size = new System.Drawing.Size(234, 47);
             this.c_notes.TabIndex = 8;
             // 
             // c_bank_account_no_t
             // 
             this.c_bank_account_no_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_bank_account_no_t.Location = new System.Drawing.Point(296, 139);
+            this.c_bank_account_no_t.Location = new System.Drawing.Point(296, 150);
             this.c_bank_account_no_t.Name = "c_bank_account_no_t";
             this.c_bank_account_no_t.Size = new System.Drawing.Size(70, 13);
             this.c_bank_account_no_t.TabIndex = 74;
@@ -433,21 +443,22 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // c_bank_account_no
             // 
+            this.c_bank_account_no.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_bank_account_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CBankAccountNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_bank_account_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.c_bank_account_no.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.c_bank_account_no.Location = new System.Drawing.Point(373, 137);
-            this.c_bank_account_no.Mask = "000000  0000000 000";
+            this.c_bank_account_no.Location = new System.Drawing.Point(373, 148);
+            this.c_bank_account_no.Mask = "000000  0000000 00#";
             this.c_bank_account_no.Name = "c_bank_account_no";
             this.c_bank_account_no.PromptChar = ' ';
-            this.c_bank_account_no.Size = new System.Drawing.Size(123, 20);
+            this.c_bank_account_no.Size = new System.Drawing.Size(127, 20);
             this.c_bank_account_no.TabIndex = 15;
-            this.c_bank_account_no.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.c_bank_account_no.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_ird_no_t
             // 
             this.c_ird_no_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_ird_no_t.Location = new System.Drawing.Point(296, 160);
+            this.c_ird_no_t.Location = new System.Drawing.Point(296, 171);
             this.c_ird_no_t.Name = "c_ird_no_t";
             this.c_ird_no_t.Size = new System.Drawing.Size(70, 13);
             this.c_ird_no_t.TabIndex = 75;
@@ -456,19 +467,22 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // c_ird_no
             // 
+            this.c_ird_no.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_ird_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CIrdNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_ird_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_ird_no.Location = new System.Drawing.Point(373, 158);
-            this.c_ird_no.Mask = "00-000-000";
+            this.c_ird_no.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.c_ird_no.Location = new System.Drawing.Point(373, 169);
+            this.c_ird_no.Mask = "000-000-00#";
             this.c_ird_no.Name = "c_ird_no";
             this.c_ird_no.PromptChar = ' ';
             this.c_ird_no.Size = new System.Drawing.Size(92, 20);
             this.c_ird_no.TabIndex = 16;
+            this.c_ird_no.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_gst_number_t
             // 
             this.c_gst_number_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_gst_number_t.Location = new System.Drawing.Point(296, 180);
+            this.c_gst_number_t.Location = new System.Drawing.Point(296, 191);
             this.c_gst_number_t.Name = "c_gst_number_t";
             this.c_gst_number_t.Size = new System.Drawing.Size(70, 13);
             this.c_gst_number_t.TabIndex = 76;
@@ -477,19 +491,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // c_gst_number
             // 
+            this.c_gst_number.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             this.c_gst_number.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CGstNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_gst_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_gst_number.Location = new System.Drawing.Point(373, 178);
-            this.c_gst_number.Mask = "00-000-000";
+            this.c_gst_number.HidePromptOnLeave = true;
+            this.c_gst_number.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.c_gst_number.Location = new System.Drawing.Point(373, 189);
+            this.c_gst_number.Mask = "###-###-###";
             this.c_gst_number.Name = "c_gst_number";
             this.c_gst_number.PromptChar = ' ';
             this.c_gst_number.Size = new System.Drawing.Size(92, 20);
             this.c_gst_number.TabIndex = 17;
+            this.c_gst_number.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
             // c_tax_rate_t
             // 
             this.c_tax_rate_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_tax_rate_t.Location = new System.Drawing.Point(296, 200);
+            this.c_tax_rate_t.Location = new System.Drawing.Point(296, 211);
             this.c_tax_rate_t.Name = "c_tax_rate_t";
             this.c_tax_rate_t.Size = new System.Drawing.Size(70, 13);
             this.c_tax_rate_t.TabIndex = 77;
@@ -502,20 +520,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_tax_rate.EditMask = "#0.00";
             this.c_tax_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.c_tax_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.c_tax_rate.Location = new System.Drawing.Point(373, 198);
+            this.c_tax_rate.Location = new System.Drawing.Point(373, 209);
             this.c_tax_rate.Name = "c_tax_rate";
             this.c_tax_rate.PromptChar = ' ';
             this.c_tax_rate.Size = new System.Drawing.Size(92, 20);
             this.c_tax_rate.TabIndex = 18;
             this.c_tax_rate.Text = "0.00";
-            this.c_tax_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.c_tax_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.c_tax_rate.Value = "0.00";
             // 
             // c_witholding_tax_certificate_t
             // 
             this.c_witholding_tax_certificate_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_witholding_tax_certificate_t.Location = new System.Drawing.Point(296, 220);
+            this.c_witholding_tax_certificate_t.Location = new System.Drawing.Point(296, 231);
             this.c_witholding_tax_certificate_t.Name = "c_witholding_tax_certificate_t";
             this.c_witholding_tax_certificate_t.Size = new System.Drawing.Size(75, 13);
             this.c_witholding_tax_certificate_t.TabIndex = 78;
@@ -527,7 +544,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_witholding_tax_certificate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CWitholdingTaxCertificate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_witholding_tax_certificate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.c_witholding_tax_certificate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_witholding_tax_certificate.Location = new System.Drawing.Point(373, 218);
+            this.c_witholding_tax_certificate.Location = new System.Drawing.Point(373, 229);
             this.c_witholding_tax_certificate.Name = "c_witholding_tax_certificate";
             this.c_witholding_tax_certificate.Size = new System.Drawing.Size(92, 21);
             this.c_witholding_tax_certificate.TabIndex = 19;
@@ -536,7 +553,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // c_tpid_number_t
             // 
             this.c_tpid_number_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_tpid_number_t.Location = new System.Drawing.Point(296, 240);
+            this.c_tpid_number_t.Location = new System.Drawing.Point(296, 251);
             this.c_tpid_number_t.Name = "c_tpid_number_t";
             this.c_tpid_number_t.Size = new System.Drawing.Size(75, 13);
             this.c_tpid_number_t.TabIndex = 79;
@@ -546,18 +563,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_tpid_number.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CTpidNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_tpid_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_tpid_number.Location = new System.Drawing.Point(373, 238);
+            this.c_tpid_number.Location = new System.Drawing.Point(373, 249);
             this.c_tpid_number.Name = "c_tpid_number";
             this.c_tpid_number.Size = new System.Drawing.Size(92, 20);
             this.c_tpid_number.TabIndex = 20;
-            this.c_tpid_number.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // gb_notes
             // 
             this.gb_notes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.gb_notes.Location = new System.Drawing.Point(5, 204);
+            this.gb_notes.Location = new System.Drawing.Point(5, 207);
             this.gb_notes.Name = "gb_notes";
-            this.gb_notes.Size = new System.Drawing.Size(281, 59);
+            this.gb_notes.Size = new System.Drawing.Size(281, 68);
             this.gb_notes.TabIndex = 7;
             this.gb_notes.TabStop = false;
             this.gb_notes.Text = "Notes";
@@ -565,9 +581,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // gb_pay
             // 
             this.gb_pay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.gb_pay.Location = new System.Drawing.Point(295, 128);
+            this.gb_pay.Location = new System.Drawing.Point(295, 133);
             this.gb_pay.Name = "gb_pay";
-            this.gb_pay.Size = new System.Drawing.Size(205, 135);
+            this.gb_pay.Size = new System.Drawing.Size(211, 142);
             this.gb_pay.TabIndex = 100;
             this.gb_pay.TabStop = false;
             this.gb_pay.Text = "Pay-Related";
@@ -586,10 +602,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_email_address.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CEmailAddress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_email_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_email_address.Location = new System.Drawing.Point(333, 108);
+            this.c_email_address.Location = new System.Drawing.Point(333, 105);
             this.c_email_address.MaxLength = 40;
             this.c_email_address.Name = "c_email_address";
-            this.c_email_address.Size = new System.Drawing.Size(161, 20);
+            this.c_email_address.Size = new System.Drawing.Size(167, 20);
             this.c_email_address.TabIndex = 14;
             this.c_email_address.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
             // 
