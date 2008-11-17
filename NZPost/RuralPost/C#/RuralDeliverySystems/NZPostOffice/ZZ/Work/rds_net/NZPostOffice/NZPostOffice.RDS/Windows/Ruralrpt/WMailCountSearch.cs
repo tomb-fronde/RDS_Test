@@ -21,6 +21,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             InitializeComponent();
 
+            this.pb_1.BringToFront();
             dw_criteria.DataObject = new DReportGenericRegOutletCriteria();
             dw_results.DataObject = new DMailCountSearchResults();
 
