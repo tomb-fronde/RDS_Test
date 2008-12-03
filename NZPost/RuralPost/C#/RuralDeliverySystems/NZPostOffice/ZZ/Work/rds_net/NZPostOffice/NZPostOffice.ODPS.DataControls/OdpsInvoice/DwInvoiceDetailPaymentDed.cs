@@ -53,7 +53,9 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                 {
                     this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = "Total£º";
                 }
-                this.grid.Rows[this.grid.RowCount - 1].Cells[2].Value = sum;
+                // TJB  Dec08  RD7_0017
+                //this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = sum;
+                this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = sum;
                 rowCount = this.grid.RowCount - 1;
             }
             this.rowcount.Text = rowCount.ToString();
