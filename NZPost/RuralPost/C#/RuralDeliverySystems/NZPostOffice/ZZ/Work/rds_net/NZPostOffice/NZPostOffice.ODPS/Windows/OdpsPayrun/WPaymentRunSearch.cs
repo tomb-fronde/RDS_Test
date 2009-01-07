@@ -193,7 +193,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             //  TJB  SR4649  Dec 2004  
             //   ( see below around call to OD_BLF_Mainrun)
             int ll_aKey = 0;
-            string ls_ErrMsg;
+            string sErrMsg;
             int t_pos1;
             int t_pos2;
             string t_contractNo = null;
@@ -240,9 +240,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                     return;
                 }
             }
-            /*  --------------------- Debugging --------------------- //
-            MessageBox.Show ( & "Call od_blf_mainrun_checkrun \n"            & +"   Contract   = "+string ( lcontract)+"\n"   & +"   Contractor = "+string ( lcontractor)+"\n" & +"   Start      = "+string ( dstart)+"\n"      & +"   End        = "+string ( dend,  "w_payment_run_search.cb_open.clicked" )
-            // -----------------------------------------------------  */
             //  Detect past payment runs
 
             //select odps.od_blf_mainrun_checkrun ( :lcontract,:lcontractor, :dstart,:dend) into :lPastRuns from sys.dummy;
@@ -258,11 +255,17 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             tStart = System.DateTime.Now;
 
             // select odps.od_blf_mainrun ( :lcontract, :lcontractor, :dstart, :dend ) into :lRunResult from sys.dummy;
-            int sqlCode = -1;
-            ODPSDataService dataservice = ODPSDataService.GetOdBlfMainrunFromDummy(lcontract, lcontractor, dStart, dEnd, ref sqlCode);
+
+            ODPSDataService dataservice = ODPSDataService.GetOdBlfMainrunFromDummy(lcontract, lcontractor, dStart, dEnd);
             //? lRunResult = dataservice.RowCount;
 
             sRunResult = dataservice.DataObject;
+            sRunResult = sRunResult == null ? "" : sRunResult;  //added by jlwang
+
+            /* -------------------------------- Debugging ------------------------------- //
+            MessageBox.Show("od_blf_mainrun returned " + sRunResult
+                            ,"ODPS.Windows.OdpsPayrun.wPaymentRunSearch.cb_open_clicked");
+            /* --------------------------------------------------------------------------- */
 
             //  TJB  SR4649  Dec 2004
             //  Changed return value to string to return error information from OD_BLF_Mainrun_PostTaxAdj
@@ -270,62 +273,71 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             //  When there's an error, the string is a comma-separated list of values:
             //       <return code>, <contractor no>, <deduction ID>, <deduction description>
             //  otherwise its just a single value  ( the return code).
-            // select odps.od_blf_mainrun ( :lcontract, :lcontractor, :dstart, :dend ) 
-            //   into :lRunResult 
-            //   from sys.dummy;
 
-
-            //select odps.od_blf_mainrun ( :lcontract, :lcontractor, :dstart, :dend ) into :sRunResult  from sys.dummy;
-            //  Extract the return code from the returned string
-            //?sRunResult = ODPSDataService.GetOdBlfMainrunFromDummy(lcontract, lcontractor, dStart, dEnd).DataObject;
-            //t_pos1 = TextUtil.Pos(sRunResult, ',');
-            sRunResult = sRunResult == null ? "" : sRunResult;  //added by jlwang
             t_pos1 = sRunResult.IndexOf(",");
             if (t_pos1 >= 0)
             {
-                // lRunResult = Convert.ToInt32(Left(sRunResult, t_pos1 - 1));
-                lRunResult = Convert.ToInt32(sRunResult.Substring(0, t_pos1 - 1 - 1));
+                lRunResult = Convert.ToInt32(sRunResult.Substring(0, t_pos1));
             }
             else
             {
-
                 int.TryParse(sRunResult, out lRunResult);//lRunResult = Convert.ToInt32(sRunResult);
             }
-            //  If thre is more to the return code than just the code itself
+
+            //  If there is more to the return code than just the code itself
             //  Split off the other values.
             if (lRunResult == -(1) && t_pos1 >= 0)
             {
                 // t_pos2 = TextUtil.Pos(sRunResult, ',', t_pos1 + 1);
+                t_pos1 = t_pos1 + 1;
                 t_pos2 = sRunResult.IndexOf(",", t_pos1);
                 if (t_pos2 > 0)
                 {
-                    t_contractorNo = sRunResult.Substring(t_pos1, t_pos2 - t_pos1 - 1 - 1);//t_contractorNo = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
-                    t_pos1 = t_pos2;
+                    t_contractorNo = sRunResult.Substring(t_pos1, t_pos2 - t_pos1);//t_contractorNo = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    t_pos1 = t_pos2 + 1;
                 }
-
                 t_pos2 = sRunResult.IndexOf(",", t_pos1);//t_pos2 = TextUtil.Pos(sRunResult, ',', t_pos1 + 1);
                 if (t_pos2 > 0)
                 {
-                    t_dedID = sRunResult.Substring(t_pos1, t_pos2 - t_pos1 - 1 - 1); // t_dedID = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
-                    t_pos1 = t_pos2;
+                    t_dedID = sRunResult.Substring(t_pos1, t_pos2 - t_pos1); // t_dedID = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    t_pos1 = t_pos2 + 1;
                 }
+                t_ded_description = sRunResult.Substring(t_pos1); //t_ded_description =  Mid(sRunResult, t_pos1 + 1);
+                t_ded_description = t_ded_description == null ? "" : t_ded_description;
 
-                if (sRunResult.Length > t_pos1 - 1)//(sRunResult.Length > t_pos1)
-                {
-                    t_ded_description = sRunResult.Substring(t_pos1); //t_ded_description =  Mid(sRunResult, t_pos1 + 1);
-                }
                 //  Tell the user about the error and abort run
-                MessageBox.Show("NULL deduction in OD_BLF_Mainrun_PostTaxAdj\r\r" + "Contractor:   " + t_contractorNo + '~' + "Deduction ID: " + t_dedID + '~' + "Deduction:    " + t_ded_description + "\r\rAborting run", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("NULL deduction in OD_BLF_Mainrun_PostTaxAdj\r\r"
+                                + "Contractor:   " + t_contractorNo + "\r"
+                                + "  " + "Deduction ID: " + t_dedID + "\r"
+                                + "  " + "Deduction:    " + t_ded_description + "\r\r"
+                                + "Aborting run"
+                                , "ERROR"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Stop);
                 //? ROLLBACK;
                 return;
             }
-            if (sqlCode < 0) //(dataservice.SQLCode < 0)
+
+            if (lRunResult < 0 || dataservice.SQLCode < 0)
             {
-                MessageBox.Show("Payment Run Failed! \r" + "SQLCODE = " + Convert.ToString(dataservice.SQLCode) + "- " + dataservice.SQLErrText + "\r\r" + "Return code   = " + sRunResult + "\r\rAborting run", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                sErrMsg = "";
+                if (dataservice.SQLCode != 0)
+                {
+                    sErrMsg = "SQLCODE = " + Convert.ToString(dataservice.SQLCode) + "\r"
+                                     + "   - " + dataservice.SQLErrText + "\r";
+                }
+                sErrMsg = sErrMsg + "Return code   = " + sRunResult + "\r";
+                MessageBox.Show("Payment Run Failed!                    \r" 
+                                + sErrMsg + "\r"
+                                + "Aborting run"
+                                , this.Text
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Stop);
                 //  PBY 26/04/2002 added ROLLBACK to avoid table locking problem.
                 //? ROLLBACK;
                 return;
             }
+
             //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
             //COMMIT;
             if (lRunResult == 0)
