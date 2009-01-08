@@ -345,10 +345,9 @@ namespace NZPostOffice.ODPS.DataService
             return obj._rowCount;
         }
 
-        public static ODPSDataService GetOdBlfMainrunFromDummy(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend, ref int sqlCode)
+        public static ODPSDataService GetOdBlfMainrunFromDummy(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend)
         {
             ODPSDataService obj = Execute("_GetOdBlfMainrunFromDummy", lcontract, lcontractor, dstart, dend);
-            sqlCode = obj._sqlcode;
             return obj;
         }
 
