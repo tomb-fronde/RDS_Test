@@ -1691,14 +1691,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (itemReallyChanged)
             {
                 column_name = dw_address.GetColumnName();
-                //! selection changed but binded property not yet until data window loses focus
-                itemReallyChanged = false;
-                this.dw_address.DataObject.AcceptText();
-                //! assign property for this simple combo box explicitly
-                (this.dw_address.DataObject.Current as SearchAddress).SlName =
-                    string.Format("{0}", ((ComboBox)(dw_address.DataObject.GetControlByName("sl_name"))).Text);
-                itemReallyChanged = true;
-
+                // TJB Jan 2009: Added column_name == "sl_name" condition to workaround/fix
+                //               RDS Address screen startup unhandled exception (in debugging mode only!)
+                if (column_name == "sl_name")
+                {
+                    //! selection changed but binded property not yet until data window loses focus
+                    itemReallyChanged = false;
+                    this.dw_address.DataObject.AcceptText();
+                    //! assign property for this simple combo box explicitly
+                    (this.dw_address.DataObject.Current as SearchAddress).SlName =
+                        string.Format("{0}", ((ComboBox)(dw_address.DataObject.GetControlByName("sl_name"))).Text);
+                    itemReallyChanged = true;
+                }
                 if (column_name == "AdrRdNo")
                 {
                     if ((dw_address.GetItem<SearchAddress>(dw_address.GetRow()).AdrRdNo == null) ||
