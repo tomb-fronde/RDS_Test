@@ -59,7 +59,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 
             if ((ls_subkeylistNT == null || ls_subkeylistNT.Length == 0) && (ls_subkeylist95 == null || ls_subkeylist95.Length == 0)) //(ls_subkeylistNT.UpperBound == 0 && ls_subkeylist95.UpperBound == 0) 
             {
-//pp!                MessageBox.Show("No printer connections set. Invoice ( s) will not be retrieved properly", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+//pp!                MessageBox.Show("No printer connections set. Invoice(s) will not be retrieved properly"
+//pp!                               , "Warning"
+//pp!                               , MessageBoxButtons.OK
+//pp!                               , MessageBoxIcon.Information);
             }
             this.of_setaccess("Regional");
 
@@ -383,7 +386,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ((DwInvoiceDetailPaymentPrDetailxp)ids_detailxp.DataObject).Retrieve(al_invid, al_contractno, al_contractorid, ad_startdate, ad_enddate);
             ll_rowcount = ids_detailxp.RowCount;
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & '++++++++ SkyRoad Section ++++++++\n' & +'Invoice ID = '+of_display ( al_invId)+'\n'       & +'Rowcount   = '+string ( ll_rowcount,  'w_invoice_search.of_process_detailxp' )
+            MessageBox.Show('++++++++ SkyRoad Section ++++++++\n'
+                            + 'Invoice ID = '+of_display(al_invId)+'\n'
+                            + 'Rowcount   = '+string(ll_rowcount)
+                            , 'w_invoice_search.of_process_detailxp' )
             // ---------------------------------------------------------  */
             if (ll_rowcount > 0)
             {
@@ -400,7 +406,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 
                 ls_temp = "5" + "|" + "D" + "|" + "SKYROAD" + "|" + of_output(ld_prd_date) + "|" + of_output(ls_prt_code) + "|" + of_output(ll_prd_qty) + "|" + of_output(ldc_prd_rate, 3) + "|" + of_output(ldc_prd_cost, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & 'Row = '+string ( ll_row)+'\n'           & +'Prd date = '+of_display ( ld_prd_date)+'\n'  & +'Prt code = '+of_display ( ls_prt_code)+'\n'  & +'Prd qty  = '+of_display ( ll_prd_qty)+'\n'   & +'Prd rate = '+of_display ( ldc_prd_rate)+'\n' & +'Prd cost = '+of_display ( ldc_prd_cost)+'\n' & +'\n' & +ls_temp+'\n' & ,  'w_invoice_search.of_process_detailxp' )
+                MessageBox.Show('Row = '+string(ll_row)+'\n'
+                                + 'Prd date = '+of_display ( ld_prd_date)+'\n'
+                                + 'Prt code = '+of_display ( ls_prt_code)+'\n'
+                                + 'Prd qty  = '+of_display ( ll_prd_qty)+'\n'
+                                + 'Prd rate = '+of_display ( ldc_prd_rate)+'\n'
+                                + 'Prd cost = '+of_display ( ldc_prd_cost)+'\n\n'
+                                + ls_temp+'\n'
+                                , 'w_invoice_search.of_process_detailxp' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_temp);
                 try
@@ -409,8 +422,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing SKYROAD detail record.\n" + "Contract    = " + is_contract + '~' + "Item        = " + of_display(ll_row) + "Return code = " + of_display(ll_rc),
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing SKYROAD detail record.\n"
+                        + "Contract    = " + is_contract + "\n"
+                        + "Item        = " + of_display(ll_row) + "\n"
+                        + "Return code = " + of_display(ll_rc)
+                        , "Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -418,7 +436,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             {
                 ls_temp = "5" + "|" + "T" + "|" + "SKYROAD" + "|" + "|" + "|" + "|" + "|" + of_output(ldc_tot_cost, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & +'Tot cost = '+of_display ( ldc_tot_cost)      & +'\n' & +ls_temp+'\n' & ,  'w_invoice_search.of_process_detailxp' )
+                MessageBox.Show('Tot cost = '+of_display(ldc_tot_cost)+'\n'
+                                + ls_temp+'\n'
+                                , 'w_invoice_search.of_process_detailxp' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_temp);
                 try
@@ -427,8 +447,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing SKYROAD total record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc), 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing SKYROAD total record.\n"
+                                       + "Contract    = " + is_contract + "\n"
+                                       + "Return code = " + of_display(ll_rc)
+                                       , "Error"
+                                       , MessageBoxButtons.OK
+                                       , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -466,7 +490,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ((DwInvoiceDetailPayment)ids_payment_details.DataObject).Retrieve(al_invid, ad_enddate, al_contractorid, al_contractno);
             ll_rowcount = ids_payment_details.RowCount;
             /*  ------------------------ Debugging ---------------------- //
-            MessageBox.Show ( & '++++++++ Payment Details Section ++++++++\n' & +'Rowcount   = '+string ( ll_rowcount)+'\n\n'   & +'InvoiceID  = '+string ( al_invid)+'\n'        & +'End date   = '+string ( ad_enddate)+'\n'      & +'Contractor = '+string ( al_contractorid)+'\n' & +'Contract   = '+string ( al_contractno)+'\n'   & ,  'w_invoice_search.of_process_payment_details' )
+            MessageBox.Show('++++++++ Payment Details Section ++++++++\n'
+                            +'Rowcount   = '+string(ll_rowcount)+'\n\n'
+                            +'InvoiceID  = '+string(al_invid)+'\n'
+                            +'End date   = '+string(ad_enddate)+'\n'
+                            +'Contractor = '+string(al_contractorid)+'\n'
+                            +'Contract   = '+string(al_contractno)+'\n'
+                            ,'w_invoice_search.of_process_payment_details' )
             // ---------------------------------------------------------  */
             if (ll_rowcount >= 1)
             {
@@ -503,7 +533,28 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                                         of_output(ldc_y_gst_value, 2) + "|" + of_output(ldc_y_wtax_value, 2) + "|" + 
                                         of_output(ldc_y_adj_notax, 2) + "|" + of_output(ldc_y_total, 2);
                 /*  ------------------------ Debugging ---------------------- //
-                MessageBox.Show ( & 'Row = '+string ( ll_row)+'\n'           & +'m_standard    = '+of_display ( ldc_m_standard)+'\n'  & +'m_allowance   = '+of_display ( ldc_m_allowance)+'\n'  & +'m_taxable_adj = '+of_display ( ldc_m_taxable_adj)+'\n'  & +'m_tot_b4_tax  = '+of_display ( ldc_m_tot_b4_tax)+'\n'  & +'m_gst_rate    = '+of_display ( ldc_m_gst_rate)+'\n'  & +'m_gst_value   = '+of_display ( ldc_m_gst_value)+'\n'  & +'m_wtax_rate   = '+of_display ( ldc_m_wtax_rate)+'\n'  & +'m_wtax_value  = '+of_display ( ldc_m_wtax_value)+'\n'  & +'m_adj_notax   = '+of_display ( ldc_m_adj_notax)+'\n'  & +'m_total       = '+of_display ( ldc_m_total)+'\n'  & +'\n'  & +ls_m_temp+'\n'  & +'\n'  & +'y_standard    = '+of_display ( ldc_y_standard)+'\n'  & +'y_allowance   = '+of_display ( ldc_y_allowance)+'\n'  & +'y_taxable_adj = '+of_display ( ldc_y_taxable_adj)+'\n'  & +'y_2date_tax   = '+of_display ( ldc_y_2date_tax)+'\n'  & +'y_gst_value   = '+of_display ( ldc_y_gst_value)+'\n'  & +'y_wtax_value  = '+of_display ( ldc_y_wtax_value)+'\n'  & +'y_adj_notax   = '+of_display ( ldc_y_adj_notax)+'\n'  & +'y_total       = '+of_display ( ldc_y_total)+'\n'  & +'\n'  & +ls_y_temp+'\n'  & ,  'w_invoice_search.of_process_payment_details' )
+                MessageBox.Show('Row = '+string(ll_row)+'\n'
+                                + 'm_standard    = '+of_display(ldc_m_standard)+'\n'
+                                + 'm_allowance   = '+of_display(ldc_m_allowance)+'\n'
+                                + 'm_taxable_adj = '+of_display(ldc_m_taxable_adj)+'\n'
+                                + 'm_tot_b4_tax  = '+of_display(ldc_m_tot_b4_tax)+'\n'
+                                + 'm_gst_rate    = '+of_display(ldc_m_gst_rate)+'\n'
+                                + 'm_gst_value   = '+of_display(ldc_m_gst_value)+'\n'
+                                + 'm_wtax_rate   = '+of_display(ldc_m_wtax_rate)+'\n'
+                                + 'm_wtax_value  = '+of_display(ldc_m_wtax_value)+'\n'
+                                + 'm_adj_notax   = '+of_display(ldc_m_adj_notax)+'\n'
+                                + 'm_total       = '+of_display(ldc_m_total)+'\n\n'
+                                + ls_m_temp+'\n\n'
+                                + 'y_standard    = '+of_display(ldc_y_standard)+'\n'
+                                + 'y_allowance   = '+of_display(ldc_y_allowance)+'\n'
+                                + 'y_taxable_adj = '+of_display(ldc_y_taxable_adj)+'\n'
+                                + 'y_2date_tax   = '+of_display(ldc_y_2date_tax)+'\n'
+                                + 'y_gst_value   = '+of_display(ldc_y_gst_value)+'\n'
+                                + 'y_wtax_value  = '+of_display(ldc_y_wtax_value)+'\n'
+                                + 'y_adj_notax   = '+of_display(ldc_y_adj_notax)+'\n'
+                                + 'y_total       = '+of_display(ldc_y_total)+'\n\n'
+                                + ls_y_temp+'\n'
+                                , 'w_invoice_search.of_process_payment_details' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_m_temp);
                 try
@@ -512,19 +563,27 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing current pay summary record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing current pay summary record.\n"
+                                       + "Contract    = " + is_contract + "\n"
+                                       + "Return code = " + of_display(ll_rc)
+                                       , "Error"
+                                       , MessageBoxButtons.OK
+                                       , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
                 //ll_rc = FileWrite(ii_file, ls_y_temp);
                 try
                 {
                     sw.WriteLine(ls_y_temp);
-
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing YTD pay summary record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc),
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing YTD pay summary record.\n"
+                                       + "Contract    = " + is_contract + "\n"
+                                       + "Return code = " + of_display(ll_rc)
+                                       , "Error"
+                                       , MessageBoxButtons.OK
+                                       , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -547,7 +606,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ((DwInvoiceDetailPaymentDed)ids_payment_ded.DataObject).Retrieve(al_invid);
             ll_rowcount = ids_payment_ded.RowCount;
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & '++++++++ Payment DED Section ++++++++\n' & +'Rowcount   = '+string ( ll_rowcount)+'\n\n'  & +'InvoiceID  = '+string ( al_invid)+'\n'       & ,  'w_invoice_search.of_process_payment_ded' )
+            MessageBox.Show('++++++++ Payment DED Section ++++++++\n'
+                            + 'Rowcount   = '+string(ll_rowcount)+'\n\n'
+                            + 'InvoiceID  = '+string(al_invid)+'\n'
+                            , 'w_invoice_search.of_process_payment_ded' )
             // ---------------------------------------------------------  */
             if (ll_rowcount >= 1)
             {
@@ -563,7 +625,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 
                 ls_lineout = "4" + "|" + "D" + "|" + "N" + "|" + of_output(ld_pcd_date) + "|" + of_output(ls_ded_desc) + "|" + of_output(ldc_pcd_amount, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & 'Row = '+string ( ll_row)+'\n'                     & +'pcd_date   = '+of_display ( ld_pcd_date)+'\n'    & +'ded_desc   = '+of_display ( ls_ded_desc)+'\n'    & +'pcd_amount = '+of_display ( ldc_pcd_amount)+'\n' & +'\n'  & +ls_lineout+'\n'  & ,  'w_invoice_search.of_process_payment_ded' )
+                MessageBox.Show('Row = '+string(ll_row)+'\n'
+                                + 'pcd_date   = '+of_display(ld_pcd_date)+'\n'
+                                + 'ded_desc   = '+of_display(ls_ded_desc)+'\n'
+                                               + 'pcd_amount = '+of_display(ldc_pcd_amount)+'\n\n'
+                                + ls_lineout+'\n'
+                                , 'w_invoice_search.of_process_payment_ded' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_lineout);
                 try
@@ -572,8 +639,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing non-taxable adjustment detail record.\n" + "Contract    = " + is_contract + '~' + "Item        = " + of_display(ll_row) + "Return code = " + of_display(ll_rc), 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing non-taxable adjustment detail record.\n" 
+                                    + "Contract    = " + is_contract + "\n"
+                                    + "Item        = " + of_display(ll_row) +"\n"
+                                    + "Return code = " + of_display(ll_rc)
+                                    , "Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -583,7 +655,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             {
                 ls_lineout = "4" + "|" + "T" + "|" + "N" + "|" + "||" + of_output(ldc_total, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & +'total      = '+of_display ( ldc_total)+'\n'     & +'\n'  & +ls_lineout+'\n'  & ,  'w_invoice_search.of_process_payment_ded' )
+                MessageBox.Show('total      = '+of_display(ldc_total)+'\n\n'
+                                + ls_lineout+'\n'
+                                , 'w_invoice_search.of_process_payment_ded' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_lineout);
                 try
@@ -592,8 +666,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing non-taxable adjustment total record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc),
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing non-taxable adjustment total record.\n"
+                                    + "Contract    = " + is_contract + "\n"
+                                    + "Return code = " + of_display(ll_rc)
+                                    , "Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -613,16 +691,16 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             string ls_lineout;
             decimal? ldc_pvalue;
             decimal ldc_total = 0;
+
             ((DwInvoiceDetailPaymentPr)ids_payment_pr.DataObject).Retrieve(al_invid, ad_enddate);
             ll_rowcount = ids_payment_pr.RowCount;
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & '++++++++ Payment Pr Section ++++++++\n'     & +'Rowcount   = '+string ( ll_rowcount)+'\n\n'  & +'InvoiceID  = '+string ( al_invid)+'\n'       & +'End date   = '+string ( ad_enddate)+'\n'     & ,  'w_invoice_search.of_process_payment_pr' )
+            MessageBox.Show('++++++++ Payment Pr Section ++++++++\n'
+                            +'Rowcount   = '+string(ll_rowcount)+'\n\n'
+                            +'InvoiceID  = '+string(al_invid)+'\n'
+                            +'End date   = '+string(ad_enddate)+'\n',
+                            'w_invoice_search.of_process_payment_pr' )
             // ---------------------------------------------------------  */
-            if (ll_rowcount >= 1)
-            {
-                //ldc_total = ids_payment_pr.GetItemNumber(1, "compute_1");
-                ldc_total = ((DwInvoiceDetailPaymentPr)ids_payment_pr.DataObject).Compute1.GetValueOrDefault();
-            }
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
                 ld_in_date = ids_payment_pr.GetItem<InvoiceDetailPaymentPr>(ll_row).InDate;
@@ -631,28 +709,46 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 ls_prs_desc = of_remove_crlf(ls_temp);
 
                 ls_lineout = "4" + "|" + "D" + "|" + "T" + "|" + of_output(ld_in_date) + "|" + of_output(ls_prs_desc) + "|" + of_output(ldc_pvalue, 2);
+
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & 'Row = '+string ( ll_row)+'\n'           & +'in_date  = '+of_display ( ld_in_date)+'\n'  & +'prs_desc = '+of_display ( ls_prs_desc)+'\n'  & +'pvalue   = '+of_display ( ldc_pvalue)+'\n'  & +'\n'  & +ls_lineout+'\n'  & ,  'w_invoice_search.of_process_payment_pr' )
+                MessageBox.Show('Row = '+string(ll_row)+'\n'
+                                + 'in_date  = '+of_display(ld_in_date)+'\n'
+                                + 'prs_desc = '+of_display(ls_prs_desc)+'\n'
+                                + 'pvalue   = '+of_display(ldc_pvalue)+'\n'
+                                + '\n'  & +ls_lineout+'\n'
+                                , 'w_invoice_search.of_process_payment_pr' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_lineout);
+
                 try
                 {
                     sw.WriteLine(ls_lineout);
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing taxable adjustment detail record.\n" + "Contract    = " + is_contract + '~' + "Item        = " + of_display(ll_row) + "Return code = " + of_display(ll_rc), 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing taxable adjustment detail record.\n"
+                                    + "Contract    = " + is_contract + '\r'
+                                    + "Item        = " + of_display(ll_row) + '\r'
+                                    + "Return code = " + of_display(ll_rc)
+                                    , "Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
-            //  TJB  SR4685 fixup
-            //  Removed extra +'||' 
+                // TJB Jan 2009:  Moved ldc_total calculation/access to follow
+                //                detail output.Done when trying to track down a
+                //                bug; left because it didn't make any difference.
             if (ll_rowcount >= 1)
             {
+                //ldc_total = ids_payment_pr.GetItemNumber(1, "compute_1");
+                ldc_total = ((DwInvoiceDetailPaymentPr)ids_payment_pr.DataObject).Compute1.GetValueOrDefault();
+
                 ls_lineout = "4" + "|" + "T" + "|" + "T" + "|" + "||" + of_output(ldc_total, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & +'total    = '+of_display ( ldc_total)+'\n'  & +'\n'  & +ls_lineout+'\n'  & ,  'w_invoice_search.of_process_payment_pr' )
+                MessageBox.Show('total    = '+of_display(ldc_total)+'\n\n'
+                                + ls_lineout+'\n'
+                                , 'w_invoice_search.of_process_payment_pr' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_lineout);
                 try
@@ -661,8 +757,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing taxable adjustment total record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc), 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing taxable adjustment total record.\n" 
+                                    + "Contract    = " + is_contract + "\n"
+                                    + "Return code = " + of_display(ll_rc)
+                                    , "Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -686,7 +786,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ((DwInvoiceDetailPaymentPrDetailpp)ids_detailpp.DataObject).Retrieve(al_invid, al_contractno, al_contractorid, ad_startdate, ad_enddate);
             ll_rowcount = ids_detailpp.RowCount;
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & '++++++++ Parcel Post Section ++++++++\n' & +'Invoice ID = '+of_display ( al_invId)+'\n'       & +'Rowcount   = '+string ( ll_rowcount,  'w_invoice_search.of_process_detailpp' )
+            MessageBox.Show('++++++++ Parcel Post Section ++++++++\n'
+                            + 'Invoice ID = '+of_display(al_invId)+'\n'
+                            + 'Rowcount   = '+string(ll_rowcount)
+                            , 'w_invoice_search.of_process_detailpp' )
             // ---------------------------------------------------------  */
             if (ll_rowcount > 0)
             {
@@ -703,7 +806,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 
                 ls_temp = "5" + "|" + "D" + "|" + "PARCEL POST" + "|" + of_output(ld_prd_date) + "|" + of_output(ls_prt_code) + "|" + of_output(ll_prd_qty) + "|" + of_output(ldc_prd_rate, 3) + "|" + of_output(ldc_prd_cost, 2);
                 /*  ----------------------- Debugging ----------------------- //
-                MessageBox.Show ( & 'Row = '+string ( ll_row)+'\n'           & +'Prd date = '+of_display ( ld_prd_date)+'\n'  & +'Prt code = '+of_display ( ls_prt_code)+'\n'  & +'Prd qty  = '+of_display ( ll_prd_qty)+'\n'   & +'Prd rate = '+of_display ( ldc_prd_rate)+'\n' & +'Prd cost = '+of_display ( ldc_prd_cost)+'\n' & +'\n' & +ls_temp+'\n' & ,  'w_invoice_search.of_process_detailpp' )
+                MessageBox.Show('Row = '+string(ll_row)+'\n'
+                                + 'Prd date = '+of_display(ld_prd_date)+'\n'
+                                + 'Prt code = '+of_display(ls_prt_code)+'\n'
+                                + 'Prd qty  = '+of_display(ll_prd_qty)+'\n'
+                                + 'Prd rate = '+of_display(ldc_prd_rate)+'\n'
+                                + 'Prd cost = '+of_display(ldc_prd_cost)+'\n\n'
+                                + ls_temp+'\n'
+                                , 'w_invoice_search.of_process_detailpp' )
                 // ---------------------------------------------------------  */
                 //ll_rc = FileWrite(ii_file, ls_temp);
                 try
@@ -712,8 +822,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing Parcel Post detail record.\n" + "Contract    = " + is_contract + '~' + "Item        = " + of_display(ll_row) + "Return code = " + of_display(ll_rc), 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error writing Parcel Post detail record.\n" 
+                                    + "Contract    = " + is_contract + "\n"
+                                    + "Item        = " + of_display(ll_row) +"\n"
+                                    + "Return code = " + of_display(ll_rc)
+                                    , "Error", MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return -(1);
                 }
             }
@@ -1052,7 +1166,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 sname = "";
             }
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & +'sdate        = '+of_display ( sdate)+'\n'  & +'edate        = '+of_display ( edate)+'\n'  & +'alregion     = '+of_display ( alregion)+'\n'  & +'sname        = '+of_display ( sname)+'\n'  & +'alcontractor = '+of_display ( alcontractor)+'\n'  & +'alcontract   = '+of_display ( alcontract)+'\n'  & ,  'w_invoice.cb_open.clicked' )
+            MessageBox.Show ('sdate        = '+of_display(sdate)+'\n'
+                             +'edate        = '+of_display ( edate)+'\n'
+                             +'alregion     = '+of_display ( alregion)+'\n'
+                             +'sname        = '+of_display ( sname)+'\n'
+                             +'alcontractor = '+of_display ( alcontractor)+'\n'
+                             +'alcontract   = '+of_display ( alcontract)+'\n'
+                             ,'w_invoice.cb_open.clicked' )
             // ---------------------------------------------------------  */
             //  TJB SR4639
             //  Get the contract type specified in the search criteria to pass 
@@ -1147,23 +1267,35 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ll_rows = dw_results.RowCount - 1;
             if (ll_rows < 0)
             {
-                MessageBox.Show("You must search for a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must search for a contractor"
+                                ,"Invoice"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
             if (dw_search.GetValue(0, "end_date") == null)
             {
-                MessageBox.Show("You must specify a period end date", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must specify a period end date"
+                                , "Invoice"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
             ll_row = dw_results.GetSelectedRow(0);
             if (ll_row < 0)
             {
-                MessageBox.Show("You must select a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contractor"
+                                , "Invoice"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
             if (dw_results.GetValue(ll_row, "contractor_no") == null)
             {
-                MessageBox.Show("You must select a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contractor"
+                                , "Invoice"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
 
@@ -1186,7 +1318,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 sname = "";
             }
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & +'sdate        = '+of_display ( sdate)+'\n'  & +'edate        = '+of_display ( edate)+'\n'  & +'alregion     = '+of_display ( alregion)+'\n'  & +'sname        = '+of_display ( sname)+'\n'  & +'alcontractor = '+of_display ( alcontractor)+'\n'  & +'alcontract   = '+of_display ( alcontract)+'\n'  & ,  'w_invoice.cb_export.clicked' )
+            MessageBox.Show ('sdate        = '+of_display(sdate)+'\n'
+                             +'edate        = '+of_display(edate)+'\n'
+                             +'alregion     = '+of_display(alregion)+'\n'
+                             +'sname        = '+of_display(sname)+'\n'
+                             +'alcontractor = '+of_display(alcontractor)+'\n'
+                             +'alcontract   = '+of_display(alcontract)+'\n'
+                             ,'w_invoice.cb_export.clicked' )
             // ---------------------------------------------------------  */
             //  TJB SR4639
             //  Get the contract type specified in the search criteria to pass 
@@ -1228,7 +1366,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             lreturn = dataService.LReturn;
             if (dataService.SQLCode < 0)
             {
-                MessageBox.Show(dataService.SQLErrText, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText,
+                                "SQL Error"
+                                ,MessageBoxButtons.OK
+                                ,MessageBoxIcon.Information);
                 //  PBY 26/04/2002 added ROLLBACK to avoid table locking problem.
                 //?ROLLBACK;
                 return;
@@ -1237,8 +1378,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             //?COMMIT;
             if (lreturn < 0)
             {
-                MessageBox.Show("Error running procedure OD_RPF_Invoice_pay_piecerate_detailv4.\r" + "Errornumber is " + string.Format("Invoice", lreturn), 
-                    "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Error running procedure OD_RPF_Invoice_pay_piecerate_detailv4.\r" 
+                                +"Error number is " + string.Format("Invoice", lreturn)
+                                ,"Error"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
             int ll_rc = -1;
@@ -1286,8 +1430,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             //  Get the set of invoices
             ((DwInvoiceHeaderOnly)ids_invoice.DataObject).Retrieve(sdate, edate, alcontractor, alcontract, alregion, sname, li_ctKey);
             ll_rowcount = ids_invoice.RowCount;
-            MessageBox.Show(of_display(ll_rowcount) + " invoices found.\n\n" + "Please select a file to export the invoice details to.", "Datamail Invoice Export",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(of_display(ll_rowcount)+" invoices found.\n\n" 
+                            + "Please select a file to export the invoice details to."
+                            , "Datamail Invoice Export"
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Information);
             ll_file_select = 0;
             ls_pathname = "C:\\rdsruntime\\rds_invoices_" + of_monthname(edate.Value) + edate.Value.Year.ToString() + ".txt";
             DialogResult li_ret;
@@ -1305,7 +1452,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ls_filename = ls_pathname.Substring(ls_pathname.LastIndexOf("\\") + 1);
             saveFileDialog.AddExtension = true;
             /*  ----------------------- Debugging ----------------------- //
-            MessageBox.Show ( & +'ll_rc = '+of_display ( ll_rc)+'\n'  & +'ls_pathname = '+of_display ( ls_pathname)+'\n'  & +'ls_filename = '+of_display ( ls_filename)+'\n'  & ,  'w_invoice.cb_export.clicked' )
+            MessageBox.Show('ll_rc = '+of_display(ll_rc)+'\n'
+                            +'ls_pathname = '+of_display(ls_pathname)+'\n'
+                            +'ls_filename = '+of_display(ls_filename)+'\n'
+                            ,'w_invoice.cb_export.clicked' )
             // ---------------------------------------------------------  */
             //if (!(ll_rc == 1))
             //{
