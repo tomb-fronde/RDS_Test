@@ -240,7 +240,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( il_adr_id)     then ds_adrid  = 'null' 
                 ds_rdflag = ib_rdContract.ToString()
                 if isnull ( ib_rdContract) then ds_rdflag = 'null' 
-                MessageBox.Show (    & 'Adr ID         = '+ds_adrid  +'\r\n' & +'ib_rdContract = '+ds_rdflag +'\r\n' & +'Address permissions  = <'+ds_addr_perms +'>\r\n' & +'Customer permissions = <'+ds_cust_perms +'>\r\n' ,  'w_maintain_address.pfc_preopen' )
+                MessageBox.Show ('Adr ID         = '+ds_adrid +'\r\n'
+                                 +'ib_rdContract = '+ds_rdflag +'\r\n'
+                                 +'Address permissions  = <'+ds_addr_perms +'>\r\n'
+                                 +'Customer permissions = <'+ds_cust_perms +'>\r\n' 
+                                 ,'w_maintain_address.pfc_preopen' )
             // --------------------------------------------------------------------  */
             inv_road = (NRoad)StaticVariables.gnv_app.of_get_road_map();
             ldwc_child = idw_header.GetChild("rt_id");
@@ -388,14 +392,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( ib_RDcontract)   then ds_rdcontract   = 'null' else ds_rdcontract   = ib_RDcontract.ToString()
                 if isnull ( ls_temp)         then ds_adrnum       = 'null' else ds_adrnum       = ls_temp.ToString()
                 if isnull ( il_contract_no)  then ds_contract_no  = 'null' else ds_contract_no  = il_contract_no.ToString()
-                MessageBox.Show ( & 'NPAD enabled = '+ds_npad_enabled+'\r\n'  & +'RD contract = '+ds_rdcontract+'\r\n'    & +'Unnumbered  = '+string ( ib_unnumbered)+'\r\n'  & +'Adr num     = <'+ds_adrnum+'>'+'\r\n'   & +'Contract No = '+ds_contract_no+'\r\n'   ,  'w_maintain_address.pfc_postopen' )
+                MessageBox.Show ('NPAD enabled = '+ds_npad_enabled+'\r\n'
+                                 +'RD contract = '+ds_rdcontract+'\r\n'
+                                 +'Unnumbered  = '+string(ib_unnumbered)+'\r\n'
+                                 +'Adr num     = <'+ds_adrnum+'>'+'\r\n'
+                                 +'Contract No = '+ds_contract_no+'\r\n'
+                                 ,'w_maintain_address.pfc_postopen' )
             // --------------------------------------------------------------------  */
             //  TJB  SR4686  June 2006
             //  ******************************************************
             //  Set up customer maintenance
             //  ******************************************************
             /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & 'idw_details.Enabled  = '+string ( idw_details.Enabled)+'\r\n'  & +'cb_open.Enabled     = '+string ( cb_open.Enabled)+'\r\n'      & +'cb_new.Enabled      = '+string ( cb_new.Enabled)+'\r\n'       & +'cb_transfer.Enabled = '+string ( cb_transfer.Enabled)+'\r\n'  & +'cb_remove.Enabled   = '+string ( cb_remove.Enabled)+'\r\n\r\n'  & +'is_cust_perms       = '+is_cust_perms		,  'w_maintain_address.pfc_postopen' )
+                MessageBox.Show ('idw_details.Enabled  = '+string(idw_details.Enabled)+'\r\n'
+                                 +'cb_open.Enabled     = '+string ( cb_open.Enabled)+'\r\n'
+                                 +'cb_new.Enabled      = '+string ( cb_new.Enabled)+'\r\n'
+                                 +'cb_transfer.Enabled = '+string ( cb_transfer.Enabled)+'\r\n'
+                                 +'cb_remove.Enabled   = '+string ( cb_remove.Enabled)+'\r\n\r\n'
+                                 +'is_cust_perms       = '+is_cust_perms
+                                 ,'w_maintain_address.pfc_postopen' )
             // --------------------------------------------------------------------  */
             idw_details.SuspendLayout();
             //  If the user doesn't have Customer:read privilege, they can't do anything
@@ -512,7 +527,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( ls_custrestore) then ds_custrestore = 'Null'
                 ds_temp = ll_temp.ToString()
                 if isnull ( ll_temp) then ds_temp = 'Null'
-                MessageBox.Show (  & 'Cust Restore permissions = '+ds_custrestore+'\r\n'  & +'Permission M at '+ds_temp,  'w_maintain_address.pfc_preopen' )
+                MessageBox.Show ('Cust Restore permissions = '+ds_custrestore+'\r\n'
+                                 +'Permission M at '+ds_temp
+                                 ,'w_maintain_address.pfc_preopen' )
             // ------------------------------------------------------------  */
             if (ll_temp < 0)
             {
@@ -1707,7 +1724,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ds_rsid = 'NULL'
             ds_tcid = al_tcid.ToString()
             if isnull ( al_tcid) then ds_tcid = 'NULL'
-            MessageBox.Show (   & 'Road name    = '+ds_roadname+'\r\n'  & +'Road type   = '+ds_rtid+'\r\n'  & +'Road suffix = '+ds_rsid+'\r\n'  & +'Town        = '+ds_tcid+'\r\n\r\n'  & +'Filter = '+ls_filter+'\r\n'  & ,  'w_maintain_address.of_filter_suburb_dddw' )
+            MessageBox.Show ('Road name    = '+ds_roadname+'\r\n'
+                             +'Road type   = '+ds_rtid+'\r\n'
+                             +'Road suffix = '+ds_rsid+'\r\n'
+                             +'Town        = '+ds_tcid+'\r\n\r\n'
+                             +'Filter = '+ls_filter+'\r\n'
+                             ,'w_maintain_address.of_filter_suburb_dddw' )
             // ------------------------------------------------------------  */
             ldwc_child = (DDddwSuburbNames)idw_header.GetChild("sl_name");
             ldwc_child.FilterString = "sl_name = \"xxxx\"";
@@ -1928,14 +1950,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int of_validcontract(int? al_contractno)
         {
             //  TJB  SR4688  July 2006   - New -
-            //  Check thatn the contract number entered is valid
-            //   ( ie not terminated or expired).
+            //  Check that the contract number entered is valid
+            //   (ie not terminated or expired).
             //  Returns:
             // 		0		Contract exists and is current
             // 		1		Contract does not exist
             // 		2		Contract is terminated
             // 		3		Contract is not current
-            int? ll_exists = 0;
+            int?      ll_exists = 0;
             DateTime? ld_terminated = null;
             DateTime? ld_today;
             ll_exists = null;
@@ -3579,7 +3601,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ds_data = data
                 ds_col_name = column
                 if isnull ( ds_data) then ds_data = 'NULL'
-                MessageBox.Show ( & 'Row = '+string ( row)+'\r\n'      & +'Column = '+ds_col_name+'\r\n'  & +'Data   = '+ds_data  ,  'w_maintain_address.dw_header.itemerror' )
+                MessageBox.Show ('Row = '+string ( row)+'\r\n'
+                                 +'Column = '+ds_col_name+'\r\n'
+                                 +'Data   = '+ds_data
+                                 ,'w_maintain_address.dw_header.itemerror' )
             // --------------------------------------------------------------------  */
             if (column == "rt_id")
             {
@@ -6837,7 +6862,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (sObjectAtPointer.Length >= 15 && sObjectAtPointer.Substring(0, 15) == "contract_button")
             {
                 ll_contract_id = dw_header.GetItem<AddressDetails>(row).ContractNo;
-                //  TJB  SR4688  uly 2006
+                //  TJB  SR4688  July 2006
                 //  Check whether the contract enterd is OK
                 if (il_contract_ok < 0)
                 {

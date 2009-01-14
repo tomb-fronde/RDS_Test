@@ -190,8 +190,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             Controls.Add(cb_restore);
             this.ResumeLayout();
         }
-
-  
    
         private void dw_header_Click(object sender, EventArgs e) //added by jlwang
         {
