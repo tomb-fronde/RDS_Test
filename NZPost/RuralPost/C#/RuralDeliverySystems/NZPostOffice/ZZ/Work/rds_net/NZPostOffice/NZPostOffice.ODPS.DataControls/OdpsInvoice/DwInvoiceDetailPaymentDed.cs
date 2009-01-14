@@ -52,10 +52,11 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                 if (this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value == null)
                 {
                     this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = "Total£º";
+                    // TJB  Dec08  RD7_0017: Changed index value to 2
+                    // TJB  Jan09  RD7_0017: Moved inside 'if' block (was below)
+                    //this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = sum;
+                    this.grid.Rows[this.grid.RowCount - 1].Cells[2].Value = sum;
                 }
-                // TJB  Dec08  RD7_0017
-                //this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = sum;
-                this.grid.Rows[this.grid.RowCount - 1].Cells[1].Value = sum;
                 rowCount = this.grid.RowCount - 1;
             }
             this.rowcount.Text = rowCount.ToString();
