@@ -27,6 +27,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             m_report = new MOdpsReport(this);
             InitializeComponent();
 
+            //TJB Jan-2009:  Added Dataobject definition (missing ??)
+            //               Need to fix resizability 
+            dw_1.DataObject = new DwInvoiceHeaderv5();
+
             //? m_odps_report = new NZPostOffice.ODPS.Menus.MOdpsReport(this);
             //? m_odps_report_menu.SetFunctionalPart(m_odps_report);
             //? m_odps_report_toolbar.SetFunctionalPart(m_odps_report);
