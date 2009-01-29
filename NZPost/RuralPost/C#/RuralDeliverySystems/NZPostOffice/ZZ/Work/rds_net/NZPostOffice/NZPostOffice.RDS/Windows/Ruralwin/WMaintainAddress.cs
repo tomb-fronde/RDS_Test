@@ -193,26 +193,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             //! added checking for null or exception appears sometimes
             if (lvNCriteria.of_getcriteria("adr_id") != null)
-            {
                 il_adr_id = (int)lvNCriteria.of_getcriteria("adr_id");
-            }
+
             if (lvNCriteria.of_getcriteria("cust_id") != null)
-            {
                 il_cust_id = (int)lvNCriteria.of_getcriteria("cust_id");
-            }
+
             if (lvNCriteria.of_getcriteria("rd_Contract_Select") != null)
-            {
                 ll_temp = (int)lvNCriteria.of_getcriteria("rd_Contract_Select");
-            }
 
             if (ll_temp == 1)
-            {
                 ib_RDcontract = true;
-            }
             else
-            {
                 ib_RDcontract = false;
-            }
             //  TJB  SR4686  June 2006
             //  Get the User's Address and Customer privileges
             //  The user needs Address:Modify to be able to modify the address 
@@ -220,31 +212,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  maintenance.
             is_addr_perms = of_getpermissions("Address");
             if (is_addr_perms == null)
-            {
                 is_addr_perms = "";
-            }
             is_cust_perms = of_getpermissions("Customer");
             if (is_cust_perms == null)
-            {
                 is_cust_perms = "";
-            }
             /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_adrid
-                string	ds_rdflag
-                string	ds_addr_perms, ds_cust_perms
-                ds_addr_perms = is_addr_perms
-                if is_addr_perms = '' then ds_addr_perms = 'NONE'
-                ds_cust_perms = is_cust_perms
-                if is_cust_perms = '' then ds_cust_perms = 'NONE'
-                ds_adrid  = il_adr_id.ToString()
-                if isnull ( il_adr_id)     then ds_adrid  = 'null' 
-                ds_rdflag = ib_rdContract.ToString()
-                if isnull ( ib_rdContract) then ds_rdflag = 'null' 
-                MessageBox.Show ('Adr ID         = '+ds_adrid +'\r\n'
-                                 +'ib_rdContract = '+ds_rdflag +'\r\n'
-                                 +'Address permissions  = <'+ds_addr_perms +'>\r\n'
-                                 +'Customer permissions = <'+ds_cust_perms +'>\r\n' 
-                                 ,'w_maintain_address.pfc_preopen' )
+                string	ds_adrid;
+                string	ds_rdflag;
+                string	ds_addr_perms, ds_cust_perms;
+                ds_addr_perms = is_addr_perms;
+                if (is_addr_perms == null) ds_addr_perms = "null";
+                ds_cust_perms = is_cust_perms;
+                if (is_cust_perms == null) ds_cust_perms = "null";
+                ds_adrid  = il_adr_id.ToString();
+                if (il_adr_id == null)     ds_adrid  = "null";
+                ds_rdflag = ib_RDcontract.ToString();
+                if (ib_RDcontract == null) ds_rdflag = "null";
+                MessageBox.Show ("Adr ID         = "+ds_adrid +"\n"
+                                 +"ib_rdContract = "+ds_rdflag +"\n"
+                                 +"Address permissions  = <"+ds_addr_perms +">\n"
+                                 +"Customer permissions = <"+ds_cust_perms +">\n" 
+                                 ,"Windows.Ruralwin.w_maintain_address.pfc_preopen" );
             // --------------------------------------------------------------------  */
             inv_road = (NRoad)StaticVariables.gnv_app.of_get_road_map();
             ldwc_child = idw_header.GetChild("rt_id");
@@ -282,13 +270,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 of_refresh_occupants();
                 // Build title
                 if (dw_header.RowCount > 0)
-                {
                     this.Text = "Address  ( " + il_adr_id.ToString() + "): " + idw_header.GetItem<AddressDetails>(0).TitleAddress;
-                }
                 else
-                {
                     this.Text = "Address  ( " + il_adr_id.ToString() + "): ";
-                }
+
                 //this.Text = "Address  ( " + il_adr_id.ToString() + "): " + StaticMessage.stringTitle;
                 //  Set up the suburb dropdown, depending on the town value
                 ll_tcid = idw_header.GetItem<AddressDetails>(0).TcId;
@@ -340,35 +325,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             Color ll_button_face = System.Drawing.SystemColors.ButtonFace;
             Color ll_win_background = System.Drawing.SystemColors.Window;
             string ls_temp;
+
             //  TJB  NPAD2  December 2005
             //  If NPAD processing is enabled, disable the fields in the
             //  address that cannot be updated.
             //  Determine if NPAD is enabled
             ib_npad_enabled = StaticVariables.gnv_app.of_get_npadenabled();
             if (ib_npad_enabled == null)
-            {
                 ib_npad_enabled = false;
-            }
+
             //  Get some values to be used when communicating with NPAD
             is_npadoutdir = StaticVariables.gnv_app.of_get_npaddirectory();
             is_userid = StaticVariables.LoginId;
             if (is_npadoutdir == null)
-            {
                 is_npadoutdir = "";
-            }
+
             if (is_userid == null)
-            {
                 is_userid = "";
-            }
+
             //  Determine if the address is unnumbered
             ll_row = idw_header.GetRow();
             ls_temp = idw_header.GetItem<AddressDetails>(ll_row).AdrNum;
             if (ls_temp != null) ls_temp = ls_temp.Trim();
             ib_unnumbered = false;
             if (ls_temp == null || ls_temp == "")
-            {
                 ib_unnumbered = true;
-            }
+
             //  TJB  SR46xx  Dec 2006
             //  If this user has sufficient privileges to restore deleted 
             //  customers, enable the "Restore custs" button; otherwise 
@@ -392,25 +374,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( ib_RDcontract)   then ds_rdcontract   = 'null' else ds_rdcontract   = ib_RDcontract.ToString()
                 if isnull ( ls_temp)         then ds_adrnum       = 'null' else ds_adrnum       = ls_temp.ToString()
                 if isnull ( il_contract_no)  then ds_contract_no  = 'null' else ds_contract_no  = il_contract_no.ToString()
-                MessageBox.Show ('NPAD enabled = '+ds_npad_enabled+'\r\n'
-                                 +'RD contract = '+ds_rdcontract+'\r\n'
-                                 +'Unnumbered  = '+string(ib_unnumbered)+'\r\n'
-                                 +'Adr num     = <'+ds_adrnum+'>'+'\r\n'
-                                 +'Contract No = '+ds_contract_no+'\r\n'
-                                 ,'w_maintain_address.pfc_postopen' )
+                MessageBox.Show ('NPAD enabled = '+ds_npad_enabled+'\n'
+                                 +'RD contract = '+ds_rdcontract+'\n'
+                                 +'Unnumbered  = '+string(ib_unnumbered)+'\n'
+                                 +'Adr num     = <'+ds_adrnum+'>'+'\n'
+                                 +'Contract No = '+ds_contract_no+'\n'
+                                 ,'Windows.Ruralwin.w_maintain_address.pfc_postopen' )
             // --------------------------------------------------------------------  */
             //  TJB  SR4686  June 2006
             //  ******************************************************
             //  Set up customer maintenance
             //  ******************************************************
             /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ('idw_details.Enabled  = '+string(idw_details.Enabled)+'\r\n'
-                                 +'cb_open.Enabled     = '+string ( cb_open.Enabled)+'\r\n'
-                                 +'cb_new.Enabled      = '+string ( cb_new.Enabled)+'\r\n'
-                                 +'cb_transfer.Enabled = '+string ( cb_transfer.Enabled)+'\r\n'
-                                 +'cb_remove.Enabled   = '+string ( cb_remove.Enabled)+'\r\n\r\n'
+                MessageBox.Show ('idw_details.Enabled  = '+string(idw_details.Enabled)+'\n'
+                                 +'cb_open.Enabled     = '+string ( cb_open.Enabled)+'\n'
+                                 +'cb_new.Enabled      = '+string ( cb_new.Enabled)+'\n'
+                                 +'cb_transfer.Enabled = '+string ( cb_transfer.Enabled)+'\n'
+                                 +'cb_remove.Enabled   = '+string ( cb_remove.Enabled)+'\n\r\n'
                                  +'is_cust_perms       = '+is_cust_perms
-                                 ,'w_maintain_address.pfc_postopen' )
+                                 ,'Windows.Ruralwin.w_maintain_address.pfc_postopen' )
             // --------------------------------------------------------------------  */
             idw_details.SuspendLayout();
             //  If the user doesn't have Customer:read privilege, they can't do anything
@@ -527,9 +509,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( ls_custrestore) then ds_custrestore = 'Null'
                 ds_temp = ll_temp.ToString()
                 if isnull ( ll_temp) then ds_temp = 'Null'
-                MessageBox.Show ('Cust Restore permissions = '+ds_custrestore+'\r\n'
+                MessageBox.Show ('Cust Restore permissions = '+ds_custrestore+'\n'
                                  +'Permission M at '+ds_temp
-                                 ,'w_maintain_address.pfc_preopen' )
+                                 ,'Windows.Ruralwin.w_maintain_address.pfc_preopen' )
             // ------------------------------------------------------------  */
             if (ll_temp < 0)
             {
@@ -567,18 +549,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_userid;
             li_rc = 1;
             if (StaticFunctions.IsDirty(dw_header))
-            {
                 li_rc = dw_header.Save();
-            }
+
             if (StaticFunctions.IsDirty(idw_details))
-            {
-                //li_rc = dw_header.Save();//li_rc = this.pfc_save();
                 li_rc = dw_details.Save();
-            }
+
             if (li_rc == 1)
-            {
                 this.Close();
-            }
+
         }
 
         public virtual int of_checkandsave()
@@ -588,13 +566,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (il_adr_id <= 0)
             {
                 //  No address id allocated yet.  Must save to proceed 
-                li_choice = MessageBox.Show("The new address must be saved before any occupants \r\n" + "can be created for the address. Do you wish to \r\n" + "continue and save the address now?", "Save Address", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                li_choice = MessageBox.Show("The new address must be saved before any occupants \n" 
+                    + "can be created for the address. Do you wish to \n" 
+                    + "continue and save the address now?"
+                    , "Save Address"
+                    , MessageBoxButtons.YesNo
+                    , MessageBoxIcon.Question
+                    , MessageBoxDefaultButton.Button1);
                 if (li_choice == DialogResult.Yes)
                 {
                     //li_rc = dw_header.Save();//li_rc = this.pfc_save();
                     //if (li_rc == 0)
                     //{
-                    //    MessageBox.Show("You must supply address header before an address can be saved.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //    MessageBox.Show("You must supply address header before an address can be saved."
+                    //        , "Validation Error"
+                    //        , MessageBoxButtons.OK
+                    //        , MessageBoxIcon.Exclamation);
                     //    return ii_failure;
                     //}
                     //else if (li_rc < 0)
@@ -605,7 +592,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //li_rc = dw_details.Save();//li_rc = this.pfc_save();
                     if (!dw_header.GetItem<AddressDetails>(0).IsDirty && dw_header.GetItem<AddressDetails>(0).IsNew)
                     {
-                        MessageBox.Show("You must supply address details before an address can be saved.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("You must supply address details before an address can be saved."
+                            , "Validation Error"
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Exclamation);
                         return ii_failure;
                     }
                     li_rc = dw_header.Save();//li_rc = this.pfc_save();
@@ -622,7 +612,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (of_updatechecks() > 0)
             {
-                li_choice = MessageBox.Show("You must save the changes before continuing. \r\n" + "Do you wish to save the changes now?", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                li_choice = MessageBox.Show("You must save the changes before continuing. \n" 
+                    + "Do you wish to save the changes now?"
+                    , "Save Changes"
+                    , MessageBoxButtons.YesNo
+                    , MessageBoxIcon.Question
+                    , MessageBoxDefaultButton.Button1);
                 if (li_choice == DialogResult.Yes)
                 {
                     li_rc = dw_details.Save();// li_rc = this.pfc_save();
@@ -720,7 +715,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  DB Error
                 if (!ib_closestatus)
                 {
-                    MessageBox.Show("A database error has occurred. \r\n\r\n" + "Database error code:  " + dataService.SQLDBCode + '~' + "Database error message:\r\n" + "    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("A database error has occurred. \n\n" 
+                        + "Database error code:  " + dataService.SQLDBCode + '\n' 
+                        + "Database error message:\n" 
+                        + "    " + dataService.SQLErrText
+                        , "Database Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
             }
             else if (ll_match_count > 0)
@@ -751,7 +752,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 USING SQLCA; */
             RDSDataService dataService = RDSDataService.GetTownCityTcId(as_tcname);
             li_tcid = dataService.intVal;
-            if (!(li_tcid == null))
+            if ( !(li_tcid == null) )
             {
                 return li_tcid;
             }
@@ -878,7 +879,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_npadfileseq = dataService.intVal;
             if (ll_npadfileseq == null || ll_npadfileseq <= 0)
             {
-                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  ", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  "
+                    , "ERROR"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 ls_npadfileseq = DateTime.Now.ToShortTimeString();
             }
             else
@@ -888,21 +892,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             is_npadfilename = "RDS_NPAD_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + "_" + ls_npadfileseq + ".xml";
             is_npadoutfile = is_npadoutdir + "\\" + is_npadfilename;
             ds_dpid1 = al_old_dpid.ToString();
-            if (al_old_dpid == null)
-            {
-                ds_dpid1 = "null";
-            }
+            if (al_old_dpid == null) ds_dpid1 = "null";
             ds_dpid2 = al_new_dpid.ToString();
-            if (al_new_dpid == null)
-            {
-                ds_dpid2 = "null";
-            }
+            if (al_new_dpid == null) ds_dpid2 = "null";
+
             /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show (  & 'NPAD interface message\r\n\r\n'  & +'Send transfer_customer XML message\r\n'	& +'   Old DPID = '+ds_dpid1+'\r\n'	   & +'   New DPID = '+ds_dpid2+'\r\n\r\n'	& +as_description+'\r\n'  & +is_npadoutfile+'\r\n'  & +is_userid            ,  'w_maintain_address.of_npad_xferOne' )
+            MessageBox.Show("NPAD interface message\n\n"
+                + "Send transfer_customer XML message\n"
+                + "   Old DPID = " + ds_dpid1 + "\n"
+                + "   New DPID = " + ds_dpid2 + "\n\n"
+                + as_description + "\n"
+                + is_npadoutfile + "\n"
+                + is_userid
+                , "Windows.Ruralwin.w_maintain_address.of_npad_xferOne");
             // --------------------------------------------------------------------  */
             if (al_old_dpid == null || al_old_dpid < 1 || al_new_dpid == null || al_new_dpid < 1)
             {
-                MessageBox.Show("One or both customer DPIDs are null.  \r\n" + "This may indicate an inconsistency in the database. \r\n\r\n" + "Old Master DPID = " + ds_dpid1 + '~' + "New Master DPID = " + ds_dpid2 + '~', "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("One or both customer DPIDs are null.  \n" 
+                    + "This may indicate an inconsistency in the database. \n\n" 
+                    + "Old Master DPID = " + ds_dpid1 + "\n" 
+                    + "New Master DPID = " + ds_dpid2
+                    , "Warning"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
             }
             else
             {
@@ -926,11 +938,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ds_msg = "Invalid new DPID";
                         ds_dpid = ds_dpid2;
                     }
-                    MessageBox.Show("Error sending transfer_customer message.\r\n" + "Return code = " + li_rc + "   ( " + ds_msg + ", \"Error\" )" + "\r\n\r\nDPID = " + ds_dpid, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error sending transfer_customer message.\r\n" 
+                        + "Return code = " + li_rc + "   ( " + ds_msg + ", \"Error\" )" + "\n\n" 
+                        + "DPID = " + ds_dpid
+                        , ""
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 else if (li_rc < 0)
                 {
-                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\n" 
+                        + "    " + is_npadoutfile + "\n\n" 
+                        + "Possible cause: the output directory may not exist."
+                        , "SQL Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
             }
             return li_rc;
@@ -1064,22 +1086,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ll_rc = dataService.SQLCode;
                 if (ll_dpid == null)
-                {
                     ds_dpid = "null";
-                }
                 else
-                {
                     ds_dpid = ll_dpid.ToString();
-                }
+
                 if (ll_cust == null)
-                {
                     ds_cust = "null";
-                }
                 else
-                {
                     ds_cust = ll_cust.ToString();
-                }
-                MessageBox.Show("Determining dummy primary\'s DPID\r\n" + "ll_dpid = " + ds_dpid + '~' + "ll_cust = " + ds_cust + '~' + "SQLCA.SQLErrText = " + dataService.SQLErrText, "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show("Determining dummy primary\'s DPID\n" 
+                    + "ll_dpid = " + ds_dpid + '\n' 
+                    + "ll_cust = " + ds_cust + '\n' 
+                    + "SQLCA.SQLErrText = " + dataService.SQLErrText
+                    , "SQL Error"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
             }
             else
             {
@@ -1142,9 +1164,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            MessageBox.Show ( & 'ids_results.rowcount = '+string ( ids_results.rowcount ( ))+'\r\n' & +'Promoted customer = '+string ( ll_new_master)+'\r\n'  & +ids_results.getItemString ( ll_new_master_row, 'w_maintain_address.of_promote_recipient', 'cust_initials') & +" "+ids_results.getItemString ( ll_new_master_row, 'cust_surname_company') &  )
-            // --------------------------------------------------------------------  */
             //  Return the row number of the promoted recipient
             return ll_new_master_row;
         }
@@ -1226,7 +1245,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             /*  ---------------------------- Debugging ----------------------------- //
                 if ll_new_old_master_row = 0 then
-                MessageBox.Show (   & 'Old Recipient to promote not found!' ,  'w_maintain_address.of_promote_old_recipient' )
+                MessageBox.Show("Old Recipient to promote not found!"
+                    , "w_maintain_address.of_promote_old_recipient" )
                 else
                 string	ds_cust, ds_initials, ds_surname, ds_name
                 ds_cust = ll_new_old_master_id.ToString()
@@ -1237,7 +1257,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if isnull ( ds_name)     then ds_name = 'null'
                 if not isnull ( ds_initials) then ds_name = ds_initials
                 if not isnull ( ds_surname)  then ds_name += " "+ds_surname
-                MessageBox.Show ( & 'RDS internal operation\r\n\r\n'  & +'Old Recipient promoted.  \r\n'  & +'cust_id = '+ds_cust+'  ( '+ds_name+') \r\n'  ,  'w_maintain_address.of_promote_old_recipient' )
+                MessageBox.Show("RDS internal operation\n\n"
+                    + "Old Recipient promoted.  \n"
+                    + "cust_id = "+ds_cust+"  ( "+ds_name+") \n"
+                    , "w_maintain_address.of_promote_old_recipient" );
                 end if
             // --------------------------------------------------------------------  */
             return ll_new_old_master_row;
@@ -1292,7 +1315,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ds_name = ids_results.getItemstring ( ll_row,'cust_initials')  &
                         +" "+ids_results.getItemstring ( ll_row,'cust_surname_company')
                         if isnull ( ds_name) then ds_name = 'null'
-                        MessageBox.Show (  & 'NPAD interface message\r\n\r\n'  & +'Send delete_customer XML message for all recipients\r\n'		& +'   DPID = '+ds_dpid+'\r\n\r\n' & +'   Cust = '+ds_cust+'\r\n'   & +'   Name = '+ls_name+'\r\n\r\n' & +as_description              ,  'w_maintain_address.of_npad_deleteall' )
+                        MessageBox.Show("NPAD interface message\n\n"
+                            + "Send delete_customer XML message for all recipients\n"
+                            + "   DPID = "+ds_dpid+"\n\n"
+                            + "   Cust = "+ds_cust+"\n"
+                            + "   Name = "+ls_name+"\n\n"
+                            + as_description
+                            , "w_maintain_address.of_npad_deleteall" );
                     // --------------------------------------------------------------------  */
                     if (ll_dpid == null || ll_dpid < 1)
                     {
@@ -1309,7 +1338,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ll_npadfileseq = dataService.intVal;
                         if (ll_npadfileseq == null || ll_npadfileseq <= 0)
                         {
-                            MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  ", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  "
+                                , "ERROR"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                             ls_npadfileseq = DateTime.Now.ToString("fff");
                         }
                         else
@@ -1328,12 +1360,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //!li_rc = this.WriteXMLFileDeleteCustomer(is_npadoutfile, ll_dpid, is_userid, as_description);
                         if (li_rc > 0)
                         {
-                            MessageBox.Show("Error sending delete_customer message.\r\n" + "Return code = " + li_rc + "   ( Invalid DPID) \r\n\r\n" + "DPID    = " + ds_dpid + " ( CustID = " + ds_cust + ", \"Error\" )", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Error sending delete_customer message.\n" 
+                                + "Return code = " + li_rc + "  (Invalid DPID) \n\n" 
+                                + "DPID    = " + ds_dpid + " (CustID = " + ds_cust + ", \"Error\")"
+                                , ""
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                             return li_rc;
                         }
                         else if (li_rc < 0)
                         {
-                            MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Error writing XML message file (RC=" + li_rc + ").\n" 
+                                + "    " + is_npadoutfile + "\n\n" 
+                                + "Possible cause: the output directory may not exist."
+                                , "SQL Error"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                             return li_rc;
                         }
                     }
@@ -1371,7 +1413,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_npadfileseq = dataService.intVal;
             if (ll_npadfileseq == null || ll_npadfileseq <= 0)
             {
-                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  ", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  "
+                    , "ERROR"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 ls_npadfileseq = DateTime.Now.ToString("fff");
             }
             else
@@ -1386,11 +1431,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ds_dpid = "null";
             }
             /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show (  & 'NPAD interface message\r\n\r\n'  & +'Send delete_customer XML message\r\n' & +'   DPID = '+ds_dpid+'\r\n\r\n' & +as_description+'\r\n'   & +is_npadoutfile        ,  'w_maintain_address.of_npad_deleteone' )
+                MessageBox.Show("NPAD interface message\n\n"
+                     + "Send delete_customer XML message\n"
+                     + "   DPID = "+ds_dpid+"\n\n"
+                     + as_description+"\n"
+                     + is_npadoutfile
+                     , "w_maintain_address.of_npad_deleteone" );
             // --------------------------------------------------------------------  */
             if (al_dpid == null || al_dpid < 1)
             {
-                MessageBox.Show("The customer DPID is null.  \r\n" + "This may indicate an inconsistency in the database. \r\n\r\n" + "DPID    = " + ds_dpid + '~', "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The customer DPID is null.  \n" 
+                    + "This may indicate an inconsistency in the database. \n\n" 
+                    + "DPID    = " + ds_dpid + "\n"
+                    , "Warning"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
             }
             else
             {
@@ -1409,11 +1464,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         ds_dpid = "null";
                     }
-                    MessageBox.Show("Error sending delete_customer message.\r\n" + "Return code = " + li_rc + "   ( Invalid DPID)" + "\r\n\r\nDPID    = " + ds_dpid, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error sending delete_customer message.\n" 
+                        + "Return code = " + li_rc + "  (Invalid DPID)" + "\n\n" 
+                        + "DPID    = " + ds_dpid
+                        , "Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 else if (li_rc < 0)
                 {
-                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing XML message file (RC=" + li_rc + ").\n" 
+                        + "    " + is_npadoutfile + "\n\n" 
+                        + "Possible cause: the output directory may not exist."
+                        , "SQL Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
             }
             return li_rc;
@@ -1447,7 +1512,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ds_adrid = al_adrid.ToString();
                 }
-                MessageBox.Show("A database error has occurred deleting the unoccupied address.\r\n\r\n" + "Address ID = " + ds_adrid + "\r\n\r\n" + "Error code:  " + dataService.SQLDBCode + '~' + "Error message:\r\n    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A database error has occurred deleting the unoccupied address.\n\n" 
+                    + "Address ID = " + ds_adrid + "\n\n" 
+                    + "Error code:  " + dataService.SQLDBCode + "\n" 
+                    + "Error message:\n"
+                    + "    " + dataService.SQLErrText
+                    , "Database Error"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 //? rollback;
                 li_rc = -(1);
             }
@@ -1517,7 +1589,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             RDSDataService dataService = RDSDataService.UpdateAddressDpIdByAdrId(al_new_master_dpid, al_new_adr_id);
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("An error has occurred when updating the record \r\n" + "of the address the customers are transferring to. \r\n\r\n" + "Error code: " + dataService.SQLDBCode + '~' + "Error text: " + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("An error has occurred when updating the record \n" 
+                    + "of the address the customers are transferring to. \n\n" 
+                    + "Error code: " + dataService.SQLDBCode + "\n"
+                    + "Error text: " + dataService.SQLErrText
+                    , "Database error"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
             }
             return dataService.SQLCode;
         }
@@ -1553,7 +1631,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_npadfileseq = dataService.intVal;
             if (ll_npadfileseq == null || ll_npadfileseq <= 0)
             {
-                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  ", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  "
+                    , "ERROR"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 ls_npadfileseq = DateTime.Now.ToString("fff");
             }
             else
@@ -1593,7 +1674,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // --------------------------------------------------------------------  */
             if (al_dpid == null || al_dpid < 1)
             {
-                MessageBox.Show("The customer DPID is null.  \r\n" + "This may indicate an inconsistency in the database. \r\n\r\n" + "DPID    = " + ds_dpid + '~', "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The customer DPID is null.  \n" 
+                    + "This may indicate an inconsistency in the database. \n\n" 
+                    + "DPID    = " + ds_dpid + "\n"
+                    , "Warning"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
             }
             else
             {
@@ -1607,11 +1693,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //!li_rc = this.WriteXMLFileModifyCustomer(al_dpid, is_userid, is_npadoutfile, ls_description);
                 if (li_rc > 0)
                 {
-                    MessageBox.Show("Error sending modify_customer message.\r\n" + "Return code = " + li_rc + "\r\n\r\n" + " ( see npad_msg_log table for more detail)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error sending modify_customer message.\n" 
+                        + "Return code = " + li_rc + "\n\n" 
+                        + "(see npad_msg_log table for more detail)"
+                        , "Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 else if (li_rc < 0)
                 {
-                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing XML message file (RC=" + li_rc + ").\n" 
+                        + "    " + is_npadoutfile + "\n\n" 
+                        + "Possible cause: the output directory may not exist."
+                        , "SQL Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
             }
             return li_rc;
@@ -2064,7 +2160,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 is_npadfilename = "RDS_NPAD_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + "_" + ls_npadfileseq + ".xml";
                 is_npadoutfile = is_npadoutdir + "\\" + is_npadfilename;
                 /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & "Message file = "+is_npadoutfile       + "\r\n" & +"DPID = " + string ( al_dpid)           + "\r\n" & +"Occupied = "+as_occupied ,  'w_maintain_address.of_npad_addr_occupied' )
+                MessageBox.Show ("Message file = "+is_npadoutfile + "\r"
+                            + "DPID = " + al_dpid.ToString() + "\r"
+                            + "Occupied = "+as_occupied
+                            , "WMaintainAddress.of_npad_addr_occupied" );
                 // --------------------------------------------------------------------  */
                 /* select f_rds_npad_addr_occupied (  :al_dpid, :as_occupied, 
                     :is_userid, :as_description, :is_npadoutfile)
@@ -2077,12 +2176,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 if (li_rc > 0)
                 {
-                    MessageBox.Show("Error sending delete_customer message.\r\n" + "Return code = " + li_rc + "   ( Invalid DPID) \r\n\r\n" + "DPID    = " + ds_dpid, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ds_dpid = al_dpid.ToString();
+                    if (ds_dpid == null) ds_dpid = "null";
+
+                    MessageBox.Show("Error sending delete_customer message.\n"
+                        + "Return code = " + li_rc + "  (Invalid DPID) \n\n" 
+                        + "DPID    = " + ds_dpid
+                        , "Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return li_rc;
                 }
                 else if (li_rc < 0)
                 {
-                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing XML message file (RC=" + li_rc + ").\n" 
+                        + "    " + is_npadoutfile + "\n\n" 
+                        + "Possible cause: the output directory may not exist."
+                        , "SQL Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return li_rc;
                 }
             }
@@ -2962,12 +3072,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_null = null;
             Cursor.Current = Cursors.WaitCursor;
             ls_rd_no = dw_header.GetItem<AddressDetails>(0).AdrRdNo;
-            ls_town_name = dw_header.GetItem<AddressDetails>(0).TownName;
-            if (ls_rd_no == null || ls_town_name == null || ls_town_name.Length <= 0)
+                // TJB  RD7_0019  Jan-20009
+                //      The town_name is not retrieved (bug in application translation?)
+            //ls_town_name = dw_header.GetItem<AddressDetails>(0).TownName;
+            //if (ls_rd_no == null || ls_town_name == null || ls_town_name.Length <= 0)
+            int? ll_tcid;
+            ll_tcid = dw_header.GetItem<AddressDetails>(0).TcId;
+                // Check that an RD# and town have been specified
+                //       return validation error if not
+            if (ls_rd_no == null || ll_tcid == null)
             {
-                return -(1);
+                return (-1);
             }
             ll_contract_no = dw_header.GetItem<AddressDetails>(0).ContractNo;
+
             //  Before we proceed any of the following, make sure the contract type is RD
             if (!(ll_contract_no == null) && ll_contract_no > 0 && !(this.of_iscontractoftyperd(ll_contract_no)))
             {
@@ -2987,147 +3105,194 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
                 OR con_rd_ref_text like :ls_percent + :ls_and   + :ls_rd_no + :ls_percent	)
                 USING	SQLCA; */
-            RDSDataService dataService = RDSDataService.GetContractComplex(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ls_comma);
-            ll_match_count = dataService.intVal;
-            if (dataService.SQLCode != 0)
-            {
-                //  DB Error
-                if (!ib_closestatus)
-                {
-                    MessageBox.Show("A database error has occurred during validation of the contract number.\r\n\r\n" + "Database error code: " + dataService.SQLDBCode + '~' + "Database error message:\r\n    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dw_header.DataObject.Controls["adr_rd_no"].Focus();
-                    //? dw_header.SelectText(1, 500);
-                    dw_header.Focus();
-                    return -(1);
-                }
-            }
-            else if (ll_match_count == 0)
-            {
-                //  cannot find a contract for this RD & town combination
-                //  Do not display message if this is closing
-                if (!ib_closestatus)
-                {
-                    MessageBox.Show("The system is unable to find a default contract \r\n" + "for the  RD number and the mail town specified.\r\n" + "Please check that the RD number and the mail town\r\n" + "specified are correct.  If so, contact your\r\n" + "System Administrators immediately.", "Validation Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    dw_header.DataObject.Controls["adr_rd_no"].Focus();
-                    //? dw_header.SelectText(1, 500);
-                    dw_header.Focus();
-                    return -(1);
-                }
-            }
-            else if (ll_match_count > 1)
-            {
-                //  multiple matches found.  Only one is allowed.
-                //  Check if contract number is entered
-                if (ll_contract_no > 0)
-                {
-                    /* SELECT 	contract_no 
-                        INTO	:ll_default_contract_no
-                        FROM	contract
-                        WHERE	con_date_terminated IS NULL
-                        AND	contract_no = :ll_contract_no
-                        AND	con_rd_ref_text LIKE :ls_percent + :ls_town_name + :ls_percent
-                        AND	 ( con_rd_ref_text like :ls_rd_no + :ls_space + :ls_percent 
-                        OR con_rd_ref_text like :ls_rd_no + :ls_comma + :ls_percent 
-                        OR con_rd_ref_text like :ls_rd_no + :ls_and + :ls_percent 
-                        OR con_rd_ref_text like :ls_percent + :ls_space + :ls_rd_no + :ls_percent 
-                        OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
-                        OR con_rd_ref_text like :ls_percent + :ls_and + :ls_rd_no + :ls_percent  )
-                        USING	SQLCA; */
-                    dataService = RDSDataService.GetContractComplex2(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ll_contract_no, ls_comma);
-                    ll_default_contract_no = dataService.intVal;
-                    if (dataService.SQLCode == 100)
-                    {
-                        //  not match
-                        MessageBox.Show("The contract number specified is not a valid\r\n" + "contract for this address. ", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        dw_header.GetItem<AddressDetails>(0).ContractNo = ll_null;
-                        dw_header.DataObject.Controls["contract_no"].Focus();
-                        //? dw_header.SelectText(1, 500);
-                        dw_header.Focus();
-                        return -(1);
-                    }
-                    else if (dataService.SQLCode < 0)
-                    {
-                        //  SQLError
-                        if (!ib_closestatus)
-                        {
-                            MessageBox.Show("A database error has occurred during validation of the contract number.\r\n\r\n" + "Database error code: " + dataService.SQLDBCode + '~' + "Database error message:\r\n    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            dw_header.DataObject.Controls["adr_rd_no"].Focus();
-                            //? dw_header.SelectText(1, 500);
-                            dw_header.Focus();
-                            return -(1);
-                        }
-                    }
-                    else
-                    {
-                        //  Good match
-                        return 1;
-                    }
-                }
-            }
-            else if (ll_match_count == 1)
-            {
-                /* SELECT	contract_no 
-                    INTO	:ll_default_contract_no
-                    FROM	contract
-                    WHERE	con_date_terminated IS NULL
-                    AND	con_rd_ref_text LIKE :ls_percent + :ls_town_name + :ls_percent
-                    AND	 ( con_rd_ref_text like :ls_rd_no + :ls_space + :ls_percent 
-                    OR con_rd_ref_text like :ls_rd_no + :ls_comma + :ls_percent 
-                    OR con_rd_ref_text like :ls_rd_no + :ls_and + :ls_percent 
-                    OR con_rd_ref_text like :ls_percent + :ls_space + :ls_rd_no + :ls_percent 
-                    OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
-                    OR con_rd_ref_text like :ls_percent + :ls_and + :ls_rd_no + :ls_percent  )
-                    USING	SQLCA; */
-                dataService = RDSDataService.GetContractComplex3(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ls_comma);
-                ll_default_contract_no = dataService.intVal;
-                if (dataService.SQLCode < 0)
-                {
-                    //  SQLError
-                    if (!ib_closestatus)
-                    {
-                        MessageBox.Show("A database error has occurred during validation of the contract number.\r\n\r\n" + "Database error code:  " + dataService.SQLDBCode + '~' + "Database error message:\r\n    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        dw_header.DataObject.Controls["adr_rd_no"].Focus();
-                        //? dw_header.SelectText(1, 500);
-                        dw_header.Focus();
-                        return -(1);
-                    }
-                }
-                if (ll_contract_no == null || ll_contract_no != ll_default_contract_no)
-                {
-                    //  prompt a message
-                    //  Do not display message if this is closing
-                    if (!ib_closestatus)
-                    {
-                        if (ab_save)
-                        {
-                            //  this is part of validation process
-                            if (MessageBox.Show("Validation Error", "The contract number specified is different from\r\n" + "the default contract for this address: \r\n\r\n" + "Default Contract: \t" + ll_default_contract_no.ToString() + '~' + "Specified Contract: \t" + ll_contract_no.ToString() + "\r\n\r\n" + "The default contract will overwrite the contract \r\n" + "specified.  Do you wish to continue saving this address?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-                            {
-                                // continue saving
-                                dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
-                            }
-                            else
-                            {
-                                dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
-                                dw_header.DataObject.Controls["contract_no"].Focus();
-                                //? dw_header.SelectText(1, 500);
-                                dw_header.Focus();
-                                return -(1);
-                            }
-                        }
-                        else
-                        {
-                            //  this is part of itemchanged event
-                            MessageBox.Show("The contract number specified is different from\r\n" + "the default contract for this address: \r\n\r\n" + "Default Contract: \t" + ll_default_contract_no + '~' + "Specified Contract: \t" + ll_contract_no + "\r\n\r\n" + "The default contract will overwrite the contract \r\n" + "specified. ", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
-                            dw_header.DataObject.Controls["contract_no"].Focus();
-                            //? dw_header.SelectText(1, 500);
-                            dw_header.Focus();
-                            return -(1);
-                        }
-                    }
-                }
-            }
+            // TJB  RD7_0019  Jan-20009
+            //      Disable this validation.  It does not work reliably, we can only 
+            //      change the contract number, and we only do so very occasionally.
+            //      A later change request may ask for validation to be done.
+            //
+            // // GetContractComplex implements the query in the comment above ...
+            // //    Note: GetContractComplex is broken.  It relies on the Town Name which 
+            // //          is not known at this point.  It needs to be changed to use
+            // //          the tc_id instead!  Also, there's a data type problem
+            // //          in the construction of the query (which may be related
+            // //          to the town name being null).
+            // RDSDataService dataService = RDSDataService.GetContractComplex(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ls_comma);
+            // ll_match_count = dataService.intVal;
+            // if (dataService.SQLCode != 0)
+            // {
+            //     //  DB Error
+            //     if (!ib_closestatus)
+            //     {
+            //         MessageBox.Show("A database error has occurred during validation of the contract number.\n\n" 
+            //             + "Database error code: " + dataService.SQLDBCode + '\n' 
+            //             + "Database error message:\n" 
+            //             + "    " + dataService.SQLErrText
+            //             , "Database Error"
+            //             , MessageBoxButtons.OK
+            //             , MessageBoxIcon.Information);
+            //         dw_header.DataObject.Controls["adr_rd_no"].Focus();
+            //         //? dw_header.SelectText(1, 500);
+            //         dw_header.Focus();
+            //         return -(1);
+            //     }
+            // }
+            // else if (ll_match_count == 0)
+            // {
+            //     //  cannot find a contract for this RD & town combination
+            //     //  Do not display message if this is closing
+            //     if (!ib_closestatus)
+            //     {
+            //         MessageBox.Show("The system is unable to find a default contract \n" 
+            //              + "for the  RD number and the mail town specified.\n" 
+            //              + "Please check that the RD number and the mail town\n" 
+            //              + "specified are correct.  If so, contact your\n" 
+            //              + "System Administrators immediately."
+            //              , "Validation Warning"
+            //              , MessageBoxButtons.OK
+            //              , MessageBoxIcon.Exclamation);
+            //         dw_header.DataObject.Controls["adr_rd_no"].Focus();
+            //         //? dw_header.SelectText(1, 500);
+            //         dw_header.Focus();
+            //         return -(1);
+            //     }
+            // }
+            // else if (ll_match_count > 1)
+            // {
+            //     //  multiple matches found.  Only one is allowed.
+            //     //  Check if contract number is entered
+            //     if (ll_contract_no > 0)
+            //     {
+            //         /* SELECT 	contract_no 
+            //             INTO	:ll_default_contract_no
+            //             FROM	contract
+            //             WHERE	con_date_terminated IS NULL
+            //             AND	contract_no = :ll_contract_no
+            //             AND	con_rd_ref_text LIKE :ls_percent + :ls_town_name + :ls_percent
+            //             AND	 ( con_rd_ref_text like :ls_rd_no + :ls_space + :ls_percent 
+            //             OR con_rd_ref_text like :ls_rd_no + :ls_comma + :ls_percent 
+            //             OR con_rd_ref_text like :ls_rd_no + :ls_and + :ls_percent 
+            //             OR con_rd_ref_text like :ls_percent + :ls_space + :ls_rd_no + :ls_percent 
+            //             OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
+            //             OR con_rd_ref_text like :ls_percent + :ls_and + :ls_rd_no + :ls_percent  )
+            //             USING	SQLCA; */
+            //         dataService = RDSDataService.GetContractComplex2(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ll_contract_no, ls_comma);
+            //         ll_default_contract_no = dataService.intVal;
+            //         if (dataService.SQLCode == 100)
+            //         {
+            //             //  not match
+            //             MessageBox.Show("The contract number specified is not a valid\r\n" + "contract for this address. ", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //             dw_header.GetItem<AddressDetails>(0).ContractNo = ll_null;
+            //             dw_header.DataObject.Controls["contract_no"].Focus();
+            //             //? dw_header.SelectText(1, 500);
+            //             dw_header.Focus();
+            //             return -(1);
+            //         }
+            //         else if (dataService.SQLCode < 0)
+            //         {
+            //             //  SQLError
+            //             if (!ib_closestatus)
+            //             {
+            //                 MessageBox.Show("A database error has occurred during validation of the contract number.\n\n" 
+            //                     + "Database error code: " + dataService.SQLDBCode + "\n" 
+            //                     + "Database error message:\n    " + dataService.SQLErrText
+            //                     , "Database Error"
+            //                     , MessageBoxButtons.OK
+            //                     , MessageBoxIcon.Information);
+            //                 dw_header.DataObject.Controls["adr_rd_no"].Focus();
+            //                 //? dw_header.SelectText(1, 500);
+            //                 dw_header.Focus();
+            //                 return -(1);
+            //             }
+            //         }
+            //         else
+            //         {
+            //             //  Good match
+            //             return 1;
+            //         }
+            //     }
+            // }
+            // else if (ll_match_count == 1)
+            // {
+            //     /* SELECT	contract_no 
+            //         INTO	:ll_default_contract_no
+            //         FROM	contract
+            //         WHERE	con_date_terminated IS NULL
+            //         AND	con_rd_ref_text LIKE :ls_percent + :ls_town_name + :ls_percent
+            //         AND	 ( con_rd_ref_text like :ls_rd_no + :ls_space + :ls_percent 
+            //         OR con_rd_ref_text like :ls_rd_no + :ls_comma + :ls_percent 
+            //         OR con_rd_ref_text like :ls_rd_no + :ls_and + :ls_percent 
+            //         OR con_rd_ref_text like :ls_percent + :ls_space + :ls_rd_no + :ls_percent 
+            //         OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
+            //         OR con_rd_ref_text like :ls_percent + :ls_and + :ls_rd_no + :ls_percent  )
+            //         USING	SQLCA; */
+            //     dataService = RDSDataService.GetContractComplex3(ls_and, ls_town_name, ls_rd_no, ls_space, ls_percent, ls_comma);
+            //     ll_default_contract_no = dataService.intVal;
+            //     if (dataService.SQLCode < 0)
+            //     {
+            //         //  SQLError
+            //         if (!ib_closestatus)
+            //         {
+            //             MessageBox.Show("A database error has occurred during validation of the contract number.\r\n\r\n" + "Database error code:  " + dataService.SQLDBCode + '~' + "Database error message:\r\n    " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //             dw_header.DataObject.Controls["adr_rd_no"].Focus();
+            //             //? dw_header.SelectText(1, 500);
+            //             dw_header.Focus();
+            //             return -(1);
+            //         }
+            //     }
+            //     if (ll_contract_no == null || ll_contract_no != ll_default_contract_no)
+            //     {
+            //         //  prompt a message
+            //         //  Do not display message if this is closing
+            //         if (!ib_closestatus)
+            //         {
+            //             if (ab_save)
+            //             {
+            //                 //  this is part of validation process
+            //                 if (MessageBox.Show("The contract number specified is different from\n" 
+            //                     + "the default contract for this address: \n\n" 
+            //                     + "Default Contract:   " + ll_default_contract_no.ToString() + "\n" 
+            //                     + "Specified Contract: " + ll_contract_no.ToString() + "\n\n" 
+            //                     + "The default contract will overwrite the contract specified.\n" 
+            //                     + "Do you wish to continue saving this address?"
+            //                     , "Validation Error"
+            //                     , MessageBoxButtons.YesNo
+            //                     , MessageBoxIcon.Question
+            //                     , MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+            //                 {
+            //                     // continue saving
+            //                     dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
+            //                 }
+            //                 else
+            //                 {
+            //                     dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
+            //                     dw_header.DataObject.Controls["contract_no"].Focus();
+            //                     //? dw_header.SelectText(1, 500);
+            //                     dw_header.Focus();
+            //                     return -(1);
+            //                 }
+            //             }
+            //             else
+            //             {
+            //                 //  this is part of itemchanged event
+            //                 MessageBox.Show("The contract number specified is different from\n" 
+            //                     + "the default contract for this address: \n\n" 
+            //                     + "Default Contract:   " + ll_default_contract_no.ToString() + "\n" 
+            //                     + "Specified Contract: " + ll_contract_no.ToString() + "\n\n" 
+            //                     + "The default contract will overwrite the contract specified." 
+            //                     , "Validation Error"
+            //                     , MessageBoxButtons.OK
+            //                     , MessageBoxIcon.Exclamation);
+            //                 dw_header.GetItem<AddressDetails>(0).ContractNo = ll_default_contract_no;
+            //                 dw_header.DataObject.Controls["contract_no"].Focus();
+            //                 //? dw_header.SelectText(1, 500);
+            //                 dw_header.Focus();
+            //                 return -(1);
+            //             }
+            //         }
+            //     }
+            // }
+            // TJB  RD7_0019  Jan-20009:   End disabled code
+
             return 1;
         }
 
@@ -3783,6 +3948,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_postcode = "";
             string ls_userid = "";
             bool lb_new_road = false;
+
             // dwItemStatus	ldwItemStatus
             /*? if (ancestorreturnvalue == -(1))
             {
@@ -3796,10 +3962,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_header.AcceptText();
             ll_row = dw_header.GetRow();
             /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_closestatus
-                ds_closestatus = ib_closestatus.ToString()
-                if isnull ( ib_closestatus) then ds_closestatus = 'NULL'
-                MessageBox.Show (    & 'dw_header pfc_validation  \r\n'      & +'ib_closestatus = '+ds_closestatus ,  'w_maintain_address.dw_header.pfc_validation' )
+                string	ds_closestatus;
+                ds_closestatus = ib_closestatus.ToString();
+                if (ib_closestatus == null) then ds_closestatus = "null";
+                MessageBox.Show("dw_header pfc_validation  \n"
+                    +"ib_closestatus = "+ds_closestatus
+                    ,"Windows.Ruralwin.w_maintain_address.dw_header_pfc_validation" );
             // --------------------------------------------------------------------  */
             //  Check that the contract #, road name, and town/city are specified.
             //  Check that a road name has been specified
@@ -3809,7 +3977,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Do not display message if this is closing
                 if (!ib_closestatus)
                 {
-                    MessageBox.Show("A road name must be entered.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("A road name must be entered."
+                        , "Validation Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 dw_header.DataObject.Controls["road_name"].Focus();
                 //? dw_header.SelectText(1, 500);
@@ -3823,7 +3994,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Do not display message if this is closing
                 if (!ib_closestatus)
                 {
-                    MessageBox.Show("A town/city must be selected.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("A town/city must be selected."
+                        , "Validation Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 dw_header.DataObject.Controls["tc_id"].Focus();
                 //? dw_header.SelectText(1, 500);
@@ -3837,7 +4011,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Do not display message if this is closing
                 if (!ib_closestatus)
                 {
-                    MessageBox.Show("A contract number must be specified for this address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("A contract number must be specified for this address."
+                        , "Validation Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation);
                 }
                 dw_header.DataObject.Controls["contract_no"].Focus();
                 //? dw_header.SelectText(1, 500);
@@ -3855,7 +4032,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  Do not display message if this is closing
                     if (!ib_closestatus)
                     {
-                        MessageBox.Show("A RD number must be entered.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("A RD number must be entered."
+                            , "Validation Error"
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Information);
                     }
                     dw_header.DataObject.Controls["adr_rd_no"].Focus();
                     //? dw_header.SelectText(1, 500);
@@ -3872,6 +4052,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             //  Check that we have a post code.  The user doesn't enter it; it
             //  is derived from the mailtown and RD number
+            // TJB  RD7_0019  Jan-2009
+            //     Added retrieval of port code from header
+            ls_postcode = dw_header.GetItem<AddressDetails>(ll_row).PostCode.Trim();
             if (ls_postcode == null || ls_postcode == "")
             {
                 //  Update the post code
@@ -3890,7 +4073,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_postcode = idw_header.GetItem<AddressDetails>(ll_row).PostCode;
             if (ls_postcode == null || ls_postcode == "")
             {
-                MessageBox.Show("Unable to determine post code for address.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to determine post code for address."
+                    , "Error"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Information);
                 return -(1);
             }
             //  Need to split the adr_num field into adr_no and adr_alpha
@@ -3950,7 +4136,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  happens, return FAILURE.
                     if (ll_road_id < 0)
                     {
-                        MessageBox.Show("Error creating the new road.  New address not created. \r\n", "Road Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Error creating the new road.  New address not created. \n"
+                            , "Road Creation Error"
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Exclamation);
                         //? rollback;
                         ll_rc = -(1);
                     }
@@ -6871,7 +7060,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 if (ll_contract_id == null || ll_contract_id <= 0 || !(il_contract_ok == 0))
                 {
-                    MessageBox.Show("Please enter a current contract number.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Please enter a current contract number."
+                        , "Warning"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -6930,11 +7122,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Lookups for sl_id, RD-no and post_code handled separately
             ll_null = null;
             /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_col_name, ds_data
-                ds_data = data
-                ds_col_name = column
-                if isnull ( ds_data) then ds_data = 'NULL'
-                MessageBox.Show ( & 'Row = '+string ( row)+'\r\n'      & +'Column = '+ds_col_name+'\r\n'  & +'Data   = '+ds_data  ,  'w_maintain_address.dw_header.itemchanged' )
+                string	ds_col_name, ds_data;
+                ds_data = data;
+                ds_col_name = column;
+                if (ds_data == null) then ds_data = "NULL";
+                MessageBox.Show ("Row = "+string(row)+"\n"
+                    + "Column = "+ds_col_name+"\n
+                    + "Data   = '+ds_data
+                    , "w_maintain_address.dw_header.itemchanged" );
             // --------------------------------------------------------------------  */
             if (column == "adr_num")
             {
@@ -6947,7 +7142,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    MessageBox.Show("The road number format is incorrect.\r\n" + "Please use the format <unit>/<number><alpha>.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The road number format is incorrect.\n" 
+                        + "Please use the format <unit>/<number><alpha>."
+                        , "Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Information);
                 }
             }
             //  TJB  NPAD2  Apr/May 2006  
@@ -6985,7 +7184,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     if (ll_new_contract < 5000 || ll_new_contract >= 6000)
                     {
-                        MessageBox.Show("The contract number must be a Rural Delivery contract number.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("The contract number must be a Rural Delivery contract number."
+                            , "Warning"
+                            , MessageBoxButtons.OK
+                            , MessageBoxIcon.Exclamation);
                         idw_header.GetItem<AddressDetails>(row).ContractNo = ll_old_contract;
                         idw_header.DataObject.BindingSource.CurrencyManager.Refresh();
                         return; //? return 1;
@@ -6993,7 +7195,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else if (ll_new_contract >= 5000 && ll_new_contract < 6000)
                 {
-                    MessageBox.Show("The contract number must not be a Rural Delivery contract number.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("The contract number must not be a Rural Delivery contract number."
+                        , "Warning"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation);
                     idw_header.GetItem<AddressDetails>(row).ContractNo = ll_old_contract;
                     idw_header.DataObject.BindingSource.CurrencyManager.Refresh();
                     return; //? return 1;
@@ -7006,19 +7211,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 il_contract_ok = of_validcontract(ll_new_contract);
                 if (il_contract_ok == 1)
                 {
-                    ls_msg = "The contract number you have entered does not exist. \r\n";
+                    ls_msg = "The contract number you have entered does not exist. \n";
                 }
                 else if (il_contract_ok == 2)
                 {
-                    ls_msg = "The contract number you have entered has terminated. \r\n";
+                    ls_msg = "The contract number you have entered has terminated. \n";
                 }
                 else if (il_contract_ok == 3)
                 {
-                    ls_msg = "The contract number you have entered is not current. \r\n";
+                    ls_msg = "The contract number you have entered is not current. \n";
                 }
                 if (!(il_contract_ok == 0))
                 {
-                    MessageBox.Show(ls_msg + "Please enter a current contract number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(ls_msg + "Please enter a current contract number."
+                        , "Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation);
                     return; //? return 1;
                 }
             }
@@ -7098,7 +7306,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 if (!(is_cust_perms.IndexOf('M') >= 0))
                 {
-                    MessageBox.Show("You must have at customer modify privilege to change the primary customer.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("You must have at customer modify privilege to change the primary customer."
+                        , "Validation Error"
+                        , MessageBoxButtons.OK
+                        , MessageBoxIcon.Exclamation);
                     return; //? return 2;
                 }
                 if (data == "0")
@@ -7153,7 +7364,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             //  This is the only primary contact
                             dw_details.GetItem<AddressOccupants>(row).PrimaryInd = Convert.ToInt32(dw_details.GetItem<AddressOccupants>(row).PrimaryInd) == 1 ? 0 : 1;
                             dw_details.DataObject.BindingSource.CurrencyManager.Refresh();
-                            MessageBox.Show("You must have at least one primary contact associated with an address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("You must have at least one primary contact associated with an address."
+                                , "Validation Error"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Exclamation);
                             return; //? return 2;
                         }
                     }
@@ -7237,7 +7451,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Disallow restoring occupants for unnumbered addresses
             if (ib_unnumbered)
             {
-                MessageBox.Show("You may not restore customers for unnumbered addresses this way." + "\r\n\r\nPlease use NPAD to recreate the customer ( s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You may not restore customers for unnumbered addresses this way." + "\n\n" 
+                    + "Please use NPAD to recreate the customer(s)."
+                    , "Warning"
+                    , MessageBoxButtons.OK
+                    , MessageBoxIcon.Exclamation);
                 return;
             }
             //  TJB  NPAD2.1  May 2007
@@ -7286,9 +7504,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 //  If the occupation status has changed
                 /*  ---------------------------- Debugging ----------------------------- //
-                    boolean db_unoccupied
-                    db_unoccupied = of_isunoccupied ( ll_addr_id)
-                    MessageBox.Show ( & "Address DPID = "+string ( ll_addr_dpid)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_unoccupied)+"\r\n" & +"    now = "+string ( not db_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_remove' )
+                    boolean db_unoccupied;
+                    db_unoccupied = of_isunoccupied(ll_addr_id);
+                    MessageBox.Show("Address DPID = "+string(ll_addr_dpid)+"\n"
+                        + "Occupied status:\n"
+                        + "    old = "+string(not lb_unoccupied)+"\n"
+                        + "    now = "+string(not db_unoccupied)+"\n" 
+                        , "w_maintain_address.dw_details.ue_click_remove" );
                 // --------------------------------------------------------------------  */
                 if (!(lb_unoccupied == of_isunoccupied(ll_addr_id)))
                 {
@@ -7307,7 +7529,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             /*  ------------------- Debugging ------------------ //
-                MessageBox.Show ( & "ll_updated = " + string ( ll_updated,  "w_maintain_address.cb_undelete.clicked" )
+                MessageBox.Show("ll_updated = " + ll_updated.ToString()
+                    , "w_maintain_address.cb_undelete.clicked" );
             // ------------------------------------------------  */
             //  If so, refresh the occupants list
             if (ll_updated == 1)
