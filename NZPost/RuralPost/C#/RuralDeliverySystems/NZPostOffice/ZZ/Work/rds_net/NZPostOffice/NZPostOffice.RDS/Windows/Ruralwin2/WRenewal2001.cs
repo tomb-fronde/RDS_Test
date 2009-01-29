@@ -2352,6 +2352,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     idw_frequency_adjustment.SelectRow(idw_frequency_adjustment.GetRow() + 1, true);
                 }
+                // TJB  Jan 2009
+                // Added below line (no longer sure why).
+                idw_frequency_adjustment.SelectRow(idw_frequency_adjustment.GetRow()+1, true);
                 idw_frequency_adjustment.DataObject.SetCurrent(idw_frequency_adjustment.GetRow());
             }
         }
