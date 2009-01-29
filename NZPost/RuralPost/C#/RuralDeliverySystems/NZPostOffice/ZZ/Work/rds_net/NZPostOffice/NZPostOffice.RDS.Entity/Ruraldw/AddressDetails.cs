@@ -531,14 +531,23 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             get
             {
                 CanReadProperty("TownName", true);
-                return _town_name;//?
+                return _town_name;
             }
             set
             {
-                CanWriteProperty("SlName", true);
+                // TJB  RD7_0019  Jan 2009
+                //    Probably a bug but not called so not tested.  Looks like code
+                //    Metex added as a place-holder but never implemented the lookup!
+                //    Change code to save town name.
+                //CanWriteProperty("SlName", true);
+                //if (_town_name != value)
+                //{
+                //    _sl_name = value;
+                //}
+                CanWriteProperty("TownName", true);
                 if (_town_name != value)
                 {
-                    _sl_name = value;
+                    _town_name = value;
                 }
             }
         }
@@ -556,7 +565,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
             set
             {
-                CanWriteProperty("SlName", true);
+                // TJB  RD7_0019  Jan 2009
+                //    Probably a bug but not called so not tested.  Looks like code
+                //    Metex added as a place-holder but never implemented the lookup!
+                //    Change code to save Title Address.
+                // CanWriteProperty("SlName", true);
+                // if (_title_address != value)
+                // {
+                //     _title_address = value;
+                // }
+                CanWriteProperty("TitleAddress", true);
                 if (_title_address != value)
                 {
                     _title_address = value;
