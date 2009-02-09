@@ -1844,19 +1844,31 @@ namespace NZPostOffice.RDS.Controls
             int? ll_rs_id;
             string ls_filter;
             string ls_filter_null_clause;
-            bool lb_rs_it_exist;
+            bool lb_rs_id_exist;
             bool ib_continue;
             adwc_data.FilterString = "";
 
             //! added to be used for filtering
             AlRtId = al_rt_id;
             AsRoadName = as_road_name;
+            // TJB  RD7_0021  Feb 2009
+            // Added line to empty the rsIdList before starting.  
+            // Was repopulated with each call adding on to previous results.
+            rsIdList.Clear();
 
             //adwc_data.Filter();
+            //if (adwc_data is DDddwRoadSuffix)
+            //{
+            //    adwc_data.Filter<DddwRoadSuffix>();
+            //}
             if (adwc_data is DDddwRoadSuffix)
             {
-                adwc_data.Filter<DddwRoadSuffix>();
+                if (adwc_data.FilterString == "" )
+                    adwc_data.FilterOnce<DddwRoadSuffix>(EmptyFilter);
+                else
+                    adwc_data.Filter<DddwRoadSuffix>();
             }
+
             ib_continue = true;
             if (string.IsNullOrEmpty(as_road_name)) //if (IsNull(as_road_name) ||  as_road_name).Trim(.Len() == 0) {
             {
@@ -1894,13 +1906,13 @@ namespace NZPostOffice.RDS.Controls
             }
             ls_filter = "";
             ls_filter_null_clause = "";
-            lb_rs_it_exist = false;
+            lb_rs_id_exist = false;
             if (ib_continue)
             {
                 //!for (ll_x = 0; ll_x < ids_road_map.RowCount; ll_x++)
                 for (ll_x = 0; ll_x < ids_road_mapListFiltered.Count; ll_x++)
                 {
-                    lb_rs_it_exist = true;
+                    lb_rs_id_exist = true;
                     //!ll_rs_id = ids_road_map.GetItem<RoadMapV2>(ll_x).RsId; //ll_rs_id = ids_road_map.GetItemNumber(ll_x, "rs_id");
                     ll_rs_id = ids_road_mapListFiltered[ll_x].RsId;
                     if (!ll_rs_id.HasValue)
@@ -1932,7 +1944,7 @@ namespace NZPostOffice.RDS.Controls
                     }
                 }
 
-                if (lb_rs_it_exist == false || ls_filter == "")
+                if (lb_rs_id_exist == false || ls_filter == "")
                 {
                     ls_filter = "IsNull ( rt_id)";
                     isRtIdNull = true;
