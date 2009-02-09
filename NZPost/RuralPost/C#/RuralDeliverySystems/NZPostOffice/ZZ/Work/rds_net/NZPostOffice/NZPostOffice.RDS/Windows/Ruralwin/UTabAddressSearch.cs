@@ -1046,7 +1046,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
 
             //! if (dwo.Name == "road_name" || dwo.Name == "rt_id" || dwo.Name == "rs_id" || dwo.Name == "sl_name" || dwo.Name == "tc_id")
-            //!if (dw_address.GetColumnName() == "road_name" || dw_address.GetColumnName() == "rt_id" || 
+            //! if (dw_address.GetColumnName() == "road_name" || dw_address.GetColumnName() == "rt_id" || 
             //!    dw_address.GetColumnName() == "rs_id" || dw_address.GetColumnName() == "sl_name" || 
             //!    dw_address.GetColumnName() == "tc_id")             
             if (column_name == "road_name" || column_name == "rt_id" || column_name == "rs_id" || column_name == "sl_name" ||
@@ -1092,9 +1092,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 //!                of_filter_town_dddw(dw_address.GetColumnName(), data);//of_filter_town_dddw(dwo.Name, data);
                 of_filter_town_dddw(column_name, data);
-
-
-
 
                 ib_town_filtered = false;
                 if (!((ll_tc_id == null)) && ll_tc_id > 0)
@@ -1429,7 +1426,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             ((WAddressSearch)Parent).ue_set_new();
         }
-       public virtual void dw_address_itemerror()
+
+        public virtual void dw_address_itemerror()
         {
             //?return 1;
         }
@@ -1690,14 +1688,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (itemReallyChanged)
             {
-                column_name = dw_address.GetColumnName();
+                // TJB Jan 2009: RD7_0021 [Bugfix to earlier workaround (below)]
+                //     Moved AcceptText() from inside if (column_name=sl_name block
+                //     to fix issue with populating town, road type and road suffix
+                //     dropdowns.
+                this.dw_address.DataObject.AcceptText();
+
+                // TJB Feb 2009 RD7_0021
+                // The road_name's TextChanged event is taken up with code to anticipate 
+                // the name being entered.  When the user exits the field, the 
+                // dw_address_validating function is called which calls this routine 
+                // (dw_address_itemchanged), but dw_address.GetColumnName returns the 
+                // name of the column the user has tabbed to, not the column just exited. 
+                // The statement below overrides this so that the road type filtering 
+                // can be done when the road name is changed.
+                if (roadNameChanged)
+                    column_name = "road_name";
+                else
+                    column_name = dw_address.GetColumnName();
+
                 // TJB Jan 2009: Added column_name == "sl_name" condition to workaround/fix
                 //               RDS Address screen startup unhandled exception (in debugging mode only!)
                 if (column_name == "sl_name")
                 {
                     //! selection changed but binded property not yet until data window loses focus
                     itemReallyChanged = false;
-                    this.dw_address.DataObject.AcceptText();
+                    // this.dw_address.DataObject.AcceptText();
                     //! assign property for this simple combo box explicitly
                     (this.dw_address.DataObject.Current as SearchAddress).SlName =
                         string.Format("{0}", ((ComboBox)(dw_address.DataObject.GetControlByName("sl_name"))).Text);
