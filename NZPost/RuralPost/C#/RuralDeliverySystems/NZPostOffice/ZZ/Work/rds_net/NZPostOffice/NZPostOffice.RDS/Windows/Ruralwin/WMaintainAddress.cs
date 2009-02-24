@@ -871,7 +871,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ds_dpid2;
             li_rc = 0;
             //  XML message file info
-            /* select f_getNextSequence ( 'NPADFileSeq',1,10000)
+            /* select f_getNextSequence('NPADFileSeq',1,10000)
                 into :ll_npadfileseq
                 from dummy
                 using SQLCA; */
@@ -880,9 +880,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (ll_npadfileseq == null || ll_npadfileseq <= 0)
             {
                 MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  "
-                    , "ERROR"
-                    , MessageBoxButtons.OK
-                    , MessageBoxIcon.Information);
+                                , "ERROR"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 ls_npadfileseq = DateTime.Now.ToShortTimeString();
             }
             else
@@ -918,7 +918,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                /* select f_rds_npad_transfer_customer (  :al_old_dpid, :al_new_dpid,
+                /* select f_rds_npad_transfer_customer( :al_old_dpid, :al_new_dpid,
                     :is_userid, :as_description, :is_npadoutfile)
                     into :li_rc
                     from dummy
@@ -938,8 +938,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ds_msg = "Invalid new DPID";
                         ds_dpid = ds_dpid2;
                     }
-                    MessageBox.Show("Error sending transfer_customer message.\r\n" 
-                        + "Return code = " + li_rc + "   ( " + ds_msg + ", \"Error\" )" + "\n\n" 
+                    MessageBox.Show("Error sending transfer_customer message.\r\n"
+                        + "Return code = " + li_rc + " (" + ds_msg + ", \"Error\" )" + "\n\n" 
                         + "DPID = " + ds_dpid
                         , ""
                         , MessageBoxButtons.OK
@@ -1118,7 +1118,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  "Promote" the 1st transferring recipient 
             //  ---------------------------------------
             //  "Promote" the 1st transferring recipient to be the master of all 
-            //  the transferring customers  ( there won't already be one).
+            //  the transferring customers (there won't already be one).
             // 
             //  Returns the row number of the promoted customer.
             int ll_row;
@@ -5138,7 +5138,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2.1  May 2007
             //  If the result of the transfer is that the occupied status of either
             //  or both the from and to addresses changes, and if NPAD is enabled, 
-            //  message ( s) need to be sent to NPAD with the current status.
+            //  message(s) need to be sent to NPAD with the current status.
             bool lb_old_unoccupied;
             bool lb_new_unoccupied;
             int ll_addr_row;
@@ -5156,7 +5156,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             //  Get the cust ID of the selected customer
             //  Note: there's a subtlety here.  The selected customer may not actually 
-            // 			be one of the ones transferring  ( but usually is).
+            // 			be one of the ones transferring (but usually is).
             // 			A separate screen is used to select the customers who are transferring.
             // 			If the selected customer is a recipient, the selection screen contains
             // 			only the selected customer.  The user has an opportunity to de-select 
@@ -5168,7 +5168,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_selected_row = idw_details.GetRow();
             if (ll_selected_row < 0)
             {
-                MessageBox.Show("You must select a customer before transferring the customer.", "Transfer Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a customer before transferring the customer."
+                                , "Transfer Customer"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return;
             }
             Cursor.Current = Cursors.WaitCursor;
@@ -5212,7 +5215,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_row = idw_details.Find("cust_id", ll_old_master_id);
                 if (ll_row >= 0)
                 {
-                    //  Found  ( should never not be found)
+                    //  Found (should never not be found)
                     is_cust_business = idw_details.GetItem<AddressOccupants>(ll_row).CustBusiness;
                     is_rural_resident = idw_details.GetItem<AddressOccupants>(ll_row).CustRuralResident;
                     is_rural_farmer = idw_details.GetItem<AddressOccupants>(ll_row).CustRuralFarmer;
@@ -5232,7 +5235,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ds_temp = ll_old_master_id.ToString();
                 }
-                MessageBox.Show("Unable to determine address of transferring customer ( s)\r\n" + "Primary customer ID is " + ds_temp, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to determine address of transferring customer(s)\n" 
+                                + "Primary customer ID is " + ds_temp
+                                , "ERROR"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             lb_old_unnumbered = of_isunnumbered(ll_old_adr_id);
@@ -5264,7 +5270,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (ids_results.RowCount <= 0)
             {
-                //  or no rows to action  ( no customers selected to transfer)
+                //  or no rows to action (no customers selected to transfer)
                 return;
             }
             //  TJB  NPAD2  Jan 2006
@@ -5300,7 +5306,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ls_cust_name = ids_results.GetItem<AddressSelectOccupants>(ll_row).CustSurnameCompany;
                 if (ls_cust_name.Length > 4 && ls_cust_name.Substring(0, 5) == "Dummy")
                 {
-                    MessageBox.Show("Dummy customers cannot transfer to another address", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Dummy customers cannot transfer to another address"
+                                    , "Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResumeLayout();
                     return;
                 }
@@ -5349,7 +5357,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (ll_old_adr_id == ll_new_adr_id)
             {
-                MessageBox.Show("The old and new addresses cannot be the same. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The old and new addresses cannot be the same."
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             //  TJB  NPAD2  Jan 2006
@@ -5386,7 +5396,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ** At about this point, if the 'to' address is unnumbered and NPAD is   **
             ** enabled, we need to determine if the address is new or not.  If it   **
             ** is, the occupants there will be dummys and the transferring custs    **
-            ** will take on the dummy's roles  ( and their DPIDs). If not, the trans- **
+            ** will take on the dummy's roles (and their DPIDs). If not, the trans- **
             ** ferring customers will become recipients of the existing master.     **
             **                                                                      **
             **************************************************************************
@@ -5400,7 +5410,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  whether any of the occupants are dummy occupants.
             if (ib_npad_enabled && lb_new_unnumbered)
             {
-                /* select count ( cam.cust_id) 
+                /* select count(cam.cust_id) 
                     into :il_dummy_custs
                     from rds_customer c,
                     customer_address_moves cam
@@ -5414,7 +5424,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (il_dummy_custs > 0)
                 {
                     //  There are dummy occupants at the new address
-                    //  Determine the number of masters  ( should only be 1) and recipients
+                    //  Determine the number of masters (should only be 1) and recipients
                     il_dummy_masters = of_getdummymasterdpid(ll_new_adr_id);
                     il_dummy_recipients = of_getdummycustdpids(ll_new_adr_id);
                     for (ll_dummy_row = 0; ll_dummy_row < il_dummy_custs; ll_dummy_row++)
@@ -5430,11 +5440,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         if (il_dummy_custs == ids_results.RowCount)
                         {
                             lb_replace_custs = true;
-                            ds_msg = "Replacing " + il_dummy_custs.ToString() + " dummy custs at new address";
+                            ds_msg = "Replacing " + il_dummy_custs.ToString() 
+                                     + " dummy custs at new address";
                         }
                         else
                         {
-                            MessageBox.Show("There is an incorrect number of dummy customers at the address \r\n" + "being moved to  ( there must be the same number of dummy customers \r\n" + "as are transferring when transferring from a numbered address).\r\n" + " ( customers transferring = " + ids_results.RowCount + "; dummy customers found = " + il_dummy_custs + ")\r\n\r\n" + "Cancelling transfer ...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("There is an incorrect number of dummy customers at the address \n"
+                                            + "being moved to (there must be the same number of dummy customers \n" 
+                                            + "as are transferring when transferring from a numbered address).\n" 
+                                            + "(customers transferring = " + ids_results.RowCount + "; dummy customers found = " + il_dummy_custs + ")\n\n" 
+                                            + "Cancelling transfer ..."
+                                            , "Error"
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //  setRedraw ( TRUE)
                             //  RETURN
                             ds_msg = "Incorrect number of dummy customers for transfer";
@@ -5444,11 +5461,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         //  The distinction here is that the transferring customers
                         //  already have DPIDs, so there only needs to be a dummy master 
-                        //  at the new address  ( needed to create the address).  Any others
+                        //  at the new address (needed to create the address).  Any others
                         //  will be ignored.
                         if (il_dummy_custs > ids_results.RowCount)
                         {
-                            MessageBox.Show("There are too many dummy customers at the address being moved to \r\n" + " ( customers transferring = " + ids_results.RowCount + "; dummy customers found = " + il_dummy_custs + ")\r\n\r\n" + "Cancelling transfer ...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("There are too many dummy customers at the address being moved to \n"
+                                            + "(customers transferring = " + ids_results.RowCount 
+                                            + "; dummy customers found = " + il_dummy_custs + ")\n\n" 
+                                            + "Cancelling transfer ..."
+                                            , "Error"
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //  setRedraw ( TRUE)
                             //  RETURN
                             ds_msg = "Too many dummy customers for transfer";
@@ -5465,8 +5487,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             //  If NPAD is enabled, there must be dummy customers at the 
                             //  new address when the transfer is from a numbered address.
-                            MessageBox.Show("The destination address must have dummy customers for \r\n" + "each customer transferring from a numbered address. \r\n" + " ( customers transferring = " + ids_results.RowCount + "; dummy customers found = " + il_dummy_custs + ")\r\n\r\n" + "Cancelling transfer ...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //  setRedraw ( TRUE)
+                            MessageBox.Show("The destination address must have dummy customers for \n" 
+                                            + "each customer transferring from a numbered address. \n"
+                                            + "(customers transferring = " + ids_results.RowCount 
+                                            + "; dummy customers found = " + il_dummy_custs + ")\n\n" 
+                                            + "Cancelling transfer ..."
+                                            , "Error"
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //  setRedraw(TRUE)
                             //  RETURN
                             ds_msg = "No dummy customers for transfer";
                         }
@@ -5476,50 +5504,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             /*  ---------------------------- Debugging ----------------------------- //
             string	ds_first_recipient, ds_dummy_master, ds_no_details, ds_no_results
             string	ds_msg2
-            if isnull ( ll_old_master_id)  then ds_temp = 'null' else ds_temp = ll_old_master_id.ToString()
-            if isnull ( ll_new_master_id)  then ds_cust = 'null' else ds_cust = ll_new_master_id.ToString()
-            ds_no_details = string ( idw_details.RowCount)
-            ds_no_results = string ( ids_results.RowCount)
+            if isnull(ll_old_master_id)  then ds_temp = 'null' else ds_temp = ll_old_master_id.ToString()
+            if isnull(ll_new_master_id)  then ds_cust = 'null' else ds_cust = ll_new_master_id.ToString()
+            ds_no_details = string(idw_details.RowCount)
+            ds_no_results = string(ids_results.RowCount)
             ds_dummy_master = ''
             if il_dummy_masters > 0 then
-            ds_dummy_master = ' ( DPID ='+il_dummy_master_dpid.ToString()  &
-            +', Cust ='+il_dummy_master_cust)+'.ToString()\r\n'
+            ds_dummy_master = '(DPID ='+il_dummy_master_dpid.ToString()  &
+            +', Cust ='+il_dummy_master_cust)+'.ToString()\n'
             end if
             ds_first_recipient = ''
             if il_dummy_recipients > 0 then
-            ds_first_recipient = ' ( DPID ='+il_dummy_dpid[1].ToString()  &
-            +', Cust ='+il_dummy_cust[1])+'.ToString()\r\n'
+            ds_first_recipient = '(DPID ='+il_dummy_dpid[1].ToString()  &
+            +', Cust ='+il_dummy_cust[1])+'.ToString()\n'
             end if
             ds_msg2 = 'Transfer '
             if lb_old_unnumbered then ds_msg2 += 'unnumbered' else ds_msg2 += 'numbered'	
             ds_msg2 += ' to '
             if lb_new_unnumbered then ds_msg2 += 'unnumbered' else ds_msg2 += 'numbered'	
             li_temp = messagebox ( 'w_maintain_address.idw_details.ue_click_transfer',  &
-            'ib_npad_enabled     = '+ib_npad_enabled.ToString()+'\r\n\r\n'  &
-            +'lb_isMaster        = '+lb_ismaster.ToString()  +'\r\n'  &
-            +'lb_all_moving      = '+lb_all_moving.ToString()+'\r\n'  &
-            +'old_master_id      = '+ds_temp              +'\r\n'  &
-            +'old_adr_id         = '+ll_old_adr_id.ToString()+'\r\n'  &
-            +'old adr unnumbered = '+lb_old_unnumbered.ToString()+'\r\n'  &
-            +'new_adr_id         = '+ll_new_adr_id.ToString()+'\r\n'  &
-            +'new adr unnumbered = '+lb_new_unnumbered.ToString()+'\r\n'  &
-            +'new_master_id      = '+ds_cust              +'\r\n'  &
-            +'new_master_exists  = '+lb_new_master_exists.ToString()+'\r\n'  &
-            +'lb_replace_custs   = '+lb_replace_custs.ToString() +'\r\n'  &
-            +'# details          = '+ds_no_details+'\r\n'  &
-            +'# results          = '+ds_no_results+'\r\n'  &
-            +'il_dummy_masters   = '+il_dummy_masters.ToString()+'\r\n'  &
+            'ib_npad_enabled     = '+ib_npad_enabled.ToString()+'\n\n'  &
+            +'lb_isMaster        = '+lb_ismaster.ToString()  +'\n'  &
+            +'lb_all_moving      = '+lb_all_moving.ToString()+'\n'  &
+            +'old_master_id      = '+ds_temp              +'\n'  &
+            +'old_adr_id         = '+ll_old_adr_id.ToString()+'\n'  &
+            +'old adr unnumbered = '+lb_old_unnumbered.ToString()+'\n'  &
+            +'new_adr_id         = '+ll_new_adr_id.ToString()+'\n'  &
+            +'new adr unnumbered = '+lb_new_unnumbered.ToString()+'\n'  &
+            +'new_master_id      = '+ds_cust              +'\n'  &
+            +'new_master_exists  = '+lb_new_master_exists.ToString()+'\n'  &
+            +'lb_replace_custs   = '+lb_replace_custs.ToString() +'\n'  &
+            +'# details          = '+ds_no_details+'\n'  &
+            +'# results          = '+ds_no_results+'\n'  &
+            +'il_dummy_masters   = '+il_dummy_masters.ToString()+'\n'  &
             +ds_dummy_master &
-            +'il_dummy_recipients = '+il_dummy_recipients.ToString()+'\r\n'  &
+            +'il_dummy_recipients = '+il_dummy_recipients.ToString()+'\n'  &
             +ds_first_recipient &
-            +'\r\n'+ds_msg2+'\r\n'  &
+            +\n'+ds_msg2+'\n'  &
             +'*** '+ds_msg+' ***'  &
             ,Exclamation!,OkCancel!)
             // --------------------------------------------------------------------  */
             if (li_temp == 2 || ds_msg.Substring(0, 10) == "Incorrect " || ds_msg.Substring(0, 9) == "Too many " || ds_msg.Substring(0, 9) == "No dummy ")
             {
                 /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show (   & 'Cancelling transfer ...' ,  'w_maintain_address.idw_details.ue_click_transfer' )
+                MessageBox.Show('Cancelling transfer ...' 
+                 *              , 'w_maintain_address.idw_details.ue_click_transfer' )
                 // --------------------------------------------------------------------  */
                 ResumeLayout();
                 return;
@@ -5549,9 +5578,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             * - the master/recipient relationships.
             *
             * Note:
-            *		We do this first so that when we copy DPIDs  ( if we do), the
-            *		original CAM record  ( with the move_out_date set) has the 
-            *		DPID it had before the transfer  ( in particular, NULL for an 
+            *		We do this first so that when we copy DPIDs (if we do), the
+            *		original CAM record (with the move_out_date set) has the 
+            *		DPID it had before the transfer (in particular, NULL for an 
             *		unnumbered address).
             ******************************************************************* */
             ll_results_rows = ids_results.RowCount;
@@ -5599,11 +5628,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  See if the master is transferring.
             //  Note: There can only ever be one master customer moving since 
             // 			the set to select from is either a single recipient or 
-            // 			a master and its associated recipients  ( not necessarily 
+            // 			a master and its associated recipients (not necessarily 
             // 			all occupants at the 'from' address).
             ll_to_master_dpid = null;
             //?ll_this_master_row = ids_results.Find('IsNull(master_cust_id) and IsNull(move_out_date)',1, ids_results.RowCount())
-            //?ll_this_master_row = ids_results.Find(new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("master_cust_id", null), new KeyValuePair<string, object>("move_out_date", null) });
+            //?ll_this_master_row = ids_results.Find(new KeyValuePair<string, object>[](new KeyValuePair<string, object>("master_cust_id", null), new KeyValuePair<string, object>("move_out_date", null) });
             //add by ybfan
             ll_this_master_row = -1;
             for (int i = 0; i < ids_results.RowCount; i++)
@@ -5622,14 +5651,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // 
                 // *************************************************************
                 lb_master_moving = false;
-                //  For each customer that is transferring  ( all are recipients),
+                //  For each customer that is transferring (all are recipients),
                 //  link the customer to the new master.  Any that aren't transferring 
                 //  will remain linked to the master who also isn't transferring.
                 // 
                 //  If there isn't a master at the new address, one of the recipients 
                 //  who is transferring will be 'promoted' to be the master.  This should 
                 //  only occur when the 'to' address is an unoccupied numbered address, 
-                //  or when NPAD isn't enabled and a new address  ( numbered or not) has 
+                //  or when NPAD isn't enabled and a new address (numbered or not) has 
                 //  just been created.
                 // 
                 //  While we're at it, we'll copy dummy DPIDs to the transferring 
@@ -5702,14 +5731,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else
                     {
-                        //  at the new  ( unnumbered) address).
+                        //  at the new (unnumbered) address).
                         //  We'll make the transferrees recipients.
                         of_transfer_custs(ll_new_master_id);
                     }
                 }
                 else
                 {
-                    //  There is no master at the new  ( unnumbered) address.
+                    //  There is no master at the new (unnumbered) address.
                     //  Promote the 1st transferring recipient to be the master
                     //  at the new address.
                     ll_new_master_row = of_promote_recipient();
@@ -5734,13 +5763,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // *************************************************************
                 //  If the 'To' address is numbered, the master and any recipients 
                 //  will retain their current relationship, so there's nothing to do
-                //   ( except promote a recipient who isn't transferring, if any).
+                //  (except promote a recipient who isn't transferring, if any).
                 // 
                 //  This is also what happens if the 'To' address is a new unnumbered
-                //  address  ( either has a dummy master or no master).
+                //  address (either has a dummy master or no master).
                 // 
                 //  If the 'To' address is unnumbered, the master and any recipients 
-                //  become recipients of the master there  ( demoting the transferring 
+                //  become recipients of the master there (demoting the transferring 
                 //  master).
                 lb_master_moving = true;
                 //  "this_master_id" is the cust ID of the master who is transferring
@@ -5748,7 +5777,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_this_master_dpid = ids_results.GetItem<AddressSelectOccupants>(ll_this_master_row).DpId;
                 // ---------------------------------------------------------------
                 //  First, we need to determine who of those left behind will be  
-                //  the new master at the old address  ( the "new_old_master").     
+                //  the new master at the old address (the "new_old_master").     
                 // ---------------------------------------------------------------
                 if (!lb_all_moving)
                 {
@@ -5789,7 +5818,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 else if (!(ll_new_master_id == null) && ll_new_master_id > 0)
                 {
                     //  There is a master at the new address.
-                    //   ( it may or may not be a dummy)
+                    //  (it may or may not be a dummy)
                     if (ib_npad_enabled)
                     {
                         //  NPAD is enabled.
@@ -5807,8 +5836,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         }
                         else
                         {
-                            //  occupied; we'll make the all the transferrees 
-                            //  recipients.
+                            //  occupied; we'll make the all the transferrees recipients.
                             of_transfer_custs(ll_new_master_id);
                             //  If the transfer is from a numbered address, copy the DPIDs
                             //  of the dummy customers to the transferring customers.
@@ -5820,7 +5848,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else
                     {
-                        //   ( and there is a master at the new  ( unnumbered) address).
+                        //  (and there is a master at the new (unnumbered) address).
                         //  We'll make the transferrees recipients.
                         of_transfer_custs(ll_new_master_id);
                     }
@@ -5878,10 +5906,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ds_new_adr    = ll_new_adr_id.ToString()
             ds_to_master  = ll_to_master_dpid.ToString()
             ds_promo_dpid = ll_promoted_dpid.ToString()
-            if isnull ( ds_new_adr)    then ds_new_adr    = 'NULL'
-            if isnull ( ds_to_master)  then ds_to_master  = 'NULL'
-            if isnull ( ds_promo_dpid) then ds_promo_dpid = 'NULL'
-            MessageBox.Show ( & 'Update "to" address dpid?  \r\n'   & +'ll_promoted_dpid  = '+ds_promo_dpid +'\r\n'    & +'ll_new_adr_id     = '+ds_new_adr    +'\r\n'    & +'ll_to_master_dpid = '+ds_to_master  +'\r\n'    & ,  'w_maintain_address.idw_details.ue_click_transfer' )
+            if isnull(ds_new_adr)    then ds_new_adr    = 'NULL'
+            if isnull(ds_to_master)  then ds_to_master  = 'NULL'
+            if isnull(ds_promo_dpid) then ds_promo_dpid = 'NULL'
+            MessageBox.Show('Update "to" address dpid?  n'
+                            +'ll_promoted_dpid  = '+ds_promo_dpid +'\n'
+                            +'ll_new_adr_id     = '+ds_new_adr    +'\n'
+                            +'ll_to_master_dpid = '+ds_to_master  +'\n'
+                            ,  'w_maintain_address.idw_details.ue_click_transfer' )
             // --------------------------------------------------------------------  */
             //  If a recipient was promoted at the 'from' address, we need to 
             //  update the address' DPID.
@@ -5935,7 +5967,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ds_temp = li_temp.ToString();
                 }
                 /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & 'RDS internal operation\r\n\r\n'   & +'Delete dummy master\r\n\r\n'     & +'cust_id = '+ds_cust +'\r\n'    & +' ( rc = '+ds_temp+')'			,  'w_maintain_address.idw_details.ue_click_transfer' )
+                MessageBox.Show('RDS internal operation\n\n'
+                                +'Delete dummy master\n\n'
+                                +'cust_id = '+ds_cust +'\n'
+                                +'(rc = '+ds_temp+')'
+                               ,'w_maintain_address.idw_details.ue_click_transfer' )
                 // --------------------------------------------------------------------  */
             }
             if (il_dummy_custs > 0)
@@ -5976,7 +6012,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ds_temp = li_temp.ToString();
                     }
                     /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'RDS internal operation\r\n\r\n'       & +'Delete dummy customer\r\n\r\n'       & +'cust_id = '+ds_cust +'\r\n'        & +'Row '+ds_row+' of '+ds_rows+'\r\n' & +' ( rc = '+ds_temp+')'					,  'w_maintain_address.idw_details.ue_click_transfer' )
+                    MessageBox.Show('RDS internal operation\n\n'
+                                    +'Delete dummy customer\n\n'
+                                    +'cust_id = '+ds_cust +'\n'
+                                    +'Row '+ds_row+' of '+ds_rows+'\n'
+                                    +'(rc = '+ds_temp+')'
+                                   ,'w_maintain_address.idw_details.ue_click_transfer' )
                     // --------------------------------------------------------------------  */
                 }
             }
@@ -6095,7 +6136,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // ****************************************************
                     //  Nothing to tell NPAD; it doesn't care.
                     /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'NPAD interface operation\r\n\r\n'  & +'Transfer from numbered to numbered address.\r\n'         & +'Customers transferred = '+string ( ll_results_rows)+'\r\n' & +'Old address     = '+ds_old_adr_id+'\r\n'  & +'Old master      = '+ds_old_master+'\r\n'  & +'Old master dpid = '+ds_old_dpid+'\r\n'    & +'Old master moving = '+string ( lb_master_moving)+'\r\n'  & +'New address     = '+ds_new_adr_id+'\r\n'  & +'New master      = '+ds_new_master+'\r\n'  & +'New master dpid = '+ds_new_dpid+'\r\n'    & +'Cust promoted   = '+ds_promoted+'\r\n'    & +'***********\r\n'  & +"Nothing to tell NPAD; it doesn't care."		,  'w_maintain_address.idw_details.ue_click_tansfer' )
+                    MessageBox.Show('NPAD interface operation\n\n'
+                                    +'Transfer from numbered to numbered address.\n'
+                                    +'Customers transferred = '+string(ll_results_rows)+'\n'
+                                    +'Old address     = '+ds_old_adr_id+'\n'
+                                    +'Old master      = '+ds_old_master+'\n'
+                                    +'Old master dpid = '+ds_old_dpid+'\n'
+                                    +'Old master moving = '+string(lb_master_moving)+'\n'
+                                    +'New address     = '+ds_new_adr_id+'\n'
+                                    +'New master      = '+ds_new_master+'\n'
+                                    +'New master dpid = '+ds_new_dpid+'\n'
+                                    +'Cust promoted   = '+ds_promoted+'\n'
+                                    +'***********\n'
+                                    +"Nothing to tell NPAD; it doesn't care."
+                                   ,'w_maintain_address.idw_details.ue_click_tansfer' )
                     // --------------------------------------------------------------------  */
                 }
                 else if (!lb_old_unnumbered && lb_new_unnumbered)
@@ -6108,7 +6162,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  Send 'modify_customer' messages to NPAD to change the 
                     //  'Dummy' names to the transferring customers' names.
                     /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'NPAD interface operation\r\n\r\n'  & +'Transfer from numbered to unnumbered address.\r\n'       & +'Customers transferred = '+string ( ll_results_rows)+'\r\n' & +'Old address     = '+ds_old_adr_id+'\r\n'  & +'Old master      = '+ds_old_master+'\r\n'  & +'Old master dpid = '+ds_old_dpid+'\r\n'    & +'Old master moving = '+string ( lb_master_moving)+'\r\n'  & +'New address     = '+ds_new_adr_id+'\r\n'  & +'New master      = '+ds_new_master+'\r\n'  & +'New master dpid = '+ds_new_dpid+'\r\n'    & +'Cust promoted   = '+ds_promoted+'\r\n'    & +'\r\n' & +'il_dummy_masters    = '+string ( il_dummy_masters)+'\r\n'		& +'il_dummy_recipients = '+string ( il_dummy_recipients)+'\r\n'	,  'w_maintain_address.idw_details.ue_click_tansfer' )
+                    MessageBox.Show('NPAD interface operation\n\n'
+                                    +'Transfer from numbered to unnumbered address.\n'
+                                    +'Customers transferred = '+string(ll_results_rows)+'\n'
+                                    +'Old address     = '+ds_old_adr_id+'\n'
+                                    +'Old master      = '+ds_old_master+'\n'
+                                    +'Old master dpid = '+ds_old_dpid+'\n'
+                                    +'Old master moving = '+string(lb_master_moving)+'\n'
+                                    +'New address     = '+ds_new_adr_id+'\n'
+                                    +'New master      = '+ds_new_master+'\n'
+                                    +'New master dpid = '+ds_new_dpid+'\n'
+                                    +'Cust promoted   = '+ds_promoted+'\r\n'    & +'\r\n' & +'il_dummy_masters    = '+string ( il_dummy_masters)+'\r\n'		& +'il_dummy_recipients = '+string ( il_dummy_recipients)+'\r\n'	,  'w_maintain_address.idw_details.ue_click_tansfer' )
                     // --------------------------------------------------------------------  */
                     for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
                     {
@@ -6164,7 +6228,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             //  transferred. The master will be treated as a 
                             //  recipient by NPAD.
                             li_rc = of_npad_deleteone(il_deleted_master_dpid, "RDS delete recipient");
-                            for (ll_row = 0; ll_row < il_deleted_dpids; ll_row++)
+                            // TJB  RP7_0022 Feb 2009: 
+                            //      Changed loop termination to <= (was <)
+                            //         - Loop originally skipped the last element in the il_deleted_dpid array.
+                            for (ll_row = 0; ll_row <= il_deleted_dpids; ll_row++)
                             {
                                 ll_cust_dpid = il_deleted_dpid[ll_row];
                                 li_rc = of_npad_deleteone(ll_cust_dpid, "RDS delete recipient");
@@ -6217,7 +6284,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     /*  ---------------------------- Debugging ----------------------------- //
                         ds_new_master = ll_new_master_id.ToString()
                         ds_new_dpid = ll_new_master_dpid.ToString()
-                        MessageBox.Show ( & 'NPAD interface operation\r\n\r\n'  & +'Transfer from unnumbered to unnumbered address.\r\n'     & +'Customers transferred = '+string ( ll_results_rows)+'\r\n' & +'Old address     = '+ds_old_adr_id+'\r\n'  & +'Old master      = '+ds_old_master+'\r\n'  & +'Old master dpid = '+ds_old_dpid+'\r\n'  	& +'Old master moving = '+string ( lb_master_moving)+'\r\n'  & +'New address     = '+ds_new_adr_id+'\r\n'  & +'New master      = '+ds_new_master+'\r\n'  & +'New master dpid = '+ds_new_dpid+'\r\n'  	& +'Cust promoted   = '+ds_promoted+'\r\n'  	& +'\r\n' & +'il_dummy_masters    = '+string ( il_dummy_masters)+'\r\n'		& +'il_dummy_recipients = '+string ( il_dummy_recipients)+'\r\n'	& +'Dummy master        = '+string ( il_dummy_master_cust)+'\r\n' & +'Dummy master DPID   = '+string ( il_dummy_master_dpid)+'\r\n'	,  'w_maintain_address.idw_details.ue_click_tansfer' )
+                        MessageBox.Show('NPAD interface operation \n\n'
+                                        +'Transfer from unnumbered to unnumbered address.\n'
+                                        +'Customers transferred = '+string(ll_results_rows)+'\n'
+                                        +'Old address     = '+ds_old_adr_id+'\n'
+                                        +'Old master      = '+ds_old_master+'\n'
+                     * +'Old master dpid = '+ds_old_dpid+'\n'
+                     * +'Old master moving = '+string(lb_master_moving)+'\n'
+                     * +'New address     = '+ds_new_adr_id+'\n'
+                     * +'New master      = '+ds_new_master+'\n'
+                     * +'New master dpid = '+ds_new_dpid+'\n'
+                     * +'Cust promoted   = '+ds_promoted+'\n'
+                     * +'\n'
+                     * +'il_dummy_masters    = '+string(il_dummy_masters)+'\n'
+                     * +'il_dummy_recipients = '+stringil_dummy_recipients)+'\n'
+                     * +'Dummy master        = '+string(il_dummy_master_cust)+'\n'
+                     * +'Dummy master DPID   = '+string(il_dummy_master_dpid)+'\n'
+                     * ,'w_maintain_address.idw_details.ue_click_tansfer' )
                     // --------------------------------------------------------------------  */
                     int? ll_master_dpid = 0;
                     if (!lb_master_moving)
@@ -6230,13 +6313,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             ll_master_dpid = ll_new_master_dpid;
                         }
-                        //  Transfer all recipients to the new master  ( as recipients).
+                        //  Transfer all recipients to the new master (as recipients).
                         for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
                         {
                             ll_cust_dpid = ids_results.GetItem<AddressSelectOccupants>(ll_row).DpId;
                             if (!(ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutDate == null))
                             {
-                                li_rc = of_npad_xferone(ll_cust_dpid, ll_master_dpid, "RDS transfer recipient  ( 1)");
+                                li_rc = of_npad_xferone(ll_cust_dpid, ll_master_dpid, "RDS transfer recipient (1)");
                             }
                         }
                         if (il_dummy_masters == 1)
@@ -6249,19 +6332,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else
                     {
-                        //  The master and some or all of the recipients  ( if 
+                        //  The master and some or all of the recipients (if 
                         //  any) have transferred.                           
                         // --------------------------------------------------
                         //  If the master and all recipients have transferred and 
-                        //  the new master was a "real" customer  ( not a dummy).
+                        //  the new master was a "real" customer (not a dummy).
                         //  We send a transfer message for the master only.
                         //  Look up the DPID of the transferring master
-                        //  Look for the transferring master as a master  ( ie replacing the
-                        //  dummy master at the new address) or as a recipient  ( ie 
+                        //  Look for the transferring master as a master (ie replacing the
+                        //  dummy master at the new address) or as a recipient (ie 
                         //  becoming a recipient of the existing master at the new address).
 
                         //pp! find for null values replaced by loop
-                        //!ll_row = ids_results.Find(new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("master_cust_id", null), 
+                        //!ll_row = ids_results.Find(new KeyValuePair<string, object>[](new KeyValuePair<string, object>("master_cust_id", null), 
                         //!    new KeyValuePair<string, object>("move_out_date", null) });
                         ll_row = -1;
                         for (int i = 0; i < ids_results.RowCount; i++)
@@ -6278,7 +6361,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         if (ll_row < 0)
                         {
                             for (int i = 0; i < ids_results.RowCount; i++)
-                                // ll_row = ids_results.Find("isnull ( master_cust_id) and not isNull ( move_out_date)").Length) ;
+                                // ll_row = ids_results.Find("isnull(master_cust_id) and not isNull(move_out_date)").Length) ;
                                 if (ids_results.GetValue<object>(i, "master_cust_id") == null && ids_results.GetValue<object>(i, "move_out_date") != null)
                                 {
                                     ll_row = i;
@@ -6293,7 +6376,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             // ------------------------------------------------
                             if (il_dummy_masters < 1)
                             {
-                                //  The new master is a "real" customer  ( not a dummy). 
+                                //  The new master is a "real" customer (not a dummy). 
                                 //  We send a transfer message for the master only.
                                 li_rc = of_npad_xferone(ll_old_dpid, ll_new_master_dpid, "RDS transfer master  ( 1)");
                             }
@@ -6310,8 +6393,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         }
                         else
                         {
-                            //  The master and  ( possibly) some recipients have 
-                            //  transferred.                                   
+                            //  The master and (possibly) some recipients have transferred.                                   
                             // ------------------------------------------------
                             ll_master_dpid = il_dummy_master_dpid;
                             if (il_dummy_master_dpid == null || il_dummy_master_dpid < 1)
@@ -6324,7 +6406,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             li_rc = of_npad_xferone(il_demoted_dpid, il_promoted_dpid, "RDS swap source masters");
                             //  NOTE: at this point, NPAD thinks the master
                             //        who is transferring is a recipient of
-                            //        the  ( new-old) master at the 'from' address.
+                            //        the (new-old) master at the 'from' address.
                             //  Now we transfer those who are transferring 
                             //  to the new master. They will all be recipients.
                             for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
@@ -6376,8 +6458,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     /*  ---------------------------- Debugging ----------------------------- //
                     boolean db_old_unoccupied
-                    db_old_unoccupied = of_isunoccupied ( ll_old_adr_id)
-                    MessageBox.Show ( & "Old address DPID = "+string ( ll_old_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_old_unoccupied)+"\r\n" & +"    now = "+string ( not db_old_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
+                    db_old_unoccupied = of_isunoccupied(ll_old_adr_id)
+                    MessageBox.Show ( & "Old address DPID = "+string(ll_old_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_old_unoccupied)+"\r\n" & +"    now = "+string ( not db_old_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
                     // --------------------------------------------------------------------  */
                     if (!(lb_old_unoccupied == of_isunoccupied(ll_old_adr_id)))
                     {
@@ -6403,8 +6485,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ll_new_dp_id = of_get_addr_dpid(ll_new_adr_id);
                     /*  ---------------------------- Debugging ----------------------------- //
                     boolean db_new_unoccupied
-                    db_new_unoccupied = of_isunoccupied ( ll_new_adr_id)
-                    MessageBox.Show ( & "New address DPID = "+string ( ll_new_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_new_unoccupied)+"\r\n" & +"    now = "+string ( not db_new_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
+                    db_new_unoccupied = of_isunoccupied(ll_new_adr_id)
+                    MessageBox.Show ( & "New address DPID = "+string(ll_new_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_new_unoccupied)+"\r\n" & +"    now = "+string ( not db_new_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
                     // --------------------------------------------------------------------  */
                     if (!(lb_new_unoccupied == of_isunoccupied(ll_new_adr_id)))
                     {
@@ -6430,14 +6512,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             /* ***************************************************************
             * Open the address maintenance window for the newly-moved-into 
             * address to give the user an opportunity to update customer
-            * details of the transferring customers  ( and to double-check 
+            * details of the transferring customers (and to double-check 
             * that the 'right' things were done - especially to fix up 
             * the selection of the master customer).
             *************************************************************** */
             //  TJB  bugfix  Aug 2006
-            //  Need to pass the RD_Contract flag  ( as a number)
+            //  Need to pass the RD_Contract flag (as a number)
             //  to the next invocation of the w_maintain_address 
-            //   ( with the transferees at the new address).  Without it,
+            //  (with the transferees at the new address).  Without it,
             //  the address was being opened with update capability when
             //  in most cases it shouldn't have.
             int? ll_rdcontract = 0;
