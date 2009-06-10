@@ -181,8 +181,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\OdpsInvoice\WInvoiceSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WInvoiceSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\OdpsPayrun\WPaymentRunSearch.resx">
       <DependentUpon>WPaymentRunSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\OdpsRep\WReportCriteria.resx">
+      <DependentUpon>WReportCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Odps\WAbout.resx">
       <SubType>Designer</SubType>
