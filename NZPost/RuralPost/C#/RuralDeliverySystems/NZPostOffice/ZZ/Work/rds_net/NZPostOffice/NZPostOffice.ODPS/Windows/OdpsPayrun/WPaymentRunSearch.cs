@@ -200,11 +200,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             string t_contractorNo = null;
             string t_dedID = null;
             string t_ded_description = null;
+
             dw_search.DataObject.AcceptText();
             //  Validate contract
             if (dw_results.GetSelectedRow(0) == -1)
             {
-                MessageBox.Show("You must select a contract", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contract"
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             //  Get contract details
@@ -218,24 +221,32 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             //  Validate start and end dates 
             if (((TimeSpan)(dStart - dEnd)).Days > 0)
             {
-                MessageBox.Show("Start date must be earlier than end date", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Start date must be earlier than end date"
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             //  Warn
             if (((TimeSpan)(dStart - dEnd)).Days > 31)
             {
-                if (MessageBox.Show("Invoice", "Warning: the end date is too far into the future. Continue?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if (MessageBox.Show("Warning: the end date is too far into the future. Continue?"
+                                    , "Invoice"
+                                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                    == DialogResult.No)
                 {
                     return;
                 }
             }
-            // messagebox ( "",string ( daysafter ( today ( ),dend)))
+            // Messagebox.Show("",string(daysafter(today(),dend)))
             //  Detect other users
-            //select db_property ( 'conncount') into  :lLoggedOnUsers from sys.dummy;
+            //select db_property('conncount') into  :lLoggedOnUsers from sys.dummy;
             lLoggedOnUsers = ODPSDataService.GetDbPropertyFromDummy(); ;
             if (lLoggedOnUsers > 1)
             {
-                if (MessageBox.Show("Warning: There are " + Convert.ToString(lLoggedOnUsers - 1) + " other users connected. Ignore?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                if (MessageBox.Show("Warning: There are " + Convert.ToString(lLoggedOnUsers - 1) + " other users connected. Ignore?"
+                                    , this.Text
+                                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                   != DialogResult.Yes)
                 {
                     return;
                 }
@@ -247,14 +258,16 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
             if (lPastRuns > 0)
             {
-                MessageBox.Show("Payment run already made for the contract ( s) selected", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Payment run already made for the contract(s) selected"
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             // Run! Call stored procedures!
             Cursor.Current = Cursors.WaitCursor;
             tStart = System.DateTime.Now;
 
-            // select odps.od_blf_mainrun ( :lcontract, :lcontractor, :dstart, :dend ) into :lRunResult from sys.dummy;
+            // select odps.od_blf_mainrun( :lcontract, :lcontractor, :dstart, :dend ) into :lRunResult from sys.dummy;
 
             ODPSDataService dataservice = ODPSDataService.GetOdBlfMainrunFromDummy(lcontract, lcontractor, dStart, dEnd);
             //? lRunResult = dataservice.RowCount;
@@ -262,7 +275,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             sRunResult = dataservice.DataObject;
             sRunResult = sRunResult == null ? "" : sRunResult;  //added by jlwang
 
-            /* -------------------------------- Debugging ------------------------------- //
+            /* -------------------------------- Debugging -------------------------------- //
             MessageBox.Show("od_blf_mainrun returned " + sRunResult
                             ,"ODPS.Windows.OdpsPayrun.wPaymentRunSearch.cb_open_clicked");
             /* --------------------------------------------------------------------------- */
@@ -281,7 +294,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             }
             else
             {
-                int.TryParse(sRunResult, out lRunResult);//lRunResult = Convert.ToInt32(sRunResult);
+                //lRunResult = Convert.ToInt32(sRunResult);
+                int.TryParse(sRunResult, out lRunResult);
             }
 
             //  If there is more to the return code than just the code itself
@@ -293,16 +307,20 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 t_pos2 = sRunResult.IndexOf(",", t_pos1);
                 if (t_pos2 > 0)
                 {
-                    t_contractorNo = sRunResult.Substring(t_pos1, t_pos2 - t_pos1);//t_contractorNo = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    //t_contractorNo = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    t_contractorNo = sRunResult.Substring(t_pos1, t_pos2 - t_pos1);
                     t_pos1 = t_pos2 + 1;
                 }
-                t_pos2 = sRunResult.IndexOf(",", t_pos1);//t_pos2 = TextUtil.Pos(sRunResult, ',', t_pos1 + 1);
+                //t_pos2 = TextUtil.Pos(sRunResult, ',', t_pos1 + 1);
+                t_pos2 = sRunResult.IndexOf(",", t_pos1);
                 if (t_pos2 > 0)
                 {
-                    t_dedID = sRunResult.Substring(t_pos1, t_pos2 - t_pos1); // t_dedID = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    // t_dedID = TextUtil.Mid(sRunResult, t_pos1 + 1, t_pos2 - t_pos1 - 1);
+                    t_dedID = sRunResult.Substring(t_pos1, t_pos2 - t_pos1); 
                     t_pos1 = t_pos2 + 1;
                 }
-                t_ded_description = sRunResult.Substring(t_pos1); //t_ded_description =  Mid(sRunResult, t_pos1 + 1);
+                //t_ded_description =  Mid(sRunResult, t_pos1 + 1);
+                t_ded_description = sRunResult.Substring(t_pos1); 
                 t_ded_description = t_ded_description == null ? "" : t_ded_description;
 
                 //  Tell the user about the error and abort run
@@ -324,15 +342,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 if (dataservice.SQLCode != 0)
                 {
                     sErrMsg = "SQLCODE = " + Convert.ToString(dataservice.SQLCode) + "\r"
-                                     + "   - " + dataservice.SQLErrText + "\r";
+                              + "   - " + dataservice.SQLErrText + "\r";
                 }
                 sErrMsg = sErrMsg + "Return code   = " + sRunResult + "\r";
                 MessageBox.Show("Payment Run Failed!                    \r" 
                                 + sErrMsg + "\r"
                                 + "Aborting run"
                                 , this.Text
-                                , MessageBoxButtons.OK
-                                , MessageBoxIcon.Stop);
+                                , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 //  PBY 26/04/2002 added ROLLBACK to avoid table locking problem.
                 //? ROLLBACK;
                 return;
@@ -342,12 +359,15 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             //COMMIT;
             if (lRunResult == 0)
             {
-                MessageBox.Show("Payment run produced nothing!", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Payment run produced nothing!"
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             string ls_RunMSG;
 
-            StaticVariables.LoginId = StaticVariables.LoginId.ToUpper();//StaticVariables.gs_userid = Upper(StaticVariables.gs_userid);
+            //StaticVariables.gs_userid = Upper(StaticVariables.gs_userid);
+            StaticVariables.LoginId = StaticVariables.LoginId.ToUpper();
             if (lRunResult > 0)
             {
                 // OpenWithParm(WPaymentRunResults, SecondsAfter(tStart, System.DateTime.Now));
@@ -360,7 +380,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 {
                     ls_RunMSG = "Successful payment run for " + dEnd.ToString() + " Start time: " + tStart.ToString() + " End time: " + System.DateTime.Now.ToString();
                     // INSERT INTO rd.rds_audit (  "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
-                    // VALUES  (  null,:tStart,:gs_UserID,:lcontract,:lcontractor,:ls_RunMSG,null,null )  ;
+                    // VALUES  ( null,:tStart,:gs_UserID,:lcontract,:lcontractor,:ls_RunMSG,null,null )  ;
 
                     //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
                     //COMMIT;
@@ -369,8 +389,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 else
                 {
                     ls_RunMSG = "Unuccessful payment run for " + dEnd.ToString() + "  Reference#" + lRunResult.ToString();
-                    //INSERT INTO rd.rds_audit (  "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
-                    // VALUES  (  null, :tStart, :gs_UserID, :lcontract, :lcontractor, :ls_RunMSG , null, null );
+                    //INSERT INTO rd.rds_audit( "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
+                    // VALUES ( null, :tStart, :gs_UserID, :lcontract, :lcontractor, :ls_RunMSG , null, null );
 
                     //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
                     //COMMIT;
@@ -382,7 +402,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                     ll_aKey = dataservice3.Ll_aKey;
                     // 	messagebox ( parent.title,"Payment Run Failed! - Ref#"+lRunResult).ToString()
                     // MessageBox(parent.Title, "Payment Run Failed!  - Ref# " + String(lRunResult) + "\r~rrds_audit key " + String(ll_aKey), exclamation!, ok!, 1);
-                    MessageBox.Show("Payment Run Failed!  - Ref# " + Convert.ToString(lRunResult) + "\r\rrds_audit key " + Convert.ToString(ll_aKey), this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Payment Run Failed!  - Ref# " + Convert.ToString(lRunResult) + "\r\r"
+                                    + "rds_audit key " + Convert.ToString(ll_aKey)
+                                    , this.Text
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }
