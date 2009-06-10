@@ -868,14 +868,16 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             else
                 ls_temp = aa_value.ToString();
 
-            if ((ls_temp.GetType() == typeof(string)) && (ls_temp.Length == 13))  //if (Match(ls_temp, Char(13))) 
-            {
-                ls_temp = '\"' + ls_temp + '\"';
-            }
-            else if (aa_value is DateTime)
+            if (aa_value is DateTime)
             {
                 return ((DateTime)aa_value).ToShortDateString();
             }
+            // Commented out - TJB  4-May-2009 - Quotes incorrectly added
+            //else if ((ls_temp.GetType() == typeof(string)) && (ls_temp.Length == 13))  //if (Match(ls_temp, Char(13))) 
+            //{
+            //    ls_temp = '\"' + ls_temp + '\"';
+            //}
+
             return ls_temp;
         }
 
@@ -965,21 +967,50 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 {
                     ls_postcode = "";
                 }
-                for (ll_i = 0; ll_i < 4; ll_i++)
+                // for (ll_i = 0; ll_i < 4; ll_i++)
+                // {
+                //     //ll_j = TextUtil.Pos (ls_temp, Char(13));
+                //     ll_j = ls_temp.IndexOf("\r");
+                //     if (ll_j > 0)
+                //     {
+                //         ls_addr[ll_i] = ls_temp.Substring(0, ll_j).Trim();   //ls_addr[ll_i] = Trim(Left(ls_temp, ll_j - 1));
+                //         ls_temp = ls_temp.Substring(ll_j + 1 + 1).Trim();  //ls_temp = Trim(Right(ls_temp,  ls_temp.Len() - ll_j - 1));
+                //     }
+                //     else
+                //     {
+                //         ls_addr[ll_i] = ls_temp;
+                //         ls_temp = "";
+                //     }
+                // }
+
+                const char quote = '"';
+                char[] quotess = new Char[]
+                    {
+                        quote
+                    };
+                const char nl = '\n';
+                const char cr = '\r';
+                char[] lineendings = new Char[]
+                    {
+                        nl, cr
+                    };
+                String[] split_address = ls_temp.Split(lineendings);
+
+                ll_i = 0;
+                foreach ( String address_line in split_address )
                 {
-                    //ll_j = TextUtil.Pos (ls_temp, Char(13));
-                    ll_j = ls_temp.IndexOf("\r");
-                    if (ll_j > 0)
+                    if (address_line.Length > 0)
                     {
-                        ls_addr[ll_i] = ls_temp.Substring(0, ll_j).Trim();   //ls_addr[ll_i] = Trim(Left(ls_temp, ll_j - 1));
-                        ls_temp = ls_temp.Substring(ll_j + 1 + 1).Trim();  //ls_temp = Trim(Right(ls_temp,  ls_temp.Len() - ll_j - 1));
+                        ls_addr[ll_i] = address_line.Trim(quotess);
+                        ll_i++;
                     }
-                    else
-                    {
-                        ls_addr[ll_i] = ls_temp;
-                        ls_temp = "";
-                    }
-                }
+                };
+                while ( ll_i < 4 )
+                {
+                    ls_addr[ll_i] = "";
+                    ll_i++;
+                };
+
                 ls_temp = ls_addr[0] + "|" + ls_addr[1] + "|" + ls_addr[2] + "|" + ls_addr[3] + "|" + ls_postcode;
             }
             return ls_temp;
@@ -1540,7 +1571,16 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 //  Split the contractor's address into 4 address lines 
                 //  and the post code.
                 ls_address = of_split_address(ls_contractor_addr);
-                ls_temp = "1" + "|" + of_output(ll_contract_no) + "|" + of_output(ls_contractor_gst) + "|" + of_output(ls_ds_no) + "|" + of_output(ls_contractor_name) + "|" + ls_address + "|" + of_output(ls_contract_title) + "|" + of_output(ld_end_date) + "|" + of_output(ld_issue_date) + "|" + of_output(ls_invoice_no) + "|" + of_output(ls_message);
+                ls_temp = "1" + "|" + of_output(ll_contract_no) 
+                              + "|" + of_output(ls_contractor_gst) 
+                              + "|" + of_output(ls_ds_no)       
+                              + "|" + of_output(ls_contractor_name) 
+                              + "|" + ls_address                
+                              + "|" + of_output(ls_contract_title) 
+                              + "|" + of_output(ld_end_date)    
+                              + "|" + of_output(ld_issue_date) 
+                              + "|" + of_output(ls_invoice_no)  
+                              + "|" + of_output(ls_message);
                 // 				+of_output ( ll_contractor_no)   +'|' &  --> replaced with ls_ds_no
                 /*  ----------------------- Debugging ----------------------- //
                 string	ds_address
@@ -1576,8 +1616,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                     //if (ll_rc < 0) 
                     catch
                     {
-                        MessageBox.Show("Error writing payee details record.\n" + "Contract    = " + is_contract + '~' + "Return code = " + of_display(ll_rc),
-                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Error writing payee details record.\n" 
+                                         + "Contract    = " + is_contract + '~' 
+                                         + "Return code = " + of_display(ll_rc)
+                                        ,"Error"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         break;
                     }
                     ll_rc = of_process_payment_details(ll_inv_id, edate, ll_contractor_no, ll_contract_no);
