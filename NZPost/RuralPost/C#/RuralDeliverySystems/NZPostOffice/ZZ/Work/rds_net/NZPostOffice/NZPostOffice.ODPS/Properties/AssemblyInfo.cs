@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Owner Driver Payment System")]
 [assembly: AssemblyDescription("Owner Driver Payment System")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Metex Inc.")]
+[assembly: AssemblyCompany("Fronde Systems Group")]
 [assembly: AssemblyProduct("Owner Driver Payment System")]
-[assembly: AssemblyCopyright("Copyright @2007 Rural Post")]
+[assembly: AssemblyCopyright("Copyright @2009 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("7.0.0.0")]
-[assembly: AssemblyFileVersion("7.0.0.0")]
+[assembly: AssemblyVersion("7.0.0.27")]
+[assembly: AssemblyFileVersion("7.0.0.27")]
