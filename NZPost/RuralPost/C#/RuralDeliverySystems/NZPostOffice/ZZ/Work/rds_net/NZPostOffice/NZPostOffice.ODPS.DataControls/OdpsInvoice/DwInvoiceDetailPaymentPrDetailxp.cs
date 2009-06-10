@@ -49,11 +49,15 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                     _sum += this.GetItem<InvoiceDetailPaymentPrDetailxp>(i).Cost;
                 }
                 sum = _sum;
-                this.grid.Rows[this.grid.RowCount - 1].Cells[4].Value = sum;
-                rowCount = this.grid.RowCount - 1;
-                row = rowCount;
-                this.rowcount.Text = rowCount.ToString();
-                this.grid.InvalidateCell(3, this.grid.RowCount - 1);
+                /* 
+                 * Comment this out to fix exported invoices bug
+                 * - Skyroad details displayed group total as last item line 
+                 */
+                //this.grid.Rows[this.grid.RowCount - 1].Cells[4].Value = sum;
+                //rowCount = this.grid.RowCount - 1;
+                //row = rowCount;
+                //this.rowcount.Text = rowCount.ToString();
+                //this.grid.InvalidateCell(3, this.grid.RowCount - 1);
             }
         }
 
