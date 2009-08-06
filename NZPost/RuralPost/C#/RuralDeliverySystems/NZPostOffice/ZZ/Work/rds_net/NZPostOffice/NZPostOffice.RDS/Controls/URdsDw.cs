@@ -466,15 +466,13 @@ namespace NZPostOffice.RDS.Controls
             return -1;
         }
 
-
         //pp! PB help statement for the following functions: GetNextModified reports rows with the status NewModified! and DataModified!
         public virtual int GetNextModified(int row)
         {
             for (++row; row < this.DataObject.RowCount; row++)
             {
+                //pp! added IsNew check, entity can has IsNew = true and IsDirty = false, to be verified
                 if (((Metex.Core.EntityBase)this.DataObject.BindingSource.List[row]).IsDirty
-
-                    //pp! added IsNew check, entity can has IsNew = true and IsDirty = false, to be verified
                     || ((Metex.Core.EntityBase)this.DataObject.BindingSource.List[row]).IsNew
                     )
                     return row;
@@ -508,7 +506,7 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual int Save()
         {
-           // if (this.NewCount() > 0 || this.ModifiedCount() > 0)
+            // if (this.NewCount() > 0 || this.ModifiedCount() > 0)
             if (this.DataObject.DeletedCount==0 || this.NewCount() >0 ||
                 (this.DataObject.DeletedCount >0 && this.ModifiedCount()>0) ||
                 (this.DataObject.DeletedCount >0 && this.NewCount()>0))
@@ -539,8 +537,9 @@ namespace NZPostOffice.RDS.Controls
             }
             if (WinPfcSave != null)
                 WinPfcSave();
-      
-            this.URdsDw_GetFocus(null, null); //added by jlwang for fix tab key change the focus
+
+            //added by jlwang for fix tab key change the focus
+            this.URdsDw_GetFocus(null, null); 
             return rst;// 0;
         }
         protected virtual int pfc_update()
