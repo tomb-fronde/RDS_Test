@@ -17,11 +17,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     public class WPieceRateImport : WAncestorWindow
     {
         #region Define
-        public string isIgnoreWrongRates = "UNDEF";
-
-        public bool bprocessing = false;
-
-        public string is_Flag = String.Empty;
 
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
@@ -38,23 +33,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_3;
 
-        public URdsDw dw_wrong_rate;
-        public List<PieceRateImportDiffRateReport> dw_wrong_rateList = new List<PieceRateImportDiffRateReport>();
+        public Button cb_4;
 
-        public URdsDw dw_errors;
-        public List<PieceRateImportExeptionReport> dw_errorsList = new List<PieceRateImportExeptionReport>();
-
-
-        public PictureBox p_abort;
+        public Button cb_cancel;
 
         public Button cb_stop;
 
-        public Button cb_4;
+        public URdsDw dw_errors;
+        public List<PieceRateImportExeptionReport> dw_errorsList = new List<PieceRateImportExeptionReport>();
+        
+        public PictureBox p_abort;
 
-        public URdsDw dw_invalid;
-
-        public URdsDw dw_invalid_date;
-        public List<PieceRateImportInvalidDate> dw_InvalidDateList = new List<PieceRateImportInvalidDate>();
+        public string isIgnoreWrongRates = "UNDEF";
+        public int nInputRecords;
 
         #endregion
 
@@ -63,49 +54,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.InitializeComponent();
 
             dw_1.DataObject = new DPieceRateImport();
-            //jlwang:moved from IC
-            dw_wrong_rate.DataObject = new DPieceRateImportDiffRateReport();
-            dw_wrong_rate.Constructor += new UserEventDelegate(dw_wrong_rate_constructor);
-
             dw_errors.DataObject = new DPieceRateImportExeptionReport();
-
-            dw_invalid.Constructor += new UserEventDelegate(dw_invalid_constructor);
-            dw_invalid.DataObject = new DPieceRateImportInvalidDate();
-
-            dw_invalid_date.Constructor += new UserEventDelegate(dw_invalid_date_constructor);
-            dw_invalid_date.DataObject = new DPieceRateImportInvalidDate();
-            //jlwang:end
         }
 
         public override void open()
         {
             base.open();
-
-            //?dw_1.settransobject(StaticVariables.sqlca);
-            /*?dw_1.DataObject.InsertItem<PieceRateImport>(0);
-            dw_1.DataObject.DeleteItemAt(0);
-            
-            //?dw_errors.settransobject(StaticVariables.sqlca);
-            dw_errors.DataObject.InsertItem<PieceRateImportExeptionReport>(0);
-            dw_errors.DataObject.DeleteItemAt(0);
-            //?dw_wrong_rate.settransobject(StaticVariables.sqlca);
-            dw_wrong_rate.DataObject.InsertItem<PieceRateImportDiffRateReport>(0);
-            dw_wrong_rate.DataObject.DeleteItemAt(0);
-            //?dw_invalid.settransobject(StaticVariables.sqlca);
-            dw_invalid.DataObject.InsertItem<PieceRateImportInvalidDate>(0);
-            dw_invalid.DataObject.DeleteItemAt(0);
-            //?dw_invalid_date.settransobject(StaticVariables.sqlca);
-             */
         }
 
         public override int closequery()
         {
             return base.closequery();
-            // if bprocessing then
-            // 	messagebox ( title,"Importing data...cannot close window")
-            // 	return 1
-            // end if
-            //?return 0;
         }
 
         public override void pfc_preopen()
@@ -135,44 +94,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             this.dw_1 = new URdsDw();
 //!            dw_1.DataObject = new DPieceRateImport();
-            dw_1.TabIndex = 1;
 
             this.sle_1 = new TextBox();
             this.st_1 = new Label();
             this.cb_1 = new Button();
             this.cb_2 = new Button();
             this.cb_3 = new Button();
-
-            this.dw_wrong_rate = new URdsDw();
-            //dw_wrong_rate.DataObject = new DPieceRateImportDiffRateReport();
+            this.cb_4 = new Button();
+            this.cb_cancel = new Button();
 
             this.dw_errors = new URdsDw();
             //dw_errors.DataObject = new DPieceRateImportExeptionReport();
 
             this.p_abort = new PictureBox();
             this.cb_stop = new Button();
-            this.cb_4 = new Button();
-
-            this.dw_invalid = new URdsDw();
-            //dw_invalid.DataObject = new DPieceRateImportInvalidDate();
-
-            this.dw_invalid_date = new URdsDw();
-            //dw_invalid_date.DataObject = new DPieceRateImportInvalidDate();
 
             Controls.Add(dw_1);
             Controls.Add(sle_1);
             Controls.Add(st_1);
             Controls.Add(cb_1);
-            Controls.Add(cb_4);
             Controls.Add(cb_2);
             Controls.Add(cb_3);
-            Controls.Add(dw_wrong_rate);
+            Controls.Add(cb_4);
+            Controls.Add(cb_cancel);
             Controls.Add(dw_errors);
             Controls.Add(p_abort);
             Controls.Add(cb_stop);
-
-            Controls.Add(dw_invalid);
-            Controls.Add(dw_invalid_date);
 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -190,6 +137,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             dw_1.Location = new System.Drawing.Point(3, 30);
             dw_1.Size = new System.Drawing.Size(466, 325);
+            dw_1.TabIndex = 5;
 
             // 
             // sle_1
@@ -213,27 +161,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             st_1.Size = new System.Drawing.Size(51, 16);
 
             // 
-            // cb_1
+            // cb_1   = "&Import with values"
             // 
             cb_1.Text = "&Import with values";
             cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 4;
+            cb_1.TabIndex = 3;
             cb_1.Size = new System.Drawing.Size(101, 21);
             cb_1.Location = new System.Drawing.Point(254, 2);
             cb_1.Click += new EventHandler(cb_1_clicked);
 
             // 
-            // cb_2
+            // cb_2   = "..."
             // 
             cb_2.Text = "...";
             cb_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_2.TabIndex = 3;
+            cb_2.TabIndex = 2;
             cb_2.Location = new System.Drawing.Point(229, 2);
             cb_2.Size = new System.Drawing.Size(21, 21);
             cb_2.Click += new EventHandler(cb_2_clicked);
 
             // 
-            // cb_3
+            // cb_3   "&Save"
             // 
             cb_3.Text = "&Save";
             cb_3.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
@@ -243,12 +191,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_3.Click += new EventHandler(cb_3_clicked);
 
             // 
-            // dw_wrong_rate
+            // cb_4   "&Import without values"
             // 
-            dw_wrong_rate.Location = new System.Drawing.Point(659, 133);
-            dw_wrong_rate.Size = new System.Drawing.Size(128, 130);
-            dw_wrong_rate.Visible = false;
-            //dw_wrong_rate.Constructor += new UserEventDelegate(dw_wrong_rate_constructor);
+            cb_4.Text = "&Import without values";
+            cb_4.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_4.TabIndex = 4;
+            cb_4.Location = new System.Drawing.Point(358, 2);
+            cb_4.Size = new System.Drawing.Size(110, 21);
+            cb_4.Click += new EventHandler(cb_4_clicked);
+
+            // 
+            // cb_cancel   "&Cancel"
+            // 
+            cb_cancel.Text = "&Cancel";
+            cb_cancel.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_cancel.TabIndex = 7;
+            cb_cancel.Location = new System.Drawing.Point(345, 360);
+            cb_cancel.Size = new System.Drawing.Size(52, 21);
+            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
 
             // 
             // dw_errors
@@ -272,38 +232,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             cb_stop.Text = "Sto&p";
             cb_stop.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_stop.TabIndex = 7;
+            cb_stop.TabIndex = 8;
             cb_stop.Location = new System.Drawing.Point(366, 2);
             cb_stop.Size = new System.Drawing.Size(65, 21);
             cb_stop.Visible = false;
             cb_stop.Click += new EventHandler(cb_stop_clicked);
 
-            // 
-            // cb_4
-            // 
-            cb_4.Text = "&Import without values";
-            cb_4.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_4.TabIndex = 5;
-            cb_4.Location = new System.Drawing.Point(358, 2);
-            cb_4.Size = new System.Drawing.Size(110, 21);
-            cb_4.Click += new EventHandler(cb_4_clicked);
-
-            // 
-            // dw_invalid
-            // 
-            dw_invalid.TabIndex = 2;
-            dw_invalid.Location = new System.Drawing.Point(692, 206);
-            dw_invalid.Size = new System.Drawing.Size(84, 109);
-            dw_invalid.Visible = false;
-            //dw_invalid.Constructor += new UserEventDelegate(dw_invalid_constructor);
-
-            // 
-            // dw_invalid_date
-            // 
-            dw_invalid_date.TabIndex = 2;
-            dw_invalid_date.Location = new System.Drawing.Point(485, 12);
-            dw_invalid_date.Size = new System.Drawing.Size(262, 315);
-            //dw_invalid_date.Constructor += new UserEventDelegate(dw_invalid_date_constructor);
             this.ResumeLayout();
         }
 
@@ -325,22 +259,60 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #endregion
 
         #region Methods
-        public virtual bool wf_check_contract(int arow)
+        public virtual void wf_saveerror_info(int pRow, string pErrormsg)
         {
+            DataEntityGrid dwchild = (DataEntityGrid)dw_1.GetControlByName("grid");
+            PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
+            record.Contract = dw_1.GetItem<PieceRateImport>(pRow).Contract;
+            record.PrdDate = dw_1.GetItem<PieceRateImport>(pRow).PrdDate;
+            record.PrtCode = dw_1.GetItem<PieceRateImport>(pRow).PrtCode;
+            record.PrdQuantity = dw_1.GetItem<PieceRateImport>(pRow).PrdQuantity;
+            record.PrdCost = dw_1.GetItem<PieceRateImport>(pRow).PrdCost;
+            record.ContractNo = dw_1.GetItem<PieceRateImport>(pRow).ContractNo;
+            record.PrtKey = dw_1.GetItem<PieceRateImport>(pRow).PrtKey;
+            record.PrdRdCost = dw_1.GetItem<PieceRateImport>(pRow).PrdRdCost;
+            record.PrtDescription = dwchild.Rows[pRow].Cells["prt_key"].FormattedValue.ToString();
+            record.Errormsg = pErrormsg;
+            dw_errorsList.Insert(0, record);
+        }
+
+        public virtual bool wf_checkdate(int pRow, DateTime pToday)
+        {   // Validate the contract date
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
+            DateTime thisPrdDate;
+
+            thisPrdDate = (DateTime)dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdDate;
+            if ( thisPrdDate > pToday )
+            {
+                wf_saveerror_info( pRow, "Invalid date" );
+                return false;
+            }
+            return true;
+        }
+
+        public virtual bool wf_check_contract(int pRow)
+        {   // Validate the contract number
+            // Save the number (as a number) in ContractNo
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
             string sMSNumber;
             int lContract;
             int lCount;
-            bool bReturn = true;
             int SQLCode = 0;
-            string SQLErrText = string.Empty;
 
-            sMSNumber = dw_1.DataObject.GetItem<PieceRateImport>(arow).Contract;//, "contract");
-            //if (IsNumber(sMSNumber)) {
-            if (int.TryParse(sMSNumber, out lContract))
-            {
-                lContract = Convert.ToInt32(sMSNumber);
-            }
-            else
+            sMSNumber = dw_1.DataObject.GetItem<PieceRateImport>(pRow).Contract;
+            if ( ! int.TryParse(sMSNumber, out lContract) )
             {
                 // select contract_no into :lContract from contract where con_old_mail_service_no = :sMSNumber;
                 lContract = RDSDataService.GetContractNo(sMSNumber);
@@ -349,359 +321,257 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lCount = RDSDataService.GetContractCount(lContract, ref SQLCode);
             if (SQLCode == 0 && lCount > 0)
             {
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).ContractNo = lContract;
+                dw_1.DataObject.GetItem<PieceRateImport>(pRow).ContractNo = lContract;
             }
             else
             {
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg = "Contract not found on database";
-                PieceRateImport current = dw_1.GetItem<PieceRateImport>(arow);
-                //dw_1.rowsmove(arow, arow, primary!, dw_errors, 1, primary!);
-                //dw_errors.InsertItem<PieceRateImportExeptionReport>(0);
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtKey = dw_1.GetItem<PieceRateImport>(arow).PrtKey;
-                PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                record.Contract = current.Contract;
-                record.ContractNo = current.ContractNo;
-                record.PrdCost = current.PrdCost;
-                record.PrdDate = current.PrdDate;
-                record.PrdQuantity = current.PrdQuantity;
-                record.PrtCode = current.PrtCode;
-                record.PrtKey = current.PrtKey;
-                dw_errorsList.Insert(0,record);
-
-                dw_1.DeleteItemAt(arow);
-                bReturn = false;
+                dw_1.DataObject.GetItem<PieceRateImport>(pRow).ContractNo = -1;
+                wf_saveerror_info(pRow, "Contract not found on database");
+                return false;
             }
-            return bReturn;
+            return true;
         }
 
-        public virtual bool wf_check_piece_rate(int arow)
-        {
-            string sPRCode;
-            DateTime? dPRDate;
-            int lPRKey;
-            bool bReturn = true;
+        public virtual bool wf_check_duplicate(int pRow, int pContractNo, string pPrtCode, DateTime? pPrdDate)
+        {   // Check for duplicate records.  Parameters contain previous record's values.
+            // MUST follow checkdate routine which sets the ContractNo value 
+            //     (otherwise throws an unhandled exception)
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
+            string thisPrtCode;
+            int thisContractNo;
+            DateTime? thisPrdDate;
+
+            thisContractNo = (int)dw_1.DataObject.GetItem<PieceRateImport>(pRow).ContractNo;
+            thisPrtCode = dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrtCode;
+            thisPrdDate = dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdDate;
+            if (( thisContractNo == pContractNo
+                 && thisPrtCode == pPrtCode
+                 && thisPrdDate == pPrdDate) )
+            {
+                wf_saveerror_info(pRow, "Duplicate data row (contract, date, prt_code)");
+                return false;
+            }
+            return true;
+        }
+
+        public virtual bool wf_check_piece_rate(int pRow)
+        {   // Validate the piecerate
+            // Set the PrtKey value for the record
+            // Save the number (as a number) in ContractNo
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
+            string thisPrtCode;
+            int thisPrtKey;
             int SQLCode = 0;
-            string SQLErrText = string.Empty;
 
-            PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(arow);
-
-            //!sPRCode = current.PrtCode;
-            sPRCode = current.PrtCode;
-
-            //!dPRDate = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdDate;
-            dPRDate = current.PrdDate;
+            thisPrtCode = dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrtCode;
 
             // select prt_key into :lPRKey from piece_rate_type where prt_code = :sPRCode;
-            lPRKey = RDSDataService.GetPrtKey(sPRCode, ref SQLCode);
+            thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
             if (SQLCode == 0)
             {
-                dw_1.SetValue(arow, "prt_key", lPRKey);
                 //dw_1.DataObject.GetItem<PieceRateImport>(arow).PrtKey = lPRKey;
+                dw_1.SetValue(pRow, "prt_key", thisPrtKey);
             }
             else
             {
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg = "Piece rate code not found on database";
-                
-                //dw_1.DataObject.rowsmove(arow, arow, primary!, dw_errors, 1, primary!);
-                //dw_errors.InsertItem<PieceRateImportExeptionReport>(0);
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtKey = dw_1.GetItem<PieceRateImport>(arow).PrtKey;
-                PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                record.Contract = current.Contract;
-                record.ContractNo = current.ContractNo;
-                record.PrdCost = current.PrdCost;
-                record.PrdDate = current.PrdDate;
-                record.PrdQuantity = current.PrdQuantity;
-                record.PrtCode = current.PrtCode;
-                record.PrtKey = current.PrtKey;
-                dw_errorsList.Insert(0, record);
-
-                dw_1.DeleteItemAt(arow);
-                bReturn = false;
+                wf_saveerror_info( pRow, "Piece rate key not found on database" );
+                return false;
             }
-            return bReturn;
+            return true;
         }
 
-        public virtual bool wf_confirm_rate(int arow)
-        {
-            int? lContract;
-            DateTime? dPRDDate;
-            DateTime? dPrEffDate;
-            Decimal? decRate = Decimal.MinValue;
-            int? lPRKey;
-            bool bReturn = true;
-            int lCount = int.MinValue;
-            lContract = dw_1.DataObject.GetItem<PieceRateImport>(arow).ContractNo;
-            lPRKey = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrtKey;
-            dPRDDate = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdDate;
+        public virtual bool wf_confirm_rate(int pRow)
+        {   // Validate the piecerate cost
+            // Assumes the PrtKey value for the record has been set (in wf_check_piece_rate)
+            // Save the pr_rate in PrdRdCost
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
+            int thisContractNo;
+            DateTime thisPrdDate;
+            Decimal? thisPrRate;
+            Decimal? thisPrdCost;
+            Decimal? thisTotalcost;
+            int thisPrtKey;
+            int thisCount = int.MinValue;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            /*SELECT piece_rate.pr_rate, piece_rate.pr_effective_date
-            INTO :decRate, :dPrEffDate 
-            FROM contract key join contract_renewals,
-            contract_renewals join piece_rate
-            on  contract_renewals.con_rg_code_at_renewal   = piece_rate.rg_code
-            and contract_renewals.con_rates_effective_date = piece_rate.pr_effective_date
-            and piece_rate.prt_key = :lPRKey
-            WHERE contract.contract_no = :lContract 
-            AND contract_renewals.contract_seq_number = ( SELECT max ( contract_seq_number) FROM contract_renewals 
-            WHERE contract_renewals.con_start_date <= :dPRDDate and contract_renewals.contract_no = contract.contract_no);*/
-            RDSDataService dataService = RDSDataService.GetContractList(lPRKey, lContract, dPRDDate, ref SQLCode, ref SQLErrText);
+            thisContractNo = (int)dw_1.DataObject.GetItem<PieceRateImport>(pRow).ContractNo;
+            thisPrdCost = dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost;
+            thisPrtKey = (int)dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrtKey;
+            thisPrdDate = (DateTime)dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdDate;
+            RDSDataService dataService = RDSDataService.GetContractList(
+                                                     thisPrtKey, 
+                                                     thisContractNo, 
+                                                     thisPrdDate, 
+                                                     ref SQLCode, 
+                                                     ref SQLErrText);
             List<ContractItem> list = dataService.ContractItemList;
+            thisPrRate = 0;
             if (list != null && list.Count > 0)
             {
-                decRate = list[0].Pr_rate;
-                dPrEffDate = list[0].Pr_effective_date;
+                thisPrRate = list[0].Pr_rate;
             }
-
             if (SQLCode == 0)
             {
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdRdCost = decRate;
+                dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdRdCost = thisPrRate;
 
-                // select count(prt_key) into :lCount from piece_rate_delivery  where contract_no = :lContract and prt_key = :lPRKey and prd_date= :dPRDDate;
-                lCount = RDSDataService.GetPieceRateDeliveryCount(lContract, lPRKey, dPRDDate);
+                // Totalcost is a derived value, depending on the PrRdCost (= _prd_quantity * _prd_rd_cost)
+                // Don't reference it till the PrRdCost has been set.
+                thisTotalcost = dw_1.DataObject.GetItem<PieceRateImport>(pRow).Totalcost;
 
-                // 	if lCount>0 then
-                if (!(StaticFunctions.f_nempty(lCount)))
+                // select count(prt_key) into :lCount from piece_rate_delivery where contract_no = :lContract and prt_key = :lPRKey and prd_date= :dPRDDate;
+                thisCount = RDSDataService.GetPieceRateDeliveryCount( thisContractNo, 
+                                                                      thisPrtKey, 
+                                                                      thisPrdDate);
+
+                // if lCount>0 then
+                if (!(StaticFunctions.f_nempty(thisCount)))
                 {
-                    dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg = "A piece rate for this contract on this date has already been defined on the datab" + "ase";
-
-                    //dw_1.rowsmove(arow, arow, primary!, dw_errors, 1, primary!);
-                    PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(arow);
-                    //!dw_errors.InsertItem<PieceRateImportExeptionReport>(0);
-                    DataEntityGrid dwchild = (DataEntityGrid)dw_1.GetControlByName("grid");
-                    //!dw_errors.GetItem<PieceRateImportExeptionReport>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtDescription = dwchild.Rows[arow].Cells["prt_key"].FormattedValue.ToString();//add by mkwang
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdRdCost = dw_1.GetItem<PieceRateImport>(arow).PrdRdCost;
-                    //!dw_errors.GetItem<PieceRateImportExeptionReport>(0).Errormsg = dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg;
-                    PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                    record.Contract = current.Contract;
-                    record.ContractNo = current.ContractNo;
-                    record.PrdCost = current.PrdCost;
-                    record.PrdDate = current.PrdDate;
-                    record.PrdQuantity = current.PrdQuantity;
-                    record.PrtCode = current.PrtCode;
-                    record.PrtDescription = dwchild.Rows[arow].Cells["prt_key"].FormattedValue.ToString();
-                    record.Errormsg = current.Errormsg;
-                    dw_errorsList.Insert(0, record);
-
-                    dw_1.DeleteItemAt(arow);
-                    bReturn = false;
+                    // sErrormsg = "A piece rate for this contract on this date has already been defined on the database";
+                    wf_saveerror_info(pRow, "Piece rate already defined on database");
+                    return false;
                 }
-                else if (dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost != null && dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost != Decimal.Round(dw_1.DataObject.GetItem<PieceRateImport>(arow).Totalcost.Value, 2) && !(StaticFunctions.f_nempty(decRate)))
+                else if (thisPrdCost != null
+                         && Decimal.Round((Decimal)thisPrdCost.Value,2) 
+                                               != Decimal.Round(thisTotalcost.Value, 2)
+                         && ! (StaticFunctions.f_nempty(thisPrRate)))
                 {
-                    // 	and decRate>0 then 
-                    System.Decimal? ltemp1;
-                    System.Decimal? ltemp2;
-                    System.Decimal? ltemp3;
-                    ltemp1 = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost;
-                    ltemp2 = Decimal.Round(dw_1.DataObject.GetItem<PieceRateImport>(arow).Totalcost.Value, 2);
-                    ltemp3 = decRate;
                     if (isIgnoreWrongRates == "UNDEF")
                     {
-                        if (MessageBox.Show("Piece Rate costs have been found that do not match the rates defined for this con" + "tract.\r\rDo you want to write them to another file for later processing?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        isIgnoreWrongRates = "YES";
+                        DialogResult answer = MessageBox.Show(
+                                                 "Piece Rate costs have been found that do not match the rates defined for this contract.\n\n"
+                                                + "Do you want to write them to another file for later processing?"
+                                                , this.Text
+                                                , MessageBoxButtons.YesNo
+                                                , MessageBoxIcon.Question);
+                        if (answer == DialogResult.Yes)
                         {
                             isIgnoreWrongRates = "NO";
-                        }
-                        else
-                        {
-                            isIgnoreWrongRates = "YES";
                         }
                     }
                     if (isIgnoreWrongRates == "NO")
                     {
-                        //dw_1.rowsmove(arow, arow, primary!, dw_wrong_rate, 1, primary!);
-                        PieceRateImport current = dw_1.GetItem<PieceRateImport>(arow);
-
-                        //!dw_wrong_rate.InsertItem<PieceRateImportDiffRateReport>(0);
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                        //dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                        //!dw_wrong_rate.GetItem<PieceRateImportDiffRateReport>(0).PrtKey = dw_1.GetItem<PieceRateImport>(arow).PrtKey;
-                        PieceRateImportDiffRateReport record = new PieceRateImportDiffRateReport();
-                        record.Contract = current.Contract;
-                        record.ContractNo = current.ContractNo;
-                        record.PrdCost = current.PrdCost;
-                        record.PrdDate = current.PrdDate;
-                        record.PrdQuantity = current.PrdQuantity;
-                        record.PrtCode = current.PrtCode;
-                        record.PrtKey = current.PrtKey;
-                        dw_wrong_rateList.Insert(0, record);
-
-                        dw_1.DeleteItemAt(arow);
+                        // sErrormsg = "Piece Rate cost does not match the rates defined for this contract.";
+                        wf_saveerror_info(pRow, "Piece Rate cost does not match");
+                        return false;
                     }
                 }
             }
             else
             {
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg = "Piece rate type does not have a rate defined for this contract";
-                PieceRateImport current = dw_1.GetItem<PieceRateImport>(arow);
-                //dw_1.rowsmove(arow, arow, primary!, dw_errors, 1, primary!);
-                dw_errors.InsertItem<PieceRateImportExeptionReport>(0);
-                //!dw_errors.GetItem<PieceRateImportExeptionReport>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                //!dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtKey = dw_1.GetItem<PieceRateImport>(arow).PrtKey;
-                PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                record.Contract = current.Contract;
-                record.ContractNo = current.ContractNo;
-                record.PrdCost = current.PrdCost;
-                record.PrdDate = current.PrdDate;
-                record.PrdQuantity = current.PrdQuantity;
-                record.PrtCode = current.PrtCode;
-                record.PrtKey = current.PrtKey;
-                dw_errorsList.Insert(0, record);
-
-                dw_1.DeleteItemAt(arow);
-                bReturn = false;
+                //sErrormsg = "Piece rate type does not have a rate defined for this contract";
+                wf_saveerror_info(pRow, "Piece rate not defined");
+                return false;
             }
-            return bReturn;
+            return true;
         }
 
-        public virtual bool wf_check_duplicates(int arow)
+        //pp! using private function as the performance deteriorates severely if function from URdsDw is used
+        private int SaveErrorFile(string filename, string saveastype)
         {
-            bool bReturn = true;
-            int lLastRow;
-            int lLoop;
-            if (dw_1.DataObject.GetItem<PieceRateImport>(arow).Nextdup == "Y")
+            int nErrorRows;
+            DateTime prdDate;
+            //((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
+
+            nErrorRows = dw_errors.RowCount;
+            if (nErrorRows > 0)
             {
-                if (arow == 0)
+                //        MessageBox.Show( nErrorRows + " errors found.\n"
+                //                       + "Please select a file to save the error records to."
+                //                       , "Import Error"
+                //                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                try
                 {
-                    bReturn = false;
-                }
-                else if (dw_1.DataObject.GetItem<PieceRateImport>(arow - 1).Nextdup == "N")
-                {
-                    bReturn = false;
-                }
-            }
-            if (!bReturn)
-            {
-                lLastRow = arow;
-                //while (dw_1.DataObject.GetItem<PieceRateImport>(lLastRow).Nextdup == "Y")
-                //{
-                //    lLastRow++;
-                //}
-                //for (lLoop = lLastRow; lLoop >= arow; lLoop -= 1)
-                //{
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).Errormsg = "This row contains a duplicated contract number and piece rate";
-                //}
-                //dw_1.rowsmove(arow, lLastRow, primary!, dw_errors, 1, primary!);
-
-                for (int i = arow; i < lLastRow; i++)
-                {
-                    PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(i);
-
-                    //!dw_errors.InsertItem<PieceRateImportExeptionReport>(0);
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).Contract = dw_1.GetItem<PieceRateImport>(i).Contract;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).ContractNo = dw_1.GetItem<PieceRateImport>(i).ContractNo;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdCost = dw_1.GetItem<PieceRateImport>(i).PrdCost;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdDate = dw_1.GetItem<PieceRateImport>(i).PrdDate;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(i).PrdQuantity;
-                    //dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtCode = dw_1.GetItem<PieceRateImport>(i).PrtCode;
-                    //!dw_errors.GetItem<PieceRateImportExeptionReport>(0).PrtKey = dw_1.GetItem<PieceRateImport>(i).PrtKey;
-                    PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                    record.Contract = current.Contract;
-                    record.ContractNo = current.ContractNo;
-                    record.PrdCost = current.PrdCost;
-                    record.PrdDate = current.PrdDate;
-                    record.PrdQuantity = current.PrdQuantity;
-                    record.PrtCode = current.PrtCode;
-                    record.PrtKey = current.PrtKey;
-                    dw_errorsList.Insert(0, record);
-
-                    dw_1.DeleteItemAt(i);
-                }
-
-            }
-            
-            //pp! changed after performance issues
-            //!pp moved to cb_1_clicked, cb_4_clicked event handler to write the content of dw_errorsList only once - the last time after the loop
-            //!dw_errors.SaveAs("C:\\temp\\duplicate.txt", "text");
-            //==! this.SaveErrors("C:\\temp\\duplicate.txt", "text");
-
-            return bReturn;
-        }
-
-        //pp! using private function as the performance deteriorates severely if function form URdsDw is used
-        private int SaveErrors(string filename, string saveastype)
-        {
-            try
-            {
-                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filename))//null;
-                {
-                    // set separator charatcer
-                    char sep = '\t';                                  
-                  
-                    //sw = new StreamWriter(filename);
-                    //!for (int r = 0; r < dw_errors.DataObject.RowCount; r++)
-                    for (int r = 0; r < dw_errorsList.Count; r++)
+                    SaveFileDialog savedlg = new SaveFileDialog();
+                    savedlg.Filter = "Text (*.txt) |*.txt";
+                    savedlg.DefaultExt = saveastype;
+                    if (filename.Length > 0)
                     {
+                        savedlg.FileName = filename;
+                    }
+                    if (savedlg.ShowDialog() == DialogResult.OK)
+                    {
+                        filename = savedlg.FileName.Trim();
+                    }
+                    else
+                    {
+                        return -1;
+                    }
 
-                        PieceRateImportExeptionReport current = dw_errorsList[r];//!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(r); 
-                        
-                        //!sw.Write(this.ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
-                        sw.Write(this.ValidateExportValue(current.Contract));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrtDescription));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrdDate));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrtCode));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrdQuantity));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrdCost));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrdRdCost));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.PrtKey));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.ContractNo));
-                        sw.Write(sep);
-                        sw.Write(this.ValidateExportValue(current.Errormsg));
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filename))
+                    {
+                        int row;
+                        char sep = '\t';       // set separator charatcer
 
-                        //!if (r != dw_errors.DataObject.RowCount - 1)
-                        if (r != dw_errorsList.Count - 1)
+                        // Extract the list elements in reverse order - this writes them to the file
+                        // in the order they were added to the list (and so match the input file order).
+                        //for (r = (nErrorRows - 1); r >= 0; r--)
+                        nErrorRows = nErrorRows - 1;
+                        for (row = 0; row <= nErrorRows; row++)
                         {
-                            sw.Write("\r\n");
-                        }                        
+                            //!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(r); 
+                            PieceRateImportExeptionReport current = 
+                                 dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(row); 
+
+                            sw.Write(this.ValidateExportValue(current.Contract));
+                            sw.Write(sep);
+                            //sw.Write(this.ValidateExportValue(current.PrdDate));
+                            prdDate = (DateTime)current.PrdDate;
+                            sw.Write(prdDate.ToString("dd/MM/yyyy"));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.PrtCode));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.PrdQuantity));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.PrdCost));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.PrdRdCost));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.PrtKey));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.ContractNo));
+                            sw.Write(sep);
+                            sw.Write(this.ValidateExportValue(current.Errormsg));
+
+                            //!if (r != dw_errors.DataObject.RowCount - 1)
+                            if (row < nErrorRows)
+                            {
+                                sw.Write("\r\n");
+                            }
+                        }
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
                     }
-                   
-                    if (sw != null)
-                    {
-                        sw.Close();
-                    }
+                    // return dw_errorsList.Count;
+                    return (nErrorRows + 1);
                 }
-                //!return 1;
-                return dw_errorsList.Count;
+                catch
+                {
+                    return -1;
+                }
             }
-            catch
-            {
-                return -1;
-            }
+            return 0;
         }
 
         private string ValidateExportValue(object value)
@@ -720,152 +590,125 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
+        public virtual bool wf_calculate_rate(int pRow)
+        {   // 
+            // Assumes the PrtKey value for the record has been set (in wf_check_piece_rate)
+            // Save the pr_rate in PrRdCost
+            // If valid
+            //    Return TRUE
+            // If invalid
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
 
-        public virtual bool wf_calculate_rate(int arow)
-        {
-            DateTime ld_start = new DateTime();
-            DateTime ld_end = new DateTime();
-            DateTime? ld_prd_date = new DateTime();
-            DateTime? ld_con_rates_effective_date = new DateTime();
-            DateTime ld_prev_start = new DateTime();
-            DateTime ld_prev_end = new DateTime();
-            int li_seq_num = int.MinValue;
-            int li_rg_code = int.MinValue;
-            int? li_contract_no = int.MinValue;
-            int li_prt_key = int.MinValue;
-            int? li_prd_quantity = int.MinValue;
-            int li_seq_num_min_one = int.MinValue;
-            int test = int.MinValue;
-            string ls_prt_code = string.Empty;
-            System.Decimal? ldec_pr_rate;
-            System.Decimal? ldec_prd_cost = Decimal.MinValue;
+            DateTime thisConStartDate = new DateTime();
+            DateTime thisConEndDate = new DateTime();
+            DateTime prevConStartDate = new DateTime();
+            DateTime prevConEndDate = new DateTime();
+            DateTime? thisConRatesEffectiveDate = new DateTime();
+            DateTime? prevConRatesEffectiveDate = new DateTime();
+            DateTime? thisPrdDate = new DateTime();
+            int thisConSeqNum = int.MinValue;
+            int prevConSeqNum = int.MinValue;
+            int thisRgCode;
+            int thisPrtKey;
+            int? thisPrdQuantity;
+            int? thisContractNo;
+            string thisPrtCode;
+            System.Decimal prevPrRate;
+            System.Decimal prevPrdCost;
+            System.Decimal? thisPrRate;
+            System.Decimal? thisPrdCost = Decimal.MinValue;
             int SQLCode = 0;
-            
-            PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(arow);
 
-            // Get the required valued off dw_1.
-            //!li_contract_no = dw_1.DataObject.GetItem<PieceRateImport>(arow).ContractNo;
-            li_contract_no = current.ContractNo;
+            PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(pRow);
 
-            //!ls_prt_code = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrtCode.Trim();
-            if (!string.IsNullOrEmpty(current.PrtCode))
-            {
-                ls_prt_code = current.PrtCode.Trim();
-            }
+            // Get the required values from dw_1.
+            thisContractNo  = current.ContractNo;
+            thisPrdDate     = current.PrdDate;
+            thisPrdQuantity = current.PrdQuantity;
+            thisPrtCode = (string.IsNullOrEmpty(current.PrtCode)) ? "" : current.PrtCode.Trim();
+            //if (!string.IsNullOrEmpty(current.PrtCode))
+            //    {
+            //    thisPrtCode = current.PrtCode.Trim();
+            //}
 
-            //!ld_prd_date = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdDate;//, "prd_date").Date;
-            ld_prd_date = current.PrdDate;//, "prd_date").Date;
-
-            //!li_prd_quantity = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdQuantity;//, "prd_quantity");
-            li_prd_quantity = current.PrdQuantity;//, "prd_quantity");
             // Get the max seq number to determine what renewal a contract is in
             // select max(contract_seq_number) into :li_seq_num  from contract_renewals where contract_no = :li_contract_no;
-            li_seq_num = RDSDataService.GetMaxContractSeqNumber(li_contract_no);
+            thisConSeqNum = RDSDataService.GetMaxContractSeqNumber(thisContractNo);
 
             // Get the start and end date of the current renewal
             //select con_start_date, con_expiry_date  into :ld_start, :ld_end  from contract_renewals  where contract_seq_number = :li_seq_num  and contract_no = :li_contract_no;
 
-            RDSDataService dataService = RDSDataService.GetContractRenewalsDate(li_seq_num, li_contract_no);
+            RDSDataService dataService 
+                           = RDSDataService.GetContractRenewalsDate(thisConSeqNum, thisContractNo);
             List<ContractRenewalsDateItem> list = dataService.ContractRenewalsDateItemList;
-            ld_start = list[0].Con_start_date;
-            ld_end = list[0].Con_expiry_date;
+            thisConStartDate = list[0].Con_start_date;
+            thisConEndDate   = list[0].Con_expiry_date;
 
             // Use the prt code from dw_1 to determine the prt_key
             // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-            li_prt_key = RDSDataService.GetPrtKey(ls_prt_code, ref SQLCode);
+            thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
 
             // Get the contract rates' effective date to narrow down the search for the correct rate
             //select con_rates_effective_date into :ld_con_rates_effective_date  from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num;
-            ld_con_rates_effective_date = RDSDataService.GetConRatesEffDate(li_contract_no, li_seq_num);
+            thisConRatesEffectiveDate 
+                           = RDSDataService.GetConRatesEffDate(thisContractNo, thisConSeqNum);
 
             // Use the prt_key to determine the the rate
             // select pr_rate into :ldec_pr_rate from piece_rate  where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-            ldec_pr_rate = RDSDataService.GetPrRateFromPieceRate(li_prt_key, ld_con_rates_effective_date);
+            thisPrRate = RDSDataService.GetPrRateFromPieceRate(thisPrtKey, thisConRatesEffectiveDate);
 
             // Check that the prd date is in the current renewal
-            if (ld_prd_date >= ld_start && ld_prd_date <= ld_end)
+            if (thisPrdDate >= thisConStartDate && thisPrdDate <= thisConEndDate)
             {
-                ldec_prd_cost = li_prd_quantity * ldec_pr_rate;
+                thisPrdCost = thisPrdQuantity * thisPrRate;
 
                 // Display the answer on the dw_1
                 //!dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost = ldec_prd_cost;
-                dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost = ldec_prd_cost;
+                dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost = thisPrdCost;
             }
             else
             {
-                //!li_contract_no = dw_1.DataObject.GetItem<PieceRateImport>(arow).ContractNo;
-                li_contract_no = current.ContractNo;
-
-                //!ls_prt_code = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrtCode;
-                ls_prt_code = current.PrtCode;
-
-
-                //!ld_prd_date = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdDate;
-                ld_prd_date = current.PrdDate;
-
-
-                //!li_prd_quantity = dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdQuantity;
-                li_prd_quantity = current.PrdQuantity;
-
-
                 // Minus 1 from the current renewal 
-                li_seq_num_min_one = li_seq_num - 1;
+                //li_seq_num_min_one = li_seq_num - 1;
+                prevConSeqNum = thisConSeqNum - 1;
+
                 // select con_start_date, con_expiry_date  into :ld_prev_start, :ld_prev_end from contract_renewals  where contract_no = :li_contract_no  and contract_seq_number = :li_seq_num_min_one;
-                dataService = RDSDataService.GetContractRenewalsDate(li_seq_num_min_one, li_contract_no);
+                dataService = RDSDataService.GetContractRenewalsDate(prevConSeqNum, thisContractNo);
                 list = dataService.ContractRenewalsDateItemList;
                 if (list != null && list.Count > 0)
                 {
-                    ld_prev_start = list[0].Con_start_date;
-                    ld_prev_end = list[0].Con_expiry_date;
+                    prevConStartDate = list[0].Con_start_date;
+                    prevConEndDate   = list[0].Con_expiry_date;
                 }
 
-                if (ld_prd_date >= ld_prev_start && ld_prd_date <= ld_prev_end)
+                //if (ld_prd_date >= ld_prev_start && ld_prd_date <= ld_prev_end)
+                if (thisPrdDate >= prevConStartDate && thisPrdDate <= prevConEndDate)
                 {
                     // Use the prt code from dw_1 to determine the prt_key
                     // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-                    li_prt_key = RDSDataService.GetPrtKey(ls_prt_code, ref SQLCode);
+                    thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
 
                     // Get the contract rates effective date to norrow down the search for the correct rate
                     //select con_rates_effective_date into :ld_con_rates_effective_date from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num_min_one;
-                    ld_con_rates_effective_date = RDSDataService.GetConRatesEffDate(li_contract_no, li_seq_num_min_one);
+                    prevConRatesEffectiveDate = RDSDataService.GetConRatesEffDate(thisContractNo, prevConSeqNum);
 
                     //  TJB  20 Jul 2005
                     //  Fix bug: use the correct contract sequence number
                     // 		   and contract_seq_number = :li_seq_num;
                     // Use the prt_key to determine the the rate
                     //select pr_rate into :ldec_pr_rate from piece_rate where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-                    ldec_pr_rate = RDSDataService.GetPrRateFromPieceRate(li_prt_key, ld_con_rates_effective_date);
-                    ldec_prd_cost = li_prd_quantity * ldec_pr_rate;
+                    prevPrRate = (decimal)RDSDataService.GetPrRateFromPieceRate(thisPrtKey, prevConRatesEffectiveDate);
+                    prevPrdCost = (decimal)(thisPrdQuantity * prevPrRate);
 
                     // Display the answer on the dw_1
-                    dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost = ldec_prd_cost;
+                    dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost = prevPrdCost;
                 }
                 else
                 {
-                    is_Flag = "yes";
-                    //dw_1.rowsmove(arow, arow, primary!, dw_invalid, 1, primary!);                                       
-
-                    //! replaced by list of BEntities for performace reasons
-                    //!dw_invalid.InsertItem<PieceRateImportInvalidDate>(0);
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).Contract = dw_1.GetItem<PieceRateImport>(arow).Contract;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).ContractNo = dw_1.GetItem<PieceRateImport>(arow).ContractNo;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).PrdCost = dw_1.GetItem<PieceRateImport>(arow).PrdCost;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).PrdDate = dw_1.GetItem<PieceRateImport>(arow).PrdDate;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).PrdQuantity = dw_1.GetItem<PieceRateImport>(arow).PrdQuantity;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).PrtCode = dw_1.GetItem<PieceRateImport>(arow).PrtCode;
-                    //!dw_invalid.GetItem<PieceRateImportInvalidDate>(0).PrtKey = dw_1.GetItem<PieceRateImport>(arow).PrtKey;
-
-                    PieceRateImportInvalidDate newInvalidRec = new PieceRateImportInvalidDate();
-                    newInvalidRec.Contract = current.Contract;
-                    newInvalidRec.ContractNo = current.ContractNo;
-                    newInvalidRec.PrdCost = current.PrdRdCost;
-                    newInvalidRec.PrdDate = current.PrdDate;
-                    newInvalidRec.PrdQuantity = current.PrdQuantity;
-                    newInvalidRec.PrtCode = current.PrtCode;
-                    newInvalidRec.PrtKey = current.PrtKey;
-                    dw_InvalidDateList.Insert(0, newInvalidRec);
-
-                    dw_1.DeleteItemAt(arow);
+                    wf_saveerror_info(pRow, "Prd_cost not determined");
+                    return false;
                 }
             }
             return true;
@@ -877,8 +720,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         private bool dw_1_filter(PieceRateImport t)
-        {
-            if (t.PrdDate > DateTime.Today)
+        {if (t.PrdDate > DateTime.Today)
             {
                 return true;
             }
@@ -888,44 +730,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        public virtual int wf_checkdates()
-        {
-            int ll_Ret;
-            int ll_Count;
-            //?dw_1.setredraw(false);
-            // dw_1.DataObject.SuspendLayout();
-            dw_1.DataObject.FilterString = " prd_date >" + DateTime.Today;
-            dw_1.DataObject.FilterOnce<PieceRateImport>(dw_1_filter);
-            if (dw_1.RowCount > 0)
-            {
-                MessageBox.Show("Piece rates with invalid dates detected. Please save the invalid records to a tex" + "t file for later editing", "Invalid Dates", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (dw_1.SaveAs("", "text") != 1)
-                {
-                    dw_1.SaveAs("c:\\PieceratesInvalidDates.txt", "text");
-                }
-            }
-            ll_Count = dw_1.RowCount;
+        public virtual int wf_dump_records(string pMsg)
+        {    // List current records in dw_1
+             // TJB  22-Jul-2009 testing
 
-            for (ll_Ret = 0; ll_Ret < ll_Count; ll_Ret++)
+            int nRows;
+            string sData = String.Empty;
+            string sFilter = String.Empty;
+
+            sFilter = dw_1.DataObject.FilterString;
+            nRows = dw_1.RowCount;
+            for (int i = 0; i < nRows; i++)
             {
-                dw_1.DataObject.DeleteItemAt(0);
+                sData = sData + "Row " + i;
+                PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(i);
+                sData = sData + ": " + current.Contract
+                              + ", " + ((DateTime)current.PrdDate).ToString("dd/MM/yyyy")
+                              + ", " + current.PrtCode
+                              + ", " + current.PrdQuantity
+                              + ", " + current.PrdCost
+                              + ", " + current.PrtKey
+                              + "\n";
             }
-            //dw_1.DataObject.BindingSource.List.Add(l_array);
-            dw_1.DataObject.FilterString = "";
-            dw_1.DataObject.FilterOnce<PieceRateImport>(filterWithEmptystring);
-            dw_1.DataObject.ResumeLayout(false);
-            return 1;
+            MessageBox.Show( pMsg + "\n"
+                           + nRows + " Rows found\n"
+                           + "Filter = " + sFilter + "\n"
+                           + sData
+                           , "dw_1 dump"
+                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return nRows;
         }
 
         public virtual void post_yield()
         {
-            bprocessing = false;
             cb_1.Enabled = true;
             cb_2.Enabled = true;
             dw_1.Enabled = true;
             cb_3.Enabled = true;
             dw_errors.Enabled = true;
-            dw_wrong_rate.Enabled = true;
             sle_1.Enabled = true;
             st_1.Enabled = true;
             st_label.Enabled = true;
@@ -933,182 +775,53 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return;
         }
 
-        public virtual void dw_wrong_rate_constructor()
-        {
-            dw_wrong_rate.of_SetUpdateable(false);
-        }
-
         public virtual void dw_errors_constructor()
         {
             dw_errors.of_SetUpdateable(false);
-        }
-
-        public virtual void dw_invalid_constructor()
-        {
-            dw_invalid.of_SetUpdateable(false);
-        }
-
-        public virtual void dw_invalid_date_constructor()
-        {
-            dw_invalid_date.of_SetUpdateable(false);
         }
 
         #endregion
 
         #region Events
         public virtual void cb_1_clicked(object sender, EventArgs e)
-        {
-            int lRowCount;
-            int lPRKey;
-            int lRow;
-            int lContract;
-            int lCounter = 0;
-            string sPRCode;
-            string sMSNumber;
-            string sPathname = string.Empty;
-            string sFileName = string.Empty;
-            string sIgnoreWrongRates = "UNDEF";
-            string ls_test;
-            System.Decimal decRate;
-            DateTime dPRDate;
-            ls_test = sle_1.Text;
-            if (ls_test == "")
+        {                 // Import with values
+            string inFilename;
+
+            // dw_1.InsertItem<PieceRateImport>(0);
+            dw_1.DataObject.Reset();
+
+            inFilename = sle_1.Text;
+            if (inFilename == "")
             {
-                MessageBox.Show("Please select a file to import", "Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select a file to import"
+                              , "Import"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            else
+            Cursor.Current = Cursors.WaitCursor;
+
+            int rc = ImportFile(inFilename);
+            if (rc < 0)
             {
+                MessageBox.Show("Error " + rc + " encountered reading input file.\n"
+                               , "Input error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (dw_1.RowCount <= 0 
+                || dw_1.DataObject.GetItem<PieceRateImport>(0).PrdCost == null)
+            {
+                MessageBox.Show("You cannot import because there are no values!"
+                               , "Import with values"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dw_1.DataObject.Reset();
-                dw_errors.DataObject.Reset();
-                dw_wrong_rate.DataObject.Reset();
-                Cursor.Current = Cursors.WaitCursor;
-
-                dw_1.InsertItem<PieceRateImport>(0);
-                dw_1.Reset();
-                ImportFile(sle_1.Text);
-                if (dw_1.RowCount <= 0 || dw_1.DataObject.GetItem<PieceRateImport>(0).PrdCost == null)
-                {
-                    MessageBox.Show("You cannot import because there are no values!", "Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dw_1.DataObject.Reset();
-                    return;
-                }
-                //  TWC - fix for 4511 - need to re-set the sort criteria before sorting again
-                dw_1.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
-                dw_1.DataObject.Sort<PieceRateImport>();
-               
-                wf_checkdates();
-                lRowCount = dw_1.RowCount;
-                isIgnoreWrongRates = "UNDEF";
-                if (lRowCount > 0)
-                {
-                    bprocessing = true;
-
-                    //pp! performance problem:                    
-                    for (int i = 0; i < dw_1.DataObject.RowCount - 1; i++)
-                    {
-                        //! dw_1 has calculated columns, calculate values here
-
-                        // nextdup = if((contract_no = contract_no[1] and  prt_code =  prt_code [1] and  prd_date =  prd_date[1]),'Y','N')
-                        PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(i);
-
-                        PieceRateImport nextRec = dw_1.DataObject.GetItem<PieceRateImport>(i + 1);
-                        if (current.ContractNo == nextRec.ContractNo && current.PrtCode == nextRec.PrtCode && current.PrdDate == nextRec.PrdDate)
-                        {
-                            current.Nextdup = "Y";
-                        }
-                        else
-                        {
-                            current.Nextdup = "N";
-                        }
-
-
-                    }
-                    for (lRow = lRowCount - 1; lRow >= 0; lRow -= 1)
-                    {
-                        if (!bprocessing)
-                        {
-                            break;
-                        }
-                        lCounter++;
-                        if (/*Mod(lCounter, 10)*/ (lCounter / 10) == 0)
-                        {
-                            //?w_main_mdi.SetMicroHelp("Processing row " + lCounter.ToString() + " of " + lRowCount).ToString();
-                        }
-                        if (wf_check_contract(lRow))
-                        {
-                            if (wf_check_piece_rate(lRow))
-                            {
-                                if (wf_check_duplicates(lRow))
-                                {
-                                    if (wf_confirm_rate(lRow))
-                                    {
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //P!! line moved from wf_check_duplicates to write last record in dw_errorList to file
-                    this.SaveErrors("C:\\temp\\duplicate.txt", "text");
-                }               
-
-                //?!if (dw_errors.RowCount == 0 && bprocessing)
-                if (dw_errorsList.Count == 0 && bprocessing)
-                {
-                    //!dw_errors.DataObject.InsertItem<PieceRateImportExeptionReport>(0);                    
-                    //!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(0).Errormsg = "No errors found in import file";
-                    PieceRateImportExeptionReport record = new PieceRateImportExeptionReport();
-                    record.Errormsg = "No errors found in import file";
-                    dw_errorsList.Insert(0, record);
-                }
-                dw_errors.ResumeLayout(false);
-                dw_wrong_rate.ResumeLayout(false);
-                if (bprocessing)
-                {
-                    //dw_errors.Print();
-                    ((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
-                    ((DPieceRateImportExeptionReport)dw_errors.DataObject).Print();
-
-                    //!if (dw_wrong_rate.RowCount > 0)
-                    if (dw_wrong_rateList.Count > 0)
-                    {
-                        ((DPieceRateImportDiffRateReport)(dw_wrong_rate.DataObject)).Retrieve(dw_wrong_rateList);
-                        ((DPieceRateImportDiffRateReport)dw_wrong_rate.DataObject).Print();
-
-                        //!while (StaticVariables.gnv_app.of_isempty(sPathname))
-                        while (/*StaticVariables.gnv_app.of_isempty(sPathname) || */StaticVariables.gnv_app.of_isempty(sFileName))
-                        {
-                            //GetFileSaveName("Enter the \'Wrong Rates\' Filename", sPathname, sFileName);
-                            SaveFileDialog file_dia = new SaveFileDialog();
-                            file_dia.Title = "Enter the \'Wrong Rates\' Filename";
-                            file_dia.InitialDirectory = sPathname;
-                            file_dia.FileName = sFileName;
-                            file_dia.Filter = "All files (*.*)|*.*";
-                            file_dia.ShowDialog();
-
-                            
-                            sFileName = file_dia.FileName;
-                            if (/*!StaticVariables.gnv_app.of_isempty(sPathname) || */StaticVariables.gnv_app.of_isempty(sFileName))
-                            {
-                                MessageBox.Show("A file must be specified so the piece rates with different costs can be saved.", this.Text/*parent.Title */, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            else
-                            {
-                                ((DPieceRateImportDiffRateReport)(dw_wrong_rate.DataObject)).Retrieve(dw_wrong_rateList);
-                                //!dw_wrong_rate.SaveAs(sPathname, "text");
-                                dw_wrong_rate.SaveAs(sFileName, "text");
-                            }
-                        }
-                    }
-                }
-                //?w_main_mdi.SetMicroHelp("");
-                post_yield();
-                cb_stop.Visible = false;
-                p_abort.Visible = false;
+                return;
             }
+            wf_process_input();
         }
 
         public virtual void cb_2_clicked(object sender, EventArgs e)
-        {
+        {       // Select input file
             string sFileName = string.Empty;
             string sDirectory = string.Empty;
             //GetFileOpenName("Select the import file", sFileName, sDirectory, "txt", "Tab Delimited Files,*.TXT,dBase III Files,*.DBF");
@@ -1125,18 +838,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         public virtual void cb_3_clicked(object sender, EventArgs e)
-        {
+        {      // Save
             dw_1.Save();
             //?commit;
-            MessageBox.Show("The piece rate information has been saved to the database", base.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("The piece rate information has been saved to the database"
+                           , base.Text
+                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            ib_disableclosequery = true;
+            this.Close();
+        }
+
+        public virtual void cb_cancel_clicked(object sender, EventArgs e)
+        {     // Cancel
             ib_disableclosequery = true;
             this.Close();
         }
 
         public virtual void p_abort_clicked(object sender, EventArgs e)
         {
-            if (MessageBox.Show(base.Text, "Do you want to stop processing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            DialogResult answer = MessageBox.Show("Do you want to stop processing?"
+                                                 , base.Text
+                                                 , MessageBoxButtons.YesNo
+                                                 , MessageBoxIcon.Question);
+            if (answer == DialogResult.Yes)
             {
                 post_yield();
             }
@@ -1144,172 +869,214 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void cb_stop_clicked(object sender, EventArgs e)
         {
-            if (MessageBox.Show(base.Text, "Do you want to stop processing?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            DialogResult answer = MessageBox.Show("Do you want to stop processing?"
+                                                 , base.Text
+                                                 , MessageBoxButtons.YesNo
+                                                 , MessageBoxIcon.Question);
+            if (answer == DialogResult.Yes)
             {
                 post_yield();
             }
         }
 
         public virtual void cb_4_clicked(object sender, EventArgs e)
-        {
-            int lRowCount;
+        {   // Import without values - tjb version
+            string inFilename;
+
+            //            dw_1.InsertItem<PieceRateImport>(0);
+            dw_1.DataObject.Reset();
+
+            inFilename = sle_1.Text;
+            if (inFilename == "")
+            {
+                MessageBox.Show("Please select a file to import"
+                              , "Import"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            Cursor.Current = Cursors.WaitCursor;
+            inFilename = sle_1.Text;
+            int rc = ImportFile(inFilename);
+            if (rc < 0)
+            {
+                MessageBox.Show("Error " + rc + " encountered reading input file.\n"
+                               , "Input error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (dw_1.RowCount > 0 
+                && dw_1.DataObject.GetItem<PieceRateImport>(0).PrdCost != null)
+            {
+                MessageBox.Show("You cannot import because there are values!"
+                              , "Import without values"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dw_1.DataObject.Reset();
+                return;
+            }
+            wf_process_input();
+        }
+
+        public virtual void wf_process_input()
+        {   // Import without values - tjb version
+            int nRows, nRow;
             int lPRKey;
             int lRow;
             int lContract;
-            int lCounter = 0;
             string sPRCode;
             string sMSNumber;
-            string sPathname = string.Empty;
             string sFileName = string.Empty;
             string sIgnoreWrongRates = "UNDEF";
             string ls_test;
             System.Decimal decRate;
             DateTime dPRDate;
-            is_Flag = "";
-            ls_test = sle_1.Text;
-            if (ls_test == "")
+            DateTime dToday = DateTime.Today;
+            int prevContractNo;
+            string prevPrtCode;
+            DateTime prevPrdDate;
+            int nErrors = 0;
+            int nData = 0;
+            bool delRow = false;
+            string inFilename, outFilenameDefault;
+
+            inFilename = sle_1.Text;
+
+            // Reset all 3 datawindows.
+            dw_errors.DataObject.Reset();
+            dw_errorsList.Clear();
+
+            //  TWC - fix for 4511 - need to re-set the sort criteria before sorting again
+            dw_1.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
+            dw_1.DataObject.Sort<PieceRateImport>();
+          //      wf_dump_records("cb_4_clicked: before calling checkdates");
+          //      int nDateErrors = wf_checkdates();
+          //      wf_dump_records("cb_4_clicked: Starting");
+            isIgnoreWrongRates = "UNDEF";
+            nRows = dw_1.RowCount;
+            if (nRows > 0)
             {
-                MessageBox.Show("Please select a file to import", "Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Scan each input record, applying various validations
+                //for (lRow = lRowCount - 1; lRow >= 0; lRow -= 1)
+                // We do the loop this way because the number of rows (nRows) may decrease
+                // as we delete faulty records.
+                string errName = "";
+                prevContractNo = 0;
+                prevPrtCode    = "";
+                prevPrdDate    = DateTime.MinValue;
+                nRow = 0;
+                while(nRow < nRows)
+                {
+                    errName = "";
+                    delRow = false;
+                    // NOTE: These conditions are the negated condition
+                    //    - the code fragments are executed only if the validation is FALSE
+                    if (! wf_checkdate(nRow, dToday))
+                    {
+                        errName = "checkdate";
+                        delRow = true;
+                    }
+                    else if (! wf_check_contract(nRow))
+                    {
+                        errName = "check_contract";
+                        delRow = true;
+                    }
+                    else if (! wf_check_duplicate(nRow, prevContractNo, prevPrtCode, prevPrdDate))
+                    {
+                        errName = "check_duplicate";
+                        delRow = true;
+                    }
+                    else if (! wf_check_piece_rate(nRow))
+                    {
+                        errName = "check_piece_rate";
+                        delRow = true;
+                    }
+                    else if (! wf_confirm_rate(nRow))
+                    {
+                        errName = "check_confirm_rate";
+                        delRow = true;
+                    }
+                    else if (! wf_calculate_rate(nRow))
+                    {
+                        errName = "check_calculate_rate";
+                        delRow = true;
+                    }
+                    if (delRow)
+                    {
+                        dw_1.DeleteItemAt(nRow);
+                            // If we've deleted a row, the number of rows is less and
+                            // the current row number points to the next unprocessed row.
+                        nRows = dw_1.RowCount;
+                    }
+                    else
+                    {
+                        // If we haven't deleted a row
+                        // Save some of the current processed row's data to use to
+                        // check the next record to see if it a duplicate.  If the current row 
+                        // was deleted, ignore it - - we only look for duplicate good records.
+                        prevContractNo = (int)dw_1.DataObject.GetItem<PieceRateImport>(nRow).ContractNo;
+                        prevPrtCode = dw_1.DataObject.GetItem<PieceRateImport>(nRow).PrtCode;
+                        prevPrdDate = (DateTime)dw_1.DataObject.GetItem<PieceRateImport>(nRow).PrdDate;
+                        // If we haven't deleted a row, the number of rows is th same and
+                        // we increment the row number to the next unprocessed row.
+                        nRow++;
+                    }
+                }  // End record-scanning loop
+                //P!! line moved from wf_check_duplicates to write last record in dw_errorList to file
+            }
+            nErrors = dw_errorsList.Count;
+            nData = dw_1.RowCount;
+            if (nInputRecords != (nErrors + nData))
+            {
+                MessageBox.Show("Incorrect number of records after validation.\n"
+                             + "   " + nInputRecords + " records input.\n"
+                             + "   " + nErrors + " error records found.\n"
+                             + "   " + nData + " records validated.\n"
+                             , "WARNING"
+                             , MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (nErrors == 0)
+            {
+                //!dw_errors.DataObject.InsertItem<PieceRateImportExeptionReport>(0);
+                //!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(0).Errormsg = "No errors found in import file";
+                PieceRateImportExeptionReport newError = new PieceRateImportExeptionReport();
+                newError.Errormsg = "No errors found in import file";
+                dw_errorsList.Insert(0, newError);
+            }
+            ((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
+            dw_errors.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
+            dw_errors.DataObject.Sort<PieceRateImportExeptionReport>();
+            if (nErrors > 0)
+            {
+                MessageBox.Show(nErrors + " Errors encountered.  Saving error records.\n"
+                             + "Please select a file to save the faulty records to."
+                             , ""
+                             , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                int i = inFilename.LastIndexOf('.');
+                outFilenameDefault = inFilename.Substring(0,i) + "-errors";
+                this.SaveErrorFile(outFilenameDefault, "text");
+            }
+            DialogResult answer;
+            string errcountmsg;
+            if (nErrors == 0)
+            {
+                errcountmsg = "No errors encountered.";
             }
             else
             {
-                // Reset all 3 datawindows.
-                dw_1.InsertItem<PieceRateImport>(0);
-                dw_1.DataObject.Reset();
-                dw_errors.DataObject.Reset();
-                dw_wrong_rate.DataObject.Reset();
-                dw_invalid.DataObject.Reset();
-                Cursor.Current = Cursors.WaitCursor;
-                ImportFile(sle_1.Text);
-                if (dw_1.RowCount > 0 && dw_1.DataObject.GetItem<PieceRateImport>(0).PrdCost != null)
-                {
-                    MessageBox.Show("You cannot import because there are values!", "Import", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dw_1.DataObject.Reset();
-                    return;
-                }
-                //  TWC - fix for 4511 - need to re-set the sort criteria before sorting again
-                dw_1.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
-                dw_1.DataObject.Sort<PieceRateImport>();
-                wf_checkdates();
-                lRowCount = dw_1.RowCount;
-                isIgnoreWrongRates = "UNDEF";
-                if (lRowCount > 0)
-                {
-                    bprocessing = true;
-
-                    //pp! performance problem:                    
-                    for(int i = 0; i < dw_1.DataObject.RowCount-1; i++)
-                    {
-                        //! dw_1 has calculated columns, calculate values here
-                        
-                        // nextdup = if((contract_no = contract_no[1] and  prt_code =  prt_code [1] and  prd_date =  prd_date[1]),'Y','N')
-                        PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(i);                        
-
-                        PieceRateImport nextRec = dw_1.DataObject.GetItem<PieceRateImport>(i + 1);
-                        if (current.ContractNo == nextRec.ContractNo && current.PrtCode == nextRec.PrtCode && current.PrdDate == nextRec.PrdDate)
-                        {
-                            current.Nextdup = "Y";
-                        }
-                        else 
-                        {
-                            current.Nextdup = "N";
-                        }
-
-                        
-                    }
-
-
-                    for (lRow = lRowCount - 1; lRow >= 0; lRow -= 1)
-                    {                                             
-                       
-                        if (!bprocessing)
-                        {
-                            break;
-                        }
-                        lCounter++;
-                        if (/*Mod(lCounter, 10)*/ (lCounter / 10) == 0)
-                        {
-                            //?w_main_mdi.SetMicroHelp("Processing row " + lCounter.ToString() + " of " + lRowCount).ToString();
-                        }
-
-                        if (wf_check_contract(lRow))
-                        {
-                            if (wf_check_piece_rate(lRow))
-                            {
-                                if (wf_check_duplicates(lRow))
-                                {
-                                    if (wf_confirm_rate(lRow))
-                                    {
-                                        wf_calculate_rate(lRow);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //P!! line moved from wf_check_duplicates to write last record in dw_errorList to file
-                    this.SaveErrors("C:\\temp\\duplicate.txt", "text");
-                }
-
-                //!if (dw_errors.RowCount == 0 && bprocessing)
-                if (dw_errorsList.Count == 0 && bprocessing)
-                {
-                    //!dw_errors.DataObject.InsertItem<PieceRateImportExeptionReport>(0);
-                    //!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(0).Errormsg = "No errors found in import file";
-                    PieceRateImportExeptionReport newError = new PieceRateImportExeptionReport();
-                    newError.Errormsg = "No errors found in import file";
-                    dw_errorsList.Insert(0, newError);
-                }
-               
-
-                if (bprocessing)
-                {
-                    //?dw_errors.Print();
-                    ((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
-                    ((DPieceRateImportExeptionReport)dw_errors.DataObject).Print();
-                    //!if (dw_wrong_rate.RowCount > 0)
-                    if (dw_wrong_rateList.Count > 0)
-                    {
-                        //!dw_wrong_rate.Print();
-                        ((DPieceRateImportDiffRateReport)(dw_wrong_rate.DataObject)).Retrieve(dw_wrong_rateList);
-                        ((DPieceRateImportDiffRateReport)dw_wrong_rate.DataObject).Print();
-
-                        //!while (StaticVariables.gnv_app.of_isempty(sPathname))
-                         while (/*StaticVariables.gnv_app.of_isempty(sPathname) || */StaticVariables.gnv_app.of_isempty(sFileName))
-                        {
-                            //GetFileSaveName("Enter the \'Wrong Rates\' Filename", sPathname, sFileName);
-                            SaveFileDialog file_dia = new SaveFileDialog();
-                            file_dia.Title = "Enter the \'Wrong Rates\' Filename";
-                            file_dia.InitialDirectory = sPathname;
-                            file_dia.FileName = sFileName;
-                            file_dia.Filter = "All files (*.*)|*.*";
-                            file_dia.ShowDialog();
-                            
-                            sFileName = file_dia.FileName;
-                            //!if (StaticVariables.gnv_app.of_isempty(sPathname))
-                            if (/*!StaticVariables.gnv_app.of_isempty(sPathname) ||*/ StaticVariables.gnv_app.of_isempty(sFileName))
-                            {
-                                MessageBox.Show("A file must be specified so the piece rates with different costs can be saved.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            else
-                            {
-                                //!dw_wrong_rate.saveas(sPathname, text!, false);
-                                //!dw_wrong_rate.SaveAs(sPathname, "text");
-                                dw_wrong_rate.SaveAs(sFileName, "text");
-                            }
-                        }
-                    }
-                }
-                //?w_main_mdi.SetMicroHelp("");
-                post_yield();
-                cb_stop.Visible = false;
-                p_abort.Visible = false;
-                if (is_Flag == "yes")
-                {
-                    MessageBox.Show("There have been rows that have a delivery date too far in the future.\r" + "They have been saved as Invalid.txt in your C:\\temp directory for future importin" + "g !", "Import Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ((DPieceRateImportInvalidDate)(dw_invalid.DataObject)).Retrieve(dw_InvalidDateList);
-                    dw_invalid.SaveAs("C:\\Temp\\invalid.txt", "text");
-                }
+                errcountmsg = ((nErrors == 1) ? "1 error" : nErrors + " errors") + " encountered.";
             }
+            answer = MessageBox.Show(errcountmsg + "\n\n"
+                         + "Do you want to print the error report?"
+                         , ""
+                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (answer == DialogResult.Yes)
+            {
+                //((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
+                ((DPieceRateImportExeptionReport)dw_errors.DataObject).Print();
+            }
+            //?w_main_mdi.SetMicroHelp("");
+            post_yield();
+            cb_stop.Visible = false;
+            p_abort.Visible = false;
         }
         #endregion
 
@@ -1325,6 +1092,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         // Data Import
         private int ImportFile(string path)
         {
+            nInputRecords = 0;
             if (!string.IsNullOrEmpty(path))
             {
                 #region open the stream
@@ -1361,6 +1129,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     string line = sr.ReadLine();
                     buffer.Add(line);
+                    nInputRecords++;
                 }
                 sr.Close();
                 #endregion
@@ -1370,6 +1139,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     UpdateStatusText(i, buffer.Count);
                     dw_1.DataObject.AddItem<PieceRateImport>(ParseStringToPieceRateImport(buffer[i]));
                 }
+                dw_1.DataObject.Refresh();
                 return dw_1.RowCount;
             }
             else
@@ -1379,7 +1149,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         private PieceRateImport ParseStringToPieceRateImport(string text)
-        {
+        {   // TJB  22-Jul-2009: added comment about expected input format
+            // Format expected:
+            //    Contract    (contract_no as a string)
+            //    PrdDate     (date in dd/mm/yyyy format)
+            //    PrtCode     (string)
+            //    PrdQuantity (int)
+            //    PrdCost     (decimal)
             PieceRateImport item = new PieceRateImport();
             text = text.Replace("\"", "");
             text = text.Replace("\'", "");
