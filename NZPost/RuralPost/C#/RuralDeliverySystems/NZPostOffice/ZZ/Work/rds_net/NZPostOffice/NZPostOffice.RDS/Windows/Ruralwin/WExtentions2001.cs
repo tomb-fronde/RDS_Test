@@ -51,7 +51,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_contract.GotFocus += new EventHandler(dw_contract_getfocus);
 
             //jlwang:end
-
         }
 
         public override int closequery()
@@ -130,7 +129,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (!aautomatic)
                 {
                     // PowerBuilder 'Choose Case' statement converted into 'if' statement
-                    DialogResult TestExpr = MessageBox.Show("Do you want to update the database?", this.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    DialogResult TestExpr = MessageBox.Show("Do you want to update the database?"
+                                        , this.Text
+                                        , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     if (TestExpr == DialogResult.Cancel)
                     {
                         return false;
@@ -205,11 +206,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Modified SQL error messages to identify which statement generated the error
             if (dataService.SQLCode == -(1))
             {
-                MessageBox.Show("w_extentions2001.wf_addextn: counting contracts\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Counting contracts\n\n" 
+                            + dataService.SQLErrText
+                            , "w_extentions2001.wf_addextn: Database error"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (lCount != 1)
             {
-                MessageBox.Show("The extension effective date is outside the current contracts start and end dates" + ".\r" + "Please change the effective date before saving the extension", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The extension effective date is outside the current contracts start and end dates.\r" 
+                            + "Please change the effective date before saving the extension"
+                            , this.Text
+                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             dDistance = dw_extension.GetItem<Extension2005>(0).ExtnDistance;
@@ -224,7 +231,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             sReason = dw_extension.GetItem<Extension2005>(0).ExtnReason;
             if (StaticVariables.gnv_app.of_isempty(sReason))
             {
-                MessageBox.Show("The reason for this extension has to be entered before it can be saved to the dat" + "abase.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The reason for this extension has to be entered before it can be saved to the database."
+                            , this.Text
+                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             decDelHrs = dw_extension.GetItem<Extension2005>(0).ExtnDelHrs;
@@ -240,11 +249,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             iEfCount = dataService.intVal;
             if (dataService.SQLCode == -(1))
             {
-                MessageBox.Show("w_extentions2001.wf_addextn: counting frequency_distances\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Counting frequency_distances\n\n" 
+                                + dataService.SQLErrText
+                                , "w_extentions2001.wf_addextn: Database error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (iEfCount > 0)
             {
-                MessageBox.Show("You cannot add this extension to the database because " + "there is already an extension for this frequency " + "defined for this effective date", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You cannot add this extension to the database because" 
+                                + " there is already an extension for this frequency" 
+                                + " defined for this effective date"
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //? rollback;
                 return -(1);
             }
@@ -287,7 +303,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lNoCMBS, lNoPostOffices, decDelHrs, sReason, dDistance, lNoPrivateBags, lSFKey, sDeliveryDays, lNoBoxes, lContract, decProcHrs);
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("w_extentions2001.wf_addextn: inserting into frequency_distances\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Inserting into frequency_distances\n\n" 
+                            + dataService.SQLErrText
+                            , "w_extentions2001.wf_addextn: Database error"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //? rollback;
                 iReturn = -(1);
             }
@@ -300,7 +319,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dataService = RDSDataService.UpdateRouteFreqRfDist(lContract, dDistance, lSFKey, sDeliveryDays);
                 if (dataService.SQLCode == -(1))
                 {
-                    MessageBox.Show("w_extentions2001.wf_addextn: updating route_frequency\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Updating route_frequency\n\n" 
+                                + dataService.SQLErrText
+                                , "w_extentions2001.wf_addextn: Database error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 /* select max(contract_seq_number) into :lSequence  
                    from contract_renewals
@@ -309,7 +331,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lSequence = dataService.intVal;
                 if (dataService.SQLCode == -(1))
                 {
-                    MessageBox.Show("w_extentions2001.wf_addextn: determining max ( contract_seq_number)\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Determining max(contract_seq_number)\n\n" 
+                                + dataService.SQLErrText
+                                , "w_extentions2001.wf_addextn: Database error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 /* select max(fd_unique_seq_number) into :lNextSeq
                    from frequency_adjustments 
@@ -318,16 +343,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lNextSeq = dataService.intVal;
                 if (dataService.SQLCode == -(1))
                 {
-                    MessageBox.Show("w_extentions2001.wf_addextn: determining max ( fd_unique_seq_number)\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Determining max(fd_unique_seq_number)\n\n" 
+                                + dataService.SQLErrText
+                                , "w_extentions2001.wf_addextn: Database error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                if (lNextSeq == null)
-                {
-                    lNextSeq = 1;
-                }
-                else
-                {
-                    lNextSeq++;
-                }
+                lNextSeq = (lNextSeq == null) ? 1 : lNextSeq + 1;
+                
+                //if (lNextSeq == null)
+                //{
+                //   lNextSeq = 1;
+                //}
+                //else
+                //{
+                //    lNextSeq++;
+                //}
                 dBenchmark = dw_extension.GetItem<Extension2005>(0).Extnamnt;
                 dAmountToPay = dw_extension.GetItem<Extension2005>(0).Extnamount;
                 //  Changing the recalc amount to be the benchmark difference from the database
@@ -336,20 +366,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Changed benchmarkCalc stored procedure name
                 //  TJB  SR4695  Jan-2007
                 //  Added sf_key and rf_delivery_days insert 
-                //   ( new columns in table to link to frequency_distances)
+                //   (new columns in table to link to frequency_distances)
                 /* INSERT INTO frequency_adjustments 
-                   (contract_no, contract_seq_number, fd_unique_seq_number,   
-                    fd_adjustment_amount, fd_paid_to_date, fd_bm_after_extn,   
-                    fd_confirmed, fd_amount_to_pay, fd_effective_date, sf_key, rf_delivery_days)  
-                    VALUES ( :lContract, :lSequence, :lNextSeq, :dBenchmark, null, BenchmarkCalc2005 ( :lContract, :lSequence),   
-                    'N', :dAmountToPay, :dEffectiveDate, :lSFKey, :sDeliveryDays)  ; */
+                 *     (contract_no, contract_seq_number, fd_unique_seq_number,   
+                 *      fd_adjustment_amount, fd_paid_to_date, fd_bm_after_extn,   
+                 *      fd_confirmed, fd_amount_to_pay, fd_effective_date, sf_key, rf_delivery_days)  
+                 *  VALUES 
+                 *     (:lContract, :lSequence, :lNextSeq, :dBenchmark, null, BenchmarkCalc2005(:lContract, :lSequence),
+                 *      'N', :dAmountToPay, :dEffectiveDate, :lSFKey, :sDeliveryDays)  ; */
                 dataService = RDSDataService.InsertFreqAdjustments(dBenchmark, lNextSeq, dEffectiveDate, lSequence, lSFKey, sDeliveryDays, dAmountToPay, lContract);
                 if (dataService.SQLCode == -(1))
                 {
-                    MessageBox.Show("w_extentions2001.wf_addextn: inserting into frequency_adjustments\r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Inserting into frequency_adjustments\n\n" 
+                                + dataService.SQLErrText
+                                , "w_extentions2001.wf_addextn: Database error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 //? commit;
-                if (MessageBox.Show("Do you want a benchmark report produced of the current contract?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want a benchmark report produced of the current contract?"
+                                , this.Text
+                                , MessageBoxButtons.YesNo
+                                , MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
                     dw_benchmark_report.Visible = true;
@@ -409,14 +446,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_ext_ue_reenter_amount()
         {
-            // decimal dDelHours
-            // 
-            // dDelHours = This.GetItemNumber ( 1, "del_days_per_week")
-            // dDelHours = Round ( dDelHours, 3)
-            // this.setitem ( 1, "extn_del_hrs", dDelHours)
-            //dw_ext.SetValue(0, "extnamount", dw_ext.GetValue<decimal>(0, "extnamnt"));
-            dw_ext.SetValue(0, "extnamount", dw_ext.GetItem<NZPostOffice.RDS.Entity.Ruraldw.Extension2005>(0).Extnamnt);//this.setitem(1, "extnamount", this.getitemdecimal(1, "extnamnt"))
-
+                // TJB  20-Jul-2009  RD7_0033: Extentions fixes
+                // Split the assignment into parts to see what's going on
+                // Changed method of assignment (probably made no difference)
+            decimal? dExtnamnt;
+            
+            //dw_ext.SetValue(0, "extnamount", dw_ext.GetItem<NZPostOffice.RDS.Entity.Ruraldw.Extension2005>(0).Extnamnt);
+            dExtnamnt = (decimal)dw_ext.GetItem<Extension2005>(0).Extnamnt;
+            dw_ext.GetItem<Extension2005>(0).Extnamount = dExtnamnt;
         }
 
         public virtual void dw_ext_ue_dwnprocessenter()
@@ -485,14 +522,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         #region Events
         public void WExtentions2001_extn_effective_date_change(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            string extn_date_text = dw_ext.GetControlByName("extn_effective_date").Text;
+                // TJB  15-Jul-2009   RD7_0033
+                //     Added this test.  If an invalid date is entered, the entry field
+                //     validation replaces the value entered with "00/00/0000".
+            if ( extn_date_text == "00/00/0000" )
+            {
+                MessageBox.Show("Invalid date entered.  Please re-enter the effective date.", "Warning");
+                e.Cancel = true;
+            }
+
             if (dw_ext.RowCount > 0)//pp! added condition or of nor row there is exception
             {
                 try
                 {
-                    if (!(StaticVariables.gnv_app.of_sanedate(System.Convert.ToDateTime(dw_ext.GetControlByName("extn_effective_date").Text), "effective date")))
+                    if (!(StaticVariables.gnv_app.of_sanedate(System.Convert.ToDateTime(extn_date_text), "effective date")))
                     {
                         e.Cancel = true;
-                        dw_ext.GetControlByName("extn_effective_date").Text = dw_ext.GetItem<Extension2005>(0).ExtnEffectiveDate.ToString();
+                        // TJB  15-Jul-2009  RD7_0033
+                        //    Changed value set in extn_effective_date.  Commented out setting
+                        //    includes a time as part of the string.
+                        // dw_ext.GetControlByName("extn_effective_date").Text = dw_ext.GetItem<Extension2005>(0).ExtnEffectiveDate.ToString();
+                        dw_ext.GetControlByName("extn_effective_date").Text = extn_date_text;
                         dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
                         return;//?2;
                     }
@@ -784,26 +835,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  base.itemchanged();
             dw_ext.URdsDw_Itemchanged(sender, e);
-            bool bRecalc = false;
-            decimal dDistance;
-            int lCustomers;
-            decimal dDelHrs = 0;
+            bool bRecalc      = false;
+            decimal dDistance = 0;
+            int lCustomers    = 0;
+            decimal dDelHours = 0;
+            decimal dextnamnt = 0;
+            decimal dExtnDelHrs = 0;
+
             string sColumn;
-            decimal dDelHours;
-            sColumn = ((TextBoxBase)sender).Name;//dw_ext.GetColumnName();
+            object value;
+            string data;
+
+                // TJB  20-Jul-2009  RD7_0033: Extentions fixes
+                //    Moved extraction of 'value' outside 'if' structure
+            sColumn = ((TextBoxBase)sender).Name;        //dw_ext.GetColumnName();
+            value   = dw_ext.GetValue<object>(0, sColumn);
 
             if (dw_ext.RowCount > 0)//pp! added condition or of no row there is exception
             {
-                object value = dw_ext.GetValue<object>(0, sColumn);
-
-                string data = value != null ? value.ToString() : null;
+                data  = value != null ? value.ToString() : null;
                 if (sColumn == "extn_distance")
                 {
                     decimal.TryParse(dw_ext.GetControlByName(sColumn).Text, out dDistance);
                     lCustomers = (int)dw_ext.GetItem<Extension2005>(0).CustChange;
                     bRecalc = true;
                     dw_extension.GetControlByName("compute_1").Visible = true;
-                    dw_extension.GetControlByName("extnamnt").Visible = true;
+                    dw_extension.GetControlByName("extnamnt").Visible  = true;
                 }
                 else if (sColumn == "extn_boxes")
                 {
@@ -817,13 +874,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         lCustomers = lCustomers + (int)dw_ext.GetItem<Extension2005>(0).ExtnNoCmbCustomers;
                     }
-                    if (lCustomers != 0)
-                    {
-                        dw_extension.GetControlByName("cust_change").Visible = true;
-                        dw_extension.GetControlByName("volume_change").Visible = true;
-                        dw_extension.GetControlByName("proc_hrs_change").Visible = true;
-                        dw_extension.GetControlByName("extnamnt").Visible = true;
-                    }
+                    // TJB  20-Jul-2009  Extentions fixes
+                    //     Moved this block outside "if" blocks
+                    // if (lCustomers != 0)
+                    // {
+                    //     dw_extension.GetControlByName("cust_change").Visible     = true;
+                    //     dw_extension.GetControlByName("volume_change").Visible   = true;
+                    //     dw_extension.GetControlByName("proc_hrs_change").Visible = true;
+                    //     dw_extension.GetControlByName("extnamnt").Visible        = true;
+                    // }
                     bRecalc = true;
                 }
                 else if (sColumn == "extn_no_cmb_customers")
@@ -857,8 +916,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else if (sColumn == "extn_del_hrs")
                 {
-                    dw_ext.GetControlByName("extnamnt").Visible = true;
-                    //bRecalc = true;
+                        // TJB  20-Jul-2009  Extentions fixes
+                        //    Turned on bRecalc flag (was commented out)
+                        //    Needed to enable recalculation of amount if extn_del_hrs manually changed
+                    dw_extension.GetControlByName("extnamnt").Visible = true;
+                    bRecalc = true;
+                }
+                    // tjb  15-Jul-2009  Extensions fixes
+                    //    Moved from below if(bRecalc)
+                else if (sColumn == "extnamount")
+                {
+                    if (dw_ext.GetItem<Extension2005>(0).Extnamount != 0)
+                    {
+                        dw_extension.GetControlByName("compute_4").Visible = true;
+                        dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
+                    }
+                    bRecalc = true;
+                }
+                    // TJB  20-Jul-2009  Extentions fixes
+                    //    Moved to make these fields visible when # customesrs changed
+                if (lCustomers != 0)
+                {
+                    dw_extension.GetControlByName("cust_change").Visible = true;
+                    dw_extension.GetControlByName("volume_change").Visible = true;
+                    dw_extension.GetControlByName("proc_hrs_change").Visible = true;
+                    dw_extension.GetControlByName("extnamnt").Visible = true;
                 }
                 if (bRecalc)
                 {
@@ -873,23 +955,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  TWC - 18/09/2003 call 4566 
                     //  accept text so all variables are current before recalculating
                     dw_ext.AcceptText();
-                    dDelHours = Convert.ToDecimal(dw_ext.GetItem<Extension2005>(0).DelDaysPerWeek);
-                    dDelHours = Math.Round(dDelHours, 2);
-                    dw_ext.GetItem<Extension2005>(0).ExtnDelHrs = dDelHours;
-                    // dw_ext.DataObject.SetCurrent(0);
-                    // dw_ext.GetControlByName("extn_del_hrs").Text = dw_ext.GetValue(0, "extn_del_hrs").ToString();
-                    dw_ext.SetValue(0, "extn_del_hrs", dDelHours);// dw_ext.SetItem(1, "extn_del_hrs", dDelHours);
-                    dw_ext_ue_reenter_amount(); // post
-                    dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
-                }
-                else if (sColumn == "extnamount")
-                {
-                    if (dw_ext.GetItem<Extension2005>(0).Extnamount != 0)
+
+                       // TJB  20-Jul-2009  Extentions fixes
+                       //    Added test for extn_del_hrs column
+                       //    In PB version, changing the ExtnDelHrs value here was reversed (somehow)
+                       //    when dw_ext_ue_reenter_amount() was entered, and the relevant calculations
+                       //    worked correctly.  In C#, setting the ExtnDelHrs value is permanent and
+                       //    usually resulted in it being set to 0.
+                       //    This code ensures the value entered is the value seen by
+                       //    dw_ext_ue_reenter_amount().
+                    if (sColumn == "extn_del_hrs")
                     {
-                        dw_extension.GetControlByName("compute_4").Visible = true;
-                        dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
+                        dExtnDelHrs = (decimal)value;
+                        dw_ext.GetItem<Extension2005>(0).ExtnDelHrs = dExtnDelHrs;
+                    } 
+                    else
+                    {
+                        dDelHours = (decimal)dw_ext.GetItem<Extension2005>(0).DelDaysPerWeek;
+                        dDelHours = Math.Round(dDelHours, 2);
+                        dw_ext.GetItem<Extension2005>(0).ExtnDelHrs = dDelHours;
+                        // dw_ext.DataObject.SetCurrent(0);
+                        // dw_ext.GetControlByName("extn_del_hrs").Text = dw_ext.GetValue(0, "extn_del_hrs").ToString();
+                            // TJB  20-Jul-2009  Extentions fixes
+                            //    The line below was  commented-out because it is redundant
+                        // dw_ext.SetValue(0, "extn_del_hrs", dDelHours);    // dw_ext.SetItem(1, "extn_del_hrs", dDelHours);
                     }
-                    bRecalc = true;
+                    dw_ext_ue_reenter_amount();                          // post
+                        // TJB  20-Jul-2009  Extentions fixes
+                        //    Redundant
+                    // dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
                 }
                 dw_ext.DataObject.BindingSource.CurrencyManager.Refresh();
             }
