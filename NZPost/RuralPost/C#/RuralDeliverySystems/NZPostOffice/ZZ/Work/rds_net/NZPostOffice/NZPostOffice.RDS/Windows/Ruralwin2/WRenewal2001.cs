@@ -134,8 +134,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_contract_contractor.DataObject = new DContractContractor();
             dw_contract_contractor.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
+            //dw_contract_vehicle.DataObject = new DContractVehicle();
             dw_contract_vehicle.DataObject = new DContractVehicle();
-            dw_contract_vehicle.DataObject = new DContractVehicle();
+            dw_contract_vehicle.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             dw_renewal_artical_counts.DataObject = new DRenewalArticalCounts();
             dw_renewal_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
@@ -143,9 +144,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ((DContractVehicle)dw_contract_vehicle.DataObject).SelectedItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
             ((DContractVehicle)dw_contract_vehicle.DataObject).TextChanged += new EventHandler(dw_contract_vehicle_itemchanged);
             
-            
             //jlwang:moved from IC
-
             dw_renewal.Constructor += new UserEventDelegate(dw_renewal_constructor);
             dw_renewal.WinPfcSave += new UserEventDelegate1(this.pfc_save); //added by jlwang
 
@@ -196,222 +195,199 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_renewal = new System.Windows.Forms.TabControl();
+            this.tabpage_renewal = new System.Windows.Forms.TabPage();
+            this.dw_renewal = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_frequency_adjustment = new System.Windows.Forms.TabPage();
+            this.dw_renewal_freq_adjust = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_contract_adjustment = new System.Windows.Forms.TabPage();
+            this.dw_renewal_cont_adjustments = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_owners_drivers = new System.Windows.Forms.TabPage();
+            this.dw_contract_contractor = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_vehicles = new System.Windows.Forms.TabPage();
+            this.dw_contract_vehicle = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_article_count = new System.Windows.Forms.TabPage();
+            this.dw_renewal_artical_counts = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_renewal.SuspendLayout();
+            this.tabpage_renewal.SuspendLayout();
+            this.tabpage_frequency_adjustment.SuspendLayout();
+            this.tabpage_contract_adjustment.SuspendLayout();
+            this.tabpage_owners_drivers.SuspendLayout();
+            this.tabpage_vehicles.SuspendLayout();
+            this.tabpage_article_count.SuspendLayout();
             this.SuspendLayout();
-            this.tab_renewal = new TabControl();
-            Controls.Add(tab_renewal);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.Size = new System.Drawing.Size(615, 448);
-            this.Name = "w_renewal2001";
             // 
             // st_label
             // 
-            st_label.Text = "w_renewal2001";
-            st_label.Location = new System.Drawing.Point(10, 410);
+            this.st_label.Location = new System.Drawing.Point(13, 400);
+            this.st_label.Size = new System.Drawing.Size(171, 21);
+            this.st_label.Text = "w_renewal2001";
             // 
             // tab_renewal
             // 
-            tabpage_renewal = new TabPage();
-            tabpage_frequency_adjustment = new TabPage();
-            tabpage_contract_adjustment = new TabPage();
-            tabpage_owners_drivers = new TabPage();
-            tabpage_vehicles = new TabPage();
-            tabpage_article_count = new TabPage();
-            tab_renewal.Controls.Add(tabpage_renewal);
-            tab_renewal.Controls.Add(tabpage_frequency_adjustment);
-            tab_renewal.Controls.Add(tabpage_contract_adjustment);
-            tab_renewal.Controls.Add(tabpage_owners_drivers);
-            tab_renewal.Controls.Add(tabpage_vehicles);
-            tab_renewal.Controls.Add(tabpage_article_count);
-            tab_renewal.SelectedIndex = 0;
-            tab_renewal.Multiline = true;
-            tab_renewal.TabIndex = 1;
-            tab_renewal.Size = new System.Drawing.Size(590, 390);
-            tab_renewal.Location = new System.Drawing.Point(10, 5);
-            tab_renewal.SelectedIndexChanged += new EventHandler(tab_renewal_selectionchanging);
-            tab_renewal.SelectedIndexChanged += new EventHandler(tab_renewal_selectionchanged);
+            this.tab_renewal.Controls.Add(this.tabpage_renewal);
+            this.tab_renewal.Controls.Add(this.tabpage_frequency_adjustment);
+            this.tab_renewal.Controls.Add(this.tabpage_contract_adjustment);
+            this.tab_renewal.Controls.Add(this.tabpage_owners_drivers);
+            this.tab_renewal.Controls.Add(this.tabpage_vehicles);
+            this.tab_renewal.Controls.Add(this.tabpage_article_count);
+            this.tab_renewal.Location = new System.Drawing.Point(10, 5);
+            this.tab_renewal.Multiline = true;
+            this.tab_renewal.Name = "tab_renewal";
+            this.tab_renewal.SelectedIndex = 0;
+            this.tab_renewal.Size = new System.Drawing.Size(590, 390);
+            this.tab_renewal.TabIndex = 1;
+            this.tab_renewal.SelectedIndexChanged += new System.EventHandler(this.tab_renewal_selectionchanged);
             // 
             // tabpage_renewal
             // 
-            dw_renewal = new URdsDw();
-            //!dw_renewal.DataObject = new DRenewal();
-            tabpage_renewal.Controls.Add(dw_renewal);
-            tabpage_renewal.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_renewal.Text = "Renewal";
-            tabpage_renewal.Size = new System.Drawing.Size(600, 375);
-            tabpage_renewal.Top = 25;
-            tabpage_renewal.Left = 3;
-            tabpage_renewal.Visible = false;
-            tabpage_renewal.Tag = "ComponentName=Renewal;";
+            this.tabpage_renewal.Controls.Add(this.dw_renewal);
+            this.tabpage_renewal.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_renewal.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_renewal.Name = "tabpage_renewal";
+            this.tabpage_renewal.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_renewal.TabIndex = 0;
+            this.tabpage_renewal.Tag = "ComponentName=Renewal;";
+            this.tabpage_renewal.Text = "Renewal";
+            this.tabpage_renewal.Visible = false;
             // 
             // dw_renewal
             // 
-            //!dw_renewal.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_renewal.VerticalScroll.Visible = false;
-            dw_renewal.TabIndex = 1;
-            dw_renewal.Location = new System.Drawing.Point(5, 5);//! 19);
-            dw_renewal.Size = new System.Drawing.Size(600, 320);
-            dw_renewal.Visible = false;
-            dw_renewal.ItemChanged += new EventHandler(dw_renewal_itemchanged);
-
-            //dw_renewal.Constructor += new UserEventDelegate(dw_renewal_constructor);
-            //dw_renewal.WinPfcSave += new UserEventDelegate1(this.pfc_save); //added by jlwang
+            this.dw_renewal.DataObject = null;
+            this.dw_renewal.FireConstructor = false;
+            this.dw_renewal.Location = new System.Drawing.Point(5, 5);
+            this.dw_renewal.Name = "dw_renewal";
+            this.dw_renewal.Size = new System.Drawing.Size(600, 320);
+            this.dw_renewal.TabIndex = 1;
+            this.dw_renewal.Visible = false;
+            this.dw_renewal.ItemChanged += new System.EventHandler(this.dw_renewal_itemchanged);
             // 
             // tabpage_frequency_adjustment
             // 
-            dw_renewal_freq_adjust = new URdsDw();
-//!            dw_renewal_freq_adjust.DataObject = new DRenewalFreqAdjust();
-            tabpage_frequency_adjustment.Controls.Add(dw_renewal_freq_adjust);
-            tabpage_frequency_adjustment.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_frequency_adjustment.Text = "Frequency Adjustment";
-            tabpage_frequency_adjustment.Size = new System.Drawing.Size(582, 375);
-            tabpage_frequency_adjustment.Top = 25;
-            tabpage_frequency_adjustment.Left = 3;
-
-            tabpage_frequency_adjustment.Name = tabpage_frequency_adjustment.Text; //
-            tabpage_frequency_adjustment.Tag = "ComponentName=Frequency Adjustment;";
+            this.tabpage_frequency_adjustment.Controls.Add(this.dw_renewal_freq_adjust);
+            this.tabpage_frequency_adjustment.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_frequency_adjustment.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_frequency_adjustment.Name = this.tabpage_frequency_adjustment.Text;
+            this.tabpage_frequency_adjustment.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_frequency_adjustment.TabIndex = 1;
+            this.tabpage_frequency_adjustment.Tag = "ComponentName=Frequency Adjustment;";
+            this.tabpage_frequency_adjustment.Text = "Frequency Adjustment";
             // 
             // dw_renewal_freq_adjust
-            //
-            dw_renewal_freq_adjust.TabIndex = 1;
-//!            dw_renewal_freq_adjust.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_renewal_freq_adjust.Location = new System.Drawing.Point(5, 7);
-            dw_renewal_freq_adjust.Size = new System.Drawing.Size(571, 326);
-            //dw_renewal_freq_adjust.ItemChanged += new EventHandler(dw_renewal_freq_adjust_itemchanged);
-
-            //dw_renewal_freq_adjust.Click += new EventHandler(dw_renewal_freq_adjust_clicked);
-
-            //dw_renewal_freq_adjust.DataObject.RetrieveStart += new RetrieveEventHandler(dw_renewal_freq_adjust_retrievestart);
-            //dw_renewal_freq_adjust.Constructor += new UserEventDelegate(dw_renewal_freq_adjust_constructor);
-            //((DataEntityGrid)dw_renewal_freq_adjust.GetControlByName("grid")).CellValueChanged += new DataGridViewCellEventHandler(dw_renewal_freq_adjust_itemchanged);
-            //dw_renewal_freq_adjust.PfcPreDeleteRow += new UserEventDelegate1(dw_renewal_freq_adjust_pfc_predeleterow);
-            //dw_renewal_freq_adjust.PfcDeleteRow += new UserEventDelegate(dw_renewal_freq_adjust_pfc_deleterow);
-            //dw_renewal_freq_adjust.WinPfcSave += new UserEventDelegate1(this.pfc_save); //added by jlwang
-
+            // 
+            this.dw_renewal_freq_adjust.DataObject = null;
+            this.dw_renewal_freq_adjust.FireConstructor = false;
+            this.dw_renewal_freq_adjust.Location = new System.Drawing.Point(5, 7);
+            this.dw_renewal_freq_adjust.Name = "dw_renewal_freq_adjust";
+            this.dw_renewal_freq_adjust.Size = new System.Drawing.Size(571, 326);
+            this.dw_renewal_freq_adjust.TabIndex = 1;
             // 
             // tabpage_contract_adjustment
             // 
-            dw_renewal_cont_adjustments = new URdsDw();
-//!            dw_renewal_cont_adjustments.DataObject = new DRenewalAdjustments();
-
-            tabpage_contract_adjustment.Controls.Add(dw_renewal_cont_adjustments);
-            tabpage_contract_adjustment.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_contract_adjustment.Text = "Contract Adjustment";
-            tabpage_contract_adjustment.Size = new System.Drawing.Size(582, 375);
-            tabpage_contract_adjustment.Top = 25;
-            tabpage_contract_adjustment.Left = 3;
-            tabpage_contract_adjustment.Visible = false;
-            tabpage_contract_adjustment.Tag = "ComponentName=Contract Adjustment;";
+            this.tabpage_contract_adjustment.Controls.Add(this.dw_renewal_cont_adjustments);
+            this.tabpage_contract_adjustment.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_contract_adjustment.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_contract_adjustment.Name = "tabpage_contract_adjustment";
+            this.tabpage_contract_adjustment.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_contract_adjustment.TabIndex = 2;
+            this.tabpage_contract_adjustment.Tag = "ComponentName=Contract Adjustment;";
+            this.tabpage_contract_adjustment.Text = "Contract Adjustment";
+            this.tabpage_contract_adjustment.Visible = false;
             // 
             // dw_renewal_cont_adjustments
             // 
-//!            dw_renewal_cont_adjustments.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_renewal_cont_adjustments.TabIndex = 1;
-            dw_renewal_cont_adjustments.Location = new System.Drawing.Point(5, 7);
-            dw_renewal_cont_adjustments.Size = new System.Drawing.Size(571, 326);
-            dw_renewal_cont_adjustments.ItemChanged += new EventHandler(dw_renewal_cont_adjustments_itemchanged);
-
-            //dw_renewal_cont_adjustments.Constructor += new UserEventDelegate(dw_renewal_cont_adjustments_constructor);
-            //dw_renewal_cont_adjustments.PfcPreDeleteRow += new UserEventDelegate1(dw_renewal_cont_adjustments_pfc_predeleterow);
-            //dw_renewal_cont_adjustments.PfcValidation += new UserEventDelegate1(dw_renewal_cont_adjustments_pfc_validation);
-            //dw_renewal_cont_adjustments.WinPfcSave += new UserEventDelegate1(this.pfc_save);  //added by jlwang
-
+            this.dw_renewal_cont_adjustments.DataObject = null;
+            this.dw_renewal_cont_adjustments.FireConstructor = false;
+            this.dw_renewal_cont_adjustments.Location = new System.Drawing.Point(5, 7);
+            this.dw_renewal_cont_adjustments.Name = "dw_renewal_cont_adjustments";
+            this.dw_renewal_cont_adjustments.Size = new System.Drawing.Size(571, 326);
+            this.dw_renewal_cont_adjustments.TabIndex = 1;
+            this.dw_renewal_cont_adjustments.ItemChanged += new System.EventHandler(this.dw_renewal_cont_adjustments_itemchanged);
             // 
             // tabpage_owners_drivers
             // 
-            dw_contract_contractor = new URdsDw();
-            //!dw_contract_contractor.DataObject = new DContractContractor();
-            tabpage_owners_drivers.Controls.Add(dw_contract_contractor);
-            tabpage_owners_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_owners_drivers.Text = "Owner Drivers";
-            tabpage_owners_drivers.Size = new System.Drawing.Size(582, 375);
-            tabpage_owners_drivers.Top = 25;
-            tabpage_owners_drivers.Left = 3;
-            tabpage_owners_drivers.Visible = false;
-            tabpage_owners_drivers.Tag = "ComponentName=Renewal Owner Drivers;";
+            this.tabpage_owners_drivers.Controls.Add(this.dw_contract_contractor);
+            this.tabpage_owners_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_owners_drivers.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_owners_drivers.Name = "tabpage_owners_drivers";
+            this.tabpage_owners_drivers.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_owners_drivers.TabIndex = 3;
+            this.tabpage_owners_drivers.Tag = "ComponentName=Renewal Owner Drivers;";
+            this.tabpage_owners_drivers.Text = "Owner Drivers";
+            this.tabpage_owners_drivers.Visible = false;
             // 
             // dw_contract_contractor
             // 
-            dw_contract_contractor.TabIndex = 1;
-            //!dw_contract_contractor.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_contract_contractor.Location = new System.Drawing.Point(5, 7);
-            dw_contract_contractor.Size = new System.Drawing.Size(571, 326);
-            dw_contract_contractor.GotFocus += new EventHandler(dw_contract_contractor_getfocus);
-
-            //((DContractContractor)dw_contract_contractor.DataObject).CellClick += new EventHandler(dw_contract_contractor_clicked);
-            ////dw_contract_contractor.ItemChanged += new EventHandler(dw_contract_contractor_itemchanged);
-            //((DContractContractor)dw_contract_contractor.DataObject).CellValueChanged += new EventHandler(dw_contract_contractor_itemchanged);
-            ////((Metex.Windows.DataEntityGrid)dw_contract_contractor.DataObject.GetControlByName("grid")).CellEnter  +=new DataGridViewCellEventHandler(WRenewal2001_CellLeave);
-
-            //dw_contract_contractor.PfcValidation += new UserEventDelegate1(dw_contract_contractor_pfc_validation);
-            //dw_contract_contractor.Constructor += new UserEventDelegate(dw_contract_contractor_constructor);
-            //dw_contract_contractor.WinPfcSave += new UserEventDelegate1(pfc_save); //added by jlwang
-
+            this.dw_contract_contractor.DataObject = null;
+            this.dw_contract_contractor.FireConstructor = false;
+            this.dw_contract_contractor.Location = new System.Drawing.Point(5, 7);
+            this.dw_contract_contractor.Name = "dw_contract_contractor";
+            this.dw_contract_contractor.Size = new System.Drawing.Size(571, 326);
+            this.dw_contract_contractor.TabIndex = 1;
+            this.dw_contract_contractor.GotFocus += new System.EventHandler(this.dw_contract_contractor_getfocus);
             // 
             // tabpage_vehicles
             // 
-            dw_contract_vehicle = new URdsDw();
-            //!dw_contract_vehicle.DataObject = new DContractVehicle();
-            tabpage_vehicles.Controls.Add(dw_contract_vehicle);
-            tabpage_vehicles.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_vehicles.Text = "Vehicles";
-            tabpage_vehicles.Size = new System.Drawing.Size(582, 375);
-            tabpage_vehicles.Top = 25;
-            tabpage_vehicles.Visible = false;
-            tabpage_vehicles.Tag = "ComponentName=Renewal Vehicles;";
-
+            this.tabpage_vehicles.Controls.Add(this.dw_contract_vehicle);
+            this.tabpage_vehicles.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_vehicles.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_vehicles.Name = "tabpage_vehicles";
+            this.tabpage_vehicles.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_vehicles.TabIndex = 4;
+            this.tabpage_vehicles.Tag = "ComponentName=Renewal Vehicles;";
+            this.tabpage_vehicles.Text = "Vehicles";
+            this.tabpage_vehicles.Visible = false;
             // 
             // dw_contract_vehicle
             // 
-            dw_contract_vehicle.TabIndex = 1;
-            //!dw_contract_vehicle.DataObject = new DContractVehicle();
-            dw_contract_vehicle.Location = new System.Drawing.Point(5, 7);
-            dw_contract_vehicle.Size = new System.Drawing.Size(578, 350);
-            //dw_contract_vehicle.ItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
-//!            ((DContractVehicle)dw_contract_vehicle.DataObject).SelectedItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
-//!            ((DContractVehicle)dw_contract_vehicle.DataObject).TextChanged += new EventHandler(dw_contract_vehicle_itemchanged);
-
-            //dw_contract_vehicle.Constructor += new UserEventDelegate(dw_contract_vehicle_constructor);
-            //dw_contract_vehicle.PfcPreInsertRow += new UserEventDelegate1(dw_contract_vehicle_pfc_preinsertrow);
-            //dw_contract_vehicle.PfcPreDeleteRow += new UserEventDelegate1(dw_contract_vehicle_pfc_predeleterow);
-            //dw_contract_vehicle.PfcInsertRow += new UserEventDelegate(dw_contract_vehicle_pfc_insertrow);
-            //dw_contract_vehicle.PfcPostUpdate += new UserEventDelegate(dw_contract_vehicle_pfc_postupdate);
-            //dw_contract_vehicle.PfcValidation += new UserEventDelegate1(dw_contract_vehicle_pfc_validation);
-            //dw_contract_vehicle.UpdateStart += new UserEventDelegate(updatestart);
-            //dw_contract_vehicle.WinPfcSave += new UserEventDelegate1(pfc_save);
-            //dw_contract_vehicle.DataObject.BindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(dw_contract_vehicle_DataSourceChanged);
-
+            this.dw_contract_vehicle.DataObject = null;
+            this.dw_contract_vehicle.FireConstructor = false;
+            this.dw_contract_vehicle.Location = new System.Drawing.Point(5, 7);
+            this.dw_contract_vehicle.Name = "dw_contract_vehicle";
+            this.dw_contract_vehicle.Size = new System.Drawing.Size(578, 350);
+            this.dw_contract_vehicle.TabIndex = 1;
             // 
             // tabpage_article_count
             // 
-            dw_renewal_artical_counts = new URdsDw();
-            //!dw_renewal_artical_counts.DataObject = new DRenewalArticalCounts();
-            tabpage_article_count.Controls.Add(dw_renewal_artical_counts);
-            tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_article_count.Text = "Article Counts";
-            tabpage_article_count.Size = new System.Drawing.Size(582, 375);
-            tabpage_article_count.Top = 25;
-            tabpage_article_count.Left = 3;
-            //tabpage_article_count.Visible = false;
-            tabpage_article_count.Name = tabpage_article_count.Text;//
-
-            tabpage_article_count.Tag = "ComponentName=Renewal Article Counts;";
+            this.tabpage_article_count.Controls.Add(this.dw_renewal_artical_counts);
+            this.tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_article_count.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_article_count.Name = this.tabpage_article_count.Text;
+            this.tabpage_article_count.Size = new System.Drawing.Size(582, 364);
+            this.tabpage_article_count.TabIndex = 5;
+            this.tabpage_article_count.Tag = "ComponentName=Renewal Article Counts;";
+            this.tabpage_article_count.Text = "Article Counts";
             // 
             // dw_renewal_artical_counts
             // 
-            dw_renewal_artical_counts.TabIndex = 1;
-            //!dw_renewal_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_renewal_artical_counts.Location = new System.Drawing.Point(5, 7);
-            dw_renewal_artical_counts.Size = new System.Drawing.Size(571, 326);
-            dw_renewal_artical_counts.GotFocus += new EventHandler(dw_renewal_artical_counts_getfocus);
-            dw_renewal_artical_counts.Click += new EventHandler(dw_renewal_artical_counts_clicked);
+            this.dw_renewal_artical_counts.DataObject = null;
+            this.dw_renewal_artical_counts.FireConstructor = false;
+            this.dw_renewal_artical_counts.Location = new System.Drawing.Point(5, 7);
+            this.dw_renewal_artical_counts.Name = "dw_renewal_artical_counts";
+            this.dw_renewal_artical_counts.Size = new System.Drawing.Size(571, 326);
+            this.dw_renewal_artical_counts.TabIndex = 1;
+            this.dw_renewal_artical_counts.Click += new System.EventHandler(this.dw_renewal_artical_counts_clicked);
+            this.dw_renewal_artical_counts.GotFocus += new System.EventHandler(this.dw_renewal_artical_counts_getfocus);
+            // 
+            // WRenewal2001
+            // 
+            this.ClientSize = new System.Drawing.Size(609, 419);
+            this.Controls.Add(this.tab_renewal);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.Name = "WRenewal2001";
+            this.Controls.SetChildIndex(this.tab_renewal, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_renewal.ResumeLayout(false);
+            this.tabpage_renewal.ResumeLayout(false);
+            this.tabpage_frequency_adjustment.ResumeLayout(false);
+            this.tabpage_contract_adjustment.ResumeLayout(false);
+            this.tabpage_owners_drivers.ResumeLayout(false);
+            this.tabpage_vehicles.ResumeLayout(false);
+            this.tabpage_article_count.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-
-            //((DRenewalArticalCounts)dw_renewal_artical_counts.DataObject).DoubleClick += new EventHandler(dw_renewal_artical_counts_doubleclicked);
-            //dw_renewal_artical_counts.Constructor += new UserEventDelegate(dw_renewal_artical_counts_constructor);
-            //dw_renewal_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_renewal_artical_counts_pfc_preinsertrow);
-            //dw_renewal_artical_counts.WinPfcSave += new UserEventDelegate1(this.pfc_save);
-            this.ResumeLayout();
         }
 
         //void dw_contract_vehicle_DataSourceChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
@@ -926,7 +902,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  record and a corresponding frequency_distances record.
             n_freq = new NFrequencyAdjustment();
             n_freq.of_set_contract(ai_contractno, ai_sequenceno);
-            n_freq.is_reason = "Change in value resulting from change in vehicle fuel type.";
+            //  TJB  RD7_0037  Aug2009: Changed wording
+            n_freq.is_reason = "Change in value resulting from change in vehicle.";
             //  Use today's date as the effective date
             n_freq.of_set_effective_date(DateTime.Today);
             n_freq.is_confirmed = "N";
@@ -943,7 +920,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             else
             {
                 //?Rollback;
-                MessageBox.Show("A frequency adjustment insert failed. ~r" + "The sql error code was " + li_return.ToString() + " ~r" + "The insert has been rolled back.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A frequency adjustment insert failed. \n" 
+                                  + "The sql error code was " + li_return.ToString() + "\n" 
+                                  + "The insert has been rolled back."
+                               , "ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 li_return = -(1);
             }
             return li_return;
@@ -1869,14 +1850,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             li_rows = RDSDataService.GetContractorCount3(il_contract, il_sequence, ref SQLCode, ref SQLErrText);
             if (SQLCode != 0)
             {
-                MessageBox.Show("Unable to determine the contract status.\n\n" + "Error Text: " + SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to determine the contract status.\n\n" 
+                                 + "Error Text: " + SQLErrText
+                               , "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             if (li_rows <= 0)
             {
                 //  This is not an active contract
                 //  do not create any frequency adjustments
-                MessageBox.Show("Adding a new vehicle to an expired or pending contract is not allowed. ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Adding a new vehicle to an expired or pending contract is not allowed. "
+                               , "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
 
             }
@@ -2017,23 +2001,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     li_prevVehNo = 0;
                 }
                 //  Obtain current benchmark
-                /*select benchmarkCalcVeh2005 ( :il_contract, :il_sequence, :li_newVehNo)
-                    into :ldc_newBenchmark from dummy USING SQLCA;*/
+                //select benchmarkCalcVeh2005(:il_contract, :il_sequence, :li_newVehNo)
+                //  into :ldc_newBenchmark from dummy USING SQLCA;
                 ldc_newBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(il_contract, il_sequence, li_newVehNo, ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
-                    MessageBox.Show("Unable to determine current benchmark.\n\n" + "Error Code: " + Convert.ToString(SQLCode) + '~' + "Error Text: " + SQLErrText, "Database Error  ( w_renewal2001.pfc_postupdate)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Unable to determine current benchmark.\n\n" 
+                                     + "Error Code: " + Convert.ToString(SQLCode) + "\n" 
+                                     + "Error Text: " + SQLErrText
+                                   , "Database Error (WRenewal2001.pfc_postupdate)"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //?Rollback;
                     //?return -(1);
                     return;
                 }
                 //  Obtain previous benchmark
-                /*?select benchmarkCalcVeh2005 ( :il_contract, :il_sequence, :li_prevVehNo)
-                    into :ldc_prevBenchmark from dummy USING SQLCA;*/
+                // select benchmarkCalcVeh2005(:il_contract, :il_sequence, :li_prevVehNo)
+                //   into :ldc_prevBenchmark from dummy USING SQLCA;
                 ldc_prevBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(il_contract, il_sequence, li_prevVehNo, ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
-                    MessageBox.Show("Unable to determine previous benchmark.\n\n" + "Error Code: " + Convert.ToString(SQLCode) + '~' + "Error Text: " + SQLErrText, "Database Error  ( w_renewal2001.pfc_postupdate)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Unable to determine previous benchmark.\n\n" 
+                                     + "Error Code: " + Convert.ToString(SQLCode) + "\n" 
+                                     + "Error Text: " + SQLErrText
+                                   , "Database Error (WRenewal2001.pfc_postupdate)"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //?Rollback;
                     //return -(1);
                     return;
@@ -2045,11 +2037,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //  If successful, tell the user
                     if (li_rc > 0)
                     {
-                        MessageBox.Show("A frequency adjustment for the Road User Charges  ~r" + "has been made.  Please check and confirm it.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("A frequency adjustment for the Road User Charges as been made.\n" 
+                                         + "Please check and confirm it."
+                                         , "Information"
+                                         , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else if (li_rc == 0)
                     {
-                        MessageBox.Show("A frequency adjustment for the Road User Charges  ~r" + "was not created.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("A frequency adjustment for the Road User Charges was not created."
+                                       , "ERROR"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
