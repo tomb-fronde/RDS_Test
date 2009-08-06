@@ -744,8 +744,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             int ll_Cnt;
             this.SuspendLayout();
+
             // Set our tag
             Tag = il_rg_code.ToString() + id_renewaldate.ToString();
+
             // Process effective date
             if (id_renewaldate == System.Convert.ToDateTime("1900,1,1") || is_editable == "W")
             {
@@ -755,6 +757,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             ib_RetrievingVehicleList = true;
             ((DVehicalTypesList)(iuo_vehiclerates_list.DataObject)).Retrieve();
+            ll_Cnt = iuo_vehiclerates_list.RowCount;
 
             ib_RetrievingVehicleList = false;
             sle_effdate.Enabled = false;
@@ -775,7 +778,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 //iuo_nonvehiclerates.Modify("rg_code.Protect=\"0~tif ( isRowNew ( ),1,1)\"");
                 //?iuo_nonvehiclerates.(7)DataControl["rg_code"].BackColor =\'79216776\'");
-
                 iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Enabled = false;
 
                 //  icb_delete = tab_main.tabpage_renewalrates.cb_delete
@@ -809,6 +811,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 // Grab vehicle rates
                 ((DVehicalTypesList)iuo_vehiclerates_list.DataObject).Retrieve();
+                ll_Cnt = iuo_vehiclerates_list.RowCount;
+
                 // copy previous rates
                 of_copy_prev_piecerates();
                 of_copy_prev_miscrates();
@@ -911,34 +915,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual int of_getvehiclerate()
         {
             int? ll_vtKey;
+            int vrl_row, vrl_rows;
             DateTime? ld_Max_Effective_Date;
+
             if (ib_RetrievingVehicleList)
             {
                 return 1;
             }
-
             if (iuo_vehiclerates.Save() == -1)
                 return 0;
 
-            /*?
-            if (!(iuo_vehiclerates.Update() != -(1))) 
-            {
-                rollback;
-                return 0;
-            }
-            else 
-            {
-                commit;
-            }
-             */
-
-            if (iuo_vehiclerates_list.RowCount == 0)
+            vrl_rows = iuo_vehiclerates_list.RowCount;
+            if (vrl_rows == 0)
             {
                 return 0;
             }
-            if (iuo_vehiclerates_list.GetSelectedRow(0) >= 0)
+            vrl_row = iuo_vehiclerates_list.GetSelectedRow(0);
+            if (vrl_row >= 0)
             {
-                ll_vtKey = iuo_vehiclerates_list.GetItem<VehicalTypesList>(iuo_vehiclerates_list.GetSelectedRow(0)).VtKey;//GetItemNumber(iuo_vehiclerates_list.GetSelectedRow(0), "vt_key");
+                //GetItemNumber(iuo_vehiclerates_list.GetSelectedRow(0), "vt_key");
+                ll_vtKey = iuo_vehiclerates_list.GetItem<VehicalTypesList>(vrl_row).VtKey;
                 ((DVehicleRates2001)iuo_vehiclerates.DataObject).Retrieve(ll_vtKey, of_getdate());
                 if (iuo_vehiclerates.RowCount == 0)
                 {
@@ -946,21 +942,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     iuo_vehiclerates.InsertRow(0);
                     if (is_editable == "W")
                     {
-                        //SELECT max ( vr_rates_effective_date)  INTO :ld_Max_Effective_Date  FROM   vehicle_rate WHERE  vt_key 	= :ll_vtKey;
+                        //SELECT max(vr_rates_effective_date) INTO :ld_Max_Effective_Date FROM vehicle_rate WHERE vt_key = :ll_vtKey;
                         ld_Max_Effective_Date = RDSDataService.GetVehicleRateMax(ll_vtKey);
                         if (!(ld_Max_Effective_Date == null) && ld_Max_Effective_Date != System.Convert.ToDateTime("1900,1,1"))
                         {
                             ((DVehicleRates2001)iuo_vehiclerates.DataObject).Retrieve(ll_vtKey, ld_Max_Effective_Date);
 
                             iuo_vehiclerates.ResetUpdate();
-
-                            iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());//.SetItem(1, "vr_rates_effective_date", of_getdate());
+                            //.SetItem(1,"vr_rates_effective_date", of_getdate());
+                            iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());
                             //iuo_vehiclerates.SetItemStatus(1, 0, primary!, new!);
                             ((VehicleRates2001)iuo_vehiclerates.GetItem<VehicleRates2001>(0)).MarkNewEntity();
                         }
                     }
                 }
-            }
+            } 
             return 1;
         }
 
@@ -968,7 +964,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             int? ll_RGCode = 0;
             if (iuo_nonvehiclerates.RowCount > 0)  //added by jlwang
-                ll_RGCode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;//.GetItemNumber(1, "rg_code");
+                //.GetItemNumber(1, "rg_code");
+                ll_RGCode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
             if (ll_RGCode == null)
             {
                 ll_RGCode = il_rg_code;
@@ -994,7 +991,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     return null;
                 }
-
             }
             else
             {
@@ -1096,24 +1092,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             /* Use li_Renewal_Group and ld_Max_Effective_Date to retrieve the latest values for the Renewal Group as default values */
             ll_Rows = ((DNonVehicleRates2005)iuo_nonvehiclerates.DataObject).Retrieve(il_rg_code, ld_Max_Effective_Date);
-            //iuo_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", false);// "N");// .SetItem(1, "nvr_frozen_indicator", 'N');--no nvr_frozen_indicator
+            //iuo_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", false);// "N");
+            // .SetItem(1, "nvr_frozen_indicator", 'N');--no nvr_frozen_indicator
             iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).NvrFrozenIndicator = false;
             iuo_nonvehiclerates.ResetUpdate();
             //iuo_nonvehiclerates.SetItemStatus(1, 0, primary!, new!);
             ((NonVehicleRates2005)iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0)).MarkNewEntity();
             //  now use the max effective date to get the end of contract date 
 
-            //SELECT nvr_contract_end  INTO :ld_Date_To FROM non_vehicle_rate WHERE rg_code = :il_rg_code AND nvr_rates_effective_date = :ld_Max_Effective_Date;
+            //SELECT nvr_contract_end  INTO :ld_Date_To FROM non_vehicle_rate 
+            // WHERE rg_code = :il_rg_code AND nvr_rates_effective_date = :ld_Max_Effective_Date;
             ld_Date_To = RDSDataService.GetNonVehicleRateValue(il_rg_code, ld_Max_Effective_Date);
-
-            ld_Date_From = ld_Date_To.GetValueOrDefault().AddDays(1);//ld_Date_From =RelativeDate(ld_Date_To, 1);
+            //ld_Date_From =RelativeDate(ld_Date_To, 1);
+            ld_Date_From = ld_Date_To.GetValueOrDefault().AddDays(1);
             li_yy = ld_Date_To.Value.Year + 1;
             li_dd = ld_Date_To.Value.Day;
             li_mm = ld_Date_To.Value.Month;
             ld_Date_To = System.Convert.ToDateTime(li_yy + "," + li_mm + "," + li_dd);
-            iuo_nonvehiclerates.SetValue(0, "nvr_rates_effective_date", ld_Date_From);//.SetItem(1, "nvr_rates_effective_date", ld_Date_From);--no nvr_rates_effective_date
-            iuo_nonvehiclerates.SetValue(0, "nvr_contract_end", ld_Date_To);//.SetItem(1, "nvr_contract_end", ld_Date_To);--no nvr_contract_end
-            iuo_nonvehiclerates.SetValue(0, "nvr_contract_start", ld_Date_From);//.SetItem(1, "nvr_contract_start", ld_Date_From);--no nvr_contract_start
+            //.SetItem(1, "nvr_rates_effective_date", ld_Date_From);--no nvr_rates_effective_date
+            iuo_nonvehiclerates.SetValue(0, "nvr_rates_effective_date", ld_Date_From);
+            //.SetItem(1, "nvr_contract_end", ld_Date_To);--no nvr_contract_end
+            iuo_nonvehiclerates.SetValue(0, "nvr_contract_end", ld_Date_To);
+            //.SetItem(1, "nvr_contract_start", ld_Date_From);--no nvr_contract_start
+            iuo_nonvehiclerates.SetValue(0, "nvr_contract_start", ld_Date_From);
             return ll_Rows;
         }
 
@@ -1130,10 +1131,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ld_Max_Effective_Date = RDSDataService.GetFuelRatesMax(il_rg_code, ref sqlCode, ref sqlErrText);
             if (sqlCode != 0)//(StaticVariables.sqlca.SQLCode != 0)
             {
-                MessageBox.Show(sqlErrText/*?app.sqlca.SQLErrText*/, "Copy fuel rates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(sqlErrText /*?app.sqlca.SQLErrText*/
+                              , "Copy prev fuelrates"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
-
             if ((ld_Max_Effective_Date == null) && ld_Max_Effective_Date != System.Convert.ToDateTime("1900,1,1"))
             {
                 ld_Max_Effective_Date = of_getdate();
@@ -1159,13 +1161,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  The user has clicked on New Rates, so show 
             //  the most current fuel rates as defaults.
 
-            // SELECT max ( pr_effective_date) INTO :ld_Max_PrEffective_Date    FROM piece_rate    WHERE rg_code = :il_rg_code;
+            // SELECT max(pr_effective_date) INTO :ld_Max_PrEffective_Date FROM piece_rate WHERE rg_code = :il_rg_code;
             int sqlCode = -1;
             string sqlErrText = "";
             ld_Max_PrEffective_Date = RDSDataService.GetPieceRateMax(il_rg_code, ref sqlCode, ref sqlErrText);
             if (sqlCode != 0)// (StaticVariables.sqlca.SQLCode != 0)
             {
-                MessageBox.Show(/*?app.sqlca.SQLErrText*/sqlErrText, "Copy piece rates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(sqlErrText   /*?app.sqlca.SQLErrText*/
+                              , "Copy prev piecerates"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
 
@@ -1192,14 +1196,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Ctr;
             // The user has clicked on New Rates, so show the must current fuel rates as defaults
 
-            //SELECT max( rr_rates_effective_date) INTO :ld_Max_PrEffective_Date FROM rate_days WHERE rg_code =:il_rg_code;
-
+            //SELECT max(rr_rates_effective_date) INTO :ld_Max_PrEffective_Date FROM rate_days WHERE rg_code =:il_rg_code;
             int sqlCode = -1;
             string sqlErrText = "";
             ld_Max_PrEffective_Date = RDSDataService.GetRateDaysMax(il_rg_code, ref sqlCode, ref sqlErrText);
             if (sqlCode != 0)// (StaticVariables.sqlca.SQLCode != 0)
             {
-                MessageBox.Show(/*?app.sqlca.SQLErrText*/sqlErrText, "Copy rate rates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(sqlErrText   /*?app.sqlca.SQLErrText*/
+                               , "Copy prev ratedays"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
 
@@ -1211,8 +1216,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             iuo_ratedays.ResetUpdate();
             for (ll_Ctr = 0; ll_Ctr < iuo_ratedays.RowCount; ll_Ctr++)
             {
-                iuo_ratedays.SetValue(ll_Ctr, "rr_rates_effective_date", of_getdate());// .SetItem(ll_Ctr, "rr_rates_effective_date", of_getdate());
-                iuo_ratedays.SetValue(ll_Ctr, "rg_code", of_getrgcode());//.SetItem(ll_Ctr, "rg_code", of_getrgcode());
+                // .SetItem(ll_Ctr, "rr_rates_effective_date", of_getdate());
+                iuo_ratedays.SetValue(ll_Ctr, "rr_rates_effective_date", of_getdate());
+                //.SetItem(ll_Ctr, "rg_code", of_getrgcode());
+                iuo_ratedays.SetValue(ll_Ctr, "rg_code", of_getrgcode());
                 //iuo_ratedays.SetItemStatus(ll_Ctr, 0, primary!, new!);
                 ((RateDays2001)iuo_ratedays.GetItem<RateDays2001>(ll_Ctr)).MarkNewEntity();
             }
@@ -1233,7 +1240,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             if (sqlCode != 0)  //(StaticVariables.sqlca.SQLCode != 0)
             {
-                MessageBox.Show(/*?app.sqlca.SQLErrText*/sqlErrText, "Copy fuel rates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(sqlErrText   /*?app.sqlca.SQLErrText*/
+                               , "Copy prev miscrates"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
 
@@ -1267,7 +1276,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string ls_Group;
             int ll_Row;
             DataUserControl dwc;//  DataControlBuilder dwc;
-            dwc = iuo_nonvehiclerates.DataObject.GetChild("rg_code");//.GetChild("rg_code", dwc);
+            //.GetChild("rg_code", dwc);
+            dwc = iuo_nonvehiclerates.DataObject.GetChild("rg_code");
             ll_Row = dwc.Find("rg_code  ", of_getrgcode().ToString());
             if (ll_Row > 0)
             {
@@ -1320,12 +1330,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             // Check fuel rates
 
-            //select count ( *)  into :ll_Count1 from fuel_type ,fuel_rates where fuel_type.ft_key = fuel_rates.ft_key and fuel_rates.rr_rates_effective_date = :ld_Date and fuel_rates.rg_code = :ll_RGCode and (fuel_rates.fr_fuel_rate is null or fuel_rates.fr_fuel_consumtion_rate is null);
+            //select count(*) into :ll_Count1 from fuel_type ,fuel_rates 
+            // where fuel_type.ft_key = fuel_rates.ft_key and fuel_rates.rr_rates_effective_date = :ld_Date and fuel_rates.rg_code = :ll_RGCode and (fuel_rates.fr_fuel_rate is null or fuel_rates.fr_fuel_consumtion_rate is null);
             ll_Count1 = RDSDataService.GetFuelTypeFuelRatesCount(ld_Date, ll_RGCode);
             if (ll_Count1 > 0)
             {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_fuelrates.text = "Fuel Rates  ( Incomplete)";
-                tabpage_fuelrates.Text = "Fuel Rates  ( Incomplete)";
+                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_fuelrates.text = "Fuel Rates (Incomplete)";
+                tabpage_fuelrates.Text = "Fuel Rates (Incomplete)";
             }
             else
             {
@@ -1334,12 +1345,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             // check rate days
 
-            //select count(*) into :ll_Count2  from standard_frequency ,rate_days where standard_frequency.sf_key = rate_days.sf_key and rate_days.rr_rates_effective_date = :ld_Date and rate_days.rg_code = :ll_RGCode and rate_days.rtd_days_per_annum is null;
+            //select count(*) into :ll_Count2 from standard_frequency ,rate_days 
+            // where standard_frequency.sf_key = rate_days.sf_key 
+            //   and rate_days.rr_rates_effective_date = :ld_Date 
+            //   and rate_days.rg_code = :ll_RGCode and rate_days.rtd_days_per_annum is null;
             ll_Count2 = RDSDataService.GetStandardFrequencyRateDaysCount(ld_Date, ll_RGCode);
             if (ll_Count2 > 0)
             {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_ratedays.text = "Rate Days  ( Incomplete)";
-                tabpage_ratedays.Text = "Rate Days  ( Incomplete)";
+                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_ratedays.text = "Rate Days (Incomplete)";
+                tabpage_ratedays.Text = "Rate Days (Incomplete)";
             }
             else
             {
@@ -1352,8 +1366,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             if (ll_Count3 > 0)
             {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_piecerates.text = "Piece Rates  ( Incomplete)";
-                tabpage_piecerates.Text = "Piece Rates  ( Incomplete)";
+                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_piecerates.text = "Piece Rates (Incomplete)";
+                tabpage_piecerates.Text = "Piece Rates (Incomplete)";
             }
             else
             {
@@ -1367,13 +1381,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_NumVehicleTypes = RDSDataService.GetVehicleTypeCount();
 
             // Count vehicle types already entered
-            //SELECT count ( vehicle_rate.vt_key )  INTO :ll_NumVehicleTypesFilled  FROM vehicle_rate   WHERE vehicle_rate.vr_rates_effective_date = :ld_Date  AND vehicle_rate.vr_nominal_vehicle_value is not null  AND vehicle_rate.vr_repairs_maintenance_rate is not null AND vehicle_rate.vr_tyre_tubes_rate is not null AND vehicle_rate.vr_vehicle_allowance_rate is not null AND vehicle_rate.vr_licence_rate is not null AND vehicle_rate.vr_vehicle_rate_of_return_pct is not null AND vehicle_rate.vr_salvage_ratio is not null AND vehicle_rate.vr_ruc is not null AND vehicle_rate.vr_sundries_k is not null AND vehicle_rate.vr_vehicle_value_insurance_pct is not null;
+            //SELECT count ( vehicle_rate.vt_key) INTO :ll_NumVehicleTypesFilled  FROM vehicle_rate 
+            // WHERE vehicle_rate.vr_rates_effective_date = :ld_Date  
+            //   AND vehicle_rate.vr_nominal_vehicle_value is not null  
+            //   AND vehicle_rate.vr_repairs_maintenance_rate is not null 
+            //   AND vehicle_rate.vr_tyre_tubes_rate is not null 
+            //   AND vehicle_rate.vr_vehicle_allowance_rate is not null 
+            //   AND vehicle_rate.vr_licence_rate is not null 
+            //   AND vehicle_rate.vr_vehicle_rate_of_return_pct is not null 
+            //   AND vehicle_rate.vr_salvage_ratio is not null 
+            //   AND vehicle_rate.vr_ruc is not null 
+            //   AND vehicle_rate.vr_sundries_k is not null 
+            //   AND vehicle_rate.vr_vehicle_value_insurance_pct is not null;
 
             ll_NumVehicleTypesFilled = RDSDataService.GetVehicleRateCount(ld_Date);
 
             if ((ll_NumVehicleTypesFilled == null) || (ll_NumVehicleTypesFilled < ll_NumVehicleTypes))
             {
-                tabpage_vehiclerates.Text = "Vehicle Rates  ( Incomplete)";
+                tabpage_vehiclerates.Text = "Vehicle Rates (Incomplete)";
             }
             else
             {
@@ -1383,7 +1408,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (ab_withmessage)
                 {
-                    MessageBox.Show("This renewal rate cannot be frozen because not all fuel rates have been defined f" + "or it yet.", "title", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This renewal rate cannot be frozen because not all \n"
+                                     + "fuel rates have been defined for it yet."
+                                   , "title"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 return false;
             }
@@ -1391,7 +1419,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (ab_withmessage)
                 {
-                    MessageBox.Show("This renewal rate cannot be frozen because not all days per annum have been defin" + "ed for it yet.", "title", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This renewal rate cannot be frozen because not all \n"
+                                     + "days per annum have been defined for it yet."
+                                   , "title", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 return false;
             }
@@ -1399,7 +1429,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (ab_withmessage)
                 {
-                    MessageBox.Show("This renewal rate cannot be frozen because not all vehicle rates have been define" + "d for it yet.", "title", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This renewal rate cannot be frozen because not all \n"
+                                     + "vehicle rates have been defined for it yet."
+                                   , "title", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 return false;
             }
@@ -1407,7 +1439,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (ab_withmessage)
                 {
-                    DialogResult dlg = MessageBox.Show("title", "Not all piece rates have been defined for it yet. Continue anyway?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);// question!, yesno!, 2) == 2)
+                    // question!, yesno!, 2) == 2)
+                    DialogResult dlg = MessageBox.Show("Not all piece rates have been defined for it yet. \n"
+                                                        + "Continue anyway?"
+                                                      , "title"
+                                                      , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (dlg == DialogResult.No)
                     {
@@ -1533,7 +1569,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 return;// -(1);
             }
-            ll_rgcode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;//.GetItemNumber(1, "rg_code");
+            //.GetItemNumber(1, "rg_code");
+            ll_rgcode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
             iuo_nonvehiclerates.DataObject.AcceptText();
             iuo_fuelrates.DataObject.AcceptText();
             iuo_miscrates.DataObject.AcceptText();
@@ -1574,48 +1611,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     }
                 }
             }
-            /*?
-            if (iuo_nonvehiclerates.Update() == -(1))
-            {
-                rollback;
-                return -(1);
-            }
-            if (iuo_fuelrates.Update() == -(1))
-            {
-                rollback;
-                return -(1);
-            }
-            else 
-            {
-                iuo_fuelrates.ResetUpdate();
-            }
-            if (iuo_miscrates.Update() == -(1)) 
-            {
-                rollback;
-                return -(1);
-            }
-            if (iuo_vehiclerates.Update() == -(1)) 
-            {
-                rollback;
-                return -(1);
-            }
-            if (iuo_ratedays.Update() == -(1)) 
-            {
-                rollback;
-                return -(1);
-            }
-            if (iuo_piecerates.Update() == -(1))
-            {
-                rollback;
-                return -(1);
-            }*/
-
             iuo_nonvehiclerates.Save();
             iuo_fuelrates.Save();
             iuo_miscrates.Save();
-            iuo_vehiclerates.Save();
+            // TJB  RD7_0036  Aug 2009
+            // Changed to save_vehiclerates
+            // iuo_vehiclerates.RowCount;
+            // iuo_vehiclerates.Save();
+            save_vehiclerates();
             iuo_ratedays.Save();
             iuo_piecerates.Save();
+
             if (iw_caller != null)
             {
                 iw_caller.of_retrievelist();
@@ -1646,107 +1652,63 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return;// 1;
         }
 
+        public virtual void save_vehiclerates()
+        {
+            // TJB  RD7_0036  Aug 2009
+            // iuo_vehiclerates contains the rates for only one vehicle type, 
+            //    while iuo_vehiclerates identifies all vehicle types.  Initially, only
+            //    the rates for the currect vehicle type were being saved, which could cause
+            //    errors.  This code saves the rates for all vehicle types.
+            int rc, vrl_rows, vrl_row, selected_vrl_row;
+            selected_vrl_row = iuo_vehiclerates_list.GetSelectedRow(0);
+            iuo_vehiclerates.Save();
+            vrl_rows = iuo_vehiclerates_list.RowCount;
+            for (vrl_row = 0; vrl_row < vrl_rows; vrl_row++)
+            {
+                if (vrl_row != selected_vrl_row)
+                {
+                    iuo_vehiclerates_list.SelectRow(vrl_row, false) ;
+                    rc = of_getvehiclerate();
+                }
+            }
+            iuo_vehiclerates_list.SelectRow(selected_vrl_row, false);
+            rc = of_getvehiclerate();
+            int i = rc;
+        }
+
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
             // Boolean bReturnValue = True
             // Long    lMessageReturn = 0
             // 
-            // 
-            // 
             // if This.AcceptText  ( ) = 1 then
-            // 
-            // 	If This.DeletedCount  (  ) > 0 &
-            // 	Or This.ModifiedCount  (  ) > 0 Then
-            // 
-            // 		If aAutoUpdate Then
-            // 
-            // 			bReturnValue =  (  This.Update  ( ) = 1 )
-            // 
-            // 		Else
-            // 
-            // 			lMessageReturn = MessageBox (  "Update?", "Do you want to update the database?", Information!, YesNoCancel! )
-            // 
+            //    If This.DeletedCount  (  ) > 0 &
+            //    Or This.ModifiedCount  (  ) > 0 Then
+            //       If aAutoUpdate Then
+            //          bReturnValue =  (  This.Update  ( ) = 1 )
+            //       Else
+            //          lMessageReturn = MessageBox("Update?", "Do you want to update the database?", Information!, YesNoCancel! )
             // 			Choose Case lMessageReturn
             // 			Case 1
-            // 
-            // 				bReturnValue =  (  This.Update  ( ) = 1 )
-            // 
+            // 				bReturnValue = (This.Update() = 1)
             // 			Case 2
-            // 
             // 				bReturnValue = True
-            // 
             // 			Case 3
-            // 
             // 				bReturnValue = False
-            // 
             // 			End Choose
-            // 
-            // 		End If
-            // 
-            // 	End If
-            // 
+            //       End If
+            //    End If
             // Else
-            // 
-            // 	bReturnValue = False
-            // 
+            //    bReturnValue = False
             // End If
-            // 
             // if bReturnValue then 
-            // 	g_System.dddw_update = datetime ( today ( ), now ( ))
-            // 	ist_instance.last_updated = datetime ( today ( ), now ( ))
-            // 	Commit;
+            //    g_System.dddw_update = datetime(today(), now())
+            //    ist_instance.last_updated = datetime(today(), now())
+            //    Commit;
             // else
-            // 	RollBack;
+            //    RollBack;
             // end if
-            // 
             // Return bReturnValue
-            // 
-            // 
-            // 
-            // 
-            // 
-            // 
-            // 
-            // //if not of_validate ( ) then
-            // //	return 
-            // //end if
-            // //
-            // ////iuo_renewalrates.of_UpdateDb ( true) 
-            // ////CloseWithReturn ( Parent, 1)
-            // //
-            // ////if iuo_renewalrates.of_UpdateDb ( true) then
-            // ////	if iuo_fuelrates.of_UpdateDb ( true) then
-            // ////		if iuo_piecerates.of_UpdateDb ( true) then 
-            // ////			if iuo_ratedays.of_UpdateDb ( true) then
-            // ////				if iuo_vehiclerates.of_UpdateDb ( true) then
-            // ////					if iuo_miscrates.of_UpdateDb ( true) then
-            // ////						CloseWithReturn ( Parent, 1)
-            // ////						return 1
-            // ////					end if
-            // ////				end if
-            // ////			end if
-            // ////		end if
-            // ////	end if	
-            // ////end if
-            // ////
-            // //
-            // //if iuo_renewalrates.of_UpdateDb ( true) then
-            // //	if iuo_fuelrates.of_UpdateDb ( true) then
-            // //		if iuo_miscrates.of_UpdateDb ( true) then
-            // //			if iuo_piecerates.of_UpdateDb ( true) then 
-            // //				if iuo_vehiclerates.of_UpdateDb ( true) then
-            // //					if iuo_ratedays.of_UpdateDb ( true) then
-            // //						CloseWithReturn ( Parent, 1)
-            // //						return 1
-            // //					end if
-            // //				end if
-            // //			end if
-            // //		end if
-            // //	end if	
-            // //end if
-            // //
-            // //
-            // //CloseWithReturn ( Parent, 1)
         }
 
         public virtual void sle_effdate_modified(object sender, EventArgs e)
@@ -1877,7 +1839,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (dw_vehicletypes.RowCount > 0)
             {
                 dw_vehicletypes.SelectRow(0, true);
-                ll_vtKey = dw_vehicletypes.GetValue<int?>(0, "vt_key");// GetItemNumber(1, "vt_key");
+                // GetItemNumber(1, "vt_key");
+                ll_vtKey = dw_vehicletypes.GetValue<int?>(0, "vt_key");
                 ((DVehicleRates2001)iuo_vehiclerates.DataObject).Retrieve(ll_vtKey, id_renewaldate);
                 if (iuo_vehiclerates.RowCount == 0)
                 {

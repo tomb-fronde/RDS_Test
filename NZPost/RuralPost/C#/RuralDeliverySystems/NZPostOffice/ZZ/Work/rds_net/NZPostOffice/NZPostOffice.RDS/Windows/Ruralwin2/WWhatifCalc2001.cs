@@ -22,7 +22,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     {
         #region Define
 
-        public List<int> ila_VtKeys = new List<int>();// IntArray ila_VtKeys = new IntArray();
+        // IntArray ila_VtKeys = new IntArray();
+        public List<int> ila_VtKeys = new List<int>();
 
         public DataUserControl idw_Crosstab;
 
@@ -30,11 +31,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public DateTime id_EffectDate = DateTime.MinValue;
 
-        public List<decimal> idec_Current = new List<decimal>();// DecimalArray idec_Current = new DecimalArray();
+        // DecimalArray idec_Current = new DecimalArray();
+        public List<decimal> idec_Current = new List<decimal>();
 
         public decimal? id_RateOf;
 
-        public List<decimal?> id_RateOfReturn = new List<decimal?>();// DecimalArray id_RateOfReturn = new DecimalArray();
+        // DecimalArray id_RateOfReturn = new DecimalArray();
+        public List<decimal?> id_RateOfReturn = new List<decimal?>();
 
         public string is_reportRenewal = String.Empty;
 
@@ -44,7 +47,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public DataUserControl idw_dist;
 
-        //  TJB SR4560  Used to save contract number  ( in of_setup) for use by of_showVehicleRates 
+        //  TJB SR4560  Used to save contract number (in of_setup) for use by of_showVehicleRates 
         public int? il_contract;
 
         public int? il_sequence;
@@ -320,6 +323,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string ls_VolumeSource;
             DateTime ld_EffectDate;
             decimal ldec_Distance = 0;
+            decimal? dItemspercust;
             int ll_Count;
             int ll_Ctr;
             NRdsMsg lnv_Msg;
@@ -329,8 +333,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //DECLARE GetRouteFreq CURSOR FOR  
             //SELECT	route_frequency.sf_key, route_frequency.rf_delivery_days, route_frequency.rf_distance  
             //FROM route_frequency WHERE 	route_frequency.rf_active = 'Y' AND route_frequency.contract_no = :ll_Contract;
-
-
 
             id_RateOf = 0;
             idw_summary.Reset();
@@ -344,6 +346,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             is_reportRenewal = (string)lnv_Criteria.of_getcriteria("reportgroupname");
             id_EffectDate = ld_EffectDate;
 
+            // Count rows for progress bar
             ll_RateRow = lw_Rates.dw_listing.GetSelectedRow(0);
             ll_Count = 0;
             ll_Ctr = 0;
@@ -352,27 +355,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_Count++;
                 ll_RateRow = lw_Rates.dw_listing.GetSelectedRow(ll_RateRow + 1);
             }
+            
             // Loop through the caller's datawindow's contract list
+            // NOTE:  dw_listing is the list of contracts on the Rates/WhatIf window
+            // (TJB)  and ll_RateRow is mis-named; should be something like ll_ContractRow
             ll_RateRow = lw_Rates.dw_listing.GetSelectedRow(0);
             ll_NumContracts = lw_Rates.dw_listing.RowCount;
-
             while (!(ll_RateRow == -1))
             {
-                // yield ( )
                 ll_Ctr++;
                 StaticVariables.gnv_app.of_showstatus(ref w_status, ll_Ctr, ll_Count, "Retrieving Rates...");
                 ll_Contracts++;
-                ll_Contract = lw_Rates.dw_listing.GetItem<WhatifContractSelection>(ll_RateRow).ContractNo;//lw_Rates.dw_listing.getitemnumber(ll_RateRow, "contract_no");
+                //lw_Rates.dw_listing.getitemnumber(ll_RateRow, "contract_no");
+                ll_Contract = lw_Rates.dw_listing.GetItem<WhatifContractSelection>(ll_RateRow).ContractNo;
                 ll_Sequence = lw_Rates.dw_listing.GetItem<WhatifContractSelection>(ll_RateRow).ContractSeqNumber;
                 ll_FirstRow = -1;
-                // Get frequencies
 
+                // Get frequencies
                 //OPEN GetRouteFreq
                 //FETCH GetRouteFreq INTO :ll_SfKey, :ls_DelDays, :ldec_Distance;
                 List<RouteFrequencyItem> rfList = new List<RouteFrequencyItem>();
                 RDSDataService rService = RDSDataService.GetRouteFrequencyList(ll_Contract.GetValueOrDefault());
                 rfList = rService.RoutFrequencyList;
-                for (int i = 0; i < rfList.Count; i++) //while (StaticVariables.sqlca.SQLCode == 0)
+                //while (StaticVariables.sqlca.SQLCode == 0)
+                for (int i = 0; i < rfList.Count; i++) 
                 {
                     ll_SfKey = rfList[i].SfKey;
                     ls_DelDays = rfList[i].RfDeliveryDays;
@@ -385,11 +391,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         //?idw_summary.GroupCalc();
                         ll_FirstRow = idw_summary.RowCount - 1;
                         idw_summary.SetValue(ll_FirstRow, "firstrow", "Y");
-                        ll_numberboxholders = idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Numberboxholders;//.GetItemNumber(ll_FirstRow, "numberboxholders");
+                        //.GetItemNumber(ll_FirstRow, "numberboxholders");
+                        ll_numberboxholders = idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Numberboxholders;
+                        ll_numberboxholders = (ll_numberboxholders == null) ? 0 : ll_numberboxholders;
                         if (ll_numberboxholders > 0)
                         {
-                            ll_volume = (int)idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Volume;//.GetItemNumber(ll_FirstRow, "volume");
-                            idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Itemspercust = Math.Round(System.Convert.ToDecimal(ll_volume) / System.Convert.ToDecimal(ll_numberboxholders), 3);
+                            //.GetItemNumber(ll_FirstRow, "volume");
+                            ll_volume = (int)idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Volume;
+                            //idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Itemspercust 
+                            //                     = Math.Round(System.Convert.ToDecimal(ll_volume) 
+                            //                        / System.Convert.ToDecimal(ll_numberboxholders), 3);
+                            dItemspercust = Math.Round(System.Convert.ToDecimal(ll_volume)
+                                                                 / System.Convert.ToDecimal(ll_numberboxholders), 3);
+                            idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Itemspercust = dItemspercust;
                         }
                         else
                         {
@@ -401,14 +415,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         ((DWhatifCalulator2005)idw_summary).Retrieve(ll_Contract, ll_Sequence, il_RGCode, ld_EffectDate, ls_VolumeSource);
                         //?idw_summary.RowsCopy(ll_FirstRow, ll_FirstRow, primary!, idw_summary, idw_summary.RowCount + 1, primary!);
                         idw_summary.SetValue(idw_summary.RowCount - 1, "firstrow", "N");
-                        idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 1).Itemspercust = idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 2).Itemspercust;
+                        // idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 1).Itemspercust 
+                        //                      = idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 2).Itemspercust;
+                        dItemspercust = idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 2).Itemspercust;
+                        dItemspercust = (dItemspercust == null) ? 0 : dItemspercust;
+                        idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 1).Itemspercust = dItemspercust;
                     }
                     ll_Row = idw_summary.RowCount - 1;
                     idw_summary.SetValue(ll_Row, "sf_key", ll_SfKey);
                     idw_summary.SetValue(ll_Row, "rf_deliverydays", ls_DelDays);
                     idw_summary.SetValue(ll_Row, "rf_distance", ldec_Distance);
 
-                    //select rtd_days_per_annum into :ll_DaysYear from rate_days where rg_code = :il_RGCode and rr_rates_effective_date = :ld_EffectDate and sf_key = :ll_SfKey;
+                    //select rtd_days_per_annum into :ll_DaysYear 
+                    //  from rate_days 
+                    // where rg_code = :il_RGCode 
+                    //   and rr_rates_effective_date = :ld_EffectDate 
+                    //   and sf_key = :ll_SfKey;
                     ll_DaysYear = RDSDataService.GetRateDaysValue(il_RGCode, ld_EffectDate, ll_SfKey);
                     idw_summary.SetValue(ll_Row, "rf_daysyear", ll_DaysYear);
                     //FETCH GetRouteFreq INTO :ll_SfKey, :ls_DelDays, :ldec_Distance;
@@ -418,15 +440,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             ll_RowCount = idw_summary.RowCount;
-            store_group_value();
             //?idw_summary.GroupCalc();
+            store_group_value();
+
             if (ll_RowCount > 0)
             {
                 for (ll_Row = 0; ll_Row < ll_RowCount; ll_Row++)
                 {
                     StaticVariables.gnv_app.of_showstatus(ref w_status, ll_Row, ll_RowCount, "Calculating final benchmark...");
-                    idec_Current.Add(idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Opcost);// idec_Current[ll_Row] = idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Opcost;//.GetItemNumber(ll_Row, "opcost");
-                    idw_summary.SetValue(ll_Row, "finalbenchmark", System.Convert.ToInt32(idec_Current[ll_Row]));
+                    // idec_Current[ll_Row] = idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Opcost;//.GetItemNumber(ll_Row, "opcost");
+                    // TJB: idec_Current is a list.  idec_Current.Add adds an item (Opcost) to the list 
+                    //      then copies it to idw_summary, unchanged.  idec_Current isn't used anywhere
+                    //      else so there's no need to use it.
+                    //      thisOpcost is used only to see what's happening ...
+                    //idec_Current.Add(idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Opcost);
+                    //idw_summary.SetValue(ll_Row, "finalbenchmark", System.Convert.ToInt32(idec_Current[ll_Row]));
+                    decimal thisOpcost = idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Opcost;
+                    idw_summary.SetValue(ll_Row, "finalbenchmark", System.Convert.ToInt32(thisOpcost));
                 }
                 if (idw_summary.GetControlByName("st_contract") != null)
                     idw_summary.GetControlByName("st_contract").Text = "\'" + idw_summary.GetItem<WhatifCalulator2005>(0).ContractNo.ToString() + "\'";//idw_summary.DataControl["st_contract"].Text = "\'" + String((DWhatifCalulator2005)idw_summary.GetItemNumber(1, "contract_no")) + '\'');
@@ -436,11 +466,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     for (ll_Row = 0; ll_Row < ll_RowCount; ll_Row++)
                     {
-                        id_RateOfReturn.Add(idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1);// id_RateOfReturn[ll_Row] = (decimal)idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1;//.GetItemNumber(ll_Row, "rateofreturn_1");
+                        // id_RateOfReturn[ll_Row] = (decimal)idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1;
+                        //.GetItemNumber(ll_Row, "rateofreturn_1");
+                        //id_RateOfReturn.Add(idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1);
+                        decimal? dRateofreturn1 = idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1;
+                        id_RateOfReturn.Add(dRateofreturn1);  // TJB: id_RateOfReturn isn't used anywhere?
                     }
                 }
             }
-            store_group_value();
+            // TJB  RD7_0036  Aug 2009
+            // Removed.
+            // store_group_value();   // TJB:  This isn't done in PB version??
 
             of_loadvtkeys();
             StaticVariables.gnv_app.of_hidestatus(ref w_status);
@@ -454,8 +490,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? l_contract_no = 0;
             int? l_contract_no_old = 0;
             decimal? l_group = 0;
+            decimal? dRfDistance, dRfDaysyear, dCalcroutedistance;
             int j = 0;
-            l_contract_no_old = idw_summary.GetItem<WhatifCalulator2005>(0).ContractNo;
+
+            l_group = 0;
+            //l_contract_no_old = idw_summary.GetItem<WhatifCalulator2005>(0).ContractNo;
+            l_contract_no_old = 0;
             for (int i = 0; i < idw_summary.RowCount; i++)
             {
                 l_contract_no = idw_summary.GetItem<WhatifCalulator2005>(i).ContractNo;
@@ -463,25 +503,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     if (idw_summary.GetItem<WhatifCalulator2005>(i).RfActive == "Y")
                     {
-                        l_group += idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance * idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
-                    }
-                    else
-                    {
+                        //l_group += idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance
+                        //              * idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
+                        dRfDistance = idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance;
+                        dRfDaysyear = idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
+                        l_group += dRfDistance * dRfDaysyear;
                     }
                 }
                 else
                 {
                     for (int k = j; k < i; k++)
                     {
-                        idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance = l_group;
+                        // idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance = l_group;
+                        dCalcroutedistance = idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance;
+                        dCalcroutedistance = l_group;
+                        idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance = dCalcroutedistance;
                     }
-                    l_group = idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance * idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
+                    //l_group = idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance 
+                    //             * idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
+                    dRfDistance = idw_summary.GetItem<WhatifCalulator2005>(i).RfDistance;
+                    dRfDaysyear = idw_summary.GetItem<WhatifCalulator2005>(i).RfDaysyear;
+                    l_group = dRfDistance * dRfDaysyear;
                     j = i;
                 }
+                l_contract_no_old = l_contract_no;
             }
             for (int k = j; k < idw_summary.RowCount; k++)
             {
-                idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance = l_group.GetValueOrDefault();
+                //idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance 
+                //                                                 = l_group.GetValueOrDefault();
+                dCalcroutedistance = idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance;
+                dCalcroutedistance = l_group.GetValueOrDefault();
+                idw_summary.GetItem<WhatifCalulator2005>(k).Calcroutedistance = dCalcroutedistance;
             }
 
             System.Data.DataTable table = new NZPostOffice.RDS.DataControls.Report.WhatifCalulator2005DataSet(idw_summary.BindingSource.DataSource);
@@ -513,11 +566,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             for (int i = 0; i < idw_summary.RowCount; i++)
             {
-                WhatifCalculatorReport2005 l_temp = new WhatifCalculatorReport2005();
                 WhatifCalulator2005 data = idw_summary.GetItem<WhatifCalulator2005>(i);
+                /* ------------------------- Debugging ------------------------- //
+                string firstrowStatus = data.Firstrow;
+                MessageBox.Show("i = " + i.ToString() + " of " + idw_summary.RowCount.ToString() + "\n"
+                                + "Contract = " + data.ContractNo.ToString() + "\n"
+                                + "Seq = " + data.ContractSeqNumber.ToString() + "\n"
+                                + "Title = " + data.ConTitle + "\n"
+                                + "FirstRow = " + firstrowStatus
+                                , "RDS.Windows.Ruralwin2.WhatIfCalc2005.of_showreport");
+                // ------------------------------------------------------------- */
+                WhatifCalculatorReport2005 l_temp = new WhatifCalculatorReport2005();
+                l_temp.ConTitle = data.ConTitle;
                 l_temp.ContractNo = data.ContractNo;
                 l_temp.ContractSeqNumber = data.ContractSeqNumber;
-                l_temp.ConTitle = data.ConTitle;
                 l_temp.Nominalvehical = data.Nominalvehical;
                 l_temp.Delwagerate = data.Delwagerate;
                 l_temp.Repairsmaint = data.Repairsmaint;
@@ -632,6 +694,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? l_Totwd = 0;
             decimal? l_Totwp = 0;
             decimal? l_Totwr = 0;
+
             l_contract_no_old = idw_report.GetItem<WhatifCalculatorReport2005>(0).ContractNo;
             l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Acccost.GetValueOrDefault();
             l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Delcosts.GetValueOrDefault();
@@ -650,7 +713,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Proccosts.GetValueOrDefault();
                     l_Totwr += idw_report.GetItem<WhatifCalculatorReport2005>(i).Relcosts.GetValueOrDefault();
                 }
+                // TJB  RD7_0036  3-Apr-2009
+                // This is needed to fix a bug in the WhatIf full report
+                l_contract_no_old = l_contract_no;
             }
+
             for (int i = 0; i < idw_report.RowCount; i++)
             {
                 idw_report.GetItem<WhatifCalculatorReport2005>(i).Totacc = l_Totacc;
@@ -699,9 +766,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             RDSDataService rService = RDSDataService.GetVehicleTypeList();
             vtList = rService.VehicleTypeList;
 
-
             int ll_Ctr = 0;
-
             for (int k = 0; k < idw_report.RowCount; k++)
             {
                 ll_Ctr = 0;
