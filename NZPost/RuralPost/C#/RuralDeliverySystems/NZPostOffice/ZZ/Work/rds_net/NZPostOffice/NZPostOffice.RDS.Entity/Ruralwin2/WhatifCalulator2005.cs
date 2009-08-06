@@ -1892,36 +1892,38 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 //round( if(isNull(calcvd),0,calcvd) + if(isNull(calcfc),0,calcfc) + if(isNull(calcrep),0,calcrep ) + if(isNull(calctt),0,calctt) + 
                 //if(isNull(calcdc),0,calcdc ) + if(isNull(calcpc),0,calcpc) + if(isNull(calcpc),0,calcrc) + if(isNull(calcacc),0,calcacc ) + if(isNull(calcvi),0,calcvi ) + if(isNull(calclic),0,calclic ) + if(IsNull(calccrr ),0,calccrr ) + calcpl +
                 //if(isnull(sundries ),0,sundries )+  if(isnull(calctel ),0,calctel)+  if(isnull(ruc),0,calcruc* nmultiplier ) + if(isnull(caclacct),0,caclacct) +  
-                // if(IsNull(sundriesk),0,sundriesk) * If(IsNull(calcroutedistance ),0,calcroutedistance / 1000) + if(IsNull(rateofreturn_1),0,rateofreturn_1) + 0.5, 0)
-                decimal d_value;
+                //if(IsNull(sundriesk),0,sundriesk) * If(IsNull(calcroutedistance ),0,calcroutedistance / 1000) + if(IsNull(rateofreturn_1),0,rateofreturn_1) + 0.5, 0)
+                decimal ruc_value;
                 if (Ruc == null)
-                    d_value = 0;
+                    ruc_value = 0;
                 else
-                    d_value = Convert.ToDecimal(Calcruc * Nmultiplier);
+                    ruc_value = Convert.ToDecimal(Calcruc * Nmultiplier);
                 //    return decimal.Round((Convert.ToDecimal(Calcvd) + Convert.ToDecimal(Calcfc) + Convert.ToDecimal(Calcrep) + Convert.ToDecimal(Calctt)
                 //        + Convert.ToDecimal(Calcdc) + Convert.ToDecimal(Calcpc) + Convert.ToDecimal(Calcrc) + Convert.ToDecimal(Calcacc) + Convert.ToDecimal(Calcvi) + Convert.ToDecimal(Calclic) + Convert.ToDecimal(Calccrr) + Calcpl
                 //        + Convert.ToDecimal(Sundries) + Convert.ToDecimal(Calctel) + d_value + Convert.ToDecimal(Caclacct)
                 //        + Convert.ToDecimal(Sundriesk) + Convert.ToDecimal(Calcroutedistance / 1000) + Convert.ToDecimal(Rateofreturn1) + Convert.ToDecimal(0.5)), 0);
-                return decimal.Round((Calcvd.GetValueOrDefault() + 
-                    Calcfc.GetValueOrDefault() + 
-                    Calcrep.GetValueOrDefault()
-                    + Calctt.GetValueOrDefault() + 
-                    Calcdc.GetValueOrDefault() + 
-                    Calcpc.GetValueOrDefault()
-                    + (Calcpc == null ? 0:Calcrc.GetValueOrDefault()) + 
-                    Calcacc.GetValueOrDefault() + 
-                    Calcvi.GetValueOrDefault()
-                    + Calclic.GetValueOrDefault() + 
-                    Calccrr.GetValueOrDefault() + 
-                    Calcpl.GetValueOrDefault()
-                    + Sundries.GetValueOrDefault() +
-                    Calctel.GetValueOrDefault() +
-                    d_value + 
-                    Caclacct.GetValueOrDefault()
-                    + Sundriesk.GetValueOrDefault() * 
-                    (Calcroutedistance.GetValueOrDefault() / 1000)
-                    + Rateofreturn1.GetValueOrDefault() + Convert.ToDecimal(0.5)), 0);
-
+                decimal dResult = decimal.Round((Calcvd.GetValueOrDefault() 
+                                      + Calcfc.GetValueOrDefault() 
+                                      + Calcrep.GetValueOrDefault()
+                                      + Calctt.GetValueOrDefault() 
+                                      + Calcdc.GetValueOrDefault() 
+                                      + Calcpc.GetValueOrDefault()   //  + (Calcpc == null ? 0: Calcrc.GetValueOrDefault()) 
+                                      + Calcrc.GetValueOrDefault() 
+                                      + Calcacc.GetValueOrDefault() 
+                                      + Calcvi.GetValueOrDefault()
+                                      + Calclic.GetValueOrDefault() 
+                                      + Calccrr.GetValueOrDefault() 
+                                      + Calcpl.GetValueOrDefault()
+                                      + Sundries.GetValueOrDefault() 
+                                      + Calctel.GetValueOrDefault()
+                                      + ruc_value 
+                                      + Caclacct.GetValueOrDefault()
+                                      + Sundriesk.GetValueOrDefault() 
+                                              * (Calcroutedistance.GetValueOrDefault() / 1000)
+                                      + Rateofreturn1.GetValueOrDefault() 
+                                      + Convert.ToDecimal(0.5)
+                                     ), 0);
+                return dResult; 
             }
         }
 
@@ -1979,10 +1981,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             {
                 CanReadProperty(true);
                 //(calcdelhours * 4) *  delwagerate + ((((calcvolume /  itemshour ) / 365) * 7) * 4) * procwagerate
+                
                 if (Itemshour == 0)
                     return 0;
                 else
-                    return (Calcdelhours * 4) * Delwagerate + ((((Calcvolume / Itemshour) / 365) * 7) * 4) * Procwagerate;
+                    // TJB  RD7_0036  Aug2009
+                    //    Changed calculation to use reliefweeks (currently 5) instead of hard-coded 4 weeks
+                    return ((Calcdelhours * _relief_weeks) * Delwagerate)
+                                       + (((((Calcvolume / Itemshour) / 365) * 7) * _relief_weeks) * Procwagerate);
+                    //return (Calcdelhours * 4) * Delwagerate + ((((Calcvolume / Itemshour) / 365) * 7) * 4) * Procwagerate;
             }
         }
 

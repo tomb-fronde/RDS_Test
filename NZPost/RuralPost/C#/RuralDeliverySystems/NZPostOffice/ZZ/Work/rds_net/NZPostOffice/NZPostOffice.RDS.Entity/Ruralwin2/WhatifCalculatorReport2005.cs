@@ -2559,7 +2559,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             {
                 CanReadProperty(true);
                 //((((   if(isnull(calcvolume),0,calcvolume)  /  if(isnull(itemshour),0,itemshour) ) / 365) * 7) * 52) *  if(isnull(procwagerate),0,procwagerate)
-                if (Calcvolume == null || Itemshour == null || Procwagerate == null)
+                if (Calcvolume == null || Itemshour == null || Itemshour == 0 || Procwagerate == null)
                     return null;
                 return ((((Convert.ToDecimal(Calcvolume) / Convert.ToDecimal(Itemshour)) / 365) * 7) * 52) * Convert.ToDecimal(Procwagerate);
             }
@@ -2715,6 +2715,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             {
                 CanReadProperty(true);
                 //((((calcvolume /  itemshour ) / 365) * 7) * 56) *  delwagerate
+                if (Itemshour == null || Itemshour == 0)
+                    return null;
                 return ((((Calcvolume / Itemshour) / 365) * 7) * 56) * Delwagerate;
             }
         }
@@ -2970,6 +2972,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             {
                 CanReadProperty(true);
                 //totvol / itemshour / (365 / 7)
+                if (Itemshour == null || Itemshour == 0)
+                    return null;
                 return Totvol / Itemshour / (365 / 7);
             }
         }
@@ -2979,6 +2983,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 //totvol / itemshour / (365 / 7)
+                if (Itemshour == null || Itemshour == 0)
+                    return null;
                 return (Totvol / Itemshour / (365 / 7));
             }
         }
@@ -3586,13 +3592,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //(if(isnull(calcdelhours),0,calcdelhours) * 4) *  if(isnull(delwagerate),0,delwagerate) + ((((   if(isnull(calcvolume),0,calcvolume)  /  if(isnull(itemshour),0,itemshour) ) / 365) * 7) * 4) *  if(isnull(procwagerate),0,procwagerate)
+                //(if(isnull(calcdelhours),0,calcdelhours) * 4) * if(isnull(delwagerate),0,delwagerate) 
+                //          + ((((if(isnull(calcvolume),0,calcvolume) / if(isnull(itemshour),0,itemshour)) / 365) * 7) * 4) * if(isnull(procwagerate),0,procwagerate)
+                //!(calcdelhours * reliefWeeks * delwagerate) + ((((calcvolume / itemshour) / 365) * 7) * reliefWeeks) * procwagerate
+                if (Itemshour == null || Itemshour == 0)
+                    return null;
 
-
-                //!(calcdelhours * reliefWeeks) *  delwagerate + ((((calcvolume /  itemshour ) / 365) * 7) * reliefWeeks) * procwagerate                
-                return (Calcdelhours.GetValueOrDefault() * _relief_weeks.GetValueOrDefault()) * Delwagerate.GetValueOrDefault() +
-                    ((((Calcvolume.GetValueOrDefault() / Itemshour.GetValueOrDefault()) / 365) * 7) *
-                                                                    _relief_weeks.GetValueOrDefault()) * Procwagerate.GetValueOrDefault();
+                return (Calcdelhours.GetValueOrDefault() * _relief_weeks.GetValueOrDefault() * Delwagerate.GetValueOrDefault()) 
+                          + ((((Calcvolume.GetValueOrDefault() / Itemshour.GetValueOrDefault()) / 365) * 7) 
+                                                 * _relief_weeks.GetValueOrDefault()) * Procwagerate.GetValueOrDefault();
             }
         }
 
