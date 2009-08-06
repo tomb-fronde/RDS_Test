@@ -1272,11 +1272,31 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             get
             {
+                // TJB  20-Jul-2009  RD7_0033:  Extentions fixes
+                //    Intruduced temporary variable (tmpamnt) to assist debugging.
+                decimal? tmpamt;
                 CanReadProperty("Extnamnt", true);
-                return Math.Ceiling(((Ruccost== null?0:Ruccost)+ 	(Acccost == null?0:Acccost) +  	(Proccost == null?0:Proccost ) + 
-                    (Delcost== null?0:Delcost )  +  	(Reliefcost== null?0:Reliefcost )  +  	(Tyretubecost== null?0:Tyretubecost)  +  	
-                    (Repmaintcost== null?0:Repmaintcost)  +  	(Fuelcost== null?0:Fuelcost)  +  	
-                    (Vehicledep== null?0:Vehicledep)).GetValueOrDefault());
+                tmpamt =  (Ruccost == null ? 0 : Ruccost)
+                        + (Acccost == null ? 0 : Acccost)
+                        + (Proccost == null ? 0 : Proccost)
+                        + (Delcost == null ? 0 : Delcost)
+                        + (Reliefcost == null ? 0 : Reliefcost)
+                        + (Tyretubecost == null ? 0 : Tyretubecost)
+                        + (Repmaintcost == null ? 0 : Repmaintcost)
+                        + (Fuelcost == null ? 0 : Fuelcost)
+                        + (Vehicledep == null ? 0 : Vehicledep);
+                return Math.Ceiling(tmpamt.GetValueOrDefault());
+                // return Math.Ceiling((
+                //      (Ruccost == null?0:Ruccost)
+                //     +(Acccost == null?0:Acccost)
+                //     +(Proccost == null?0:Proccost)
+                //     +(Delcost == null?0:Delcost)
+                //     +(Reliefcost == null?0:Reliefcost)
+                //     +(Tyretubecost == null?0:Tyretubecost)
+                //     +(Repmaintcost == null?0:Repmaintcost)
+                //     +(Fuelcost == null?0:Fuelcost)
+                //     +(Vehicledep == null?0:Vehicledep)
+                //     ).GetValueOrDefault());
             }
         }
 
