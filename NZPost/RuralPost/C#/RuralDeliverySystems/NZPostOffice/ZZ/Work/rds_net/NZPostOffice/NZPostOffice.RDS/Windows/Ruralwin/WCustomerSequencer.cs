@@ -1243,7 +1243,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rc = StaticVariables.gnv_app.of_getinivalue(is_inifile, "General", "Default File Location", ref ls_savedir);
             if (ll_rc < 1)
             {
-                MessageBox.Show("Default stripmaker files directory not found in ini file.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Default stripmaker files directory not found in ini file."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 ls_savedir = StaticFunctions.GetCurrentDirectory();
             }
             else if (!(File.Exists(ls_savedir)))
@@ -1264,7 +1266,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if ((int)ll_dr < 0)
             {
-                MessageBox.Show("Error selecting save file name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Error selecting save file name"
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;//? return -(1);
             }
             //  Make sure we don't change the working directory
@@ -1291,10 +1295,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Check to see if the header file already exists
             if (File.Exists(is_filedir + is_headerfile))
             {
-                ll_rc = (int)MessageBox.Show("Stripmaker header file " + is_headerfile + " exists.\r" + "Do you want to replace it and its related files?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                ll_rc = (int)MessageBox.Show("Stripmaker header file " + is_headerfile + " exists.\r" 
+                                             + "Do you want to replace it and its related files?"
+                                             , "Warning"
+                                             , MessageBoxButtons.YesNo
+                                             , MessageBoxIcon.Question
+                                             , MessageBoxDefaultButton.Button1);
                 if (ll_rc == (int)DialogResult.No)
                 {
-                    MessageBox.Show("No Stripmaker files have been generated", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No Stripmaker files have been generated"
+                                   , "Information"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return; //? return 0;
                 }
             }
@@ -1307,7 +1318,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             li_inirows = lf_getinikeyvalues(is_inifile, "Header", ref ls_inikeys, ref ls_inivalues);
             if (li_inirows < 1)
             {
-                MessageBox.Show("Header section not found in ini file: " + is_inifile + "\r\rUnable to continue." + "\r\r ( No Stripmaker files have been generated)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Header section not found in ini file: " + is_inifile + "\r\r"
+                                + "Unable to continue." + "\r\r"
+                                + "(No Stripmaker files have been generated)"
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;//? return -(1);
             }
             //  Get contract information for header file
@@ -1323,7 +1338,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Contract title lookup failed~r" + dataService.SQLErrText + "\r\r ( No Stripmaker files have been generated)", "SQL error " + dataService.SQLCode, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Contract title lookup failed\r" 
+                                + dataService.SQLErrText + "\r\r"
+                                + "(No Stripmaker files have been generated)"
+                                , "SQL error " + dataService.SQLCode
+                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 //? rollback;
                 return;//? return -(1);
             }
@@ -1336,7 +1355,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to open header file: " + ls_file + "\r\n" + "Return code = " + ex.Message + "\r\r ( No Stripmaker files have been generated)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Failed to open header file: " + ls_file + "\r\n" 
+                               + "Return code = " + ex.Message + "\r\r"
+                               + "(No Stripmaker files have been generated)"
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             li_ok = 0;
             ll_written = 0;
@@ -1382,7 +1405,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to open street file: '" + ls_file + "'" + "Return code = " + li_file + "\r\r ( No Stripmaker files have been generated)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Failed to open street file: '" + ls_file + "'" 
+                                + "Return code = " + li_file + "\r\r"
+                                + "(No Stripmaker files have been generated)"
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
                 return;//? return -(1);
             }
@@ -1391,7 +1418,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             li_inirows = lf_getinikeyvalues(is_inifile, "Street", ref ls_inikeys, ref ls_inivalues);
             if (li_inirows < 1)
             {
-                MessageBox.Show("Street section not found in ini file: " + is_inifile + "\r\rUsing defaults: Arial, 14, 18", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Street section not found in ini file: " + is_inifile + "\r\r"
+                               + "Using defaults: Arial, 14, 18"
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 ls_font = "Arial";
                 ls_street_size = "14";
                 ls_delivery_size = "18";
@@ -1416,7 +1446,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (ls_font == "<not set>" || ls_street_size == "<not set>" || ls_delivery_size == "<not set>")
             {
-                MessageBox.Show("Street font details not found in ini file: " + is_inifile + "\r\r" + "Font Name = " + ls_font + '~' + "Street Name Font Size = " + ls_street_size + '~' + "Delivery Point Font Size = " + ls_delivery_size + "\r\rUsing defaults: Arial, 14, 18", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Street font details not found in ini file: " + is_inifile + "\r\r" 
+                                + "Font Name = " + ls_font + '\r' 
+                                + "Street Name Font Size = " + ls_street_size + '\r' 
+                                + "Delivery Point Font Size = " + ls_delivery_size + "\r\r"
+                                + "Using defaults: Arial, 14, 18"
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 if (ls_font == "<not set>")
                 {
                     ls_font = "Arial";
@@ -1480,7 +1516,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 else
                 {
                     li_colour = li_colour + 1;
-                    if (li_colour > li_colours)
+                    // TJB  RD7_0032  10-Jun-2009
+                    //      Changed condition from '>' to '>=' to avoid using too large an index.
+                    if (li_colour >= li_colours)
                     {
                         li_colour = 0;
                     }
