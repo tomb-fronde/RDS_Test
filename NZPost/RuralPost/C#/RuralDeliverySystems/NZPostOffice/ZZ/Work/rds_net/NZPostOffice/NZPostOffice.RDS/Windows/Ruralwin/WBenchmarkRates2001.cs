@@ -432,19 +432,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_DwcRow;
             if (dw_listing.GetSelectedRow(0) == -1)
             {
-                MessageBox.Show("Please select contract ( s) to use", "What-If Calculator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select contract(s) to use"
+                                , "What-If Calculator"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             if (dw_renewals.RowCount == 0)
             {
-                MessageBox.Show("Please define rates first", "What-If Calculator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please define rates first"
+                                , "What-If Calculator"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             // get renewal info
             ll_Row = dw_renewals.GetSelectedRow(0);
             if (ll_Row == -1)
             {
-                MessageBox.Show("Please select a renewal rate to use", "What-If Calculator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select a renewal rate to use"
+                                , "What-If Calculator"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             Cursor.Current = Cursors.WaitCursor;
