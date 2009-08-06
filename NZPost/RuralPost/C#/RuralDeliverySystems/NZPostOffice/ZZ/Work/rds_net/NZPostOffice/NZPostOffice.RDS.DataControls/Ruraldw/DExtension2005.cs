@@ -9,13 +9,24 @@ using Metex.Core;
 using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
+
 {
 	public partial class DExtension2005 : Metex.Windows.DataUserControl
 	{
 		public DExtension2005()
 		{
 			InitializeComponent();
-		}
+                // TJB  15-July-2009  RD7_0033
+                //    Added to fix problem with extentions:
+                //    Itemchanged event not being triggered.
+            this.extn_rural_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            this.extn_other_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            this.extn_private_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            this.extn_post_offices.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            this.extn_no_cmbs.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            // this.extn_del_hrs.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
+            this.extn_del_hrs.Validated += new System.EventHandler(this.TextBox_LostFocus);
+        }
 
 		public int Retrieve( int? in_contract )
 		{

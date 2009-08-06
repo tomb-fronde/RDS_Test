@@ -197,7 +197,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_1.EditMask = "#,##0.00";
             this.compute_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.compute_1.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.compute_1.Location = new System.Drawing.Point(13, 8);
+            this.compute_1.Location = new System.Drawing.Point(13, 10);
             this.compute_1.Name = "compute_1";
             this.compute_1.PromptChar = ' ';
             this.compute_1.ReadOnly = true;
@@ -212,41 +212,41 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // extn_distance
             // 
             this.extn_distance.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnDistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N2"));
-            this.extn_distance.EditMask = "###0.00";
+            this.extn_distance.EditMask = "#####.##";
             this.extn_distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_distance.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_distance.Location = new System.Drawing.Point(17, 26);
+            this.extn_distance.Location = new System.Drawing.Point(17, 28);
             this.extn_distance.Name = "extn_distance";
             this.extn_distance.PromptChar = ' ';
             this.extn_distance.Size = new System.Drawing.Size(68, 20);
             this.extn_distance.TabIndex = 102;
-            this.extn_distance.Text = "0.00";
             this.extn_distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_distance.Value = "0.00";
+            this.extn_distance.Value = "";
             this.extn_distance.Validated += new System.EventHandler(this.TextBox_LostFocus);
             // 
             // extn_boxes
             // 
             this.extn_boxes.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnBoxes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_boxes.EditMask = "#,###";
+            this.extn_boxes.EditMask = "####";
             this.extn_boxes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_boxes.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_boxes.Location = new System.Drawing.Point(17, 46);
+            this.extn_boxes.Location = new System.Drawing.Point(17, 48);
             this.extn_boxes.Name = "extn_boxes";
             this.extn_boxes.PromptChar = ' ';
             this.extn_boxes.Size = new System.Drawing.Size(68, 20);
             this.extn_boxes.TabIndex = 103;
+            this.extn_boxes.Text = "0";
             this.extn_boxes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_boxes.Value = "";
+            this.extn_boxes.Value = "0";
             this.extn_boxes.Validated += new System.EventHandler(this.TextBox_LostFocus);
             // 
             // extn_del_hrs
             // 
             this.extn_del_hrs.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnDelHrs", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N2"));
-            this.extn_del_hrs.EditMask = "##0.00";
+            this.extn_del_hrs.EditMask = "#####.##";
             this.extn_del_hrs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_del_hrs.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_del_hrs.Location = new System.Drawing.Point(17, 200);
+            this.extn_del_hrs.Location = new System.Drawing.Point(17, 202);
             this.extn_del_hrs.Name = "extn_del_hrs";
             this.extn_del_hrs.PromptChar = ' ';
             this.extn_del_hrs.Size = new System.Drawing.Size(68, 20);
@@ -254,91 +254,96 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.extn_del_hrs.Text = "0.00";
             this.extn_del_hrs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.extn_del_hrs.Value = "0.00";
-            this.extn_del_hrs.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
             // 
             // extn_rural_bags
             // 
             this.extn_rural_bags.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnRuralBags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_rural_bags.EditMask = "###";
+            this.extn_rural_bags.EditMask = "####";
             this.extn_rural_bags.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_rural_bags.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_rural_bags.Location = new System.Drawing.Point(17, 66);
+            this.extn_rural_bags.Location = new System.Drawing.Point(17, 68);
             this.extn_rural_bags.Name = "extn_rural_bags";
             this.extn_rural_bags.PromptChar = ' ';
             this.extn_rural_bags.Size = new System.Drawing.Size(68, 20);
             this.extn_rural_bags.TabIndex = 104;
+            this.extn_rural_bags.Text = "0";
             this.extn_rural_bags.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_rural_bags.Value = "";
+            this.extn_rural_bags.Value = "0";
             // 
             // extn_other_bags
             // 
             this.extn_other_bags.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnOtherBags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_other_bags.EditMask = "###";
+            this.extn_other_bags.EditMask = "####";
             this.extn_other_bags.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_other_bags.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_other_bags.Location = new System.Drawing.Point(17, 86);
+            this.extn_other_bags.Location = new System.Drawing.Point(17, 88);
             this.extn_other_bags.Name = "extn_other_bags";
             this.extn_other_bags.PromptChar = ' ';
             this.extn_other_bags.Size = new System.Drawing.Size(68, 20);
             this.extn_other_bags.TabIndex = 105;
+            this.extn_other_bags.Text = "0";
             this.extn_other_bags.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_other_bags.Value = "";
+            this.extn_other_bags.Value = "0";
             // 
             // extn_post_offices
             // 
             this.extn_post_offices.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnPostOffices", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_post_offices.EditMask = "###";
+            this.extn_post_offices.EditMask = "####";
             this.extn_post_offices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_post_offices.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_post_offices.Location = new System.Drawing.Point(17, 125);
+            this.extn_post_offices.Location = new System.Drawing.Point(17, 127);
             this.extn_post_offices.Name = "extn_post_offices";
             this.extn_post_offices.PromptChar = ' ';
             this.extn_post_offices.Size = new System.Drawing.Size(68, 20);
             this.extn_post_offices.TabIndex = 107;
+            this.extn_post_offices.Text = "0";
             this.extn_post_offices.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_post_offices.Value = "";
+            this.extn_post_offices.Value = "0";
             // 
             // extn_private_bags
             // 
             this.extn_private_bags.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnPrivateBags", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_private_bags.EditMask = "###";
+            this.extn_private_bags.EditMask = "####";
             this.extn_private_bags.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_private_bags.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_private_bags.Location = new System.Drawing.Point(17, 106);
+            this.extn_private_bags.Location = new System.Drawing.Point(17, 108);
             this.extn_private_bags.Name = "extn_private_bags";
             this.extn_private_bags.PromptChar = ' ';
             this.extn_private_bags.Size = new System.Drawing.Size(68, 20);
             this.extn_private_bags.TabIndex = 106;
+            this.extn_private_bags.Text = "0";
             this.extn_private_bags.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_private_bags.Value = "";
+            this.extn_private_bags.Value = "0";
             // 
             // extn_no_cmbs
             // 
             this.extn_no_cmbs.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnNoCmbs", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_no_cmbs.EditMask = "###";
+            this.extn_no_cmbs.EditMask = "####";
             this.extn_no_cmbs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_no_cmbs.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_no_cmbs.Location = new System.Drawing.Point(17, 145);
+            this.extn_no_cmbs.Location = new System.Drawing.Point(17, 147);
             this.extn_no_cmbs.Name = "extn_no_cmbs";
             this.extn_no_cmbs.PromptChar = ' ';
             this.extn_no_cmbs.Size = new System.Drawing.Size(68, 20);
             this.extn_no_cmbs.TabIndex = 108;
+            this.extn_no_cmbs.Text = "0";
             this.extn_no_cmbs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_no_cmbs.Value = "";
+            this.extn_no_cmbs.Value = "0";
             // 
             // extn_no_cmb_customers
             // 
             this.extn_no_cmb_customers.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnNoCmbCustomers", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.extn_no_cmb_customers.EditMask = "###";
+            this.extn_no_cmb_customers.EditMask = "####";
             this.extn_no_cmb_customers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_no_cmb_customers.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.extn_no_cmb_customers.Location = new System.Drawing.Point(17, 165);
+            this.extn_no_cmb_customers.Location = new System.Drawing.Point(17, 167);
             this.extn_no_cmb_customers.Name = "extn_no_cmb_customers";
             this.extn_no_cmb_customers.PromptChar = ' ';
             this.extn_no_cmb_customers.Size = new System.Drawing.Size(68, 20);
             this.extn_no_cmb_customers.TabIndex = 109;
+            this.extn_no_cmb_customers.Text = "0";
             this.extn_no_cmb_customers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_no_cmb_customers.Value = "";
+            this.extn_no_cmb_customers.Value = "0";
             this.extn_no_cmb_customers.Validated += new System.EventHandler(this.TextBox_LostFocus);
             // 
             // gb_2
@@ -576,7 +581,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.boxes.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.boxes.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Boxes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.boxes.EditMask = "#,##0";
+            this.boxes.EditMask = "#,###";
             this.boxes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.boxes.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.boxes.Location = new System.Drawing.Point(8, 55);
@@ -585,10 +590,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.boxes.ReadOnly = true;
             this.boxes.Size = new System.Drawing.Size(68, 13);
             this.boxes.TabIndex = 7;
-            this.boxes.Text = "0";
             this.boxes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.boxes.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.boxes.Value = "0";
+            this.boxes.Value = "";
             // 
             // rural_bags
             // 
@@ -666,7 +670,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.mail_volume.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mail_volume.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "MailVolume", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N0"));
-            this.mail_volume.EditMask = "#,##0";
+            this.mail_volume.EditMask = "#,###";
             this.mail_volume.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.mail_volume.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.mail_volume.Location = new System.Drawing.Point(8, 188);
@@ -1246,7 +1250,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_7
             // 
             this.t_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_7.Location = new System.Drawing.Point(14, 50);
+            this.t_7.Location = new System.Drawing.Point(14, 53);
             this.t_7.Name = "t_7";
             this.t_7.Size = new System.Drawing.Size(152, 13);
             this.t_7.TabIndex = 125;
@@ -1260,7 +1264,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.volume_change.EditMask = "#,##0";
             this.volume_change.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.volume_change.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.volume_change.Location = new System.Drawing.Point(173, 50);
+            this.volume_change.Location = new System.Drawing.Point(173, 53);
             this.volume_change.Name = "volume_change";
             this.volume_change.PromptChar = ' ';
             this.volume_change.ReadOnly = true;
@@ -1274,7 +1278,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_8
             // 
             this.t_8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_8.Location = new System.Drawing.Point(70, 71);
+            this.t_8.Location = new System.Drawing.Point(70, 73);
             this.t_8.Name = "t_8";
             this.t_8.Size = new System.Drawing.Size(94, 13);
             this.t_8.TabIndex = 123;
@@ -1288,7 +1292,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.proc_hrs_change.EditMask = "#,##0.00";
             this.proc_hrs_change.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.proc_hrs_change.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.proc_hrs_change.Location = new System.Drawing.Point(173, 71);
+            this.proc_hrs_change.Location = new System.Drawing.Point(173, 73);
             this.proc_hrs_change.Name = "proc_hrs_change";
             this.proc_hrs_change.PromptChar = ' ';
             this.proc_hrs_change.ReadOnly = true;
@@ -1302,7 +1306,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_10
             // 
             this.t_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_10.Location = new System.Drawing.Point(221, 71);
+            this.t_10.Location = new System.Drawing.Point(221, 73);
             this.t_10.Name = "t_10";
             this.t_10.Size = new System.Drawing.Size(45, 13);
             this.t_10.TabIndex = 113;
@@ -1312,7 +1316,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_11
             // 
             this.t_11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_11.Location = new System.Drawing.Point(222, 50);
+            this.t_11.Location = new System.Drawing.Point(222, 53);
             this.t_11.Name = "t_11";
             this.t_11.Size = new System.Drawing.Size(38, 13);
             this.t_11.TabIndex = 114;
@@ -1370,7 +1374,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // extnamount
             // 
             this.extnamount.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Extnamount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "N2"));
-            this.extnamount.EditMask = "###,###.00";
+            this.extnamount.EditMask = "###,###.##";
             this.extnamount.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extnamount.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.extnamount.Location = new System.Drawing.Point(159, 118);
@@ -1378,16 +1382,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.extnamount.PromptChar = ' ';
             this.extnamount.Size = new System.Drawing.Size(61, 20);
             this.extnamount.TabIndex = 127;
-            this.extnamount.Text = ".00";
+            this.extnamount.Text = "0.00";
             this.extnamount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.extnamount.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.extnamount.Value = ".00";
+            this.extnamount.Value = "0.00";
             this.extnamount.Validated += new System.EventHandler(this.TextBox_LostFocus);
             // 
             // t_38
             // 
             this.t_38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_38.Location = new System.Drawing.Point(89, 145);
+            this.t_38.Location = new System.Drawing.Point(89, 147);
             this.t_38.Name = "t_38";
             this.t_38.Size = new System.Drawing.Size(56, 13);
             this.t_38.TabIndex = 115;
@@ -1415,7 +1419,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.compute_4.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute4", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.compute_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.compute_4.Location = new System.Drawing.Point(156, 144);
+            this.compute_4.Location = new System.Drawing.Point(157, 147);
             this.compute_4.Name = "compute_4";
             this.compute_4.ReadOnly = true;
             this.compute_4.Size = new System.Drawing.Size(61, 13);
