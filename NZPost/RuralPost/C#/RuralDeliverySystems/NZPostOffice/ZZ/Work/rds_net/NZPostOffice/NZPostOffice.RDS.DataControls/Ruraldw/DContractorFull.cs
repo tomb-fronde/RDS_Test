@@ -20,6 +20,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_phone_night.LostFocus += new System.EventHandler(this.c_phone_night_LostFocus);
             this.c_ird_no.LostFocus += new System.EventHandler(this.c_ird_no_LostFocus);
             this.c_gst_number.LostFocus += new System.EventHandler(this.c_gst_number_LostFocus);
+            // TJB  RD7_0034   21-July-2009
+            //    Changed type of c_salutation and c_address controls to Textbox from RichTextbos
+            //    - done to enable cut/copy/paste right-click menu
+            //    - no features of the RichTextbox appear to be used, so there's no need to retain in
+            //    Changes initially in DContractorFull.designer.cs but file rewritten by designer
         }
 
         protected override void OnHandleCreated(EventArgs e)

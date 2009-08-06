@@ -40,9 +40,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_initials_t = new System.Windows.Forms.Label();
             this.c_initials = new System.Windows.Forms.TextBox();
             this.c_salutation_t = new System.Windows.Forms.Label();
-            this.c_salutation = new System.Windows.Forms.RichTextBox();
+            this.c_salutation = new System.Windows.Forms.TextBox();
             this.c_address_t = new System.Windows.Forms.Label();
-            this.c_address = new System.Windows.Forms.RichTextBox();
+            this.c_address = new System.Windows.Forms.TextBox();
             this.contractor_supplier_no_t = new System.Windows.Forms.Label();
             this.contractor_supplier_no = new System.Windows.Forms.TextBox();
             this.c_title_t = new System.Windows.Forms.Label();
@@ -178,7 +178,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.c_initials.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CInitials", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_initials.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_initials.Location = new System.Drawing.Point(105, 72);
+            this.c_initials.Location = new System.Drawing.Point(105, 73);
             this.c_initials.MaxLength = 10;
             this.c_initials.Name = "c_initials";
             this.c_initials.Size = new System.Drawing.Size(70, 20);
@@ -201,14 +201,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_salutation.Location = new System.Drawing.Point(105, 95);
             this.c_salutation.MaxLength = 40;
             this.c_salutation.Name = "c_salutation";
-            this.c_salutation.Size = new System.Drawing.Size(174, 29);
+            this.c_salutation.Size = new System.Drawing.Size(174, 20);
             this.c_salutation.TabIndex = 5;
-            this.c_salutation.Text = "";
+            this.c_salutation.WordWrap = false;
             // 
             // c_address_t
             // 
             this.c_address_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_address_t.Location = new System.Drawing.Point(10, 128);
+            this.c_address_t.Location = new System.Drawing.Point(10, 122);
             this.c_address_t.Name = "c_address_t";
             this.c_address_t.Size = new System.Drawing.Size(94, 13);
             this.c_address_t.TabIndex = 70;
@@ -220,12 +220,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_address.BackColor = System.Drawing.Color.Aqua;
             this.c_address.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CAddress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.c_address.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_address.Location = new System.Drawing.Point(105, 125);
+            this.c_address.Location = new System.Drawing.Point(105, 120);
             this.c_address.MaxLength = 200;
+            this.c_address.Multiline = true;
             this.c_address.Name = "c_address";
-            this.c_address.Size = new System.Drawing.Size(174, 57);
+            this.c_address.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.c_address.Size = new System.Drawing.Size(174, 63);
             this.c_address.TabIndex = 6;
-            this.c_address.Text = "";
             // 
             // contractor_supplier_no_t
             // 
@@ -731,9 +732,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label c_initials_t;
         private System.Windows.Forms.TextBox c_initials;
         private System.Windows.Forms.Label c_salutation_t;
-        private System.Windows.Forms.RichTextBox c_salutation;
+        //private System.Windows.Forms.RichTextBox c_salutation;
+        private System.Windows.Forms.TextBox c_salutation;
         private System.Windows.Forms.Label c_address_t;
-        private System.Windows.Forms.RichTextBox c_address;
+        //private System.Windows.Forms.RichTextBox c_address;
+        private System.Windows.Forms.TextBox c_address;
         private System.Windows.Forms.Label contractor_supplier_no_t;
         private System.Windows.Forms.TextBox contractor_supplier_no;
         private System.Windows.Forms.Label c_title_t;
