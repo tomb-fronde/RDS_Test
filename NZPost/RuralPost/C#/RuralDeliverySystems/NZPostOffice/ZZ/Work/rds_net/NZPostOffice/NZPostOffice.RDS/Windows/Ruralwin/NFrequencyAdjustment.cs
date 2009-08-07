@@ -71,7 +71,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("Invalid effective date passed in", is_ERROR_TITLE);
             }
             //  if contract number is not set, return failure
-            if ((il_contract_no == null) || il_contract_no <= 0 || (il_sequence_no == null) || il_sequence_no <= 0)
+            if (il_contract_no == null 
+                || il_contract_no <= 0 
+                || il_sequence_no == null
+                || il_sequence_no <= 0)
             {
                 MessageBox.Show("Please supply a contract number first", is_ERROR_TITLE);
                 return ii_FAILURE;
@@ -80,7 +83,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Need to grab the first available "active" sf_key!
             //  Get the route frequency and delivery dates from the Route_Frequency table
 
-            /*SELECT FIRST sf_key, rf_delivery_days INTO :il_sf_key, :is_delivery_days FROM	route_frequency WHERE contract_no = :il_contract_no AND	rf_active = 'Y';*/
+            //SELECT FIRST sf_key, rf_delivery_days INTO :il_sf_key, :is_delivery_days 
+            // FROM	route_frequency WHERE contract_no = :il_contract_no AND	rf_active = 'Y'
             RDSDataService dataService = RDSDataService.GetRouteFrequencyList(il_contract_no.Value);
             List<RouteFrequencyItem> list = dataService.RoutFrequencyList;
             il_sf_key = list[0].SfKey;
@@ -88,13 +92,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Unable to obtain route frequency detailsfor the contract.\n\n" + "Error Text: " + dataService.SQLErrText, "Database Error");
+                MessageBox.Show("Unable to obtain route frequency details for the contract.\n\n" 
+                                 + "Error Text: " + dataService.SQLErrText
+                               , "Database Error");
                 return ii_FAILURE;
             }
             //  Check that no other extensions are made to the database
-            /*SELECT count (*) INTO	:ll_Count FROM	frequency_distances WHERE contract_no = :il_Contract_no AND	sf_key = :il_SF_Key				
-                AND	rf_delivery_days = :is_Delivery_Days AND fd_effective_date = :ad_Effective_Date;*/
-            ll_count = RDSDataService.GetFrequencyDistancesCount(il_contract_no, il_sf_key, is_delivery_days, ad_effective_date, ref SQLCode, ref SQLErrText);
+            //SELECT count(*) INTO :ll_Count FROM frequency_distances 
+            // WHERE contract_no = :il_Contract_no AND sf_key = :il_SF_Key				
+            //  AND	rf_delivery_days = :is_Delivery_Days 
+            //  AND fd_effective_date = :ad_Effective_Date
+            ll_count = RDSDataService.GetFrequencyDistancesCount(il_contract_no
+                                                                , il_sf_key
+                                                                , is_delivery_days
+                                                                , ad_effective_date
+                                                                , ref SQLCode, ref SQLErrText);
             if (SQLCode == -(1))
             {
                 MessageBox.Show(SQLErrText, is_ERROR_TITLE);
@@ -106,17 +118,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Will get the next available effecitve date
                 while (SQLCode == 0 && ll_count > 0)
                 {
-                    ad_effective_date = ad_effective_date.GetValueOrDefault().AddDays(-1);//StaticFunctions.RelativeDate(ad_effective_date, -(1));
-                    /*SELECT count(*) INTO	:ll_Count FROM	frequency_distances WHERE contract_no = :il_Contract_no
-                        AND	sf_key = :il_SF_Key AND	rf_delivery_days  = :is_Delivery_Days AND fd_effective_date = :ad_Effective_Date;*/
-                    ll_count = RDSDataService.GetFrequencyDistancesCount(il_contract_no, il_sf_key, is_delivery_days, ad_effective_date, ref SQLCode, ref SQLErrText);
+                    //StaticFunctions.RelativeDate(ad_effective_date, -(1));
+                    ad_effective_date = ad_effective_date.GetValueOrDefault().AddDays(-1);
+                    //SELECT count(*) INTO	:ll_Count FROM frequency_distances 
+                    // WHERE contract_no = :il_Contract_no AND sf_key = :il_SF_Key 
+                    //   AND rf_delivery_days = :is_Delivery_Days 
+                    //   AND fd_effective_date = :ad_Effective_Date;
+                    ll_count = RDSDataService.GetFrequencyDistancesCount(
+                                                            il_contract_no, il_sf_key
+                                                          , is_delivery_days, ad_effective_date
+                                                          , ref SQLCode, ref SQLErrText);
                 }
                 if (SQLCode == -(1))
                 {
                     MessageBox.Show(SQLErrText, is_ERROR_TITLE);
                     return ii_FAILURE;
                 }
-                // 	MessageBox ( is_ERROR_TITLE , "Please choose a different effective date because there is already an extension defined for this effective date")
+                // 	MessageBox("Please choose a different effective date because there\n" 
+                //              + "is already an extension defined for this effective date."
+                //            ,is_ERROR_TITLE)
             }
             id_effective_date = ad_effective_date;
             return ii_SUCCESS;
@@ -133,26 +153,47 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            if ((id_effective_date == null) || (idc_adjustment_amount == null) || (idc_amount_to_pay == null) || (idc_new_benchmark == null) || (il_contract_no == null) || il_contract_no <= 0 || (il_sequence_no == null) || il_sequence_no <= 0 || (is_reason == null) || is_reason == "")
+            if ((id_effective_date == null) 
+                || (idc_adjustment_amount == null) 
+                || (idc_amount_to_pay == null) 
+                || (idc_new_benchmark == null) 
+                || (il_contract_no == null) 
+                || il_contract_no <= 0 
+                || (il_sequence_no == null) 
+                || il_sequence_no <= 0 
+                || (is_reason == null) 
+                || is_reason == "")
             {
                 MessageBox.Show("Please set the instance variables before saving", is_ERROR_TITLE);
                 return ii_FAILURE;
             }
-            /*INSERT INTO frequency_distances ( fd_effective_date, contract_no, sf_key, rf_delivery_days, fd_change_reason)
-                VALUES ( :id_Effective_Date, :il_Contract_no, :il_sf_key, :is_Delivery_Days, :is_Reason);*/
-            RDSDataService.InsertIntoFrequencyDistances(id_effective_date, il_contract_no, il_sf_key, is_delivery_days, is_reason, ref SQLCode, ref SQLErrText);
+            //INSERT INTO frequency_distances (fd_effective_date, contract_no, sf_key, rf_delivery_days, fd_change_reason)
+            //VALUES (:id_Effective_Date, :il_Contract_no, :il_sf_key, :is_Delivery_Days, :is_Reason);
+            RDSDataService.InsertIntoFrequencyDistances(id_effective_date
+                                                        , il_contract_no
+                                                        , il_sf_key
+                                                        , is_delivery_days
+                                                        , is_reason
+                                                        , ref SQLCode, ref SQLErrText);
             if (SQLCode != 0)
             {
-                MessageBox.Show("Error saving frequency_distances record\n" + "Error Text: " + SQLErrText, "Database Error  ( n_frequency_adjustment.of_save)");
+                MessageBox.Show("Error saving frequency_distances record\n\n" 
+                                 + "Error Text: " + SQLErrText
+                               , "Database Error (NFrequencyAdjustment.of_save)");
                 //?ROLLBACK USING atr_tran_object;
                 return ii_FAILURE;
             }
-            /*SELECT max ( fd_unique_seq_number) INTO :lNextSeq FROM frequency_adjustments
-                WHERE contract_no = :il_Contract_no AND contract_seq_number = :il_Sequence_no USING atr_tran_object;*/
-            lnextseq = RDSDataService.GetMaxFdUniqueSeqNumber(il_contract_no, il_sequence_no, ref SQLCode, ref SQLErrText);
+            ///SELECT max ( fd_unique_seq_number) INTO :lNextSeq FROM frequency_adjustments
+            //  WHERE contract_no = :il_Contract_no AND contract_seq_number = :il_Sequence_no 
+            //  USING atr_tran_object;
+            lnextseq = RDSDataService.GetMaxFdUniqueSeqNumber(il_contract_no
+                                                             , il_sequence_no
+                                                             , ref SQLCode, ref SQLErrText);
             if (SQLCode < 0)
             {
-                MessageBox.Show("Error obtaining fd_unique_seq_number.\n" + "Error Text: " + SQLErrText, "Database Error  ( n_frequency_adjustment.of_save)");
+                MessageBox.Show("Error obtaining fd_unique_seq_number.\n\n" 
+                                 + "Error Text: " + SQLErrText
+                               , "Database Error (NFrequencyAdjustment.of_save)");
                 //?ROLLBACK USING atr_tran_object;
                 return ii_FAILURE;
             }
@@ -192,11 +233,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     :id_Effective_Date, 
                     :il_sf_key,
                     :is_Delivery_Days)  ;*/
-            RDSDataService.InsertIntoFrequencyAdjustments(il_contract_no, il_sequence_no, lnextseq, idc_adjustment_amount,
-                idc_new_benchmark, is_confirmed, idc_amount_to_pay, id_effective_date, il_sf_key, is_delivery_days, ref SQLCode, ref SQLErrText);
+            RDSDataService.InsertIntoFrequencyAdjustments(il_contract_no
+                                                         , il_sequence_no
+                                                         , lnextseq
+                                                         , idc_adjustment_amount
+                                                         , idc_new_benchmark
+                                                         , is_confirmed
+                                                         , idc_amount_to_pay
+                                                         , id_effective_date
+                                                         , il_sf_key
+                                                         , is_delivery_days
+                                                         , ref SQLCode, ref SQLErrText);
             if (SQLCode == -(1))
             {
-                MessageBox.Show("Error saving frequency_adjustment record\n" + "Error Text: " + SQLErrText, "Database Error  ( n_frequency_adjustment.of_save)");
+                MessageBox.Show("Error saving frequency_adjustment record\n" 
+                                 + "Error Text: " + SQLErrText
+                               , "Database Error (NFrequencyAdjustment.of_save)");
                 //?ROLLBACK USING atr_tran_object;
                 return ii_FAILURE;
             }
