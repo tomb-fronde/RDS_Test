@@ -116,6 +116,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw t;
 
+        private int? nPrevVehicle;
+        private int? nPrevFtKey;
+        private System.Decimal dcPrevVehBenchmark = -1;
+
         #endregion
 
         public WRenewal2001()
@@ -510,6 +514,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             //  TWC 13/06/2003 Manually showing the article count tab if have privilage
             this.tabpage_article_count.Show();
+
             //  TJB  SR4695  Jan-2007
             //  Create datastores for frequency_distances, [non_]vehicle_override_rate[_history]
             //  tables
@@ -519,7 +524,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ids_non_vehicle_override_rate_history = new DsNonVehicleOverrideRateHistory();
             ids_route_frequency = new DsRouteFrequency();
 
-            dw_renewal.URdsDw_GetFocus(null, null);//added by jlwang
+            // TJB  RD7_0037  Aug2009
+            // Get the current vehicle details
+            il_contract = (il_contract == null) ? 0 : il_contract;
+            il_sequence = (il_sequence == null) ? 0 : il_sequence;
+            if (dw_contract_vehicle.RowCount == 0 && il_contract > 0 && il_sequence > 0)
+            {
+                ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
+            }
+            // TJB  RD7_0037  Aug2009
+            // Determine initial vehicle benchmark
+            // Save the fuel type and original vehicle number (so we can tell
+            // if there's any change).
+            dcPrevVehBenchmark = -1;
+            int nRow = dw_contract_vehicle.GetRow();
+            if (nRow >= 0)
+            {
+                nPrevVehicle = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+                nPrevFtKey = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
+                dcPrevVehBenchmark = wf_getVehBenchmark();
+            }
+
+            //added by jlwang
+            dw_renewal.URdsDw_GetFocus(null, null);
         }
 
         #region Methods
@@ -1723,12 +1750,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             BeginInvoke(new constructorDelegate(dw_contract_vehicle_invoke));
 
             //  TJB  SR4696  Dec 2006
-            // 	The system administrator is authorised to change anything  ( almost)
-            //  on the vehicle screen  ( not vehicle_allowance_paid_to_date).
+            // 	The system administrator is authorised to change anything (almost)
+            //  on the vehicle screen (not vehicle_allowance_paid_to_date).
             //  Here we check to see if the user is a system administrator, 
-            //  and if so, set st_systemadmin  ( and hide it regarless).  Each
+            //  and if so, set st_systemadmin (and hide it regardless). Each
             //  of the fields turns update protection off if the st_sysadmin
-            //  flag is set to "Y".  There is no visible indication until the
+            //  flag is set to "Y". There is no visible indication until the
             //  user clicks on one of the fields.
             string ls_group_list = "System Administrators";
             bool lb_ismember = false;
@@ -1743,6 +1770,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 dw_contract_vehicle.DataObject.GetControlByName("st_sysadmin").Text = "N";
             }
             dw_contract_vehicle.DataObject.GetControlByName("st_sysadmin").Visible = false;
+
         }
 
         public virtual void scrollvertical()
@@ -1968,6 +1996,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return li_return_code;
         }
 
+        //  TJB  RD7_0037  Aug2009
+        //  dw_contract_vehicle_pfc_postupdate() rewritten (below)
+        /*    
         public virtual void dw_contract_vehicle_pfc_postupdate()
         {
             int li_return;
@@ -1985,21 +2016,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             li_return = 1;// ancestorreturnvalue;
             //  TJB  15-Oct-2004  SR4633
-            //  If a new vehicle has been added, if the benchmark value 
+            //  If a new vehicle has been added and the benchmark value 
             //  changes, add a frequency adjustment.
             if (ib_new_veh_added)
             {
                 li_row = dw_contract_vehicle.GetRow();
                 li_newVehNo = dw_contract_vehicle.GetItem<ContractVehicle>(li_row).VehicleNumber;
                 li_prevVehNo = dw_contract_vehicle.GetItem<ContractVehicle>(li_row + 1).VehicleNumber;
-                if (li_newVehNo == null)
-                {
-                    li_newVehNo = 0;
-                }
-                if (li_prevVehNo == null)
-                {
-                    li_prevVehNo = 0;
-                }
+                (li_newVehNo == null)  ? 0 : li_newVehNo;
+                (li_prevVehNo == null) ? 0 : li_prevVehNo;
+
                 //  Obtain current benchmark
                 //select benchmarkCalcVeh2005(:il_contract, :il_sequence, :li_newVehNo)
                 //  into :ldc_newBenchmark from dummy USING SQLCA;
@@ -2055,7 +2081,73 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
             }
-            //return li_return;
+        }
+      */
+
+        public virtual void dw_contract_vehicle_pfc_postupdate()
+        {
+            int? nThisFtKey;
+            int? nThisVehicle;
+            int nRow;
+            string adj_type;
+            System.Decimal dcThisVehBenchmark;
+
+            nRow = idw_vehicle.GetRow();
+            nThisVehicle = idw_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+            nThisFtKey = idw_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
+            dcThisVehBenchmark = wf_getVehBenchmark();
+            /* ------------------------------ Debugging ------------------------------- //
+            MessageBox.Show("Prev Vehicle = " + nPrevVehicle + "\n"
+                 + "This Vehicle = " + nThisVehicle + "\n"
+                 + "Prev Ft Key = " + nPrevFtKey + "\n"
+                 + "This Ft Key = " + nThisFtKey + "\n\n"
+                 + "Prev Benchmark = " + dcPrevVehBenchmark + "\n"
+                 + "This Benchmark = " + dcThisVehBenchmark
+               , "dw_contract_vehicle_pfc_postupdate"
+               , MessageBoxButtons.OK
+               , MessageBoxIcon.Information);
+            // ------------------------------------------------------------------------ */
+
+            if (ib_new_veh_added)
+            {
+                adj_type = "new vehicle";
+            }
+            else if (nPrevFtKey != nThisFtKey)
+            {
+                adj_type = "fuel type change";
+            }
+            else
+            {
+                adj_type = "vehicle change";
+            }
+
+            //  If the previous and current benchmarks differ, create a frequency adjustment
+            if (dcThisVehBenchmark != dcPrevVehBenchmark)
+            {
+                int li_rc = wf_add_frequency_adjustment(il_contract, il_sequence, dcThisVehBenchmark, dcPrevVehBenchmark);
+                //  If successful, tell the user
+                if (li_rc > 0)
+                {
+                    MessageBox.Show("A frequency adjustment for the " + adj_type + " has been made.\n"
+                                     + "Please check and confirm it."
+                                   , ""
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (li_rc == 0)
+                {
+                    MessageBox.Show("A frequency adjustment for the " + adj_type + " was not created."
+                                   , "ERROR"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Error );
+                }
+            }
+            //  PBY 25/06/2002 SR#4409 Make sure no column is editable after a save
+            ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
+
+            // TJB  RD7_0037  Aug 2007
+            // These are the new "Previous" values
+            nPrevVehicle = nThisVehicle;
+            nPrevFtKey = nThisFtKey;
+            dcPrevVehBenchmark = dcThisVehBenchmark;
         }
 
         public virtual void dw_contract_vehicle_pfc_insertrow()
@@ -2085,6 +2177,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #endregion
 
         #region Events
+        public virtual System.Decimal wf_getVehBenchmark()
+        {
+                // TJB  RD7_0037  Aug 2007
+                // Determine the vehicle benchmark for the current vehicle
+                // Returns -1 if unable to.
+            int? nContract;
+            int? nSequence;
+            int? nVehicle;
+            int nRow;
+            int SQLCode = 0;
+            string SQLErrText = string.Empty;
+            System.Decimal dcVehBenchmark = -1;
+
+            nRow = idw_vehicle.GetRow();
+            if (nRow >= 0)
+            {
+                nContract = idw_vehicle.GetItem<ContractVehicle>(nRow).ContractNo;
+                nSequence = idw_vehicle.GetItem<ContractVehicle>(nRow).ContractSeqNumber;
+                nVehicle = idw_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+                dcVehBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(
+                                                                       nContract
+                                                                     , nSequence
+                                                                     , nVehicle
+                                                                     , ref SQLCode
+                                                                     , ref SQLErrText);
+                if (SQLCode != 0)
+                {
+                    MessageBox.Show("Unable to determine current benchmark.\n\n"
+                                     + "Error Code: " + Convert.ToString(SQLCode) + "\n"
+                                     + "Error Text: " + SQLErrText
+                                   , "Database Error (WRenewal2001.pfc_postupdate)"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    dcVehBenchmark = -1;
+                }
+            }
+            return dcVehBenchmark;
+        }
+
         public override void resize(object sender, EventArgs args)
         {
             // override
@@ -2166,12 +2296,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ((DContractVehicle)idw_vehicle.DataObject).Retrieve(il_contract, il_sequence);
                 }
                 if (idw_renewal.RowCount > 0)
+                {
                     idw_vehicle.DataObject.GetControlByName("st_title").Text = idw_renewal.GetItem<Renewal>(0).Contracttitle;
+                }
                 // ist_maintenance.dwCurrent = idw_vehicle
             }
             else if (str == "article counts")//(TestExpr == 5)
             {
-                dw_renewal_artical_counts_getfocus(null, null);//added by jlwang
+                //added by jlwang
+                dw_renewal_artical_counts_getfocus(null, null);
                 if (idw_article_count.RowCount == 0)
                 {
                     ((DRenewalArticalCounts)idw_article_count.DataObject).Retrieve(il_contract, il_sequence);
@@ -2185,19 +2318,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Ret;
             int ll_Row;
             DialogResult di_ret;
+
             //?idw_renewal.DataObject.AcceptText();
             //if (idw_renewal.DeletedCount() > 0 || idw_renewal.ModifiedCount() > 0) {
             if (StaticFunctions.IsDirty(idw_renewal.DataObject))
             {
-                di_ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                di_ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question);
                 ll_Row = idw_renewal.GetRow();
                 if (di_ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_renewal.Save();// base.pfc_save();
-                    ((DRenewal)idw_renewal.DataObject).Retrieve(il_contract, il_sequence); //added by jlwang
+                    // base.pfc_save();
+                    ll_Ret = idw_renewal.Save();
+                    ((DRenewal)idw_renewal.DataObject).Retrieve(il_contract, il_sequence);
                     if (ll_Ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -2209,15 +2347,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //if (idw_frequency_adjustment.DeletedCount() > 0 || idw_frequency_adjustment.ModifiedCount() > 0) {
             if (StaticFunctions.IsDirty(idw_frequency_adjustment.DataObject))
             {
-                di_ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                di_ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question);
                 ll_Row = idw_frequency_adjustment.GetRow();
                 if (di_ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_frequency_adjustment.Save(); //ll_Ret = base.pfc_save();
+                    //ll_Ret = base.pfc_save();
+                    ll_Ret = idw_frequency_adjustment.Save();
 
                     if (ll_Ret < 0)
                     {
-                        return; //return 1;
+                        return;
                     }
                 }
                 else
@@ -2229,14 +2371,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //if (idw_contract_adjustment.DeletedCount() > 0 || idw_contract_adjustment.ModifiedCount() > 0) {
             if (StaticFunctions.IsDirty(idw_contract_adjustment.DataObject))
             {
-                di_ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                di_ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question);
                 ll_Row = idw_contract_adjustment.GetRow();
                 if (di_ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_contract_adjustment.Save(); // ll_Ret = base.pfc_save();
+                    // ll_Ret = base.pfc_save();
+                    ll_Ret = idw_contract_adjustment.Save(); 
                     if (ll_Ret < 0)
                     {
-                        //return 1;
                         return;
                     }
                 }
@@ -2249,14 +2394,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //if (idw_owner_drivers.DeletedCount() > 0 || idw_owner_drivers.ModifiedCount() > 0) {
             if (StaticFunctions.IsDirty(idw_owner_drivers.DataObject))
             {
-                di_ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                di_ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question);
                 ll_Row = idw_owner_drivers.GetRow();
                 if (di_ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_owner_drivers.Save();//ll_Ret = base.pfc_save();
+                    //ll_Ret = base.pfc_save();
+                    ll_Ret = idw_owner_drivers.Save();
                     if (ll_Ret < 0)
                     {
-                        //return 1;
                         return;
                     }
                 }
@@ -2269,14 +2417,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //if (idw_vehicle.DeletedCount() > 0 || idw_vehicle.ModifiedCount() > 0) {
             if (StaticFunctions.IsDirty(idw_vehicle.DataObject))
             {
-                di_ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                ll_Row = idw_vehicle.GetRow();
+                di_ret = MessageBox.Show("Do you want to update the contract_vehicle database?"
+                                        , "Update"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question);
                 if (di_ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_vehicle.Save();//ll_Ret = base.pfc_save();
+                    //ll_Ret = base.pfc_save();
+                    ll_Ret = idw_vehicle.Save();
                     if (ll_Ret < 0)
                     {
-                        //return 1;
                         return;
                     }
                 }
@@ -2467,6 +2617,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string sLeased = string.Empty;
             DateTime? dPurchase = new DateTime();
             int SQLCode = 0;
+
             string column_name = ((Control)sender).Name;
             if (column_name == "v_vehicle_registration_number")//"vehicle_v_vehicle_registration_number")
             {
