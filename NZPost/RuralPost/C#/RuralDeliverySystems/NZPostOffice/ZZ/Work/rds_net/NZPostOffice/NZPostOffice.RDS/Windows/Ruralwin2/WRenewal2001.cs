@@ -2084,6 +2084,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
       */
 
+        //  TJB  RD7_0037  Aug2009
+        //  dw_contract_vehicle_pfc_postupdate() rewritten
         public virtual void dw_contract_vehicle_pfc_postupdate()
         {
             int? nThisFtKey;
@@ -2179,7 +2181,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #region Events
         public virtual System.Decimal wf_getVehBenchmark()
         {
-                // TJB  RD7_0037  Aug 2007
+                // TJB  RD7_0037  Aug 2007  (New)
                 // Determine the vehicle benchmark for the current vehicle
                 // Returns -1 if unable to.
             int? nContract;
