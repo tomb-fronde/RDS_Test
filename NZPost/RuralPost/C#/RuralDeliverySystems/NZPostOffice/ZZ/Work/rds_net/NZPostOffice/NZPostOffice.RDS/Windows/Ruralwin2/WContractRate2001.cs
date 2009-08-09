@@ -1,16 +1,17 @@
 using System;
 using System.Windows.Forms;
+using Metex.Windows;
+using NZPostOffice.Shared;
 using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.RDS.Controls;
-using Metex.Windows;
+using NZPostOffice.RDS.Windows.Ruralwin;
 using NZPostOffice.RDS.DataControls.Ruraldw;
 using NZPostOffice.RDS.DataControls.Ruralwin2;
 using NZPostOffice.RDS.Entity.Ruraldw;
-using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralwin2;
 using NZPostOffice.RDS.DataService;
 
-namespace NZPostOffice.RDS.Windows.Ruralwin
+namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public partial class WContractRate2001 : WMaster
     {
@@ -173,7 +174,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Unable to retreive the original benchmark for the contract.", "w_contract_rate2001.pfc_postopen: Database Error");
+                MessageBox.Show("Unable to retreive the original benchmark for the contract."
+                               , "WContractRate2001.pfc_postopen: Database Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
             //  TJB  SR4695  Jan-2007
@@ -416,7 +419,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("ERROR: Looking up route details for the contract.\n\n" 
                                  + dataService.SQLErrText
                                , "Database Error"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return ld_null;
             }
 
@@ -436,7 +439,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("ERROR: Looking for duplicate effective date. \n\n" 
                                  + dataService.SQLErrText
                                , "Database error"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return ld_null;
             }
             if (ll_count > 0)
@@ -458,8 +461,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         MessageBox.Show("ERROR: Looking for next effective date. \n\n" 
                                          + dataService.SQLErrText
                                        , "Database error"
-                                       , MessageBoxButtons.OK
-                                       , MessageBoxIcon.Exclamation);
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return ld_null;
                     }
                 }
@@ -520,7 +522,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             li_rows = dataService.intVal;
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Unable to determine the contract status.\r\n\r\n" + "Error Text: " + dataService.SQLErrText, "Database Error  ( w_contract_rate2001.pfc_update)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to determine the contract status.\n\n" 
+                                 + "Error Text: " + dataService.SQLErrText
+                               , "Database Error (WContractRate2001.pfc_update)"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //? Rollback;
                 return -(1);
             }
@@ -546,7 +551,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ldc_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Unable to calculate a new benchmark for the contract.\r\n\r\n" + "Error Text: " + dataService.SQLErrText, "Database Error  ( w_contract_rate2001.pfc_update)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to calculate a new benchmark for the contract.\n\n" 
+                                 + "Error Text: " + dataService.SQLErrText
+                               , "Database Error (WContractRate2001.pfc_update)"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //? Rollback;
                 return -(1);
             }
@@ -600,25 +608,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  is later than the previous effective date entered.
                 if (!(id_previous_effective_date == null) && ld_effective_date <= id_previous_effective_date)
                 {
-                    MessageBox.Show("The Effective Date you have selected must be later than " + string.Format("dd/MM/yyyy", id_previous_effective_date) + ".", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("The Effective Date you have selected must be later than " 
+                                     + string.Format("dd/MM/yyyy", id_previous_effective_date) + "."
+                                   , "Invalid Date"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     //? return -(1);
                 }
                 //  PBY 02/09/2002 SR#4414 also make sure effective date cannot be greater than
-                //  today ( )+30days
+                //  today()+30days
                 //? ld_upperlimitdate = StaticMethods.RelativeDate(System.Convert.ToDateTime(StaticVariables.gnv_app.of_gettimestamp()), 30);
                 if (!(id_previous_effective_date == null) && ld_effective_date > ld_upperlimitdate)
                 {
-                    MessageBox.Show("The Effective Date you have selected must not be later than " + string.Format("dd/MM/yyyy", ld_upperlimitdate) + ".", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("The Effective Date you have selected must not be later than " 
+                                     + string.Format("dd/MM/yyyy", ld_upperlimitdate) + "."
+                                   , "Invalid Date"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     //? return -(1);
                 }
-                /* select vor_effective_date  into :id_date_exists  from vehicle_override_rate
-                    where contract_no = :il_contract and contract_seq_number = :il_sequence
-                    and vor_effective_date = :ld_effective_date; */
+                // select vor_effective_date into :id_date_exists from vehicle_override_rate
+                //  where contract_no = :il_contract and contract_seq_number = :il_sequence
+                //    and vor_effective_date = :ld_effective_date
                 RDSDataService dataService = RDSDataService.GetVovEffectiveDate(ld_effective_date, il_sequence, il_contract);
                 id_date_exists = dataService.dtVal;
                 if (id_date_exists != null)
                 {
-                    MessageBox.Show("The Effective Date you have selected already exists. " + "Please select another.", "Invalid Date", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("The Effective Date you have selected already exists. " 
+                                     + "Please select another."
+                                   , "Invalid Date"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return -(1);
                 }
             }
@@ -716,7 +733,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (ll_rc < 0)
                 {
                     MessageBox.Show("Error inserting new entry into non_vehicle_override_rate_history table. \n" 
-                                     + "Row = " + ll_row + "RC = " + ll_rc
+                                     + "Row = " + ll_row
+                                     + ", RC = " + ll_rc
                                    , "Error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -893,7 +911,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ldc_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorPublicLiabilityRate2;
             }
 
-            //ll_rc = this.pfc_save();
+            // ll_rc = this.pfc_save(); ===> TJB: in PB was "ll_rc = parent.pfc_save();"
             ll_rc = idw_vehiclerates.Save(); 
             if (ll_rc >= 0)
             {
@@ -945,8 +963,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 MessageBox.Show("This contract has been terminated.  \n" 
                                  + "New override rates may not be added."
-                               , "Warning", MessageBoxButtons.OK
-                               , MessageBoxIcon.Exclamation);
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             //  TJB SR4632 29-Jul-2004
@@ -957,8 +975,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DialogResult answer;
             answer = MessageBox.Show(ls_msg
                                , "Inserting new rates"
-                               , MessageBoxButtons.YesNo
-                               , MessageBoxIcon.Information);
+                               , MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (answer == DialogResult.Yes)
             {
                 il_inserted = 1;

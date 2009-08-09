@@ -9,7 +9,7 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralwin2;
 
-namespace NZPostOffice.RDS.Windows.Ruralwin
+namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     partial class WContractRate2001
     {
