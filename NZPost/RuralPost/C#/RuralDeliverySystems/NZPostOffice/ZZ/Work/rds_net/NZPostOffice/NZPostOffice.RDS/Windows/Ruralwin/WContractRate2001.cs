@@ -138,6 +138,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_nonvehiclerates.InsertItem<NonVehicleOverrideRates>(0);
                 ll_row = 0;
             }
+
             //  Make the heading of the datawindows = to the Contract_no, contract_seq_no and Contract name
             ls_heading = StaticMessage.StringParm;
             ls_heading = StaticVariables.gnv_app.of_get_parameters().stringparm;
@@ -387,7 +388,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  SR4695  Feb-2007   New
             //  Return the next available fd_effective_date for the frequency_adjustments
-            //  table for the contract.  This code is similar to  ( and largely copied from)
+            //  table for the contract.  This code is similar to (and largely copied from)
             //  that in the n_frequency_adjustment.of_set_effective_date function.
             // 
             //  Returns
@@ -398,10 +399,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_deldays = "";
             DateTime? ld_next_date;
             DateTime? ld_null = null;
+
             //  Need to grab the first available "active" sf_key!
             //  Get the route frequency and delivery days from the Route_Frequency table
-            /* SELECT FIRST sf_key, rf_delivery_days INTO :ll_sfkey, :ls_deldays
-                FROM route_frequency WHERE contract_no = :al_contract AND rf_active = 'Y'; */
+            // SELECT FIRST sf_key, rf_delivery_days INTO :ll_sfkey, :ls_deldays
+            //   FROM route_frequency WHERE contract_no = :al_contract AND rf_active = 'Y'
             RDSDataService dataService = RDSDataService.GetFirstRouteFrequenctSfKey(al_contract);
             if (dataService.FirstRouteFrequenctSfKeyList.Count > 0)
             {
@@ -411,19 +413,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Looking up route details for the contract.\r\n\r\n" + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("ERROR: Looking up route details for the contract.\n\n" 
+                                 + dataService.SQLErrText
+                               , "Database Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return ld_null;
             }
+
             //  Check that no other extensions are made to the database
             ld_next_date = ad_effective_date;
-            /* SELECT count(*) INTO	:ll_count FROM frequency_distances
-                WHERE contract_no = :al_contract AND sf_key = :ll_sfkey				
-                AND	rf_delivery_days = :ls_deldays AND fd_effective_date = :ld_next_date; */
-            dataService = RDSDataService.GetFrequencyDistancesCount(ll_sfkey, ls_deldays, ld_next_date, al_contract);
+
+            // SELECT count(*) INTO	:ll_count FROM frequency_distances
+            //  WHERE contract_no = :al_contract AND sf_key = :ll_sfkey				
+            //    AND rf_delivery_days = :ls_deldays AND fd_effective_date = :ld_next_date
+            dataService = RDSDataService.GetFrequencyDistancesCount( ll_sfkey
+                                                                   , ls_deldays
+                                                                   , ld_next_date
+                                                                   , al_contract);
             ll_count = dataService.intVal;
             if (dataService.SQLCode == -(1))
             {
-                MessageBox.Show("Looking for duplicate effective date. \r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("ERROR: Looking for duplicate effective date. \n\n" 
+                                 + dataService.SQLErrText
+                               , "Database error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return ld_null;
             }
             if (ll_count > 0)
@@ -435,11 +448,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ld_next_date = ld_next_date.Value.AddDays(1);
                     /* SELECT count(*) INTO	:ll_count FROM	frequency_distances WHERE contract_no = :al_contract
                         AND	sf_key = :ll_sfkey AND	rf_delivery_days = :ls_deldays AND fd_effective_date = :ld_next_date; */
-                    dataService = RDSDataService.GetFrequencyDistancesCount2(ll_sfkey, ls_deldays, ld_next_date, al_contract);
+                    dataService = RDSDataService.GetFrequencyDistancesCount2( ll_sfkey
+                                                                            , ls_deldays
+                                                                            , ld_next_date
+                                                                            , al_contract);
                     ll_count = dataService.intVal;
                     if (dataService.SQLCode == -(1))
                     {
-                        MessageBox.Show("Looking for next effective date. \r\n\r\n" + dataService.SQLErrText, "Database error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("ERROR: Looking for next effective date. \n\n" 
+                                         + dataService.SQLErrText
+                                       , "Database error"
+                                       , MessageBoxButtons.OK
+                                       , MessageBoxIcon.Exclamation);
                         return ld_null;
                     }
                 }
@@ -640,6 +660,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             decimal? ldc_delivery = 0;
             decimal? ldc_processing = 0;
             string ls_frozen = null;
+
             ll_vor_rows = idw_vehiclerates.RowCount;
             ll_nvor_rows = idw_nonvehiclerates.RowCount;
             if (ll_vor_rows >= 1)
@@ -667,7 +688,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ids_nonvehiclerateshistory.InsertItem<NonVehicleOverrideRateHistory>(ll_row);
             if (ll_row < 0)
             {
-                MessageBox.Show("Error creating new entry for non_vehicle_override_rate_history table.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Error creating new entry for non_vehicle_override_rate_history table."
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -688,16 +711,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorDeliveryWageRate = ldc_delivery;
                 ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorProcessingWageRate = ldc_processing;
                 ids_nonvehiclerateshistory.Save();
-                if (ll_rc == null)
-                {
-                    ll_rc = 0;
-                }
+                ll_rc = (ll_rc == null) ? 0 : ll_rc;
+
                 if (ll_rc < 0)
                 {
-                    MessageBox.Show("Error inserting new entry into non_vehicle_override_rate_history table. \r\n" + "Row = " + ll_row + "RC  = " + ll_rc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error inserting new entry into non_vehicle_override_rate_history table. \n" 
+                                     + "Row = " + ll_row + "RC = " + ll_rc
+                                   , "Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            //? return SUCCESS;
         }
 
         public virtual void dw_other_rates_constructor()
@@ -841,15 +864,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_rc;
             int? ll_temp;
             decimal? ldc_temp;
+
             idw_vehiclerates.AcceptText();
             idw_nonvehiclerates.AcceptText();
             idw_otherrates.AcceptText();
-            //  Only do the update if the row is marked modified  ( whether or not 
+            //  Only do the update if the row is marked modified (whether or not 
             //  the processing wage was changed). If you copy the processing wage 
             //  to the hourly wage "just in case" you'll mark the record modified 
-            //  and set up a potential unwanted save  ( the user will always be asked 
+            //  and set up a potential unwanted save (the user will always be asked 
             //  about saving because the vehicle override window has been modified 
             //  with today's date as the 'new' effective date).
+
+            int i;
+            i = idw_vehiclerates.RowCount;
+            i = idw_nonvehiclerates.RowCount;
+            i = idw_otherrates.RowCount;
+            
             if (StaticFunctions.IsDirty(idw_nonvehiclerates))
             {
                 ll_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractNo;
@@ -863,7 +893,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ldc_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorPublicLiabilityRate2;
             }
 
-            ll_rc = idw_vehiclerates.Save(); //ll_rc = this.pfc_save();
+            //ll_rc = this.pfc_save();
+            ll_rc = idw_vehiclerates.Save(); 
             if (ll_rc >= 0)
             {
                 senderName = "OK";
@@ -895,7 +926,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void cb_newrates_clicked(object sender, EventArgs e)
         {
             /***********************************************************************
-                Purpose: NweOverrideRate button clicked event
+                Purpose: NewOverrideRate button clicked event
                 Revision History:
                 Date     	Initials		Description
                 ??/??/????	???			Initial version
@@ -912,15 +943,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  updating override rates is allowed only for non-terminated contracts
             if (of_isterminated(il_contract))
             {
-                MessageBox.Show("This contract has been terminated.  \r\n" + "New override rates may not be added.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("This contract has been terminated.  \n" 
+                                 + "New override rates may not be added."
+                               , "Warning", MessageBoxButtons.OK
+                               , MessageBoxIcon.Exclamation);
                 return;
             }
             //  TJB SR4632 29-Jul-2004
             //  Added 'Note:' to message.
             ls_msg = "Inserting new Vehicle Override Rates will effect the Benchmark Calculation.";
-            ls_msg = ls_msg + "\r\nNote: the resulting frequency adjustment needs to be confirmed separately.   ";
-            ls_msg = ls_msg + "\r\nDo you wish to continue?";
-            if (MessageBox.Show(ls_msg, "Inserting new rates", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            ls_msg = ls_msg + "\nNote: the resulting frequency adjustment needs to be confirmed separately.   ";
+            ls_msg = ls_msg + "\nDo you wish to continue?";
+            DialogResult answer;
+            answer = MessageBox.Show(ls_msg
+                               , "Inserting new rates"
+                               , MessageBoxButtons.YesNo
+                               , MessageBoxIcon.Information);
+            if (answer == DialogResult.Yes)
             {
                 il_inserted = 1;
                 /*  
