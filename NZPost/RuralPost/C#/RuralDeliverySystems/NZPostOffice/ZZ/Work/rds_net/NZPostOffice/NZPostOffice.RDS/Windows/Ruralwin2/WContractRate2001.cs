@@ -912,7 +912,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             // ll_rc = this.pfc_save(); ===> TJB: in PB was "ll_rc = parent.pfc_save();"
-            ll_rc = idw_vehiclerates.Save(); 
+            ll_rc = 0;
+            if (StaticFunctions.IsDirty(idw_vehiclerates))
+            {
+                ll_rc = idw_vehiclerates.Save();
+            }
+            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
+            {
+                ll_rc = idw_nonvehiclerates.Save();
+            }
             if (ll_rc >= 0)
             {
                 senderName = "OK";
