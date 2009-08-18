@@ -56,6 +56,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             //st_title.Text = StaticVariables.gnv_app.of_get_title();
             st_title.Text = StaticVariables.DisplayName.Remove(StaticVariables.DisplayName.Length - 9);
             //st_version.Text = StaticVariables.gnv_app.of_getversion();
+
             #region added by ylwang
             // get Version info from App.Config...
             //!string version = System.Configuration.ConfigurationManager.AppSettings["Version"].ToString();            
@@ -67,12 +68,12 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             //!version = NZPostOffice.Shared.Managers.AppManager.ApplicationVersion;
             //!buildDate = NZPostOffice.Shared.Managers.AppManager.ApplicationBuiltOn;
 
-            st_version.Text = "Version " +
-                //!config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")"
-                System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString() +
-                " (Built on " + string.Format("{0:dd/MM/yyyy HH:mm:ss}", 
-                    System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location)) + ")";
-                //!"Version " + version + " Built on (" + buildDate + ")";
+            st_version.Text = "Version "
+                              + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
+                              + " (Built on " 
+                              + string.Format("{0:dd/MMM/yyyy HH:mm}", 
+                                           System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location))
+                              + ")";
         }
 
         #region Form Design
@@ -113,8 +114,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.st_1.Name = "st_1";
             this.st_1.Size = new System.Drawing.Size(236, 45);
             this.st_1.TabIndex = 2;
-            this.st_1.Text = "Please contact your nearest user support representive for information about this " +
-                "application.";
+            this.st_1.Text = "Please contact your nearest user support representive for information about this application.";
             // 
             // cb_ok
             // 
@@ -134,7 +134,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.st_copyright.Name = "st_copyright";
             this.st_copyright.Size = new System.Drawing.Size(212, 18);
             this.st_copyright.TabIndex = 3;
-            this.st_copyright.Text = "Copyright © 1994, all rights reserved";
+            this.st_copyright.Text = "Copyright © 2009, all rights reserved";
             // 
             // st_version
             // 
