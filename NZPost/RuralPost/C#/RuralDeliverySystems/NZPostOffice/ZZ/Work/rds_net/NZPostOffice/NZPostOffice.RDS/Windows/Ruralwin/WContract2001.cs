@@ -194,8 +194,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_cmbs.DataObject = new DCmbAddressList();
             dw_cmbs.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-
-
             dw_route_frequency.DataObject = new DRouteFrequency();
             dw_route_frequency.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
@@ -225,6 +223,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_renewals.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
             ((DRenewals)dw_renewals.DataObject).CellClick += new EventHandler(dw_renewals_clicked);
             ((DRenewals)dw_renewals.DataObject).CellDoubleClick += new EventHandler(dw_renewals_doubleclicked);
+
             dw_route_frequency.Constructor += new UserEventDelegate(dw_route_frequency_constructor);
             ((DRouteFrequency)dw_route_frequency.DataObject).CellDoubleClick += new EventHandler(dw_route_frequency_doubleclicked);
             ((DRouteFrequency)dw_route_frequency.DataObject).CellClick += new EventHandler(dw_route_frequency_clicked);
@@ -320,7 +319,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (il_Contract_no > -(1))
             {
                 idw_contract.Retrieve(new object[] { il_Contract_no });
-                ls_Title = "Contract:  ( " + il_Contract_no.ToString() + ") " + idw_contract.GetItem<Contract>(0).ConTitle;
+                ls_Title = "Contract: (" + il_Contract_no.ToString() + ") " + idw_contract.GetItem<Contract>(0).ConTitle;
                 li_Region = idw_contract.GetItem<Contract>(0).RegionId;
                 this.of_set_regionid(li_Region);
                 idw_fixed_assets.of_set_regionid(li_Region);
