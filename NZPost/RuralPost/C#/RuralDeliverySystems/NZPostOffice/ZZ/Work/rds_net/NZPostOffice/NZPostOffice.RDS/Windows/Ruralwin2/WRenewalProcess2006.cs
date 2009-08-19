@@ -90,6 +90,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw dw_bm_report;
 
+        // TJB  Aug2009
+        // Added window name label
+        // 'InitializeComponent' re-written by designer
+        private TextBox st_1;
+
         public Button cb_printbm;
 
         #endregion
@@ -126,6 +131,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             sScheduleDWs.Add("r_route_description_single_contract");
             sScheduleDWs.Add("r_mail_carried_single_contract");
             sScheduleDWs.Add("r_contract_summary");
+
+            this.st_1.Visible = false;
         }
 
         public virtual void ue_abort()
@@ -160,238 +167,270 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.dw_schedule = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_1 = new System.Windows.Forms.TabControl();
+            this.tabpage_1 = new System.Windows.Forms.TabPage();
+            this.cb_clear = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.l_1 = new System.Windows.Forms.Panel();
+            this.dw_criteria1 = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_listings = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_create_pending = new System.Windows.Forms.Button();
+            this.cb_bm = new System.Windows.Forms.Button();
+            this.cb_2s = new System.Windows.Forms.Button();
+            this.cb_bmlast = new System.Windows.Forms.Button();
+            this.cb_update_pv = new System.Windows.Forms.Button();
+            this.cb_printsked = new System.Windows.Forms.Button();
+            this.cb_searchs = new System.Windows.Forms.Button();
+            this.cb_1 = new System.Windows.Forms.Button();
+            this.tabpage_2 = new System.Windows.Forms.TabPage();
+            this.dw_bm_report = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_printbm = new System.Windows.Forms.Button();
+            this.st_1 = new System.Windows.Forms.TextBox();
+            this.tab_1.SuspendLayout();
+            this.tabpage_1.SuspendLayout();
+            this.tabpage_2.SuspendLayout();
             this.SuspendLayout();
-            this.dw_schedule = new URdsDw();
-            //!dw_schedule.DataObject = new RScheduleaSingleContract();
-            this.tab_1 = new TabControl();
-            Controls.Add(tab_1);
-            Controls.Add(dw_schedule);
-            this.Text = "Renewal Process";
-            this.Location = new System.Drawing.Point(1, 1);
-            this.Size = new System.Drawing.Size(593, 440);
             // 
             // st_label
             // 
-            st_label.Text = "RDRENPROC";
-            st_label.Location = new System.Drawing.Point(19, 479);
-            st_label.Visible = false;
+            this.st_label.Location = new System.Drawing.Point(19, 479);
+            this.st_label.Text = "RDRENPROC";
+            this.st_label.Visible = false;
             // 
             // dw_schedule
             // 
-            dw_schedule.TabIndex = 1;
-            dw_schedule.Location = new System.Drawing.Point(467, 328);
-            dw_schedule.Size = new System.Drawing.Size(83, 58);
-            dw_schedule.Visible = false;
+            this.dw_schedule.DataObject = null;
+            this.dw_schedule.FireConstructor = false;
+            this.dw_schedule.Location = new System.Drawing.Point(467, 328);
+            this.dw_schedule.Name = "dw_schedule";
+            this.dw_schedule.Size = new System.Drawing.Size(83, 58);
+            this.dw_schedule.TabIndex = 1;
+            this.dw_schedule.Visible = false;
             // 
             // tab_1
             // 
-            // Gegerated from create event for tab_1
-            tabpage_1 = new TabPage();
-            tabpage_2 = new TabPage();
-            tab_1.Controls.Add(tabpage_1);
-            tab_1.Controls.Add(tabpage_2);
-            tab_1.SelectedIndex = 0;
-            tab_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_1.TabIndex = 2;
-            tab_1.Size = new System.Drawing.Size(570, 400);
-            tab_1.Location = new System.Drawing.Point(5, 7);
+            this.tab_1.Controls.Add(this.tabpage_1);
+            this.tab_1.Controls.Add(this.tabpage_2);
+            this.tab_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_1.Location = new System.Drawing.Point(5, 3);
+            this.tab_1.Name = "tab_1";
+            this.tab_1.SelectedIndex = 0;
+            this.tab_1.Size = new System.Drawing.Size(570, 400);
+            this.tab_1.TabIndex = 2;
             // 
             // tabpage_1
             // 
-            // Gegerated from create event for tabpage_1
-            cb_clear = new UCb();
-            l_1 = new Panel();
-            dw_criteria1 = new URdsDw();
-            //!dw_criteria1.DataObject = new DRenewalProcessCriteria();
-            dw_listings = new URdsDw();
-            //!dw_listings.DataObject = new DListContractsForProcessing2001();
-            cb_create_pending = new Button();
-            cb_bm = new Button();
-            cb_2s = new Button();
-            cb_bmlast = new Button();
-            cb_update_pv = new Button();
-            cb_printsked = new Button();
-            cb_searchs = new Button();
-            cb_1 = new Button();
-            tabpage_1.Controls.Add(cb_clear);
-            tabpage_1.Controls.Add(l_1);
-            tabpage_1.Controls.Add(dw_criteria1);
-            tabpage_1.Controls.Add(dw_listings);
-            tabpage_1.Controls.Add(cb_create_pending);
-            tabpage_1.Controls.Add(cb_bm);
-            tabpage_1.Controls.Add(cb_2s);
-            tabpage_1.Controls.Add(cb_bmlast);
-            tabpage_1.Controls.Add(cb_update_pv);
-            tabpage_1.Controls.Add(cb_printsked);
-            tabpage_1.Controls.Add(cb_searchs);
-            tabpage_1.Controls.Add(cb_1);
-            tabpage_1.ToolTipText = "Contract selection tabpage for creating pendings and benchmarking";
-            tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_1.Text = "Benchmark";
-            tabpage_1.Name = tabpage_1.Text; //
-
-            tabpage_1.BackColor = System.Drawing.Color.FromArgb(4, 192, 192, 192);
-            tabpage_1.Top = 25;
-            tabpage_1.Left = 3;
-            tabpage_1.Size = new System.Drawing.Size(562, 362);
-
+            this.tabpage_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tabpage_1.Controls.Add(this.cb_clear);
+            this.tabpage_1.Controls.Add(this.l_1);
+            this.tabpage_1.Controls.Add(this.dw_criteria1);
+            this.tabpage_1.Controls.Add(this.dw_listings);
+            this.tabpage_1.Controls.Add(this.cb_create_pending);
+            this.tabpage_1.Controls.Add(this.cb_bm);
+            this.tabpage_1.Controls.Add(this.cb_2s);
+            this.tabpage_1.Controls.Add(this.cb_bmlast);
+            this.tabpage_1.Controls.Add(this.cb_update_pv);
+            this.tabpage_1.Controls.Add(this.cb_printsked);
+            this.tabpage_1.Controls.Add(this.cb_searchs);
+            this.tabpage_1.Controls.Add(this.cb_1);
+            this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_1.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_1.Name = this.tabpage_1.Text;
+            this.tabpage_1.Size = new System.Drawing.Size(562, 374);
+            this.tabpage_1.TabIndex = 0;
+            this.tabpage_1.Text = "Benchmark";
+            this.tabpage_1.ToolTipText = "Contract selection tabpage for creating pendings and benchmarking";
             // 
             // cb_clear
             // 
-            cb_clear.Text = "&Clear";
-            cb_clear.TabIndex = 13;
-            cb_clear.Location = new System.Drawing.Point(437, 32);
-            cb_clear.Size = new System.Drawing.Size(76, 22);
-            cb_clear.Click += new EventHandler(cb_clear_clicked);
-            // 
-            // dw_criteria1
-            // 
-            //?dw_criteria1.vscrollbar = false;
-            dw_criteria1.TabIndex = 12;
-            //!dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_criteria1.Location = new System.Drawing.Point(51, 4);
-            dw_criteria1.Size = new System.Drawing.Size(350, 90);
-            dw_criteria1.ItemChanged += new EventHandler(dw_criteria1_itemchanged);
-            //p!            dw_criteria1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria1_constructor);
-
+            this.cb_clear.Location = new System.Drawing.Point(437, 32);
+            this.cb_clear.Name = "cb_clear";
+            this.cb_clear.Size = new System.Drawing.Size(76, 22);
+            this.cb_clear.TabIndex = 13;
+            this.cb_clear.Text = "&Clear";
+            this.cb_clear.Click += new System.EventHandler(this.cb_clear_clicked);
             // 
             // l_1
             // 
-            l_1.Height = 1;
-            l_1.Width = 345;
-            l_1.BackColor = System.Drawing.Color.Black;
-            l_1.BorderStyle = BorderStyle.Fixed3D;
-            l_1.Location = new System.Drawing.Point(55, 338);
+            this.l_1.BackColor = System.Drawing.Color.Black;
+            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.l_1.Location = new System.Drawing.Point(55, 338);
+            this.l_1.Name = "l_1";
+            this.l_1.Size = new System.Drawing.Size(345, 1);
+            this.l_1.TabIndex = 14;
+            // 
+            // dw_criteria1
+            // 
+            this.dw_criteria1.DataObject = null;
+            this.dw_criteria1.FireConstructor = false;
+            this.dw_criteria1.Location = new System.Drawing.Point(51, 4);
+            this.dw_criteria1.Name = "dw_criteria1";
+            this.dw_criteria1.Size = new System.Drawing.Size(350, 90);
+            this.dw_criteria1.TabIndex = 12;
+            this.dw_criteria1.ItemChanged += new System.EventHandler(this.dw_criteria1_itemchanged);
             // 
             // dw_listings
             // 
-            dw_listings.TabIndex = 4;
-            dw_listings.Location = new System.Drawing.Point(51, 95);
-            dw_listings.Size = new System.Drawing.Size(350, 275);
-            //!dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            //p!            ((DListContractsForProcessing2001)dw_listings.DataObject).CellDoubleClick += new EventHandler(dw_listings_doubleclicked);
-            //p!            dw_listings.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listings_constructor);
+            this.dw_listings.DataObject = null;
+            this.dw_listings.FireConstructor = false;
+            this.dw_listings.Location = new System.Drawing.Point(51, 95);
+            this.dw_listings.Name = "dw_listings";
+            this.dw_listings.Size = new System.Drawing.Size(350, 275);
+            this.dw_listings.TabIndex = 4;
             // 
             // cb_create_pending
             // 
-            cb_create_pending.Text = "Create &Pendings";
-            cb_create_pending.Enabled = false;
-            cb_create_pending.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_create_pending.TabIndex = 3;
-            cb_create_pending.Location = new System.Drawing.Point(437, 196);
-            cb_create_pending.Size = new System.Drawing.Size(97, 22);
-            cb_create_pending.Tag = "ComponentName=Create Pendings;";
-            cb_create_pending.Click += new EventHandler(cb_create_pending_clicked);
+            this.cb_create_pending.Enabled = false;
+            this.cb_create_pending.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_create_pending.Location = new System.Drawing.Point(437, 196);
+            this.cb_create_pending.Name = "cb_create_pending";
+            this.cb_create_pending.Size = new System.Drawing.Size(97, 22);
+            this.cb_create_pending.TabIndex = 3;
+            this.cb_create_pending.Tag = "ComponentName=Create Pendings;";
+            this.cb_create_pending.Text = "Create &Pendings";
+            this.cb_create_pending.Click += new System.EventHandler(this.cb_create_pending_clicked);
             // 
             // cb_bm
             // 
-            cb_bm.Text = "Benchmark";
-            cb_bm.Enabled = false;
-            cb_bm.Font = new System.Drawing.Font("MS Sans Serif", 8, cb_bm.Font.Style);
-            cb_bm.TabIndex = 5;
-            cb_bm.Location = new System.Drawing.Point(437, 230);
-            cb_bm.Size = new System.Drawing.Size(97, 22);
-            cb_bm.Tag = "ComponentName=Benchmark;";
-            cb_bm.Click += new EventHandler(cb_bm_clicked);
+            this.cb_bm.Enabled = false;
+            this.cb_bm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_bm.Location = new System.Drawing.Point(437, 230);
+            this.cb_bm.Name = "cb_bm";
+            this.cb_bm.Size = new System.Drawing.Size(97, 22);
+            this.cb_bm.TabIndex = 5;
+            this.cb_bm.Tag = "ComponentName=Benchmark;";
+            this.cb_bm.Text = "Benchmark";
+            this.cb_bm.Click += new System.EventHandler(this.cb_bm_clicked);
             // 
             // cb_2s
             // 
-            cb_2s.Text = "Select &All";
-            cb_2s.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_2s.TabIndex = 2;
-            cb_2s.Location = new System.Drawing.Point(437, 88);
-            cb_2s.Size = new System.Drawing.Size(76, 22);
-            cb_2s.Click += new EventHandler(cb_2s_clicked);
+            this.cb_2s.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_2s.Location = new System.Drawing.Point(437, 88);
+            this.cb_2s.Name = "cb_2s";
+            this.cb_2s.Size = new System.Drawing.Size(76, 22);
+            this.cb_2s.TabIndex = 2;
+            this.cb_2s.Text = "Select &All";
+            this.cb_2s.Click += new System.EventHandler(this.cb_2s_clicked);
             // 
             // cb_bmlast
             // 
-            cb_bmlast.Text = "Benchmark Last";
-            cb_bmlast.Enabled = false;
-            cb_bmlast.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_bmlast.TabIndex = 6;
-            cb_bmlast.Location = new System.Drawing.Point(437, 264);
-            cb_bmlast.Size = new System.Drawing.Size(97, 22);
-            cb_bmlast.Tag = "ComponentName=Benchmark Last;";
-            cb_bmlast.Click += new EventHandler(cb_bmlast_clicked);
+            this.cb_bmlast.Enabled = false;
+            this.cb_bmlast.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_bmlast.Location = new System.Drawing.Point(437, 264);
+            this.cb_bmlast.Name = "cb_bmlast";
+            this.cb_bmlast.Size = new System.Drawing.Size(97, 22);
+            this.cb_bmlast.TabIndex = 6;
+            this.cb_bmlast.Tag = "ComponentName=Benchmark Last;";
+            this.cb_bmlast.Text = "Benchmark Last";
+            this.cb_bmlast.Click += new System.EventHandler(this.cb_bmlast_clicked);
             // 
             // cb_update_pv
             // 
-            cb_update_pv.Text = "Update PValues";
-            cb_update_pv.Enabled = false;
-            cb_update_pv.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_update_pv.TabIndex = 7;
-            cb_update_pv.Location = new System.Drawing.Point(437, 298);
-            cb_update_pv.Size = new System.Drawing.Size(97, 22);
-            cb_update_pv.Tag = "ComponentName=Update Payment Values;";
-            cb_update_pv.Click += new EventHandler(cb_update_pv_clicked);
+            this.cb_update_pv.Enabled = false;
+            this.cb_update_pv.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_update_pv.Location = new System.Drawing.Point(437, 298);
+            this.cb_update_pv.Name = "cb_update_pv";
+            this.cb_update_pv.Size = new System.Drawing.Size(97, 22);
+            this.cb_update_pv.TabIndex = 7;
+            this.cb_update_pv.Tag = "ComponentName=Update Payment Values;";
+            this.cb_update_pv.Text = "Update PValues";
+            this.cb_update_pv.Click += new System.EventHandler(this.cb_update_pv_clicked);
             // 
             // cb_printsked
             // 
-            cb_printsked.Text = "Print Schedules...";
-            cb_printsked.Enabled = false;
-            cb_printsked.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_printsked.TabIndex = 8;
-            cb_printsked.Location = new System.Drawing.Point(437, 332);
-            cb_printsked.Size = new System.Drawing.Size(97, 22);
-            cb_printsked.Tag = "ComponentName=Print Schedules;";
-            cb_printsked.Click += new EventHandler(cb_printsked_clicked);
+            this.cb_printsked.Enabled = false;
+            this.cb_printsked.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_printsked.Location = new System.Drawing.Point(437, 332);
+            this.cb_printsked.Name = "cb_printsked";
+            this.cb_printsked.Size = new System.Drawing.Size(97, 22);
+            this.cb_printsked.TabIndex = 8;
+            this.cb_printsked.Tag = "ComponentName=Print Schedules;";
+            this.cb_printsked.Text = "Print Schedules...";
+            this.cb_printsked.Click += new System.EventHandler(this.cb_printsked_clicked);
             // 
             // cb_searchs
             // 
-            this.AcceptButton = cb_searchs;
-            cb_searchs.Text = "&Search";
-            cb_searchs.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_searchs.TabIndex = 5;
-            cb_searchs.Location = new System.Drawing.Point(437, 6);
-            cb_searchs.Size = new System.Drawing.Size(76, 22);
-            cb_searchs.Click += new EventHandler(cb_searchs_clicked);
+            this.cb_searchs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_searchs.Location = new System.Drawing.Point(437, 6);
+            this.cb_searchs.Name = "cb_searchs";
+            this.cb_searchs.Size = new System.Drawing.Size(76, 22);
+            this.cb_searchs.TabIndex = 5;
+            this.cb_searchs.Text = "&Search";
+            this.cb_searchs.Click += new System.EventHandler(this.cb_searchs_clicked);
             // 
             // cb_1
             // 
-            cb_1.Text = "&Unselect All";
-            cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 5;
-            cb_1.Location = new System.Drawing.Point(437, 120);
-            cb_1.Size = new System.Drawing.Size(76, 22);
-            cb_1.Click += new EventHandler(cb_1_clicked);
+            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_1.Location = new System.Drawing.Point(437, 120);
+            this.cb_1.Name = "cb_1";
+            this.cb_1.Size = new System.Drawing.Size(76, 22);
+            this.cb_1.TabIndex = 5;
+            this.cb_1.Text = "&Unselect All";
+            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
             // 
             // tabpage_2
             // 
-            // Gegerated from create event for tabpage_2
-            dw_bm_report = new URdsDw();
-            //!dw_bm_report.DataObject = new RBenchmarkReport2006();
-            //!dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            cb_printbm = new Button();
-            tabpage_2.Controls.Add(dw_bm_report);
-            tabpage_2.Controls.Add(cb_printbm);
-            tabpage_2.ToolTipText = "Benchmark report - enabled only when benchmark process is successful";
-            tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_2.Text = "Report";
-            tabpage_2.Name = tabpage_2.Text;//
-
-            tabpage_2.Enabled = false;
-            tabpage_2.Top = 25;
-            tabpage_2.Left = 3;
-            tabpage_2.Size = new System.Drawing.Size(562, 362);
+            this.tabpage_2.Controls.Add(this.dw_bm_report);
+            this.tabpage_2.Controls.Add(this.cb_printbm);
+            this.tabpage_2.Enabled = false;
+            this.tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_2.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_2.Name = this.tabpage_2.Text;
+            this.tabpage_2.Size = new System.Drawing.Size(562, 374);
+            this.tabpage_2.TabIndex = 1;
+            this.tabpage_2.Text = "Report";
+            this.tabpage_2.ToolTipText = "Benchmark report - enabled only when benchmark process is successful";
             // 
             // dw_bm_report
             // 
-            dw_bm_report.TabIndex = 12;
-            dw_bm_report.Location = new System.Drawing.Point(5, 8);
-            dw_bm_report.Size = new System.Drawing.Size(550, 318);
-            //dw_bm_report.DoubleClick += new EventHandler(dw_bm_report_doubleclicked);
-            //p!            dw_bm_report.DataObject.RetrieveStart += new RetrieveEventHandler(dw_bm_report_retrievestart);
-            //p!            dw_bm_report.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_bm_report_constructor);
+            this.dw_bm_report.DataObject = null;
+            this.dw_bm_report.FireConstructor = false;
+            this.dw_bm_report.Location = new System.Drawing.Point(5, 8);
+            this.dw_bm_report.Name = "dw_bm_report";
+            this.dw_bm_report.Size = new System.Drawing.Size(550, 318);
+            this.dw_bm_report.TabIndex = 12;
             // 
             // cb_printbm
             // 
-            cb_printbm.Text = "&Print";
-            cb_printbm.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_printbm.TabIndex = 3;
-            cb_printbm.Location = new System.Drawing.Point(486, 334);
-            cb_printbm.Size = new System.Drawing.Size(70, 22);
-            cb_printbm.Click += new EventHandler(cb_printbm_clicked);
-            this.ResumeLayout();
+            this.cb_printbm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_printbm.Location = new System.Drawing.Point(486, 334);
+            this.cb_printbm.Name = "cb_printbm";
+            this.cb_printbm.Size = new System.Drawing.Size(70, 22);
+            this.cb_printbm.TabIndex = 3;
+            this.cb_printbm.Text = "&Print";
+            this.cb_printbm.Click += new System.EventHandler(this.cb_printbm_clicked);
+            // 
+            // st_1
+            // 
+            this.st_1.BackColor = System.Drawing.SystemColors.Control;
+            this.st_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.st_1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.st_1.Location = new System.Drawing.Point(8, 410);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(157, 13);
+            this.st_1.TabIndex = 4;
+            this.st_1.Text = "WRenewalProcess2006";
+            // 
+            // WRenewalProcess2006
+            // 
+            this.AcceptButton = this.cb_searchs;
+            this.ClientSize = new System.Drawing.Size(585, 427);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.tab_1);
+            this.Controls.Add(this.dw_schedule);
+            this.Location = new System.Drawing.Point(1, 1);
+            this.Name = "WRenewalProcess2006";
+            this.Text = "Renewal Process";
+            this.Controls.SetChildIndex(this.dw_schedule, 0);
+            this.Controls.SetChildIndex(this.tab_1, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_1.ResumeLayout(false);
+            this.tabpage_1.ResumeLayout(false);
+            this.tabpage_2.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>
@@ -1113,7 +1152,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lContract = dw_criteria.GetItem<RenewalProcessCriteria>(0).ContractNo;
             if (StaticFunctions.f_nempty(lRenewal) && StaticFunctions.f_nempty(lContract))
             {
-                MessageBox.Show("A renewal group or a contract has to be selected prior to performing a search on " + "the database", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A renewal group or a contract has to be selected prior to\n" 
+                                 + "performing a search on the database."
+                               , "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bCheckRows = false;
             }
             else if (!(StaticFunctions.f_nempty(lRenewal)))
@@ -1128,9 +1169,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 sIndicator = RDSDataService.GetNvrForzenIndicatorFormNonVehicle(lRenewal);
                 if (sIndicator != "Y")
                 {
-                    MessageBox.Show("The current renewal group cannot be selected because its renewal rates have not " 
-                                     + "been frozen", "", 
-                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The current renewal group cannot be selected because \n" 
+                                     + "its renewal rates have not been frozen"
+                                     , "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     bCheckRows = false;
                 }
                 else
