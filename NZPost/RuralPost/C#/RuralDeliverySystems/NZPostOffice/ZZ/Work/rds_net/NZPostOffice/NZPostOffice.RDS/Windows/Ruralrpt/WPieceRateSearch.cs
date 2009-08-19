@@ -19,10 +19,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             InitializeComponent();
 
             dw_results.DataObject = new DReportGenericResults();
-
+            // TJB  RD7_0043  Aug2009
+            // Moved line instantiating dw_criteria
+            dw_criteria.DataObject = new DReportGenericCriteriaWithMonth();
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).GotFocus += new EventHandler(dw_criteria_GotFocus);
 
-            dw_criteria.DataObject = new DReportGenericCriteriaWithMonth();
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
             ((DReportGenericCriteriaWithMonth)dw_criteria.DataObject).TextBoxLostFocus += new System.EventHandler(dw_criteria_ItemChange);
             ((Metex.Windows.DataEntityGrid)dw_results.GetControlByName("grid")).CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(pb_open_clicked);
@@ -79,29 +80,29 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             }
             if (lOutlet == null)
             {
-                sParm += "\r\nAll Outlets";
+                sParm += "\nAll Outlets";
             }
             else
             {
                 //SELECT outlet.o_name  INTO :sTemp  FROM outlet  WHERE outlet.outlet_id = :lOutlet;
                 sTemp = RDSDataService.GetOutletValue(lOutlet);
-                sParm += "\r\n" + sTemp;
+                sParm += "\n" + sTemp;
             }
             if (lRenGroup == null)
             {
-                sParm += "\r\nAll Renewal Groups";
+                sParm += "\nAll Renewal Groups";
             }
             else
             {
                 //SELECT renewal_group.rg_description  INTO :sTemp  FROM renewal_group  WHERE renewal_group.rg_code = :lRenGroup   ;
                 sTemp = RDSDataService.GetRenewalGroupValue(lRenGroup, ref sqlCode, ref sqlErrText);
-                sParm += "\r\n" + sTemp;
+                sParm += "\n" + sTemp;
             }
             // get contract
             lRow = dw_results.GetSelectedRow(0);
             if (lRow == 0)
             {
-                sParm += "\r\nAll Contracts";
+                sParm += "\nAll Contracts";
             }
             else
             {
@@ -111,12 +112,12 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                     lContract = dw_results.GetItem<ReportGenericResults>(dw_results.GetSelectedRow(0)).ContractNo;//, "contract_no");
                     //SELECT contract.con_title INTO :sTemp  FROM contract  WHERE contract.contract_no = :lContract   ;
                     sTemp = RDSDataService.GetContractValue(lContract, ref sqlCode, ref sqlErrText);
-                    sParm += "\r\n" + sTemp + "  ( " + lContract.ToString() + ")";
+                    sParm += "\n" + sTemp + " (" + lContract.ToString() + ")";
                 }
-                else
-                {
-                    // sParm+='\r\nSelected Contracts'
-                }
+                //else
+                //{
+                //    // sParm+='\nSelected Contracts'
+                //}
             }
             return sParm;
         }
@@ -136,7 +137,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //!if (dw_results.GetSelectedRow(0) == 0)
             if (dw_results.GetSelectedRow(0) < 0)
             {
-                MessageBox.Show("You must select a contract", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contract"
+                               , ""
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             StaticVariables.gnv_app.of_get_parameters().miscstringparm = wf_getparms();
@@ -168,10 +171,17 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
         public virtual void dw_criteria_ItemChange(object sender, EventArgs e)
         {           
-            ((TextBox)dw_criteria.GetControlByName("monthyear1")).Text = dw_criteria.GetControlByName("monthyear").Text;
+            ((TextBox)dw_criteria.GetControlByName("monthyear1")).Text 
+                = dw_criteria.GetControlByName("monthyear").Text;
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).BringToFront();
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).Enabled = true;
         }
         #endregion
+
+        // TJB  RD7_0043  Aug2009
+        // Added (accidentally)
+        private void dw_results_Click(object sender, EventArgs e)
+        {
+        }
     }
 }

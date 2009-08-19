@@ -30,46 +30,47 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.SuspendLayout();
-            // 
-            // st_label
-            // 
-            st_label.Visible = true;
-            st_label.Text = "w_piece_rate_search";
-            st_label.ForeColor = System.Drawing.Color.Black;
-            st_label.Location = new System.Drawing.Point(5, 342);
             // 
             // dw_criteria
             // 
-           
-            dw_criteria.Height = 163;
-            dw_criteria.Width = 295;
-            dw_criteria.Top = 2;
-          
-           
+            this.dw_criteria.Location = new System.Drawing.Point(3, 2);
+            this.dw_criteria.Size = new System.Drawing.Size(295, 163);
             // 
             // dw_results
             // 
-            //!dw_results.DataObject = new DReportGenericResults();
-            dw_results.Height = 165;
-            dw_results.Width = 295;
-            dw_results.Top = 170;
-            
-           
+            this.dw_results.Location = new System.Drawing.Point(3, 170);
+            this.dw_results.Size = new System.Drawing.Size(295, 165);
+            this.dw_results.Click += new System.EventHandler(this.dw_results_Click);
             // 
             // pb_search
             // 
-            pb_search.Top = 4;
+            this.pb_search.Location = new System.Drawing.Point(302, 4);
             // 
             // pb_open
             // 
-            pb_open.Top = 171;
-            pb_open.Left = 303;
-            this.Name = "w_piece_rate_search";
-            this.Size = new System.Drawing.Size(378, 388);
-            this.ResumeLayout();
+            this.pb_open.Location = new System.Drawing.Point(303, 171);
+            // 
+            // st_label
+            // 
+            this.st_label.ForeColor = System.Drawing.Color.Black;
+            this.st_label.Location = new System.Drawing.Point(5, 342);
+            this.st_label.Text = "WPieceRateSearch";
+            // 
+            // WPieceRateSearch
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(372, 356);
+            this.Name = "WPieceRateSearch";
+            this.Controls.SetChildIndex(this.pb_open, 0);
+            this.Controls.SetChildIndex(this.pb_search, 0);
+            this.Controls.SetChildIndex(this.dw_results, 0);
+            this.Controls.SetChildIndex(this.dw_criteria, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
