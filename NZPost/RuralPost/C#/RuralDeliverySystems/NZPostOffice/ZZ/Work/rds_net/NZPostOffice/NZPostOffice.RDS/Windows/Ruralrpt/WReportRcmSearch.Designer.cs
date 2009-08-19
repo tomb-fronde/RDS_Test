@@ -38,7 +38,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // st_label
             // 
-            st_label.Text = "RDRPTRCS";
+            st_label.Text = "WReportRcmSearch";
             st_label.Height = 14;
             st_label.Location = new System.Drawing.Point(3, 139);
             // 

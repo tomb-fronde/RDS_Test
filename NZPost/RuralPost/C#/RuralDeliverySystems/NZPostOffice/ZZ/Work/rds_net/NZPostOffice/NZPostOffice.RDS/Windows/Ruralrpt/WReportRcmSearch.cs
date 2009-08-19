@@ -29,7 +29,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         public override void pfc_preopen()
         {
             base.pfc_preopen();
-            st_label.Text = "w_report_rcm_search";
+            st_label.Text = "WReportRcmSearch";
             // DataControlBuilder dwChild
             // long lNull
             // 
@@ -109,34 +109,34 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             }
             if (lOutlet == null)
             {
-                sParm += "\r\nAll Outlets";
+                sParm += "\nAll Outlets";
             }
             else
             {
                 //SELECT outlet.o_name  INTO :sTemp  FROM outlet  WHERE outlet.outlet_id = :lOutlet;
                 sTemp = RDSDataService.GetOutletValue(lOutlet);
-                sParm += "\r\n" + sTemp;
+                sParm += "\n" + sTemp;
             }
             if (lRenGroup == null)
             {
-                sParm += "\r\nAll Renewal Groups";
+                sParm += "\nAll Renewal Groups";
             }
             else
             {
                 //SELECT renewal_group.rg_description  INTO :sTemp  FROM renewal_group  WHERE renewal_group.rg_code = :lRenGroup;
                 sTemp = RDSDataService.GetRenewalGroupValue(lRenGroup, ref sqlCode, ref sqlErrText);
-                sParm += "\r\n" + sTemp;
+                sParm += "\n" + sTemp;
             }
             // May 1999
             if (lContractType == null)
             {
-                sParm += "\r\nAll Contract Types";
+                sParm += "\nAll Contract Types";
             }
             else
             {
                 //SELECT contract_type.contract_type  INTO :sTemp  FROM contract_type  WHERE contract_type.ct_key = :lContractType   ;
                 sTemp = RDSDataService.GetContractTypeValue(lContractType);
-                sParm += "\r\n" + sTemp;
+                sParm += "\n" + sTemp;
             }
             return sParm;
         }
