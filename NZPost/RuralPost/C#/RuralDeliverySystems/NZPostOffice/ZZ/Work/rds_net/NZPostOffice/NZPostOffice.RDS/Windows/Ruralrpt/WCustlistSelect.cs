@@ -154,7 +154,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             //  TJB  Jan 2005
             //  Note: For some reason, if this button is left visible
-            //  while the addresses are being retrieved  ( it takes 
+            //  while the addresses are being retrieved (it takes 
             //  a loooong time!), it shows through the overlying 
             //  label window until the data has been retrieved and 
             //  displayed.  Enabling it after the 'OpenSheet' works,
