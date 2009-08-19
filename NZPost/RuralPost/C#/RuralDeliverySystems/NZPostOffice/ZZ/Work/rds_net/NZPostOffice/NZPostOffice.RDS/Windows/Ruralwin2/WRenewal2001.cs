@@ -120,6 +120,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private int? nPrevFtKey;
         private System.Decimal dcPrevVehBenchmark = -1;
 
+        // TJB  RD7_0040  Aug2009  -- Added --
+        private int? nPrevVolume, nPrevRgCode;
+
         #endregion
 
         public WRenewal2001()
@@ -151,6 +154,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //jlwang:moved from IC
             dw_renewal.Constructor += new UserEventDelegate(dw_renewal_constructor);
             dw_renewal.WinPfcSave += new UserEventDelegate1(this.pfc_save); //added by jlwang
+            // TJB  RD7_0040  Aug2009  -- Added --
+            dw_renewal.EditChanged += new EventHandler(dw_renewal_editchanged);
 
             dw_renewal_freq_adjust.DataObject.RetrieveStart += new RetrieveEventHandler(dw_renewal_freq_adjust_retrievestart);
             dw_renewal_freq_adjust.Constructor += new UserEventDelegate(dw_renewal_freq_adjust_constructor);
@@ -159,7 +164,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_renewal_freq_adjust.PfcDeleteRow += new UserEventDelegate(dw_renewal_freq_adjust_pfc_deleterow);
             dw_renewal_freq_adjust.WinPfcSave += new UserEventDelegate1(this.pfc_save); //added by jlwang
             dw_renewal_freq_adjust.Click += new EventHandler(dw_renewal_freq_adjust_clicked);
-
 
             dw_renewal_cont_adjustments.Constructor += new UserEventDelegate(dw_renewal_cont_adjustments_constructor);
             dw_renewal_cont_adjustments.PfcPreDeleteRow += new UserEventDelegate1(dw_renewal_cont_adjustments_pfc_predeleterow);
@@ -356,7 +360,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_article_count.Controls.Add(this.dw_renewal_artical_counts);
             this.tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_article_count.Location = new System.Drawing.Point(4, 22);
-            this.tabpage_article_count.Name = this.tabpage_article_count.Text;
+            // TJB  RD7_0040  Aug2009:  Changed from 'this.tabpage_article_count.Text' to literal
+            // Previously, the Text value was null, and assigning Null to Name 
+            // caused the tab to not be displayed.
+            this.tabpage_article_count.Name = "tabpage_article_count";
             this.tabpage_article_count.Size = new System.Drawing.Size(582, 364);
             this.tabpage_article_count.TabIndex = 5;
             this.tabpage_article_count.Tag = "ComponentName=Renewal Article Counts;";
@@ -512,7 +519,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 m_sheet._m_renewalrates.Visible = true;
 
             }
-            //  TWC 13/06/2003 Manually showing the article count tab if have privilage
+            //  TWC 13/06/2003 Manually showing the article count tab if have privilege
+          
             this.tabpage_article_count.Show();
 
             //  TJB  SR4695  Jan-2007
@@ -544,6 +552,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nPrevFtKey = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
                 dcPrevVehBenchmark = wf_getVehBenchmark();
             }
+            nRow = dw_renewal.RowCount;
+            nRow = dw_renewal.GetRow();
+            nPrevRgCode = idw_renewal.GetItem<Renewal>(0).ConRgCodeAtRenewal;
+            nPrevVolume = idw_renewal.GetItem<Renewal>(0).ConVolumeAtRenewal;
+            int? n = nPrevRgCode;
+            n = nPrevVolume;
 
             //added by jlwang
             dw_renewal.URdsDw_GetFocus(null, null);
@@ -556,14 +570,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             StaticVariables.gnv_app.of_get_parameters().longparm = il_contract;
             StaticVariables.gnv_app.of_get_parameters().integerparm = il_sequence;
             // if g_security.Access_Groups[1] = 7 then
-            // 	gnv_App.of_Get_Parameters ( ).booleanparm =  ( tab_renewal.tabpage_renewal.dw_renewal.getitemstring ( 1, "con_acceptance_flag") = 'Y')
+            // 	gnv_App.of_Get_Parameters().booleanparm = (tab_renewal.tabpage_renewal.dw_renewal.getitemstring(1,"con_acceptance_flag") = 'Y')
             // else
-            // 	gnv_App.of_Get_Parameters ( ).BooleanParm = True
+            // 	gnv_App.of_Get_Parameters().BooleanParm = True
             // end if
             //  tjb  SR4695  Jan-2007
             if (il_contract > 5999)
             {
-                MessageBox.Show("Override rates may only be entered for rural delivery contracts.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Override rates may only be entered for rural delivery contracts."
+                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             //open(w_contract_rate2001);
@@ -583,7 +598,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //   ( See dw_contract_vehicle.updatestart)
             if (ib_new_veh_added && ib_new_veh_validated)
             {
-                ll_response = MessageBox.Show("Do you wish to review the overrides for this contract?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ll_response = MessageBox.Show("Do you wish to review the overrides for this contract?"
+                                             , this.Text
+                                             , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (ll_response == DialogResult.Yes)
                 {
                     ib_new_veh_added = false;
@@ -627,7 +644,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ds_msg = ds_msg + "Updating "+ll_rf_modcount.ToString()  &
             + " records in route_frequency \n"
             end if
-            MessageBox.Show (  ds_msg ,  "w_renewal2001.pfc_save" )
+            MessageBox.Show(ds_msg, "w_renewal2001.pfc_save" )
             // -------------------------------------------------------------  */
             if (ll_fd_delcount > 0)
             {
@@ -654,7 +671,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //!ids_route_frequency.Update();
                 ids_route_frequency.Save();
             }
-
             return SUCCESS;
         }
 
@@ -784,7 +800,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //if (ld_purchased_date != null && idw_vehicle.DataObject.Find(new KeyValuePair<string, object>("v_purchased_date", ld_purchased_date)) > 0)
                     if (ld_purchased_date != null && find_pruchased_date(1, idw_vehicle.RowCount, ld_purchased_date))
                     {
-                        MessageBox.Show("The purchased date has to be later than other existing vehicles' purchase date.", "Rural Delivery System with NPAD Extensions(enabled)", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show("The purchased date has to be later than other existing vehicles' purchase date."
+                                       , ""
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         //?is_dberrormsg = "The purchased date has to be later than other existing vehicles\' purchase date.";
                         //idw_vehicle.GetItem<ContractVehicle>(arow).VPurchasedDate = null;
                         return "v_purchased_date";
@@ -815,88 +833,114 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (idw_renewal.GetItem<Renewal>(0).ConStartDate == null)
             {
                 sColumn = "con_start_date";
-                MessageBox.Show("This renewal cannot be accepted becase there is no contract start date entered", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because there is no contract start date entered."
+                               , this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if ((idw_renewal.GetItem<Renewal>(0).ConExpiryDate == null))
             {
                 sColumn = "con_expiry_date";
-                MessageBox.Show("This renewal cannot be accepted because there is no contract expiry date", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because there is no contract expiry date."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (idw_renewal.GetItem<Renewal>(0).ConStartDate > idw_renewal.GetItem<Renewal>(0).ConExpiryDate)
             {
                 sColumn = "con_start_date";
-                MessageBox.Show("This renewal cannot be accepted because its start date is greater then its expiry" + " date", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because its start date is greater then its expiry date"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek))
             {
-                MessageBox.Show("This renewal cannot be accepted because the processing hours per week have not be" + "en defined yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the processing hours per week have not been defined yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_acceptance_flag";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConRenewalBenchmarkPrice))
             {
-                MessageBox.Show("This renewal cannot be accepted because the benchmark price has not been defined " + "yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the benchmark price has not been defined yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_acceptance_flag";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConRenewalPaymentValue))
             {
-                MessageBox.Show("This renewal cannot be accepted because the payment value has not been entered ye" + "t", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the payment value has not been entered yet."
+                                , this.Text
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_renewal_payment_value";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConVolumeAtRenewal))
             {
-                MessageBox.Show("This renewal cannot be accepted because the volume has not been entered yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the volume has not been entered yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_volume_at_renewal";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConDelHrsWeekAtRenewal))
             {
-                MessageBox.Show("This renewal cannot be accepted because the delivery hours per week has not been " + "entered yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the delivery hours per week has not been entered yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_del_hrs_week_at_renewal";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConDistanceAtRenewal))
             {
-                MessageBox.Show("This renewal cannot be accepted because the distance has not been entered yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the distance has not been entered yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_distance_at_renewal";
             }
             else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConNoCustomersAtRenewal))
             {
-                MessageBox.Show("This renewal cannot be accepted because the number of customers has not been ente" + "red yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This renewal cannot be accepted because the number of customers has not been entered yet."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sColumn = "con_no_customers_at_renewal";
             }
             else
             {
                 lContract = idw_renewal.GetItem<Renewal>(0).ContractNo;
                 lSequence = idw_renewal.GetItem<Renewal>(0).ContractSeqNumber;
-                //select con_expiry_date into :dDate from contract_renewals where contract_no = :lContract and contract_seq_number = :lSequence;
+                //select con_expiry_date into :dDate from contract_renewals 
+                // where contract_no = :lContract and contract_seq_number = :lSequence;
                 dDate = RDSDataService.GetConExpiryDateFromContractRenewals(lContract, lSequence);
                 if (dDate < idw_renewal.GetItem<Renewal>(0).ConStartDate)
                 {
                     sColumn = "con_start_date";
-                    MessageBox.Show("This renewal cannot be accepted because its start date occurs before the previuos" + " renewals expiry date", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This renewal cannot be accepted because its start date occurs before the previous renewals expiry date."
+                                   , this.Text
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    //select count(*) into :lCount from contractor_renewals where contract_no = :lContract and contract_seq_number = :lSequence;
+                    //select count(*) into :lCount from contractor_renewals 
+                    // where contract_no = :lContract and contract_seq_number = :lSequence;
                     lCount = RDSDataService.GetContractorRenewalsCount2(lContract, lSequence);
                     if (StaticFunctions.f_nempty(lCount))
                     {
-                        MessageBox.Show("This renewal cannot be accepted because there are no owner drivers attached to it" + " yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("This renewal cannot be accepted because there are no owner drivers attached to it yet."
+                                       , this.Text
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         sColumn = "con_acceptance_flag";
                     }
                     else
                     {
                         //  PBY 12/06/2002 SR#4402			
-                        // select count ( *)
-                        // 			into :lCount
-                        // 			from contract_vehical
-                        // 			where contract_no = :lContract
-                        // 			  and contract_seq_number = :lSequence
-                        //            and cv_vehical_status = 'A';
+                        // select count(*) into :lCount
+                        //   from contract_vehical
+                        //  where contract_no = :lContract
+                        //    and contract_seq_number = :lSequence
+                        //    and cv_vehical_status = 'A';
 
                         //select f_GetLatestVehicle ( :lContract, :lSequence) into :lCount from dummy;
                         lCount = RDSDataService.GetLatestVehicleFormDummy(lContract, lSequence);
                         if (StaticFunctions.f_nempty(lCount))
                         {
-                            MessageBox.Show("This renewal cannot be accepted because there are no vehicles attached to it yet", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("This renewal cannot be accepted because there are no vehicles attached to it yet."
+                                           , this.Text
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             sColumn = "con_acceptance_flag";
                         }
                     }
@@ -1122,7 +1166,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_rows = ((DsRouteFrequency)ids_route_frequency).Retrieve(il_contract);
             if (ll_rows < 0)
             {
-                MessageBox.Show("No route_frequency data found for this contract.\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No route_frequency data found for this contract.\n"
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ll_row = -(1);
             }
             else
@@ -1130,11 +1176,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_row = ids_route_frequency.Find(new KeyValuePair<string, Object>("sf_key", il_sfKey), new KeyValuePair<string, object>("rf_delivery_days", is_delDays));//.Find( ls_find ).Length;
                 if (ll_row < 0)
                 {
-                    MessageBox.Show("Error finding route_frequency row to update.\n" + "Searching for\n" + "     sf_key        = " + (il_sfKey.ToString()) + '\n' + "     delivery_days = " + is_delDays, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error finding route_frequency row to update.\n" 
+                                     + "Searching for\n" 
+                                     + "     sf_key        = " + (il_sfKey.ToString()) + '\n' 
+                                     + "     delivery_days = " + is_delDays
+                                   , "ERROR"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else if (ll_row == 0)
                 {
-                    MessageBox.Show("No matching route_frequency row found to update.\n" + "Searching for\n" + "     sf_key        = " + il_sfKey.ToString() + '\n' + "     delivery_days = " + is_delDays, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("No matching route_frequency row found to update.\n" 
+                                     + "Searching for\n" 
+                                     + "     sf_key        = " + il_sfKey.ToString() + '\n' 
+                                     + "     delivery_days = " + is_delDays
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
                 {
@@ -1327,11 +1383,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
 
                 // modified by jlwang: pls check the logic of pb,make sure it the same to pb
-                this.pfc_save();//iw_renewal.pfc_save();
+                this.pfc_save();         //iw_renewal.pfc_save();
                 ll_rc = 0;
                 if (ll_rc < 0)
                 {
-                    MessageBox.Show("Database updates failed!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Database updates failed!"
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return; //return FAILURE;
                 }
             }
@@ -1362,7 +1420,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ls_user = StaticVariables.gnv_app.of_getuserid();
             if (ls_user == null || !(ls_user == "sysadmin"))
             {
-                MessageBox.Show("Only the system administrator may delete frequency adjustments. ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Only the system administrator may delete frequency adjustments. "
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -1;// PREVENT_ACTION;
 
             }
@@ -1373,7 +1433,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check that a row has been selected
             if ((ll_row == null) || ll_row < 0)
             {
-                MessageBox.Show("Please select an adjustment to be deleted \n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select an adjustment to be deleted \n"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -1;// PREVENT_ACTION;
 
             }
@@ -1391,13 +1453,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check that we're dealing with the correct contract renewal
             if (!(ll_seq >= il_current_seq))
             {
-                MessageBox.Show("Frequency adjustments may only be deleted \n" + " from the current or pending contract renewal.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Frequency adjustments may only be deleted \n" 
+                                 + " from the current or pending contract renewal."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -1;//PREVENT_ACTION;
             }
             //  Check to see if more than one row has been selected
             if (!(ll_row2 == null) && ll_row2 > ll_row)
             {
-                MessageBox.Show("Only one frequency adjustment may only be deleted at a time. \n" + "Please select the frequency adjustment you want to delete.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Only one frequency adjustment may only be deleted at a time. \n" 
+                                 + "Please select the frequency adjustment you want to delete."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //  Unselect the rows
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 while (ll_row2 > 0)
@@ -1412,7 +1480,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Only the last row may be deleted
             if (!(ll_row == ll_rows - 1))
             {
-                MessageBox.Show("Only the last frequency adjustment may be deleted.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Only the last frequency adjustment may be deleted."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //  Unselect the row
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 return -1;// PREVENT_ACTION;
@@ -1420,7 +1490,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check that the frequency adjustment has not been confirmed
             if (!(ls_confirmed == null || ls_confirmed == "N"))
             {
-                MessageBox.Show("Only frequency adjustments that have not been confirmed may be deleted. \n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Only frequency adjustments that have not been confirmed may be deleted. \n"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //  Unselect the row
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 return -1;// PREVENT_ACTION;
@@ -1429,7 +1501,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check that the frequency adjustment has not been paid
             if (!(ld_paid == null))
             {
-                MessageBox.Show("Only frequency adjustments that have not been paid may be deleted. \n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Only frequency adjustments that have not been paid may be deleted. \n"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //  Unselect the row
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 return -1;// PREVENT_ACTION;
@@ -1459,7 +1533,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  unconfirmed adjustment.
                 if (!(ll_row == ll_row2))
                 {
-                    MessageBox.Show("Only the last unconfirmed adjustment may be deleted. \n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Only the last unconfirmed adjustment may be deleted. \n"
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //  Unselect the row.
                     idw_frequency_adjustment.SelectRow(ll_row, false);
                     return -1;// PREVENT_ACTION;
@@ -1479,7 +1555,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 				corresponding vehicle override, we may be able to delete it
             if (ll_rc < 0)
             {
-                MessageBox.Show("No frequency_distances record found. \n" + "Unable to delete the adjustment.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No frequency_distances record found. \n" 
+                                 + "Unable to delete the adjustment."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (ll_rc == 1)
             {
@@ -1491,7 +1570,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else if (ll_rc == 2)
             {
-                MessageBox.Show("Global frequency adjustments may not be deleted. \n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Global frequency adjustments may not be deleted. \n"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (ll_rc == 3)
             {
@@ -1508,7 +1589,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 else if (ll_rc == 0)
                 {
                     //  There wasn't a matching vehicle_override_rates record
-                    MessageBox.Show("This adjustment is not associated with either a vehicle or \n" + "non-vehicle override. \n" + "Unable to delete the adjustment.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This adjustment is not associated with either a vehicle or non-vehicle override. \n" 
+                                     + "Unable to delete the adjustment."
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -1554,7 +1638,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     ds_msg = ",\nvehicle_override_rate and \nnon_vehicle_override_rate records.";
                 }
-                DialogResult il_rc = MessageBox.Show("Please confirm the deletion:  \n" + "     Renewal  " + il_contract.ToString() + '/' + il_sequence.ToString() + '\n' + "  Adjustment  " + ds_adjustment + '\n' + "      Reason  " + is_reason + "\n\n" + "and associated frequency_distances" + ds_msg, "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                DialogResult il_rc = MessageBox.Show("Please confirm the deletion:  \n" 
+                                                      + "     Renewal  " + il_contract.ToString() + '/' + il_sequence.ToString() + '\n' 
+                                                      + "  Adjustment  " + ds_adjustment + '\n' 
+                                                      + "      Reason  " + is_reason + "\n\n" 
+                                                      + "and associated frequency_distances" + ds_msg
+                                                    , "Confirm"
+                                                    , MessageBoxButtons.OKCancel, MessageBoxIcon.Question
+                                                    , MessageBoxDefaultButton.Button2);
                 if (!(il_rc == DialogResult.OK))
                 {
                     il_del_record = 0;
@@ -1592,7 +1683,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             if (!(dw_renewal_cont_adjustments.GetItem<RenewalAdjustments>(dw_renewal_cont_adjustments.GetRow()).CaDatePaid == null))
             {
-                MessageBox.Show("You may not delete contract adjustments that have been paid.", "Renewal", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("You may not delete contract adjustments that have been paid."
+                               , "Renewal"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return -(1);
 
             }
@@ -1669,7 +1762,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else if (StaticVariables.gnv_app.of_isempty(dw_contract_contractor.GetItem<ContractContractor>(ll_Row).CcontractorName))
                 {
-                    MessageBox.Show("The supplier entered does not exist on the database", "Renewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The supplier entered does not exist on the database"
+                                   , "Renewal"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ls_ErrorColumn = "ccontractor_name";
                 }
                 else if (dw_contract_contractor.uf_not_entered(ll_Row, "cr_effective_date", "effective date"))
@@ -1687,12 +1782,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     lCount = RDSDataService.GetContractorCount2(lSupplier);
                     if (lCount == 0)
                     {
-                        MessageBox.Show("The supplier entered does not exist on the database", "Renewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("The supplier entered does not exist on the database"
+                                       , "Renewal"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ls_ErrorColumn = "contractor_supplier_no";
                     }
                     else if (dw_contract_contractor.DataObject.GetItem<ContractContractor>(ll_Row).IsDirty/*, 0, primary!) == newmodified!*/)
                     {
-                        //?sDate = dw_contract_contractor.Describe("evaluate ( \'string ( max ( if ( contractor_supplier_no=" + lSupplier.ToString() + ", date ( \"1900-1-1\")" + ", cr_effective_date))," + "\"YYYY-MM-DD\")" + "\',1)");
+                        //?sDate = dw_contract_contractor.Describe("evaluate(\'string(max(if(contractor_supplier_no=" + lSupplier.ToString() + ", date(\"1900-1-1\")" + ", cr_effective_date))," + "\"YYYY-MM-DD\")" + "\',1)");
 
                         DateTime? tDate = DateTime.MinValue;
                         foreach (ContractContractor var in dw_contract_contractor.DataObject.BindingSource.List)
@@ -1710,12 +1807,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         {
                             if (dw_contract_contractor.GetItem<ContractContractor>(ll_Row).CrEffectiveDate <= dMaxDate)
                             {
-                                MessageBox.Show("The effective date for this new owner driver must be greater than the effective d" + "ates of the other owner drivers.", "Renewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show("The effective date for this new owner driver must be greater \n" 
+                                                 + "than the effective dates of the other owner drivers."
+                                               , "Renewal"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 ls_ErrorColumn = "cr_effective_date";
                             }
                             if (dw_contract_contractor.GetValue<DateTime>(ll_Row, "cr_effective_date") < idw_renewal.GetItem<Renewal>(0).ConStartDate)//idw_renewal.GetValue<DateTime>(0, "con_start_date"))
                             {
-                                MessageBox.Show("The effective date for this new owner driver must be greater than the renewal sta" + "rt date.", "Renewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show("The effective date for this new owner driver must be greater " 
+                                                 + "than the renewal start date."
+                                               , "Renewal"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 ls_ErrorColumn = "cr_effective_date";
                             }
                         }
@@ -1939,19 +2042,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 if (dw_contract_vehicle.uf_not_entered(ll_Row, "v_vehicle_registration_number", "reg number"))
                 {
-                    ls_ErrorColumn = "v_vehicle_registration_number";//"vehicle_v_vehicle_registration_number";
+                    ls_ErrorColumn = "v_vehicle_registration_number";    //"vehicle_v_vehicle_registration_number";
                 }
                 else if (dw_contract_vehicle.uf_not_entered(ll_Row, "vt_key", "vehicle type"))
                 {
-                    ls_ErrorColumn = "vt_key";//"vehicle_vt_key"
+                    ls_ErrorColumn = "vt_key";                          //"vehicle_vt_key"
                 }
                 else if (dw_contract_vehicle.uf_not_entered(ll_Row, "v_vehicle_make", "make"))
                 {
-                    ls_ErrorColumn = "v_vehicle_make";// "vehicle_v_vehicle_make";
+                    ls_ErrorColumn = "v_vehicle_make";                  // "vehicle_v_vehicle_make";
                 }
                 else if (dw_contract_vehicle.uf_not_entered(ll_Row, "ft_key", "fuel type"))
                 {
-                    ls_ErrorColumn = "ft_key";// "vehicle_ft_key";
+                    ls_ErrorColumn = "ft_key";                          // "vehicle_ft_key";
                     //  PBY 12/06/2002 SR#4402
                     // 	Elseif This.uf_not_entered ( ll_Row, "cv_vehical_status", "status") Then
                     // ls_ErrorColumn = "cv_vehical_status"
@@ -2326,7 +2429,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (StaticFunctions.IsDirty(idw_renewal.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update database?"
-                                        , "Update"
+                                        , "Renewal Update"
                                         , MessageBoxButtons.YesNo
                                         , MessageBoxIcon.Question);
                 ll_Row = idw_renewal.GetRow();
@@ -2350,7 +2453,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (StaticFunctions.IsDirty(idw_frequency_adjustment.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update database?"
-                                        , "Update"
+                                        , "Frequency Adjustment Update"
                                         , MessageBoxButtons.YesNo
                                         , MessageBoxIcon.Question);
                 ll_Row = idw_frequency_adjustment.GetRow();
@@ -2374,7 +2477,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (StaticFunctions.IsDirty(idw_contract_adjustment.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update database?"
-                                        , "Update"
+                                        , "Contract Adjustment Update"
                                         , MessageBoxButtons.YesNo
                                         , MessageBoxIcon.Question);
                 ll_Row = idw_contract_adjustment.GetRow();
@@ -2397,7 +2500,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (StaticFunctions.IsDirty(idw_owner_drivers.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update database?"
-                                        , "Update"
+                                        , "Owner Driver Update"
                                         , MessageBoxButtons.YesNo
                                         , MessageBoxIcon.Question);
                 ll_Row = idw_owner_drivers.GetRow();
@@ -2420,7 +2523,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (StaticFunctions.IsDirty(idw_vehicle.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update the contract_vehicle database?"
-                                        , "Update"
+                                        , "Vehicle Update"
                                         , MessageBoxButtons.YesNo
                                         , MessageBoxIcon.Question);
                 if (di_ret == DialogResult.Yes)
@@ -2439,34 +2542,70 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
+        public virtual void dw_renewal_editchanged(object sender, EventArgs e)
+        {
+            // TJB  RD7_0040  Aug2009   -- New --
+            update_con_proc_hrs_wk();
+            return;
+        }
+
+        public virtual void update_con_proc_hrs_wk()
+        {
+            // TJB  RD7_0040  Aug2009   -- New --
+            int nRow, n;
+            int? nRgCode, nVolume;
+
+            nRow = dw_renewal.GetRow();
+            nRgCode = idw_renewal.GetItem<Renewal>(nRow).ConRgCodeAtRenewal;
+            nVolume = idw_renewal.GetItem<Renewal>(nRow).ConVolumeAtRenewal;
+            if (nVolume != nPrevVolume || nRgCode != nPrevRgCode)
+            {
+                int nProcRatePerHr;
+                System.Decimal dProcHours, dVolume, dProcRatePerHr;
+                decimal? dProcHrsWk, dpw;
+                DateTime? dEffDate;
+
+                dEffDate = idw_renewal.GetItem<Renewal>(nRow).ConRatesEffectiveDate;
+                nProcRatePerHr = RDSDataService.GetNvrItemProcRatePerHrFromNonVehicleRate(nRgCode, dEffDate);
+                dProcRatePerHr = Convert.ToDecimal(nProcRatePerHr);
+                dVolume = Convert.ToDecimal(dw_renewal.DataObject.GetValue(nRow, "con_volume_at_renewal"));
+                System.Decimal dWeeksPerYr = 52.1429M;
+                dProcHours = (dProcRatePerHr == null || dProcRatePerHr == 0)
+                                     ? 0 
+                                     : (dVolume / dProcRatePerHr) / dWeeksPerYr;
+                dProcHours = Math.Round(dProcHours, 2);
+                dw_renewal.SetValue(nRow, "con_processing_hours_per_week", dProcHours);
+                nPrevVolume = nVolume;
+                nPrevRgCode = nRgCode;
+            }
+            return;
+        }
+
         public virtual void dw_renewal_itemchanged(object sender, EventArgs e)
         {
+            // TJB  RD7_0040  Aug2009
+            // Modified to use new update_con_proc_hrs_wk subroutine (above)
+
             // base.itemchanged();
             dw_renewal.URdsDw_Itemchanged(sender, e);
-            int lActionCode = 0;
-            int lProcRate;
-            int? lRGCode;
-            System.Decimal dProcHours;
-            DateTime? dDate;
+
+            string changed_column = dw_renewal.GetColumnName();
+            string t = changed_column;
+            int nRow = dw_renewal.GetRow();
             if (dw_renewal.GetColumnName() == "con_acceptance_flag")
             {
                 if (!(wf_checkaccepted()))
                 {
-                    dw_renewal.SetValue(0, "con_acceptance_flag", false);
-                    lActionCode = 1;
+                    dw_renewal.SetValue(nRow, "con_acceptance_flag", false);
                 }
             }
             else if (dw_renewal.GetColumnName() == "con_volume_at_renewal")
             {
-                lRGCode = idw_renewal.GetItem<Renewal>(1).ConRgCodeAtRenewal;
-                dDate = idw_renewal.GetItem<Renewal>(1).ConRatesEffectiveDate;
-                /*select  non_vehicle_rate.nvr_item_proc_rate_per_hr into :lProcRate from non_vehicle_rate 
-                  where  ( non_vehicle_rate.rg_code = :lRgCode) and ( non_vehicle_rate.nvr_rates_effective_date = :dDate);*/
-                RDSDataService.GetNvrItemProcRatePerHrFromNonVehicleRate(lRGCode, dDate);
-                dProcHours = Convert.ToInt32(dw_renewal.DataObject.GetValue(dw_renewal.GetRow(), "con_volume_at_renewal"));
-                dw_renewal.SetValue(1, "con_processing_hours_per_week", dProcHours);
+                // TJB  RD7_0040  Aug2009
+                // Moved code to separate function
+                // (suspect code here is never executed)
+                update_con_proc_hrs_wk();
             }
-            //return lActionCode;
             return;
         }
 
@@ -2621,7 +2760,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int SQLCode = 0;
 
             string column_name = ((Control)sender).Name;
-            if (column_name == "v_vehicle_registration_number")//"vehicle_v_vehicle_registration_number")
+            if (column_name == "v_vehicle_registration_number")       //"vehicle_v_vehicle_registration_number")
             {
                 sRegNo = Convert.ToString(dw_contract_vehicle.DataObject.GetValue(dw_contract_vehicle.GetRow(), "v_vehicle_registration_number"));//.GetText();
                 /*SELECT vehicle.vehicle_number,   
@@ -2700,7 +2839,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 //  PBY 12/06/2002 SR#4402
             }
-            else if (column_name == "ft_key"/*"vehicle_ft_key"*/)
+            else if (column_name == "ft_key")      /*"vehicle_ft_key"*/
             {
                 int l_ft_key;
 
@@ -2722,6 +2861,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void dw_renewal_artical_counts_doubleclicked(object sender, EventArgs e)
         {
+            //  TJB  RD7_0040  Aug 2009
+            // Ignore if there's nothing to display
+            if (dw_renewal_artical_counts.RowCount < 1) return;
+
             // if This.RowCount > 0 then
             // 	SetPointer ( HourGlass!)
             // 	if g_Security.Access_Groups[7] > -1 then  // Does the user have access to full functions
