@@ -32,6 +32,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
             m_main_menu = new MMainMenu(this);
+            // TJB  Aug2009
+            // Changed content of Toolstrip StatusLabel4 to show purpose of app
+            //this.toolStripStatusLabel4.Text = "DEV Version";
+            //this.toolStripStatusLabel4.Text = "Test Version";
+            this.toolStripStatusLabel4.Text = "Production Version";
         }
 
         public virtual void reset_clock()
