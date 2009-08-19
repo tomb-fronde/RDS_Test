@@ -36,6 +36,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             int lRowCount;
             int lContract;
             int lSequence;
+            int nSwitch = 0;
             //DataUserControl dwResults;
             URdsDw dwResults;
             DateTime? dReportMonth;
@@ -46,8 +47,6 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             {
                 return;
             }
-            string ls_reportname = StaticVariables.gnv_app.of_get_parameters().stringparm;
-            dw_report.SetDataObject(DEFAULT_ASSEMBLY, DEFAULT_VERSION, StaticFunctions.migrateName(ls_reportname));
 
             //dwResults.DataObject = (DataUserControl)StaticVariables.gnv_app.of_get_parameters().dwparm;
             //dwResults = StaticVariables.gnv_app.of_get_parameters().dwparm;
@@ -57,6 +56,19 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 return;
             }
 
+            string ls_reportname = StaticVariables.gnv_app.of_get_parameters().stringparm;
+            dw_report.SetDataObject(DEFAULT_ASSEMBLY, DEFAULT_VERSION, StaticFunctions.migrateName(ls_reportname));
+
+            // TJB  RD7_0043  Aug2009
+            // Added
+            string migratedName = StaticFunctions.migrateName(ls_reportname);
+            //if (StaticFunctions.migrateName(ls_reportname) == "RContractSummary")
+            if (migratedName == "RContractSummary")
+            {
+                dw_report.DataObject = new RContractSummary();
+            }
+
+            dw_report.Reset();
             lRow = dwResults.GetSelectedRow(0);
             if (lRow >= 0)
             {
@@ -70,7 +82,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                         if (lContract > 0)
                         {
                             // dw_report.Retrieve(lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm);
-                            dw_report.Retrieve(new object[] { lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm });
+                            //dw_report.Retrieve(new object[] { lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm });
+                            dw_report.Retrieve(new object[] { lContract, lSequence, dReportMonth });
                         }
                     }
                 }
@@ -81,7 +94,18 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                         lContract = dwResults.GetValue<int>(lRow, "contract_no");
                         lSequence = dwResults.GetValue<int>(lRow, "con_active_Sequence");
                         // dw_report.Retrieve(lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm);
-                        dw_report.Retrieve(new object[] { lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm });
+                        //dw_report.Retrieve(new object[] { lContract, lSequence, StaticVariables.gnv_app.of_get_parameters().dateparm });
+                        // TJB  RD7_0043  Aug2009
+                        if (nSwitch == 0)
+                        {
+                            dw_report.Retrieve(new object[] { lContract, lSequence, dReportMonth });
+                            nSwitch++;
+                        }
+                        else
+                        {
+                            dw_report.Reset();
+                            dw_report.Retrieve(new object[] { lContract, lSequence, dReportMonth });
+                        }
                         lRow = dwResults.GetSelectedRow(lRow + 1);
                     }
                 }
