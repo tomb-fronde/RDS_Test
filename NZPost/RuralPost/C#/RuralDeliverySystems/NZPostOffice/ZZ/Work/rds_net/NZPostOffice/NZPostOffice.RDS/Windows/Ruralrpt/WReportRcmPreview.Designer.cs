@@ -43,7 +43,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             // 
             // st_label
             // 
-            st_label.Text = "RDRPTRCP";
+            st_label.Text = "WReportRCMPreview";
 
             //
             //dw_report
