@@ -50,6 +50,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             lSingleCounter = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
+
             if (StaticVariables.gnv_app.of_get_parameters().stringparm.Length == 0)
             {
                 return;
@@ -71,8 +72,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 dw_report.DataObject = new RSchedulebSingleContract();
             else if (StaticFunctions.migrateName(ls_reportname) == "RMailCarriedSingleContract")
                 dw_report.DataObject = new RMailCarriedSingleContract();
-
-
+            else if (StaticFunctions.migrateName(ls_reportname) == "RVehicleScheduleSingleContractv2")
+                dw_report.DataObject = new RVehicleScheduleSingleContractv2();
 
             lRow = dwResults.GetSelectedRow(0);
             dw_report.Reset();
@@ -142,7 +143,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 }
                 else
                 {
-                    //  Specific contract
+                    //  Selected contracts
                     while (lRow > 0)
                     {
                         lContract = dwResults.GetValue<int>(lRow, "contract_no");
@@ -184,7 +185,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                         }
                         else
                         {
-                            //  generate the report the 'original' way.
+                            // generate the report the 'original' way.
                             lb_doreport = true;
                         }
                         if (lContract > 0 && lb_doreport == true)
@@ -194,6 +195,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                             lSingleCounter++;
                         }
                         lRow = dwResults.GetSelectedRow(lRow + 1);
+
                         // Exit when aborted
                         if (ib_Abort)
                         {
@@ -204,7 +206,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             }
             if (lSingleCounter == 1)
             {
-                if (dw_report.DataObject.Name == "r_route_description_single_contract" || dw_report.DataObject.Name == "r_mail_carried_single_contract")
+                //if (dw_report.DataObject.Name == "r_route_description_single_contract" 
+                //    || dw_report.DataObject.Name == "r_mail_carried_single_contract")
+                if (ls_reportname == "r_route_description_single_contract"
+                    || ls_reportname == "r_mail_carried_single_contract")
                 {
                     if (!((StaticVariables.gnv_app.of_get_parameters().dateparm == null)))
                     {
