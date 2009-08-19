@@ -23,7 +23,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
         {
             int ret = 0;//RetrieveCore<RcmStatNestedReport>(new List<RcmStatNestedReport>(RcmStatNestedReport.GetAllRcmStatNestedReport()));
 
-            try//p! attempt to remove "no error" exception from Crystal Reports
+            try   //p! attempt to remove "no error" exception from Crystal Reports
             {
                 DataTable table2 = new RcmStatisticalReportDataSet(RcmStatisticalReport.GetAllRcmStatisticalReport(inRegion, inOutlet, inRengroup, inContractType));
                 this.reRRcmStatNestedReport.Subreports["RERRcmStatisticalReport.rpt"].SetDataSource(table2);
@@ -32,8 +32,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 //!    CrystalDecisions.CrystalReports.Engine.CrossTabObject)
 
                 this.viewer.RefreshReport();
-            }catch(Exception e)
-            {}
+            }
+                // TJB  RD7_0043 Aug2009
+                // Added set return code on error (was empty)
+            catch(Exception e)
+            {
+                ret = -1;
+            }
             return ret;
         }
     }
