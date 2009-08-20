@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Common;
 using Metex.Core;
 using Metex.Core.Security;
+using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
@@ -43,6 +44,36 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     public class Renewal : Entity<Renewal>
     {
         #region Business Methods
+
+        // TJB  RD7_0040  Aug2009
+        // Added SQL variables for RequestNextAvaliableSessionDbConnection
+        private int _sqlcode = -1;
+        public int SQLCode
+        {
+            get
+            {
+                return _sqlcode;
+            }
+        }
+
+        private int _sqldbcode = -1;
+        public int SQLDBCode
+        {
+            get
+            {
+                return _sqldbcode;
+            }
+        }
+
+        private string _sqlerrtext = "";
+        public string SQLErrText
+        {
+            get
+            {
+                return _sqlerrtext;
+            }
+        }
+
         [DBField()]
         private int? _contract_no;
 
@@ -123,7 +154,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _con_no_cmb_custs_at_renewal;
-
 
         public virtual int? ContractNo
         {
@@ -704,14 +734,74 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 DbCommand cm = cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
-                if (GenerateUpdateCommandText(cm, "contract_renewals", ref pList))
-                {
-                    cm.CommandText += " WHERE  contract_renewals.contract_no = @contract_no and contract_renewals.contract_seq_number = @contract_seq_number";
+                // TJB  RD7_0040  Aug2009
+                // Replaced generated update statement (it didn't generate anything)
+                
+                // if (GenerateUpdateCommandText(cm, "contract_renewals", ref pList))
+                // {
+                //     cm.CommandText += " WHERE  contract_renewals.contract_no = @contract_no and contract_renewals.contract_seq_number = @contract_seq_number";
+                // 
+                //     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
+                //     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
+                //     DBHelper.ExecuteNonQuery(cm, pList);
+                // }
+                cm.CommandText = "update contract_renewals set"
+                                    + " con_start_date = @con_start_date,"
+                                    + " con_expiry_date = @con_expiry_date,"
+                                    + " con_acceptance_flag = @con_acceptance_flag,"
+                                    + " con_relief_driver_name = @con_relief_driver_name,"
+                                    + " con_relief_driver_address = @con_relief_driver_address,"
+                                    + " con_relief_driver_home_phone = @con_relief_driver_home_phone,"
+                                    + " con_renewal_payment_value = @con_renewal_payment_value,"
+                                    + " con_rg_code_at_renewal = @con_rg_code_at_renewal,"
+                                    + " con_volume_at_renewal = @con_volume_at_renewal,"
+                                    + " con_del_hrs_week_at_renewal = @con_del_hrs_week_at_renewal,"
+                                    + " con_no_customers_at_renewal = @con_no_customers_at_renewal,"
+                                    + " con_no_rural_private_bags_at_renewal = @con_no_rural_private_bags_at_,"
+                                    + " con_no_other_bags_at_renewal = @con_no_other_bags_at_renewal,"
+                                    + " con_no_private_bags_at_renewal = @con_no_private_bags_at_renewa,"
+                                    + " con_no_post_offices_at_renewal = @con_no_post_offices_at_renewa,"
+                                    + " con_no_cmbs_at_renewal = @con_no_cmbs_at_renewal,"
+                                    + " con_no_cmb_custs_at_renewal = @con_no_cmb_custs_at_renewal,"
+                                    + " con_processing_hours_per_week = @con_processing_hours_per_week,"
+                ;
+                int l = cm.CommandText.Length - 1;
+                cm.CommandText  = cm.CommandText.Substring(0,l);
+                cm.CommandText += " WHERE contract_renewals.contract_no = @contract_no " 
+                                   + "and contract_renewals.contract_seq_number = @contract_seq_number";
 
-                    pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
-                    pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
+                pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
+                pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
+                pList.Add(cm, "con_start_date", _con_start_date);
+                pList.Add(cm, "con_expiry_date", _con_expiry_date);
+                pList.Add(cm, "con_acceptance_flag", _con_acceptance_flag);
+                pList.Add(cm, "con_relief_driver_name", _con_relief_driver_name);
+                pList.Add(cm, "con_relief_driver_address", _con_relief_driver_address);
+                pList.Add(cm, "con_relief_driver_home_phone", _con_relief_driver_home_phone);
+                pList.Add(cm, "con_renewal_payment_value", _con_renewal_payment_value);
+                pList.Add(cm, "con_rg_code_at_renewal", _con_rg_code_at_renewal);
+                pList.Add(cm, "con_volume_at_renewal", _con_volume_at_renewal);
+                pList.Add(cm, "con_del_hrs_week_at_renewal", _con_del_hrs_week_at_renewal);
+                pList.Add(cm, "con_no_customers_at_renewal", _con_no_customers_at_renewal);
+                pList.Add(cm, "con_no_rural_private_bags_at_", _con_no_rural_private_bags_at_);
+                pList.Add(cm, "con_no_other_bags_at_renewal", _con_no_other_bags_at_renewal);
+                pList.Add(cm, "con_no_private_bags_at_renewa", _con_no_private_bags_at_renewa);
+                pList.Add(cm, "con_no_post_offices_at_renewa", _con_no_post_offices_at_renewa);
+                pList.Add(cm, "con_no_cmbs_at_renewal", _con_no_cmbs_at_renewal);
+                pList.Add(cm, "con_no_cmb_custs_at_renewal", _con_no_cmb_custs_at_renewal);
+                pList.Add(cm, "con_processing_hours_per_week", _con_processing_hours_per_week);
+
+                try
+                {
                     DBHelper.ExecuteNonQuery(cm, pList);
+                    _sqlcode = 0;
                 }
+                catch (Exception e)
+                {
+                    _sqlerrtext = e.Message;
+                    _sqlcode = -1;
+                }
+
                 // reinitialize original key/value list
                 StoreInitialValues();
             }
