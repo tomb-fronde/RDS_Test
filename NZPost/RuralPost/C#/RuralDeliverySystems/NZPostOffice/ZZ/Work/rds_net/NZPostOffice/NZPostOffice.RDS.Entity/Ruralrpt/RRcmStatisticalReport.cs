@@ -175,7 +175,7 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                     cm.CommandType = CommandType.StoredProcedure;
                     //cm.CommandText = "sp_GetRCMStatReportv2";
                     cm.CommandText = "rd.sp_GetRCMStatReport";
-                    cm.CommandTimeout = 500;
+                    cm.CommandTimeout = 2000;   // TJB  RD7_0043 Aug2009:  Changed timeout 500 --> 2000 (seconds)
                     cm.Parameters.Add(new SqlParameter("inRegion", inRegion));
                     cm.Parameters.Add(new SqlParameter("inOutlet", inOutlet));
                     cm.Parameters.Add(new SqlParameter("inRengroup", inRengroup));
