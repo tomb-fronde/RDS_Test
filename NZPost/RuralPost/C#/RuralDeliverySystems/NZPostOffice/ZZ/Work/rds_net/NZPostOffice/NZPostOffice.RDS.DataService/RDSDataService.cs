@@ -2357,12 +2357,11 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///UPDATE rds_customer SET printedon = today ( *)   WHERE customer.cust_id =  @lcust
+        ///UPDATE rds_customer SET printedon = today(*) WHERE customer.cust_id = @lcust
         /// </summary>
         public static void UpdateCustId(int? lcust, ref int SQLCode)
         {
             RDSDataService obj = Execute("_UpdateCustId", lcust);
-
         }
 
         public static RDSDataService DeleteAdressByAdrId(int? al_adrID)
@@ -2374,6 +2373,12 @@ namespace NZPostOffice.RDS.DataService
         public static string FFreqInuse(int? contract_no, int? sf_key, string rf_delivery_days)
         {
             return Execute("_FFreqInuse", contract_no, sf_key, rf_delivery_days).strVal;
+        }
+
+        // TJB  RD7_0039  Sept2007:  added
+        public static void CleanupFDRows(int? sf_key, int? contract_no, int? rd_sequence, string rf_delivery_days)
+        {
+            Execute("_CleanupFDRows", sf_key, contract_no, rd_sequence, rf_delivery_days);
         }
 
         #endregion
@@ -10544,6 +10549,44 @@ namespace NZPostOffice.RDS.DataService
                     else
                     {
                         strVal = "No";
+                    }
+                }
+            }
+        }
+
+        // TJB  RD7_0039  Sept2009:  added
+        [ServerMethod]
+        private void _CleanupFDRows(int? sf_key, int? contract_no, int? rd_sequence, string rf_delivery_days)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbTransaction tr = cn.BeginTransaction())
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.Transaction = tr;
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+
+                    pList.Add(cm, "sf_key", sf_key);
+                    pList.Add(cm, "contract_no", contract_no);
+                    pList.Add(cm, "rd_sequence", rd_sequence);
+                    pList.Add(cm, "rf_delivery_days", rf_delivery_days);
+
+                    cm.CommandText = "DELETE FROM route_description"
+                                   + " WHERE route_description.sf_key = @sf_key"
+                                     + " and route_description.contract_no = @contract_no"
+                                     + " and route_description.rf_delivery_days = @rf_delivery_days"
+                                     + " and (route_description.rd_sequence >= @rd_sequence"
+                                     + "      or route_description.rd_sequence < 0)"
+                                     ;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        tr.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        tr.Rollback();
                     }
                 }
             }
