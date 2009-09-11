@@ -26,15 +26,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public int il_frequency = 0;
 
-        public bool ib_error = false;
-
         public bool lreset = true;
 
         public string terminal_point_const = "Terminal";
 
         public int il_terminal_row = -(1);
 
-        public bool ib_terminalNotChanged = false;
+        //public bool ib_terminalNotChanged = false;
 
         public URdsDw idw_route_freq;
 
@@ -90,8 +88,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_annotation.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
-
-            //jlwang:moved from IC
             dw_extensions.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_extensions_constructor);
             dw_extensions.DataObject.BorderStyle = BorderStyle.Fixed3D;
             ((DFrequenceDistances)dw_extensions.DataObject).CellDoubleClick += new EventHandler(dw_extensions_doubleclicked);
@@ -102,8 +98,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_frequency_description.PfcDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_pfc_deleterow);
             dw_frequency_description.PfcInsertRow = new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_pfc_insertrow);
             dw_frequency_description.PfcPreInsertRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_frequency_description_pfc_preinsertrow);
-            dw_frequency_description.PfcPreUpdate += new UserEventDelegate1(dw_frequency_description_pfc_preupdate);
-            dw_frequency_description.PfcValidation += new UserEventDelegate1(dw_frequency_description_pfc_validation);
+            dw_frequency_description.PfcPreUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_frequency_description_pfc_preupdate);
+            dw_frequency_description.PfcValidation += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_frequency_description_pfc_validation);
+            dw_frequency_description.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_pfc_postupdate);
 
             dw_mail_carried.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_mail_carried_constructor);
             dw_mail_carried.PfcPreUpdate += new UserEventDelegate1(dw_mail_carried_pfc_preupdate);
@@ -113,13 +110,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             dw_header.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_header_constructor);
 
-            //jlwang:end
-
             ((DMailCarriedForm)dw_mail_carried.DataObject).CellButtonClick += new EventHandler(dw_mail_carried_clicked);
 
             //! used to get rfpt_id old value before changing it
             ((DFreqDescription)(dw_frequency_description.DataObject)).Grid.CellEnter += new DataGridViewCellEventHandler(Grid_CellEnter);
-
         }
 
         #region Form Design
@@ -384,7 +378,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public override int closequery()
         {
-            base.closequery();
+            // TJB  RD7_0039  Sept2009:  Changed
+            // Added check of base.closequery result
+            // 0 = proceed, 1 = don't close
+            //base.closequery();
+            int i = base.closequery();
+            if (i != 0) return i;
+
             //  TJB SR4602 25-Nov-2004
             //  Replaced the annotation text edit field in the datawindow 
             //  with a multi-line edit control, to allow wordwrapping.
@@ -422,7 +422,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         return 1;
                     }
-                    ll_ret = MessageBox.Show("Do you want to save changes?", "Update", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    ll_ret = MessageBox.Show("Do you want to save changes?"
+                                            , "Update Annotation"
+                                            , MessageBoxButtons.YesNoCancel
+                                            , MessageBoxIcon.Question);
                     if (ll_ret == DialogResult.Yes)
                     {
                         //  Sometimes the print flag is null when it should be either 'Y' or 'N'
@@ -542,38 +545,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual bool wf_isterminal(int? ai_rfpt_id)
         {
-            //  Returns TRUE if the row supplied as arg is a TERMINAL row.  
-            int rfpt_id;
+            //  Returns TRUE if the row supplied as arg is a TERMINAL row, otherwise returns FALSE
+            bool lb_return = false;
             string s_rfpt_desc = string.Empty;
             // SELECT route_freq_point_type.rfpt_description  INTO :s_rfpt_desc  FROM route_freq_point_type  WHERE route_freq_point_type.rfpt_id = :ai_rfpt_id   ;
-            s_rfpt_desc = RDSDataService.GetRfptDescription(ai_rfpt_id);
-            if (s_rfpt_desc == terminal_point_const)
+            if (ai_rfpt_id != null)
             {
-                return true;
+                s_rfpt_desc = RDSDataService.GetRfptDescription(ai_rfpt_id);
+                lb_return = (s_rfpt_desc == terminal_point_const);
             }
-            else
-            {
-                return false;
-            }
+            return lb_return;
         }
 
         public virtual bool wf_isterminalpoint(int al_row)
         {
             //  Mike Vautier, 4Dec96
             //  Returns TRUE if the row supplied as arg is a TERMINAL row.  
-            bool lb_return;
-            int li_rfpt;
+            int li_rfpt_id;
+            bool lb_return = false;
             string s_rfpt_desc = string.Empty;
+
             if (al_row < 1 || al_row > idw_description.DataObject.RowCount)
             {
-                lb_return = false;
+                return false;
             }
-            else
+            // SELECT route_freq_point_type.rfpt_description INTO :s_rfpt_desc FROM route_freq_point_type WHERE route_freq_point_type.rfpt_id = :li_rfpt;
+            //li_rfpt_id = Convert.ToInt32(idw_description.DataObject.GetItem<FreqDescription>(al_row).Test);//, "rfpt_id"));
+            li_rfpt_id = Convert.ToInt32(idw_description.DataObject.GetItem<FreqDescription>(al_row).Rfpdid);
+            if (li_rfpt_id != null)
             {
-                li_rfpt = Convert.ToInt32(idw_description.DataObject.GetItem<FreqDescription>(al_row).Test);//, "rfpt_id"));
-                // SELECT route_freq_point_type.rfpt_description INTO :s_rfpt_desc FROM route_freq_point_type WHERE route_freq_point_type.rfpt_id = :li_rfpt;
-                s_rfpt_desc = RDSDataService.GetRfptDescription(li_rfpt);
-                lb_return = s_rfpt_desc == terminal_point_const;
+                s_rfpt_desc = RDSDataService.GetRfptDescription(li_rfpt_id);
+                lb_return = (s_rfpt_desc == terminal_point_const);
             }
             return lb_return;
         }
@@ -601,7 +603,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_length = as_annotation.Length;
             if (ll_length > li_maxlen)
             {
-                MessageBox.Show("Maximum size of the annotation of " + li_maxlen.ToString() + " characters~r" + "has been exceeded.  Please reword it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Maximum size of the annotation of " + li_maxlen.ToString() + " characters \n" 
+                                 + "has been exceeded.  Please reword it."
+                                ,"Error"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Information);
                 return 1;
             }
             ll_row = idw_annotation.GetRow();
@@ -633,18 +639,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB SR4706
             //  If the 'Terminal' type of a route entry is changed, the next row
             //  must be deleted.  If the user triggers the change by changing focus 
-            //  to a different row  ( eg by tabbing forward), GetRow+1 will not be 
-            //  the correct row to delete.  itemchanged sets il_terminal_row to 
-            //  the row that has been changed.  Otherwise il_terminal_row is 
+            //  to a different row (eg by tabbing forward), GetRow+1 will not be 
+            //  the correct row to delete. itemchanged sets il_terminal_row to 
+            //  the row that has been changed. Otherwise il_terminal_row is 
             //  initialised to -1.
+            int nRow = dw_frequency_description.GetRow();
+            /*
             if (il_terminal_row < 0)
             {
-                dw_frequency_description.DataObject.DeleteItemAt(dw_frequency_description.GetRow() + 1);
+                //dw_frequency_description.DataObject.DeleteItemAt(dw_frequency_description.GetRow() + 1);
+                dw_frequency_description.DataObject.DeleteItemAt(nRow + 1);
             }
             else
             {
                 dw_frequency_description.DataObject.DeleteItemAt(il_terminal_row + 1);
             }
+            */
+            // TJB  RD7_0039  Sept2009
+            // Changed.  
+            // Added check that there IS a row following the 'Terminal' row to be deleted.
+            if (il_terminal_row >= 0)
+            {
+                nRow = il_terminal_row;
+            }
+            if ( (nRow + 1) >= dw_frequency_description.RowCount )
+            {
+                return;
+            }
+            dw_frequency_description.DataObject.DeleteItemAt(nRow + 1);
         }
 
         public virtual void dw_frequency_description_constructor()
@@ -653,47 +675,47 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             il_terminal_row = -(1);
         }
 
-        public virtual void itemerror()
-        {
-            if (ib_error)
-            {
-                // 	This.AcceptText ( )
-                ib_error = false;
-                return;
-            }
-        }
-
         public virtual void dw_frequency_description_pfc_deleterow()
         {
-            //?base.pfc_deleterow();
-            //  PBY 10/06/2002
-            //  Added for SR#4394
-            //?if (ancestorreturnvalue == 1) {
-            if (true)
+            // TJB  RD7_0039  Sept2009: Note
+            // Disabled the DeleteEntity method in (NZPostOffice.RDS.Entity.Ruraldw)
+            // When(if) the datawindow is saved any changed rows are re-written before the 
+            // deleted rows are removed.  This caused a problem in that if the delete was 
+            // in the 'middle' of the set of rows, the re-written row would be deleted.
+            // Now, the CleanupFDRows method is called after the save completes (in 
+            // pfc_postupdate) to delete the rows that are leftover after shifting the
+            // data rows 'up' over the deleted row.
+            if (dw_frequency_description.RowCount > 0)
             {
-                if (dw_frequency_description.RowCount > 0)
-                {
-                    wf_recalcrunning(dw_frequency_description.GetRow());
-                }
+                //wf_recalcrunning(dw_frequency_description.GetRow());
+                int nRow = dw_frequency_description.GetRow();
+                wf_recalcrunning(nRow);
             }
-            //return ancestorreturnvalue;
+            //int nRows = dw_frequency_description.RowCount
+            //dw_frequency_description_display_rows("dw_frequency_description_pfc_deleterow", 85, (nRows - 1));
             return;
         }
 
         public virtual void pfc_predeleterow()
         {
             //?base.pfc_predeleterow();
-            // if this.getrow ( )<>1 then
-            // 	if wf_isterminalpoint ( this.getrow ( ))    then
-            // 		MessageBox ( 'Route Description','You may not delete a record that is marked as a terminal point. See previous record.',StopSign!)
+            // if this.getrow()<>1 then
+            // 	if wf_isterminalpoint(this.getrow ( ))    then
+            // 		MessageBox('You may not delete a record that is marked as a terminal point.\n' 
+            //                  + 'See previous record.'
+            //                ,'Route Description',StopSign!)
             // 		Return -1
-            // 	elseif   wf_isterminalpoint ( this.getrow ( ) - 1) then
-            // 		MessageBox ( 'Route Description','You may not delete a record that has a Refererence Point of "Terminal".  You must first update the reference point to another value.',StopSign!)
+            // 	elseif wf_isterminalpoint(this.getrow() - 1) then
+            // 		MessageBox('You may not delete a record that has a Refererence Point of "Terminal".\n' 
+            //                  + 'You must first update the reference point to another value.'
+            //                ,'Route Description',StopSign!)
             // 		Return -1
             // 	end if
             // else
             // 	if  wf_isterminalpoint ( 1) then 
-            // 		MessageBox ( 'Route Description','You may not delete a record that is marked as a terminal point. See previous record.',StopSign!)
+            // 		MessageBox('You may not delete a record that is marked as a terminal point.\n' 
+            //                  + 'See previous record.'
+            //                ,'Route Description',StopSign!)
             // 		Return -1
             // 	end if
             // end if
@@ -714,11 +736,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     if (!(dw_frequency_description.GetRow() == dw_frequency_description.RowCount))
                     {
-                        MessageBox.Show("Insert not allowed here", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Insert not allowed here"
+                                       , "Warning"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
                 }
             }
+            //int nRows = dw_frequency_description.RowCount
+            //dw_frequency_description_display_rows("dw_frequency_description_pfc_preinsertrow", 85, (nRows - 1));
             return 1;
         }
 
@@ -729,33 +755,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lrow = 0;
             //  Mike Vautier 4Dec96.  Don't insert if this is between a Terminal point pair record.  
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            int TestExpr = dw_frequency_description.RowCount;
-            if (TestExpr == 0)
+            int nRows = dw_frequency_description.RowCount;
+            if (nRows == 0)
             {
                 dw_frequency_description.InsertItem<FreqDescription>(dw_frequency_description.GetRow());
                 lrow = dw_frequency_description.GetRow();
                 dw_frequency_description.DataObject.SetCurrent(lrow.Value);
-                dw_frequency_description.SetColumn("rd_description_of_point");//.DataObject.GetControlByName("rd_description_of_point").Focus();
+                //.DataObject.GetControlByName("rd_description_of_point").Focus();
+                dw_frequency_description.SetColumn("rd_description_of_point");
                 lrow = dw_frequency_description.GetRow();
-                if (dw_frequency_description.GetRow() == 0)
-                {
-                    dTotal = 0;
-                }
-                else
-                {
-                    dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(dw_frequency_description.GetRow() - 1).RfRunningTotal;//, "rf_running_total");
-                }
-                dw_frequency_description.DataObject.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
-            }
-            else if (TestExpr == 1)
-            {
-                dw_frequency_description.InsertItem<FreqDescription>(0);
-                dw_frequency_description.SetCurrent(0);
-                lrow = dw_frequency_description.GetRow();
-                dw_frequency_description.SetCurrent(lrow.Value);
-                dw_frequency_description.SetColumn("rd_description_of_point");//.DataObject.GetControlByName("rd_description_of_point").Focus();
-                lrow = dw_frequency_description.GetRow();
-                if (dw_frequency_description.GetRow() == 0)
+                //if (dw_frequency_description.GetRow() == 0)
+                if (lrow == 0)
                 {
                     dTotal = 0;
                 }
@@ -763,11 +773,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(dw_frequency_description.GetRow() - 1).RfRunningTotal;
                 }
-                dw_frequency_description.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
+                dw_frequency_description.DataObject.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
+            }
+            else if (nRows == 1)
+            {
+                dw_frequency_description.InsertItem<FreqDescription>(0);
+                dw_frequency_description.SetCurrent(0);
+                lrow = dw_frequency_description.GetRow();
+                dw_frequency_description.SetCurrent(lrow.Value);
+                //.DataObject.GetControlByName("rd_description_of_point").Focus();
+                dw_frequency_description.SetColumn("rd_description_of_point");
+                lrow = dw_frequency_description.GetRow();
+                //if (dw_frequency_description.GetRow() == 0)
+                if (lrow == 0)
+                {
+                    dTotal = 0;
+                }
+                else
+                {
+                    dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(dw_frequency_description.GetRow() - 1).RfRunningTotal;
+                }
+                dw_frequency_description.DataObject.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
             }
             //!else if (dw_frequency_description.GetRow() != 1)
             else if (dw_frequency_description.GetRow() != 0)
             {
+                lrow = dw_frequency_description.GetRow();
                 if (!(wf_isterminalpoint(dw_frequency_description.GetRow() - 1)))
                 {
                     if (dw_frequency_description.GetRow() == dw_frequency_description.RowCount)
@@ -780,7 +811,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         lrow = dw_frequency_description.InsertRow(dw_frequency_description.GetRow());
                     }
                     dw_frequency_description.SetCurrent(lrow.Value);
-                    dw_frequency_description.SetColumn("rd_description_of_point");//.DataObject.GetControlByName("rd_description_of_point").Focus();
+                    //.DataObject.GetControlByName("rd_description_of_point").Focus();
+                    dw_frequency_description.SetColumn("rd_description_of_point");
                     lrow = dw_frequency_description.GetRow();
                     if (dw_frequency_description.GetRow() == 0)
                     {
@@ -790,7 +822,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(dw_frequency_description.GetRow() - 1).RfRunningTotal;
                     }
-                    dw_frequency_description.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
+                    dw_frequency_description.DataObject.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
                 }
                 else if (dw_frequency_description.GetRow() == dw_frequency_description.RowCount)
                 {
@@ -798,20 +830,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else
                 {
-                    // messagebox ( "","Insert not allowed here")
+                    MessageBox.Show("Insert not allowed immediately after terminal point."
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //messagebox ( "","Insert not allowed here")
                     // RETURN -1
+                    return;
                 }
             }
             else
             {
                 dw_frequency_description.InsertItem<FreqDescription>(0);
                 dw_frequency_description.SetCurrent(0);
-                dw_frequency_description.SetColumn("rd_description_of_point");//.DataObject.GetControlByName("rd_description_of_point").Focus();
-                lrow = 1;
-                dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(0).RfRunningTotal;//, "rf_running_total");
+                //.DataObject.GetControlByName("rd_description_of_point").Focus();
+                dw_frequency_description.SetColumn("rd_description_of_point");
+                dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(0).RfRunningTotal;
                 dw_frequency_description.SetValue(dw_frequency_description.GetRow(), "rf_running_total", dTotal);
             }
-            //return 1;
+            //nRows = dw_frequency_description.RowCount;
+            //dw_frequency_description_display_rows("dw_frequency_description_pfc_insertrow", 85, (nRows - 1));
+
             return;
         }
 
@@ -826,7 +864,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     if (!ib_closestatus)
                     {
-                        MessageBox.Show("Route description incomplete.  \nYou must specify a Description of Stage.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Route description incomplete.  \n"
+                                         + "You must specify a Description of Stage."
+                                        ,"Validation Error"
+                                        , MessageBoxButtons.OK
+                                        , MessageBoxIcon.Information);
                         dw_frequency_description.SetCurrent(ll_x);
                         dw_frequency_description.SetColumn("rd_description_of_point");
                     }
@@ -836,31 +878,93 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return SUCCESS;
         }
 
+        // TJB  RD7_0039  Sept2009: added
+        // When saving, if there have been deleted rows, it is possible to have left-over
+        // rows in the database where rows have been shifter to over-write the deleted 
+        // rows.  The CleanupFDRows method removes these leftovers (if any) by deleting
+        // any rows with an rd_sequence >= the value passed (rows in the datawindow 
+        // are numbered [0..(n-1)] and dw.RowCount = n).
+        protected virtual void dw_frequency_description_pfc_postupdate()
+        {
+            int nRows;
+            nRows = dw_frequency_description.RowCount;
+            // dw_frequency_description_display_rows("dw_frequency_description_pfc_postupdate(1)", 85, (nRows - 1));
+            RDSDataService.CleanupFDRows(il_sf_key, il_contract, nRows, is_delivery_days);
+        }
+
         protected virtual int dw_frequency_description_pfc_preupdate()
         {
             base.pfc_preupdate();
-            int ll_GetRow;
-            int ll_Row;
-            int ll_RowNumber;
-            int? ll_null;
+            int nRow;
+            int? ll_null, nRDSequence;
+
             ll_null = null;
-            ll_GetRow = idw_description.GetRow();
-            for (ll_Row = 0; ll_Row < dw_frequency_description.RowCount; ll_Row++)
+            for (nRow = 0; nRow < dw_frequency_description.RowCount; nRow++)
             {
-                if (dw_frequency_description.DataObject.GetItem<FreqDescription>(ll_Row).RDSequence == 0 || (dw_frequency_description.DataObject.GetItem<FreqDescription>(ll_Row).RDSequence == null))
+                //if (dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence == 0 
+                //    || (dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence == null))
+                nRDSequence = dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence;
+                if (nRDSequence == null)
                 {
-                    dw_frequency_description.SetValue(ll_Row, "sf_key", il_sf_key);
-                    dw_frequency_description.SetValue(ll_Row, "contract_no", il_contract);
-                    dw_frequency_description.SetValue(ll_Row, "rf_delivery_days", is_delivery_days);
+                    dw_frequency_description.SetValue(nRow, "sf_key", il_sf_key);
+                    dw_frequency_description.SetValue(nRow, "contract_no", il_contract);
+                    dw_frequency_description.SetValue(nRow, "rf_delivery_days", is_delivery_days);
                 }
-                if (dw_frequency_description.DataObject.GetItem<FreqDescription>(ll_Row).AdrId <= 0)
+                if (dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).AdrId <= 0)
                 {
-                    dw_frequency_description.SetValue(ll_Row, "adr_id", ll_null);
+                    dw_frequency_description.SetValue(nRow, "adr_id", ll_null);
                 }
-                dw_frequency_description.DataObject.GetItem<FreqDescription>(ll_Row).RDSequence = ll_Row;//.SetValue(ll_Row, "rd_sequence", ll_Row);
+                // TJB  RD7_0039  Sept2009: changed
+                // Only set the sequence number if it has changed (otherwise the row is
+                // marked 'dirty' and updated when the datawindow is saved even if the
+                // value hasn't changed.
+                if (nRDSequence != nRow)
+                {
+                    dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence = nRow;
+                }
             }
             dw_frequency_description.DataObject.AcceptText();
+            //nRows = dw_frequency_description.RowCount;
+            //dw_frequency_description_display_rows("dw_frequency_description_pfc_preupdate", 85, (nRows - 1));
             return 1;
+        }
+
+        // TJB  RD7_0039  Sept2009: added
+        // Added to aid debugging
+        public virtual void dw_frequency_description_display_rows(string sTitle, int nFromRow, int nToRow)
+        {
+            int nRow, nRows;
+            nRows = dw_frequency_description.RowCount;
+            System.Decimal? dTotal;
+            string sMsg;
+
+            if (nFromRow >= nRows)
+            {
+                MessageBox.Show( sTitle + "\n" 
+                                 + "Bad display range.\n"
+                                 + "Rowcount = " + nRows.ToString() + "\n"
+                                 + "Range = " + nFromRow.ToString() + " - " + nToRow.ToString()
+                               , "dw_frequency_description_display_rows");
+                return;
+            }
+            if (nToRow >= nRows) nToRow = (nRows - 1);
+            sMsg = sTitle + "\n" 
+                   + "Rowcount = " + nRows.ToString();
+            nRow = 0;
+            dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RfRunningTotal;
+            sMsg = sMsg + "\n" + nRow.ToString()
+                        + ": " + dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence.ToString()
+                        + ", " + dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RdDescriptionOfPoint
+                        + ", " + dTotal.ToString();
+            for (nRow = nFromRow; nRow <= nToRow; nRow++)
+            {
+                dTotal = dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RfRunningTotal;
+                sMsg = sMsg + "\n" + nRow.ToString()
+                            + ": " + dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RDSequence.ToString()
+                            + ", " + dw_frequency_description.DataObject.GetItem<FreqDescription>(nRow).RdDescriptionOfPoint
+                            + ", " + dTotal.ToString();
+            }
+            MessageBox.Show(sMsg, "dw_frequency_description_display_rows");
         }
 
         public virtual void dw_mail_carried_constructor()
@@ -897,7 +1001,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 else if (this.uf_not_unique())
                 {
                     //! aded instead of calling from parent forms or classes
-                    MessageBox.Show("The current dispatch carried already has been defined.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("The current dispatch carried already has been defined."
+                                   , this.Text
+                                   , MessageBoxButtons.OK
+                                   , MessageBoxIcon.Stop);
                     dw_mail_carried.isErrorColumn = "mc_dispatch_carried";
                     return -(1);
                 }
@@ -913,7 +1020,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else if (dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McUpOutlet == null)
                 {
-                    MessageBox.Show("The uplift outlet does not exist on the database.", "Frequency", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The uplift outlet does not exist on the database."
+                                   , "Frequency"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     dw_mail_carried.isErrorColumn = "mc_up_outlet_name";
                     return -(1);
                 }
@@ -924,7 +1033,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else if (dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McSetDownTime/*.TimeOfDay*/ <= dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McUpliftTime/*.TimeOfDay*/ && !dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).NextDay/* == "N"*/)
                 {
-                    MessageBox.Show("The set down time must be greater then the uplift time.", "Frequency", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The set down time must be greater then the uplift time."
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     dw_mail_carried.isErrorColumn = "mc_set_down_time";
                     return -(1);
                 }
@@ -935,7 +1046,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else if (dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McDnOutlet == null)
                 {
-                    MessageBox.Show("The set down outlet does not exist on the database.", "Frequency", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The set down outlet does not exist on the database."
+                                   , "Frequency"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     dw_mail_carried.isErrorColumn = "mc_dn_outlet_name";
                     return -(1);
                 }
@@ -1015,7 +1128,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         private void Grid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            i_rfptItemNo = (dw_frequency_description.DataObject.Current as FreqDescription).Test;//, "rfpt_id");
+            //i_rfptItemNo = (dw_frequency_description.DataObject.Current as FreqDescription).Test;//, "rfpt_id");
+            i_rfptItemNo = (dw_frequency_description.DataObject.Current as FreqDescription).Rfpdid;
         }
 
         public override void resize(object sender, EventArgs args)
@@ -1107,7 +1221,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //?idw_description.DataObject.AcceptText();
             if (idw_description.DataObject.DeletedCount > 0 || StaticFunctions.IsDirty(idw_description.DataObject)/*.ModifiedCount() > 0*/)
             {
-                ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ret = MessageBox.Show("Do you want to update database?"
+                                     , "Update Route Description"
+                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_description.DataObject.GetRow();
                 if (ret == DialogResult.Yes)
                 {
@@ -1125,7 +1241,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //?idw_mail_carried.DataObject.AcceptText();
             if (idw_mail_carried.DataObject.DeletedCount > 0 || StaticFunctions.IsDirty(idw_mail_carried.DataObject)/*.ModifiedCount() > 0*/)
             {
-                ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ret = MessageBox.Show("Do you want to update database?"
+                                     , "Update Mail Carried"
+                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_mail_carried.GetRow();
                 if (ret == DialogResult.Yes)
                 {
@@ -1175,7 +1293,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (idw_annotation.DataObject.DeletedCount > 0 || StaticFunctions.IsDirty(idw_annotation.DataObject)/*.ModifiedCount() > 0*/)
                 {
                     //  TJB SR4602 23-Nov-2004: Added cancel option
-                    ret = MessageBox.Show("Update", "Do you want to update database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    ret = MessageBox.Show("Do you want to update database?"
+                                         , "Update Annotation"
+                                         , MessageBoxButtons.YesNoCancel
+                                         , MessageBoxIcon.Question);
                     if (ret == DialogResult.Yes)
                     {
                         //  TJB SR4602 23-Nov-2004
@@ -1261,7 +1382,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             NRdsMsg lnv_msg;
             NCriteria lnv_Criteria;
             WAddressSearchSelect lw_search = new WAddressSearchSelect();
-            sObjectAtPointer = dw_frequency_description.DataObject.GetColumnName();// dw_frequency_description.DataObject.GetObjectAtPointer();
+            // dw_frequency_description.DataObject.GetObjectAtPointer();
+            sObjectAtPointer = dw_frequency_description.DataObject.GetColumnName();
             // /////OLD//////////////////////////
             // if left ( sObjectAtPointer, 10) = "dos_button" and KeyDown ( KeyShift!) then
             // 	scrolltorow ( row)
@@ -1275,10 +1397,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if isnull ( sObjectAtPointer) then	ds_object = 'NULL'
                 ds_contract = il_contract.ToString()
                 if isnull ( il_contract) then ds_contract = 'NULL'
-                MessageBox.Show (  & 'sObjectAtPointer = '+ds_object +'\n'  & +'il_contract     = '+ds_contract ,  'w_frequencies2001.dw_frequency_description.clicked' )
-                // --------------------------------------------------------------------  */
-            //if (sObjectAtPointer.Substring(0, 10) == "dos_button")
-            //{
+                MessageBox.Show('sObjectAtPointer = '+ds_object +'\n'
+                                 +'il_contract     = '+ds_contract 
+                               ,  'w_frequencies2001.dw_frequency_description.clicked' )
+            // --------------------------------------------------------------------  */
             dw_frequency_description.SetCurrent(dw_frequency_description.GetRow());
             //  TJB  Release 6.8.11 fixup
             //  Need to pass the flag that says whether this is a
@@ -1310,7 +1432,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 dw_frequency_description.DataObject.SetValue(dw_frequency_description.DataObject.GetRow(), "rd_description_of_point", ls_address);
             }
             dw_frequency_description.DataObject.AcceptText();
-            // }
         }
 
         int? i_rfptItemNo = null;
@@ -1325,9 +1446,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int lRow;
             int lLoop;
             int lRowCount;
-            string sPoint = string.Empty;
+            string s_rfptItemNo = string.Empty;
             int l_thisRow;
-            //!int? i_rfptItemNo;
+
+            // NOTE:  il_terminal_row is used in dw_frequency_description_ue_deletenext
             il_terminal_row = -(1);
             string columnName = ((Metex.Windows.DataEntityGrid)dw_frequency_description.GetControlByName("grid")).CurrentColumnName;
             if (columnName == "rf_distance_of_leg")
@@ -1338,85 +1460,67 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 wf_recalcrunning(dw_frequency_description.GetRow());
                 dw_frequency_description.Refresh();
 
-                //  PBY 10/06/2002 SR#4394
-                //  Commented out the following block of code
-                // 
-                //  with the two lines above.
-                // 	w_main_mdi.setmicrohelp ( "Updating Running Totals")
-                //  lRow = this.GetRow ( )
-                // 
-                // 	If lRow > 1 Then
-                // 		dTotal = This.GetItemSystem.Conver.ToDouble (  lRow - 1, 'rf_running_total' )
-                // 	Else
-                // 		dTotal = 0
-                // 	End If
-                // 
-                // 	dLeg = Dec ( this.gettext ( ))
-                // 
-                // 	If isnull ( dLeg) Then dLeg = 0
-                // 	dTotal = dTotal + dLeg
-                // 
-                // 	This.setitem ( this.getrow ( ), "rf_running_total", dTotal)
-                // 	wf_recalcrunning ( lRow)
-                // 	w_main_mdi.setmicrohelp ( "")
             }
-            //  Mike Vautier, 4 Dec 96.  Route termination points.  
             if (columnName == "rfpt_id")
             {
-                // 	sPoint = String ( this.getitemnumber ( this.getrow ( ),"rfpt_id"))
-                // 	was_terminal = wf_isterminal ( this.getitemnumber ( this.getrow ( ),"rfpt_id"))
-                // 	is_terminal = wf_isterminal ( integer ( this.gettext ( )))
+                // TJB  RD7_0039  Sept2009
+                // Largely rewritten to fix bugs in handling of change in point type (rfpt_id)
+                // to/from being a 'Terminal' point.
+                // NOTE: Various names are used in the code for the database 'rfpt_id' column name,
+                //       with 'Test' being the most-useful one.  Need to sort it out simetime.
+
+                // 	was_terminal = wf_isterminal(this.getitemnumber(this.getrow(),"rfpt_id"))
+                // 	is_terminal = wf_isterminal(integer(this.gettext()))
                 l_thisRow = dw_frequency_description.GetRow();
 
-                //! is assigned in CellEnter of dw_frequency_description
-                //!                i_rfptItemNo = dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test;//, "rfpt_id");
+                // i_rfptItemNo is assigned in CellEnter of dw_frequency_description
+                // It is the rfpt_id value when the user's cursor entered the field/cell
+                //!     i_rfptItemNo = dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test;
+                was_terminal = wf_isterminal(i_rfptItemNo);
 
-                if (i_rfptItemNo.HasValue)
+                //is_terminal = wf_isterminal(Convert.ToInt32(dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test));
+                //int? this_rfptItemNo = Convert.ToInt32(dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test);
+                int? this_rfptItemNo = Convert.ToInt32(dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Rfpdid);
+                is_terminal = wf_isterminal(this_rfptItemNo);
+                if (is_terminal && !was_terminal)
                 {
-                    sPoint = i_rfptItemNo.ToString();
-                    was_terminal = wf_isterminal(i_rfptItemNo);
-                }
-
-                //!is_terminal = wf_isterminal(Convert.ToInt32(dw_frequency_description.DataObject.GetValue(dw_frequency_description.GetRow(),
-                //!    dw_frequency_description.GetColumnName())));
-                is_terminal = wf_isterminal(Convert.ToInt32(dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test));
-
-
-                //  TJB 16Mar04 - ib_TerminalNotChanged set to True if the user selects a
-                //       changed value for a 'Terminal' point, then says 'No' to the delete
-                //       messagebox.  When the user moves to a new column/row, itemchanged 
-                //       is called with is_terminal 'true', resembling a situation where 
-                //       the user changed the column value to 'Terminal'.  
-                //       ib_TerminalNotChanged distinguishes the two situations and prevents
-                //       the insertion of an extra row.
-                if (ib_terminalNotChanged)
-                {
-                    ib_terminalNotChanged = false;
-                }
-                else if (is_terminal)
-                {
-                    dw_frequency_description.InsertRow(dw_frequency_description.GetRow() + 1);
-                    dw_frequency_description.DataObject.SetValue(dw_frequency_description.GetRow() + 1, "show_question", 1);
+                    // If this point was not terminal but now is, set 'show_question' flag
+                    dw_frequency_description.InsertRow(l_thisRow + 1);
+                    dw_frequency_description.DataObject.SetValue(l_thisRow + 1, "show_question", 1);
                 }
                 else if (was_terminal && !is_terminal)
                 {
-                    //  Delete the following terminal point record
-                    if (MessageBox.Show("This will delete the following record - Continue?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
+                    // If this point was terminal but now isn't, ask whether to
+                    // delete the following terminal point record.
+                    if (MessageBox.Show("This will delete the following record - Continue?"
+                                       , "Delete"
+                                       , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                       == DialogResult.Yes)
+                    {    // Yes
                         il_terminal_row = dw_frequency_description.GetRow();
-                        ib_error = false;
-                        dw_frequency_description_ue_deletenext(); //dw_frequency_description.PostEvent("ue_deletenext");
+                        //dw_frequency_description.PostEvent("ue_deletenext");
+                        dw_frequency_description_ue_deletenext(); 
                         return;
                     }
                     else
                     {
-                        dw_frequency_description.SetValue(dw_frequency_description.GetRow(), dw_frequency_description.GetColumnName(), sPoint);
-                        //dw_frequency_description.SetItem(dw_frequency_description.GetRow(), "rfpt_id", sPoint);
-                        ib_error = true;
-                        ib_terminalNotChanged = true;
-                        return;
+                        //dw_frequency_description.SetValue(dw_frequency_description.GetRow(), dw_frequency_description.GetColumnName(), s_rfptItemNo);
+                        //
+                        // The 'try - catch' was added when there was a problem with an unhandled exception
+                        // when undoing change in rfpt_id value.  (tjb Sept 2009)
+                        try
+                        {
+                            //dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Test = i_rfptItemNo;
+                            dw_frequency_description.DataObject.GetItem<FreqDescription>(l_thisRow).Rfpdid = i_rfptItemNo;
+                        }
+                        catch (Exception ex2)
+                        {
+                        }
                     }
                 }
+                // If either there's no change in the setting fot this point (it was terminal and still is,
+                // or wasn't terminal and still isn't - even if the type or point has changed), we don't
+                // need to do anything.
             }
         }
 
@@ -1425,7 +1529,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_rowCount;
             int ll_count;
             ll_rowCount = dw_frequency_description.RowCount;
-            for (ll_count = 1; ll_count < ll_rowCount; ll_count++) //for ll_count = 2 to ll_RowCount step 1
+            //for ll_count = 2 to ll_RowCount step 1
+            for (ll_count = 1; ll_count < ll_rowCount; ll_count++)
             {
                 if (dw_frequency_description.DataObject.GetItem<FreqDescription>(ll_count - 1).PointType == "Terminal")
                 {
@@ -1443,7 +1548,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             string sObjectAtPointer = string.Empty;
             string sOutlet;
-            sObjectAtPointer = ((Button)sender).Name;//sObjectAtPointer = dw_mail_carried.DataObject.ActiveControl.Name;// dw_mail_carried.GetObjectAtPointer();
+
+            //sObjectAtPointer = dw_mail_carried.DataObject.ActiveControl.Name;// dw_mail_carried.GetObjectAtPointer();
+            sObjectAtPointer = ((Button)sender).Name;
             if (sObjectAtPointer.Length >= 13 && sObjectAtPointer.Substring(0, 13) == "up_pcklst_bmp")
             {
                 wf_get_outlet("up");
