@@ -160,17 +160,32 @@ namespace NZPostOffice.Shared.VisualComponents
                 if (base.Text.Substring(0, 2) == "00")
                     return null;
                 else
-                    return (val = base.Text).Trim();
+                {
+                    string sval = (val = base.Text).Trim();
+                    return sval;
+                }
             }
             set
             {
-                if ( value == null||value == "00000000" || value == "")
+                if (value == null || value == "00000000" || value == "")
                 {
                     value = null;
                     val = "00000000";
                 }
                 else
+                {
                     val = value;
+                        // TJB  15-July-2009
+                        //    Added to fix a problem with the entered date in
+                        //    the Extentions Screen.
+                        // If the value is a date (contains an "/") and its
+                        // length is less than 10, assume the leading '0' from
+                        // day is missing and add it.
+                    if (val.IndexOf('/') > 0 && val.Length < 10)
+                    {
+                        val = '0' + val;
+                    }
+                }
                 base.Text = val;
                 this.Text = val; //added
             }
@@ -184,7 +199,18 @@ namespace NZPostOffice.Shared.VisualComponents
             }
             set
             {
-                base.Text = value;
+                string sval = value;
+                // TJB  15-July-2009
+                //    Added to fix a problem with the entered date in
+                //    the Extentions Screen.
+                // If the value is a date (contains an "/") and its
+                // length is less than 10, assume the leading '0' from
+                // day is missing and add it.
+                if (sval.IndexOf('/') > 0 && sval.Length < 10)
+                {
+                    sval = '0' + sval;
+                }
+                base.Text = sval;
                 if (this.Text.Replace('/', ' ').Replace('_', ' ').Trim() == "")
                     this.Text = "00000000";
             }
