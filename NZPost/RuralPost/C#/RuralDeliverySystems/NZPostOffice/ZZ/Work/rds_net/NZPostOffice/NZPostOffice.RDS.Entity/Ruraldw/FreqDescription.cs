@@ -18,7 +18,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("rd_description_of_point", "_rd_description_of_point", "route_description")]
     [MapInfo("rd_time_at_point", "_rd_time_at_point", "route_description")]
     [MapInfo("rfv_id", "_rfv_id", "route_description")]
-    [MapInfo("rfpd_id", "_test", "route_description")]
+    // [MapInfo("rfpd_id", "_test", "route_description")]
+    [MapInfo("rfpd_id", "_rfpd_id", "route_description")]
     [MapInfo("point_type", "_point_type", "")]
     [MapInfo("rf_distance_of_leg", "_rf_distance_of_leg", "route_description")]
     [MapInfo("rf_running_total", "_rf_running_total", "route_description")]
@@ -37,7 +38,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private int? _sf_key=1;
 
         [DBField()]
-        private int? _contract_no =5000;
+        private int? _contract_no=5000;
 
         [DBField()]
         private int? _rd_sequence;
@@ -54,8 +55,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private int? _rfv_id;
 
+        // [DBField()]
+        // private int? _test;
+
         [DBField()]
-        private int? _test;
+        private int? _rfpd_id;
 
         [DBField()]
         private string _point_type;
@@ -206,20 +210,44 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
-
+        // rfpd_id
         public virtual int? Test
         {
             get
             {
                 CanReadProperty("Test", true);
-                return _test;
+                //return _test;
+                return _rfpd_id;
             }
             set
             {
                 CanWriteProperty("Test", true);
-                if (_test != value)
+                //if (_test != value)
+                //{
+                //    _test = value;
+                //    PropertyHasChanged();
+                //}
+                if (_rfpd_id != value)
                 {
-                    _test = value;
+                    _rfpd_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? Rfpdid
+        {
+            get
+            {
+                CanReadProperty("Rfpdid", true);
+                return _rfpd_id;
+            }
+            set
+            {
+                CanWriteProperty("Rfpdid", true);
+                if (_rfpd_id != value)
+                {
+                    _rfpd_id = value;
                     PropertyHasChanged();
                 }
             }
@@ -420,7 +448,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._rd_description_of_point = GetValueFromReader<String>(dr, 4);
                             instance._rd_time_at_point = GetValueFromReader<DateTime>(dr, 5);
                             instance._rfv_id = GetValueFromReader<Int32?>(dr, 6);
-                            instance._test = GetValueFromReader<Int32?>(dr, 7);
+                            //instance._test = GetValueFromReader<Int32?>(dr, 7);
+                            instance._rfpd_id = GetValueFromReader<Int32?>(dr, 7);
                             instance._point_type = GetValueFromReader<String>(dr, 8);
                             instance._rf_distance_of_leg = GetValueFromReader<Decimal?>(dr, 9);
                             instance._rf_running_total = GetValueFromReader<Decimal?>(dr, 10);
@@ -443,77 +472,229 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void UpdateEntity()
         {
-            //using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            //{
-            //    DbCommand cm = cn.CreateCommand();
-            //    cm.CommandType = CommandType.Text;
-            //    ParameterCollection pList = new ParameterCollection();
-            //    if (GenerateUpdateCommandText(cm, "route_description", ref pList))
-            //    {
-            //        cm.CommandText += " WHERE  route_description.sf_key = @sf_key and route_description.contract_no = @contract_no and route_description.rd_sequence = @rd_sequence " +
-            //        "and route_description.rf_delivery_days = @rf_delivery_days ";
+            // TJB  RD7_0039  Sept2009:  Added
+            // Code the UpdateEntity separately from InsertEntity
+            // Updates now actually update rather than detele/insert if rd_sequence hasn't changed.
 
-            //        pList.Add(cm, "sf_key", GetInitialValue("_sf_key"));
-            //        pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
-            //        pList.Add(cm, "rd_sequence", GetInitialValue("_rd_sequence"));
-            //        pList.Add(cm, "rf_delivery_days", GetInitialValue("_rf_delivery_days"));
-            //        DBHelper.ExecuteNonQuery(cm, pList);
-            //    }
-            //    // reinitialize original key/value list
-            //    StoreInitialValues();
-            //}
-            InsertEntity();
+            // This is mostly for debugging ...
+            int? sf_key_prev, contract_no_prev, rd_sequence_prev, i;
+            int? rd_sequence_now;
+            string rd_description_prev, rf_delivery_days_prev, s;
+            string rd_description_now;
+
+            sf_key_prev = (int?)GetInitialValue("_sf_key");
+            contract_no_prev = (int?)GetInitialValue("_contract_no");
+            rd_sequence_prev = (int?)GetInitialValue("_rd_sequence");
+            rf_delivery_days_prev = (string)GetInitialValue("_rf_delivery_days");
+            rd_description_prev = (string)GetInitialValue("_rd_description_of_point");
+            i = sf_key_prev; i = contract_no_prev; i = rd_sequence_prev;
+            s = rd_description_prev; s = rf_delivery_days_prev;
+            rd_sequence_now = _rd_sequence;
+            rd_description_now  = _rd_description_of_point;
+            s = rd_description_now;  i = rd_sequence_now;
+            //private void UpdateEntity()
+
+            // If the sequence number hasn't changed we can do an update
+            // If the sequence number has changed, we need to do a delete-insert
+            if (rd_sequence_prev != null && rd_sequence_prev == _rd_sequence)
+            {
+                using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+
+                    cm.CommandText = "UPDATE route_description"
+                                     + " SET route_description.sf_key = @sf_key"
+                                        + ", route_description.contract_no = @contract_no"
+                                        + ", route_description.rd_sequence = @rd_sequence"
+                                        + ", route_description.rf_delivery_days = @rf_delivery_days"
+                                        + ", route_description.rd_description_of_point = @rd_description_of_point"
+                                        + ", route_description.rd_time_at_point = @rd_time_at_point"
+                                        + ", route_description.rfv_id = @rfv_id"
+                                        + ", route_description.rfpd_id = @rfpd_id"
+                                        + ", route_description.rf_distance_of_leg = @rf_distance_of_leg"
+                                        + ", route_description.rf_running_total = @rf_running_total"
+                                        + ", route_description.rfv_id_2 = @rfv_id_2"
+                                        + ", route_description.cust_id = @cust_id"
+                                        + ", route_description.adr_id = @adr_id"
+                                        ;
+
+                    cm.CommandText += " WHERE route_description.sf_key = @sf_key_prev"
+                                     + "  and route_description.contract_no = @contract_no_prev"
+                                     + "  and route_description.rd_sequence = @rd_sequence_prev"
+                                     + "  and route_description.rf_delivery_days = @rf_delivery_days_prev"
+                                     ;
+
+                    pList.Add(cm, "sf_key_prev", sf_key_prev);
+                    pList.Add(cm, "contract_no_prev", contract_no_prev);
+                    pList.Add(cm, "rd_sequence_prev", rd_sequence_prev);
+                    pList.Add(cm, "rf_delivery_days_prev", rf_delivery_days_prev);
+
+                    pList.Add(cm, "sf_key", _sf_key);
+                    pList.Add(cm, "contract_no", _contract_no);
+                    pList.Add(cm, "rd_sequence", _rd_sequence);
+                    pList.Add(cm, "rf_delivery_days", _rf_delivery_days);
+                    pList.Add(cm, "rd_description_of_point", _rd_description_of_point);
+                    pList.Add(cm, "rd_time_at_point", _rd_time_at_point);
+                    pList.Add(cm, "rfv_id", _rfv_id);
+                    pList.Add(cm, "rfpd_id", _rfpd_id);
+                    pList.Add(cm, "rf_distance_of_leg", _rf_distance_of_leg);
+                    pList.Add(cm, "rf_running_total", _rf_running_total);
+                    pList.Add(cm, "rfv_id_2", _rfv_id_2);
+                    pList.Add(cm, "cust_id", _cust_id);
+                    pList.Add(cm, "adr_id", _adr_id);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    StoreInitialValues();
+                }
+            }
+            else
+            {
+                InsertEntity();
+            }
         }
 
-        //pp! changed the way of Insert and Update - in PB this data window uses 'Delete and then Insert' - and the keys are changed also
+        //pp! changed the way of Insert and Update 
+        //    - in PB this data window uses 'Delete and then Insert' 
+        //    - and the keys are changed also
         [ServerMethod()]
         private void InsertEntity()
         {
+            // TJB  RD7_0039  Sept2009:  Added
+            // Added the try ... catch around the ExecuteNonQuery's primarily for debugging,
+            // but alse to catch errors where rows are deleted that don't actually exist.
+            int? sf_key_prev, contract_no_prev, rd_sequence_prev, i;
+            int? rd_sequence_now;
+            string rd_description_prev, rf_delivery_days_prev, s;
+            string rd_description_now;
+
+            // This is mostly for debugging ...
+            sf_key_prev = (int?)GetInitialValue("_sf_key");
+            contract_no_prev = (int?)GetInitialValue("_contract_no");
+            rd_sequence_prev = (int?)GetInitialValue("_rd_sequence");
+            rf_delivery_days_prev = (string)GetInitialValue("_rf_delivery_days");
+            rd_description_prev = (string)GetInitialValue("_rd_description_of_point");
+            i = sf_key_prev; i = contract_no_prev; i = rd_sequence_prev;
+            s = rd_description_prev; s = rf_delivery_days_prev;
+            rd_sequence_now = _rd_sequence;
+            rd_description_now = _rd_description_of_point;
+            s = rd_description_now;  i = rd_sequence_now;
+            //private void InsertEntity()
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
-                cm.CommandText += "Delete from route_description WHERE  route_description.sf_key = @sf_key and " + 
-                    " route_description.contract_no = @contract_no and route_description.rd_sequence = @rd_sequence " +
-                   "and route_description.rf_delivery_days = @rf_delivery_days ";
+
+                cm.CommandText += "Delete from route_description"
+                                + " WHERE route_description.sf_key = @sf_key"
+                                 + "  and  route_description.contract_no = @contract_no"
+                                 + "  and route_description.rd_sequence = @rd_sequence"
+                                 + "  and route_description.rf_delivery_days = @rf_delivery_days"
+                                 ;
 
                 pList.Add(cm, "sf_key", _sf_key);
                 pList.Add(cm, "contract_no", _contract_no);
                 pList.Add(cm, "rd_sequence", _rd_sequence);
                 pList.Add(cm, "rf_delivery_days", _rf_delivery_days);
-                DBHelper.ExecuteNonQuery(cm, pList);
-                if (GenerateInsertCommandText(cm, "route_description", pList))
+
+                try
                 {
                     DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                catch (Exception ex)
+                {
+                }
+              
+                //if (GenerateInsertCommandText(cm, "route_description", pList))
+                bool GenerateInsertCommand = GenerateInsertCommandText(cm, "route_description", pList);
+                if (GenerateInsertCommand)
+                {
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
                 StoreInitialValues();
             }
         }
+
         [ServerMethod()]
         private void DeleteEntity()
         {
+            // TJB  RD7_0039  Sept2009:  Added
+            // Disabled the delete functionality.
+            // The datawindow Save procedure first did any updates then the deletes.
+            // If the row deleted was 'in the middle', rows with higher sequence numbers
+            // would effectively be 'moved up' over the deleted row, then the delete 
+            // would remove the 'moved up' row (thus effectively removing both the row
+            // that was intended to be deleted and the one after it).  Disabling this 
+            // delete avoids deleting the second row.
+            // This 'shift up' leaves dangling rows at the 'top' that are deleted by the
+            // CleanupFDRows method (in NZPostOffice.RDS.DataControls) 
+            int? sf_key_prev, contract_no_prev, rd_sequence_prev, i;
+            int? rd_sequence_now;
+            string rd_description_prev, rf_delivery_days_prev, s;
+            string rd_description_now;
+
+            // This is mostly for debugging ...
+            sf_key_prev = (int?)GetInitialValue("_sf_key");
+            contract_no_prev = (int?)GetInitialValue("_contract_no");
+            rd_sequence_prev = (int?)GetInitialValue("_rd_sequence");
+            rf_delivery_days_prev = (string)GetInitialValue("_rf_delivery_days");
+            rd_description_prev = (string)GetInitialValue("_rd_description_of_point");
+            i = sf_key_prev; i = contract_no_prev; i = rd_sequence_prev;
+            s = rd_description_prev; s = rf_delivery_days_prev;
+            rd_sequence_now = _rd_sequence;
+            rd_description_now = _rd_description_of_point;
+            s = rd_description_now; i = rd_sequence_now;
+            //private void DeleteEntity()
+/*
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
+
                 using (DbTransaction tr = cn.BeginTransaction())
                 {
                     DbCommand cm = cn.CreateCommand();
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
+
+                    cm.CommandText = "DELETE FROM route_description"
+                                   + " WHERE route_description.sf_key = @sf_key"
+                                     + " and route_description.contract_no = @contract_no"
+                                     + " and route_description.rd_sequence = @rd_sequence "
+                                     + " and route_description.rf_delivery_days = @rf_delivery_days ";
+
                     pList.Add(cm, "sf_key", GetInitialValue("_sf_key"));
                     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
                     pList.Add(cm, "rd_sequence", GetInitialValue("_rd_sequence"));
                     pList.Add(cm, "rf_delivery_days", GetInitialValue("_rf_delivery_days"));
 
-                    cm.CommandText = "DELETE FROM route_description WHERE  route_description.sf_key = @sf_key and route_description.contract_no = @contract_no and route_description.rd_sequence = @rd_sequence " +
-                    "and route_description.rf_delivery_days = @rf_delivery_days ";
-                    DBHelper.ExecuteNonQuery(cm, pList);
-                    tr.Commit();
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        tr.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        tr.Rollback();
+                    }
                 }
             }
+*/
         }
-
         #endregion
 
         [ServerMethod()]
