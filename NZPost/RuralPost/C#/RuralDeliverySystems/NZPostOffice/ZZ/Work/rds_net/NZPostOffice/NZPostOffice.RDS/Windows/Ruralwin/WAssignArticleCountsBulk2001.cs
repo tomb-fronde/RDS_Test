@@ -79,8 +79,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     li_Day = 28;
                 }
-                ldt_YearAgo = new DateTime(li_Year - 1, li_Month, li_Day);// System.Convert.ToDateTime(li_Year - 1, li_Month, li_Day);
-                /*UPDATE artical_count set contract_seq_number = null where contract_no = :lContract and contract_seq_number	= :lrenewal;*/
+                // System.Convert.ToDateTime(li_Year - 1, li_Month, li_Day);
+                ldt_YearAgo = new DateTime(li_Year - 1, li_Month, li_Day);
+                /*UPDATE artical_count set contract_seq_number = null 
+                 * where contract_no = :lContract and contract_seq_number = :lrenewal;*/
                 RDSDataService.UpdateArticalCountContractSeqNumber(lcontract, lrenewal, ref SQLCode, ref SQLErrText);
                 if (SQLCode < 0)
                 {
@@ -90,7 +92,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return -(1);
                 }
-                /*select count ( artical_count.contract_no) into :lcount from artical_count where 	artical_count.contract_no = :lContract  and    	artical_count.contract_seq_number is null and 		artical_count.ac_start_week_period > :ldt_YearAgo;*/
+                /*select count(artical_count.contract_no) into :lcount from artical_count 
+                 * where artical_count.contract_no = :lContract 
+                 *   and artical_count.contract_seq_number is null 
+                 *   and artical_count.ac_start_week_period > :ldt_YearAgo;*/
                 lcount = RDSDataService.GetArticalCountConut(lcontract, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                 if (SQLCode < 0)
                 {
@@ -103,7 +108,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 int? TestExpr = lcount;
                 if (TestExpr == 0)
                 {
-                    /*select con_start_date into :dStartDate from contract_renewals where contract_renewals.contract_no = :lContract and contract_renewals.contract_seq_number = :lrenewal - 1;*/
+                    /*select con_start_date into :dStartDate from contract_renewals 
+                     * where contract_renewals.contract_no = :lContract 
+                     * and contract_renewals.contract_seq_number = :lrenewal - 1;*/
+                    //
                     // 21-Jul-2008  Metex Renewals fix2:  add "dStartDate ="
                     //              TJB   Added t_dStartDate to allow for possible null values
                     t_dStartDate = RDSDataService.GetContractRenewalsConStartDate(lcontract, lrenewal, ref SQLCode, ref SQLErrText);
@@ -113,30 +121,45 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     if (SQLCode < 0)
                     {
-                        MessageBox.Show(SQLErrText
-                                         + "\n\n" 
+                        MessageBox.Show(SQLErrText + "\n" 
                                          + "The con_volume_at_renewal for the pending must be manually adjusted."
                                        , "Error 3a- update article count - case 0 for " + lcontract.ToString()
                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         // 	return -1
                     }
-                    /*select contract_renewals.con_volume_at_renewal + sum ( ifnull ( frequency_distances.fd_volume,0,frequency_distances.fd_volume)) into	 :lVolAtRen from	 contract_renewals ,   route_frequency left outer join	frequency_distances on  route_frequency.contract_no=frequency_distances.contract_no and route_frequency.sf_key=frequency_distances.sf_key and route_frequency.rf_delivery_days=frequency_distances.rf_delivery_days and frequency_distances.fd_effective_date>=:dStartDate ,   rate_days where	 contract_renewals.contract_no = route_frequency.contract_no and	 route_frequency.sf_key = rate_days.sf_key and	 contract_renewals.con_rates_effective_date = rate_days.rr_rates_effective_date and	 contract_renewals.con_rg_code_at_renewal = rate_days.rg_code and	 contract_renewals.contract_no = :lContract and	 contract_renewals.contract_seq_number =  ( :lrenewal - 1) group by contract_renewals.contract_no, contract_renewals.con_volume_at_renewal;*/
+                    /*select contract_renewals.con_volume_at_renewal 
+                     *           + sum(ifnull(frequency_distances.fd_volume,0,frequency_distances.fd_volume)) 
+                     *  into :lVolAtRen 
+                     *  from contract_renewals
+                     *     , route_frequency left outer join frequency_distances 
+                     *                       on route_frequency.contract_no=frequency_distances.contract_no and
+                     *                          route_frequency.sf_key=frequency_distances.sf_key and 
+                     *                          route_frequency.rf_delivery_days=frequency_distances.rf_delivery_days and 
+                     *                          frequency_distances.fd_effective_date>=:dStartDate 
+                     *     , rate_days 
+                     * where contract_renewals.contract_no = route_frequency.contract_no and
+                     *       route_frequency.sf_key = rate_days.sf_key and
+                     *       contract_renewals.con_rates_effective_date = rate_days.rr_rates_effective_date and	
+                     *       contract_renewals.con_rg_code_at_renewal = rate_days.rg_code and
+                     *       contract_renewals.contract_no = :lContract and	
+                     *       contract_renewals.contract_seq_number = (:lrenewal - 1) 
+                     * group by 
+                     *       contract_renewals.contract_no, contract_renewals.con_volume_at_renewal;*/
                     lVolAtRen = RDSDataService.GetContractRenewalsConVolumeAtRenewal(dStartDate, lcontract, lrenewal, ref SQLCode, ref SQLErrText);
                     if (SQLCode < 0)
                     {
-                        MessageBox.Show(SQLErrText 
-                                         + "\n\n" 
+                        MessageBox.Show(SQLErrText + "\n" 
                                          + "The con_volume_at_renewal for the pending must be manually adjusted."
                                        , "Error 3b- update article count - case 0 for " + lcontract.ToString()
                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         // return -1
                     }
-                    /*UPDATE contract_renewals set con_volume_at_renewal = :lVolAtRen where contract_no = :lContract and contract_seq_number = :lrenewal;*/
+                    /*UPDATE contract_renewals set con_volume_at_renewal = :lVolAtRen 
+                     * where contract_no = :lContract and contract_seq_number = :lrenewal;*/
                     RDSDataService.UpdateContractRenewalsConVolumeAtRenewal(lVolAtRen, lcontract, lrenewal, ref SQLCode, ref SQLErrText);
                     if (SQLCode < 0)
                     {
-                        MessageBox.Show(SQLErrText
-                                         + "\n\n"
+                        MessageBox.Show(SQLErrText + "\n"
                                          + "The con_volume_at_renewal for the pending must be manually adjusted."
                                        , "Error 3c- update article count - case 0 for " + lcontract.ToString()
                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -145,7 +168,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else if (TestExpr == 1)
                 {
-                    /*UPDATE artical_count set contract_seq_number = :lrenewal where contract_no = :lContract and	 contract_seq_number is null and artical_count.ac_start_week_period > :ldt_YearAgo;*/
+                    /*UPDATE artical_count set contract_seq_number = :lrenewal 
+                     * where contract_no = :lContract and
+                     *       contract_seq_number is null and 
+                     *       artical_count.ac_start_week_period > :ldt_YearAgo;*/
                     RDSDataService.UpdateArticalCountContractSeqNumber1(lrenewal, lcontract, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                     if (SQLCode < 0)
                     {
@@ -160,7 +186,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     string TestExpr1 = atype.ToString();
                     if (TestExpr1 == "last")
                     {
-                        /*UPDATE artical_count set contract_seq_number=:lrenewal where contract_no=:lContract and ( contract_seq_number is null or contract_seq_number=:lrenewal) and ac_start_week_period = ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = :lContract and ( contract_seq_number is null or contract_seq_number = :lrenewal) and  ac_start_week_period > :ldt_YearAgo);*/
+                        /*UPDATE artical_count set contract_seq_number=:lrenewal 
+                         * where contract_no = :lContract and 
+                         *       (contract_seq_number is null 
+                         *          or contract_seq_number = :lrenewal) and 
+                         *       ac_start_week_period = (select max(ac_start_week_period) 
+                         *                                 from artical_count as a2 
+                         *                                where a2.contract_no = :lContract and 
+                         *                                      (contract_seq_number is null 
+                         *                                         or contract_seq_number = :lrenewal) and 
+                         *                                      ac_start_week_period > :ldt_YearAgo);*/
                         RDSDataService.UpdateArticalCountContractSeqNumber2(lrenewal, lcontract, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
@@ -173,7 +208,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else if (TestExpr1 == "lastbutone")
                     {
-                        /*select max ( ac_start_week_period) into	 :ldt_LastCountDate from	 artical_count as a2 where	 a2.contract_no = :lContract and	  ( contract_seq_number is null or contract_seq_number = :lrenewal) and	 ac_start_week_period > :ldt_YearAgo;*/
+                        /*select max(ac_start_week_period) into	:ldt_LastCountDate 
+                         *  from artical_count as a2 
+                         * where a2.contract_no = :lContract and 
+                         *       (contract_seq_number is null or contract_seq_number = :lrenewal) and
+                         *       ac_start_week_period > :ldt_YearAgo;*/
                         ldt_LastCountDate = RDSDataService.GetArticalCountAcStartWeekPeriodMax(lcontract, lrenewal, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
@@ -183,7 +222,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return -(1);
                         }
-                        /*UPDATE artical_count set contract_seq_number=:lrenewal where contract_no=:lContract and ( contract_seq_number is null  or contract_seq_number=:lrenewal) and ac_start_week_period =  ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = :lContract and ( contract_seq_number is null or contract_seq_number = :lrenewal) and  ac_start_week_period > :ldt_YearAgo and  ac_start_week_period < :ldt_LastCountDate);*/
+                        /*UPDATE artical_count set contract_seq_number=:lrenewal 
+                         * where contract_no=:lContract and 
+                         *       (contract_seq_number is null 
+                         *         or contract_seq_number=:lrenewal) and 
+                         *       ac_start_week_period = (select max(ac_start_week_period) 
+                         *                                 from artical_count as a2 
+                         *                                where a2.contract_no = :lContract and 
+                         *                                      (contract_seq_number is null 
+                         *                                         or contract_seq_number = :lrenewal) and 
+                         *                                      ac_start_week_period > :ldt_YearAgo and 
+                         *                                      ac_start_week_period < :ldt_LastCountDate);*/
                         RDSDataService.UpdateArticalCountContractSeqNumber3(lrenewal, lcontract, ldt_YearAgo, ldt_LastCountDate, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
@@ -196,7 +245,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else if (TestExpr1 == "average")
                     {
-                        /*UPDATE artical_count set contract_seq_number=:lrenewal where contract_no=:lContract and ( contract_seq_number is null or contract_seq_number=:lrenewal) and ac_start_week_period = ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = :lContract and ( contract_seq_number is null or contract_seq_number = :lrenewal) and  ac_start_week_period > :ldt_YearAgo);*/
+                        /*UPDATE artical_count set contract_seq_number=:lrenewal 
+                         * where contract_no=:lContract and 
+                         *      (contract_seq_number is null or contract_seq_number=:lrenewal) and 
+                         *      ac_start_week_period = (select max(ac_start_week_period) 
+                         *                                from artical_count as a2 
+                         *                               where a2.contract_no = :lContract and 
+                         *                                     (contract_seq_number is null 
+                         *                                        or contract_seq_number = :lrenewal) and 
+                         *                                     ac_start_week_period > :ldt_YearAgo);*/
                         RDSDataService.UpdateArticalCountContractSeqNumber2(lrenewal, lcontract, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
@@ -206,7 +263,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return -(1);
                         }
-                        /*select max(ac_start_week_period) into	 :ldt_LastCountDate from	 artical_count as a2 where	 a2.contract_no = :lContract and	  ( contract_seq_number is null or contract_seq_number = :lrenewal) and	 ac_start_week_period > :ldt_YearAgo;*/
+                        /*select max(ac_start_week_period) into	:ldt_LastCountDate 
+                         *  from artical_count as a2 
+                         * where a2.contract_no = :lContract and
+                         *      (contract_seq_number is null or contract_seq_number = :lrenewal) and
+                         *      ac_start_week_period > :ldt_YearAgo;*/
                         ldt_LastCountDate = RDSDataService.GetArticalCountAcStartWeekPeriodMax(lcontract, lrenewal, ldt_YearAgo, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
@@ -216,7 +277,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return -(1);
                         }
-                        /*UPDATE artical_count set contract_seq_number=:lrenewal where contract_no=:lContract and ( contract_seq_number is null  or contract_seq_number=:lrenewal) and ac_start_week_period =  ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = :lContract and ( contract_seq_number is null or contract_seq_number = :lrenewal) and  ac_start_week_period > :ldt_YearAgo and  ac_start_week_period < :ldt_LastCountDate);*/
+                        /*UPDATE artical_count set contract_seq_number=:lrenewal 
+                         * where contract_no = :lContract and 
+                         *       (contract_seq_number is null or contract_seq_number=:lrenewal) and 
+                         *       ac_start_week_period = (select max(ac_start_week_period) 
+                         *                                 from artical_count as a2 
+                         *                                where a2.contract_no = :lContract and 
+                         *                                      (contract_seq_number is null 
+                         *                                         or contract_seq_number = :lrenewal) and 
+                         *                                      ac_start_week_period > :ldt_YearAgo and 
+                         *                                      ac_start_week_period < :ldt_LastCountDate);*/
                         RDSDataService.UpdateArticalCountContractSeqNumber3(lrenewal, lcontract, ldt_YearAgo, ldt_LastCountDate, ref SQLCode, ref SQLErrText);
                         if (SQLCode < 0)
                         {
