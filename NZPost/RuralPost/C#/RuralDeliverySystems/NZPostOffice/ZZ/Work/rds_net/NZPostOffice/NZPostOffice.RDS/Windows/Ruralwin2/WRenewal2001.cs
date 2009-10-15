@@ -2326,7 +2326,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         //jlwang:change selectindex to name 
-        // log in app with different user ,the tabpage should be invisible or visible
+        // log in app with different user, the tabpage should be invisible or visible
         // if we use select index to get tagepage it will throw exception. 
         public virtual void tab_renewal_selectionchanged(object sender, EventArgs e)
         {
@@ -2553,9 +2553,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             // TJB  RD7_0040  Aug2009   -- New --
             int nRow, n;
-            int? nRgCode, nVolume;
+            int? nRgCode, nVolume, nContractNo, nContractSeqNumber;
 
             nRow = dw_renewal.GetRow();
+            // TJB  RD7_0051  Oct-2009
+            // Added ContractNo and ContractSeqNumber parameters 
+            // to GetNvrItemProcRatePerHrFromNonVehicleRate call.
+            nContractNo = idw_renewal.GetItem<Renewal>(nRow).ContractNo;
+            nContractSeqNumber = idw_renewal.GetItem<Renewal>(nRow).ContractSeqNumber;
             nRgCode = idw_renewal.GetItem<Renewal>(nRow).ConRgCodeAtRenewal;
             nVolume = idw_renewal.GetItem<Renewal>(nRow).ConVolumeAtRenewal;
             if (nVolume != nPrevVolume || nRgCode != nPrevRgCode)
@@ -2566,7 +2571,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 DateTime? dEffDate;
 
                 dEffDate = idw_renewal.GetItem<Renewal>(nRow).ConRatesEffectiveDate;
-                nProcRatePerHr = RDSDataService.GetNvrItemProcRatePerHrFromNonVehicleRate(nRgCode, dEffDate);
+                nProcRatePerHr = RDSDataService.GetNvrItemProcRatePerHrFromNonVehicleRate(nContractNo, nContractSeqNumber, nRgCode, dEffDate);
                 dProcRatePerHr = Convert.ToDecimal(nProcRatePerHr);
                 dVolume = Convert.ToDecimal(dw_renewal.DataObject.GetValue(nRow, "con_volume_at_renewal"));
                 System.Decimal dWeeksPerYr = 52.1429M;
