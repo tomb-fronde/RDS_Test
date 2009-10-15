@@ -140,6 +140,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             string sUsePrintedOn;
             string sPrintedOnString;
             Cursor.Current = Cursors.WaitCursor;
+
             dw_criteria.DataObject.AcceptText();
             // get criteria
             lRegionID = dw_criteria.GetItem<MailmergeCustomerDownloadSearch>(0).RegionIdRo;
@@ -153,49 +154,59 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             // date loaded
             if (dl_todate == null && dl_fromdate == null || dl_todate != null && dl_fromdate != null)
             {
-                if (((TimeSpan)(dl_todate - dl_fromdate)).Days < 0) //if (DaysAfter(dl_fromdate, dl_todate) < 0) 
+                //if (DaysAfter(dl_fromdate, dl_todate) < 0) 
+                if (((TimeSpan)(dl_todate - dl_fromdate)).Days < 0) 
                 {
-                    MessageBox.Show("The date first loaded FROM date must be earlier than the TO date", "Date Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The date first loaded FROM date must be earlier than the TO date"
+                                   , "Date Loaded"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show("You must specify date first loaded FROM date and TO date", "Date Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must specify date first loaded FROM date and TO date"
+                               , "Date Loaded"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             // date printed
             if (dpo_todate == null && dpo_fromdate == null || dpo_todate != null && dpo_fromdate != null)
             {
-                if (((TimeSpan)(dpo_todate - dpo_fromdate)).Days < 0) //if (DaysAfter(dpo_fromdate, dpo_todate) < 0)
+                //if (DaysAfter(dpo_fromdate, dpo_todate) < 0)
+                if (((TimeSpan)(dpo_todate - dpo_fromdate)).Days < 0)
                 {
-                    MessageBox.Show("The date last printed FROM date must be earlier than the TO date", "Date Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The date last printed FROM date must be earlier than the TO date"
+                                   , "Date Loaded"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show("You must specify date last printed FROM date and TO date", "Date Loaded", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must specify date last printed FROM date and TO date"
+                               , "Date Loaded"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             // *******************create the syntax**********************
             //  sBaseSelect2  be passed to the customer dump window which which
             //  	will use it to modify the where clause for retrieve and update of printedon
             //  	In this script it is used to retrieve the appropriate contracts
-            // removed from s_BaseWhere1 ( after  (  contract.con_date_terminated is null) and & ) so that all customers 
+            // removed from s_BaseWhere1(after (contract.con_date_terminated is null) and & ) so that all customers 
             // are retrieved and not just the customers with a privacy flag of Y
-            //  (  customer.cust_dir_listing_ind='Y') and &
+            // (customer.cust_dir_listing_ind='Y') and &
             // s_BaseWhere1=  "&
-            // WHERE 	 (  contractor.contractor_supplier_no = contractor_renewals.contractor_supplier_no ) and  &
+            // WHERE 	(contractor.contractor_supplier_no = contractor_renewals.contractor_supplier_no ) and  &
             //          	 (  contract.contract_no = customer.contract_no ) and  &
             //          	 (  region.region_id = outlet.region_id ) and  &
             //          	 (  outlet.outlet_id = contract.con_base_office ) and  &
             // 				 (  outlet_type.ot_code = outlet.ot_code ) and &
             // 				 (  contract.con_date_terminated is null) and &
-            // 		       (  contract_renewals.contract_no = contractor_renewals.contract_no ) and  &
+            // 		         (  contract_renewals.contract_no = contractor_renewals.contract_no ) and  &
             //          	 (  contract_renewals.contract_seq_number = contractor_renewals.contract_seq_number ) and  &
             //          	 (  contract.contract_no = contract_renewals.contract_no ) and  &
             //          	 (  contract.con_active_sequence = contract_renewals.contract_seq_number ) and  &
             //          	 (   (  contractor_renewals.cr_effective_date =  (   select max ( cr.cr_effective_date)  from contractor_renewals as cr where cr.contractor_supplier_no = contractor_renewals.contractor_supplier_no and cr.contract_no = contract.contract_no )) AND  "
             //  TJB SR4652 Feb 2005
             //  Changed the clause definition to a series of string concatenations
-            //   ( largely for cosmetic reasons, but I found it easier to debug).
+            //  (largely for cosmetic reasons, but I found it easier to debug).
             // s_BaseWhere1 = "&
             //    WHERE  (  contract.contract_no = address.contract_no ) and  &
             //           (  contract_renewals.contract_no = contract.contract_no ) and  &
@@ -208,17 +219,32 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             //           (  region.region_id = outlet.region_id ) and  &
             //           (  contract.con_base_office = outlet.outlet_id ) and  &
             //           (  contract.con_active_sequence = contract_renewals.contract_seq_number ) and  &
-            //           (   (  contract.con_date_terminated is null ) AND  &
+            //           (  ( contract.con_date_terminated is null ) AND  &
             //           (  rds_customer.master_cust_id is null ) AND  &
             //           (  customer_address_moves.move_out_date is null ) AND  &
-            //           (  contractor_renewals.cr_effective_date =  (  select max ( cr.cr_effective_date)  from contractor_renewals as cr where cr.contractor_supplier_no = contractor_renewals.contractor_supplier_no and cr.contract_no = contract.contract_no) ) ) AND"
+            //           (  contractor_renewals.cr_effective_date = (select max(cr.cr_effective_date)  from contractor_renewals as cr where cr.contractor_supplier_no = contractor_renewals.contractor_supplier_no and cr.contract_no = contract.contract_no) ) ) AND"
             //  TJB SR4652 Feb 2005
             //  Changed the 'where' conditions in the final subselect to fix a 
             //  problem where duplicate records were being selected when a contract
             //  changed hands during the current month.
-            s_BaseWhere1 = "WHERE  (  contract.contract_no = address.contract_no ) AND " + " (  contract_renewals.contract_no = contract.contract_no ) AND " + " (  contractor_renewals.contractor_supplier_no = contractor.contractor_supplier_n" +
-            "o ) AND " + " (  contractor_renewals.contract_no = contract_renewals.contract_no ) AND " + " (  contractor_renewals.contract_seq_number = contract_renewals.contract_seq_numb" +
-            "er ) AND " + " (  customer_address_moves.adr_id = address.adr_id ) AND " + " (  outlet_type.ot_code = outlet.ot_code ) AND " + " (  rds_customer.cust_id = customer_address_moves.cust_id ) AND " + " (  region.region_id = outlet.region_id ) AND " + " (  contract.con_base_office = outlet.outlet_id ) AND " + " (  contract.con_active_sequence = contract_renewals.contract_seq_number ) AND " + " (  contract.con_date_terminated is null ) AND " + " (  rds_customer.master_cust_id is null ) AND " + " (  customer_address_moves.move_out_date is null ) AND " + " (  contractor_renewals.cr_effective_date " + "=  (  select max ( cr.cr_effective_date) " + " from contractor_renewals as cr " + "where cr.contract_seq_number = contract_renewals.contract_seq_number " + "  and cr.contract_no = contract_renewals.contract_no ) )";
+            s_BaseWhere1 = "WHERE contract.contract_no = address.contract_no AND " 
+                              + "contract_renewals.contract_no = contract.contract_no AND " 
+                              + "contractor_renewals.contractor_supplier_no = contractor.contractor_supplier_no AND " 
+                              + "contractor_renewals.contract_no = contract_renewals.contract_no AND " 
+                              + "contractor_renewals.contract_seq_number = contract_renewals.contract_seq_number AND " 
+                              + "customer_address_moves.adr_id = address.adr_id AND " 
+                              + "outlet_type.ot_code = outlet.ot_code AND " 
+                              + "rds_customer.cust_id = customer_address_moves.cust_id AND " 
+                              + "region.region_id = outlet.region_id AND " 
+                              + "contract.con_base_office = outlet.outlet_id AND " 
+                              + "contract.con_active_sequence = contract_renewals.contract_seq_number AND " 
+                              + "contract.con_date_terminated is null AND " 
+                              + "rds_customer.master_cust_id is null AND " 
+                              + "customer_address_moves.move_out_date is null AND " 
+                              + "contractor_renewals.cr_effective_date " 
+                                        + "= (select max(cr.cr_effective_date) from contractor_renewals as cr " 
+                                            + "where cr.contract_seq_number = contract_renewals.contract_seq_number " 
+                                            + "  and cr.contract_no = contract_renewals.contract_no)";
             // *******convert all data types to string for SQL use*******
             string sRegionID;
             string sOutletID;
@@ -257,7 +283,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             }
             else
             {
-                sl_fromdate = '\'' + dl_fromdate.ToString("yyyy/mm/dd") + '\'';
+                // TJB  RD7_0043  Aug2009
+                // Changed format: yyyy/mm/dd --> yyyy/MM/dd
+                sl_fromdate = '\'' + dl_fromdate.ToString("yyyy/MM/dd") + '\'';
             }
             if (dl_todate == null || dl_todate == DateTime.MinValue)
             {
@@ -265,7 +293,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             }
             else
             {
-                sl_todate = '\'' + dl_todate.ToString("yyyy/mm/dd") + '\'';
+                // TJB  RD7_0043  Aug2009
+                // Changed format: yyyy/mm/dd --> yyyy/MM/dd
+                sl_todate = '\'' + dl_todate.ToString("yyyy/MM/dd") + '\'';
             }
             if (dpo_fromdate == null || dpo_fromdate == DateTime.MinValue)
             {
@@ -273,7 +303,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             }
             else
             {
-                spo_fromdate = '\'' + dpo_fromdate.ToString("yyyy/mm/dd") + '\'';
+                // TJB  RD7_0043  Aug2009
+                // Changed format: yyyy/mm/dd --> yyyy/MM/dd
+                spo_fromdate = '\'' + dpo_fromdate.ToString("yyyy/MM/dd") + '\'';
             }
             if (dpo_todate == null || dpo_todate == DateTime.MinValue)
             {
@@ -281,18 +313,20 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             }
             else
             {
-                spo_todate = '\'' + dpo_todate.ToString("yyyy/mm/dd") + '\'';
+                // TJB  RD7_0043  Aug2009
+                // Changed format: yyyy/mm/dd --> yyyy/MM/dd
+                spo_todate = '\'' + dpo_todate.ToString("yyyy/MM/dd") + '\'';
             }
             // *******Evaluate sUsePrintedOn ***********
             if (sUsePrintedOn == "Y")
             {
                 if (spo_fromdate == "null")
                 {
-                    sPrintedOnString = " AND  ( rds_customer.printedon is null)";
+                    sPrintedOnString = " AND rds_customer.printedon is null";
                 }
                 else
                 {
-                    sPrintedOnString = " AND  ( rds_customer.printedon between " + spo_fromdate + " and " + spo_todate + " )";
+                    sPrintedOnString = " AND rds_customer.printedon between " + spo_fromdate + " and " + spo_todate;
                 }
             }
             else
@@ -302,19 +336,19 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             //  TJB SR4652 Feb 2005
             //  Changed how this clause is formed, to avoid selection clauses 
             //  like
-            //       (  ( region.region_id = <sRegionID> AND null is not null) 
-            //        OR  ( null is null)) AND 
-            //   ( where lRegionID is null)
+            //      ((region.region_id = <sRegionID> AND null is not null) 
+            //        OR (null is null)) AND 
+            //   (where lRegionID is null)
             // 
             // s_BaseWhere2 =   &
-            // 				" (  ( region.region_id = " + sRegionID + "  AND  " + &
-            //          	sRegionID+ " is not null) OR   &
+            // 				"( (region.region_id = " + sRegionID + " AND " + &
+            //                   sRegionID+ " is not null) OR   &
             //          	 ( " + sRegionID+ " is null)) AND  &
-            //          	 (  ( outlet.outlet_id = " + sOutletID +" AND  "&
+            //          	 ( (outlet.outlet_id = " + sOutletID +" AND  "&
             //          	+ sOutletID + "  is not null) OR  &
             //          	 ( " + sOutletID + " is null)) AND  &
-            //          	 (  ( rds_customer.cust_surname_company like '" +sfirstletter + "')) AND  &
-            //          	 (  ( rds_customer.cust_date_commenced between "+ sl_fromdate + " and "+ sl_todate + " AND  &
+            //          	 ( (rds_customer.cust_surname_company like '" +sfirstletter + "')) AND  &
+            //          	 ( (rds_customer.cust_date_commenced between "+ sl_fromdate + " and "+ sl_todate + " AND  &
             //          	 ( " + sl_fromdate + " is not null AND  "&
             //          	+ sl_todate + " is not null)) OR  &
             //          	 ( " + sl_fromdate + " is null OR  "&
@@ -323,19 +357,19 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             s_BaseWhere2 = "";
             if (lRegionID != 0 && lRegionID != null)
             {
-                s_BaseWhere2 = " AND  (  region.region_id = " + sRegionID + " ) ";
+                s_BaseWhere2 = " AND region.region_id = " + sRegionID;
             }
             if (lOutletID != 0 && lOutletID != null)
             {
-                s_BaseWhere2 = s_BaseWhere2 + " AND  (  outlet.outlet_id = " + sOutletID + " )";
+                s_BaseWhere2 = s_BaseWhere2 + " AND outlet.outlet_id = " + sOutletID;
             }
             if (!(sFirstLetter == "%"))
             {
-                s_BaseWhere2 = s_BaseWhere2 + " (  rds_customer.cust_surname_company like \'" + sFirstLetter + "%\' )";
+                s_BaseWhere2 = s_BaseWhere2 + " AND rds_customer.cust_surname_company like \'" + sFirstLetter + "%\'";
             }
             if (!StaticFunctions.IsNull(dl_fromdate) && !StaticFunctions.IsNull(dl_todate))
             {
-                s_BaseWhere2 = s_BaseWhere2 + " AND  (  rds_customer.cust_date_commenced between " + sl_fromdate + " and " + sl_todate + " )";
+                s_BaseWhere2 = s_BaseWhere2 + " AND rds_customer.cust_date_commenced between " + sl_fromdate + " and " + sl_todate;
             }
             return s_BaseWhere1 + s_BaseWhere2 + ' ' + sPrintedOnString;
         }
@@ -391,11 +425,11 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             StaticVariables.gnv_app.of_set_componenttoopen(this.of_get_componentname());
             Cursor.Current = Cursors.WaitCursor;
             // testing twc
-            //  OpenWithParm ( w_qs_outlet, sOutlet)
+            //  OpenWithParm(w_qs_outlet, sOutlet)
             StaticMessage.StringParm = sOutlet;
             WQsOutlet w_qs_outlet = new WQsOutlet();
             w_qs_outlet.ShowDialog();
-            // opensheetwithParm ( w_qs_outlet,sOutlet, w_main_mdi, 0, originaL!)
+            // opensheetwithParm(w_qs_outlet,sOutlet, w_main_mdi, 0, originaL!)
             if (StaticVariables.gnv_app.of_get_parameters().longparm > 0)
             {
                 dw_criteria.SetValue(0, "outlet_id", StaticVariables.gnv_app.of_get_parameters().longparm);
@@ -420,7 +454,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             String SQLErrText = string.Empty;
             if (dw_results.GetSelectedRow(0) < 0)
             {
-                MessageBox.Show("Please select contract ( s)", "Open Customers");
+                MessageBox.Show("Please select contract(s)"
+                               , "Open Customers"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             Cursor.Current = Cursors.WaitCursor;
@@ -436,18 +472,22 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             // 							   			region,   &
             // 							   			contract_renewals, &
             // 											outlet_type  "
-            sBaseSelect = "SELECT \tDistinct rds_customer.cust_id FROM \taddress,   contract,   contract_renew" +
-            "als,   contractor,   contractor_renewals,   customer_address_moves,   outlet,   " +
-            "outlet_type,   rds_customer,   region  ";
+            sBaseSelect = "SELECT Distinct rds_customer.cust_id" 
+                         + " FROM address, contract, contract_renewals, "
+                                + "contractor, contractor_renewals, "
+                                + "customer_address_moves, outlet, outlet_type, "
+                                + "rds_customer, region ";
             // Get list of contracts
             sContractList = uf_get_contract_list();
-            if (sContractList == "null")
+            // TJB  RD7_0043  Aug2009
+            // Added 'sContractList == ""' condition
+            if (sContractList == "" || sContractList == "null")
             {
                 sAdditionalBaseWhere = "";
             }
             else
             {
-                sAdditionalBaseWhere += " AND  ( contract.contract_no in  ( " + sContractList + ")) ";
+                sAdditionalBaseWhere += " AND contract.contract_no in (" + sContractList + ")";
             }
             //  Added the Privacy Protection check
             //  Check if user has the ability to override privacy flag
@@ -455,14 +495,14 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             if ((lb_privacy_override == null) || lb_privacy_override == false)
             {
                 //  have to hide the customers with privacy preference set
-                sAdditionalBaseWhere += "  AND  ( rds_customer.cust_dir_listing_ind = \'Y\')";
+                sAdditionalBaseWhere += " AND rds_customer.cust_dir_listing_ind = \'Y\'";
             }
             sBaseWhere += sAdditionalBaseWhere;
-            //  gnv_App.of_Get_Parameters ( ).StringParm = sBaseSelect + sBaseWhere	//pass SQL
+            //  gnv_App.of_Get_Parameters().StringParm = sBaseSelect + sBaseWhere	//pass SQL
             StaticVariables.gnv_app.of_get_parameters().longparm = -(1);
             //  TJB  SR4646  Jan 2005
             //  Select the customers for the labels
-            //   ( moved from w_customer_labels)
+            //  (moved from w_customer_labels)
             string ls_tmpTable;
             string ls_select;
             string ls_sqlDelete;
@@ -472,12 +512,15 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             StaticMessage.StringParm = ls_select;
             ls_sqlDelete = "delete from " + ls_tmpTable;
             //  Clear out the temporary table
-
-            RDSDataService.DeleteReportTemp(ref SQLCode, ref SQLErrText);// EXECUTE IMMEDIATE :ls_sqlDelete;
+            // EXECUTE IMMEDIATE :ls_sqlDelete;
+            RDSDataService.DeleteReportTemp(ref SQLCode, ref SQLErrText);
             if (SQLCode == -(1))
             {
                 //?ROLLBACK;
-                MessageBox.Show("WARNING: Unable to delete from temporary table " + ls_tmpTable + "~r~r" + SQLErrText, "SQL ERROR");
+                MessageBox.Show("WARNING: Unable to delete from temporary table " + ls_tmpTable + "\n\n" 
+                                 + SQLErrText
+                               , "SQL ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  Insert the selected customers into the temporary table
@@ -486,7 +529,10 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             if (SQLCode == -(1))
             {
                 //?ROLLBACK;
-                MessageBox.Show("WARNING: Unable to select customers into temporary table " + ls_tmpTable + "~r~r" + SQLErrText, "SQL ERROR");
+                MessageBox.Show("WARNING: Unable to select customers into temporary table " + ls_tmpTable + "\n\n" 
+                                 + SQLErrText
+                               , "SQL ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  Commit the changes
@@ -510,159 +556,161 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             //!if (dw_results.GetSelectedRow(0) == 0)
             if (dw_results.GetSelectedRow(0) < 0)
             {
-                MessageBox.Show("Please select contract ( s)", "Open Customers");
+                MessageBox.Show("Please select contract(s)"
+                               , "Open Customers"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             Cursor.Current = Cursors.WaitCursor;
             // Get select
-            // sBaseSelect =  	left ( dw_syntax.describe ( "datawindow.table.select"), pos ( dw_syntax.describe ( "datawindow.table.select"),'WHERE') - 1)
-            // sBaseSelect =  	left ( dw_syntax.GETSQLSelect ( ), pos ( dw_syntax.GETSQLSelect ( ),'WHERE') - 1)
-            string dw_syntax_sqlselect =
+            // sBaseSelect =  	left(dw_syntax.describe("datawindow.table.select"), pos(dw_syntax.describe("datawindow.table.select"),'WHERE') - 1)
+            // sBaseSelect =  	left(dw_syntax.GETSQLSelect(), pos(dw_syntax.GETSQLSelect(),'WHERE') - 1)
                 //p! changed the substring function - diferent in ASA and SQLServer, if length < 0 exception in SQLServer
-                /*"SELECT rds_customer.cust_id               as cust_id, " +
-                " rds_customer.cust_surname_company  as cust_surname_company, " +
-                " rds_customer.cust_initials         as cust_initials, " +
-                " rtrim(ltrim(isnull(rds_customer.cust_title,'') + ' ' " +
-                "        + isnull(rds_customer.cust_initials,'') + ' ' " +
-                "        + isnull(rds_customer.cust_surname_company,''))) " +
-                "                                    as cust_name, " +
-                " rtrim(ltrim(road.road_name " +
-                " +case isnull(road_type.rt_name,'') " +
-                " when '' then '' " +
-                " else " +
-                " ' '+road_type.rt_name " +
-                " end " +
-                " +case isnull(road_suffix.rs_name,'') " +
-                " when '' then '' " +
-                " else ' '+road_suffix.rs_name end)) " +
-                "                                    as cust_mailing_address_road, " +
-                " suburblocality.sl_name             as cust_mailing_address_locality,  " +
-                " towncity.tc_name                   as cust_mail_town,  " +
-                " rds_customer.cust_date_commenced   as cust_date_first_loaded," +
-                " null                               as cust_date_left,  " +
-                " rds_customer.cust_dir_listing_ind  as cust_dir_listing_ind, " +
-                " rds_customer.cust_dir_listing_text as cust_dir_listing_text," +
-                " contractor.c_title                 as c_title,  " +
-                " contractor.c_first_names           as c_first_names,  " +
-                " contractor.c_surname_company       as c_surname_company,  " +
-                " rtrim(ltrim(case isnull(contractor.c_title,'') " +
-                " when '' then '' " +
-                " else contractor.c_title+' ' end " +
-                "        + case isnull(contractor.c_first_names,'') " +
-                " when '' then '' " +
-                " else contractor.c_first_names+' ' end " +
-                "        + isnull(contractor.c_surname_company,'') )) " +
-                "                                    as ownerdriver_name, " +
-                " case isnull(contractor.c_phone_day,'') " +
-                " when '' then ''  " +
-                " else " +
-                "  case left(contractor.c_phone_day,2)when '02' then " +
-                "            substring(contractor.c_phone_day,1,3)+'-' " +
-                "           +substring(contractor.c_phone_day,4,3)+'-' " +
-                "           +substring(contractor.c_phone_day,7,len(contractor.c_phone_day)-7)  " +
-                "       else " +
-                "            substring(contractor.c_phone_day,1,2)+'-' " +
-                "           +substring(contractor.c_phone_day,3,3)+'-' " +
-                "           +substring(contractor.c_phone_day,6,len(contractor.c_phone_day)-6) " +
-                "       end " +
-                "     end  as c_phone_day, " +
-                " case isnull(contractor.c_phone_night,'') " +
-                " when '' then '' " +
-                " else " +
-                " case left(contractor.c_phone_night,2)when '02' then " +
-                "            substring(contractor.c_phone_night,1,3)+'-' " +
-                "           +substring(contractor.c_phone_night,4,3)+'-' " +
-                "           +substring(contractor.c_phone_night,7,len(contractor.c_phone_night)-7)  " +
-                "       else " +
-                "            substring(contractor.c_phone_night,1,2)+'-' " +
-                "           +substring(contractor.c_phone_night,3,3)+'-' " +
-                "           +substring(contractor.c_phone_night,6,len(contractor.c_phone_night)-6)  " +
-                "       end " +
-                "     end  as c_phone_night, " +
-                " case isnull(contractor.c_mobile,'') " +
-                " when '' then '' " +
-                " else " +
-                "     substring(contractor.c_mobile,1,3)+'-' " +
-                "       +substring(contractor.c_mobile,4,3)+'-' " +
-                "       +substring(contractor.c_mobile,7,len(contractor.c_mobile)-7) end as c_mobile, " +
-                " case isnull(contractor.c_mobile2,'') " +
-                "  when '' then '' " +
-                "  else " +
-                "     substring(contractor.c_mobile2,1,3)+'-' " +
-                "       +substring(contractor.c_mobile2,4,3)+'-' " +
-                "       +substring(contractor.c_mobile2,7,len(contractor.c_mobile2)-7) end as c_mobile2," +
-                " case contractor.c_prime_contact when  1  then c_phone_day end," +
-                " case contractor.c_prime_contact when 2 then c_phone_night end," +
-                " case contractor.c_prime_contact when 3 then c_mobile end as primary_contact, " +
-                " contractor.c_email_address         as c_email_address, " +
-                " contractor.c_salutation            as c_salutation, " +
-                " outlet.o_name                      as o_name, " +
-                " outlet.o_address                   as o_address, " +
-                " outlet.o_telephone                 as o_telephone, " +
-                " outlet.o_fax                       as o_fax, " +
-                " outlet.o_manager                   as o_manager, " +
-                " region.rgn_name                    as rgn_name, " +
-                " region.rgn_rcm_manager             as rgn_rcm_manager, " +
-                " region.rgn_fax                     as rgn_fax, " +
-                " region.rgn_telephone               as rgn_telephone, " +
-                " region.rgn_address                 as rgn_address, " +
-                " str(contract.contract_no) +'/' + str(contract.con_active_sequence) " +
-                "                                    as contract_no, " +
-                " address.adr_rd_no                  as cust_rd_number, " +
-                " rd.f_GetDeliveryDays(rds_customer.cust_id) " +
-                "                                    as cust_delivery_days, " +
-                " substring(case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),1,1) when 'Y' then ',Monday'    else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),2,1) when 'Y'   then ',Tuesday'   else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),3,1) when 'Y'   then ',Wednesday' else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),4,1) when 'Y'   then ',Thursday'  else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),5,1) when 'Y'   then ',Friday'    else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),6,1) when 'Y'   then ',Saturday'  else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),7,1) when 'Y'   then ',Sunday'    else '' end,2," +
-                "    len(case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),1,1) when 'Y' then ',Monday'    else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),2,1) when 'Y'   then ',Tuesday'   else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),3,1) when 'Y'   then ',Wednesday' else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),4,1) when 'Y'   then ',Thursday'  else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),5,1) when 'Y'   then ',Friday'    else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),6,1) when 'Y'   then ',Saturday'  else '' end " +
-                "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),7,1) when 'Y'   then ',Sunday'    else '' end)-2)   " +
-                "    as cust_deliverydays,    " +
-                " substring(case rds_customer.cust_business when 'Y'      then ',Business'       else '' end " +
-                "    + case rds_customer.cust_rural_resident when 'Y'  then ',Rural Resident' else '' end  " +
-                "    + case rds_customer.cust_rural_farmer when 'Y'    then ',Rural Farmer'   else '' end,2, " +
-                " len(case rds_customer.cust_business when 'Y'      then ',Business'       else '' end " +
-                "    + case rds_customer.cust_rural_resident when 'Y'  then ',Rural Resident' else '' end  " +
-                "    + case rds_customer.cust_rural_farmer when 'Y'    then ',Rural Farmer'   else '' end)-2)  " +
-                "    as cust_category,  " +
-                " contractor.c_initials              as c_initials,  " +
-                " outlet_type.ot_outlet_type         as ot_outlet_type,  " +
-                " rds_customer.cust_title            as cust_title,  " +
-                " case isnull(address.adr_unit,'') " +
-                " when '' then '' " +
-                " else address.adr_unit+'/' end " +
-                " +address.adr_no                 as adr_no, " +
-                " post_code.post_code                as adr_post_code, " +
-                " address.adr_alpha                  as adr_alpha, " +
-                " isnull(adr_no,'')+isnull(adr_alpha,' ') " +
-                "                                    as cust_mailing_address_no," +
-                " address.dp_id " +
-                " FROM contract,   " +
-                " contractor,    " +
-                " contractor_renewals,    " +
-                " rds_customer,   " +
-                " address left outer join road on address.road_id = road.road_id " +
-                " LEFT OUTER JOIN road_type on road.rt_id = road_type.rt_id " +
-                " LEFT OUTER JOIN road_suffix on road.rs_id = road_suffix.rs_id " +
-                " left outer join suburblocality on address.sl_id = suburblocality.sl_id " +
-                " left outer join towncity on address.tc_id = towncity.tc_id " +
-                " left outer join post_code on address.post_code_id = post_code.post_code_id, " +
-                " customer_address_moves, " +
-                " outlet ,  " +
-                " region ,  " +
-                " contract_renewals , " +
-                " outlet_type  ";
-                                    */
+            /*string dw_syntax_sqlselect =
+            "SELECT rds_customer.cust_id               as cust_id, " +
+            " rds_customer.cust_surname_company  as cust_surname_company, " +
+            " rds_customer.cust_initials         as cust_initials, " +
+            " rtrim(ltrim(isnull(rds_customer.cust_title,'') + ' ' " +
+            "        + isnull(rds_customer.cust_initials,'') + ' ' " +
+            "        + isnull(rds_customer.cust_surname_company,''))) " +
+            "                                    as cust_name, " +
+            " rtrim(ltrim(road.road_name " +
+            " +case isnull(road_type.rt_name,'') " +
+            " when '' then '' " +
+            " else " +
+            " ' '+road_type.rt_name " +
+            " end " +
+            " +case isnull(road_suffix.rs_name,'') " +
+            " when '' then '' " +
+            " else ' '+road_suffix.rs_name end)) " +
+            "                                    as cust_mailing_address_road, " +
+            " suburblocality.sl_name             as cust_mailing_address_locality,  " +
+            " towncity.tc_name                   as cust_mail_town,  " +
+            " rds_customer.cust_date_commenced   as cust_date_first_loaded," +
+            " null                               as cust_date_left,  " +
+            " rds_customer.cust_dir_listing_ind  as cust_dir_listing_ind, " +
+            " rds_customer.cust_dir_listing_text as cust_dir_listing_text," +
+            " contractor.c_title                 as c_title,  " +
+            " contractor.c_first_names           as c_first_names,  " +
+            " contractor.c_surname_company       as c_surname_company,  " +
+            " rtrim(ltrim(case isnull(contractor.c_title,'') " +
+            " when '' then '' " +
+            " else contractor.c_title+' ' end " +
+            "        + case isnull(contractor.c_first_names,'') " +
+            " when '' then '' " +
+            " else contractor.c_first_names+' ' end " +
+            "        + isnull(contractor.c_surname_company,'') )) " +
+            "                                    as ownerdriver_name, " +
+            " case isnull(contractor.c_phone_day,'') " +
+            " when '' then ''  " +
+            " else " +
+            "  case left(contractor.c_phone_day,2)when '02' then " +
+            "            substring(contractor.c_phone_day,1,3)+'-' " +
+            "           +substring(contractor.c_phone_day,4,3)+'-' " +
+            "           +substring(contractor.c_phone_day,7,len(contractor.c_phone_day)-7)  " +
+            "       else " +
+            "            substring(contractor.c_phone_day,1,2)+'-' " +
+            "           +substring(contractor.c_phone_day,3,3)+'-' " +
+            "           +substring(contractor.c_phone_day,6,len(contractor.c_phone_day)-6) " +
+            "       end " +
+            "     end  as c_phone_day, " +
+            " case isnull(contractor.c_phone_night,'') " +
+            " when '' then '' " +
+            " else " +
+            " case left(contractor.c_phone_night,2)when '02' then " +
+            "            substring(contractor.c_phone_night,1,3)+'-' " +
+            "           +substring(contractor.c_phone_night,4,3)+'-' " +
+            "           +substring(contractor.c_phone_night,7,len(contractor.c_phone_night)-7)  " +
+            "       else " +
+            "            substring(contractor.c_phone_night,1,2)+'-' " +
+            "           +substring(contractor.c_phone_night,3,3)+'-' " +
+            "           +substring(contractor.c_phone_night,6,len(contractor.c_phone_night)-6)  " +
+            "       end " +
+            "     end  as c_phone_night, " +
+            " case isnull(contractor.c_mobile,'') " +
+            " when '' then '' " +
+            " else " +
+            "     substring(contractor.c_mobile,1,3)+'-' " +
+            "       +substring(contractor.c_mobile,4,3)+'-' " +
+            "       +substring(contractor.c_mobile,7,len(contractor.c_mobile)-7) end as c_mobile, " +
+            " case isnull(contractor.c_mobile2,'') " +
+            "  when '' then '' " +
+            "  else " +
+            "     substring(contractor.c_mobile2,1,3)+'-' " +
+            "       +substring(contractor.c_mobile2,4,3)+'-' " +
+            "       +substring(contractor.c_mobile2,7,len(contractor.c_mobile2)-7) end as c_mobile2," +
+            " case contractor.c_prime_contact when  1  then c_phone_day end," +
+            " case contractor.c_prime_contact when 2 then c_phone_night end," +
+            " case contractor.c_prime_contact when 3 then c_mobile end as primary_contact, " +
+            " contractor.c_email_address         as c_email_address, " +
+            " contractor.c_salutation            as c_salutation, " +
+            " outlet.o_name                      as o_name, " +
+            " outlet.o_address                   as o_address, " +
+            " outlet.o_telephone                 as o_telephone, " +
+            " outlet.o_fax                       as o_fax, " +
+            " outlet.o_manager                   as o_manager, " +
+            " region.rgn_name                    as rgn_name, " +
+            " region.rgn_rcm_manager             as rgn_rcm_manager, " +
+            " region.rgn_fax                     as rgn_fax, " +
+            " region.rgn_telephone               as rgn_telephone, " +
+            " region.rgn_address                 as rgn_address, " +
+            " str(contract.contract_no) +'/' + str(contract.con_active_sequence) " +
+            "                                    as contract_no, " +
+            " address.adr_rd_no                  as cust_rd_number, " +
+            " rd.f_GetDeliveryDays(rds_customer.cust_id) " +
+            "                                    as cust_delivery_days, " +
+            " substring(case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),1,1) when 'Y' then ',Monday'    else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),2,1) when 'Y'   then ',Tuesday'   else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),3,1) when 'Y'   then ',Wednesday' else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),4,1) when 'Y'   then ',Thursday'  else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),5,1) when 'Y'   then ',Friday'    else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),6,1) when 'Y'   then ',Saturday'  else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),7,1) when 'Y'   then ',Sunday'    else '' end,2," +
+            "    len(case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),1,1) when 'Y' then ',Monday'    else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),2,1) when 'Y'   then ',Tuesday'   else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),3,1) when 'Y'   then ',Wednesday' else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),4,1) when 'Y'   then ',Thursday'  else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),5,1) when 'Y'   then ',Friday'    else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),6,1) when 'Y'   then ',Saturday'  else '' end " +
+            "    + case substring(rd.f_GetDeliveryDays(rds_customer.cust_id),7,1) when 'Y'   then ',Sunday'    else '' end)-2)   " +
+            "    as cust_deliverydays,    " +
+            " substring(case rds_customer.cust_business when 'Y'      then ',Business'       else '' end " +
+            "    + case rds_customer.cust_rural_resident when 'Y'  then ',Rural Resident' else '' end  " +
+            "    + case rds_customer.cust_rural_farmer when 'Y'    then ',Rural Farmer'   else '' end,2, " +
+            " len(case rds_customer.cust_business when 'Y'      then ',Business'       else '' end " +
+            "    + case rds_customer.cust_rural_resident when 'Y'  then ',Rural Resident' else '' end  " +
+            "    + case rds_customer.cust_rural_farmer when 'Y'    then ',Rural Farmer'   else '' end)-2)  " +
+            "    as cust_category,  " +
+            " contractor.c_initials              as c_initials,  " +
+            " outlet_type.ot_outlet_type         as ot_outlet_type,  " +
+            " rds_customer.cust_title            as cust_title,  " +
+            " case isnull(address.adr_unit,'') " +
+            " when '' then '' " +
+            " else address.adr_unit+'/' end " +
+            " +address.adr_no                 as adr_no, " +
+            " post_code.post_code                as adr_post_code, " +
+            " address.adr_alpha                  as adr_alpha, " +
+            " isnull(adr_no,'')+isnull(adr_alpha,' ') " +
+            "                                    as cust_mailing_address_no," +
+            " address.dp_id " +
+            " FROM contract,   " +
+            " contractor,    " +
+            " contractor_renewals,    " +
+            " rds_customer,   " +
+            " address left outer join road on address.road_id = road.road_id " +
+            " LEFT OUTER JOIN road_type on road.rt_id = road_type.rt_id " +
+            " LEFT OUTER JOIN road_suffix on road.rs_id = road_suffix.rs_id " +
+            " left outer join suburblocality on address.sl_id = suburblocality.sl_id " +
+            " left outer join towncity on address.tc_id = towncity.tc_id " +
+            " left outer join post_code on address.post_code_id = post_code.post_code_id, " +
+            " customer_address_moves, " +
+            " outlet ,  " +
+            " region ,  " +
+            " contract_renewals , " +
+            " outlet_type  ";
+            */
 
-                      /* optimized further - Nov, 20 2007
+            /* optimized further - Nov, 20 2007
                 " SELECT rds_customer.cust_id              as cust_id, " +
                 "rds_customer.cust_surname_company  as cust_surname_company,  " +
                 " rds_customer.cust_initials         as cust_initials,  " +
@@ -760,63 +808,66 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
                 " LEFT OUTER JOIN road_type on road.rt_id = road_type.rt_id LEFT OUTER JOIN road_suffix on road.rs_id = road_suffix.rs_id   " +
                 " left outer join suburblocality on address.sl_id = suburblocality.sl_id left outer join towncity on address.tc_id = towncity.tc_id   " +
                 " left outer join post_code on address.post_code_id = post_code.post_code_id, customer_address_moves,  outlet ,   region ,   " +
-                " contract_renewals ,  outlet_type  ";*/
+                " contract_renewals ,  outlet_type  ";
+             */
 
-                    "  SELECT rds_customer.cust_id as cust_id, " +
-"  rds_customer.cust_surname_company as cust_surname_company, " +
-"  rds_customer.cust_initials as cust_initials, " +
-"  rtrim(ltrim(isnull(rds_customer.cust_title,'') + ' ' + isnull(rds_customer.cust_initials,'') + ' ' + isnull(rds_customer.cust_surname_company,''))) " +
-"  as cust_name, " +
-"  rtrim(ltrim(road.road_name + case when road_type.rt_name is null then '' else ' '+road_type.rt_name end + case when road_suffix.rs_name is null then '' else ' '+road_suffix.rs_name end)) " +
-"  as cust_mailing_address_road, " +
-"  suburblocality.sl_name as cust_mailing_address_locality, towncity.tc_name as cust_mail_town, " +
-"  rds_customer.cust_date_commenced as cust_date_first_loaded, null as cust_date_left, " +
-"  rds_customer.cust_dir_listing_ind as cust_dir_listing_ind, " +
-"  rds_customer.cust_dir_listing_text as cust_dir_listing_text, contractor.c_title as c_title, " +
-"  contractor.c_first_names as c_first_names, " +
-"  contractor.c_surname_company as c_surname_company, " +
-"  rtrim(ltrim(case when contractor.c_title is null then '' else contractor.c_title+' ' end + case when contractor.c_first_names is null then '' else contractor.c_first_names+' ' end + isnull(contractor.c_surname_company,'') )) " +
-"  as ownerdriver_name, " +
-"  case when contractor.c_phone_day is null then '' else case left(contractor.c_phone_day,2)when '02' then " +
-"  substring(contractor.c_phone_day,1,3)+'-' " +
-"  +substring(contractor.c_phone_day,4,3)+'-' " +
-"  +substring(contractor.c_phone_day,7,case when len(contractor.c_phone_day)<=7 then 0 else len(contractor.c_phone_day)-7 end ) else " +
-"  substring(contractor.c_phone_day,1,2)+'-' " +
-"  +substring(contractor.c_phone_day,3,3)+'-' " +
-"  +substring(contractor.c_phone_day,6,case when len(contractor.c_phone_day)<= 6 then 0 else len(contractor.c_phone_day)- 6 end) end end " +
-"  as c_phone_day, " +
-"  case when contractor.c_phone_night is null then '' else case left(contractor.c_phone_night,2)when '02' then substring(contractor.c_phone_night,1,3)+'-' +substring(contractor.c_phone_night,4,3)+'-' +substring(contractor.c_phone_night,7,case when len(contractor.c_phone_night)<=7 then 0 else len(contractor.c_phone_night)-7 end ) else substring(contractor.c_phone_night,1,2)+'-' +substring(contractor.c_phone_night,3,3)+'-' +substring(contractor.c_phone_night,6,case when len(contractor.c_phone_night)<=6 then 0 else len(contractor.c_phone_night)-6 end) end end " +
-"  as c_phone_night, " +
-"  case when contractor.c_mobile is null then '' else substring(contractor.c_mobile,1,3)+'-' +substring(contractor.c_mobile,4,3)+'-' +substring(contractor.c_mobile,7,case when len(contractor.c_mobile)<=7 then 0 else len(contractor.c_mobile)-7 end ) end " +
-"  as c_mobile, " +
-"  case when contractor.c_mobile2 is null then '' else substring(contractor.c_mobile2,1,3)+'-' +substring(contractor.c_mobile2,4,3)+'-' +substring(contractor.c_mobile2,7,case when len(contractor.c_mobile2)<=7 then 0 else len(contractor.c_mobile2)-7 end) end " +
-"  as c_mobile2," +
-"  case contractor.c_prime_contact when 1 then c_phone_day end, " +
-"  case contractor.c_prime_contact when 2 then c_phone_night end, " +
-"  case contractor.c_prime_contact when 3 then c_mobile end " +
-"  as primary_contact, " +
-"  contractor.c_email_address as c_email_address, " +
-"  contractor.c_salutation as c_salutation, " +
-"  outlet.o_name as o_name, " +
-"  outlet.o_address as o_address, " +
-"  outlet.o_telephone as o_telephone, " +
-"  outlet.o_fax as o_fax, " +
-"  outlet.o_manager as o_manager, region.rgn_name as rgn_name, region.rgn_rcm_manager as rgn_rcm_manager, region.rgn_fax as rgn_fax, " +
-"  region.rgn_telephone as rgn_telephone, " +
-"  region.rgn_address as rgn_address, " +
-"  str(contract.contract_no) +'/' + str(contract.con_active_sequence) as contract_no, " +
-"  address.adr_rd_no as cust_rd_number, " +
-"  rd.f_GetDeliveryDays(rds_customer.cust_id) as cust_delivery_days," +
-"  rd.f_GetDeliveryDays_names(rds_customer.cust_id) as cust_deliverydays, " +
-"  substring(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end,2, case when len(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end) <=2 then 0 else len(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end) -2 end) as cust_category, " +
-"  contractor.c_initials as c_initials, outlet_type.ot_outlet_type as ot_outlet_type, " +
-"  rds_customer.cust_title as cust_title, " +
-"  case when address.adr_unit is null then '' else address.adr_unit+'/' end +address.adr_no as adr_no, " +
-"  post_code.post_code as adr_post_code, address.adr_alpha as adr_alpha, isnull(adr_no,'') + isnull(adr_alpha,' ') as cust_mailing_address_no, address.dp_id " +
-"  FROM contract, contractor, contractor_renewals, rds_customer, address left outer join road on address.road_id = road.road_id " +
-"  LEFT OUTER JOIN road_type on road.rt_id = road_type.rt_id LEFT OUTER JOIN road_suffix on road.rs_id = road_suffix.rs_id " +
-"  left outer join suburblocality on address.sl_id = suburblocality.sl_id left outer join towncity on address.tc_id = towncity.tc_id " +
-"  left outer join post_code on address.post_code_id = post_code.post_code_id, customer_address_moves, outlet , region , contract_renewals , outlet_type ";
+            string dw_syntax_sqlselect =
+                      "SELECT rds_customer.cust_id as cust_id, " 
+                         +"  rds_customer.cust_surname_company as cust_surname_company, " 
+                         +"  rds_customer.cust_initials as cust_initials, " 
+                         +"  rtrim(ltrim(isnull(rds_customer.cust_title,'') + ' ' + isnull(rds_customer.cust_initials,'') + ' ' + isnull(rds_customer.cust_surname_company,''))) " 
+                                           +" as cust_name, " 
+                         +"  rtrim(ltrim(road.road_name + case when road_type.rt_name is null then '' else ' '+road_type.rt_name end + case when road_suffix.rs_name is null then '' else ' '+road_suffix.rs_name end)) " 
+                         +"  as cust_mailing_address_road, " 
+                         +"  suburblocality.sl_name as cust_mailing_address_locality, towncity.tc_name as cust_mail_town, " 
+                         +"  rds_customer.cust_date_commenced as cust_date_first_loaded, null as cust_date_left, " 
+                         +"  rds_customer.cust_dir_listing_ind as cust_dir_listing_ind, " 
+                         +"  rds_customer.cust_dir_listing_text as cust_dir_listing_text, contractor.c_title as c_title, " 
+                         +"  contractor.c_first_names as c_first_names, " 
+                         +"  contractor.c_surname_company as c_surname_company, " 
+                         +"  rtrim(ltrim(case when contractor.c_title is null then '' else contractor.c_title+' ' end + case when contractor.c_first_names is null then '' else contractor.c_first_names+' ' end + isnull(contractor.c_surname_company,'') )) " 
+                                           +" as ownerdriver_name, " 
+                         +"  case when contractor.c_phone_day is null then '' else case left(contractor.c_phone_day,2)when '02' then " 
+                         +"  substring(contractor.c_phone_day,1,3)+'-' " 
+                         +"  +substring(contractor.c_phone_day,4,3)+'-' " 
+                         +"  +substring(contractor.c_phone_day,7,case when len(contractor.c_phone_day)<=7 then 0 else len(contractor.c_phone_day)-7 end ) else " 
+                         +"  substring(contractor.c_phone_day,1,2)+'-' " 
+                         +"  +substring(contractor.c_phone_day,3,3)+'-' " 
+                         +"  +substring(contractor.c_phone_day,6,case when len(contractor.c_phone_day)<= 6 then 0 else len(contractor.c_phone_day)- 6 end) end end "
+                                           + " as c_phone_day, " 
+                         +"  case when contractor.c_phone_night is null then '' else case left(contractor.c_phone_night,2)when '02' then substring(contractor.c_phone_night,1,3)+'-' +substring(contractor.c_phone_night,4,3)+'-' +substring(contractor.c_phone_night,7,case when len(contractor.c_phone_night)<=7 then 0 else len(contractor.c_phone_night)-7 end ) else substring(contractor.c_phone_night,1,2)+'-' +substring(contractor.c_phone_night,3,3)+'-' +substring(contractor.c_phone_night,6,case when len(contractor.c_phone_night)<=6 then 0 else len(contractor.c_phone_night)-6 end) end end "
+                                           + " as c_phone_night, " 
+                         +"  case when contractor.c_mobile is null then '' else substring(contractor.c_mobile,1,3)+'-' +substring(contractor.c_mobile,4,3)+'-' +substring(contractor.c_mobile,7,case when len(contractor.c_mobile)<=7 then 0 else len(contractor.c_mobile)-7 end ) end "
+                                           + " as c_mobile, " 
+                         +"  case when contractor.c_mobile2 is null then '' else substring(contractor.c_mobile2,1,3)+'-' +substring(contractor.c_mobile2,4,3)+'-' +substring(contractor.c_mobile2,7,case when len(contractor.c_mobile2)<=7 then 0 else len(contractor.c_mobile2)-7 end) end "
+                                           + " as c_mobile2," 
+                         +"  case contractor.c_prime_contact when 1 then c_phone_day end, " 
+                         +"  case contractor.c_prime_contact when 2 then c_phone_night end, " 
+                         +"  case contractor.c_prime_contact when 3 then c_mobile end "
+                                           + " as primary_contact, " 
+                         +"  contractor.c_email_address as c_email_address, " 
+                         +"  contractor.c_salutation as c_salutation, " 
+                         +"  outlet.o_name as o_name, " 
+                         +"  outlet.o_address as o_address, " 
+                         +"  outlet.o_telephone as o_telephone, " 
+                         +"  outlet.o_fax as o_fax, " 
+                         +"  outlet.o_manager as o_manager, region.rgn_name as rgn_name, region.rgn_rcm_manager as rgn_rcm_manager, region.rgn_fax as rgn_fax, " 
+                         +"  region.rgn_telephone as rgn_telephone, " 
+                         +"  region.rgn_address as rgn_address, " 
+                         +"  str(contract.contract_no) +'/' + str(contract.con_active_sequence) as contract_no, " 
+                         +"  address.adr_rd_no as cust_rd_number, " 
+                         +"  rd.f_GetDeliveryDays(rds_customer.cust_id) as cust_delivery_days," 
+                         +"  rd.f_GetDeliveryDays_names(rds_customer.cust_id) as cust_deliverydays, " 
+                         +"  substring(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end,2, case when len(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end) <=2 then 0 else len(case rds_customer.cust_business when 'Y' then ',Business' else '' end + case rds_customer.cust_rural_resident when 'Y' then ',Rural Resident' else '' end + case rds_customer.cust_rural_farmer when 'Y' then ',Rural Farmer' else '' end) -2 end) as cust_category, " 
+                         +"  contractor.c_initials as c_initials, outlet_type.ot_outlet_type as ot_outlet_type, " 
+                         +"  rds_customer.cust_title as cust_title, " 
+                         +"  case when address.adr_unit is null then '' else address.adr_unit+'/' end +address.adr_no as adr_no, " 
+                         +"  post_code.post_code as adr_post_code, address.adr_alpha as adr_alpha, isnull(adr_no,'') + isnull(adr_alpha,' ') as cust_mailing_address_no, address.dp_id "
+                   + "  FROM contract, contractor, contractor_renewals, rds_customer," 
+                         + " address left outer join road on address.road_id = road.road_id " 
+                                 + " LEFT OUTER JOIN road_type on road.rt_id = road_type.rt_id LEFT OUTER JOIN road_suffix on road.rs_id = road_suffix.rs_id " 
+                                 + " left outer join suburblocality on address.sl_id = suburblocality.sl_id left outer join towncity on address.tc_id = towncity.tc_id " 
+                                 + " left outer join post_code on address.post_code_id = post_code.post_code_id, customer_address_moves, outlet , region , contract_renewals , outlet_type ";
 
 //!###############################################
 
@@ -825,13 +876,15 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             sBaseWhere = uf_get_where_clause();
             // Get list of contracts
             sContractList = uf_get_contract_list();
-            if (sContractList == "null")
+            // TJB  RD7_0043  Aug2009
+            // Added 'sContractList == ""' condition
+            if (sContractList == "" || sContractList == "null")
             {
                 sAdditionalWhere = "";
             }
             else
             {
-                sAdditionalWhere += " AND  ( contract.contract_no in  ( " + sContractList + ")) ";
+                sAdditionalWhere += " AND contract.contract_no in (" + sContractList + ") ";
             }
             //  Added the Privacy Protection check
             //  Check if user has the ability to override privacy flag
@@ -839,7 +892,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             if ((lb_privacy_override == null) || lb_privacy_override == false)
             {
                 //  have to hide the customers with privacy preference set
-                sAdditionalWhere += "  AND  ( rds_customer.cust_dir_listing_ind = \'Y\')";
+                sAdditionalWhere += " AND rds_customer.cust_dir_listing_ind = \'Y\'";
             }
             StaticVariables.gnv_app.of_get_parameters().stringparm = sBaseSelect + sBaseWhere + sAdditionalWhere;
             //open(wDownLoadWindow);
@@ -879,7 +932,7 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
         {
             base.dw_criteria_clicked(sender, e);
             //  this will be triggered regardless
-            //  this.postevent ( "ue_afterclicked")
+            //  this.postevent("ue_afterclicked")
         }
 
         public override void dw_criteria_itemchanged(object sender, EventArgs e)
@@ -926,7 +979,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
                 dw_results.GetItem<MailmergeDownloadSearchResults>(0).ConTitle = "<No Contracts Found>";
                 dw_results.GetItem<MailmergeDownloadSearchResults>(0).ContractNo = lnull;
                 dw_results.GetItem<MailmergeDownloadSearchResults>(0).ConActiveSequence = lnull;
-                MessageBox.Show("Search Unsuccessful", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Search Unsuccessful"
+                               , ""
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 pb_open.Visible = false;
             }
             else if (dw_results.RowCount > 1)
@@ -945,7 +1000,9 @@ namespace NZPostOffice.RDS.Windows.Ruralmailmerge
             //!if (dw_results.GetSelectedRow(0) == 0)
             if (dw_results.GetSelectedRow(0) < 0)
             {
-                MessageBox.Show("Please select contract ( s)", "Open Customers", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select contract(s)"
+                               , "Open Customers"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if (dw_criteria.GetItem<MailmergeCustomerDownloadSearch>(0).Updateafterprint == "Y")
