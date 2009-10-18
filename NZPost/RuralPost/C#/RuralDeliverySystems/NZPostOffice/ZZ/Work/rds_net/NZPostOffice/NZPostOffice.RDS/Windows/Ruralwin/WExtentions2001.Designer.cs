@@ -57,7 +57,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.st_label.Location = new System.Drawing.Point(5, 507);
             this.st_label.Size = new System.Drawing.Size(171, 15);
             this.st_label.Text = "WExtentions2001";
-            this.st_label.Visible = false;
+            this.st_label.Visible = true;
             // 
             // cb_search
             // 
