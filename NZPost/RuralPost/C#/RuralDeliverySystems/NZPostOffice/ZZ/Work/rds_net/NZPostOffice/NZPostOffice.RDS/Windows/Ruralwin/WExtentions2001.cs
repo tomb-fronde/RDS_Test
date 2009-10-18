@@ -30,6 +30,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public WExtentions2001()
         {
             this.InitializeComponent();
+
             this.dw_ext.DataObject = new DExtension2005();
             this.dw_ext.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
@@ -37,8 +38,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
+            //this.dw_bm.DataObject.BorderStyle = BorderStyle.None;
 
-            //jlwang:moved from IC
             this.dw_ext.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_constructor);
             this.dw_ext.PfcUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate1(this.dw_ext_pfc_update);
             this.dw_ext.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_pfc_postupdate);
@@ -49,8 +50,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_bm.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_bm_constructor);
             this.dw_contract.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_contract_constructor);
             dw_contract.GotFocus += new EventHandler(dw_contract_getfocus);
-
-            //jlwang:end
         }
 
         public override int closequery()
@@ -568,18 +567,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void resize(object sender, EventArgs args)
         {
-            //?base.resize(sender, args);
-            //// this.setRedraw ( false)
-            //tab_1.Width = this.Width - 100;
-            //tab_1.Width = this.Height - 370;
-            //if (dw_benchmark_report != null)
-            //{
-            //    dw_benchmark_report.Width = this.Width - 182;
-            //    dw_benchmark_report.Height = this.Height - 650;
-            //}
-
-            //cb_print.Top = this.Height - 600;
-            //cb_print.Left = this.Width - 500;
+            base.resize(sender, args);
+            // this.setRedraw ( false)
+            //tab_1.Width = this.Width - 21;
+            //tab_1.Width = this.Height - 40;
+            //if (dw_bm != null)
+            //
+            //  dw_bm.Width = this.Width - 40;
+            //  dw_bm.Height = this.Height - 112;
+            //
+            //cb_print.Top = this.Height - 95;
+            //cb_print.Left = this.Width - 114;
         }
 
         //pp! code to disable tab pages
@@ -711,13 +709,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (lCount > 0)
                 {
                     MessageBox.Show("This contract has a pending renewal.  " + "An extension cannot be run against this contract.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // TJB  RD7_0051  Oct2009
+                    // Added to allow new contract to be selected
+                    return;
                 }
                 else
                 {
                     StaticVariables.gnv_app.of_get_parameters().longparm = lContract;
                     WSelectFrequency w_select_frequency = new WSelectFrequency();
                     w_select_frequency.ShowDialog();
-                    if (StaticVariables.gnv_app.of_get_parameters().stringparm != "NotFound")
+                    string test = StaticVariables.gnv_app.of_get_parameters().stringparm;
+                    string t = test;
+
+                    if (StaticVariables.gnv_app.of_get_parameters().stringparm == "NotFound")
+                    {
+                        // TJB  RD7_0051  Oct2009
+                        // Added == NotFound to allow new contract to be selected
+                        return;
+                    }
+                    else
                     {
                         // Get days per annum
                         int? ll_key;
