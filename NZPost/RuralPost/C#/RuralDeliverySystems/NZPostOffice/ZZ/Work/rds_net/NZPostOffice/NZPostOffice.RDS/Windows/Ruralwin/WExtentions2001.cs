@@ -79,14 +79,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             RDSDataService dataService = RDSDataService.SpExtensionDeliveryTime();
             if (dataService.SQLCode < 0)
             {
-                MessageBox.Show(dataService.SQLErrText, "Execute procedure error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText
+                               , "Execute procedure error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             //? fetch conproc INTO   :iltravellingspeed, :ilcustomerdeliverytime;
             iltravellingspeed = dataService.intVal;
             ilcustomerdeliverytime = dataService.decVal;
             if (dataService.SQLCode < 0)
             {
-                MessageBox.Show(dataService.SQLErrText, "Fetch procedure error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText
+                               , "Fetch procedure error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             //? CLOSE conproc
             // Speed this up:
@@ -128,9 +132,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (!aautomatic)
                 {
                     // PowerBuilder 'Choose Case' statement converted into 'if' statement
-                    DialogResult TestExpr = MessageBox.Show("Do you want to update the database?"
-                                        , this.Text
-                                        , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    DialogResult TestExpr 
+                        = MessageBox.Show("Do you want to update the database?"
+                                         , this.Text
+                                         , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     if (TestExpr == DialogResult.Cancel)
                     {
                         return false;
@@ -205,17 +210,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Modified SQL error messages to identify which statement generated the error
             if (dataService.SQLCode == -(1))
             {
-                MessageBox.Show("Counting contracts\n\n" 
-                            + dataService.SQLErrText
-                            , "w_extentions2001.wf_addextn: Database error"
-                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Counting contracts\n\n" + dataService.SQLErrText
+                               , "w_extentions2001.wf_addextn: Database error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (lCount != 1)
             {
-                MessageBox.Show("The extension effective date is outside the current contracts start and end dates.\r" 
-                            + "Please change the effective date before saving the extension"
-                            , this.Text
-                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The extension effective date is outside the current contracts start and end dates.\n" 
+                                   + "Please change the effective date before saving the extension"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             dDistance = dw_extension.GetItem<Extension2005>(0).ExtnDistance;
@@ -231,8 +235,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (StaticVariables.gnv_app.of_isempty(sReason))
             {
                 MessageBox.Show("The reason for this extension has to be entered before it can be saved to the database."
-                            , this.Text
-                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             decDelHrs = dw_extension.GetItem<Extension2005>(0).ExtnDelHrs;
@@ -249,15 +253,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (dataService.SQLCode == -(1))
             {
                 MessageBox.Show("Counting frequency_distances\n\n" 
-                                + dataService.SQLErrText
+                                   + dataService.SQLErrText
                                 , "w_extentions2001.wf_addextn: Database error"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (iEfCount > 0)
             {
-                MessageBox.Show("You cannot add this extension to the database because" 
-                                + " there is already an extension for this frequency" 
-                                + " defined for this effective date"
+                MessageBox.Show("You cannot add this extension to the database because there is already \n"
+                                    + "an extension for this frequency defined for this effective date"
                                 , this.Text
                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //? rollback;
@@ -303,9 +306,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (dataService.SQLCode != 0)
             {
                 MessageBox.Show("Inserting into frequency_distances\n\n" 
-                            + dataService.SQLErrText
-                            , "w_extentions2001.wf_addextn: Database error"
-                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    + dataService.SQLErrText
+                               , "w_extentions2001.wf_addextn: Database error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //? rollback;
                 iReturn = -(1);
             }
@@ -319,9 +322,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode == -(1))
                 {
                     MessageBox.Show("Updating route_frequency\n\n" 
-                                + dataService.SQLErrText
-                                , "w_extentions2001.wf_addextn: Database error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                       + dataService.SQLErrText
+                                   , "w_extentions2001.wf_addextn: Database error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 /* select max(contract_seq_number) into :lSequence  
                    from contract_renewals
@@ -331,9 +334,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode == -(1))
                 {
                     MessageBox.Show("Determining max(contract_seq_number)\n\n" 
-                                + dataService.SQLErrText
-                                , "w_extentions2001.wf_addextn: Database error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                       + dataService.SQLErrText
+                                   , "w_extentions2001.wf_addextn: Database error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 /* select max(fd_unique_seq_number) into :lNextSeq
                    from frequency_adjustments 
@@ -343,9 +346,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode == -(1))
                 {
                     MessageBox.Show("Determining max(fd_unique_seq_number)\n\n" 
-                                + dataService.SQLErrText
-                                , "w_extentions2001.wf_addextn: Database error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                       + dataService.SQLErrText
+                                   , "w_extentions2001.wf_addextn: Database error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 lNextSeq = (lNextSeq == null) ? 1 : lNextSeq + 1;
                 
@@ -377,15 +380,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode == -(1))
                 {
                     MessageBox.Show("Inserting into frequency_adjustments\n\n" 
-                                + dataService.SQLErrText
-                                , "w_extentions2001.wf_addextn: Database error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                       + dataService.SQLErrText
+                                   , "w_extentions2001.wf_addextn: Database error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 //? commit;
                 if (MessageBox.Show("Do you want a benchmark report produced of the current contract?"
-                                , this.Text
-                                , MessageBoxButtons.YesNo
-                                , MessageBoxIcon.Question) == DialogResult.Yes)
+                                   , this.Text
+                                   , MessageBoxButtons.YesNo
+                                   , MessageBoxIcon.Question) 
+                         == DialogResult.Yes)
                 {
                     ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
                     dw_benchmark_report.Visible = true;
@@ -527,7 +531,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //     validation replaces the value entered with "00/00/0000".
             if ( extn_date_text == "00/00/0000" )
             {
-                MessageBox.Show("Invalid date entered.  Please re-enter the effective date.", "Warning");
+                MessageBox.Show("Invalid date entered.  Please re-enter the effective date."
+                               , "Warning");
                 e.Cancel = true;
             }
 
@@ -630,14 +635,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (dataService.SQLCode < 0)
             {
                 this.ResumeLayout(false);
-                MessageBox.Show(dataService.SQLErrText, "Declare procedure error - sp_Extension_CustCount", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText
+                               , "Declare procedure error - sp_Extension_CustCount"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             // execute conproc2 ;
             if (dataService.SQLCode < 0)
             {
                 this.ResumeLayout(false);
-                MessageBox.Show(dataService.SQLErrText, "Execute procedure error- sp_Extension_CustCount", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText
+                               , "Execute procedure error- sp_Extension_CustCount"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //? CLOSE conproc2
                 return;
             }
@@ -647,14 +656,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 this.ResumeLayout(false);
                 //? CLOSE conproc2
-                MessageBox.Show(dataService.SQLErrText, "Fetch procedure error - sp_Extension_CustCount", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(dataService.SQLErrText
+                               , "Fetch procedure error - sp_Extension_CustCount"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             //? CLOSE conproc2
             if (lCount == 0)
             {
                 this.ResumeLayout(false);
-                MessageBox.Show("The entered contract number does not exist on the database,\r" + "or you do not have the authority to apply an extension to it.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The entered contract number does not exist on the database,\n" 
+                                  + "or you do not have the authority to apply an extension to it."
+                                , this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             else
@@ -670,8 +683,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (lCount == 0)
                 {
                     this.ResumeLayout(false);
-                    if (MessageBox.Show("This contract has not been renewed under 2001 benchmark specifications.\r\nExtens" +
-                        "ion amount may not be calculated. " + "Continue with the extension?", "Extension", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                    if (MessageBox.Show("This contract has not been renewed under 2001 benchmark specifications.\n" 
+                                          + "Extension amount may not be calculated.\n" 
+                                          + "Continue with the extension?"
+                                        , "Extension"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                        , MessageBoxDefaultButton.Button2) 
+                        == DialogResult.No)
                     {
                         return;
                     }
@@ -683,7 +701,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode < 0)
                 {
                     this.ResumeLayout(false);
-                    MessageBox.Show(dataService.SQLErrText, "Declare procedure error - sp_GetCurrentrenewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(dataService.SQLErrText
+                                   , "Declare procedure error - sp_GetCurrentrenewal"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //? CLOSE conproc1
                     return;
                 }
@@ -692,7 +712,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode < 0)
                 {
                     this.ResumeLayout(false);
-                    MessageBox.Show(dataService.SQLErrText, "Execute procedure error - sp_GetCurrentrenewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(dataService.SQLErrText
+                                   , "Execute procedure error - sp_GetCurrentrenewal"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //? CLOSE conproc1
                     return;
                 }
@@ -701,14 +723,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (dataService.SQLCode < 0)
                 {
                     this.ResumeLayout(false);
-                    MessageBox.Show(dataService.SQLErrText, "Fetch procedure error - sp_GetCurrentrenewal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(dataService.SQLErrText
+                                   , "Fetch procedure error - sp_GetCurrentrenewal"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //? CLOSE conproc1
                     return;
                 }
                 //? CLOSE conproc1
                 if (lCount > 0)
                 {
-                    MessageBox.Show("This contract has a pending renewal.  " + "An extension cannot be run against this contract.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This contract has a pending renewal. An extension cannot be run against this contract."
+                                   , this.Text
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // TJB  RD7_0051  Oct2009
                     // Added to allow new contract to be selected
                     return;
@@ -738,7 +764,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         if (dataService.SQLCode < 0)
                         {
                             this.ResumeLayout(false);
-                            MessageBox.Show(dataService.SQLErrText, "Declare procedure error - sp_Extension_DaysPerAnnum", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Declare procedure error - sp_Extension_DaysPerAnnum"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //? CLOSE conproc3
                             return;
                         }
@@ -747,7 +775,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         if (dataService.SQLCode < 0)
                         {
                             this.ResumeLayout(false);
-                            MessageBox.Show(dataService.SQLErrText, "Execute procedure error - sp_Extension_DaysPerAnnum", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Execute procedure error - sp_Extension_DaysPerAnnum"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //? CLOSE conproc3
                             return;
                         }
@@ -756,7 +786,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         if (dataService.SQLCode < 0)
                         {
                             this.ResumeLayout(false);
-                            MessageBox.Show(dataService.SQLErrText, "Fetch procedure error - sp_Extension_DaysPerAnnum", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Fetch procedure error - sp_Extension_DaysPerAnnum"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //? CLOSE conproc3
                             return;
                         }
@@ -781,7 +813,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             this.ResumeLayout(false);
                             //? CLOSE conproc4
-                            MessageBox.Show(dataService.SQLErrText, "Declare procedure error - sp_Extension_RFDistance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Declare procedure error - sp_Extension_RFDistance"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
                         //? execute conproc4 ;
@@ -790,7 +824,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             this.ResumeLayout(false);
                             //? CLOSE conproc4
-                            MessageBox.Show(dataService.SQLErrText, "Execute procedure error - sp_Extension_RFDistance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Execute procedure error - sp_Extension_RFDistance"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
                         //? fetch conproc4 INTO :decDistance;
@@ -799,7 +835,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             this.ResumeLayout(false);
                             //? CLOSE conproc4
-                            MessageBox.Show(dataService.SQLErrText, "Fetch procedure error - sp_Extension_RFDistance", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(dataService.SQLErrText
+                                           , "Fetch procedure error - sp_Extension_RFDistance"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             return;
                         }
                         //? CLOSE conproc4
