@@ -18,11 +18,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
-        #region Define
         private const string DEFAULT_ASSEMBLY = "NZPostOffice.RDS.DataControls";
         private const string DEFAULT_VERSION = "1.0.0.0";
 
-        public DataUserControlContainer dw_benchmark_report;
+        #region Define
+        /// Required designer variable.
+        private System.ComponentModel.IContainer components = null;
 
         public URdsDw dw_criteria;
 
@@ -43,6 +44,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public Dictionary<int, int> lrenewallist = new Dictionary<int, int>();
 
         public bool ib_PrintAbort;
+
         public List<object> sScheduleDWs = new List<object>();// Dictionary<int, object>();
 
         /*public string[] sScheduleDWs = new string[]{
@@ -53,8 +55,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     "r_mail_carried_single_contract",
                     "r_contract_summary"};
         */
-        /// Required designer variable.
-        private System.ComponentModel.IContainer components = null;
 
         public URdsDw dw_schedule;
 
@@ -90,14 +90,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw dw_bm_report;
 
-        // TJB  Aug2009
-        // Added window name label
-        // 'InitializeComponent' re-written by designer
-        private TextBox st_1;
-
         public Button cb_printbm;
 
         #endregion
+
+        // TJB  RD7_0051 Oct-2009
+        // Fix display of page control buttons on Benchmark report panel.  The more-likely
+        // actual fix is the commenting-out of the SetChildIndex method calls in the
+        // InitializeComponent method (see below).
+        //
+        // Changed dw_benchmark_report object type and use of it instead of
+        // dw_bm_report, to match WExtentions2001 (which works).
+        // 
+        //public DataUserControlContainer dw_benchmark_report;
+        public DataUserControl dw_benchmark_report;
 
         public WRenewalProcess2006()
         {
@@ -105,11 +111,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             dw_schedule.DataObject = new RScheduleaSingleContract();
             dw_criteria1.DataObject = new DRenewalProcessCriteria();
-            dw_listings.DataObject = new DListContractsForProcessing2001();
             dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_listings.DataObject = new DListContractsForProcessing2001();
             dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_bm_report.DataObject = new RBenchmarkReport2006();
-            dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            // TJB  RD7_0051  Oct2009
+            // Changed to make report resizeable
+            //dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_bm_report.DataObject.BorderStyle = BorderStyle.None;
 
             //pp! following lines moved from InitializeComponent to the ctnructor of windiw in order to open design mode of this window
             dw_criteria1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria1_constructor);
@@ -131,8 +140,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             sScheduleDWs.Add("r_route_description_single_contract");
             sScheduleDWs.Add("r_mail_carried_single_contract");
             sScheduleDWs.Add("r_contract_summary");
-
-            this.st_1.Visible = false;
         }
 
         public virtual void ue_abort()
@@ -160,6 +167,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.of_set_componentname("Renewal Process");
         }
 
+        // TJB  RD7_0051  Oct2009
+        // NOTE: In InitializeComponent below, need to comment these out the
+        //       SetChildIndex method calls, to allow the page selection bottons 
+        //       to be placed on the benchmark report panel
+        //       The InitializeComponent prco is re-written by the designer 
+        //       if changed in design mode and the calls will need to be commented- 
+        //       out (or removed) again each time this happens.
+
         #region Form Design
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -185,7 +200,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_2 = new System.Windows.Forms.TabPage();
             this.dw_bm_report = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_printbm = new System.Windows.Forms.Button();
-            this.st_1 = new System.Windows.Forms.TextBox();
             this.tab_1.SuspendLayout();
             this.tabpage_1.SuspendLayout();
             this.tabpage_2.SuspendLayout();
@@ -194,8 +208,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // st_label
             // 
             this.st_label.Location = new System.Drawing.Point(19, 479);
-            this.st_label.Text = "RDRENPROC";
-            this.st_label.Visible = false;
+            this.st_label.Text = "WRenewalProcess2006";
+            this.st_label.Visible = true;
             // 
             // dw_schedule
             // 
@@ -253,7 +267,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // l_1
             // 
             this.l_1.BackColor = System.Drawing.Color.Black;
-            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+//            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.l_1.Location = new System.Drawing.Point(55, 338);
             this.l_1.Name = "l_1";
             this.l_1.Size = new System.Drawing.Size(345, 1);
@@ -389,6 +404,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_bm_report.Name = "dw_bm_report";
             this.dw_bm_report.Size = new System.Drawing.Size(550, 318);
             this.dw_bm_report.TabIndex = 12;
+            this.dw_bm_report.Click += new System.EventHandler(this.dw_bm_report_Click);
             // 
             // cb_printbm
             // 
@@ -400,37 +416,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_printbm.Text = "&Print";
             this.cb_printbm.Click += new System.EventHandler(this.cb_printbm_clicked);
             // 
-            // st_1
-            // 
-            this.st_1.BackColor = System.Drawing.SystemColors.Control;
-            this.st_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.st_1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.st_1.Location = new System.Drawing.Point(8, 410);
-            this.st_1.Name = "st_1";
-            this.st_1.Size = new System.Drawing.Size(157, 13);
-            this.st_1.TabIndex = 4;
-            this.st_1.Text = "WRenewalProcess2006";
-            // 
             // WRenewalProcess2006
             // 
             this.AcceptButton = this.cb_searchs;
             this.ClientSize = new System.Drawing.Size(585, 427);
-            this.Controls.Add(this.st_1);
             this.Controls.Add(this.tab_1);
             this.Controls.Add(this.dw_schedule);
             this.Location = new System.Drawing.Point(1, 1);
             this.Name = "WRenewalProcess2006";
             this.Text = "Renewal Process";
-            this.Controls.SetChildIndex(this.dw_schedule, 0);
-            this.Controls.SetChildIndex(this.tab_1, 0);
-            this.Controls.SetChildIndex(this.st_1, 0);
-            this.Controls.SetChildIndex(this.st_label, 0);
+            // TJB  RD7_0051  Oct2009
+            // Comment these out to have page selection bottons on report panel
+            //this.Controls.SetChildIndex(this.dw_schedule, 0);
+            //this.Controls.SetChildIndex(this.tab_1, 0);
+            //this.Controls.SetChildIndex(this.st_label, 0);
             this.tab_1.ResumeLayout(false);
             this.tabpage_1.ResumeLayout(false);
             this.tabpage_2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         /// <summary>
@@ -539,12 +543,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void dw_bm_report_constructor()
         {
-                //  TJB  SR4661  May 2005
-                //  Changed to use r_benchmark_report2005
-                //  TJB  SR4684  June 2006
-                //  Changed to use r_benchmark_report2006
+            // TJB  RD7_0051 Oct-2009
+            //dw_benchmark_report = dw_bm_report;
+            dw_benchmark_report = dw_bm_report.DataObject;
             dw_bm_report.of_SetUpdateable(false);
-            dw_benchmark_report = dw_bm_report;
         }
 
         public virtual void cb_printbm_constructor()
@@ -573,15 +575,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #endregion
 
         #region Events
+
         public override void resize(object sender, EventArgs args)
         {
             base.resize(sender, args);
                 // this.setRedraw ( false)
             tab_1.Width = this.Width - 21;
             tab_1.Height = this.Height - 40;
-            dw_benchmark_report.Width = this.Width - 40;
-            dw_benchmark_report.Height = this.Height - 112;
-            cb_print.Top = Height - 95;
+            // TJB  RD7_0051  Oct2009
+            //dw_benchmark_report.Width = this.Width - 40;
+            //dw_benchmark_report.Height = this.Height - 112;
+            dw_bm_report.Width  = this.Width - 40;
+            dw_bm_report.Height = this.Height - 112;
+            cb_print.Top  = Height - 95;
             cb_print.Left = Width - 114;
                 // 
                 // idw_report.height  = idw_summary.height
@@ -643,11 +649,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lnv_Criteria.of_addcriteria("contract_no", ll_ContractNo);
             lnv_msg.of_addcriteria(lnv_Criteria);
             Cursor.Current = Cursors.WaitCursor;
-            ls_Title = "Contract:  (" + ll_ContractNo.ToString() + ") " 
+            ls_Title = "Contract: (" + ll_ContractNo.ToString() + ") " 
                        + dw_listings.GetItem<ListContractsForProcessing2001>(dw_listings.GetRow()).ConTitle;   
                            /*dw_listings.GetSelectedRow(0)*/
 
-                /*if (!(IsValid(StaticVariables.gnv_app.of_findwindow(ls_Title,"w_contract2001") != null)) */
+            // if (!(IsValid(StaticVariables.gnv_app.of_findwindow(ls_Title,"w_contract2001") != null))
             if (!(StaticVariables.gnv_app.of_findwindow(ls_Title, "w_contract2001") != null))
             {
                     //OpenSheetWithParm(lw_contract2001, lnv_msg, w_main_mdi, 0, original!);
@@ -676,8 +682,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //     wSheet = w_main_mdi.GetNextSheet ( wSheet)
                 // LOOP
                 //
-                // setpointer ( hourglass!)
-                // opensheetwithparm ( wContract, lContract, w_main_mdi, 0, original!)
+                // setpointer(hourglass!)
+                // opensheetwithparm (wContract, lContract, w_main_mdi, 0, original!)
         }
 
         WStatus w_status = null;
@@ -717,7 +723,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lRow = dw_listing.GetSelectedRow(0);
             if (lRow < 0)
             {
-                MessageBox.Show("Please select a contract.", "Create Pendings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select a contract."
+                               , "Create Pendings"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             while (lRow >= 0)
@@ -731,20 +739,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 dtermdate = RDSDataService.GetConDateTerminatedFromContract(lContract, ref SQLCode, ref SQLErrText);
                 if (SQLCode == -1)
                 {
-                    MessageBox.Show(SQLErrText, "Date terminated selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(SQLErrText
+                                   , "Date terminated selection"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 };
                 if ((dtermdate == null || dtermdate == DateTime.MinValue) && 
                     dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).Rowstatus == "Active")
                 {
                     lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
                     lSequence = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ConActiveSequence;
-                        /* SELECT contract_renewals.con_relief_driver_name,   
-                         *        contract_renewals.con_relief_driver_address,   
-                         *        contract_renewals.con_relief_driver_home_phone  
-                         *   INTO :sname,:saddr,:sphone  
-                         *   FROM contract_renewals  
-                         *  WHERE contract_renewals.contract_no = :lcontract
-                         *    AND contract_renewals.contract_seq_number = :lsequence  */
+                        // SELECT contract_renewals.con_relief_driver_name,   
+                        //        contract_renewals.con_relief_driver_address,   
+                        //        contract_renewals.con_relief_driver_home_phone  
+                        //   INTO :sname,:saddr,:sphone  
+                        //   FROM contract_renewals  
+                        //  WHERE contract_renewals.contract_no = :lcontract
+                        //    AND contract_renewals.contract_seq_number = :lsequence
 
                     List<ContractRenewalsItem> vlist = new List<ContractRenewalsItem>();
                     RDSDataService dataService = RDSDataService.GetContractRenewalsList(lContract, lSequence, ref SQLCode, ref SQLErrText);
@@ -754,13 +764,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     sphone = vlist[0].Con_relief_driver_home_phone;
                     if (SQLCode == -1)
                     {
-                        MessageBox.Show(SQLErrText, "Relief driver selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(SQLErrText
+                                       , "Relief driver selection"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     lSequence++;
-                        /* insert into contract_renewals
-                         *     (contract_no, contract_seq_number,con_relief_driver_name,con_relief_driver_address,con_relief_driver_home_phone)
-                         * values
-                         *     ( :lContract, :lSequence,:sname,:saddr,:sphone); */
+                        // insert into contract_renewals
+                        //     (contract_no, contract_seq_number, con_relief_driver_name, con_relief_driver_address, con_relief_driver_home_phone)
+                        // values
+                        //     (:lContract, :lSequence,:sname,:saddr,:sphone);
                     RDSDataService.InsertIntoContractRenewals(lContract, lSequence, sname, saddr, sphone, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
@@ -794,8 +806,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             if (StaticMessage.DoubleParm == 1)
             {
-                if (MessageBox.Show("Do you want the system to produce benchmark reports for the selected contract(s)?", "", 
-                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want the system to produce benchmark reports for the selected contract(s)?"
+                                   , ""
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     //cb_benchmark_clicked(this, null);
                     cb_bm_clicked(this, null);
@@ -810,14 +823,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lSequence;
             int ltest;
             bool bPrintBenchmark = false;
-            string test;
             int ll_Ctr = 0;
             int ll_Cnt;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            dw_benchmark_report.DataObject.Reset();
-                // count rows for progress bar
+            // TJB  RD7_0051 Oct2009
+            //dw_benchmark_report.DataObject.Reset();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+            // count rows for progress bar
             ll_Cnt = of_getnumselectedrows();
             lRow = dw_listing.GetSelectedRow(0);
 
@@ -829,29 +843,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
-            ((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
-
+            // TJB  RD7_0051 Oct2009
+            //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
+            
             while (lRow >= 0)
             {
                 ll_Ctr++;
-                test = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).Rowstatus;
+                //string test = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).Rowstatus;
                 lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
                 lSequence = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).MaxSequence;
-                    //  TJB  SR4661  May 2005
-                    //  Changed benchmarkCalc stored proc name
-                    //
+
+                //  TJB  SR4661  May 2005
+                //  Changed benchmarkCalc stored proc name
+                //
                     // UPDATE contract_renewals set con_renewal_benchmark_price = BenchmarkCalc2005(contract_no, contract_seq_number)
                     //  where contract_no = :lContract 
                     //    and contract_seq_number = :lSequence;
                 RDSDataService.UpdateContractRenewals(lContract, lSequence, ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
-                    MessageBox.Show(SQLErrText, "Database error (w_renewal_process2006.cb_bm.clicked)", 
-                                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(SQLErrText 
+                                    ,"Database error (w_renewal_process2006.cb_bm.clicked)" 
+                                    ,MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 }
-                ((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence);
-                StaticVariables.gnv_app.of_showstatus(ref w_status, ll_Ctr, ll_Cnt, "Generating benchmark report...");
+                // TJB  RD7_0051 Oct2009
+                //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence);
+                ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
+                StaticVariables.gnv_app.of_showstatus(ref w_status, ll_Ctr, ll_Cnt, "Generating benchmark report ...");
                 lRow = dw_listing.GetSelectedRow(lRow + 1);
             }
             if (dw_benchmark_report.RowCount > 0)
@@ -877,9 +897,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             bool bPrintBenchmark = false;
             int ll_Ctr = 0;
             int ll_Cnt;
+
             bPrintBenchmark = true;
-            dw_benchmark_report.DataObject.Reset();
-                // count rows for progress bar
+            // TJB  RD7_0051 Oct2009
+            //dw_benchmark_report.DataObject.Reset();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+
+            // count rows for progress bar
             ll_Cnt = of_getnumselectedrows();
             lRow = dw_listing.GetSelectedRow(0);
             if (lRow < 0)
@@ -891,7 +915,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             // TJB  Aug-2008:  Added from cb_bm_clicked
-            ((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
+            // TJB  RD7_0051 Oct2009
+            //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
 
             while (lRow >= 0)
             {
@@ -904,7 +930,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         //!if (lSequence >= 1)
                     if (lSequence > 1)
                     {
-                        ((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence - 1);
+                        // TJB  RD7_0051 Oct2009
+                        //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence - 1);
+                        ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence - 1);
                     }
                 }
                 lRow = dw_listing.GetSelectedRow(lRow + 1);
@@ -932,7 +960,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            ll_rc = MessageBox.Show("Do you want the system to update the payment values \r\n" 
+            ll_rc = MessageBox.Show("Do you want the system to update the payment values \n" 
                                          + "to the benchmark values for the selected contract?", 
                                     "Update Payment Values", 
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -962,15 +990,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
                     lSequence = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).MaxSequence;
-                        /*
-                         * UPDATE contract_renewals SET con_renewal_payment_value = con_renewal_benchmark_price  
-                         * WHERE contract_renewals.contract_no = :lContract 
-                         *   AND contract_renewals.contract_seq_number =  :lSequence ;
-                         */
+                        // UPDATE contract_renewals 
+                        //    SET con_renewal_payment_value = con_renewal_benchmark_price  
+                        // WHERE contract_renewals.contract_no = :lContract 
+                        //   AND contract_renewals.contract_seq_number =  :lSequence ;
                     RDSDataService.UpdateContractRenewals2(lContract, lSequence, ref SQLCode, ref SQLErrText);
                     if (SQLCode == -(1))
                     {
-                        MessageBox.Show(SQLErrText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(SQLErrText
+                                       , "Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //?rollback;
                         StaticVariables.gnv_app.of_hidestatus(ref w_status);
                         return;
@@ -1010,7 +1039,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lRow = dw_listing.GetSelectedRow(0);
             if (lRow < 0)
             {
-                MessageBox.Show("Please select a contract.", "Print Schedules", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select a contract."
+                               , "Print Schedules"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             ll_Cnt = of_getnumselectedrows();
@@ -1042,9 +1073,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             string.Format("{0}, Version={1}, Culture=neutral, PublicKeyToken=null", DEFAULT_ASSEMBLY, DEFAULT_VERSION),
                             "NZPostOffice.RDS.DataControls.Ruralrpt." + StaticFunctions.migrateName(sScheduleDWs[lLoop].ToString()));
                     dw_schedule.DataObject = System.Activator.CreateInstance(type) as Metex.Windows.DataUserControl;
-
-
-
 
                         //?dw_schedule.settransobject(StaticVariables.sqlca);
                     if (sScheduleDWs[lLoop].ToString() == "r_contract_summary")
@@ -1087,14 +1115,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
                                               (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).PrintToPrinter(1, false, 0, 0);
                         }
-
-                            //!viewer.PrintReport();
-
-                            /*? dw_schedule.Print(false);
-                             *   while (Yield()) 
-                             *  {
-                             *  }
-                             */
                     }                  
 
 
@@ -1154,24 +1174,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 MessageBox.Show("A renewal group or a contract has to be selected prior to\n" 
                                  + "performing a search on the database."
-                               , "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                               , ""
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bCheckRows = false;
             }
             else if (!(StaticFunctions.f_nempty(lRenewal)))
             {
-                    /* select nvr_frozen_indicator into :sIndicator 
-                     *   from non_vehicle_rate 
-                     *  where rg_code = :lRenewal 
-                     *    and nvr_rates_effective_date = (select max(nvr_rates_effective_date)
-                     *                                      from non_vehicle_rate
-                     *                                     where rg_code = :lRenewal);
-                     */
+                    // select nvr_frozen_indicator into :sIndicator 
+                    //   from non_vehicle_rate 
+                    //  where rg_code = :lRenewal 
+                    //    and nvr_rates_effective_date = (select max(nvr_rates_effective_date)
+                    //                                      from non_vehicle_rate
+                    //                                     where rg_code = :lRenewal);
                 sIndicator = RDSDataService.GetNvrForzenIndicatorFormNonVehicle(lRenewal);
                 if (sIndicator != "Y")
                 {
                     MessageBox.Show("The current renewal group cannot be selected because \n" 
                                      + "its renewal rates have not been frozen"
-                                     , "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                     , ""
+                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     bCheckRows = false;
                 }
                 else
@@ -1191,7 +1212,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (dw_listing.RowCount == 0)
                 {
-                    MessageBox.Show("The search was not successful", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The search was not successful"
+                                   , ""
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else if (!(StaticFunctions.f_nempty(lContract)))
                 {
@@ -1218,9 +1241,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void cb_printbm_clicked(object sender, EventArgs e)
         {
-            ((RBenchmarkReport2006)dw_benchmark_report.DataObject).Print();
+            // TJB  RD7_0051 Oct2009
+            //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Print();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Print();
         }
 
         #endregion
+
+        private void dw_bm_report_Click(object sender, EventArgs e)
+        {
+        }
     }
 }
