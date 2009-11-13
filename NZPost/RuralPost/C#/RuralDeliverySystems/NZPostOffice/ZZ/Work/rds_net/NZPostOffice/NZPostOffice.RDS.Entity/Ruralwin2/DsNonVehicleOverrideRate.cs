@@ -377,16 +377,16 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                     pList.Add(cm, "contract", contract);
                     pList.Add(cm, "sequence", sequence);
                     cm.CommandText = " SELECT non_vehicle_override_rate.contract_no,non_vehicle_override_rate.contract_seq_number," +
-                        "non_vehicle_override_rate.nvor_wage_hourly_rate,non_vehicle_override_rate.nvor_public_liability_rate_2, " +
-                        "non_vehicle_override_rate.nvor_carrier_risk_rate,non_vehicle_override_rate.nvor_acc_rate," +
-                        "non_vehicle_override_rate.nvor_item_proc_rate_per_hour,non_vehicle_override_rate.nvor_frozen," +
-                        "non_vehicle_override_rate.nvor_accounting,non_vehicle_override_rate.nvor_telephone," +
-                        "non_vehicle_override_rate.nvor_sundries,non_vehicle_override_rate.nvor_acc_rate_amount," +
-                        "non_vehicle_override_rate.nvor_uniform,non_vehicle_override_rate.nvor_delivery_wage_rate," +
-                        "non_vehicle_override_rate.nvor_processing_wage_rate " +
-                        " FROM non_vehicle_override_rate " +
-                        " WHERE (non_vehicle_override_rate.contract_no = @contract ) AND " +
-                        " (non_vehicle_override_rate.contract_seq_number = @sequence )";
+                                             "non_vehicle_override_rate.nvor_wage_hourly_rate,non_vehicle_override_rate.nvor_public_liability_rate_2, " +
+                                             "non_vehicle_override_rate.nvor_carrier_risk_rate,non_vehicle_override_rate.nvor_acc_rate," +
+                                             "non_vehicle_override_rate.nvor_item_proc_rate_per_hour,non_vehicle_override_rate.nvor_frozen," +
+                                             "non_vehicle_override_rate.nvor_accounting,non_vehicle_override_rate.nvor_telephone," +
+                                             "non_vehicle_override_rate.nvor_sundries,non_vehicle_override_rate.nvor_acc_rate_amount," +
+                                             "non_vehicle_override_rate.nvor_uniform,non_vehicle_override_rate.nvor_delivery_wage_rate," +
+                                             "non_vehicle_override_rate.nvor_processing_wage_rate " +
+                                       " FROM non_vehicle_override_rate " +
+                                      " WHERE non_vehicle_override_rate.contract_no = @contract " +
+                                         "AND non_vehicle_override_rate.contract_seq_number = @sequence";
 
                     List<NonVehicleOverrideRate> _list = new List<NonVehicleOverrideRate>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -429,8 +429,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "non_vehicle_override_rate", ref pList))
                 {
-                    cm.CommandText += " WHERE  non_vehicle_override_rate.contract_no = @contract_no AND " +
-                        "non_vehicle_override_rate.contract_seq_number = @contract_seq_number ";
+                    cm.CommandText += " WHERE  non_vehicle_override_rate.contract_no = @contract_no "
+                                       + "AND non_vehicle_override_rate.contract_seq_number = @contract_seq_number ";
 
                     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
                     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
@@ -466,11 +466,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "DELETE FROM non_vehicle_override_rate "
+                                    + "WHERE non_vehicle_override_rate.contract_no = @contract_no "
+                                    + "AND non_vehicle_override_rate.contract_seq_number = @contract_seq_number ";
                     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
                     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
-                    cm.CommandText = "DELETE FROM non_vehicle_override_rate WHERE " +
-                    "non_vehicle_override_rate.contract_no = @contract_no AND " +
-                    "non_vehicle_override_rate.contract_seq_number = @contract_seq_number ";
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
