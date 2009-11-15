@@ -127,9 +127,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_nominal_vehicle_value.Size = new System.Drawing.Size(77, 20);
             this.vor_nominal_vehicle_value.TabIndex = 20;
             this.vor_nominal_vehicle_value.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_nominal_vehicle_value.DataBindings[0].DataSourceNullValue = null;
-            this.vor_nominal_vehicle_value.DataBindings[0].NullValue = "";
-            this.vor_nominal_vehicle_value.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_repairs_maintenance_rate_t
             // 
@@ -150,9 +147,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_repairs_maintenance_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_repairs_maintenance_rate.TabIndex = 30;
             this.vor_repairs_maintenance_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_repairs_maintenance_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_repairs_maintenance_rate.DataBindings[0].NullValue = "";
-            this.vor_repairs_maintenance_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_tyre_tubes_rate_t
             // 
@@ -173,9 +167,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_tyre_tubes_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_tyre_tubes_rate.TabIndex = 40;
             this.vor_tyre_tubes_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_tyre_tubes_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_tyre_tubes_rate.DataBindings[0].NullValue = "";
-            this.vor_tyre_tubes_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_vehical_allowance_rate_t
             // 
@@ -196,9 +187,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_vehical_allowance_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_vehical_allowance_rate.TabIndex = 50;
             this.vor_vehical_allowance_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_vehical_allowance_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_vehical_allowance_rate.DataBindings[0].NullValue = "";
-            this.vor_vehical_allowance_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_licence_rate_t
             // 
@@ -219,9 +207,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_licence_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_licence_rate.TabIndex = 60;
             this.vor_licence_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_licence_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_licence_rate.DataBindings[0].NullValue = "";
-            this.vor_licence_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_vehicle_rate_of_return_pct_t
             // 
@@ -242,9 +227,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_vehicle_rate_of_return_pct.Size = new System.Drawing.Size(77, 20);
             this.vor_vehicle_rate_of_return_pct.TabIndex = 70;
             this.vor_vehicle_rate_of_return_pct.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_vehicle_rate_of_return_pct.DataBindings[0].DataSourceNullValue = null;
-            this.vor_vehicle_rate_of_return_pct.DataBindings[0].NullValue = "";
-            this.vor_vehicle_rate_of_return_pct.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_salvage_ratio_t
             // 
@@ -266,9 +248,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_salvage_ratio.TabIndex = 80;
             this.vor_salvage_ratio.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.vor_salvage_ratio.Validating += new System.ComponentModel.CancelEventHandler(TextBox_Validating);
-            this.vor_salvage_ratio.DataBindings[0].DataSourceNullValue = null;
-            this.vor_salvage_ratio.DataBindings[0].NullValue = "";
-            this.vor_salvage_ratio.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_ruc_t
             // 
@@ -289,9 +268,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_ruc.Size = new System.Drawing.Size(77, 20);
             this.vor_ruc.TabIndex = 90;
             this.vor_ruc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_ruc.DataBindings[0].DataSourceNullValue = null;
-            this.vor_ruc.DataBindings[0].NullValue = "";
-            this.vor_ruc.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_sundries_k_t
             // 
@@ -312,9 +288,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_sundries_k.Size = new System.Drawing.Size(77, 20);
             this.vor_sundries_k.TabIndex = 100;
             this.vor_sundries_k.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_sundries_k.DataBindings[0].DataSourceNullValue = null;
-            this.vor_sundries_k.DataBindings[0].NullValue = "";
-            this.vor_sundries_k.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_vehicle_insurance_base_premium_t
             // 
@@ -335,9 +308,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_vehicle_insurance_premium.Size = new System.Drawing.Size(77, 20);
             this.vor_vehicle_insurance_premium.TabIndex = 110;
             this.vor_vehicle_insurance_premium.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_vehicle_insurance_premium.DataBindings[0].DataSourceNullValue = null;
-            this.vor_vehicle_insurance_premium.DataBindings[0].NullValue = "";
-            this.vor_vehicle_insurance_premium.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_fuel_rate_t
             // 
@@ -358,9 +328,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_fuel_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_fuel_rate.TabIndex = 120;
             this.vor_fuel_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_fuel_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_fuel_rate.DataBindings[0].NullValue = "";
-            this.vor_fuel_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // vor_consumption_rate_t
             // 
@@ -381,9 +348,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_consumption_rate.Size = new System.Drawing.Size(77, 20);
             this.vor_consumption_rate.TabIndex = 130;
             this.vor_consumption_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_consumption_rate.DataBindings[0].DataSourceNullValue = null;
-            this.vor_consumption_rate.DataBindings[0].NullValue = "";
-            this.vor_consumption_rate.Validated += new System.EventHandler(Value_Validated);
             // 
             // t_2
             // 
@@ -404,9 +368,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_livery.Size = new System.Drawing.Size(78, 20);
             this.vor_livery.TabIndex = 140;
             this.vor_livery.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_livery.DataBindings[0].DataSourceNullValue = null;
-            this.vor_livery.DataBindings[0].NullValue = "";
-            this.vor_livery.Validated += new System.EventHandler(Value_Validated);
             // 
             // DVehicleOverrideRates
             // 
