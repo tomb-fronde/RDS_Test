@@ -37,8 +37,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw idw_otherrates;
 
-        //  TJB  SR4695  Jan-2007 
-        public DsNonVehicleOverrideRateHistory ids_nonvehiclerateshistory;
+        //  TJB  SR4695  Jan-2007
+        //  TJB  RD7_0038  Jan-2009: Changed ids_nonvehiclerateshistory to ids_nonvehicleratehistory
+        public DsNonVehicleOverrideRateHistory ids_nonvehicleratehistory;
 
         // tempory variable
         private NZPostOffice.RDS.DataService.RDSDataService dataService = new NZPostOffice.RDS.DataService.RDSDataService();
@@ -54,26 +55,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_non_vehicle_rates.DataObject = new DNonVehicleOverrideRates();
             dw_other_rates.DataObject = new DOtherOverrideRates();
 
-            //jlwang:moved from IC
             dw_vehicle_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicle_constructor);
             dw_vehicle_rates.PfcUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_vehicle_rates_pfc_update);
             dw_vehicle_rates.PfcValidation += new UserEventDelegate1(dw_vehicle_rates_pfc_validation);
+            dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
+            ((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
 
             dw_non_vehicle_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_ratesconstructor);
             dw_non_vehicle_rates.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_rates_pfc_postupdate);
+            dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
+            //dw_non_vehicle_rates.ItemChanged += new EventHandler(dw_non_vehicle_rates_itemchanged);
+            ((DNonVehicleOverrideRates)dw_non_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_non_vehicle_rates_itemchanged);
 
             dw_other_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_rates_constructor);
             dw_other_rates.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_other_rateseditchanged);
 
-            dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
-            ((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
-
-            dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
-            dw_non_vehicle_rates.ItemChanged += new EventHandler(dw_non_vehicle_rates_itemchanged);
-
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
-
-            //jlwang:end
         }
 
         public override void pfc_postopen()
@@ -84,37 +81,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB  SR4695  Jan-2007
             //  Simplified through use of variables instead of fully-qualified names
             //  Retrieve rates
-            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.Retrieve ( gnv_App.of_Get_Parameters ( ).longparm, gnv_App.of_Get_Parameters ( ).integerparm)
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.Retrieve ( gnv_App.of_Get_Parameters ( ).longparm, gnv_App.of_Get_Parameters ( ).integerparm)
-            //  tab_override_rates.tabpage_other_rates.dw_other_rates.Retrieve ( gnv_App.of_Get_Parameters ( ).longparm, gnv_App.of_Get_Parameters ( ).integerparm)
+            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.Retrieve(gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
+            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.Retrieve ( gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
+            //  tab_override_rates.tabpage_other_rates.dw_other_rates.Retrieve(gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
             // 
             //  //Insert a blank row if no rows were retrieved
             //  If tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.RowCount = 0 Then
-            //  	tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.InsertRow ( 1)
-            //  	idw_vehiclerates.setitem ( 1, "vor_effective_date", today ( ))
+            //  	tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.InsertRow(1)
+            //  	idw_vehiclerates.setitem(1, "vor_effective_date", today())
             //  	 id_previous_effective_date = null
             //  ELSE
-            //  	id_previous_effective_date = tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.GetItemDateTime( 1, "vor_effective_date").Date
+            //  	id_previous_effective_date = tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.GetItemDateTime(1,"vor_effective_date").Date
             //  End If
             // 
             //  If tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.RowCount = 0 Then
-            //  	tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.InsertRow ( 1)
+            //  	tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.InsertRow(1)
             //  End If
             // 
             //  //If tab_override_rates.tabpage_other_rates.dw_other_rates.RowCount = 0 Then
-            //  //	tab_override_rates.tabpage_other_rates.dw_other_rates.InsertRow ( 1)
+            //  //	tab_override_rates.tabpage_other_rates.dw_other_rates.InsertRow(1)
             //  //End If
             // 
             //  // Make the heading of the datawindows = to the Contract_no, contract_seq_no and Contract name
-            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.modify ( "st_renewal.text='" + gnv_App.of_Get_Parameters ( ).stringparm + "'")
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.modify ( "st_renewal.text='" + gnv_App.of_Get_Parameters ( ).stringparm + "'")
-            //  //tab_override_rates.tabpage_other_rates.dw_other_rates.modify ( "st_renewal.text='" + gnv_App.of_Get_Parameters ( ).stringparm + "'")
+            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
+            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
+            //  //tab_override_rates.tabpage_other_rates.dw_other_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
             // 
             il_contract = StaticVariables.gnv_app.of_get_parameters().longparm;
             il_sequence = StaticVariables.gnv_app.of_get_parameters().integerparm;
 
             /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & "Contract   "+string ( il_contract)+"\r\n" & +"Sequence   "+string ( il_sequence,  "w_contract_rate2001.pfc_postopen" )
+                MessageBox.Show("Contract   "+string(il_contract)+"\n"+"Sequence   "+string(il_sequence,"w_contract_rate2001.pfc_postopen")
             // --------------------------------------------------------------------  */
             // Retrieve rates
             idw_vehiclerates.Retrieve(new object[] { il_contract, il_sequence });
@@ -147,10 +144,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //?idw_nonvehiclerates.GetControlByName("st_renewal").Text = ls_heading;
 
             // Make the columns read only if the contract has been accepted
-            // If gnv_App.of_Get_Parameters ( ).booleanparm Then
-            // 	tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.of_ProtectColumns ( )
-            // 	tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.of_ProtectColumns ( )
-            // 	tab_override_rates.tabpage_other_rates.dw_other_rates.of_ProtectColumns ( )
+            // If gnv_App.of_Get_Parameters().booleanparm Then
+            // 	tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.of_ProtectColumns()
+            // 	tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.of_ProtectColumns()
+            // 	tab_override_rates.tabpage_other_rates.dw_other_rates.of_ProtectColumns()
             // End If
             il_economiclife = of_getremainingeconomiclife();
             if (il_economiclife == null || il_economiclife == 0)
@@ -166,10 +163,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
 
-            /* SELECT	BenchmarkCalc2005 ( :il_contract, :il_sequence) 
-                INTO	:idc_original_benchmark 
-                FROM	dummy
-                USING	SQLCA; */
+            // SELECT	BenchmarkCalc2005(:il_contract, :il_sequence) 
+            //   INTO	:idc_original_benchmark 
+            //   FROM	dummy
+            //  USING	SQLCA
             RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
@@ -180,9 +177,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 this.Close();
             }
             //  TJB  SR4695  Jan-2007
-            //  Create a datastore for the  ( new) Non-vehicle_override_rate_history table
-            ids_nonvehiclerateshistory = new DsNonVehicleOverrideRateHistory();
-            //  ids_nonvehiclerateshistory.retrieve ( il_contract, il_sequence)
+            //  Create a datastore for the (new) Non-vehicle_override_rate_history table
+            ids_nonvehicleratehistory = new DsNonVehicleOverrideRateHistory();
+            //  ids_nonvehicleratehistory.retrieve(il_contract, il_sequence)
         }
 
         public override void pfc_preopen()
@@ -194,8 +191,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #region Methods
         public override void pfc_default()
         {
-            base.pfc_default();
             int ll_rc;
+
+            base.pfc_default();
             ll_rc = this.pfc_save();
             if (ll_rc >= 0)
             {
@@ -210,50 +208,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // integer	li_rc = -1
             // Integer	li_rows = 0
             // 
-            // idw_vehiclerates.AcceptText ( )
-            // ld_effective_date = idw_vehiclerates.GetItemDateTime( 1,"vor_effective_date").Date
+            // idw_vehiclerates.AcceptText()
+            // ld_effective_date = idw_vehiclerates.GetItemDateTime(1,"vor_effective_date").Date
             // 
-            // If idw_vehiclerates.Modifiedcount ( ) > 0 Then
+            // If idw_vehiclerates.Modifiedcount() > 0 Then
             // 
             // 	If il_inserted = 1 Then
             // 
             // 		// Check that the effective date entered is not already on the db
             // 		// PBY 25/06/2002 SR#4414 Also make sure the effective date entered
             // 		// is later than the previous effective date entered.
-            // 		IF  ( NOT IsNull ( id_previous_effective_date)) AND  ( ld_effective_date <= id_previous_effective_date) THEN
-            // 			Messagebox ( "Invalid Date", &
-            // 						  "The Effective Date you have selected must be later than " + String ( id_previous_effective_date, 'dd/mm/yyyy') + ".", &
-            // 						  StopSign!)
+            // 		IF (NOT IsNull(id_previous_effective_date)) AND (ld_effective_date <= id_previous_effective_date) THEN
+            // 			Messagebox("Invalid Date", &
+            //                     "The Effective Date you have selected must be later than " + String(id_previous_effective_date, 'dd/mm/yyyy') + "." &
+            //                     , StopSign!)
             // 			RETURN
             // 		END IF
             // 
             // 		select vor_effective_date
-            // 		into :id_date_exists
-            // 		from vehicle_override_rate
-            // 		where contract_no = :il_contract
-            // 		and contract_seq_number = :il_sequence
-            // 		and vor_effective_date = :ld_effective_date;
-            // 		If id_date_exists <> date ( '1/01/1900') Then
-            // 			Messagebox ( "Invalid Date","The Effective Date you have selected already exists, Please select another.",StopSign!)
+            // 		  into :id_date_exists
+            // 		  from vehicle_override_rate
+            // 		 where contract_no = :il_contract
+            // 		   and contract_seq_number = :il_sequence
+            // 		   and vor_effective_date = :ld_effective_date;
+            // 		If id_date_exists <> date('1/01/1900') Then
+            // 			Messagebox("Invalid Date"
+            //                    ,"The Effective Date you have selected already exists, Please select another.",StopSign!)
             // 			RETURN
             // 		End If
             // 	End if
             // 
             // 	//Save Changes
-            // 	ll_return = idw_vehiclerates.Update ( )
+            // 	ll_return = idw_vehiclerates.Update()
             // 	IF ll_return <> SUCCESS THEN
             // 		Rollback;
-            // 		Close ( this)
+            // 		Close(this)
             // 		RETURN
             // 	END IF
             // 
             // End If
             // 
-            // If idw_nonvehiclerates.ModifiedCount ( ) > 0 Then
-            // 	ll_return =	idw_nonvehiclerates.Update ( )
+            // If idw_nonvehiclerates.ModifiedCount() > 0 Then
+            // 	ll_return =	idw_nonvehiclerates.Update()
             // 	IF ll_return <> SUCCESS THEN
             // 		Rollback;
-            // 		Close ( this)
+            // 		Close(this)
             // 		RETURN
             // 	END IF
             // End If
@@ -263,16 +262,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // // the contract sequence is not the active contract sequence 
             // //  ( ie, if modifing override rates for a pending contract,
             // // no frequency adjustments should be created)
-            // SELECT 	count ( *)
-            // INTO		:li_rows
-            // FROM		contract
-            // WHERE		contract_no = :il_contract
-            // AND		con_active_sequence = :il_sequence
-            // USING		SQLCA;
+            // SELECT count(*) INTO :li_rows
+            //   FROM contract
+            //  WHERE contract_no = :il_contract
+            //    AND con_active_sequence = :il_sequence
+            //  USING SQLCA;
             // 
             // if sqlca.sqlcode <> 0 then
-            // 	messagebox ( "Database Error", "Unable to determine the contract status.\r\n\r\n" + &
-            // 											"Error Text: " + SQLCA.sqlerrtext)
+            // 	messagebox("Database Error", "Unable to determine the contract status.\n\n" + &
+            //                               "Error Text: " + SQLCA.sqlerrtext)
             // 	Rollback;											
             // 	Close ( THIS)
             // 	RETURN
@@ -282,25 +280,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 	// This is not an active contract
             // 	// do not craete any frequency adjustments
             // 	COMMIT;
-            // 	Close ( this)
+            // 	Close(this)
             // 	RETURN
             // END IF
             // 
             // n_freq = CREATE n_frequency_adjustment
             // 
-            // n_freq.of_set_contract ( il_contract, il_sequence)
+            // n_freq.of_set_contract(il_contract, il_sequence)
             // n_freq.is_reason = 'New override rate entered. '
-            // n_freq.of_set_effective_date ( ld_effective_date)
+            // n_freq.of_set_effective_date(ld_effective_date)
             // 
             // // Obtain the new benchmark
-            // SELECT	BenchmarkCalc2001 ( :il_contract, :il_sequence) 
+            // SELECT	BenchmarkCalc2001(:il_contract, :il_sequence) 
             // INTO		:ldc_benchmark 
             // FROM		dummy
-            // USING		SQLCA;
+            // USING	SQLCA;
             // 
             // if sqlca.sqlcode <> 0 then
-            // 	messagebox ( "Database Error", "Unable to calculate a new benchmark for the contract.\r\n\r\n" + &
-            // 											"Error Text: " + SQLCA.sqlerrtext)
+            // 	messagebox("Database Error", "Unable to calculate a new benchmark for the contract.\n\n" + &
+            // 	                             "Error Text: " + SQLCA.sqlerrtext)
             // 	Rollback;											
             // 	Close ( THIS)
             // 	RETURN
@@ -313,7 +311,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // n_freq.idc_adjustment_amount = ldc_amount_to_pay
             // 
             // if ldc_benchmark > 0 then
-            // 	li_rc = n_freq.of_save ( )
+            // 	li_rc = n_freq.of_save()
             // end if
             // 
             // IF li_rc > 0 THEN
@@ -327,25 +325,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public override int pfc_preclose()
         {
+            decimal? ldc_temp;
+
             base.pfc_preclose();
             //  TJB  SR4661  May 2005
-            //  Added update of nvor_wage_hourly_rate from  ( new)
+            //  Added update of nvor_wage_hourly_rate from (new)
             //  nvor_processing_wage_rate 'just in case' the user
-            //  has changed it  ( they're supposed to be identical)
+            //  has changed it (they're supposed to be identical)
             // 
             //  This is also in cb_ok.clicked.  The instance here
             //  catches updates triggered when the user closes the
             //  window with the window-close button  ( which doesn't
             //  go through pfc_default).
-            decimal? ldc_temp;
             idw_nonvehiclerates.AcceptText();
             idw_nonvehiclerates.AcceptText();
             idw_nonvehiclerates.AcceptText();
             //  Only do the update if the row is marked modified 
-            //   ( whether or not the processing wage was changed).
+            //  (whether or not the processing wage was changed).
             //  If you copy the processing wage to the hourly wage
             //  "just in case" you'll mark the record modified and 
-            //  set up a potential unwanted save  ( the user will 
+            //  set up a potential unwanted save (the user will 
             //  always be asked about saving because the vehicle 
             //  windows has been modified with today's date as the
             //  'new' effective date).
@@ -361,9 +360,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             int? ll_ecolife = null;
             // Get remaining economic life for the car
-            /* SELECT vehicle.v_remaining_economic_life INTO :ll_ecolife 
-                FROM contract_vehical, vehicle WHERE vehicle.vehicle_number = contract_vehical.vehicle_number and  
-                contract_vehical.contract_no = :il_contract AND contract_vehical.contract_seq_number = :il_sequence ; */
+            // SELECT vehicle.v_remaining_economic_life INTO :ll_ecolife 
+            //   FROM contract_vehical, vehicle 
+            //  WHERE vehicle.vehicle_number = contract_vehical.vehicle_number 
+            //    and contract_vehical.contract_no = :il_contract 
+            //    AND contract_vehical.contract_seq_number = :il_sequence
             RDSDataService dataService = RDSDataService.GetVehicleLifeCode(il_sequence, il_contract);
             ll_ecolife = dataService.intVal;
             return ll_ecolife;
@@ -406,7 +407,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Need to grab the first available "active" sf_key!
             //  Get the route frequency and delivery days from the Route_Frequency table
             // SELECT FIRST sf_key, rf_delivery_days INTO :ll_sfkey, :ls_deldays
-            //   FROM route_frequency WHERE contract_no = :al_contract AND rf_active = 'Y'
+            //   FROM route_frequency 
+            //  WHERE contract_no = :al_contract 
+            //    AND rf_active = 'Y'
             RDSDataService dataService = RDSDataService.GetFirstRouteFrequenctSfKey(al_contract);
             if (dataService.FirstRouteFrequenctSfKeyList.Count > 0)
             {
@@ -426,9 +429,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check that no other extensions are made to the database
             ld_next_date = ad_effective_date;
 
-            // SELECT count(*) INTO	:ll_count FROM frequency_distances
-            //  WHERE contract_no = :al_contract AND sf_key = :ll_sfkey				
-            //    AND rf_delivery_days = :ls_deldays AND fd_effective_date = :ld_next_date
+            // SELECT count(*) INTO :ll_count 
+            //   FROM frequency_distances
+            //  WHERE contract_no = :al_contract 
+            //    AND sf_key = :ll_sfkey				
+            //    AND rf_delivery_days = :ls_deldays 
+            //    AND fd_effective_date = :ld_next_date
             dataService = RDSDataService.GetFrequencyDistancesCount( ll_sfkey
                                                                    , ls_deldays
                                                                    , ld_next_date
@@ -444,13 +450,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             if (ll_count > 0)
             {
-                //  there is already an extension defined for this effective date. 
+                //  There is already an extension defined for this effective date. 
                 //  Will get the next available effecitve date
                 while (dataService.SQLCode == 0 && ll_count > 0)
                 {
                     ld_next_date = ld_next_date.Value.AddDays(1);
-                    /* SELECT count(*) INTO	:ll_count FROM	frequency_distances WHERE contract_no = :al_contract
-                        AND	sf_key = :ll_sfkey AND	rf_delivery_days = :ls_deldays AND fd_effective_date = :ld_next_date; */
+                    // SELECT count(*) INTO	:ll_count 
+                    //   FROM frequency_distances 
+                    //  WHERE contract_no = :al_contract
+                    //    AND sf_key = :ll_sfkey 
+                    //    AND rf_delivery_days = :ls_deldays 
+                    //    AND fd_effective_date = :ld_next_date
                     dataService = RDSDataService.GetFrequencyDistancesCount2( ll_sfkey
                                                                             , ls_deldays
                                                                             , ld_next_date
@@ -481,7 +491,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int dw_vehicle_rates_pfc_update()
         {
-            int li_return = 0;
             decimal? ldc_benchmark = 0;
             decimal? ldc_amount_to_pay = 0;
             int ll_return;
@@ -489,35 +498,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int li_rows;
             DateTime? ld_effective_date;
             NFrequencyAdjustment n_freq;
-            //? li_return = ancestorreturnvalue;
-            if (li_return < 0)
-            {
-                //  validation failed, do not proceed
-                return li_return;
-            }
-            else
-            {
-                li_return = 1;
-            }
+            int li_return = 1;
+
             idw_vehiclerates.AcceptText();
             ld_effective_date = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
-            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
-            {
-                idw_nonvehiclerates.Save();
-                ll_return = SUCCESS; //?
-                if (ll_return != SUCCESS)
-                {
-                    //? Rollback;
-                    return -1;
-                }
-            }
+            // TJB  RD7_0038  Nov-2009
+            // Removed nonvehiclerates save at this point; the save is done in the cb_ok_clicked event.
+            //            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
+            //            {
+            //                idw_nonvehiclerates.Save();
+            //                ll_return = SUCCESS; //?
+            //                if (ll_return != SUCCESS)
+            //                {
+            //                    return -1;
+            //                }
+            //            }
             //  PBY 12/06/2002 
             //  SR#4401 Do not create a frequency adjustment if
             //  the contract sequence is not the active contract sequence 
-            //   ( ie, if modifing override rates for a pending contract,
+            //  (ie, if modifing override rates for a pending contract,
             //  no frequency adjustments should be created)
             li_rows = 0;
-            // SELECT count(*) INTO	:li_rows  FROM	contract  WHERE	contract_no = :il_contract AND	con_active_sequence = :il_sequence USING SQLCA;
+            // SELECT count(*) INTO	:li_rows 
+            //   FROM contract 
+            //  WHERE contract_no = :il_contract 
+            //    AND con_active_sequence = :il_sequence 
+            //  USING SQLCA
             RDSDataService dataService = RDSDataService.GetContractCountByNoAndSeq(il_sequence, il_contract);
             li_rows = dataService.intVal;
             if (dataService.SQLCode != 0)
@@ -546,7 +552,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed BenchmarkCalc subroutine name
             //  Obtain the new benchmark
 
-            // SELECT BenchmarkCalc2005 ( :il_contract, :il_sequence) INTO :ldc_benchmark FROM dummy USING SQLCA;
+            // SELECT BenchmarkCalc2005(:il_contract,:il_sequence) INTO :ldc_benchmark FROM dummy USING SQLCA;
             dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
             ldc_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
@@ -588,17 +594,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int li_rc = -(1);
             int li_rows = 0;
             DateTime? ld_upperlimitdate = null;
-            int li_return = 0;
-            //? li_return = ancestorreturnvalue;
-            if (li_return < 0)
-            {
-                //  Validation failed, do not proceed
-                return li_return;
-            }
-            else
-            {
-                li_return = 1;
-            }
+            int li_return = 1;
+
             dw_vehicle_rates.AcceptText();
             ld_effective_date = dw_vehicle_rates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
             if (il_inserted == 1)
@@ -616,7 +613,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 //  PBY 02/09/2002 SR#4414 also make sure effective date cannot be greater than
                 //  today()+30days
-                //? ld_upperlimitdate = StaticMethods.RelativeDate(System.Convert.ToDateTime(StaticVariables.gnv_app.of_gettimestamp()), 30);
+                //? ld_upperlimitdate = StaticMethods.RelativeDate(System.Convert.ToDateTime(StaticVariables.gnv_app.of_gettimestamp()),30);
                 if (!(id_previous_effective_date == null) && ld_effective_date > ld_upperlimitdate)
                 {
                     MessageBox.Show("The Effective Date you have selected must not be later than " 
@@ -625,8 +622,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     //? return -(1);
                 }
-                // select vor_effective_date into :id_date_exists from vehicle_override_rate
-                //  where contract_no = :il_contract and contract_seq_number = :il_sequence
+                // select vor_effective_date into :id_date_exists 
+                //   from vehicle_override_rate
+                //  where contract_no = :il_contract 
+                //    and contract_seq_number = :il_sequence
                 //    and vor_effective_date = :ld_effective_date
                 RDSDataService dataService = RDSDataService.GetVovEffectiveDate(ld_effective_date, il_sequence, il_contract);
                 id_date_exists = dataService.dtVal;
@@ -701,8 +700,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ldc_processing = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
             }
 
-            ll_row = ids_nonvehiclerateshistory.RowCount;
-            ids_nonvehiclerateshistory.InsertItem<NonVehicleOverrideRateHistory>(ll_row);
+            ll_row = ids_nonvehicleratehistory.RowCount;
+            ids_nonvehicleratehistory.InsertItem<NonVehicleOverrideRateHistory>(ll_row);
             if (ll_row < 0)
             {
                 MessageBox.Show("Error creating new entry for non_vehicle_override_rate_history table."
@@ -711,30 +710,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else
             {
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractNo = il_contract;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractSeqNumber = il_sequence;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorEffectiveDate = ld_effective;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorWageHourlyRate = ldc_hourly;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorPublicLiabilityRate2 = ldc_public;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorCarrierRiskRate = ldc_carrier;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRate = ldc_acc;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorItemProcRatePerHour = (int?)ldc_item;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorFrozen = ls_frozen;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccounting = ldc_accounting;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorTelephone = ldc_telephone;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorSundries = ldc_sundries;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRateAmount = ldc_acc_amount;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorUniform = ldc_uniform;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorDeliveryWageRate = ldc_delivery;
-                ids_nonvehiclerateshistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorProcessingWageRate = ldc_processing;
-                ids_nonvehiclerateshistory.Save();
-                ll_rc = (ll_rc == null) ? 0 : ll_rc;
-
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractNo = il_contract;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractSeqNumber = il_sequence;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorEffectiveDate = ld_effective;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorWageHourlyRate = ldc_hourly;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorPublicLiabilityRate2 = ldc_public;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorCarrierRiskRate = ldc_carrier;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRate = ldc_acc;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorItemProcRatePerHour = (int?)ldc_item;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorFrozen = ls_frozen;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccounting = ldc_accounting;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorTelephone = ldc_telephone;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorSundries = ldc_sundries;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRateAmount = ldc_acc_amount;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorUniform = ldc_uniform;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorDeliveryWageRate = ldc_delivery;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorProcessingWageRate = ldc_processing;
+                ids_nonvehicleratehistory.Save();     // NOTE: Save doesn't return a return code!
+                ll_rc = (ll_rc == null) ? 0 : ll_rc;   //       This and following ll_rc stuff is irrelevant
                 if (ll_rc < 0)
                 {
                     MessageBox.Show("Error inserting new entry into non_vehicle_override_rate_history table. \n" 
-                                     + "Row = " + ll_row
-                                     + ", RC = " + ll_rc
+                                     + "Row = " + ll_row + ", RC = " + ll_rc
                                    , "Error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -752,16 +749,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void tab_override_rates_selectionchanged(object sender, EventArgs e)
         {
-            //  TJB SR4586 28-July-2004
-            //      Removed: allow the newrates button to remain visible
-            //  		       on the non-vehicle rates tabpage
-            /* 
-                if newindex = 2 then
-                w_contract_rate2001.cb_newrates.visible = False
-                else
-                w_contract_rate2001.cb_newrates.visible = True
-                end if
-             */
+            //
         }
 
         public virtual void dw_vehicle_rates_getfocus(object sender, EventArgs e)
@@ -770,7 +758,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // if the datawindow retrieves a record make the datawindow readonly
             if (dw_vehicle_rates.RowCount > 0 && il_inserted != 1 && dw_vehicle_rates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate != null/*System.Convert.ToDateTime("00/00/0000")*/)
             {
-                //dw_vehicle_rates.Enabled = false;
                 foreach (Control var in dw_vehicle_rates.DataObject.Controls)
                 {
                     if (var is TextBox)
@@ -783,14 +770,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     }
                 }
             }
+            // TJB  RD7_0038  Nov-2009:  Added to enable updates
+            else
+            {
+                foreach (Control var in dw_vehicle_rates.DataObject.Controls)
+                {
+                    if (var is TextBox)
+                    {
+                        ((TextBox)var).ReadOnly = false;
+                    }
+                    else if (var is MaskedTextBox)
+                    {
+                        ((MaskedTextBox)var).ReadOnly = false;
+                    }
+                }
+            }
         }
 
         public virtual void dw_vehicle_rates_itemchanged(object sender, EventArgs e)
         {
             dw_vehicle_rates.URdsDw_Itemchanged(sender, e);
             // Set the contract_no and the contract_seq_no
-            // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem ( 1, "Contract_no", il_contract)
-            // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem ( 1, "Contract_seq_number", il_sequence)
+            // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem(1, "Contract_no", il_contract)
+            // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem(1, "Contract_seq_number", il_sequence)
             idw_vehiclerates.GetItem<VehicleOverrideRates>(0).ContractNo = il_contract;
             idw_vehiclerates.GetItem<VehicleOverrideRates>(0).ContractSeqNumber = il_sequence;
             // calculate allowance
@@ -815,7 +817,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  If set, turn readonly off to allow changes
             if (il_inserted != 1)
             {
-                //dw_non_vehicle_rates.Enabled = false;
                 foreach (Control var in dw_non_vehicle_rates.DataObject.Controls)
                 {
                     if (var is TextBox)
@@ -830,7 +831,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else
             {
-                //dw_non_vehicle_rates.Enabled = true;
                 foreach (Control var in dw_non_vehicle_rates.DataObject.Controls)
                 {
                     if (var is TextBox)
@@ -843,14 +843,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     }
                 }
             }
-            //  TJB - this was in the original ...
-            //  Don't allow further changes if the hourly wage rate has been set
-            //  29-July-2004 - Not wanted behaviour - removed
-            // 
-            // if not isnull ( this.GetItemNumber ( 1,"nvor_wage_hourly_rate")) then
-            // 	this.modify ( "datawindow.readonly=yes")
-            // end if
-            // 
         }
 
         public virtual void dw_non_vehicle_rates_itemchanged(object sender, EventArgs e)
@@ -860,10 +852,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //      Moved from editchanged 
             //  TJB  SR4695  Feb-2007
             //  Removed.  Contract details set when NVOR record created
-            //   ( see 
             // Set the contract_no and the contract_seq_no
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.SetItem ( 1, "Contract_no", gnv_App.of_Get_Parameters ( ).longparm)
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.SetItem ( 1, "Contract_seq_number", gnv_App.of_Get_Parameters ( ).integerparm)
+            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.SetItem(1, "Contract_no", gnv_App.of_Get_Parameters().longparm)
+            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.SetItem(1, "Contract_seq_number", gnv_App.of_Get_Parameters().integerparm)
         }
 
         public virtual void dw_other_rateseditchanged(object sender, EventArgs e)
@@ -876,9 +867,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void cb_ok_clicked(object sender, EventArgs e)
         {
             //  TJB  SR4661  May 2005
-            //  Added update of nvor_wage_hourly_rate from  ( new)
+            //  Added update of nvor_wage_hourly_rate from (new)
             //  nvor_processing_wage_rate 'just in case' the user
-            //  has changed it  ( they're supposed to be identical)
+            //  has changed it (they're supposed to be identical)
             int ll_rc;
             int? ll_temp;
             decimal? ldc_temp;
@@ -931,9 +922,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
         {
             // //Save Changes
-            // If idw_vehiclerates.Update ( ) >0 Then
-            // 	If idw_nonvehiclerates.Update ( ) > 0 Then
-            //  		If tab_override_rates.tabpage_other_rates.dw_other_rates.Update ( )>0 Then
+            // If idw_vehiclerates.Update() >0 Then
+            // 	If idw_nonvehiclerates.Update() > 0 Then
+            //  		If tab_override_rates.tabpage_other_rates.dw_other_rates.Update()>0 Then
             // 		End If 
             // 	End If
             // End If
@@ -989,9 +980,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 il_inserted = 1;
                 /*  
                     13-Feb-2002 PBY commented out
-                    idw_vehiclerates.reset ( )
-                    idw_vehiclerates.InsertRow ( 1)
-                    idw_vehiclerates.setitem ( 1, "vor_effective_date", today ( ))
+                    idw_vehiclerates.reset()
+                    idw_vehiclerates.InsertRow(1)
+                    idw_vehiclerates.setitem(1, "vor_effective_date", today())
                  */
                 //  TJB  SR4695  Feb-2007
                 //  If there's no previous VOR for today the effective date 
@@ -1000,8 +991,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  there is a frequency_adjustment for today.  
                 //  When the VOR is saved, the frequency_adjustment effective date
                 //  conflicts with the extension FA's effective date, and the code 
-                //   ( in n_frequency_adjustment.of_set_effective_date) changes the FA 
-                //  effective date by -1 day ( !!) making the FA's effective date 
+                //  (in n_frequency_adjustment.of_set_effective_date) changes the FA 
+                //  effective date by -1 day(!!) making the FA's effective date 
                 //  different than the VOR's.
                 // 
                 //  Changed code to check for this conflict and set the effective
@@ -1012,10 +1003,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 DateTime? ld_default_eff_date;
                 DateTime? ld_next_eff_date;
                 ll_rc = idw_vehiclerates.ResetUpdate();
-                // * IF IsNull ( id_previous_effective_date) OR today ( ) > id_previous_effective_date THEN
-                // *	ll_rc = idw_vehiclerates.setitem ( 1, "vor_effective_date", today ( ))
+                // * IF IsNull(id_previous_effective_date) OR today() > id_previous_effective_date THEN
+                // *	ll_rc = idw_vehiclerates.setitem(1,"vor_effective_date",today())
                 // * ELSE
-                // *	ll_rc = idw_vehiclerates.setitem ( 1, "vor_effective_date", StaticMethods.RelativeDate( id_previous_effective_date,1))		
+                // *	ll_rc = idw_vehiclerates.setitem(1,"vor_effective_date",StaticMethods.RelativeDate( id_previous_effective_date,1))
                 // * END IF
                 if (id_previous_effective_date == null || System.DateTime.Today > id_previous_effective_date)
                 {
@@ -1035,10 +1026,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_vehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
                 //  Re-activate the datawindow for input
                 idw_vehiclerates.Enabled = true;
-                //  TJB SR4586 28-July-2004
+                // TJB SR4586 28-July-2004
                 //        Add management of non-vehicle overrides
                 //  Set up the non-vehicle override rates for update
-                idw_nonvehiclerates.ResetUpdate();
+                // TJB  RD7_0038  Nov-2009
+                //   Add code to set up an insert or update of the non_vehicle_override_rate table
+                int? t_contract = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractNo;
+                if (t_contract == null)
+                {
+                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).marknew();
+                    idw_nonvehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
+                }
+                else
+                {
+                    idw_nonvehiclerates.ResetUpdate();
+                } 
                 idw_nonvehiclerates.Enabled = true;
             }
             cb_ok.Focus();
@@ -1048,6 +1050,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             if (senderName == "")
             {
+                // TJB  RD7_0038  Nov-2009:  Added warning when user closes window
+                if (StaticFunctions.IsDirty(idw_vehiclerates) || StaticFunctions.IsDirty(idw_nonvehiclerates))
+                {
+                    MessageBox.Show("Changes have not been saved.","Warning"
+                                   ,MessageBoxButtons.OK,MessageBoxIcon.Information);
+                }
                 return;
             }
             if (senderName != "OK" && senderName != "Cancel")
@@ -1057,5 +1065,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             pfc_preclose();
         }
         #endregion
+
     }
 }

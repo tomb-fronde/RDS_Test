@@ -44,179 +44,165 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.st_1 = new System.Windows.Forms.Label();
+            this.tab_override_rates = new System.Windows.Forms.TabControl();
+            this.tabpage_vehicle_rates = new System.Windows.Forms.TabPage();
+            this.dw_vehicle_rates = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_non_vehicle_rates = new System.Windows.Forms.TabPage();
+            this.dw_non_vehicle_rates = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_other_rates = new System.Windows.Forms.TabPage();
+            this.dw_other_rates = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_ok = new System.Windows.Forms.Button();
+            this.cb_cancel = new System.Windows.Forms.Button();
+            this.cb_newrates = new System.Windows.Forms.Button();
+            this.tab_override_rates.SuspendLayout();
+            this.tabpage_vehicle_rates.SuspendLayout();
+            this.tabpage_non_vehicle_rates.SuspendLayout();
+            this.tabpage_other_rates.SuspendLayout();
             this.SuspendLayout();
-            this.st_1 = new Label();
-            this.tab_override_rates = new TabControl();
-            this.cb_ok = new Button();
-            this.cb_cancel = new Button();
-            this.cb_newrates = new Button();
-            
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Text = "Override Rates";
-            this.Height = 412;
-            this.Width = 380;
-            this.Top = 55;
-            this.Left = 46;
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.Tag = "ComponentName=Renewal Rates;";
-           
             // 
             // st_1
             // 
-            st_1.TabStop = false;
-            st_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            st_1.Text = "w_contract _rate2001";
-            st_1.BackColor = System.Drawing.SystemColors.Control;
-            st_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            st_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            st_1.Height = 32;
-            st_1.Width = 64;
-            st_1.Top = 350;
-            st_1.Left = 128;
-           
+            this.st_1.BackColor = System.Drawing.SystemColors.Control;
+            this.st_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_1.ForeColor = System.Drawing.Color.Gray;
+            this.st_1.Location = new System.Drawing.Point(119, 358);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(117, 16);
+            this.st_1.TabIndex = 1;
+            this.st_1.Text = "WContract _rate2001";
+            this.st_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tab_override_rates
             // 
-            this.tabpage_vehicle_rates = new TabPage();
-            this.tabpage_non_vehicle_rates = new TabPage();
-            this.tabpage_other_rates = new TabPage();
-            tab_override_rates.Controls.Add(tabpage_vehicle_rates);
-            tab_override_rates.Controls.Add(tabpage_non_vehicle_rates);
-            tab_override_rates.Controls.Add(tabpage_other_rates);
-            tab_override_rates.SelectedIndex = 0;
-            tab_override_rates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_override_rates.TabIndex = 1;
-            tab_override_rates.Height = 340;
-            tab_override_rates.Width = 355;
-            tab_override_rates.Top = 6;
-            tab_override_rates.Left = 7;
-            tab_override_rates.SelectedIndexChanged += new EventHandler(tab_override_rates_selectionchanged);
-         
+            this.tab_override_rates.Controls.Add(this.tabpage_vehicle_rates);
+            this.tab_override_rates.Controls.Add(this.tabpage_non_vehicle_rates);
+            this.tab_override_rates.Controls.Add(this.tabpage_other_rates);
+            this.tab_override_rates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_override_rates.Location = new System.Drawing.Point(7, 6);
+            this.tab_override_rates.Name = "tab_override_rates";
+            this.tab_override_rates.SelectedIndex = 0;
+            this.tab_override_rates.Size = new System.Drawing.Size(355, 340);
+            this.tab_override_rates.TabIndex = 1;
+            this.tab_override_rates.SelectedIndexChanged += new System.EventHandler(this.tab_override_rates_selectionchanged);
             // 
             // tabpage_vehicle_rates
             // 
-            dw_vehicle_rates = new URdsDw();
-            //!dw_vehicle_rates.DataObject = new DVehicleOverrideRates();
-            tabpage_vehicle_rates.Controls.Add(dw_vehicle_rates);
-            tabpage_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_vehicle_rates.Text = "Vehicle Rates";
-            tabpage_vehicle_rates.Name = tabpage_vehicle_rates.Text;//
-
-            tabpage_vehicle_rates.Size = new System.Drawing.Size(355, 332);
-            tabpage_vehicle_rates.Top = 25;
-            tabpage_vehicle_rates.Left = 3;
-            
+            this.tabpage_vehicle_rates.Controls.Add(this.dw_vehicle_rates);
+            this.tabpage_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_vehicle_rates.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_vehicle_rates.Name = this.tabpage_vehicle_rates.Text;
+            this.tabpage_vehicle_rates.Size = new System.Drawing.Size(347, 314);
+            this.tabpage_vehicle_rates.TabIndex = 0;
+            this.tabpage_vehicle_rates.Text = "Vehicle Rates";
             // 
             // dw_vehicle_rates
             // 
-            dw_vehicle_rates.TabIndex = 2;
-            dw_vehicle_rates.Size = new System.Drawing.Size(352, 325);
-            dw_vehicle_rates.Top = 5;
-            dw_vehicle_rates.Location = new System.Drawing.Point(3, 5);
-            
-            //!dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
-            //!((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
-            
-            //dw_vehicle_rates.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicle_constructor);
-            //dw_vehicle_rates.PfcUpdate +=new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_vehicle_rates_pfc_update);
-            //dw_vehicle_rates.PfcValidation += new UserEventDelegate1(dw_vehicle_rates_pfc_validation);
-          
+            this.dw_vehicle_rates.DataObject = null;
+            this.dw_vehicle_rates.FireConstructor = false;
+            this.dw_vehicle_rates.Location = new System.Drawing.Point(3, 5);
+            this.dw_vehicle_rates.Name = "dw_vehicle_rates";
+            this.dw_vehicle_rates.Size = new System.Drawing.Size(352, 325);
+            this.dw_vehicle_rates.TabIndex = 2;
             // 
             // tabpage_non_vehicle_rates
             // 
-            dw_non_vehicle_rates = new URdsDw();
-            //!dw_non_vehicle_rates.DataObject = new DNonVehicleOverrideRates();
-            tabpage_non_vehicle_rates.Controls.Add(dw_non_vehicle_rates);
-            tabpage_non_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_non_vehicle_rates.Text = "Non Vehicle Rates";
-            tabpage_non_vehicle_rates.Name = tabpage_non_vehicle_rates.Text;//
-
-            tabpage_non_vehicle_rates.Size = new System.Drawing.Size(313, 332);
-            tabpage_non_vehicle_rates.Top = 25;
-            tabpage_non_vehicle_rates.Left = 3;
-         
+            this.tabpage_non_vehicle_rates.Controls.Add(this.dw_non_vehicle_rates);
+            this.tabpage_non_vehicle_rates.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_non_vehicle_rates.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_non_vehicle_rates.Name = this.tabpage_non_vehicle_rates.Text;
+            this.tabpage_non_vehicle_rates.Size = new System.Drawing.Size(347, 314);
+            this.tabpage_non_vehicle_rates.TabIndex = 1;
+            this.tabpage_non_vehicle_rates.Text = "Non Vehicle Rates";
             // 
             // dw_non_vehicle_rates
             // 
-            dw_non_vehicle_rates.VerticalScroll.Visible = false;
-            dw_non_vehicle_rates.TabIndex = 2;
- 
-            dw_non_vehicle_rates.Size = new System.Drawing.Size(296, 256);
-            dw_non_vehicle_rates.Location = new System.Drawing.Point(1, 11);    
-            
-            //!dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
-            //!dw_non_vehicle_rates.ItemChanged+= new EventHandler(dw_non_vehicle_rates_itemchanged);
-
-            //dw_non_vehicle_rates.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_ratesconstructor);
-            //dw_non_vehicle_rates.PfcPostUpdate +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_rates_pfc_postupdate);
-
+            this.dw_non_vehicle_rates.DataObject = null;
+            this.dw_non_vehicle_rates.FireConstructor = false;
+            this.dw_non_vehicle_rates.Location = new System.Drawing.Point(1, 11);
+            this.dw_non_vehicle_rates.Name = "dw_non_vehicle_rates";
+            this.dw_non_vehicle_rates.Size = new System.Drawing.Size(296, 256);
+            this.dw_non_vehicle_rates.TabIndex = 2;
             // 
             // tabpage_other_rates
             // 
-            dw_other_rates = new URdsDw();
-            //!dw_other_rates.DataObject = new DOtherOverrideRates();
-            tabpage_other_rates.Controls.Add(dw_other_rates);
-            tabpage_other_rates.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_other_rates.Text = "Other Rates";
-            tabpage_other_rates.Size = new System.Drawing.Size(313, 296);
-            tabpage_other_rates.Top = 25;
-            tabpage_other_rates.Left = 3;
-            tabpage_other_rates.Visible = false;
+            this.tabpage_other_rates.Controls.Add(this.dw_other_rates);
+            this.tabpage_other_rates.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_other_rates.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_other_rates.Name = "tabpage_other_rates";
+            this.tabpage_other_rates.Size = new System.Drawing.Size(347, 314);
+            this.tabpage_other_rates.TabIndex = 2;
+            this.tabpage_other_rates.Text = "Other Rates";
+            this.tabpage_other_rates.Visible = false;
             // 
             // dw_other_rates
             // 
-            dw_other_rates.VerticalScroll.Visible = false;
-            dw_other_rates.TabIndex = 2;
-            dw_other_rates.Size = new System.Drawing.Size(382, 315);
-            dw_other_rates.Location = new System.Drawing.Point(5, 7);
-            //dw_other_rates.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_rates_constructor);
-            //dw_other_rates.URdsDwEditChanged +=new NZPostOffice.RDS.Controls.EventDelegate(dw_other_rateseditchanged);
+            this.dw_other_rates.DataObject = null;
+            this.dw_other_rates.FireConstructor = false;
+            this.dw_other_rates.Location = new System.Drawing.Point(5, 7);
+            this.dw_other_rates.Name = "dw_other_rates";
+            this.dw_other_rates.Size = new System.Drawing.Size(382, 315);
+            this.dw_other_rates.TabIndex = 2;
             // 
             // cb_ok
             // 
-            this.AcceptButton = cb_ok;
-            cb_ok.Text = "&Ok";
-            cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_ok.TabIndex = 2;
-            cb_ok.Height = 22;
-            cb_ok.Width = 57;
-            cb_ok.Top = 350;
-            cb_ok.Left = 207;
-            cb_ok.Name = "OK";
-            cb_ok.Click += new EventHandler(cb_ok_clicked);
+            this.cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_ok.Location = new System.Drawing.Point(241, 350);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(57, 22);
+            this.cb_ok.TabIndex = 2;
+            this.cb_ok.Text = "&Ok";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
             // cb_cancel
             // 
-            this.CancelButton = cb_cancel;
-            cb_cancel.Text = "&Cancel";
-            cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_cancel.TabIndex = 3;
-            cb_cancel.Height = 22;
-            cb_cancel.Width = 57;
-            cb_cancel.Top = 350;
-            cb_cancel.Left = 269;
-            cb_cancel.Name = "Cancel";
-            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
+            this.cb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_cancel.Location = new System.Drawing.Point(303, 350);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(57, 22);
+            this.cb_cancel.TabIndex = 3;
+            this.cb_cancel.Text = "&Cancel";
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // cb_newrates
             // 
-            cb_newrates.Text = "&New Override Rates";
-            cb_newrates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_newrates.TabIndex = 4;
-            cb_newrates.Height = 22;
-            cb_newrates.Width = 112;
-            cb_newrates.Location = new System.Drawing.Point(5, 350);
-            cb_newrates.Click += new EventHandler(cb_newrates_clicked);
+            this.cb_newrates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_newrates.Location = new System.Drawing.Point(5, 350);
+            this.cb_newrates.Name = "cb_newrates";
+            this.cb_newrates.Size = new System.Drawing.Size(112, 22);
+            this.cb_newrates.TabIndex = 4;
+            this.cb_newrates.Text = "&New Override Rates";
+            this.cb_newrates.Click += new System.EventHandler(this.cb_newrates_clicked);
+            // 
+            // WContractRate2001
+            // 
+            this.AcceptButton = this.cb_ok;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_cancel;
+            this.ClientSize = new System.Drawing.Size(372, 378);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.tab_override_rates);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.cb_newrates);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WContractRate2001";
+            this.Tag = "ComponentName=Renewal Rates;";
+            this.Text = "Override Rates";
+            this.Controls.SetChildIndex(this.cb_newrates, 0);
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.Controls.SetChildIndex(this.tab_override_rates, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.tab_override_rates.ResumeLayout(false);
+            this.tabpage_vehicle_rates.ResumeLayout(false);
+            this.tabpage_non_vehicle_rates.ResumeLayout(false);
+            this.tabpage_other_rates.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-
-            Controls.Add(st_1);
-            Controls.Add(tab_override_rates);
-            Controls.Add(cb_ok);
-            Controls.Add(cb_cancel);
-            Controls.Add(cb_newrates);
-           
-            this.ResumeLayout();
         }
 
         /// <summary>
