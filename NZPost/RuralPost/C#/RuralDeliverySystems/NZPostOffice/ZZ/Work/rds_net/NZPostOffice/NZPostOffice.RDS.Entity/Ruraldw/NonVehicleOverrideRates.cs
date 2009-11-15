@@ -11,25 +11,28 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
-    [MapInfo("contract_no", "_contract_no", "")]
-    [MapInfo("contract_seq_number", "_contract_seq_number", "")]
-    [MapInfo("nvor_wage_hourly_rate", "_nvor_wage_hourly_rate", "")]
-    [MapInfo("nvor_public_liability_rate_2", "_nvor_public_liability_rate_2", "")]
-    [MapInfo("nvor_carrier_risk_rate", "_nvor_carrier_risk_rate", "")]
-    [MapInfo("nvor_acc_rate", "_nvor_acc_rate", "")]
-    [MapInfo("nvor_item_proc_rate_per_hour", "_nvor_item_proc_rate_per_hour", "")]
-    [MapInfo("nvor_frozen", "_nvor_frozen", "")]
-    [MapInfo("nvor_accounting", "_nvor_accounting", "")]
-    [MapInfo("nvor_telephone", "_nvor_telephone", "")]
-    [MapInfo("nvor_sundries", "_nvor_sundries", "")]
-    [MapInfo("nvor_acc_rate_amount", "_nvor_acc_rate_amount", "")]
-    [MapInfo("nvor_uniform", "_nvor_uniform", "")]
-    [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "")]
-    [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "")]
+    // TJB  RD7_0038:  Added tablename (non_vehicle_override_rate)
+    [MapInfo("contract_no", "_contract_no", "non_vehicle_override_rate")]
+    [MapInfo("contract_seq_number", "_contract_seq_number", "non_vehicle_override_rate")]
+    [MapInfo("nvor_wage_hourly_rate", "_nvor_wage_hourly_rate", "non_vehicle_override_rate")]
+    [MapInfo("nvor_public_liability_rate_2", "_nvor_public_liability_rate_2", "non_vehicle_override_rate")]
+    [MapInfo("nvor_carrier_risk_rate", "_nvor_carrier_risk_rate", "non_vehicle_override_rate")]
+    [MapInfo("nvor_acc_rate", "_nvor_acc_rate", "non_vehicle_override_rate")]
+    [MapInfo("nvor_item_proc_rate_per_hour", "_nvor_item_proc_rate_per_hour", "non_vehicle_override_rate")]
+    [MapInfo("nvor_frozen", "_nvor_frozen", "non_vehicle_override_rate")]
+    [MapInfo("nvor_accounting", "_nvor_accounting", "non_vehicle_override_rate")]
+    [MapInfo("nvor_telephone", "_nvor_telephone", "non_vehicle_override_rate")]
+    [MapInfo("nvor_sundries", "_nvor_sundries", "non_vehicle_override_rate")]
+    [MapInfo("nvor_acc_rate_amount", "_nvor_acc_rate_amount", "non_vehicle_override_rate")]
+    [MapInfo("nvor_uniform", "_nvor_uniform", "non_vehicle_override_rate")]
+    [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "non_vehicle_override_rate")]
+    [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRates : Entity<NonVehicleOverrideRates>
     {
+        private string SQLErrText;
+
         #region Business Methods
         [DBField()]
         private int? _contract_no;
@@ -363,10 +366,17 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             return Fetch(incontract_no, incontract_seq_no).list;
         }
+
+        // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
+        public virtual void marknew()
+        {
+            base.MarkClean();
+            base.MarkNew();
+        }
         #endregion
 
         #region Data Access
-        [ServerMethod]
+        [ServerMethod()]
         private void FetchEntity(int? incontract_no, int? incontract_seq_no)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -406,6 +416,58 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         list = _list.ToArray();
                     }
                 }
+            }
+        }
+        
+        // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
+        [ServerMethod()]
+        private void InsertEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+                if (GenerateInsertCommandText(cm, "non_vehicle_override_rate", pList))
+                {
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        SQLErrText = e.Message;
+                    }
+                }
+                StoreInitialValues();
+            }
+        }
+
+        // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
+        [ServerMethod()]
+        private void UpdateEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+                if (GenerateUpdateCommandText(cm, "non_vehicle_override_rate", ref pList))
+                {
+                    cm.CommandText += " WHERE contract_no = @contract_no"
+                                      + " AND contract_seq_number = @contract_seq_number";
+                    pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
+                    pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        SQLErrText = e.Message;
+                    }
+                }
+                StoreInitialValues();
             }
         }
 
