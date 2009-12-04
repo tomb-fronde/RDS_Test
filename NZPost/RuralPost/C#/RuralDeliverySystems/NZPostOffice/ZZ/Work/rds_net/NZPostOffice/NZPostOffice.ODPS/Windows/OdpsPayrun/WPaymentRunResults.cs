@@ -59,15 +59,17 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 double temp;
                 temp = StaticMessage.DoubleParm / lcount;
                 // st_processingtime.Text = "Processing time: " + StaticMessage.DoubleParm.ToString() + " seconds  ( " + String(Truncate(StaticMessage.DoubleParm / lcount, 2)) + " seconds per contract-O/D)";
-                st_processingtime.Text = "Processing time: " + Convert.ToInt32(StaticMessage.DoubleParm).ToString() + " seconds  ( " + string.Format("{0:F2}", temp) + " seconds per contract-O/D)";
-
+                st_processingtime.Text = "Processing time: " + Convert.ToInt32(StaticMessage.DoubleParm).ToString() + " seconds " 
+                                         + "(" + string.Format("{0:F2}",temp) + " seconds per contract-O/D)";
             }
             // Find out if any negative pays were produced and if so print a list of them
             dw_negative.Retrieve();
             if (dw_negative.RowCount > 0)
             {
                 cb_accept.Enabled = false;
-                MessageBox.Show("Negative pay report will be printed", "Negative Pay Detected!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show("Negative pay report will be printed"
+                               , "Negative Pay Detected!"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 //?dw_negative.Print();
             }
         }
@@ -87,7 +89,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             lcount = dataservice.Count;
             if (lcount > 0)
             {
-                MessageBox.Show("Not all post-tax deductions are automatically deducted", base.Text);
+                MessageBox.Show("Not all post-tax deductions are automatically deducted"
+                               , base.Text);
                 //open(w_payment_manual_adjustment);
                 WPaymentManualAdjustment w_payment_manual_adjustment = new WPaymentManualAdjustment();
                 w_payment_manual_adjustment.ShowDialog();
@@ -113,7 +116,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         public virtual void cb_accept_clicked(object sender, EventArgs e)
         {
             int lAcceptResults;
-            if (MessageBox.Show("Are you sure you want to accept the results?", "Accepting the Payment Run", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to accept the results?"
+                               , "Accepting the Payment Run"
+                               , MessageBoxButtons.YesNo
+                               , MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Cursor.Current = Cursors.WaitCursor;
 
@@ -123,7 +129,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
                 if (lAcceptResults < 0 || dataservice.SQLCode < 0)
                 {
-                    MessageBox.Show(Convert.ToString(dataservice.SQLCode) + "Error text: " + dataservice.SQLErrText + "\r\nError accepting run results - Ref#" + Convert.ToString(lAcceptResults));
+                    MessageBox.Show(Convert.ToString(dataservice.SQLCode) 
+                                    + " Error text: " + dataservice.SQLErrText + "\n" 
+                                    + "Error accepting run results - Ref#" + Convert.ToString(lAcceptResults));
                     //  CloseWithReturn(parent, -(1));
                     StaticMessage.IntegerParm = -1;
                     this.Close();
@@ -139,7 +147,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
         public virtual void cb_reject_clicked(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to reject the results?", "Rejecting the Payment Run", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to reject the results?"
+                               , "Rejecting the Payment Run"
+                               , MessageBoxButtons.YesNo
+                               , MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 //DELETE FROM t_posttax_deductions_not_applied  commit;
