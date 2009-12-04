@@ -9,6 +9,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
+
+    // TJB  RD7_CR001  Nov-2009
+    //    Added contract_no (here and below)
 	[MapInfo("post_mail_town", "_post_mail_town", "post_code")]
 	[MapInfo("post_district", "_post_district", "post_code")]
 	[MapInfo("post_code", "_post_code", "post_code")]
