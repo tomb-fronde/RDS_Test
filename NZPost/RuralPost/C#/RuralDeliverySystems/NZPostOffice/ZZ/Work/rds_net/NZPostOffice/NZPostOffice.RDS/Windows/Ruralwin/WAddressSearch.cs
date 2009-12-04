@@ -36,7 +36,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public UCb cb_search;
 
-
         public UCb cb_clear;
 
         public UCb cb_open;
@@ -122,7 +121,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             Controls.Add(cb_open);
             Controls.Add(cb_new);
             Controls.Add(dw_results);
-            //!Controls.Add(cb_select);
+            // TJB  RD7_0042 Dec-2009: was commented out
+            // cb_select addition re-enabled so button can be enabled by
+            // AddressSearchSelect.
+            Controls.Add(cb_select);  
             //!Controls.Add(cb_cancel);
             Controls.Add(st_count);
             Controls.Add(cb_print);
@@ -185,7 +187,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_results.TabIndex = 4;
             dw_results.Location = new System.Drawing.Point(8, 136);
             dw_results.Size = new System.Drawing.Size(545, 224);
-           
 
             //((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
             //((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);

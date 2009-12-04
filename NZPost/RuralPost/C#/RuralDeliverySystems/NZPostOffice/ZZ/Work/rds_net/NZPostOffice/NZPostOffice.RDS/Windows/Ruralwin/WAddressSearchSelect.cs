@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.Shared;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
@@ -83,6 +84,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // cb_print
             // 
             cb_print.Left = 569;
+
             this.ResumeLayout();
         }
 
@@ -125,6 +127,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void pfc_postopen()
         {
             base.pfc_postopen();
+            // TJB  RD7_0042  Dec-2009
+            // Added cb_select setup to make visible on address search screen
+            // when called as addressSearchSelect.
+            cb_select.Enabled = true;
+            cb_select.Visible = true;
+            cb_select.Location = new System.Drawing.Point(569, 137);
             if (!((il_rdContractSelect == null)))
             {
                 tab_criteria.of_setrdflag(il_rdContractSelect, 1);
