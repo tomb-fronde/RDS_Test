@@ -26,20 +26,17 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.Text = "About " + config.AppSettings.Settings["AppName"].Value.ToString();
             this.st_company.Text = config.AppSettings.Settings["Company"].Value.ToString();
 
-            this.st_version.Text = "Version " + 
-                //!config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")"
-                System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString() +
-                " (Built on " + string.Format("{0: dd/MM/yyyy HH:mm:ss}", 
-                    System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) + ")";
+            //!config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")"
+            this.st_version.Text = "Version " + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n"
+                        + "(Built on " + string.Format("{0: dd/MM/yyyy HH:mm:ss}",System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) 
+                        + ")";
             
             this.st_application.Text = config.AppSettings.Settings["AppName"].Value.ToString();
             this.st_copyright.Text = config.AppSettings.Settings["CopyRight"].Value.ToString();
 
-
             //!string gs_build_date = System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location).ToString("MM/dd/yyyy");           
             //!int igv_build = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Build;
             //!string gs_build_number = string.Format("(Build {0})", igv_build);
-
         }
 
         public virtual void pb_ok_Click(object sender, EventArgs e)
