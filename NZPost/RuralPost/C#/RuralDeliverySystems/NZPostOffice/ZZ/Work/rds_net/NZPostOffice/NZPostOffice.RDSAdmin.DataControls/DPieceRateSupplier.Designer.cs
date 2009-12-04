@@ -22,63 +22,69 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		#region Component Designer generated code
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-			grid = new Metex.Windows.DataEntityGrid();
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
-			this.SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.grid = new Metex.Windows.DataEntityGrid();
+            this.prs_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bindingSource
+            // 
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDSAdmin.Entity.Security.PieceRateSupplier);
+            // 
+            // grid
+            // 
+            this.grid.AllowUserToAddRows = false;
+            this.grid.AllowUserToResizeRows = false;
+            this.grid.AutoGenerateColumns = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid.ColumnHeadersHeight = 28;
+            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.prs_description});
+            this.grid.DataSource = this.bindingSource;
+            this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.grid.Location = new System.Drawing.Point(0, 0);
+            this.grid.Name = "grid";
+            this.grid.RowHeadersVisible = false;
+            this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grid.Size = new System.Drawing.Size(205, 344);
+            this.grid.TabIndex = 0;
+            // 
+            // prs_description
+            // 
+            this.prs_description.DataPropertyName = "PrsDescription";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            this.prs_description.DefaultCellStyle = dataGridViewCellStyle2;
+            this.prs_description.HeaderText = "Piece Rate Suppliers";
+            this.prs_description.Name = "prs_description";
+            this.prs_description.Width = 201;
+            // 
+            // DPieceRateSupplier
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
+            this.Controls.Add(this.grid);
+            this.Name = "DPieceRateSupplier";
+            this.Size = new System.Drawing.Size(205, 344);
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+            this.ResumeLayout(false);
 
-			// 
-			// bindingSource
-			//
-			this.bindingSource.DataSource = typeof(NZPostOffice.RDSAdmin.Entity.Security.PieceRateSupplier);
-
-			// 
-			// grid
-			// 
-			this.grid.AllowUserToAddRows = false;
-			this.grid.AllowUserToResizeRows = false;
-			this.grid.AutoGenerateColumns = false;
-			this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-			this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F);
-			this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.grid.ColumnHeadersHeight = 28;
-			this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-			this.grid.DataSource = this.bindingSource;
-			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-			this.grid.Location = new System.Drawing.Point(0, 0);
-			this.grid.MultiSelect = true;
-			this.grid.Name = "grid";
-			this.grid.RowHeadersVisible = false;
-			this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.grid.Size = new System.Drawing.Size(638, 252);
-			this.grid.TabIndex = 0;
-
-			//
-			// prs_description
-			//
-			prs_description= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.prs_description.DataPropertyName = "PrsDescription";
-			this.prs_description.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.prs_description.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1090519039);
-			this.prs_description.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-			this.prs_description.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-			this.prs_description.HeaderText = "Piece Rate Suppliers";
-			this.prs_description.Name = "prs_description";
-			this.prs_description.Width = 201;
-			this.grid.Columns.Add(prs_description);
-
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-			this.ResumeLayout(false); this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Size = new System.Drawing.Size(638, 252);
-			this.BackColor = System.Drawing.ColorTranslator.FromWin32(80269524);
-			this.Controls.Add(grid);
 		}
 		#endregion
 
