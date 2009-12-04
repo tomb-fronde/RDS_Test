@@ -13,6 +13,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 	[MapInfo("post_district", "_post_district", "post_code")]
 	[MapInfo("post_code", "_post_code", "post_code")]
 	[MapInfo("post_code_id", "_post_code_id", "post_code",true)]
+    [MapInfo("contract_no","_contract_no","post_code")]
 	[System.Serializable()]
 
 	public class PostCodeType : Entity<PostCodeType>
@@ -27,8 +28,11 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		[DBField()]
 		private string  _post_code;
 
-		[DBField()]
-		private int?  _post_code_id;
+        [DBField()]
+        private int? _post_code_id;
+
+        [DBField()]
+        private int? _contract_no;
 
 
 		public virtual string PostMailTown
@@ -85,24 +89,41 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			}
 		}
 
-		public virtual int? PostCodeId
-		{
-			get
-			{
-				CanReadProperty(true);
-				return _post_code_id;
-			}
-			set
-			{
-				CanWriteProperty(true);
-				if ( _post_code_id != value )
-				{
-					_post_code_id = value;
-					PropertyHasChanged();
-				}
-			}
-		}
-		private PostCodeType[] dataList;
+        public virtual int? PostCodeId
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _post_code_id;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_post_code_id != value)
+                {
+                    _post_code_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+        public virtual int? ContractNo
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _contract_no;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_contract_no != value)
+                {
+                    _contract_no = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+        private PostCodeType[] dataList;
 
 		protected override object GetIdValue()
 		{
@@ -131,7 +152,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT post_code.post_mail_town ,           post_code.post_district ,           post_code.post_code ,           post_code.post_code_id  FROM post_code    ";
+					cm.CommandText = "SELECT post_code.post_mail_town" 
+                                   +      ", post_code.post_district"
+                                   +      ", post_code.post_code"
+                                   +      ", post_code.post_code_id"
+                                   +      ", post_code.contract_no"
+                                   + " FROM post_code ";
 					ParameterCollection pList = new ParameterCollection();
 
 					List<PostCodeType> list = new List<PostCodeType>();
@@ -161,10 +187,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "post_code", ref pList))
 				{
-					cm.CommandText += " WHERE  post_code.post_mail_town = @post_mail_town AND " + 
-						"post_code.post_district = @post_district AND " + 
-						"post_code.post_code = @post_code ";
-
+					cm.CommandText += " WHERE post_code.post_mail_town = @post_mail_town " 
+						               + "AND post_code.post_district = @post_district " 
+						               + "AND post_code.post_code = @post_code ";
 					pList.Add(cm, "post_mail_town", GetInitialValue("_post_mail_town"));
 					pList.Add(cm, "post_district", GetInitialValue("_post_district"));
 					pList.Add(cm, "post_code", GetInitialValue("_post_code"));
@@ -201,8 +226,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					cm.CommandType = CommandType.Text;
 						ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"post_code_id", GetInitialValue("_post_code_id"));
-						cm.CommandText = "DELETE FROM post_code WHERE " +
-						"post_code.post_code_id = @post_code_id ";
+						cm.CommandText = "DELETE FROM post_code " 
+                                        + "WHERE post_code.post_code_id = @post_code_id ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
