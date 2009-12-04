@@ -28,7 +28,6 @@ namespace NZPostOffice.RDSAdmin
         private const string is_LABEL_USERS = "Users";
 
         // TJB 18-Oct-2004 SR4642 
-
         private string is_oldLabel = String.Empty;
 
         /// Required designer variable.
@@ -214,6 +213,9 @@ namespace NZPostOffice.RDSAdmin
             // attach events
             dw_detail.DataObject.ItemChanged += new EventHandler(dw_detail_ItemChanged);
             dw_detail.DataObject.BindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(dw_detail_ListChanged);
+
+            // TJB  RD7_CR001  Nov-2009: Add next line
+            dw_detail.Size = dw_detail.DataObject.Size;
         }
 
         private bool inDw_detail_ListChanged = false;
