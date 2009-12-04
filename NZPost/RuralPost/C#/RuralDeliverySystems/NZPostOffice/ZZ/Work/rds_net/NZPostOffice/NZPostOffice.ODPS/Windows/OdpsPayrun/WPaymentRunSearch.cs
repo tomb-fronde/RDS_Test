@@ -402,7 +402,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                     ll_aKey = dataservice3.Ll_aKey;
                     // 	messagebox ( parent.title,"Payment Run Failed! - Ref#"+lRunResult).ToString()
                     // MessageBox(parent.Title, "Payment Run Failed!  - Ref# " + String(lRunResult) + "\r~rrds_audit key " + String(ll_aKey), exclamation!, ok!, 1);
-                    MessageBox.Show("Payment Run Failed!  - Ref# " + Convert.ToString(lRunResult) + "\r\r"
+                    MessageBox.Show("Payment Run Failed! - Ref# " + Convert.ToString(lRunResult) + "\r\r"
                                     + "rds_audit key " + Convert.ToString(ll_aKey)
                                     , this.Text
                                     , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
