@@ -18,41 +18,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         #region Define
         private NRoad inv_road;
-
         public int il_contract_no;
-
         public Metex.Windows.DataUserControl idw_address;
-
         public Metex.Windows.DataUserControl idw_contact;
-
         public int? il_road_id;
-
         public bool ib_town_filtered = false;
-
         public bool ib_sub_filtered = false;
-
         public string is_rd_no = "";
-
         public string is_active_tab = "none";
-
         public TabPage tabpage_address;
-
         public URdsDw dw_address;
-
         public TabPage tabpage_occupant;
-
         public URdsDw dw_contact;
-
         public delegate void InvokeDelegate();
-
         bool itemReallyChanged = true;
-
         string column_name = null;
-
         bool roadNameChanged = false;
-   
         string ls_filter;
-
         #endregion
 
         protected override void OnHandleCreated(EventArgs e)
@@ -98,12 +80,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     c.GotFocus += new EventHandler(dw_address_getfocus);
                 }
-
                 Control col = dw_address.GetControlByName("sl_name");
-                col.TextChanged += new EventHandler(this.dw_address_pfc_EditChanged);         
+                col.TextChanged += new EventHandler(this.dw_address_pfc_EditChanged);
 
+                itemReallyChanged = false;  // tjb Jan 2010: added
             }
-            
             base.OnHandleCreated(e);
         }
 
@@ -236,8 +217,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (!DesignMode)
             {
-
-
                 //inv_road = StaticVariables.gnv_app.of_get_road_map();
                 if (StaticVariables.gnv_app.of_get_road_map() == null)
                 {
@@ -515,7 +494,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string currentSuburb = string.Format("{0}", ((DSearchAddress)(dw_address.DataObject)).SuburbsCombo.Text);
             List<NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames> sourceClean = new List<NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames>
                 (NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames.GetAllDddwSuburbNames());
-            NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames emptyItem = new DddwSuburbNames(); emptyItem.SlName = "";
+            NZPostOffice.RDS.Entity.Ruralwin.DddwSuburbNames emptyItem = new DddwSuburbNames(); 
+            emptyItem.SlName = "";
             sourceClean.Insert(0, emptyItem);
             ((DSearchAddress)(dw_address.DataObject)).SuburbsCombo.DataSource = sourceClean;
 
@@ -861,32 +841,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //    dw_address.inv_DropDownSearch.of_register("sl_name");
             //}
         }
-
-        public virtual void dw_address_ue_editchanged()
+        private bool editchanged_repeat_flag = false;
+        public virtual void dw_address_ue_editchanged(string as_ColumnName)
         {
-            string sPartial = "";
-            string sNextMatch = "";
-            string ls_display = "";
+            if (editchanged_repeat_flag) return;
 
-            int size = 0;
-
-            if (dw_address.GetColumnName() == "road_name")
+            if (as_ColumnName == "road_name")
             {
+                int size = 0;
+                string sPartial = "";
+                string sNextMatch = "";
+                string ls_display = "";
+                string ls_ColumnText;
 
-                if (((DSearchAddress)dw_address.DataObject).Keypress || ((DSearchAddress)dw_address.DataObject).Keyback) //if (inv_road.of_validate_keypress() || KeyDown(keyback!)) {
+                //if (inv_road.of_validate_keypress() || KeyDown(keyback!)) {
+                if ( ((DSearchAddress)dw_address.DataObject).Keypress 
+                      || ((DSearchAddress)dw_address.DataObject).Keyback ) 
                 {
-                    if (!string.IsNullOrEmpty(dw_address.GetControlByName(dw_address.GetColumnName()).Text))
+                    ls_ColumnText = dw_address.GetControlByName(as_ColumnName).Text;
+                    //if (!string.IsNullOrEmpty(dw_address.GetControlByName(as_ColumnName).Text))
+                    if (!string.IsNullOrEmpty(ls_ColumnText))
                     {
-                        ls_display = dw_address.GetControlByName(dw_address.GetColumnName()).Text.Trim();//ls_display =  GetText().Trim();
+                        //ls_display = dw_address.GetControlByName(as_ColumnName).Text.Trim();
+                        ls_display = ls_ColumnText.Trim();
 
-                        size = ((TextBox)(dw_address.GetControlByName(dw_address.GetColumnName()))).SelectionStart;
+                        size = ((TextBox)(dw_address.GetControlByName(as_ColumnName))).SelectionStart;
 
-                        if (((DSearchAddress)dw_address.DataObject).Keyback) //if (KeyDown(keyback!)) {
+                        //if (KeyDown(keyback!)) {
+                        if (((DSearchAddress)dw_address.DataObject).Keyback)
                         {
-                            if (size - 2 > 0)
+                            if ((size - 2) > 0)
                             {
-                                sPartial = ls_display.Substring(0,
-                                    ((TextBox)(dw_address.GetControlByName(dw_address.GetColumnName()))).SelectionStart - 2); //sPartial = TextUtil.Left(ls_display, SelectedStart() - 2);
+                                //sPartial = ls_display.Substring(0,((TextBox)(dw_address.GetControlByName(ls_ColumnName))).SelectionStart - 2); 
+                                //sPartial = TextUtil.Left(ls_display, SelectedStart() - 2);
+                                sPartial = ls_display.Substring(0,(size - 2));
                             }
                             else
                             {
@@ -895,9 +883,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         }
                         else
                         {
-                            if (size - 1 > 0)
+                            if ((size - 1) > 0)
                             {
-                                sPartial = ls_display.Substring(0, ((TextBox)(dw_address.GetControlByName(dw_address.GetColumnName()))).SelectionStart /*- 1*/); //sPartial = TextUtil.Left(ls_display, SelectedStart() - 1);
+                                //sPartial = ls_display.Substring(0,((TextBox)(dw_address.GetControlByName(as_ColumnName))).SelectionStart /*- 1*/); 
+                                //sPartial = TextUtil.Left(ls_display, SelectedStart() - 1);
+                                sPartial = ls_display.Substring(0, size /*- 1*/); 
                             }
                             else
                             {
@@ -909,8 +899,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             sNextMatch = inv_road.of_getnextmatch1(sPartial);
                             if (sNextMatch.Length > 0)
                             {
-                                dw_address.GetControlByName(dw_address.GetColumnName()).Text = sNextMatch;//dw_address.SetText(sNextMatch);
-                                ((TextBox)(dw_address.GetControlByName(dw_address.GetColumnName()))).Select(sPartial.Length, sNextMatch.Length);//dw_address.SelectText( sPartial.Len() + 1,  sNextMatch).Len();
+                                editchanged_repeat_flag = true;
+                                //dw_address.SetText(sNextMatch);
+                                dw_address.GetControlByName(as_ColumnName).Text = sNextMatch;
+                                //dw_address.SelectText(sPartial.Len()+1,sNextMatch).Len();
+                                ((TextBox)(dw_address.GetControlByName(as_ColumnName))).Select(sPartial.Length, sNextMatch.Length);
+                                editchanged_repeat_flag = false;
                             }
                         }
                     }
@@ -921,7 +915,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // ldwc_child.FilterString = "rt_id < 0";
         private bool FilterRtId(DddwRoadType item)
         {
-            if (item.RtId < 0)//pp! empty record with value -100 is allowed too
+            //pp! empty record with value -100 is allowed too
+            if (item.RtId < 0)
             {
                 return true;
             }
@@ -931,7 +926,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // ldwc_child.FilterString = "rs_id < 0";
         private bool FilterRsId(DddwRoadSuffix item)
         {
-            if (item.RsId < 0)//pp! empty record with value -100 is allowed too
+            //pp! empty record with value -100 is allowed too
+            if (item.RsId < 0)
             {
                 return true;
             }
@@ -957,7 +953,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             SearchAddress dw_address_current = dw_address.DataObject.Current as SearchAddress;
 
-            //!if (dw_address.GetColumnName() == "road_name")//if (dwo.Name == "road_name")
+            //!if (dw_address.GetColumnName() == "road_name")
+            //if (dwo.Name == "road_name")
             if (column_name == "road_name")
             {
                 ls_road_name = dw_address_current.RoadName;//ls_road_name = data.ToString();
@@ -1023,8 +1020,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_address.GetItem<SearchAddress>(0).RsId = -100;// dw_address.SetItem(1, "rs_id", ll_null);
                 ll_rs_id = null;
                 ldwc_child = dw_address.DataObject.GetChild("rs_id");//dw_address.GetChild("rs_id", ldwc_child);
+                itemReallyChanged = false;
                 if (inv_road.of_filterroadsuffix1(ls_road_name, ll_rt_id, ref ldwc_child))
                 {
+                    itemReallyChanged = true;
                     ldwc_child.SetCurrent(0);//ldwc_child.ScrollToRow(0);
                     ll_currentRow = ldwc_child.GetRow();
                     if (ll_currentRow >= 0)
@@ -1049,14 +1048,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //! if (dw_address.GetColumnName() == "road_name" || dw_address.GetColumnName() == "rt_id" || 
             //!    dw_address.GetColumnName() == "rs_id" || dw_address.GetColumnName() == "sl_name" || 
             //!    dw_address.GetColumnName() == "tc_id")             
-            if (column_name == "road_name" || column_name == "rt_id" || column_name == "rs_id" || column_name == "sl_name" ||
-                column_name == "tc_id")
+            if (column_name == "road_name" 
+                || column_name == "rt_id" 
+                || column_name == "rs_id" 
+                || column_name == "sl_name" 
+                || column_name == "tc_id")
             {
-                ls_road_name = dw_address_current.RoadName;// dw_address.GetItemString(row, "road_name");
-                ll_rt_id = dw_address_current.RtId;//dw_address.GetItemNumber(row, "rt_id");
-                ll_rs_id = dw_address_current.RsId;//dw_address.GetItemNumber(row, "rs_id");
-                ls_sl_name = dw_address_current.SlName;//dw_address.GetItemString(row, "sl_name");
-                ll_tc_id = dw_address_current.TcId;//dw_address.GetItemNumber(row, "tc_id");
+                ls_road_name = dw_address_current.RoadName;  // dw_address.GetItemString(row, "road_name");
+                ll_rt_id = dw_address_current.RtId;          //dw_address.GetItemNumber(row, "rt_id");
+                ll_rs_id = dw_address_current.RsId;          //dw_address.GetItemNumber(row, "rs_id");
+                ls_sl_name = dw_address_current.SlName;      //dw_address.GetItemString(row, "sl_name");
+                ll_tc_id = dw_address_current.TcId;          //dw_address.GetItemNumber(row, "tc_id");
 
                 string data = null;
 
@@ -1089,31 +1091,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 SearchAddress CurrentAddress = (SearchAddress)(dw_address.DataObject.Current);
 
-
-                //!                of_filter_town_dddw(dw_address.GetColumnName(), data);//of_filter_town_dddw(dwo.Name, data);
+                //! of_filter_town_dddw(dw_address.GetColumnName(), data);
+                //of_filter_town_dddw(dwo.Name, data);
                 of_filter_town_dddw(column_name, data);
 
                 ib_town_filtered = false;
                 if (!((ll_tc_id == null)) && ll_tc_id > 0)
                 {
                     ldwc_child = dw_address.DataObject.GetChild("tc_id");
-                    ll_row = ldwc_child.Find("tc_id", ll_tc_id);//ll_row = ldwc_child.Find( "tc_id = " + ll_tc_id).ToString().Length);
+                    ll_row = ldwc_child.Find("tc_id", ll_tc_id);         //ll_row = ldwc_child.Find("tc_id = " + ll_tc_id).ToString().Length);
                     if (ll_row > 0)
-                    {
                         ib_town_filtered = true;
-                    }
                 }
                 if (ib_town_filtered)
-                {
-                    dw_address.GetItem<SearchAddress>(0).TcId = ll_tc_id;//dw_address.SetItem(1, "tc_id", ll_tc_id);
-                }
+                    dw_address.GetItem<SearchAddress>(0).TcId = ll_tc_id;//dw_address.SetItem(1,"tc_id", ll_tc_id);
                 else
-                {
                     dw_address.GetItem<SearchAddress>(0).TcId = -100;// dw_address.SetItem(1, "tc_id", ll_null);
-                }
 
-
-                //!                of_filter_suburb_dddw(dw_address.GetColumnName(), data); //of_filter_suburb_dddw(dwo.Name, data);
+                //! of_filter_suburb_dddw(dw_address.GetColumnName(), data); //of_filter_suburb_dddw(dwo.Name, data);
                 of_filter_suburb_dddw(column_name, data);
 
                 ib_sub_filtered = false;
@@ -1137,19 +1132,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
 
                     if (ll_row >= 0)
-                    {
                         ib_sub_filtered = true;
-                    }
                 }
                 if (ib_sub_filtered)
-                {
                     dw_address.GetItem<SearchAddress>(0).SlName = ls_sl_name;
-                }
                 else
-                {
                     dw_address.GetItem<SearchAddress>(0).SlName = "";
-                }
+                // TJB Jan-2010: Added itemReallyChanged flip-flop
+                // Refresh was triggering itemChanged eventwhich put program into a loop
+                itemReallyChanged = false;
                 dw_address.DataObject.BindingSource.CurrencyManager.Refresh();
+                itemReallyChanged = true;
             }
             //!((Metex.Windows.DataEntityCombo)(dw_address.GetControlByName(dw_address.GetColumnName()))).SelectAll();//dw_address.SelectText(1, 500);
         }
@@ -1629,6 +1622,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public void UTabAddressSearch_Enter(object sender, EventArgs e)
         {
             //!            itemReallyChanged = true;
+            int i, j;
+            i = 1;
+            j = i;
         }
 
         public virtual void u_tab_address_search_getfocus(object sender, EventArgs e)
@@ -1637,40 +1633,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             tabpage_address.Focus();
         }
 
+        private string prev_column = "";
+        private string this_column = "";
+
         public virtual void dw_address_itemfocuschanged(object sender, EventArgs e)
         {
+            string t1, t2;
+            t1 = prev_column;
+            prev_column = this_column;
+            this_column = dw_address.GetColumnName();
+            t2 = t1;
             //?inv_dropdownsearch.pfc_ItemFocusChanged(row, dwo);
         }
 
 
         public virtual void dw_address_editchanged(object sender, EventArgs e)
         {
-            roadNameChanged = true;
-            dw_address_ue_editchanged();//dw_address.ue_editchanged(row, dwo, data);
-            //?inv_dropdownsearch.pfc_EditChanged(row, dwo, data);
+
+            string ls_ColumnName;
+            ls_ColumnName = dw_address.GetColumnName();
+            if (ls_ColumnName == "road_name")
+            {
+                roadNameChanged = true;
+                //dw_address.ue_editchanged(row, dwo, data);
+                dw_address_ue_editchanged(ls_ColumnName);
+                //?inv_dropdownsearch.pfc_EditChanged(row, dwo, data);
+            }
         }
 
         public virtual void dw_address_pfc_EditChanged(object sender, EventArgs e)
         {
-            int ll_Found = -1;
-            Metex.Windows.DataUserControl dw_child = dw_address.GetChild("sl_name");
-            dw_child = new DDddwSuburbNames();
-            string searchString = ((Control)sender).Text;
+            // TJB  Jan 2010:  Revised
+            // Exit before doing the ds_child stuff if appropriate
+            // Called when the address window is loaded for each of the controls,
+            // with the 'searchString' empty, so exiting first saves a bit of time.
+            //
+            // Doesn't seem to do anything useful since only the dw_child is changed
+            // and that is purely local (unless its a pointer to the dw_address??).
+
+            string searchString = ((Control)sender).Text.Trim();
             if (string.IsNullOrEmpty(searchString))
             {
                 return;
             }
-            for (int i = 0; i < dw_child.RowCount; i++)
+            string this_sl_name;
+            string ls_ColumnName, t1;
+            ls_ColumnName = dw_address.GetColumnName();
+            t1 = ls_ColumnName;
+            Metex.Windows.DataUserControl dw_child = dw_address.GetChild("sl_name");
+            dw_child = new DDddwSuburbNames();
+            searchString = searchString.ToUpper();
+            for (int li_row = 0; li_row < dw_child.RowCount; li_row++)
             {
-                if (dw_child.GetValue<string>(i, "sl_name").Trim().ToUpper().StartsWith(searchString.ToUpper().Trim()))
+                this_sl_name = dw_child.GetValue<string>(li_row, "sl_name").Trim().ToUpper();
+                if (this_sl_name.StartsWith(searchString))
                 {
-                    ll_Found = i;
+                    dw_child.SetCurrent(li_row);
                     break;
                 }
-            }
-            if (ll_Found >= 0)
-            {
-                dw_child.SetCurrent(ll_Found);
             }
         }
 
@@ -1679,6 +1699,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (roadNameChanged)
             {
+                string ls_ColumnName, t1;
+                ls_ColumnName = dw_address.GetColumnName();
+                t1 = ls_ColumnName;
+
                 dw_address_itemchanged(sender, new EventArgs());
                 roadNameChanged = false;
             }
@@ -1688,6 +1712,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (itemReallyChanged)
             {
+                string ls_ColumnName, t1;
+                ls_ColumnName = dw_address.GetColumnName();
+                t1 = ls_ColumnName;
+
                 // TJB Jan 2009: RD7_0021 [Bugfix to earlier workaround (below)]
                 //     Moved AcceptText() from inside if (column_name=sl_name block
                 //     to fix issue with populating town, road type and road suffix
@@ -1745,6 +1773,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_address_losefocus(object sender, EventArgs e)
         {
+            string ls_ColumnName, t1, t2;
+            ls_ColumnName = dw_address.GetColumnName();
+            t1 = ls_ColumnName;
+            t2 = t1;
             dw_address.DataObject.AcceptText();
         }
         
