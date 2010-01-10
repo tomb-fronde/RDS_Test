@@ -14,7 +14,6 @@ namespace NZPostOffice.RDS.Controls
 
     public class NRoad
     {
-
         public Metex.Windows.DataUserControl ids_road_map;
 
         public Metex.Windows.DataUserControl ids_road_suburb_map;
@@ -96,20 +95,20 @@ namespace NZPostOffice.RDS.Controls
         //}
 
         //! //ids_road_map.SetFilter("lower ( road_name)=\"" + Lower( as_road_name).Trim() + '\"');
+        private string RoadName = null;
         private bool FilterRoadName(RoadMapV2 item)
         {
-            if (!string.IsNullOrEmpty(RoadName) && !string.IsNullOrEmpty(item.RoadName) && 
-                item.RoadName.Trim().ToLower() == RoadName.Trim().ToLower())
+            if (!string.IsNullOrEmpty(RoadName) 
+                && !string.IsNullOrEmpty(item.RoadName) 
+                && item.RoadName.Trim().ToLower() == RoadName.Trim().ToLower())
             {
                 return true;
             }
-
             return false;
         }
 
-        private string RoadName = null;
         List<int?> id = null;
-        public virtual bool of_filterroadtype(string as_road_name, ref Metex.Windows.DataUserControl adwc_data)
+        public virtual bool of_filterroadtype_original(string as_road_name, ref Metex.Windows.DataUserControl adwc_data)
         {
             int ll_x = 0;
             string ls_filter = "";
@@ -179,18 +178,6 @@ namespace NZPostOffice.RDS.Controls
             ids_road_map.FilterOnce<RoadMapV2>(EmptyFilter);//ids_road_map.Filter();
             return ib_continue;
         }      
-
-        private bool filterRoadType(DddwRoadType item)
-        {
-            foreach (int? rt_id in id)
-            {
-                if (rt_id == item.RtId || rt_id == -100)//! allow empty record pass filter criteria
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         //public virtual bool of_filtersuburbtype(int al_road_id, ref DataControlBuilder adwc_data) {
         //    int ll_x = 0;
@@ -685,14 +672,14 @@ namespace NZPostOffice.RDS.Controls
             return true;         
         }
 
-        bool ComplexFilter(DddwRoadSuffix record) 
+        bool FilterRoadSuffix(DddwRoadSuffix record) 
         {
             return true;
         }      
 
         int? AlRtId = null;
         string AsRoadName = string.Empty;
-        public virtual bool of_filterroadsuffix(string as_road_name, int? al_rt_id, ref Metex.Windows.DataUserControl adwc_data)
+        public virtual bool of_filterroadsuffix_original(string as_road_name, int? al_rt_id, ref Metex.Windows.DataUserControl adwc_data)
         {
             int ll_x;
             int? ll_rs_id;
@@ -700,7 +687,7 @@ namespace NZPostOffice.RDS.Controls
             string ls_filter_null_clause;
             bool lb_rs_it_exist;
             bool ib_continue;
-            adwc_data.FilterString = "";
+            adwc_data.FilterString = "";   // of_filterroadsuffix [obsolete version]
 
             //! added to be used for filtering
             AlRtId = al_rt_id;
@@ -773,7 +760,7 @@ namespace NZPostOffice.RDS.Controls
                 //adwc_data.Filter();
                 if (adwc_data is DDddwRoadSuffix)
                 {
-                    adwc_data.FilterOnce<DddwRoadSuffix>(ComplexFilter);
+                    adwc_data.FilterOnce<DddwRoadSuffix>(FilterRoadSuffix);
                 }
             }
             ids_road_map.FilterString = "";
@@ -781,7 +768,6 @@ namespace NZPostOffice.RDS.Controls
             return ib_continue;
         }
      
-
         //public virtual int of_findroad(string as_roadname, int al_roadtype, int al_roadsuffix) {
         //    int ll_found = 0;
         //    ll_found = ids_road_map.Find( "lower ( road_name)= \"" + Lower( as_roadname).Trim() + '\"' + " AND rt_id = " + al_roadtype.ToString() + " AND rs_id = " + al_roadsuffix.ToString() + '\"' ).Length);
@@ -1688,6 +1674,8 @@ namespace NZPostOffice.RDS.Controls
         }
 
         //! WSearchAddress - added trying to replace data windows with BEntity lists, as they are retrieving very slowly
+        // Match roadnames.  As the user types in a roadname, check 
+        // to see what roads exist beginning with that first part.
         public virtual string of_getnextmatch1(string as_partial)
         {
             int ll_found = -1;
@@ -1699,18 +1687,62 @@ namespace NZPostOffice.RDS.Controls
             {
 //!                as_partial = as_partial + "%";
             }
-
-            //!ll_found = ids_road_map.Find(true, new KeyValuePair<string, object>("road_name", as_partial));//ll_found = ids_road_map.Find( "lower ( road_name) like \"" + as_partial + '\"') .Length);
-            for (int i = 0; i < ids_road_mapList.Count; i++)
+            // TJB  RD7_0042  Nov-2009
+            // Change to a binary search
+            string ls_roadname, ls_roadname_partial;
+            int compare_partial;
+            int j, k, l, l1, l2, m, n;
+            n = 0;
+            m = ids_road_mapList.Count;
+            l1 = as_partial.Length;
+            ll_found = -1;
+            while ((m - n) > 8)
             {
-                if (!string.IsNullOrEmpty(ids_road_mapList[i].RoadName) && !string.IsNullOrEmpty(as_partial) &&
-                    ids_road_mapList[i].RoadName.ToLower().StartsWith(as_partial.ToLower()))
+                j = ((m - n) / 2) + n;
+                ls_roadname = ids_road_mapList[j].RoadName.ToLower();
+                l2 = ls_roadname.Length;
+                l = (l1 > l2) ? l2 : l1;
+                ls_roadname_partial = ls_roadname.Trim().Substring(0, l);
+                compare_partial = String.Compare(ls_roadname_partial, as_partial);
+                if (compare_partial == 0)
                 {
-                    ll_found = i;
+                    ll_found = j;
                     break;
                 }
+                if (compare_partial < 0)
+                    n = j;
+                else
+                    m = j;
             }
+            if (ll_found < 0)
+            {
+                for (j = n; j <= m; j++)
+                {
+                    ls_roadname = ids_road_mapList[j].RoadName.ToLower();
+                    l2 = ls_roadname.Length;
+                    l = (l1 > l2) ? l2 : l1;
+                    ls_roadname_partial = ls_roadname.Trim().Substring(0, l);
+                    compare_partial = String.Compare(ls_roadname_partial, as_partial);
+                    if (compare_partial == 0)
+                    {
+                        ll_found = j;
+                        break;
+                    }
+                }
+            }
+//            
+//            //!ll_found = ids_road_map.Find(true, new KeyValuePair<string, object>("road_name", as_partial));//ll_found = ids_road_map.Find( "lower ( road_name) like \"" + as_partial + '\"') .Length);
+//            for (int i = 0; i < ids_road_mapList.Count; i++)
+//            {
+//                if (!string.IsNullOrEmpty(ids_road_mapList[i].RoadName) && !string.IsNullOrEmpty(as_partial) &&
+//                    ids_road_mapList[i].RoadName.ToLower().StartsWith(as_partial.ToLower()))
+//                {
+//                    ll_found = i;
+//                    break;
+//                }
+//            }
 
+            // Return the first road found, or "" if none found.
             if (ll_found >= 0)
             {
                 //!ls_found = ids_road_map.GetValue<string>(ll_found, "road_name");
@@ -1718,112 +1750,257 @@ namespace NZPostOffice.RDS.Controls
                 return ls_found;
             }
             else
-            {
                 return "";
+        }
+
+        // Filter process for road types
+        // This filter process is called once for each element in the road_type dropdown list
+        // 'item' is the element being processed.
+        // 'id' is the list of road types being searched for
+        // The filter returns TRUE if one of the 'id' items matches the 'item'
+        // otherwise the filter returns FALSE
+        // The FilterOnce method (which calls this filter) marks the relevant rows as selected 
+        // when TRUE is returned.
+        private bool filterRoadType(DddwRoadType item)
+        {
+            //! allow empty record pass filter criteria
+            foreach (int? rt_id in id)
+            {
+                // if (rt_id == item.RtId || rt_id == -100)
+                if (rt_id == item.RtId)
+                {
+                    return true;
+                }
             }
+            return false;
         }
 
         //! WSearchAddress - added new function trying to replace data windows with BEntity lists, as they are retrieving very slowly
+        // TJB  RD7_0042  Jan 2010:  Re-wrote function to simplify
+        // Given a road name, filter the road type to list only those that exist for that road name.
         public virtual bool of_filterroadtype1(string as_road_name, ref Metex.Windows.DataUserControl adwc_data)
+        {
+            // If we aren't given a road name, we can't find anything; 
+            //       exit saying we didn't find anything.
+            //if (IsNull(as_road_name) || as_road_name).Trim(.Len() == 0)
+            if (string.IsNullOrEmpty(as_road_name))
+            {
+                return false;
+            }
+
+            int ll_x = 0;
+            string ls_filter = "";
+            string ls_filter_null_clause = "";
+            string road_name_lowered;
+            adwc_data.FilterString = "";
+
+            //adwc_data.Filter();
+            id = new List<int?>();
+            int id_count = 0;
+            RoadName = as_road_name;
+
+            adwc_data.FilterString = "";
+            adwc_data.FilterOnce<DddwRoadType>(EmptyFilter);
+
+            // TJB  Dec-2009:  Add null entry to filtered list
+            road_name_lowered = as_road_name.ToLower();
+            //ids_road_map.SetFilter("lower(road_name)=\"" + Lower(as_road_name).Trim() + '\"');
+            //!ids_road_map.FilterString = "lower(road_name)=\"" + as_road_name.ToLower().Trim() + "\"";
+
+            //ids_road_map.Filter();
+            //!ids_road_map.FilterOnce<RoadMapV2>(FilterRoadName);                
+            foreach (RoadMapV2 item in ids_road_mapList)
+            {
+                // Search the ids_road_mapList for a matching road name
+                if (!string.IsNullOrEmpty(item.RoadName) 
+                    && item.RoadName.ToLower() == road_name_lowered)
+                {
+                    // Add the rt_id to the ids_road_mapFilteredList unless it's already there
+                    bool lb_found = false;
+                    int? this_RtId = item.RtId;
+
+                    // Scan the list of found rt_id's 
+                    foreach (int? filtered_RtId in id)
+                    {
+                        //! avoid repetitions
+                        // If this rt_id matches one already in the list, exit this loop
+                        // with the ib_found flag set.
+                        if (filtered_RtId == this_RtId)
+                        {
+                            lb_found = true;
+                            break;
+                        }
+                    }
+                    // If we didn't find the rt_id already in the list, add it now.
+                    if (!lb_found)
+                    {
+                        id_count++;
+                        if (this_RtId.HasValue)
+                        {
+                            id.Add(this_RtId);
+                            if (ls_filter == "")
+                                ls_filter = this_RtId.ToString();
+                            else
+                                ls_filter = ls_filter + "," + this_RtId.ToString();
+                        }
+                        else
+                            ls_filter_null_clause = "isNull(rt_id)";
+                    }
+                }
+            }
+
+            // If no roadname matches found, return FALSE
+            if (id_count <= 0)
+            {
+                return false;
+            }
+
+            // Finalise the filter string.
+            if (ls_filter == "")
+                ls_filter = ls_filter_null_clause;
+            else
+            {
+                ls_filter = " in (" + ls_filter + ")";
+                if (ls_filter_null_clause != "")
+                    ls_filter = ls_filter + " or " + ls_filter_null_clause;
+            }
+
+            // Add the filter to the rt_id dropdown list
+            //adwc_data.SetFilter(ls_filter);
+            adwc_data.FilterString = ls_filter;
+            //adwc_data.Filter();
+            // Apply the filter to the rt_id dropdown list
+            if (adwc_data is DDddwRoadType)
+            {
+                adwc_data.FilterOnce<DddwRoadType>(filterRoadType);
+            }
+
+            return true;
+        }
+
+        // TJB: Original - see rewritten code above
+        // Given a road name, filter the road type to list only those that exist for that road name.
+        public virtual bool of_filterroadtype1_original(string as_road_name, ref Metex.Windows.DataUserControl adwc_data)
         {
             int ll_x = 0;
             string ls_filter = "";
             string ls_filter_null_clause = "";
-            bool lb_rt_it_exist = false;
-            bool ib_continue = true;
+            string road_name_lowered;
+            bool lb_rt_id_exist = false;
             adwc_data.FilterString = "";
+
             //adwc_data.Filter();
             id = new List<int?>();
             RoadName = as_road_name;
+            // TJB - What's the purpose of ids_road_mapFilteredList?  the 'id' list 
+            // holds the list of found rt_id's and is used in the filterRoadType filter
+            // routine.  ids_road_mapFilteredList is purely local so is discarded when
+            // this procedure is finished, thus seems redundant.
             List<RoadMapV2> ids_road_mapFilteredList = new List<RoadMapV2>();
 
             adwc_data.FilterString = "";
             adwc_data.FilterOnce<DddwRoadType>(EmptyFilter);
 
-            if (string.IsNullOrEmpty(as_road_name))//if (IsNull(as_road_name) ||  as_road_name).Trim(.Len() == 0)
+            //if (IsNull(as_road_name) || as_road_name).Trim(.Len() == 0)
+            if (string.IsNullOrEmpty(as_road_name))
             {
-                ib_continue = false;
+                return false;
             }
-            if (ib_continue)
+            // TJB  Dec-2009:  Add null entry to filtered list
+            road_name_lowered = as_road_name.ToLower();
+            //ids_road_map.SetFilter("lower(road_name)=\"" + Lower(as_road_name).Trim() + '\"');
+            //!ids_road_map.FilterString = "lower(road_name)=\"" + as_road_name.ToLower().Trim() + "\"";
+
+            //ids_road_map.Filter();
+            //!ids_road_map.FilterOnce<RoadMapV2>(FilterRoadName);                
+            foreach (RoadMapV2 item in ids_road_mapList)
             {
-                //ids_road_map.SetFilter("lower ( road_name)=\"" + Lower( as_road_name).Trim() + '\"');
-//!                ids_road_map.FilterString = "lower ( road_name)=\"" + as_road_name.ToLower().Trim() + "\"";
-
-                //ids_road_map.Filter();
-                //!ids_road_map.FilterOnce<RoadMapV2>(FilterRoadName);                
-                foreach (RoadMapV2 item in ids_road_mapList)
+                // Search the ids_road_mapList for a matching road name
+                if (!string.IsNullOrEmpty(item.RoadName) && item.RoadName.ToLower() == road_name_lowered)
                 {
-                    if (!string.IsNullOrEmpty(item.RoadName) && item.RoadName.ToLower() == as_road_name.ToLower())
+                    // Add the rt_id to the ids_road_mapFilteredList unless it's already there
+                    bool lb_found = false;
+                    // Scan the list of found rt_id's 
+                    foreach (RoadMapV2 filteredItem in ids_road_mapFilteredList)
                     {
-                        bool found = false;
-                        foreach (RoadMapV2 filteredItem in ids_road_mapFilteredList)
+                        //! avoid repetitions
+                        // If this rt_id matches one already in the list, exit this loop
+                        // with the ib_found flag set.
+                        if (filteredItem.RtId == item.RtId)
                         {
-                            if (filteredItem.RtId == item.RtId)//! avoid repetitions                            
-                            {
-                                found = true;
-                                break;
-                            }                            
-                        }
-                        if (!found)
-                        {
-                            ids_road_mapFilteredList.Add(item);
+                            lb_found = true;
+                            break;
                         }
                     }
-                }
-
-
-                //!if (ids_road_map.RowCount <= 0)
-                if (ids_road_mapFilteredList.Count <= 0)
-                {
-                    ib_continue = false;
-                }
-            }
-            if (ib_continue)
-            {
-                //!for (ll_x = 0; ll_x < ids_road_map.RowCount; ll_x++)
-                for (ll_x = 0; ll_x < ids_road_mapFilteredList.Count; ll_x++)
-                {
-                    lb_rt_it_exist = true;
-                    //!if ((ids_road_map.GetItem<RoadMapV2>(ll_x).RtId == null)) //if (IsNull(ids_road_map.GetItemNumber(ll_x, "rt_id")))
-                    if (!ids_road_mapFilteredList[ll_x].RtId.HasValue)
+                    // If we didn't find the rt_id already in the list, add it now.
+                    if (!lb_found)
                     {
-                        ls_filter_null_clause = " or isNull ( rt_id)";
-                        //!id.Add(ids_road_map.GetItem<RoadMapV2>(ll_x).RtId);
-                        id.Add(ids_road_mapFilteredList[ll_x].RtId);
+                        ids_road_mapFilteredList.Add(item);
                     }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(ls_filter)) //if (ls_filter.Len() > 0)
-                        {
-                            ls_filter = ls_filter + ", ";
-                        }
-                        //!ls_filter = ls_filter + ids_road_map.GetItem<RoadMapV2>(ll_x).RtId.GetValueOrDefault().ToString();//ls_filter = ls_filter + String(ids_road_map.GetItemNumber(ll_x, "rt_id"));
-                        ls_filter = ls_filter + ids_road_mapFilteredList[ll_x].RtId.GetValueOrDefault().ToString();
-                        //!id.Add(ids_road_map.GetItem<RoadMapV2>(ll_x).RtId);
-                        id.Add(ids_road_mapFilteredList[ll_x].RtId);
-                    }
-                }
-                ls_filter = "rt_id in  (" + ls_filter + ')' + ls_filter_null_clause;
-                if (lb_rt_it_exist == false || (ls_filter == null))
-                {
-                    ls_filter = "IsNull ( rt_id)";
-                }
-                adwc_data.FilterString = ls_filter;//adwc_data.SetFilter(ls_filter);
-                //adwc_data.Filter();
-                if (adwc_data is DDddwRoadType)
-                {
-                    adwc_data.FilterOnce<DddwRoadType>(filterRoadType);
                 }
             }
 
-            //! not used
-            //!            ids_road_map.FilterString = "";
-            //!            ids_road_map.FilterOnce<RoadMapV2>(EmptyFilter);//ids_road_map.Filter();
+            // If no roadname matches found, return FALSE
+            if (ids_road_mapFilteredList.Count <= 0)
+            {
+                return false;
+            }
 
-            return ib_continue;
+            // Build an SQL-style "in" list of the found rt_id's
+            // (TJB - this could be done while the ids_road_mapFilteredList is being populated above!)
+            //!for (ll_x = 0; ll_x < ids_road_map.RowCount; ll_x++)
+            for (ll_x = 0; ll_x < ids_road_mapFilteredList.Count; ll_x++)
+            {
+                lb_rt_id_exist = true;
+                //!if ((ids_road_map.GetItem<RoadMapV2>(ll_x).RtId == null)) 
+                //if (IsNull(ids_road_map.GetItemNumber(ll_x, "rt_id")))
+                if (!ids_road_mapFilteredList[ll_x].RtId.HasValue)
+                {
+                    ls_filter_null_clause = " or isNull(rt_id)";
+                    //!id.Add(ids_road_map.GetItem<RoadMapV2>(ll_x).RtId);
+                    id.Add(ids_road_mapFilteredList[ll_x].RtId);
+                }
+                else
+                {
+                    //if (ls_filter.Len() > 0)
+                    if (!string.IsNullOrEmpty(ls_filter))
+                    {
+                        ls_filter = ls_filter + ", ";
+                    }
+                    //!ls_filter = ls_filter + ids_road_map.GetItem<RoadMapV2>(ll_x).RtId.GetValueOrDefault().ToString();
+                    //ls_filter = ls_filter + String(ids_road_map.GetItemNumber(ll_x, "rt_id"));
+                    ls_filter = ls_filter + ids_road_mapFilteredList[ll_x].RtId.GetValueOrDefault().ToString();
+                    //!id.Add(ids_road_map.GetItem<RoadMapV2>(ll_x).RtId);
+                    id.Add(ids_road_mapFilteredList[ll_x].RtId);
+                }
+            }
+            ls_filter = "rt_id in (" + ls_filter + ')' + ls_filter_null_clause;
+            if (lb_rt_id_exist == false || (ls_filter == null))
+            {
+                ls_filter = "IsNull(rt_id)";
+            }
+            // Add the filter to the rt_id dropdown list
+            //adwc_data.SetFilter(ls_filter);
+            adwc_data.FilterString = ls_filter;
+            //adwc_data.Filter();
+            // Apply the filter to the rt_id dropdown list
+            if (adwc_data is DDddwRoadType)
+            {
+                adwc_data.FilterOnce<DddwRoadType>(filterRoadType);
+            }
+
+            return true;
         }
 
-        bool ComplexFilter1(DddwRoadSuffix record)
+        // Filter process for road suffixes
+        // This filter process is called once for each element in the road_suffix dropdown list
+        // 'record' is the element being processed.
+        // 'rsIdList' is the list of road suffixes being searched for
+        // The filter returns TRUE if one of the 'rsIdList' items matches the 'record'
+        // otherwise the filter returns FALSE.
+        // The FilterOnce method (which calls this filter) marks the relevant rows as selected 
+        // when TRUE is returned.
+        bool FilterRoadSuffix1(DddwRoadSuffix record)
         {
             foreach (int? item in rsIdList)
             {
@@ -1836,133 +2013,259 @@ namespace NZPostOffice.RDS.Controls
         }
 
         List<int?> rsIdList = new List<int?>();
-        bool isRtIdNull = false;
         //! WSearchAddress - added new function trying to replace data windows with BEntity lists, as they are retrieving very slowly
+        // TJB  RD7_0042  Jan 2010: Rewrote to simplify
         public virtual bool of_filterroadsuffix1(string as_road_name, int? al_rt_id, ref Metex.Windows.DataUserControl adwc_data)
         {
+            // Need a road name to filter on (??)
+            //if (string.IsNullOrEmpty(as_road_name))
+            //{
+            //    AsRoadName = "";
+            //    return false;
+            //}
+
+            string ls_filter = "";
+            string ls_filter_null_clause = "";
+            int rsIdList_count;
+
+            //! added to be used for filtering
+            AlRtId = al_rt_id;
+            //AsRoadName = as_road_name;
+            if (string.IsNullOrEmpty(as_road_name))
+                AsRoadName = "";
+            else
+                AsRoadName = as_road_name.ToLower().Trim();
+
+            // TJB  RD7_0021  Feb 2009
+            // Added line to empty the rsIdList before starting.  
+            // Was repopulated with each call adding on to previous results.
+            rsIdList.Clear();
+            rsIdList_count = 0;
+
+            adwc_data.FilterString = "";
+            adwc_data.FilterOnce<DddwRoadSuffix>(EmptyFilter);
+
+            ls_filter = "";
+            foreach (RoadMapV2 item in ids_road_mapList)
+            {
+                // Skip this item if there's no roadname
+                if (string.IsNullOrEmpty(item.RoadName))
+                    continue;
+
+                string itemRoadName = item.RoadName.ToLower().Trim();
+                // TJB  Jan 2010
+                // Added for debugging to provide a way to see what's happening in the loop
+                if (itemRoadName == "gateway")
+                {
+                    int i = 0;
+                    int j = i;
+                }
+                //if (!string.IsNullOrEmpty(AsRoadName) 
+                //    && !string.IsNullOrEmpty(item.RoadName) 
+                //    && item.RoadName.ToLower() == AsRoadName
+                //    && AlRtId > 0 
+                //    && item.RtId == AlRtId)
+                if ((AsRoadName == "" || itemRoadName == AsRoadName)
+                    && al_rt_id >= 0
+                    && item.RtId == al_rt_id)
+                {
+                    // Add the rs_id to the rsIdList unless it's already there
+                    bool lb_found = false;
+                    int? this_RsId = item.RsId;
+
+                    // Scan the list of found rs_id's 
+                    foreach (int? filtered_RsId in rsIdList)
+                    {
+                        //! avoid repetitions
+                        // If this rs_id matches one already in the list, exit this loop
+                        // with the ib_found flag set.
+                        if (filtered_RsId == this_RsId)
+                        {
+                            lb_found = true;
+                            break;
+                        }
+                    }
+                    // If we didn't find the rs_id already in the list, add it now.
+                    if (!lb_found)
+                    {
+                        rsIdList_count++;
+                        if (this_RsId.HasValue)
+                        {
+                            rsIdList.Add(this_RsId);
+                            if (ls_filter == "")
+                                ls_filter = this_RsId.ToString();
+                            else
+                                ls_filter = ls_filter + "," + this_RsId.ToString();
+                        }
+                        else
+                            ls_filter_null_clause = "isNull(rs_id)";
+                    }
+                }
+            }
+
+            // If no road with that name and type, return FALSE
+            if (rsIdList_count <= 0)
+            {
+                return false;
+            }
+
+            // Finalise the filter string.
+            if (ls_filter == "")
+                ls_filter = ls_filter_null_clause;
+            else
+            {
+                ls_filter = " in (" + ls_filter + ")";
+                if (ls_filter_null_clause != "")
+                    ls_filter = ls_filter + " or " + ls_filter_null_clause;
+            }
+
+            // Add the filter to the rs_id dropdown list
+            adwc_data.FilterString = ls_filter;
+            // Apply the filter to the rs_id dropdown list
+            if (adwc_data is DDddwRoadSuffix)
+            {
+                adwc_data.FilterOnce<DddwRoadSuffix>(FilterRoadSuffix1);
+            }
+
+            return true;
+        }
+
+        // TJB  RD7_0042  Jan 2010: Original.  See revised version above
+        public virtual bool of_filterroadsuffix1_original(string as_road_name, int? al_rt_id, ref Metex.Windows.DataUserControl adwc_data)
+        {
+            // Need a road name to filter on (??)
+            //if (IsNull(as_road_name) || as_road_name).Trim(.Len() == 0) {
+            if (string.IsNullOrEmpty(as_road_name))
+            {
+                AsRoadName = "";
+                return false;
+            }
+
             int ll_x;
             int? ll_rs_id;
             string ls_filter;
             string ls_filter_null_clause;
             bool lb_rs_id_exist;
-            bool ib_continue;
             adwc_data.FilterString = "";
 
             //! added to be used for filtering
             AlRtId = al_rt_id;
-            AsRoadName = as_road_name;
+            //AsRoadName = as_road_name;
+            AsRoadName = as_road_name.ToLower().Trim();
             // TJB  RD7_0021  Feb 2009
             // Added line to empty the rsIdList before starting.  
             // Was repopulated with each call adding on to previous results.
             rsIdList.Clear();
 
-            //adwc_data.Filter();
-            //if (adwc_data is DDddwRoadSuffix)
-            //{
-            //    adwc_data.Filter<DddwRoadSuffix>();
-            //}
             if (adwc_data is DDddwRoadSuffix)
             {
-                if (adwc_data.FilterString == "" )
+                if (adwc_data.FilterString == "")
                     adwc_data.FilterOnce<DddwRoadSuffix>(EmptyFilter);
                 else
                     adwc_data.Filter<DddwRoadSuffix>();
             }
 
-            ib_continue = true;
-            if (string.IsNullOrEmpty(as_road_name)) //if (IsNull(as_road_name) ||  as_road_name).Trim(.Len() == 0) {
-            {
-                ib_continue = false;
-            }
-
             List<RoadMapV2> ids_road_mapListFiltered = new List<RoadMapV2>();
-            if (ib_continue)
+
+            //ls_filter = "lower(road_name)=\"" + as_road_name.ToLower().Trim() + "\""; 
+            ls_filter = "lower(road_name)=\"" + AsRoadName + "\"";
+            // TJB  Jan-2010: Changed to allow rt_id = 0
+            // if ( !(al_rt_id == null) && al_rt_id > 0)
+            if (!(al_rt_id == null) && al_rt_id >= 0)
             {
-                ls_filter = "lower ( road_name)=\"" + as_road_name.ToLower().Trim() + "\""; //ls_filter = "lower ( road_name)=\"" + Lower(as_road_name).Trim() + '\"';
-                if (!((al_rt_id == null)) && al_rt_id > 0)
+                ls_filter = ls_filter + " AND rt_id = " + al_rt_id.ToString();
+            }
+
+            //!ids_road_map.FilterString = ls_filter;
+            //ids_road_map.SetFilter(ls_filter);
+            //! ids_road_map.FilterOnce<RoadMapV2>(FilterRoadMap);
+            //ids_road_map.Filter();                
+            foreach (RoadMapV2 item in ids_road_mapList)
+            {
+                string itemRoadName = item.RoadName.ToLower().Trim();
+                // TJB  Jan 2010
+                // Added for debugging to provide a way to see what's happening in the loop
+                if (itemRoadName == "gateway")
                 {
-                    ls_filter = ls_filter + " AND rt_id = " + al_rt_id.ToString();
+                    int i = 0;
+                    int j = i;
                 }
-
-                //!ids_road_map.FilterString = ls_filter;//ids_road_map.SetFilter(ls_filter);
-//!                ids_road_map.FilterOnce<RoadMapV2>(FilterRoadMap);//ids_road_map.Filter();                
-                foreach (RoadMapV2 item in ids_road_mapList)
+                //if (!string.IsNullOrEmpty(AsRoadName) 
+                //    && !string.IsNullOrEmpty(item.RoadName) 
+                //    && item.RoadName.ToLower() == AsRoadName
+                //    && AlRtId > 0 
+                //    && item.RtId == AlRtId)
+                if (!string.IsNullOrEmpty(AsRoadName)
+                    && !string.IsNullOrEmpty(itemRoadName)
+                    && itemRoadName == AsRoadName
+                    && AlRtId >= 0
+                    && item.RtId == AlRtId)
                 {
-                    if (!string.IsNullOrEmpty(AsRoadName) && !string.IsNullOrEmpty(item.RoadName) &&
-                                item.RoadName.ToLower() == AsRoadName.ToLower() &&
-                                AlRtId > 0 && item.RtId == AlRtId)
-                    {
-                        ids_road_mapListFiltered.Add(item);
-                    }
-                }
-
-
-                //!if (ids_road_map.RowCount <= 0)
-                if (ids_road_mapListFiltered.Count <= 0)
-                {
-                    //  no road with that name and type
-                    ib_continue = false;
+                    ids_road_mapListFiltered.Add(item);
                 }
             }
+
+            // If no road with that name and type, return FALSE
+            if (ids_road_mapListFiltered.Count <= 0)
+            {
+                return false;
+            }
+
             ls_filter = "";
             ls_filter_null_clause = "";
             lb_rs_id_exist = false;
-            if (ib_continue)
+
+            //!for (ll_x = 0; ll_x < ids_road_map.RowCount; ll_x++)
+            for (ll_x = 0; ll_x < ids_road_mapListFiltered.Count; ll_x++)
             {
-                //!for (ll_x = 0; ll_x < ids_road_map.RowCount; ll_x++)
-                for (ll_x = 0; ll_x < ids_road_mapListFiltered.Count; ll_x++)
+                lb_rs_id_exist = true;
+                //!ll_rs_id = ids_road_map.GetItem<RoadMapV2>(ll_x).RsId; 
+                //ll_rs_id = ids_road_map.GetItemNumber(ll_x, "rs_id");
+                ll_rs_id = ids_road_mapListFiltered[ll_x].RsId;
+                if (!ll_rs_id.HasValue)
                 {
-                    lb_rs_id_exist = true;
-                    //!ll_rs_id = ids_road_map.GetItem<RoadMapV2>(ll_x).RsId; //ll_rs_id = ids_road_map.GetItemNumber(ll_x, "rs_id");
-                    ll_rs_id = ids_road_mapListFiltered[ll_x].RsId;
-                    if (!ll_rs_id.HasValue)
-                    {
-                        ls_filter_null_clause = " isNull ( rs_id)";
-                        rsIdList.Add(null);
-                    }
-                    else if (string.IsNullOrEmpty(ls_filter) || ls_filter.Length < 1)
-                    {
-                        ls_filter = ll_rs_id.ToString();
-                        rsIdList.Add(ll_rs_id);
-                    }
-                    else
-                    {
-                        ls_filter = ls_filter + ", " + ll_rs_id.ToString();
-                        rsIdList.Add(ll_rs_id);
-                    }
+                    ls_filter_null_clause = " isNull(rs_id)";
+                    rsIdList.Add(null);
                 }
-                if (ls_filter == "")
+                else if (string.IsNullOrEmpty(ls_filter) || ls_filter.Length < 1)
                 {
-                    ls_filter = ls_filter_null_clause;
+                    ls_filter = ll_rs_id.ToString();
+                    rsIdList.Add(ll_rs_id);
                 }
                 else
                 {
-                    ls_filter = "rs_id in  ( " + ls_filter + ")";
-                    if (!(ls_filter_null_clause == ""))
-                    {
-                        ls_filter = ls_filter + " or " + ls_filter_null_clause;
-                    }
+                    ls_filter = ls_filter + ", " + ll_rs_id.ToString();
+                    rsIdList.Add(ll_rs_id);
                 }
-
-                if (lb_rs_id_exist == false || ls_filter == "")
+            }
+            if (ls_filter == "")
+            {
+                ls_filter = ls_filter_null_clause;
+            }
+            else
+            {
+                ls_filter = "rs_id in (" + ls_filter + ")";
+                if (!(ls_filter_null_clause == ""))
                 {
-                    ls_filter = "IsNull ( rt_id)";
-                    isRtIdNull = true;
-                }
-                adwc_data.FilterString = ls_filter;//adwc_data.SetFilter(ls_filter);
-                //adwc_data.Filter();
-                if (adwc_data is DDddwRoadSuffix)
-                {
-                    adwc_data.FilterOnce<DddwRoadSuffix>(ComplexFilter1);
+                    ls_filter = ls_filter + " or " + ls_filter_null_clause;
                 }
             }
 
-            //! not used
-            //!            ids_road_map.FilterString = "";
-            //!            ids_road_map.FilterOnce<RoadMapV2>(EmptyFilter);//ids_road_map.Filter();
-            return ib_continue;
-        }
+            if (lb_rs_id_exist == false || ls_filter == "")
+            {
+                ls_filter = "IsNull(rt_id)";
+            }
+            //adwc_data.SetFilter(ls_filter);
+            adwc_data.FilterString = ls_filter;
+            //adwc_data.Filter();
+            if (adwc_data is DDddwRoadSuffix)
+            {
+                adwc_data.FilterOnce<DddwRoadSuffix>(FilterRoadSuffix1);
+            }
 
+            return true;
+        }
+        
         //! WSearchAddress - added trying to replace data windows with BEntity lists, as they are retrieving very slowly
         public virtual string of_getsuburblist1(string as_roadname, int? al_rtid, int? al_rsid, int? al_tcid)
         {
@@ -2075,9 +2378,6 @@ namespace NZPostOffice.RDS.Controls
                 //!return true;
                 ids_road_listListFiltered.Add(item);
             }
-
-
-
             // Build a list of the suburbs found
             // If none, ll_rows will be 0 and ls_filter will be ''
             ls_filter = "";
@@ -2087,8 +2387,9 @@ namespace NZPostOffice.RDS.Controls
 
             for (ll_row = 0; ll_row < ll_rows; ll_row++)
             {
-                //!ls_temp = ids_road_list.GetItem<RoadList>(ll_row).SlName;//.GetItemString(ll_row, "sl_name");
-                ls_temp = ids_road_listListFiltered[ll_row].SlName;//.GetItemString(ll_row, "sl_name");
+                //!ls_temp = ids_road_list.GetItem<RoadList>(ll_row).SlName;
+                //.GetItemString(ll_row, "sl_name");
+                ls_temp = ids_road_listListFiltered[ll_row].SlName;
                 //!if (!((ls_temp == null)))
                 if (!string.IsNullOrEmpty(ls_temp))
                 {
@@ -2133,8 +2434,10 @@ namespace NZPostOffice.RDS.Controls
             AlRsid = al_rsid;
             AsSlName = as_slname;
 
-            if (((as_roadname == null) || as_roadname == "") && ((al_rtid == null) || al_rtid <= 0) &&
-                ((al_rsid == null) || al_rsid <= 0) && ((as_slname == null) || as_slname == ""))
+            if (((as_roadname == null)  || as_roadname == "") 
+                && ((al_rtid == null)   || al_rtid <= 0) 
+                && ((al_rsid == null)   || al_rsid <= 0) 
+                && ((as_slname == null) || as_slname == ""))
             {
                 return "";
             }
@@ -2343,7 +2646,8 @@ namespace NZPostOffice.RDS.Controls
             ll_rows = ids_road_listList.Count;
             for (ll_row = 0; ll_row < ll_rows; ll_row++)
             {
-                //!li_temp = ids_road_list.GetItem<RoadList>(ll_row).TcId;//ls_temp = String(ids_road_list.GetItemNumber(ll_row, "tc_id"));
+                //!li_temp = ids_road_list.GetItem<RoadList>(ll_row).TcId;
+                //ls_temp = String(ids_road_list.GetItemNumber(ll_row, "tc_id"));
                 li_temp = ids_road_listList[ll_row].TcId;
                 if (!((li_temp == null)))
                 {
@@ -2430,8 +2734,10 @@ namespace NZPostOffice.RDS.Controls
             int? AlTcid = al_tcid;
 
             List<RoadList> ids_road_listFilteredList = new List<RoadList>();
-            //!ids_road_list.FilterString = ls_search;//ids_road_list.SetFilter(ls_search);
-            //!ids_road_list.FilterOnce<RoadList>(FilterTown);//ids_road_list.Filter();
+            //!ids_road_list.FilterString = ls_search;
+            //ids_road_list.SetFilter(ls_search);
+            //!ids_road_list.FilterOnce<RoadList>(FilterTown);
+            //ids_road_list.Filter();
             foreach (RoadList item in ids_road_listList)
             {
                 int found = 0;
@@ -2520,7 +2826,8 @@ namespace NZPostOffice.RDS.Controls
                 }
             }
 //!            ids_road_list.FilterString = "";
-//!            ids_road_list.Filter<RoadList>();//ids_road_list.Filter();
+//!            ids_road_list.Filter<RoadList>();
+            //ids_road_list.Filter();
             if (ls_filter.Count == 0)
             {
                 ls_filter.Add("xxxxxx", 0);
