@@ -16,7 +16,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		{
 			InitializeComponent();
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
-		}
+            // TJB
+            //    Hide the help text that hides selected info
+            this.t_2.Visible = false;
+            this.t_3.Visible = false;
+        }
 
         void grid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
