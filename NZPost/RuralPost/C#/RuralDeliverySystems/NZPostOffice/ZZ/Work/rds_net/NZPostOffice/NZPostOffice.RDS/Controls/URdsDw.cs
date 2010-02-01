@@ -575,6 +575,9 @@ namespace NZPostOffice.RDS.Controls
         private System.Collections.Generic.List<string> column_name_list = new System.Collections.Generic.List<string>();
         protected virtual void URdsDw_DataObjectChanged(object sender, EventArgs e)
         {
+            //if (this.DataObject != null)
+            //    Console.WriteLine("++++ URdsDw_DataObjectChanged: " + this.DataObject.ToString());
+
             this.DataObject.Dock = DockStyle.Fill;
             string name = this.DataObject.GetType().AssemblyQualifiedName;
             this.column_name_list.Clear();
@@ -1189,7 +1192,12 @@ namespace NZPostOffice.RDS.Controls
         {
             // enable autocomplete
             string sText;
-            Control control = this.DataObject.GetControlByName(this.GetColumnName());
+            //if (this.DataObject != null)
+            //    Console.WriteLine("++++ URdsDw_EditChanged: " + this.DataObject.ToString());
+
+            //Control control = this.DataObject.GetControlByName(this.GetColumnName());
+            string this_ColumnName = this.GetColumnName();
+            Control control = this.DataObject.GetControlByName(this_ColumnName);
             if (control != null) // panel tyoe
             {
                 sText = control.Text;
@@ -1228,11 +1236,18 @@ namespace NZPostOffice.RDS.Controls
             // Process backdoor entry columns
             if (StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl) && StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift) && StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyAlt))
             {
-                if (MessageBox.Show("Are you sure you want to unlock all columns?\r\n" + "Use this facility only when you cannot access data \r\n" + "that needs to be changed.", "Unlock columns", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                if (MessageBox.Show("Are you sure you want to unlock all columns?\r\n" 
+                                     + "Use this facility only when you cannot access data \r\n" + "that needs to be changed.", "Unlock columns"
+                                   , MessageBoxButtons.YesNo
+                                   , MessageBoxIcon.Exclamation
+                                   , MessageBoxDefaultButton.Button2) 
+                    == DialogResult.Yes)
                 {
                     of_unprotectColumns();
                     this.of_SetUpdateable(true);
-                    MessageBox.Show("All columns have been unprotected.", "Unlock columns", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("All columns have been unprotected."
+                                     , "Unlock columns"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -1247,6 +1262,9 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual void URdsDw_Itemchanged(object sender, EventArgs e)
         {
+            //if (this.DataObject != null)
+            //    Console.WriteLine("++++ URdsDw_ItemChanged: " + this.DataObject.ToString());
+
             //?this.ue_PostItemChanged(row, dwo, data);
         }
 
@@ -1417,8 +1435,8 @@ namespace NZPostOffice.RDS.Controls
             MSheet lm_SheetMenu = null;
             MMainMenu lm_FrameMenu = null;
             MRdsDw lm_Dw = null;
-            if (this.DataObject != null)
-                Console.WriteLine(this.DataObject.ToString());
+            //if (this.DataObject != null)
+            //    Console.WriteLine("++++ URdsDw_GetFocus: " + this.DataObject.ToString());
 
             lm_Dw = this.mRdsDw;
             if (this.Visible)
