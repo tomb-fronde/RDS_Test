@@ -16,8 +16,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     public partial class WCustomer : WMaster
     {
         #region Define
-        private WCustomer iw_customer;
-
         public USt st_label;
 
         public int? il_customer;
@@ -29,8 +27,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public URdsDw idw_occupations;
 
         public URdsDw idw_interests;
-
-        public URdsDw idw_customer;
 
         public bool ib_Opening = true;
 
@@ -67,8 +63,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public string is_userid = String.Empty;
 
-        public bool ib_title_invalid = false;
-
         public bool ib_unnumbered;
 
         public bool? ib_npad_enabled;
@@ -82,6 +76,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public NCriteria inv_criteria;
 
         public NRdsMsg inv_msg;
+
+        // TJB  RD7_0042  Jan-2010: Added
+        // These keep track of what column we're coming from and going to
+        private string prev_column = "";
+        private string this_column = "";
+
         #endregion
 
         public WCustomer()
@@ -115,6 +115,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.PfcValidation += new UserEventDelegate1(dw_generic_pfc_validation);
             dw_generic.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_pfc_postupdate);
             dw_generic.PfcPreUpdate += new UserEventDelegate1(dw_generic_pfc_preupdate);
+            //dw_generic.GotFocus += new EventHandler(dw_generic_GotFocus);
+            //dw_generic.LostFocus += new EventHandler(dw_generic_LostFocus);
+
+            // TJB RD7_0042 jan-2010: Changed
+            // Changed to use Itemfocuschanged event to trigger
+            //dw_generic.ItemChanged += new EventHandler(dw_generic_itemchanged);
+            dw_generic.URdsDwItemFocuschanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_generic_itemfocuschanged);
 
             dw_recipients2.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_recipients2_constructor);
             dw_recipients2.PfcPreDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_recipients2_pfc_predeleterow);
@@ -131,34 +138,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_interests.PfcValidation += new UserEventDelegate1(dw_interests_pfc_validation);
 
             this.ShowInTaskbar = false;
-
-            /*?
-            //jlwang:moved from IC
-            this.FormClosing -= new FormClosingEventHandler(FormBase_FormClosing);
-            this.FormClosed -= new FormClosedEventHandler(this.FormBase_FormClosed);
-
-            dw_generic.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_constructor);
-            dw_generic.PfcPreDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_generic_pfc_predeleterow);
-            dw_generic.PfcPreInsertRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_generic_pfc_preinsertrow);
-            dw_generic.PfcValidation += new UserEventDelegate1(dw_generic_pfc_validation);
-            dw_generic.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_pfc_postupdate);
-            dw_generic.PfcPreUpdate += new UserEventDelegate1(dw_generic_pfc_preupdate);
-
-            dw_recipients2.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_recipients2_constructor);
-            dw_recipients2.PfcPreDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_recipients2_pfc_predeleterow);
-            dw_recipients2.PfcPreUpdate += new UserEventDelegate1(dw_recipients2_pfc_preupdate);
-            dw_recipients2.PfcValidation += new UserEventDelegate1(dw_recipients2_pfc_validation);
-
-            dw_occupations.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_occupations_constructor);
-            dw_occupations.PfcPreUpdate += new UserEventDelegate1(dw_occupations_pfc_preupdate);
-            dw_occupations.PfcValidation += new UserEventDelegate1(dw_occupations_pfc_validation);
-
-            dw_interests.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_interests_constructor);
-            dw_interests.PfcPreUpdate += new UserEventDelegate1(dw_interests_pfc_preupdate);
-            dw_interests.PfcValidation += new UserEventDelegate1(dw_interests_pfc_validation);
-
-            //jlwang:end
-             */
         }
 
         public override void pfc_preopen()
@@ -168,11 +147,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_row;
             int? ll_master;
             string ls_phone;
-            string ls_title;
+            string ls_form_title;
             int? ll_unnumbered;
             int? ll_npad_enabled;
             int ll_rc;
-            iw_customer = this;
             this.of_set_componentname("Customer");
             // Get the cust_id passed in from w_maintain_addresses
             // il_customer = message.Doubleparm
@@ -213,61 +191,47 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Set default values
             ib_customers_modified = false;
             ib_recipients_modified = false;
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_cust, ds_adrid, ds_dpid, ds_master, ds_contract
-            string	ds_rdflag
-            if isnull ( il_customer)    then ds_cust     = 'null' else ds_cust     = il_customer.ToString()
-            if isnull ( il_adrid)       then ds_adrid    = 'null' else ds_adrid    = il_adrid.ToString()
-            if isnull ( il_cust_dpid)   then ds_dpid     = 'null' else ds_dpid     = il_cust_dpid.ToString()
-            if isnull ( il_master)      then ds_master   = 'null' else ds_master   = il_master.ToString()
-            if isnull ( il_contract_no) then ds_contract = 'null' else ds_contract = il_contract_no.ToString()
-            if isnull ( il_rdcontractselect) then ds_rdflag = 'null' else ds_rdflag = il_rdcontractselect.ToString()
-            MessageBox.Show ( & 'Cust ID      = ' + ds_cust     +'\r\n' & +'Cust DPID    = ' + ds_dpid     +'\r\n' & +'Adr ID       = ' + ds_adrid    +'\r\n' & +'Master ID    = ' + ds_master   +'\r\n' & +'Contract No  = ' + ds_contract +'\r\n' & +'rdContractSelect = '+ds_rdflag +'\r\n' & +'Unnumbered   = ' + string ( ib_unnumbered) +'\r\n' & +'NPAD enabled = ' + string ( ib_npad_enabled,  'w_customer.pfc_preopen' )
-            // --------------------------------------------------------------------  */
+            ib_new = true;
+
             // If we've got an existing customer, retrieve his/her info
             if (il_customer > 0)
             {
                 ib_new = false;
                 // Retrieve
-                idw_customer.Retrieve(new object[] { il_customer });
-                ll_row = idw_customer.GetRow();
+                dw_generic.Retrieve(new object[]{il_customer});
+                ll_row = dw_generic.GetRow();
                 //  Display the DPID
-                // *	idw_customer.setItem ( ll_row,'cust_dpid',il_cust_dpid)
+                // *	idw_customer.setItem(ll_row,'cust_dpid',il_cust_dpid)
                 // Set Title
-                ls_title = "Customer:  ( " + il_customer.ToString() + ") " + idw_customer.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                if (!(StaticFunctions.f_isempty(idw_customer.GetItem<CustomerDetails2>(ll_row).CustInitials)))
+                ls_form_title = "Customer: (" + il_customer.ToString() + ") " + dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+                if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials)))
                 {
-                    ls_title = ls_title + ", " + idw_customer.GetItem<CustomerDetails2>(ll_row).CustInitials;
+                    ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
                 }
-                this.Text = ls_title;
+                this.Text = ls_form_title;
                 //  TWC - check that this is a primary customer - if not disable category boxes.
-                ll_master = idw_customer.GetItem<CustomerDetails2>(ll_row).MasterCustId;
+                ll_master = dw_generic.GetItem<CustomerDetails2>(ll_row).MasterCustId;
                 //  TJB  NPAD2  Jan 06
                 //  Save the original customer name so we can tell if its changed
-                is_old_surname = idw_customer.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                is_old_initials = idw_customer.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                is_old_title = idw_customer.GetItem<CustomerDetails2>(ll_row).CustTitle;
-                if (is_old_surname == null)
-                {
-                    is_old_surname = "";
-                }
-                if (is_old_initials == null)
-                {
-                    is_old_initials = "";
-                }
-                if (is_old_title == null)
-                {
-                    is_old_title = "";
-                }
+                is_old_surname  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+                is_old_initials = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
+                is_old_title    = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                // TJB  RD7_0042 Jan-2010: Changed
+                //      Fixed bug: values trimmed before checking for null
+                is_old_surname  = (is_old_surname == null) ? "" : is_old_surname.Trim();
+                is_old_initials = (is_old_initials == null) ? "" : is_old_initials.Trim();
+                is_old_title    = (is_old_title == null) ? "" : is_old_title.Trim();
             }
             else if (il_customer == 0)
             {
                 //  This is a new customer, set up a blank screen
                 ib_new = true;
-                ll_row = idw_customer.RowCount;
-                idw_customer.InsertItem<CustomerDetails2>(idw_customer.RowCount);
-                ls_title = "Customer: <New Customer>";
-                this.Text = ls_title;
+                
+                ll_row = dw_generic.RowCount;
+                dw_generic.InsertItem<CustomerDetails2>(ll_row);
+                ls_form_title = "Customer: <New Customer>";
+                this.Text = ls_form_title;
+
                 //  TJB  NPAD2  Jan 06
                 //  For a new customer, initialise the original customer name to <empty>
                 is_old_surname = "";
@@ -275,19 +239,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 is_old_title = "";
                 // Allocate a cust_id
                 il_customer = StaticFunctions.GetNextSequence("Customer");
-                idw_customer.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
-                idw_customer.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
-                idw_customer.DataObject.BindingSource.CurrencyManager.Refresh();
-                // 	idw_customer.setitem ( ll_row,"cust_dir_listing_ind","Y")
-                // 	idw_customer.setitem ( ll_row,"cust_business","N")
-                // 	idw_customer.setitem ( ll_row,"cust_rural_resident","N")
-                // 	idw_customer.setitem ( ll_row,"cust_rural_farmer","Y")
+                dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
+                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.DataObject.BindingSource.CurrencyManager.Refresh();
+                // 	idw_customer.setitem(ll_row,"cust_dir_listing_ind","Y")
+                // 	idw_customer.setitem(ll_row,"cust_business","N")
+                // 	idw_customer.setitem(ll_row,"cust_rural_resident","N")
+                // 	idw_customer.setitem(ll_row,"cust_rural_farmer","Y")
             }
             if ((bool)ib_npad_enabled)
             {
                 //  If NPAD is enabled, we disable the user's ability to update
                 //  the DPID.
-                idw_customer.GetControlByName("cust_dpid").TabStop = false;
+                dw_generic.GetControlByName("cust_dpid").TabStop = false;
 
                 if (ib_unnumbered)
                 {
@@ -299,57 +263,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 else
                 {
                     //  If the address is numbered, the user won't have a DPID 
-                    //  so don't display either the  ( empty) DPID or its caption.
-                    idw_customer.GetControlByName("t_cust_dpid").Visible = false;
-                    idw_customer.GetControlByName("cust_dpid").Visible = false;
+                    //  so don't display either the (empty) DPID or its caption.
+                    dw_generic.GetControlByName("t_cust_dpid").Visible = false;
+                    dw_generic.GetControlByName("cust_dpid").Visible = false;
                 }
             }
             //  If we're processing a non-RD contract
             //  hide the DPID.
             if (il_rdcontractselect == 0)
             {
-                idw_customer.GetControlByName("cust_dpid").TabStop = false;
-
-                idw_customer.GetControlByName("t_cust_dpid").Visible = false;
-                idw_customer.GetControlByName("cust_dpid").Visible = false;
+                dw_generic.GetControlByName("cust_dpid").TabStop = false;
+                dw_generic.GetControlByName("t_cust_dpid").Visible = false;
+                dw_generic.GetControlByName("cust_dpid").Visible = false;
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-                long		ll_recipients_vis, ll_occupations_vis, ll_interests_vis
-                string	ls_recipients_vis, ls_occupations_vis, ls_interests_vis
-                ll_recipients_vis  = idw_recipients.Object.tabpage_2.visible
-                ll_occupations_vis = idw_occupations.Object.tabpage_4.visible
-                ll_interests_vis   = idw_interests.Object.tabpage_5.visible
-                ls_recipients_vis	 = ll_recipients_vis.ToString()
-                ls_occupations_vis = ll_occupations_vis.ToString()
-                ls_interests_vis   = ll_interests_vis.ToString()
-                if isnull ( ls_recipients_vis) then  ls_recipients_vis = 'NULL'
-                if isnull ( ls_occupations_vis) then ls_occupations_vis = 'NULL'
-                if isnull ( ls_interests_vis) then   ls_interests_vis = 'NULL'
-                MessageBox.Show (    & 'ls_recipients_vis  = '+ls_recipients_vis+'\r\n' & +'ls_occupations_vis = '+ls_occupations_vis+'\r\n' & +'ls_interests_vis   = '+ls_interests_vis,  'w_customer.pfc_preopen' )
-            // --------------------------------------------------------------------  */
-            idw_recipients.Retrieve(new object[] { il_customer });
-            idw_occupations.Retrieve(new object[] { il_customer });
-            idw_interests.Retrieve(new object[] { il_customer });
-            // If IsNull ( idw_customer.GetItemDateTime( ll_row, 'cust_date_commenced').Date) Then
-            // 	idw_customer.setitem ( ll_row,"cust_date_commenced",today ( ))
+            idw_recipients.Retrieve(new object[]{il_customer });
+            idw_occupations.Retrieve(new object[]{il_customer });
+            idw_interests.Retrieve(new object[]{il_customer });
+            // If IsNull(idw_customer.GetItemDateTime(ll_row, 'cust_date_commenced').Date) Then
+            // 	idw_customer.setitem(ll_row,"cust_date_commenced",today())
             // END IF
-            /*  ---------------------------- Debugging ----------------------------- //
-                long		ll_custmodified,  ll_custdeleted
-                long		ll_recipmodified, ll_recipddeleted
-                long		ll_occmodified,   ll_occdeleted
-                long		ll_intmodified,   ll_intdeleted
-                ll_custmodified  = idw_customer.modifiedCount ( )
-                ll_custdeleted   = idw_customer.deletedCount ( )
-                ll_recipmodified = idw_recipients.modifiedCount ( )
-                ll_recipddeleted = idw_recipients.deletedCount ( )
-                ll_occmodified   = idw_occupations.modifiedCount ( )
-                ll_occdeleted    = idw_occupations.deletedCount ( )
-                ll_intmodified   = idw_interests.modifiedCount ( )
-                ll_intdeleted    = idw_interests.deletedCount ( )
-                MessageBox.Show ( & 'Customer modifiedCount   = '+string ( ll_custmodified)+'\r\n'  & +'Customer deletedCount     = '+string ( ll_custdeleted)+'\r\n'  & +'Recipients modifiedCount  = '+string ( ll_recipmodified)+'\r\n'  & +'Recipients deletedCount   = '+string ( ll_recipddeleted)+'\r\n'  & +'Occupations modifiedCount = '+string ( ll_occmodified)+'\r\n'  & +'Occupations deletedCount  = '+string ( ll_occdeleted)+'\r\n'  & +'Interests modifiedCount   = '+string ( ll_intmodified)+'\r\n'  & +'Interests deletedCount    = '+string ( ll_intdeleted)+'\r\n'  & ,  'w_customer.pfc_preopen' )
-            // --------------------------------------------------------------------  */
-            idw_customer.GetControlByName("cust_surname_company").Focus();
-            idw_customer.Focus();
+            dw_generic.GetControlByName("cust_surname_company").Focus();
+            dw_generic.Focus();
         }
 
         public override void pfc_postopen()
@@ -358,6 +292,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  SR4678  Feb 2006
             int ll_row;
             string ls_phone;
+            string ls_CustTitle;
+
             //  Determine if NPAD is enabled
             ib_npad_enabled = /*false;*/ StaticVariables.gnv_app.of_get_npadenabled();
             is_npadoutdir = StaticVariables.gnv_app.of_get_npaddirectory();
@@ -374,56 +310,49 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 is_userid = "";
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-                long		ll_custdpid
-                string	ds_custdpid
-                ll_row = idw_customer.getRow ( )
-                ll_custdpid = idw_customer.getItemNumber ( ll_row,'cust_dpid')
-                ds_custdpid = ll_custdpid.ToString()
-                if isnull ( ll_custdpid) then ds_custdpid = 'NULL'
-                MessageBox.Show ( & 'NPAD enabled    = '+string ( ib_npad_enabled)+'\r\n'  & +'NPAD directory = '+is_npadoutdir+'\r\n'  & +'User           = '+is_userid+'\r\n'  & +'Cust DPID      = '+ds_custdpid    ,  'w_customer.pfc_postopen' )
-            // --------------------------------------------------------------------  */
             //  Set the editmasks for the phone numbers
-            ll_row = idw_customer.GetRow();
             bool change = false;
-            if (NZPostOffice.Shared.StaticFunctions.IsDirty(idw_customer.DataObject))
+
+            ll_row = dw_generic.GetRow();
+            if (NZPostOffice.Shared.StaticFunctions.IsDirty(dw_generic.DataObject))
             {
                 change = true;
             }
-            ls_phone = idw_customer.GetItem<CustomerDetails2>(ll_row).CustPhoneDay;
+            ls_phone = dw_generic.GetItem<CustomerDetails2>(ll_row).CustPhoneDay;
             if (!(ls_phone == null))
             {
                 if (ls_phone.Length >= 2 && ls_phone.Substring(0, 2) == "02")
                 {
-                    ((MaskedTextBox)idw_customer.GetControlByName("cust_phone_day")).Mask = "(###) ###-#####";//!" ( ###) ### #####";
+                    ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_day")).Mask = "(###) ###-#####";//!"(###) ### #####";
                 }
                 else
                 {
-                    ((MaskedTextBox)idw_customer.GetControlByName("cust_phone_day")).Mask = "(##) ###-######";//!" ( ##) ### ######";
+                    ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_day")).Mask = "(##) ###-######";//!"(##) ### ######";
                 }
             }
-            ls_phone = idw_customer.GetItem<CustomerDetails2>(ll_row).CustPhoneNight;
+            ls_phone = dw_generic.GetItem<CustomerDetails2>(ll_row).CustPhoneNight;
             if (!(ls_phone == null))
             {
                 if (ls_phone.Length >= 2 && ls_phone.Substring(0, 2) == "02")
                 {
-                    ((MaskedTextBox)idw_customer.GetControlByName("cust_phone_night")).Mask = "(###) ###-#####";//!" ( ###) ###-#####";
+                    ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_night")).Mask = "(###) ###-#####";//!"(###) ###-#####";
                 }
                 else
                 {
-                    ((MaskedTextBox)idw_customer.GetControlByName("cust_phone_night")).Mask = "(##) ###-######";//!" ( ##) ###-######";
+                    ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_night")).Mask = "(##) ###-######";//!"(##) ###-######";
                 }
             }
-  
             if (change == false )
             {
-                idw_customer.GetItem<CustomerDetails2>(ll_row).MarkClean();
+                dw_generic.GetItem<CustomerDetails2>(ll_row).MarkClean();
             }
-            int row = FindWithNull(idw_customer.GetChild("cust_title"), "customer_title", idw_customer.GetItem<CustomerDetails2>(0).CustTitle);
-            if (row >= 0)
-                ((DataEntityCombo)idw_customer.GetControlByName("cust_title")).SelectedIndex = row;
+            ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+            ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
+            ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = ls_CustTitle;
+            ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = ls_CustTitle;
+
             //  Clear any update flags that may have been applied to fields
-            //  - the system thinks it may have to  ( and asks for permission 
+            //  - the system thinks it may have to (and asks for permission 
             //    to) save changes even when the user hasn't made any
             // Post to unused event
             this.ue_set_security();
@@ -432,12 +361,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void show()
         {
             base.show();
-            // Hide the recipients, occupations and interest tabs if displaying a recipients details in the
-            //   customer window
+            // Hide the recipients, occupations and interest tabs if displaying a recipients 
+            // details in the customer window
 
             //! in case of non primary recipient remove 3 tab pages consecutively 
-            if (idw_customer.GetItem<CustomerDetails2>(0).MasterCustId > 0)
-            {
+            if (dw_generic.GetItem<CustomerDetails2>(0).MasterCustId > 0)
+                {
                 //!tabpage_2.Enabled = false;                
                 //!tabpage_2.Visible = false;                
                 this.tab_1.TabPages.RemoveAt(1);
@@ -453,7 +382,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #region Methods
-        //ttjin.
         public int FindWithNull(DataUserControl dw, string propName, string value)
         {
             int find_row = -1;
@@ -490,35 +418,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lNull = null;
             if (sReturn == "")
             {
-                if (idw_customer.uf_not_entered(1, "cust_surname_company", "surname/ company"))
+                if (dw_generic.uf_not_entered(1, "cust_surname_company", "surname/ company"))
                 {
                     sReturn = "cust_surname_company";
                 }
-                else if (idw_customer.uf_not_entered(1, "cust_mail_town", "Town / City"))
+                else if (dw_generic.uf_not_entered(1, "cust_mail_town", "Town / City"))
                 {
                     sReturn = "cust_mail_town";
                 }
-                else if (idw_customer.uf_not_entered(1, "cust_mailing_address_road", "mailing address"))
+                else if (dw_generic.uf_not_entered(1, "cust_mailing_address_road", "mailing address"))
                 {
                     sReturn = "cust_mailing_address_road";
                 }
-                else if (idw_customer.GetItem<CustomerDetails2>(0).IsNew && idw_customer.GetItem<CustomerDetails2>(0).IsDirty)
+                else if (dw_generic.GetItem<CustomerDetails2>(0).IsNew && dw_generic.GetItem<CustomerDetails2>(0).IsDirty)
                 {
                     il_customer = StaticFunctions.GetNextSequence("customer");
-                    idw_customer.GetItem<CustomerDetails2>(0).CustId = il_customer;
-                    sTitle = "Customer:  ( " + il_customer.ToString() + ") " + idw_customer.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(idw_customer.GetItem<CustomerDetails2>(0).CustInitials)))
+                    dw_generic.GetItem<CustomerDetails2>(0).CustId = il_customer;
+                    sTitle = "Customer: (" + il_customer.ToString() + ") "
+                              + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
                     {
-                        sTitle = sTitle + ", " + idw_customer.GetItem<CustomerDetails2>(0).CustInitials;
+                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
                     }
                     this.Text = sTitle;
                 }
                 else if (sReturn == "")
                 {
-                    sTitle = "Customer:  ( " + il_customer.ToString() + ") " + idw_customer.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(idw_customer.GetItem<CustomerDetails2>(0).CustInitials)))
+                    sTitle = "Customer: (" + il_customer.ToString() + ") "
+                              + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
                     {
-                        sTitle = sTitle + ", " + idw_customer.GetItem<CustomerDetails2>(0).CustInitials;
+                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
                     }
                     this.Text = sTitle;
                 }
@@ -532,16 +462,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Insert a new custID in the customer record if there isn't one
             //  there already  ( new customerID).
             //  Returns
-            // 		1	Succeeded - new custID created
-            // 		0	Succeeded - no new ID created - not needed
+            // 	   1	Succeeded - new custID created
+            // 	   0	Succeeded - no new ID created - not needed
             // 	  -1	Failed  ( setItem failed)
             int ll_row;
             int li_rc = 0;
             if (il_customer == null || il_customer <= 0)
             {
-                ll_row = idw_customer.GetRow();
+                ll_row = dw_generic.GetRow();
                 il_customer = StaticFunctions.GetNextSequence("customer");
-                li_rc = 0; idw_customer.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
+                li_rc = 0; dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
             }
             return li_rc;
         }
@@ -553,17 +483,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  in the customer record, when a change is made to it
             //  or related information on the w_customer tabs.
             //  Returns
-            // 		1	Succeeded - new custID created
-            // 		0	Succeeded - no new ID created - not needed
-            // 	  -1	Failed  ( update failed)
+            // 	   1	Succeeded - new custID created
+            // 	   0	Succeeded - no new ID created - not needed
+            // 	  -1	Failed (update failed)
             int ll_row;
             int li_rc = 0;
             string ls_userid;
-            ll_row = idw_customer.GetRow();
+            ll_row = dw_generic.GetRow();
             ls_userid = StaticVariables.LoginId;
-            idw_customer.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
-            idw_customer.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
-            li_rc = 1; idw_customer.Save();
+            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
+            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
+            li_rc = 1; dw_generic.Save();
             return li_rc;
         }
 
@@ -586,7 +516,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int uf_savechanges()
         {
             //  TJB  NPAD2  Jan 2006  - New
-            //  Returns idw_customer.update ( ) status
+            //  Returns idw_customer.update() status
             // 		 1		Success
             // 		-1		Error
             // 
@@ -605,83 +535,73 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ds_msg;
             bool lb_name_changed;
             ls_null = null;
-            ll_row = idw_customer.GetRow();
-            if (idw_customer.GetItem<CustomerDetails2>(ll_row).CustDateCommenced == null)
+            ll_row = dw_generic.GetRow();
+            if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced == null)
             {
-                idw_customer.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
             }
             //  If this is a new customer, it will be a new master.
             if (ib_new)
             {
                 //  Set defaults where not defined by the user
-                if (idw_customer.GetItem<CustomerDetails2>(ll_row).CustBusiness == null)
+                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustBusiness == null)
                 {
-                    idw_customer.GetItem<CustomerDetails2>(ll_row).CustBusiness = false;
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustBusiness = false;
                 }
-                if (idw_customer.GetItem<CustomerDetails2>(ll_row).CustRuralResident == null)
+                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralResident == null)
                 {
-                    idw_customer.GetItem<CustomerDetails2>(ll_row).CustRuralResident = false;
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralResident = false;
                 }
-                if (idw_customer.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer == null)
+                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer == null)
                 {
-                    idw_customer.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer = true;
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer = true;
                 }
-                if (idw_customer.GetItem<CustomerDetails2>(ll_row).CustDirListingInd == null)
+                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustDirListingInd == null)
                 {
-                    idw_customer.GetItem<CustomerDetails2>(ll_row).CustDirListingInd = "Y";
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustDirListingInd = "Y";
                 }
             }
             //  Update the last_amended values
             ls_userid = StaticVariables.LoginId;
-            idw_customer.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
-            idw_customer.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
-            ll_rc = 1; idw_customer.Save();
+            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
+            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
+            ll_rc = 1; dw_generic.Save();
             if (!(ll_rc == 1))
             {
                 //  If there's a problem, tell the user about it
-                ll_cust = idw_customer.GetItem<CustomerDetails2>(ll_row).CustId;
+                ll_cust = dw_generic.GetItem<CustomerDetails2>(ll_row).CustId;
                 if (ll_cust == null)
-                {
                     ds_cust = "null";
-                }
                 else
-                {
                     ds_cust = ll_cust.ToString();
-                }
+
                 if (ib_new)
-                {
-                    ds_msg = "Error creating new customer.\r\n ";
-                }
+                    ds_msg = "Error creating new customer.\n ";
                 else
-                {
-                    ds_msg = "Error updating customer record.\r\n ";
-                }
-                MessageBox.Show(ds_msg + "(cust_id = '" + ds_cust + "')", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ds_msg = "Error updating customer record.\n ";
+
+                MessageBox.Show(ds_msg + "(cust_id = '" + ds_cust + "')"
+                               , "ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (ii_kiwi_ok == 1 && !ib_new)
             {
                 //  If the update was successful and we're modifying
-                //  an existing customer  ( not creating a new one) ...
+                //  an existing customer (not creating a new one) ...
                 //  TJB  NPAD  Jan 2006
                 //  Check to see if the customer's name was changed
-                ll_row = idw_customer.GetRow();
-                ls_surname = idw_customer.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                ls_initials = idw_customer.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                ls_title = idw_customer.GetItem<CustomerDetails2>(ll_row).CustTitle;
-                if (ls_surname == null)
-                {
-                    ls_surname = "";
-                }
-                if (ls_initials == null)
-                {
-                    ls_initials = "";
-                }
-                if (ls_title == null)
-                {
-                    ls_title = "";
-                }
+                ll_row = dw_generic.GetRow();
+                ls_surname  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+                ls_initials = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
+                ls_title    = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_surname  = (ls_surname == null)  ? "" : ls_surname.Trim();
+                ls_initials = (ls_initials == null) ? "" : ls_initials.Trim();
+                ls_title    = (ls_title == null)    ? "" : ls_title.Trim();
+
                 lb_name_changed = false;
-                if (!(ls_surname == is_old_surname) || !(ls_initials == is_old_initials) || !(ls_title == is_old_title))
+                if (!(ls_surname == is_old_surname) 
+                    || !(ls_initials == is_old_initials) 
+                    || !(ls_title == is_old_title))
                 {
                     lb_name_changed = true;
                 }
@@ -695,27 +615,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     *		string	ls_npadoutdir, ls_npadoutfile, ls_npadfilename
                     *		string	ls_description
                     *		
-                    *		ls_userid       = gnv_app.of_getuserid ( )
-                    *		ls_npadoutdir   = gnv_app.of_get_npadDirectory ( )
-                    *		ls_npadfilename = 'RDS_NPAD_'+string ( now ( ),'yyyymmdd_hhmmssfff')+'.xml'
+                    *		ls_userid       = gnv_app.of_getuserid()
+                    *		ls_npadoutdir   = gnv_app.of_get_npadDirectory()
+                    *		ls_npadfilename = 'RDS_NPAD_'+string(now(),'yyyymmdd_hhmmssfff')+'.xml'
                     *		ls_npadoutfile  = ls_npadoutdir + '\\' + ls_npadfilename
                     *		ls_description  = 'Customer name change'
                     *********************************************************************** */
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    string	ds_custdpid, ds_surname, ds_initials, ds_title
-                    ds_custdpid = ll_custdpid.ToString()
-                    if isnull ( ll_custdpid) then ds_custdpid = 'null'
-                    ds_surname  = ls_surname.ToString()
-                    if isnull ( ls_surname) then ds_surname = 'null'
-                    ds_initials = ls_initials.ToString()
-                    if isnull ( ls_initials) then ds_initials = 'null'
-                    ds_title    = ls_title.ToString()
-                    if isnull ( ls_title) then ds_title = 'null'
-                    MessageBox.Show (   & 'Customer name changed\r\n\r\n'       & +'<generate NPAD modify_customer message>\r\n\r\n'  & +'Cust Dpid = '+ds_custdpid+'\r\n'   & +'Surname   = '+ds_surname+'\r\n'    & +'Initials  = '+ds_initials+'\r\n'   & +'Title     = '+ds_title           ,  'w_customer.uf_saveChanges' )
-                    // --------------------------------------------------------------------  */
                     ll_rc = of_npad_modifyone(ll_custdpid, ls_surname, ls_initials, ls_title);
                     /* ***********************************************************************
-                    *		select f_rds_npad_modify_customer (  
+                    *		select f_rds_npad_modify_customer(  
                     *							:ll_custdpid, 
                     *							:ls_userid,
                     *							:ls_description,
@@ -725,12 +633,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     *		 using SQLCA;
                     *		 
                     *		if not ll_rc = 0 then
-                    *			messagebox ( 'Error',  &
-                    *					 'Error writing NPAD modify_customer XML file\r\n'  &
-                    *					+'Error code    = '+ll_rc.ToString()+'\r\n'  &
-                    *					+'Customer DPID = '+ds_custdpid+'\r\n' &
-                    *					+'XML filename  = '+ls_npadoutfile    &
-                    *					)
+                    *			messagebox('Error',
+                    *					 'Error writing NPAD modify_customer XML file\n'
+                    *					+'Error code    = '+ll_rc.ToString()+'\r\n'
+                    *					+'Customer DPID = '+ds_custdpid+'\r\n'
+                    *					+'XML filename  = '+ls_npadoutfile)
                     *		end if		
                     *********************************************************************** */
                 }
@@ -744,9 +651,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Add a record to the customer_address_moves table
             //  Called when a new customer is created.
             // 
-            //  Returns	 ( compatible with uf_savechanges)
-            // 		1	Success
-            // 	  -1	Error
+            //  Returns	(compatible with uf_savechanges)
+            // 	   1    Success
+            // 	  -1    Error
             int? ll_temp = null;
             int ll_rc;
             int ll_row;
@@ -781,26 +688,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  If there was an error, tell the user about it.
             if (ll_rc == -(1))
             {
-                ds_msg = "Error adding record to customer_address_moves.\r\n " + ds_msg + '~';
+                ds_msg = "Error adding record to customer_address_moves.\n " 
+                         + ds_msg + '\n';
             }
             if (ll_rc == 0)
             {
                 ll_rc = 1;
                 //  Get the new customer's ID and insert the new record
-                ll_row = idw_customer.GetRow();
-                ll_cust = idw_customer.GetItem<CustomerDetails2>(ll_row).CustId;
-                ll_dpid = idw_customer.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_row = dw_generic.GetRow();
+                ll_cust = dw_generic.GetItem<CustomerDetails2>(ll_row).CustId;
+                ll_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
                 /* insert into customer_address_moves
                     ( adr_id, cust_id, dp_id, move_in_date, 
-                    move_out_date, move_out_source, move_out_user )
+                      move_out_date, move_out_source, move_out_user )
                 values
-                    ( :il_adrid, :ll_cust, :ll_dpid, today ( ), 
-                    NULL, NULL, NULL )
+                    ( :il_adrid, :ll_cust, :ll_dpid, today(), 
+                      NULL, NULL, NULL )
                 using SQLCA; */
                 RDSDataService dataService = RDSDataService.InsertCustomerAddressMoves3(ll_cust, il_adrid, ll_dpid);
                 if (!(dataService.SQLCode == 0))
                 {
-                    MessageBox.Show("Error inserting new record into customer_address_moves table.\r\n " + "\r\nError = " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error inserting new record into customer_address_moves table.\n\n" 
+                                      + "Error = " + dataService.SQLErrText
+                                    , "Database Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ll_rc = -(1);
                 }
             }
@@ -814,7 +725,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             //  Returns
             // 		0		Success
-            // 		1		 ( or other non-zero) Error
+            // 		1		(or other non-zero) Error
             // 
             //  13 Feb 2006  TJB  
             //  Changed filename to include 1/1000ths of a second.
@@ -839,47 +750,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             //  XML message file info
 
-            // select f_getNextSequence ( 'NPADFileSeq',1,10000) into :ll_npadfileseq from dummy using SQLCA; 
+            // select f_getNextSequence('NPADFileSeq',1,10000) into :ll_npadfileseq from dummy using SQLCA; 
             RDSDataService dataService = RDSDataService.GetNextSequence("NPADFileSeq");
             ll_npadfileseq = dataService.intVal;
             if (ll_npadfileseq == null || ll_npadfileseq <= 0)
             {
-                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename.  ", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Failed to obtain sequence number for NPAD XML message filename. "
+                               , "ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ls_npadfileseq = DateTime.Now.ToString("fff");
             }
             else
             {
                 ls_npadfileseq = string.Format("0000", ll_npadfileseq);
             }
-            is_npadfilename = "RDS_NPAD_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + "_" + ls_npadfileseq + ".xml";
+            is_npadfilename = "RDS_NPAD_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") 
+                              + "_" + ls_npadfileseq 
+                              + ".xml";
             is_npadoutfile = is_npadoutdir + "\\" + is_npadfilename;
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_name
-                if not isnull ( as_title) then
-                ds_name = as_title
-                else
-                ds_name = ''
-                end if
-                if not isnull ( as_initials) then
-                if ds_name = '' then
-                ds_name = as_initials
-                else 
-                ds_name = ds_name + " " + as_initials
-                end if
-                end if
-                if not isnull ( as_surname) then
-                if ds_name = '' then
-                ds_name = as_surname
-                else 
-                ds_name = ds_name + " " + as_surname
-                end if
-                end if
-                if ds_name = '' then ds_name = 'NULL'
-                MessageBox.Show (  & 'NPAD interface message\r\n\r\n'  & +'Send modify_customer XML message\r\n' & +'DPID = '+ds_dpid+'\r\n'       & +ls_description + '\r\n\r\n'      & +'Name = '+ds_name+'\r\n'       & +is_npadoutfile+'\r\n'          & +is_userid                    ,  'w_customer.of_npad_modifyone' )
-            // --------------------------------------------------------------------  */
             if (al_dpid == null || al_dpid < 1)
             {
-                MessageBox.Show("The customer DPID is null.  \r\n" + "This may indicate an inconsistency in the database. \r\n\r\n" + "DPID    = " + ds_dpid + '~', "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The customer DPID is null. \n" 
+                                 + "This may indicate an inconsistency in the database. \n\n" 
+                                 + "DPID    = " + ds_dpid
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -888,11 +783,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 li_rc = dataService.intVal;
                 if (li_rc > 0)
                 {
-                    MessageBox.Show("Error sending modify_customer message.\r\n" + "Return code = " + li_rc + "\r\n\r\n" + " ( see npad_msg_log table for more detail)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error sending modify_customer message.\n" 
+                                     + "Return code = " + li_rc + "\n\n" 
+                                     + "(see npad_msg_log table for more detail)"
+                                   , "Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else if (li_rc < 0)
                 {
-                    MessageBox.Show("Error writing XML message file  ( RC=" + li_rc + ").\r\n" + "    " + is_npadoutfile + "\r\n\r\n" + "Possible cause: the output directory may not exist.", "SQL Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing XML message file (RC=" + li_rc + ").\n" 
+                                     + "    " + is_npadoutfile + "\n\n" 
+                                     + "Possible cause: the output directory may not exist."
+                                   , "SQL Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             return li_rc;
@@ -915,30 +818,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_new_initials = as_new_initials;
             ls_new_title = as_new_title;
             if (ls_old_surname == null)
-            {
                 ls_old_surname = "";
-            }
             if (ls_old_initials == null)
-            {
                 ls_old_initials = "";
-            }
             if (ls_old_title == null)
-            {
                 ls_old_title = "";
-            }
             if (ls_new_surname == null)
-            {
                 ls_new_surname = "";
-            }
             if (ls_new_initials == null)
-            {
                 ls_new_initials = "";
-            }
             if (ls_new_title == null)
-            {
                 ls_new_title = "";
-            }
-            if (ls_old_surname == ls_new_surname && ls_old_initials == ls_new_initials && ls_old_title == ls_new_title)
+            if (ls_old_surname == ls_new_surname 
+                && ls_old_initials == ls_new_initials 
+                && ls_old_title == ls_new_title)
             {
                 return true;
             }
@@ -952,36 +845,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  NPAD2  Apr 2006   - New -
             //  Check that customer details are OK then save
-            //   ( taken from cb_save.clicked so it can be called from the
+            //  (taken from cb_save.clicked so it can be called from the
             //   selectionchanging event when the user switches tabs).
             // 
             //  Returns
             // 	  0		OK
             // 	 -1		Failed update
             // 	 -2		Failed validation
+
             int ll_row;
             int ll_rc;
             int? ll_tmp_dpid;
             string ls_surname;
             string ls_initials;
-            string ls_title;
+            string ls_CustTitle;
             //  TJB  NPAD2 CR32  Feb 2006
             //  Don't allow the user to save the changes if the 
             //  customer's title hasn't been fixed.
-            //  NOTE: the idw_customer.accepttext ( ) triggers the
+            //  NOTE: the idw_customer.accepttext() triggers the
             //        itemchanged event that checks the customer's 
             //        title, so this test must come after it.
             ll_rc = 0;
-            if (ib_title_invalid)
+            ll_row = dw_generic.GetRow();
+            ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+            ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
+
+            if (!uf_validate_cust_title(ls_CustTitle))
             {
-                MessageBox.Show("Please select a valid customer title before saving. ", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select a valid customer title before saving. "
+                               , "WARNING"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(2);
             }
-            ll_row = idw_customer.GetRow();
-            ls_surname = idw_customer.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+            ls_surname = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
             if (ls_surname == null || ls_surname == "")
             {
-                MessageBox.Show("A customer must have a name.\r\n ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("A customer must have a name.\n "
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return -(2);
             }
             else
@@ -996,17 +897,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 //  If the DPID has been changed, update it in the 
                 //  customer_address_moves table.
-                //   ( NOTE: it may be null either before or after)
-                ll_row = idw_customer.GetRow();
-                ll_tmp_dpid = idw_customer.GetItem<CustomerDetails2>(ll_row).CustDpid;
-                if (ll_tmp_dpid == null)
-                {
-                    ll_tmp_dpid = 0;
-                }
-                if (il_cust_dpid == null)
-                {
-                    il_cust_dpid = 0;
-                }
+                //  (NOTE: it may be null either before or after)
+                ll_row = dw_generic.GetRow();
+                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_tmp_dpid  = (ll_tmp_dpid == null) ? 0 : ll_tmp_dpid;
+                il_cust_dpid = (il_cust_dpid == null) ? 0 : il_cust_dpid;
                 if (!(ll_tmp_dpid == il_cust_dpid))
                 {
                     uf_savedpid(ll_tmp_dpid);
@@ -1018,38 +913,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  message to NPAD.
             if ((bool)ib_npad_enabled && ll_rc == 1 && il_rdcontractselect == 1)
             {
-                ll_row = idw_customer.GetRow();
-                ll_tmp_dpid = idw_customer.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_row = dw_generic.GetRow();
+                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
                 if (!(ll_tmp_dpid == null) && ll_tmp_dpid > 0)
                 {
-                    ls_surname = idw_customer.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                    ls_initials = idw_customer.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                    ls_title = idw_customer.GetItem<CustomerDetails2>(ll_row).CustTitle;
-                    if (ls_surname == null)
-                    {
-                        ls_surname = "";
-                    }
-                    if (ls_initials == null)
-                    {
-                        ls_initials = "";
-                    }
-                    if (ls_title == null)
-                    {
-                        ls_title = "";
-                    }
+                    ls_surname   = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+                    ls_initials  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
+                    ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                    ls_surname   = (ls_surname == null) ? "" : ls_surname.Trim();
+                    ls_initials  = (ls_initials == null) ? "" : ls_initials.Trim();
+                    ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
+
                     //  If the customer's name hasn't changed, there's no need to tell NPAD
-                    if (!(of_samename(is_old_surname, is_old_initials, is_old_title, ls_surname, ls_initials, ls_title)))
+                    if (!(of_samename(is_old_surname, is_old_initials, is_old_title, ls_surname, ls_initials, ls_CustTitle)))
                     {
-                        of_npad_modifyone(ll_tmp_dpid, ls_surname, ls_initials, ls_title);
+                        of_npad_modifyone(ll_tmp_dpid, ls_surname, ls_initials, ls_CustTitle);
                     }
                 }
             }
-            //  The functions uf_savechanges and uf_addcam return 1 for success
-            // nd -1 for failure.  Change the  ( +)1 to 0 to return success.
-            if (ll_rc == 1)
-            {
-                ll_rc = 0;
-            }
+            // The functions uf_savechanges and uf_addcam return 1 for success
+            // and -1 for failure.  Change the (+)1 to 0 to return success.
+            ll_rc = (ll_rc == 1) ? 0 : ll_rc;
             return ll_rc;
         }
 
@@ -1059,7 +943,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Add customer_address_moves table records for the recipients.  
             // 
             //  Called when the recipients tab is being saved after the 
-            //  recipients changes have been saved  ( so that new recipients'
+            //  recipients changes have been saved (so that new recipients'
             //  cust_id's will have been created).
             // 
             //  NOTE:  Don't need to worry about deleting recipients; if a 
@@ -1067,8 +951,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //         the CAM record via the foreign key to preserve 
             //         consistency.
             // 
-            //  Returns	 ( compatible with uf_savechanges)
-            // 		1		Success
+            //  Returns	(compatible with uf_savechanges)
+            // 	   1		Success
             // 	  -1		Error
             // 	  -2		Error: no address
             int ll_row;
@@ -1101,31 +985,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_temp = dataService.intVal;
                 if (!(dataService.SQLCode == 0 || dataService.SQLCode == 100))
                 {
-                    MessageBox.Show("Error checking for recipient record in " + "customer_address_moves table. \r\n\r\n" + "Error = " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error checking for recipient record in customer_address_moves table. \n\n" 
+                                     + "Error = " + dataService.SQLErrText
+                                   , "Database Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return -(1);
                 }
                 if (ll_temp == null || ll_temp <= 0)
                 {
                     //  There's no record for the recipient
-                    /*  ------------------------- Debugging ------------------------- //
-                        string	ds_cust, ds_custname
-                        ds_custname = trim ( idw_recipients.getItemString ( ll_row,'cust_initials')+" "  &
-                        + idw_recipients.getItemString ( ll_row,'cust_surname_company'))
-                        if isnull ( ll_cust) then ds_cust = 'NULL' else ds_cust = ll_cust.ToString()
-                        MessageBox.Show (   & 'Add recipient CAM record \r\n'  & +'cust id = '+ds_cust ,  'w_customer.dw_recipients.uf_addcam_recipients' )
-                    // -------------------------------------------------------------  */
                     //  Add the recipient record to the CAM table
                     /* insert into customer_address_moves
-                        ( adr_id, cust_id, dp_id, move_in_date, 
-                        move_out_date, move_out_source, move_out_user )
-                        values
-                         ( :il_adrid, :ll_cust, NULL, today ( ), 
-                        NULL, NULL, NULL )
-                        using SQLCA; */
+                     *  ( adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user )
+                     *  values
+                     *   ( :il_adrid, :ll_cust, NULL, today(), NULL, NULL, NULL )
+                     *  using SQLCA; */
                     dataService = RDSDataService.InsertCustomerAddressMoves2(ll_cust, il_adrid);
                     if (!(dataService.SQLCode == 0))
                     {
-                        MessageBox.Show("Error inserting new recipient record into " + "customer_address_moves table. \r\n\r\n" + "Error = " + dataService.SQLErrText, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Error inserting new recipient record into customer_address_moves table. \n\n" 
+                                          + "Error = " + dataService.SQLErrText
+                                       , "Database Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
                 }
@@ -1142,14 +1023,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  NPAD2  - New -
             //  Save the customer's new DPID
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_dpid
-            ds_dpid = al_dpid.ToString()
-            if isnull ( al_dpid) then ds_dpid = 'null'
-            MessageBox.Show (   & 'al_dpid = '+ds_dpid ,  'w_customer.uf_savedpid' )
-            // --------------------------------------------------------------------  */
-            //  Update the DPID in the customer_address_moves table.
 
+            //  Update the DPID in the customer_address_moves table.
             // UPDATE customer_address_moves set dp_id = :al_dpid where cust_id = :il_customer and move_out_date is null using SQLCA; 
             RDSDataService dataService = RDSDataService.UpdateCustomerAddressMovesDpId(il_customer, al_dpid);
         }
@@ -1158,16 +1033,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  NPAD2  pre-GoLive    - new -
             //  Split out of the pfc_preopen event so it can be called from 
-            //  other events  ( see selectionchanging)
-            // IF IsNull ( idw_customer.GetItemString ( ll_row, 'cust_dir_listing_ind')) THEN
-            // 	idw_customer.SetItem ( ll_row, "cust_dir_listing_ind", "Y")
+            //  other events (see selectionchanging)
+
+            // IF IsNull(idw_customer.GetItemString(ll_row, 'cust_dir_listing_ind')) THEN
+            // 	idw_customer.SetItem(ll_row, "cust_dir_listing_ind", "Y")
             // END IF
             //  set the kiwimail variable
-            ii_original_kiwi = idw_customer.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity;
+
+            ii_original_kiwi = dw_generic.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity;
             if (ii_original_kiwi == null)
             {
                 ii_original_kiwi = 0;
             }
+        }
+
+        // TJB RD7_0042 Jan-2010: Added
+        // Check that the entered customer title is one of those in the dropdown list
+        public virtual bool uf_validate_cust_title(string as_CustTitle)
+        {
+            string this_CustTitle;
+
+            // Get a reference to the customer title list
+            List<DddwCustTitle> CustTitleList
+                = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.DataSource
+                               as List<DddwCustTitle>;
+
+            // Normalise the customer title to search for
+            as_CustTitle = as_CustTitle.Trim();
+
+            // Scan the customer title list looking for a match
+            // If a match is found, return TRUE (yes we found it)
+            // If no match is found, return FALSE
+            foreach (DddwCustTitle item in CustTitleList)
+            {
+                this_CustTitle = item.CustomerTitle.Trim();
+                if (this_CustTitle == as_CustTitle)
+                    return true;
+            }
+            return false;
         }
 
         public virtual void dw_generic_ue_validate(int al_row, string as_colname)
@@ -1175,17 +1078,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? ll_kiwi;
             DialogResult ll_response;
             string ls_phone;
-            //  TWC = 24/04/2003
-            /* 
-                String ls_business
-                String ls_farmer
-                String ls_resident
-             */
+            string column_lower;
+
             //  TJB  SR4678  Feb 2006
             //  Set the editmasks for the phone numbers
-            // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            string TestExpr = as_colname.ToLower();
-            if (TestExpr == "cust_phone_day")
+            column_lower = as_colname.ToLower();
+            if (column_lower == "cust_phone_day")
             {
                 ls_phone = dw_generic.GetItem<CustomerDetails2>(al_row).CustPhoneDay;
                 if (!(ls_phone == null))
@@ -1200,7 +1098,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            else if (TestExpr == "cust_phone_night")
+            else if (column_lower == "cust_phone_night")
             {
                 ls_phone = dw_generic.GetItem<CustomerDetails2>(al_row).CustPhoneNight;
                 if (!(ls_phone == null))
@@ -1214,78 +1112,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_night")).Mask = "(##) ###-######";//!" ( ##) ###-######";
                     }
                 }
-                /*  End Choose
-                //
-                Choose Case lower ( as_colname) */
             }
-
-            /*!! moved to a separate event handler for the checkboxes
-                        
-            else if (TestExpr == "cust_business")
+            else if (column_lower == "cust_adpost_quantity")
             {
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(al_row).CustBusiness)
+                //  Code to validate the kiwimail field
+                //  get the value of kiwimail :
+                ll_kiwi = dw_generic.GetItem<CustomerDetails2>(0).CustAdpostQuantity;
+                if (ll_kiwi == null)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralFarmer = false;
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralResident = false;
+                    ll_kiwi = 0;
                 }
-            }
-            else if (TestExpr == "cust_rural_farmer")
-            {
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralFarmer)
+                if (ll_kiwi > 3 && ll_kiwi != ii_original_kiwi)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustBusiness = false;
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralResident = false;
-                }
-            }
-            else if (TestExpr == "cust_rural_resident")
-            {
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralResident)
-                {
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustBusiness = false;
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustRuralFarmer = false;
-                }
-            }
-            */
-
-            //  Code to validate the kiwimail field
-            //  get the value of kiwimail :
-            ll_kiwi = dw_generic.GetItem<CustomerDetails2>(0).CustAdpostQuantity;
-            if (ll_kiwi == null)
-            {
-                ll_kiwi = 0;
-            }
-            if (ll_kiwi > 3 && ll_kiwi != ii_original_kiwi)
-            {
-                if (ll_kiwi > 99)
-                {
-                    MessageBox.Show("Input quantity must be less than 100! Please reinput", "Warning",
-                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    ll_response = DialogResult.None;
+                    if (ll_kiwi > 99)
+                    {
+                        MessageBox.Show("Input quantity must be less than 100! Please reinput"
+                                       , "Warning"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ll_response = DialogResult.None;
+                    }
+                    else
+                    {
+                        ll_response = MessageBox.Show("Have you entered the correct quantity required for Kiwimail?"
+                                                     , "Warning"
+                                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    }
+                    if (ll_response != DialogResult.Yes)
+                    {
+                        dw_generic.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity = ii_original_kiwi;
+                        //  Set focus back to the cust_adpost_quantity
+                        dw_generic.GetControlByName("cust_adpost_quantity").TabIndex = 5;
+                        dw_generic.Retrieve(new object[] { il_customer });
+                        dw_generic.Focus();
+                        ii_kiwi_ok = -(1);
+                    }
+                    else
+                    {
+                        ii_original_kiwi = ll_kiwi;
+                        ii_kiwi_ok = 1;
+                    }
                 }
                 else
                 {
-                    ll_response = MessageBox.Show("Warning", "Have you entered the correct quantity required for Kiwimail?",
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
-                }
-                if (ll_response != DialogResult.OK)
-                {
-                    dw_generic.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity = ii_original_kiwi;
-                    //  Set focus back to the cust_adpost_quantity
-                    dw_generic.GetControlByName("cust_adpost_quantity").TabIndex = 5;
-                    dw_generic.Retrieve(new object[] { il_customer });
-                    dw_generic.Focus();
-                    ii_kiwi_ok = -(1);
-                }
-                else
-                {
-                    ii_original_kiwi = ll_kiwi;
+                    dw_generic.GetControlByName("cust_adpost_quantity").TabIndex = 70;
                     ii_kiwi_ok = 1;
                 }
-            }
-            else
-            {
-                dw_generic.GetControlByName("cust_adpost_quantity").TabIndex = 70;
-                ii_kiwi_ok = 1;
             }
         }
 
@@ -1294,7 +1165,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_generic_constructor()
         {
             //? base.constructor();
-            idw_customer = dw_generic;
+            dw_generic = dw_generic;
             BeginInvoke(new delegateInvoke(conInvoke));
         }
 
@@ -1306,7 +1177,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.URdsDw_GetFocus(null, null);
         }
 
-        public virtual void dw_generic_itemchanged(object sender, EventArgs e)
+        // TJB RD7_0042 Jan-2010: New
+        //     Use a change in column as the trigger for dw_generic_ue_itemchanged
+        //     If the prev_columnName is empty, we've just started and don't need 
+        //     do the itemchanged procedure.
+
+        public virtual void dw_generic_itemfocuschanged(object sender, EventArgs e)
+        {
+            // TJB The local variables are there to make it easier to see what's happening
+            //     when debugging.  The variable 't' is needed to make the prev_prev_column 
+            //     and prev_column's visible.
+            // string this_column;
+            // string prev_prev_column, prev_column, t;
+            // prev_prev_column = prev_columnName;
+            // prev_column = this_columnName;
+            // this_column = dw_address.GetColumnName();
+            // t = prev_prev_column; t = prev_column; t = this_column;
+            prev_column = this_column;
+            this_column = dw_generic.GetColumnName();
+            if (!(prev_column == "") && !(prev_column == this_column) )
+                dw_generic_ue_itemchanged(sender, e, prev_column);
+        }
+
+        // TJB RD7_0042 Jan-2010: Changed
+        // Changed name to ue_itemchanged
+        // Changed parameters: added name of column that may have just changed
+        public virtual void dw_generic_ue_itemchanged(object sender, EventArgs e, string column)
         {
             //  base.itemchanged();
             dw_generic.URdsDw_Itemchanged(sender, e);
@@ -1314,51 +1210,55 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Add dropdown list of valid titles
             //  If user enters an invalid title, issue a message
             //  advising them to request the new title be added
-            //  to the list  ( and disallow the new title).
+            //  to the list (and disallow the new title).
             int ll_row;
-            int? ll_title_id;
-            string ls_title;
+            int? ll_titleId;
+            string ls_CustTitle, dddw_CustTitle;
             string ls_null;
-            URdsDw dwc_title = new URdsDw();
-
+            
             dw_generic.AcceptText();
             ll_row = dw_generic.GetRow();
-            string column = dw_generic.GetColumnName();
-
             CustomerDetails2 currentRecord = dw_generic.DataObject.Current as CustomerDetails2;
 
-            string data = string.Empty;//!dw_generic.GetControlByName(column).Text;
             if (column == "cust_title")
             {
-                data = currentRecord.CustTitle;
+                // TJB RD7_0042 Jan-2010: Changed
+                // Changed handling of customer title to use a list for the dropdown
+                // separate from the data record.
+                // Lots of commented-out code removed for clarity.
 
-                dwc_title.DataObject = (DDddwCustTitle)dw_generic.GetChild("cust_title");
-                //ll_row = dwc_title.GetRow();
-                //ll_title_id = dwc_title.GetItem<DddwCustTitle>(ll_row).CustomerTitleId;
-                //ls_title = dwc_title.GetItem<DddwCustTitle>(ll_row).CustomerTitle;
-                ls_title = dw_generic.GetItem<CustomerDetails2>(dw_generic.GetRow()).CustTitle;
-                ll_row = dwc_title.FindWithStartRow(new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("customer_title", ls_title) }, false, 0, dwc_title.RowCount);
+                // ls_CustTitle is the data record value while dddw_CustTitle is the dropdown value
+                ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
+                dddw_CustTitle = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text;
+                dddw_CustTitle = (dddw_CustTitle == null) ? "" : dddw_CustTitle.Trim();
 
-                if (ll_row >= 0)
+                // Validate the entered customer title (the user can type in anything
+                // and not select one of the dddw values).  If it is invalid, leave it 
+                // as is; attempting to save with an invalid customer title will fail.
+                if (!uf_validate_cust_title(dddw_CustTitle))
                 {
-                    ll_title_id = dwc_title.GetItem<DddwCustTitle>(ll_row).CustomerTitleId;
+                   //  The title is wrong
+                   MessageBox.Show("The only valid titles are those in the dropdown list. \n" 
+                                    + "If you wish to add a new title to the list, please \n" 
+                                    + "contact the Rural Delivery System support person at \n" 
+                                    + "Head Office."
+                                  , "WARNING"
+                                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                   //((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = ls_CustTitle;
+                   return; //? return 2;
                 }
-
-                if (!(ls_title == null && data == null || data == ls_title || (data == "" && ls_title == null)))
+                // If the customer's title has changed (in the dddw), change it in the record
+                if (!(ls_CustTitle == dddw_CustTitle))
                 {
-                    //  The title's wrong
-                    MessageBox.Show("The only valid titles are those in the dropdown list. \r\n" + "If you wish to add a new title to the list, please \r\n" + "contact the Rural Delivery System support person at \r\n" + "Head Office.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ib_title_invalid = true;
-                    return; //? return 2;
-                }
-                else
-                {
-                    //  The title's valid
-                    ib_title_invalid = false;
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle = dddw_CustTitle;
+                    //((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = dddw_CustTitle;
+                    ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
                 }
             }
-            else
+            else  // Its a non-customer title column that has changed
             {
+                // Validate the column
                 dw_generic_ue_validate(ll_row, column);
             }
         }
@@ -1366,52 +1266,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int dw_generic_pfc_validation()
         {
             DateTime? ld_cust_date_commenced;
-            int ll_row;
             string ls_cust_surname_company;
-            // String ls_cust_initials
-            // String ls_title
-            ll_row = dw_generic.GetRow();
-            // If il_customer = 0 Then
-            // 	il_customer = gnv_app.of_get_nextsequence ( 'customer')
-            // 	idw_customer.setitem ( ll_row,"cust_id", il_customer)
-            // End if
-            // 
+            int ll_row = dw_generic.GetRow();
+
             dw_generic.AcceptText();
-            // //Set Title
-            // IF il_customer > 0 THEN
-            // 	ls_title = "Customer:  ( " + il_customer.ToString() + ") " + idw_customer.GetItemString ( 1, "cust_surname_company")
-            // 	If Not gnv_App.of_IsEmpty ( idw_customer.GetItemString ( 1, "cust_initials")) Then
-            // 		ls_title = ls_title + ", " + idw_customer.GetItemString ( 1, "cust_initials")
-            // 	End If
-            // 
-            // 	w_customer.title = ls_title	
-            // END IF
+
             // Validate Data
             ld_cust_date_commenced = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced;
-            if (ld_cust_date_commenced == null || ld_cust_date_commenced == DateTime.MinValue/*System.Convert.ToDateTime("00/00/0000")*/)
+            if (ld_cust_date_commenced == null 
+                || ld_cust_date_commenced == DateTime.MinValue  /*System.Convert.ToDateTime("00/00/0000")*/)
             {
-                MessageBox.Show("A commencment date must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A commencment date must be specified."
+                               , "Validation Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             ls_cust_surname_company = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
             if (ls_cust_surname_company == null || ls_cust_surname_company == "")
             {
-                MessageBox.Show("A Surname / Company must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A Surname/Company must be specified."
+                               , "Validation Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dw_generic.GetControlByName("cust_surname_company").Focus();
-                //? dw_generic.SelectText(1, 500);
                 dw_generic.Focus();
                 return -(1);
             }
-            // ls_cust_initials = This.GetItemString ( ll_row, 'cust_initials')
-            // 
-            // If Isnull ( ls_cust_initials) Or ls_cust_initials = "" Then
-            // 	MessageBox ( 'Validation Error', 'An Initials / First Name must be specified.')
-            // 	this.SetColumn ( 'cust_initials')
-            // 	this.SelectText ( 1, 500)
-            // 	this.Post SetFocus ( )
-            // 	Return -1
-            // End If
-            // 
             return 1;
         }
 
@@ -1420,7 +1299,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_row;
             if (il_customer == null || il_customer <= 0)
             {
-                ll_row = idw_customer.GetRow();
+                ll_row = dw_generic.GetRow();
                 il_customer = StaticFunctions.GetNextSequence("customer");
                 dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
             }
@@ -1429,21 +1308,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_generic_pfc_postupdate()
         {
-            string ls_title;
-            if (true/*? ancestorreturnvalue == SUCCESS*/)
+            string ls_form_title;
+            if (true)   /*? ancestorreturnvalue == SUCCESS*/
             {
-                // Set Title
+                // Set Form Title
                 if (il_customer > 0)
                 {
-                    ls_title = "Customer: ( " + il_customer.ToString() + ") " + idw_customer.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(idw_customer.GetItem<CustomerDetails2>(0).CustInitials)))
+                    ls_form_title = "Customer: (" + il_customer.ToString() + ") " 
+                             + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
                     {
-                        ls_title = ls_title + ", " + idw_customer.GetItem<CustomerDetails2>(0).CustInitials;
+                        ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
                     }
-                    this.Text = ls_title;
+                    this.Text = ls_form_title;
                 }
             }
-            return; //? return ancestorreturnvalue;
+            return;
         }
 
         public virtual int dw_generic_pfc_preinsertrow()
@@ -1451,7 +1331,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2  Jan 2006
             if ((bool)ib_npad_enabled && ib_unnumbered)
             {
-                MessageBox.Show("Inserting new customers is not allowed for unnumbered addresses.\r\n" + "Please use the NPAD address creation function.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Inserting new customers is not allowed for unnumbered addresses.\n" 
+                                 + "Please use the NPAD address creation function."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             return 1;
@@ -1462,7 +1345,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2  Jan 2006
             if ((bool)ib_npad_enabled && ib_unnumbered)
             {
-                MessageBox.Show("Deleting customers is not allowed for unnumbered addresses \r\n" + "using this screen.  Please use the \"Move Out\" function on \r\n" + "the address maintenance screen.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Deleting customers is not allowed for unnumbered addresses \n" 
+                                   + "using this screen.  Please use the \"Move Out\" function on \n" 
+                                   + "the address maintenance screen."
+                                , "Warning"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             return 1;
@@ -1482,7 +1369,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2  Jan 2006
             if (!StaticFunctions.IsDirty(dw_recipients2))
             {
-                MessageBox.Show("No changes to save", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No changes to save"
+                               , "Information"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             ll_rowcount = dw_recipients2.RowCount;
@@ -1513,20 +1402,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ls_cust_initials = dw_recipients2.GetItem<Recipient>(ll_row).CustInitials;
                 ls_cust_company = dw_recipients2.GetItem<Recipient>(ll_row).CustSurnameCompany;
-                // 	If IsNull ( ls_cust_initials) Or ls_cust_initials = "" Then
-                // 		MessageBox ( 'Validation Error', 'A recipient name must be specified.')
-                // 		Return -1
-                // 	End If
                 if (ls_cust_company == null || ls_cust_company == "")
                 {
                     if (ls_cust_initials == null)
                     {
-                        //  this is blank row, delete it
+                        // if this is blank row, delete it
                         dw_recipients2.RowsDiscard(ll_row, ll_row);
                     }
                     else
                     {
-                        MessageBox.Show("A recipient surname must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("A recipient surname must be specified."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -1;
                     }
                 }
@@ -1554,7 +1441,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                                                                            //!keep the value ther if other row is inserted
             if ((bool)ib_npad_enabled && ib_unnumbered && il_contract_no >= 5000 && il_contract_no <= 5999)
             {
-                MessageBox.Show("New recipients may not be created for unnumbered addresses \r\n" + "using this screen.  Please use NPAD to create new recipients. \r\n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("New recipients may not be created for unnumbered addresses \n" 
+                                  + "using this screen.  Please use NPAD to create new recipients. \n"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             return 1;
@@ -1565,7 +1455,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2  Jan 2006
             if ((bool)ib_npad_enabled && ib_unnumbered && il_contract_no >= 5000 && il_contract_no <= 5999)
             {
-                MessageBox.Show("Recipients may not be deleted for unnumbered addresses \r\n" + "using this screen.  Please use the \"Move Out\" function \r\n" + "on the address maintenance screen.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Recipients may not be deleted for unnumbered addresses \n" 
+                                   + "using this screen.  Please use the \"Move Out\" function \n" 
+                                   + "on the address maintenance screen."
+                                , "Warning"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
             return 1;
@@ -1619,7 +1513,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //    ll_found = ll_row;
                     if (ll_found >= 0)
                     {
-                        MessageBox.Show("The occupation you have selected already exsists, Please select another.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("The occupation you have selected already exsists. Please select another."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
                 }
@@ -1680,7 +1576,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    // ll_found = dw_interests.Find( "interest_id = " + ll_interest_id.ToString() + " and getrow ( )<>" + ll_row).ToString().Length);
+                    // ll_found = dw_interests.Find("interest_id = " + ll_interest_id.ToString() + " and getrow()<>" + ll_row).ToString().Length);
                     ll_found = dw_interests.Find("interest_id", ll_interest_id);
                     if (ll_found == ll_row)
                         ll_found = -1;
@@ -1689,7 +1585,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //    ll_found = ll_row;
                     if (ll_found >= 0)
                     {
-                        MessageBox.Show("The interest you have selected already exsists, Please select another.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("The interest you have selected already exsists. Please select another."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
                 }
@@ -1719,22 +1617,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             DialogResult ll_ret;
             int ll_rc;
-            //? NCstLuw lnv_luw;
+
             //  TJB SR4559  14-Mar-2005
             //  Added calls to uf_flag_customer when user saves changes
-            //int oldindex = 0; //?temp value
             if (ib_Opening)
             {
-                return; //? return 0;
+                return;
             }
-            // Check for new customer
 
+            // Check for new customer
             if (oldindex == 0)
             {
                 //?  idw_customer.AcceptText();
-                if (StaticFunctions.IsDirty(idw_customer.DataObject))
+                if (StaticFunctions.IsDirty(dw_generic.DataObject))
                 {
-                    ll_ret = MessageBox.Show("Do you want to save changes to the database?", "Update Customer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    ll_ret = MessageBox.Show("Do you want to save changes to the database?"
+                                            , "Update Customer"
+                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (ll_ret == DialogResult.Yes)
                     {
                         ll_rc = uf_save_cust();
@@ -1764,7 +1663,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //?idw_recipients.AcceptText();
                 if (StaticFunctions.IsDirty(idw_recipients))
                 {
-                    ll_ret = MessageBox.Show("Do you want to save changes to the database?", "Update Recipients", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    ll_ret = MessageBox.Show("Do you want to save changes to the database?"
+                                            , "Update Recipients"
+                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (ll_ret == DialogResult.Yes)
                     {
                         uf_flag_customer();
@@ -1776,7 +1677,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //? lnv_luw = null;
                         if (ll_ret < 0)
                         {
-                            MessageBox.Show("Error saving changes.  \r\n", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Error saving changes.  \n"
+                                           , "ERROR"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             e.Cancel = true;
                             return;
                             // return 1;
@@ -1784,14 +1687,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ll_ret = (DialogResult)uf_addcam_recipients();
                         if (ll_ret < 0)
                         {
-                            MessageBox.Show("Error saving recipients customer_address_moves records. \r\n" + "Error code = " + ll_ret, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Error saving recipients customer_address_moves records. \n" 
+                                             + "Error code = " + ll_ret
+                                           , "Warning"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                         ib_recipients_modified = true;
                         //? return 0;
                     }
                     else
                     {
-                        idw_recipients.Retrieve(new object[] { il_customer });
+                        idw_recipients.Retrieve(new object[]{il_customer });
                     }
                 }
             }
@@ -1801,7 +1707,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //?idw_occupations.AcceptText();
                 if (StaticFunctions.IsDirty(idw_occupations))
                 {
-                    ll_ret = MessageBox.Show("Do you want to save changes to the database?", "Update Occupations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    ll_ret = MessageBox.Show("Do you want to save changes to the database?"
+                                            , "Update Occupations"
+                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (ll_ret == DialogResult.Yes)
                     {
                         uf_flag_customer();
@@ -1812,14 +1720,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //? lnv_luw = null;
                         if (ll_ret < 0)
                         {
-                            MessageBox.Show("Error saving changes.  \r\n", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Error saving changes.  \n"
+                                           , "ERROR"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             e.Cancel = true;
                             return; // return 1;
                         }
                     }
                     else
                     {
-                        idw_occupations.Retrieve(new object[] { il_customer });
+                        idw_occupations.Retrieve(new object[]{il_customer });
                     }
                 }
             }
@@ -1829,7 +1739,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //?idw_interests.AcceptText();
                 if (StaticFunctions.IsDirty(idw_interests))
                 {
-                    ll_ret = MessageBox.Show("Do you want to save changes to the database?", "Update Interests", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    ll_ret = MessageBox.Show("Do you want to save changes to the database?"
+                                            , "Update Interests"
+                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (ll_ret == DialogResult.Yes)
                     {
                         uf_flag_customer();
@@ -1841,20 +1753,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //? lnv_luw = null;
                         if (ll_ret < 0)
                         {
-                            MessageBox.Show("Error saving changes.  \r\n", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show("Error saving changes.  \n"
+                                           , "ERROR"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             e.Cancel = true;
                             return; //? return 1;
                         }
                     }
                     else
                     {
-                        idw_interests.Retrieve(new object[] { il_customer });
+                        idw_interests.Retrieve(new object[]{il_customer });
                     }
                 }
             }
             oldindex = tab_1.SelectedIndex;
-
-            //? return 0;
         }
 
         //added by jlwang
@@ -1862,15 +1774,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             string str = tab_1.TabPages[tab_1.SelectedIndex].Text.ToLower().Trim();
 
-            if (str == "recipients")//(tab_1.SelectedIndex == 1)
+            if (str == "recipients")         //(tab_1.SelectedIndex == 1)
             {
                 dw_recipients2.URdsDw_GetFocus(null, null);
             }
-            if (str == "occupations")//(tab_1.SelectedIndex == 2)
+            if (str == "occupations")        //(tab_1.SelectedIndex == 2)
             {
                 idw_occupations.URdsDw_GetFocus(null, null);
             }
-            if (str == "interests")//(tab_1.SelectedIndex == 3)
+            if (str == "interests")          //(tab_1.SelectedIndex == 3)
             {
                 dw_interests.URdsDw_GetFocus(null, null);
             }
@@ -1919,7 +1831,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ds_dwo_name = dw_recipients2.GetColumnName();
             if ((bool)ib_npad_enabled && ib_unnumbered && il_rdcontractselect == 1)
             {
-                MessageBox.Show("Changing recipient details unnumbered addresses is not \r\n" + "allowed using this screen.  Please use the \"Open\" \r\n" + "function on the address maintenance screen.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Changing recipient details unnumbered addresses is not \n" 
+                                 + "allowed using this screen.  Please use the \"Open\" \n" 
+                                 + "function on the address maintenance screen."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 /*? if (dw_recipients2.CanUndo())
                 {
                     dw_recipients2.Undo();
@@ -1943,25 +1859,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             bool lb_name_changed;
             string ls_surname;
             string ls_initials;
-            string ls_title;
+            string ls_CustTitle;
             NCriteria lnv_criteria;
             NRdsMsg lnv_msg;
             //? NCstLuw lnv_luw;
             //  TJB SR4559  14-Mar-2005
             //  Check for changes to any of the tab pages.
-            idw_customer.AcceptText();
+            dw_generic.AcceptText();
             idw_recipients.AcceptText();
             idw_occupations.AcceptText();
             idw_interests.AcceptText();
 
             //! GetNextModified reports rows with the status NewModified! and DataModified!.
-            ll_customers_modified = idw_customer.GetNextModified(-1);
+            ll_customers_modified = dw_generic.GetNextModified(-1);
             ll_recipients_modified = idw_recipients.GetNextModified(-1);
             ll_occupations_modified = idw_occupations.GetNextModified(-1);
             ll_interests_modified = idw_interests.GetNextModified(-1);
-            /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & 'll_customers_modified    = '+string ( ll_customers_modified)  +'\r\n'  & +'ll_recipients_modified  = '+string ( ll_recipients_modified) +'\r\n'  & +'ll_occupations_modified = '+string ( ll_occupations_modified)+'\r\n'  & +'ll_interests_modified   = '+string ( ll_interests_modified)  +'\r\n'  & ,  'w_customer.cb_save.clicked' )
-            // --------------------------------------------------------------------  */
+
+            // TJB  RD7_0042  Jan-2010: Added
+            //    Changes to the cust_title don't change the modified state of dw_generic
+            //    if the save button is clicked without tabbing out of the cust title
+            //    field.  Here we check to see if the cust_title has been changed.
+            //if (ll_customers_modified < 0)
+            {
+                //    Compare the data record value (ls_CustTitle) with the dddw value
+                //    If different, save the dddw value as the data record value
+                //    ... it will be verified below
+                ll_row = dw_generic.GetRow();
+                ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
+                string dddw_CustTitle = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text;
+                dddw_CustTitle = (dddw_CustTitle == null) ? "" : dddw_CustTitle.Trim();
+                if (!(ls_CustTitle == dddw_CustTitle))
+                {
+                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle = dddw_CustTitle;
+                    //((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = dddw_CustTitle;
+                    ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
+                    // Flag that the customer title has been changed
+                    ll_customers_modified = ll_row;
+                }
+            }
             //  TJB  NPAD2  April 2006  pre-GoLive
             //  Changed to process the appropriate changed tab
             //  NOTE:  only one of the tabs will be modified when cb_save is pressed.
@@ -1976,8 +1913,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_rc = uf_save_cust();
                 if (ll_rc < 0)
                 {
-                    //   ( the user was told) or one of the updates
-                    //  failed.  Don't exit.
+                    //  (the user was told) or one of the updates failed.  
+                    //  Don't exit.
                     return;
                 }
             }
@@ -2000,7 +1937,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_ret = uf_addcam_recipients();
                 if (ll_ret < 0)
                 {
-                    MessageBox.Show("Error saving recipients customer_address_moves records. \r\n" + "Error code = " + ll_ret, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Error saving recipients customer_address_moves records. \n" 
+                                     + "Error code = " + ll_ret
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             if (ll_occupations_modified >= 0)
@@ -2033,7 +1973,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_temp = ll_recipients_modified + ll_occupations_modified + ll_interests_modified;
             if (ll_rc < 0 && ll_temp > 1)
             {
-                MessageBox.Show("Error saving changes.  \r\n", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Error saving changes.  \n"
+                               , "ERROR"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return; //? return 1;
             }
             // CloseWithReturn ( Parent, il_customer)

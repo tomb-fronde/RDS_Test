@@ -59,246 +59,248 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_1 = new System.Windows.Forms.TabControl();
+            this.tabpage_1 = new System.Windows.Forms.TabPage();
+            this.dw_generic = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_1 = new System.Windows.Forms.GroupBox();
+            this.tabpage_2 = new System.Windows.Forms.TabPage();
+            this.dw_recipients2 = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_recipients = new System.Windows.Forms.GroupBox();
+            this.tabpage_4 = new System.Windows.Forms.TabPage();
+            this.dw_occupations = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_occupations = new System.Windows.Forms.GroupBox();
+            this.tabpage_5 = new System.Windows.Forms.TabPage();
+            this.dw_interests = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_interests = new System.Windows.Forms.GroupBox();
+            this.st_1 = new System.Windows.Forms.Label();
+            this.st_label = new NZPostOffice.Shared.VisualComponents.USt();
+            this.cb_save = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_close = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.tab_1.SuspendLayout();
+            this.tabpage_1.SuspendLayout();
+            this.tabpage_2.SuspendLayout();
+            this.tabpage_4.SuspendLayout();
+            this.tabpage_5.SuspendLayout();
             this.SuspendLayout();
-            this.tab_1 = new TabControl();
-            this.st_1 = new Label();
-            this.st_label = new USt();
-            this.cb_save = new UCb();
-            this.cb_close = new UCb();
-            Controls.Add(tab_1);
-            Controls.Add(st_1);
-            Controls.Add(cb_save);
-            Controls.Add(cb_close);
-            Controls.Add(st_label);
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Text = "Customer";
-            this.Size = new System.Drawing.Size(433, 380);
-            this.ControlBox = false;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            //!            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            //!            this.FormClosing -= new FormClosingEventHandler(FormBase_FormClosing);
-            //!            this.FormClosed -= new FormClosedEventHandler(this.FormBase_FormClosed);
-         
             // 
             // tab_1
             // 
-            // Gegerated from create event for tab_1
-            this.tabpage_1 = new TabPage();
-            this.tabpage_2 = new TabPage();
-            this.tabpage_4 = new TabPage();
-            this.tabpage_5 = new TabPage();
-            tab_1.Controls.Add(tabpage_1);
-            tab_1.Controls.Add(tabpage_2);
-            tab_1.Controls.Add(tabpage_4);
-            tab_1.Controls.Add(tabpage_5);
-            tab_1.SelectedIndex = 0;
-            tab_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_1.TabIndex = 1;
-            tab_1.Height = 318;
-            tab_1.Width = 415;
-            tab_1.Top = 3;
-            tab_1.Left = 5;
-            tab_1.Selecting += new TabControlCancelEventHandler(tab1_selectionchanging);
-            tab_1.SelectedIndexChanged += new EventHandler(tab_1_SelectedIndexChanged);
+            this.tab_1.Controls.Add(this.tabpage_1);
+            this.tab_1.Controls.Add(this.tabpage_2);
+            this.tab_1.Controls.Add(this.tabpage_4);
+            this.tab_1.Controls.Add(this.tabpage_5);
+            this.tab_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_1.Location = new System.Drawing.Point(5, 3);
+            this.tab_1.Name = "tab_1";
+            this.tab_1.SelectedIndex = 0;
+            this.tab_1.Size = new System.Drawing.Size(415, 318);
+            this.tab_1.TabIndex = 1;
+            this.tab_1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tab1_selectionchanging);
+            this.tab_1.SelectedIndexChanged += new System.EventHandler(this.tab_1_SelectedIndexChanged);
             // 
             // tabpage_1
             // 
-            // Gegerated from create event for tabpage_1
-            this.gb_1 = new GroupBox();
-            dw_generic = new URdsDw();
-            //!            dw_generic.DataObject = new DCustomerDetails2();
-            tabpage_1.Controls.Add(dw_generic);
-            tabpage_1.Controls.Add(gb_1);
-            tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_1.Text = "Customer";
-            tabpage_1.Height = 289;
-            tabpage_1.Width = 407;
-            tabpage_1.Top = 25;
-            tabpage_1.Left = 3;
-            tabpage_1.Name = tabpage_1.Text;//
-            tabpage_1.Tag = "ComponentName=Customer;";
-          
-            // 
-            // gb_1
-            // 
-            gb_1.Text = "Customer Details";
-            gb_1.BackColor = System.Drawing.SystemColors.Control;
-            gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_1.TabIndex = 2;
-            gb_1.Location = new System.Drawing.Point(8, 9);
-            gb_1.Size = new System.Drawing.Size(389, 270);
+            this.tabpage_1.Controls.Add(this.dw_generic);
+            this.tabpage_1.Controls.Add(this.gb_1);
+            this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_1.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_1.Name = this.tabpage_1.Text;
+            this.tabpage_1.Size = new System.Drawing.Size(407, 292);
+            this.tabpage_1.TabIndex = 0;
+            this.tabpage_1.Tag = "ComponentName=Customer;";
+            this.tabpage_1.Text = "Customer";
             // 
             // dw_generic
             // 
-            //!            dw_generic.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_generic.VerticalScroll.Visible = false;
-
-            dw_generic.TabIndex = 0;
-            dw_generic.Size = new System.Drawing.Size(368, 240);
-            dw_generic.Location = new System.Drawing.Point(14, 28);
-            //!            dw_generic.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_constructor);
-            dw_generic.ItemChanged += new EventHandler(dw_generic_itemchanged);
-            //!            dw_generic.PfcPreDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_generic_pfc_predeleterow);
-            //!            dw_generic.PfcPreInsertRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_generic_pfc_preinsertrow);
-            //!            dw_generic.PfcValidation += new UserEventDelegate1(dw_generic_pfc_validation);
-            //!            dw_generic.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_pfc_postupdate);
-            //!            dw_generic.PfcPreUpdate += new UserEventDelegate1(dw_generic_pfc_preupdate);
+            this.dw_generic.DataObject = null;
+            this.dw_generic.FireConstructor = false;
+            this.dw_generic.Location = new System.Drawing.Point(14, 28);
+            this.dw_generic.Name = "dw_generic";
+            this.dw_generic.Size = new System.Drawing.Size(368, 240);
+            this.dw_generic.TabIndex = 0;
+            // 
+            // gb_1
+            // 
+            this.gb_1.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_1.Location = new System.Drawing.Point(8, 9);
+            this.gb_1.Name = "gb_1";
+            this.gb_1.Size = new System.Drawing.Size(389, 270);
+            this.gb_1.TabIndex = 2;
+            this.gb_1.TabStop = false;
+            this.gb_1.Text = "Customer Details";
             // 
             // tabpage_2
             // 
-            // Gegerated from create event for tabpage_2
-            this.dw_recipients2 = new URdsDw();
-            //!            this.dw_recipients2.DataObject = new DRecipient();
-            this.gb_recipients = new GroupBox();
-            tabpage_2.Controls.Add(dw_recipients2);
-            tabpage_2.Controls.Add(gb_recipients);
-            tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_2.Text = "Recipients";
-            tabpage_2.Size = new System.Drawing.Size(407, 289);
-            tabpage_2.Top = 25;
-            tabpage_2.Left = 3;
-            tabpage_2.Name = tabpage_2.Text;//
-            tabpage_2.Tag = "ComponentName=Recipients;";
+            this.tabpage_2.Controls.Add(this.dw_recipients2);
+            this.tabpage_2.Controls.Add(this.gb_recipients);
+            this.tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_2.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_2.Name = this.tabpage_2.Text;
+            this.tabpage_2.Size = new System.Drawing.Size(407, 292);
+            this.tabpage_2.TabIndex = 1;
+            this.tabpage_2.Tag = "ComponentName=Recipients;";
+            this.tabpage_2.Text = "Recipients";
             // 
             // dw_recipients2
             // 
-            //!            dw_recipients2.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_recipients2.TabIndex = 0;
-            dw_recipients2.Location = new System.Drawing.Point(10, 24);
-            dw_recipients2.Size = new System.Drawing.Size(380, 243);
-            //!            dw_recipients2.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_recipients2_constructor);
-            dw_recipients2.ItemChanged += new EventHandler(dw_recipients2_itemchanged);
-            //!            dw_recipients2.PfcPreDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_recipients2_pfc_predeleterow);
-            //!            dw_recipients2.PfcPreUpdate += new UserEventDelegate1(dw_recipients2_pfc_preupdate);
-            //!            dw_recipients2.PfcValidation += new UserEventDelegate1(dw_recipients2_pfc_validation);
+            this.dw_recipients2.DataObject = null;
+            this.dw_recipients2.FireConstructor = false;
+            this.dw_recipients2.Location = new System.Drawing.Point(10, 24);
+            this.dw_recipients2.Name = "dw_recipients2";
+            this.dw_recipients2.Size = new System.Drawing.Size(380, 243);
+            this.dw_recipients2.TabIndex = 0;
+            this.dw_recipients2.ItemChanged += new System.EventHandler(this.dw_recipients2_itemchanged);
             // 
             // gb_recipients
             // 
-            gb_recipients.Text = "Recipients";
-            gb_recipients.BackColor = System.Drawing.SystemColors.Control;
-            gb_recipients.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_recipients.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_recipients.TabIndex = 1;
-            gb_recipients.Location = new System.Drawing.Point(3, 6);
-            gb_recipients.Size = new System.Drawing.Size(394, 268);
+            this.gb_recipients.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_recipients.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_recipients.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_recipients.Location = new System.Drawing.Point(3, 6);
+            this.gb_recipients.Name = "gb_recipients";
+            this.gb_recipients.Size = new System.Drawing.Size(394, 268);
+            this.gb_recipients.TabIndex = 1;
+            this.gb_recipients.TabStop = false;
+            this.gb_recipients.Text = "Recipients";
             // 
             // tabpage_4
             // 
-            // Gegerated from create event for tabpage_4
-            dw_occupations = new URdsDw();
-            //!            dw_occupations.DataObject = new DCustomerOccupation();
-            gb_occupations = new GroupBox();
-            tabpage_4.Controls.Add(dw_occupations);
-            tabpage_4.Controls.Add(gb_occupations);
-            tabpage_4.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_4.Text = "Occupations";
-            tabpage_4.BackColor = System.Drawing.Color.FromArgb(4, 235, 235, 233);
-            tabpage_4.Size = new System.Drawing.Size(407, 289);
-            tabpage_4.Top = 25;
-            tabpage_4.Left = 3;
-            tabpage_4.Name = tabpage_4.Text;//
-            tabpage_4.Tag = "ComponentName=Occupations;";
-
+            this.tabpage_4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(233)))));
+            this.tabpage_4.Controls.Add(this.dw_occupations);
+            this.tabpage_4.Controls.Add(this.gb_occupations);
+            this.tabpage_4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_4.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_4.Name = this.tabpage_4.Text;
+            this.tabpage_4.Size = new System.Drawing.Size(407, 292);
+            this.tabpage_4.TabIndex = 2;
+            this.tabpage_4.Tag = "ComponentName=Occupations;";
+            this.tabpage_4.Text = "Occupations";
             // 
             // dw_occupations
             // 
-            //!            dw_occupations.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_occupations.TabIndex = 0;
-            dw_occupations.Location = new System.Drawing.Point(10, 24);
-            dw_occupations.Size = new System.Drawing.Size(382, 246);
-            //!            dw_occupations.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_occupations_constructor);
-            //!            dw_occupations.PfcPreUpdate += new UserEventDelegate1(dw_occupations_pfc_preupdate);
-            //!            dw_occupations.PfcValidation += new UserEventDelegate1(dw_occupations_pfc_validation);
-
+            this.dw_occupations.DataObject = null;
+            this.dw_occupations.FireConstructor = false;
+            this.dw_occupations.Location = new System.Drawing.Point(10, 24);
+            this.dw_occupations.Name = "dw_occupations";
+            this.dw_occupations.Size = new System.Drawing.Size(382, 246);
+            this.dw_occupations.TabIndex = 0;
             // 
             // gb_occupations
             // 
-            gb_occupations.Text = "Occupations";
-            gb_occupations.BackColor = System.Drawing.SystemColors.Control;
-            gb_occupations.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_occupations.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_occupations.TabIndex = 1;
-            gb_occupations.Location = new System.Drawing.Point(3, 6);
-            gb_occupations.Size = new System.Drawing.Size(394, 268);
-
+            this.gb_occupations.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_occupations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_occupations.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_occupations.Location = new System.Drawing.Point(3, 6);
+            this.gb_occupations.Name = "gb_occupations";
+            this.gb_occupations.Size = new System.Drawing.Size(394, 268);
+            this.gb_occupations.TabIndex = 1;
+            this.gb_occupations.TabStop = false;
+            this.gb_occupations.Text = "Occupations";
             // 
             // tabpage_5
             // 
-            // Gegerated from create event for tabpage_5
-            dw_interests = new URdsDw();
-            //!            dw_interests.DataObject = new DCustomerInterest();
-            gb_interests = new GroupBox();
-            tabpage_5.Controls.Add(dw_interests);
-            tabpage_5.Controls.Add(gb_interests);
-            tabpage_5.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_5.Text = "Interests";
-            tabpage_5.BackColor = System.Drawing.Color.FromArgb(4, 235, 235, 233);
-            tabpage_5.Size = new System.Drawing.Size(407, 289);
-            tabpage_5.Top = 25;
-            tabpage_5.Left = 3;
-            tabpage_5.Name = tabpage_5.Text;//
-            tabpage_5.Tag = "ComponentName=Interests;";
-
+            this.tabpage_5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(233)))));
+            this.tabpage_5.Controls.Add(this.dw_interests);
+            this.tabpage_5.Controls.Add(this.gb_interests);
+            this.tabpage_5.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_5.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_5.Name = this.tabpage_5.Text;
+            this.tabpage_5.Size = new System.Drawing.Size(407, 292);
+            this.tabpage_5.TabIndex = 3;
+            this.tabpage_5.Tag = "ComponentName=Interests;";
+            this.tabpage_5.Text = "Interests";
             // 
             // dw_interests
             // 
-            //!            dw_interests.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_interests.TabIndex = 0;
-            dw_interests.Location = new System.Drawing.Point(10, 24);
-            dw_interests.Size = new System.Drawing.Size(382, 245);
-            //!            dw_interests.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_interests_constructor);
-            //!            dw_interests.PfcPreUpdate += new UserEventDelegate1(dw_interests_pfc_preupdate);
-            //!            dw_interests.PfcValidation += new UserEventDelegate1(dw_interests_pfc_validation);
+            this.dw_interests.DataObject = null;
+            this.dw_interests.FireConstructor = false;
+            this.dw_interests.Location = new System.Drawing.Point(10, 24);
+            this.dw_interests.Name = "dw_interests";
+            this.dw_interests.Size = new System.Drawing.Size(382, 245);
+            this.dw_interests.TabIndex = 0;
             // 
             // gb_interests
             // 
-            gb_interests.Text = "Interests";
-            gb_interests.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_interests.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_interests.TabIndex = 1;
-            gb_interests.Location = new System.Drawing.Point(3, 6);
-            gb_interests.Size = new System.Drawing.Size(394, 268);
+            this.gb_interests.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_interests.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_interests.Location = new System.Drawing.Point(3, 6);
+            this.gb_interests.Name = "gb_interests";
+            this.gb_interests.Size = new System.Drawing.Size(394, 268);
+            this.gb_interests.TabIndex = 1;
+            this.gb_interests.TabStop = false;
+            this.gb_interests.Text = "Interests";
             // 
             // st_1
             // 
-            st_1.TabStop = false;
-            st_1.Text = "w_customer";
-            st_1.BackColor = System.Drawing.SystemColors.Control;
-            st_1.ForeColor = System.Drawing.Color.Gray;
-            st_1.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            st_1.Location = new System.Drawing.Point(8, 337);
-            st_1.Size = new System.Drawing.Size(67, 19);
-            // 
-            // cb_save
-            // 
-            this.AcceptButton = cb_save;
-            cb_save.Text = "&Save";
-            cb_save.TabIndex = 2;
-            cb_save.Location = new System.Drawing.Point(256, 330);
-            cb_save.Click += new EventHandler(cb_save_clicked);
-            // 
-            // cb_close
-            // 
-            this.CancelButton = cb_close;
-            cb_close.Text = "&Close";
-            cb_close.TabIndex = 3;
-            cb_close.Location = new System.Drawing.Point(343, 330);
-            cb_close.Click += new EventHandler(cb_close_clicked);
+            this.st_1.BackColor = System.Drawing.SystemColors.Control;
+            this.st_1.Font = new System.Drawing.Font("Arial", 8F);
+            this.st_1.ForeColor = System.Drawing.Color.Gray;
+            this.st_1.Location = new System.Drawing.Point(8, 337);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(67, 19);
+            this.st_1.TabIndex = 2;
+            this.st_1.Text = "w_customer";
             // 
             // st_label
             // 
-            st_label.Text = "w_customer";
-            st_label.Visible = false;
-            st_label.Location = new System.Drawing.Point(10, 334);
-            st_label.Size = new System.Drawing.Size(70, 15);
-            this.ResumeLayout();
+            this.st_label.Location = new System.Drawing.Point(10, 334);
+            this.st_label.Name = "st_label";
+            this.st_label.Size = new System.Drawing.Size(70, 15);
+            this.st_label.TabIndex = 4;
+            this.st_label.Text = "w_customer";
+            this.st_label.Visible = false;
+            // 
+            // cb_save
+            // 
+            this.cb_save.Location = new System.Drawing.Point(256, 330);
+            this.cb_save.Name = "cb_save";
+            this.cb_save.Size = new System.Drawing.Size(75, 23);
+            this.cb_save.TabIndex = 2;
+            this.cb_save.Text = "&Save";
+            this.cb_save.Click += new System.EventHandler(this.cb_save_clicked);
+            // 
+            // cb_close
+            // 
+            this.cb_close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_close.Location = new System.Drawing.Point(343, 330);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(75, 23);
+            this.cb_close.TabIndex = 3;
+            this.cb_close.Text = "&Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
+            // 
+            // WCustomer
+            // 
+            this.AcceptButton = this.cb_save;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_close;
+            this.ClientSize = new System.Drawing.Size(425, 360);
+            this.ControlBox = false;
+            this.Controls.Add(this.tab_1);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.cb_save);
+            this.Controls.Add(this.cb_close);
+            this.Controls.Add(this.st_label);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WCustomer";
+            this.Text = "Customer";
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
+            this.Controls.SetChildIndex(this.cb_save, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.Controls.SetChildIndex(this.tab_1, 0);
+            this.tab_1.ResumeLayout(false);
+            this.tabpage_1.ResumeLayout(false);
+            this.tabpage_2.ResumeLayout(false);
+            this.tabpage_4.ResumeLayout(false);
+            this.tabpage_5.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
-
-
-
 
         /// <summary>
         /// Clean up any resources being used.
