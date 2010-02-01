@@ -1290,6 +1290,16 @@ namespace NZPostOffice.RDS.DataService
             return obj.dataObject; ;
         }
 
+        // TJB  RD7_CR001  Nov-2009: Added
+        /// <summary> 
+        /// select contract_no into @ll_contract from post_code where post_code = @as_postcode;
+        /// </summary>
+        public static int GetPostCodeContractNo(string as_postcode)
+        {
+            RDSDataService obj = Execute("_GetPostCodeContractNo", as_postcode);
+            return obj.intVal; ;
+        }
+
         /// <summary>
         /// SELECT vr_nominal_vehicle_value, vr_repairs_maintenance_rate, vr_tyre_tubes_rate,vr_vehicle_allowance_rate, 
         /// vr_licence_rate, vr_vehicle_rate_of_return_pct,vr_salvage_ratio, vr_ruc, 
@@ -3644,8 +3654,12 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT post_code, post_code_id FROM post_code pc, towncity tc " +
-                        "WHERE post_code =  ( SELECT max(pc.post_code) FROM post_code pc, towncity tc WHERE tc.tc_id = @al_tc_id AND pc.post_mail_town = tc.tc_name)";
+                    cm.CommandText = "SELECT post_code, post_code_id " 
+                                   +   "FROM post_code pc, towncity tc " 
+                                   +  "WHERE post_code = (SELECT max(pc.post_code) "
+                                   +                       "FROM post_code pc, towncity tc " 
+                                   +                      "WHERE tc.tc_id = @al_tc_id " 
+                                   +                        "AND pc.post_mail_town = tc.tc_name)";
                     pList.Add(cm, "al_tc_id", al_tc_id);
                     _PostCodeIdCodeList = new List<PostCodeIdCodeItem>();
                     try
@@ -3679,8 +3693,11 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code FROM post_code, towncity " +
-                        "WHERE post_mail_town = tc_name AND tc_id = @al_tcid AND rd_no = @ls_rdno";
+                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code " 
+                                   +   "FROM post_code, towncity " 
+                                   +  "WHERE post_mail_town = tc_name " 
+                                   +    "AND tc_id = @al_tcid " 
+                                   +    "AND rd_no = @ls_rdno";
                     pList.Add(cm, "al_tcid", al_tcid);
                     pList.Add(cm, "ls_rdno", ls_rdno);
                     _FirstPostCodeIdCodeList = new List<FirstPostCodeIdCodeItem>();
@@ -3715,8 +3732,11 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code FROM post_code pc, towncity tc " +
-                        "WHERE post_mail_town = tc_name AND tc_id = @al_tcid AND rd_no is null";
+                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code " 
+                                   +   "FROM post_code pc, towncity tc " 
+                                   +  "WHERE post_mail_town = tc_name "
+                                   +    "AND tc_id = @al_tcid "
+                                   +    "AND rd_no is null";
                     pList.Add(cm, "al_tcid", al_tcid);
                     _FirstPostCodeIdCodeList = new List<FirstPostCodeIdCodeItem>();
                     try
@@ -8442,10 +8462,11 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 cmb_id from cmb_address " +
-                        "where contract_no = @il_contract and " +
-                        "post_code_id = @ll_pcid and " +
-                        "cmb_box_no = @ls_box_no";
+                    cm.CommandText = "select top 1 cmb_id "
+                                   +   "from cmb_address "
+                                   +  "where contract_no = @il_contract "
+                                   +    "and post_code_id = @ll_pcid "
+                                   +    "and cmb_box_no = @ls_box_no";
 
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "ll_pcid", ll_pcid);
@@ -8480,10 +8501,12 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 cmb_id from cmb_address " +
-                        "where contract_no = @il_contract and " +
-                        "post_code_id = @ll_pcid and " +
-                        "cmb_box_no = @ls_box_no and not cmb_id   = @ll_cmb_id";
+                    cm.CommandText = "select top 1 cmb_id "
+                                   +   "from cmb_address " 
+                                   +  "where contract_no = @il_contract "
+                                   +    "and post_code_id = @ll_pcid "
+                                   +    "and cmb_box_no = @ls_box_no "
+                                   +    "and not cmb_id = @ll_cmb_id";
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "ll_pcid", ll_pcid);
                     pList.Add(cm, "ls_box_no", ls_box_no);
@@ -8518,8 +8541,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 adr_rd_no from address " 
-                                    + "where contract_no = @al_contract and post_code_id = @al_pcid";
+                    cm.CommandText = "select top 1 adr_rd_no "
+                                   +   "from address "
+                                   +  "where contract_no = @al_contract "
+                                   +    "and post_code_id = @al_pcid";
                     pList.Add(cm, "al_contract", al_contract);
                     pList.Add(cm, "al_pcid", al_pcid);
                     try
@@ -8745,7 +8770,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select post_code from post_code where post_code_id = @al_pcid;";
+                    cm.CommandText = "select post_code " 
+                                   +   "from post_code " 
+                                   +  "where post_code_id = @al_pcid;";
                     pList.Add(cm, "al_pcid", al_pcid);
                     try
                     {
@@ -8764,6 +8791,43 @@ namespace NZPostOffice.RDS.DataService
                     {
                     }
                     dataObject = sequence;
+                }
+            }
+        }
+
+        // TJB  RD7_CR001 Nov-2009:  Added
+        // Based on _GetPostCodePostCode
+        [ServerMethod]
+        private void _GetPostCodeContractNo(string as_postcode)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    //string sequence = null;
+                    int sequence = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select contract_no " 
+                                   +   "from post_code " 
+                                   +  "where post_code = @as_postcode;";
+                    pList.Add(cm, "as_postcode", as_postcode);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                //sequence = dr.GetString(0);
+                                sequence = dr.GetInt32(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                    //dataObject = sequence;
+                    intVal = sequence;
+                    ;
                 }
             }
         }
