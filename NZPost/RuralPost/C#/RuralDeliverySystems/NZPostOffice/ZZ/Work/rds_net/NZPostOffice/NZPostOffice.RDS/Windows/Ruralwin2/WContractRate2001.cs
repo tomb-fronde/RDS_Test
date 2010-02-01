@@ -78,41 +78,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_rc;
             int ll_row;
             string ls_heading;
-            //  TJB  SR4695  Jan-2007
-            //  Simplified through use of variables instead of fully-qualified names
-            //  Retrieve rates
-            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.Retrieve(gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.Retrieve ( gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
-            //  tab_override_rates.tabpage_other_rates.dw_other_rates.Retrieve(gnv_App.of_Get_Parameters().longparm, gnv_App.of_Get_Parameters().integerparm)
-            // 
-            //  //Insert a blank row if no rows were retrieved
-            //  If tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.RowCount = 0 Then
-            //  	tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.InsertRow(1)
-            //  	idw_vehiclerates.setitem(1, "vor_effective_date", today())
-            //  	 id_previous_effective_date = null
-            //  ELSE
-            //  	id_previous_effective_date = tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.GetItemDateTime(1,"vor_effective_date").Date
-            //  End If
-            // 
-            //  If tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.RowCount = 0 Then
-            //  	tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.InsertRow(1)
-            //  End If
-            // 
-            //  //If tab_override_rates.tabpage_other_rates.dw_other_rates.RowCount = 0 Then
-            //  //	tab_override_rates.tabpage_other_rates.dw_other_rates.InsertRow(1)
-            //  //End If
-            // 
-            //  // Make the heading of the datawindows = to the Contract_no, contract_seq_no and Contract name
-            //  tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
-            //  tab_override_rates.tabpage_non_vehicle_rates.dw_non_vehicle_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
-            //  //tab_override_rates.tabpage_other_rates.dw_other_rates.modify("st_renewal.text='" + gnv_App.of_Get_Parameters().stringparm + "'")
-            // 
             il_contract = StaticVariables.gnv_app.of_get_parameters().longparm;
             il_sequence = StaticVariables.gnv_app.of_get_parameters().integerparm;
 
-            /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show("Contract   "+string(il_contract)+"\n"+"Sequence   "+string(il_sequence,"w_contract_rate2001.pfc_postopen")
-            // --------------------------------------------------------------------  */
             // Retrieve rates
             idw_vehiclerates.Retrieve(new object[] { il_contract, il_sequence });
             idw_nonvehiclerates.Retrieve(new object[] { il_contract, il_sequence });
@@ -199,128 +167,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 this.Close();
             }
-            // n_frequency_adjustment	n_freq
-            // 
-            // date ld_effective_date, id_date_exists
-            // Decimal	ldc_benchmark
-            // Decimal	ldc_amount_to_pay
-            // LONG		ll_return
-            // integer	li_rc = -1
-            // Integer	li_rows = 0
-            // 
-            // idw_vehiclerates.AcceptText()
-            // ld_effective_date = idw_vehiclerates.GetItemDateTime(1,"vor_effective_date").Date
-            // 
-            // If idw_vehiclerates.Modifiedcount() > 0 Then
-            // 
-            // 	If il_inserted = 1 Then
-            // 
-            // 		// Check that the effective date entered is not already on the db
-            // 		// PBY 25/06/2002 SR#4414 Also make sure the effective date entered
-            // 		// is later than the previous effective date entered.
-            // 		IF (NOT IsNull(id_previous_effective_date)) AND (ld_effective_date <= id_previous_effective_date) THEN
-            // 			Messagebox("Invalid Date", &
-            //                     "The Effective Date you have selected must be later than " + String(id_previous_effective_date, 'dd/mm/yyyy') + "." &
-            //                     , StopSign!)
-            // 			RETURN
-            // 		END IF
-            // 
-            // 		select vor_effective_date
-            // 		  into :id_date_exists
-            // 		  from vehicle_override_rate
-            // 		 where contract_no = :il_contract
-            // 		   and contract_seq_number = :il_sequence
-            // 		   and vor_effective_date = :ld_effective_date;
-            // 		If id_date_exists <> date('1/01/1900') Then
-            // 			Messagebox("Invalid Date"
-            //                    ,"The Effective Date you have selected already exists, Please select another.",StopSign!)
-            // 			RETURN
-            // 		End If
-            // 	End if
-            // 
-            // 	//Save Changes
-            // 	ll_return = idw_vehiclerates.Update()
-            // 	IF ll_return <> SUCCESS THEN
-            // 		Rollback;
-            // 		Close(this)
-            // 		RETURN
-            // 	END IF
-            // 
-            // End If
-            // 
-            // If idw_nonvehiclerates.ModifiedCount() > 0 Then
-            // 	ll_return =	idw_nonvehiclerates.Update()
-            // 	IF ll_return <> SUCCESS THEN
-            // 		Rollback;
-            // 		Close(this)
-            // 		RETURN
-            // 	END IF
-            // End If
-            // 
-            // // PBY 12/06/2002 
-            // // SR#4401 Do not create any frequency adjustment if
-            // // the contract sequence is not the active contract sequence 
-            // //  ( ie, if modifing override rates for a pending contract,
-            // // no frequency adjustments should be created)
-            // SELECT count(*) INTO :li_rows
-            //   FROM contract
-            //  WHERE contract_no = :il_contract
-            //    AND con_active_sequence = :il_sequence
-            //  USING SQLCA;
-            // 
-            // if sqlca.sqlcode <> 0 then
-            // 	messagebox("Database Error", "Unable to determine the contract status.\n\n" + &
-            //                               "Error Text: " + SQLCA.sqlerrtext)
-            // 	Rollback;											
-            // 	Close ( THIS)
-            // 	RETURN
-            // end if
-            // 
-            // IF li_rows <= 0 THEN
-            // 	// This is not an active contract
-            // 	// do not craete any frequency adjustments
-            // 	COMMIT;
-            // 	Close(this)
-            // 	RETURN
-            // END IF
-            // 
-            // n_freq = CREATE n_frequency_adjustment
-            // 
-            // n_freq.of_set_contract(il_contract, il_sequence)
-            // n_freq.is_reason = 'New override rate entered. '
-            // n_freq.of_set_effective_date(ld_effective_date)
-            // 
-            // // Obtain the new benchmark
-            // SELECT	BenchmarkCalc2001(:il_contract, :il_sequence) 
-            // INTO		:ldc_benchmark 
-            // FROM		dummy
-            // USING	SQLCA;
-            // 
-            // if sqlca.sqlcode <> 0 then
-            // 	messagebox("Database Error", "Unable to calculate a new benchmark for the contract.\n\n" + &
-            // 	                             "Error Text: " + SQLCA.sqlerrtext)
-            // 	Rollback;											
-            // 	Close ( THIS)
-            // 	RETURN
-            // end if
-            // 
-            // ldc_amount_to_pay = ldc_benchmark - idc_original_benchmark
-            // 
-            // n_freq.idc_new_benchmark = ldc_benchmark
-            // n_freq.idc_amount_to_pay = ldc_amount_to_pay
-            // n_freq.idc_adjustment_amount = ldc_amount_to_pay
-            // 
-            // if ldc_benchmark > 0 then
-            // 	li_rc = n_freq.of_save()
-            // end if
-            // 
-            // IF li_rc > 0 THEN
-            // 	Commit;
-            // ELSE
-            // 	Rollback;
-            // END IF
-            // 
-            // Close ( THIS)
         }
 
         public override int pfc_preclose()
@@ -870,9 +716,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Added update of nvor_wage_hourly_rate from (new)
             //  nvor_processing_wage_rate 'just in case' the user
             //  has changed it (they're supposed to be identical)
-            int ll_rc;
+            int ll_rc, ll_row;
             int? ll_temp;
-            decimal? ldc_temp;
 
             idw_vehiclerates.AcceptText();
             idw_nonvehiclerates.AcceptText();
@@ -884,33 +729,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  about saving because the vehicle override window has been modified 
             //  with today's date as the 'new' effective date).
 
-            int i;
-            i = idw_vehiclerates.RowCount;
-            i = idw_nonvehiclerates.RowCount;
-            i = idw_otherrates.RowCount;
-            
+            ll_rc = 0;
             if (StaticFunctions.IsDirty(idw_nonvehiclerates))
             {
-                ll_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractNo;
+                ll_row = idw_nonvehiclerates.GetRow();
+                ll_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo;
                 if (ll_temp == null)
                 {
-                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractNo = il_contract;
-                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractSeqNumber = il_sequence;
+                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo = il_contract;
+                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
                 }
-                ldc_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
-                idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorWageHourlyRate = ldc_temp;
-                ldc_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorPublicLiabilityRate2;
+                // TJB  Release 7.1.1 fixup  Dec-2009
+                // The idw_vehiclerates.Save() creates the frequency adjustment record and
+                // must go last, otherwise any non-vehicle rate changes won't be reflected
+                // in the frequency adjustments.
+                ll_rc = idw_nonvehiclerates.Save();
             }
 
-            // ll_rc = this.pfc_save(); ===> TJB: in PB was "ll_rc = parent.pfc_save();"
-            ll_rc = 0;
             if (StaticFunctions.IsDirty(idw_vehiclerates))
             {
                 ll_rc = idw_vehiclerates.Save();
-            }
-            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
-            {
-                ll_rc = idw_nonvehiclerates.Save();
             }
             if (ll_rc >= 0)
             {
