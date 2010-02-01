@@ -216,24 +216,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             is_cust_perms = of_getpermissions("Customer");
             if (is_cust_perms == null)
                 is_cust_perms = "";
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_adrid;
-                string	ds_rdflag;
-                string	ds_addr_perms, ds_cust_perms;
-                ds_addr_perms = is_addr_perms;
-                if (is_addr_perms == null) ds_addr_perms = "null";
-                ds_cust_perms = is_cust_perms;
-                if (is_cust_perms == null) ds_cust_perms = "null";
-                ds_adrid  = il_adr_id.ToString();
-                if (il_adr_id == null)     ds_adrid  = "null";
-                ds_rdflag = ib_RDcontract.ToString();
-                if (ib_RDcontract == null) ds_rdflag = "null";
-                MessageBox.Show ("Adr ID         = "+ds_adrid +"\n"
-                                 +"ib_rdContract = "+ds_rdflag +"\n"
-                                 +"Address permissions  = <"+ds_addr_perms +">\n"
-                                 +"Customer permissions = <"+ds_cust_perms +">\n" 
-                                 ,"Windows.Ruralwin.w_maintain_address.pfc_preopen" );
-            // --------------------------------------------------------------------  */
             inv_road = (NRoad)StaticVariables.gnv_app.of_get_road_map();
             ldwc_child = idw_header.GetChild("rt_id");
             //!            inv_road.ids_dwc_road_type.ShareData(ldwc_child);
@@ -368,32 +350,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  SR4686  June 2006
             //  Determine the address' contract_no and type
             il_contract_no = idw_header.GetItem<AddressDetails>(ll_row).ContractNo;
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_npad_enabled, ds_rdcontract, ds_adrnum, ds_contract_no, ds_isrdcontract
-                if isnull ( ib_npad_enabled) then ds_npad_enabled = 'null' else ds_npad_enabled = ib_npad_enabled.ToString()
-                if isnull ( ib_RDcontract)   then ds_rdcontract   = 'null' else ds_rdcontract   = ib_RDcontract.ToString()
-                if isnull ( ls_temp)         then ds_adrnum       = 'null' else ds_adrnum       = ls_temp.ToString()
-                if isnull ( il_contract_no)  then ds_contract_no  = 'null' else ds_contract_no  = il_contract_no.ToString()
-                MessageBox.Show ('NPAD enabled = '+ds_npad_enabled+'\n'
-                                 +'RD contract = '+ds_rdcontract+'\n'
-                                 +'Unnumbered  = '+string(ib_unnumbered)+'\n'
-                                 +'Adr num     = <'+ds_adrnum+'>'+'\n'
-                                 +'Contract No = '+ds_contract_no+'\n'
-                                 ,'Windows.Ruralwin.w_maintain_address.pfc_postopen' )
-            // --------------------------------------------------------------------  */
             //  TJB  SR4686  June 2006
             //  ******************************************************
             //  Set up customer maintenance
             //  ******************************************************
-            /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ('idw_details.Enabled  = '+string(idw_details.Enabled)+'\n'
-                                 +'cb_open.Enabled     = '+string ( cb_open.Enabled)+'\n'
-                                 +'cb_new.Enabled      = '+string ( cb_new.Enabled)+'\n'
-                                 +'cb_transfer.Enabled = '+string ( cb_transfer.Enabled)+'\n'
-                                 +'cb_remove.Enabled   = '+string ( cb_remove.Enabled)+'\n\r\n'
-                                 +'is_cust_perms       = '+is_cust_perms
-                                 ,'Windows.Ruralwin.w_maintain_address.pfc_postopen' )
-            // --------------------------------------------------------------------  */
             idw_details.SuspendLayout();
             //  If the user doesn't have Customer:read privilege, they can't do anything
             //  with customers.
@@ -502,17 +462,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ls_custrestore = "";
             }
             ll_temp = ls_custrestore.IndexOf("M");
-            /*  ------------------------ Debugging ------------------------- //
-                string ds_custrestore, ds_temp
-                ds_custrestore = ls_custrestore
-                ds_temp = ll_temp.ToString()
-                if isnull ( ls_custrestore) then ds_custrestore = 'Null'
-                ds_temp = ll_temp.ToString()
-                if isnull ( ll_temp) then ds_temp = 'Null'
-                MessageBox.Show ('Cust Restore permissions = '+ds_custrestore+'\n'
-                                 +'Permission M at '+ds_temp
-                                 ,'Windows.Ruralwin.w_maintain_address.pfc_preopen' )
-            // ------------------------------------------------------------  */
             if (ll_temp < 0)
             {
                 cb_restore.Enabled = false;
@@ -521,13 +470,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             idw_details.ResumeLayout(false);
             // long ll_town
-            // ll_town = dw_header.getitemnumber ( dw_header.GetRow ( ), "tc_id")
+            // ll_town = dw_header.getitemnumber(dw_header.GetRow(),"tc_id")
             // 
             // datawindowchild ldwc_child
             // datawindowchild ldwc_child_post
-            // dw_header.GetChild ( 'tc_id', ldwc_child)
-            // dw_header.SetItem ( 1, 'post_code', ldwc_child.GetItemString ( ldwc_child.GetRow ( ), 'post_code'))
-            // dw_header.SetItem ( 1, 'post_code_id', ldwc_child.GetItemNumber ( ldwc_child.GetRow ( ), 'post_code_id'))
+            // dw_header.GetChild('tc_id',ldwc_child)
+            // dw_header.SetItem(1,'post_code',ldwc_child.GetItemString(ldwc_child.GetRow(),'post_code'))
+            // dw_header.SetItem(1,'post_code_id',ldwc_child.GetItemNumber(ldwc_child.GetRow(),'post_code_id'))
             // 
             idw_header.GetItem<AddressDetails>().SetEntityClean();
         }
@@ -547,7 +496,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_row;
             int ll_header_rows_modified;
             string ls_userid;
+
             li_rc = 1;
+
+            // TJB  RD7_CR001 Nov-2009: added
+            bool ib_ok = of_check_pc_contractno();
+            if (!ib_ok)
+            {
+                return;
+            }
+            
             if (StaticFunctions.IsDirty(dw_header))
                 li_rc = dw_header.Save();
 
@@ -556,7 +514,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if (li_rc == 1)
                 this.Close();
+        }
 
+        // TJB  RD7_CR001 Nov-2009: added
+        public virtual bool of_check_pc_contractno()
+        {
+            int? ll_contractno;
+            int ll_pc_contractno;
+            string ls_postcode;
+            DialogResult li_choice;
+
+            ll_contractno = dw_header.GetItem<AddressDetails>(0).ContractNo;
+            ls_postcode = dw_header.GetItem<AddressDetails>(0).PostCode;
+            ll_pc_contractno = RDSDataService.GetPostCodeContractNo(ls_postcode);
+            if (ll_contractno == ll_pc_contractno)
+            {
+                return true;
+            }
+            li_choice = MessageBox.Show("The contract number entered does not match that for the post code " 
+                                          + "(" + ll_pc_contractno.ToString() + ").\n"
+                                          + "Do you want to continue with the save anyway?"
+                                       , "Warning"
+                                       , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                       , MessageBoxDefaultButton.Button1);
+            if (li_choice == DialogResult.Yes)
+            {
+                return true;
+            }
+            return false;
         }
 
         public virtual int of_checkandsave()
@@ -567,12 +552,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 //  No address id allocated yet.  Must save to proceed 
                 li_choice = MessageBox.Show("The new address must be saved before any occupants \n" 
-                    + "can be created for the address. Do you wish to \n" 
-                    + "continue and save the address now?"
-                    , "Save Address"
-                    , MessageBoxButtons.YesNo
-                    , MessageBoxIcon.Question
-                    , MessageBoxDefaultButton.Button1);
+                                              + "can be created for the address. Do you wish to \n" 
+                                              + "continue and save the address now?"
+                                           , "Save Address"
+                                           , MessageBoxButtons.YesNo
+                                           , MessageBoxIcon.Question
+                                           , MessageBoxDefaultButton.Button1);
                 if (li_choice == DialogResult.Yes)
                 {
                     //li_rc = dw_header.Save();//li_rc = this.pfc_save();
@@ -896,16 +881,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ds_dpid2 = al_new_dpid.ToString();
             if (al_new_dpid == null) ds_dpid2 = "null";
 
-            /*  ---------------------------- Debugging ----------------------------- //
-            MessageBox.Show("NPAD interface message\n\n"
-                + "Send transfer_customer XML message\n"
-                + "   Old DPID = " + ds_dpid1 + "\n"
-                + "   New DPID = " + ds_dpid2 + "\n\n"
-                + as_description + "\n"
-                + is_npadoutfile + "\n"
-                + is_userid
-                , "Windows.Ruralwin.w_maintain_address.of_npad_xferOne");
-            // --------------------------------------------------------------------  */
             if (al_old_dpid == null || al_old_dpid < 1 || al_new_dpid == null || al_new_dpid < 1)
             {
                 MessageBox.Show("One or both customer DPIDs are null.  \n" 
@@ -1243,26 +1218,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-                if ll_new_old_master_row = 0 then
-                MessageBox.Show("Old Recipient to promote not found!"
-                    , "w_maintain_address.of_promote_old_recipient" )
-                else
-                string	ds_cust, ds_initials, ds_surname, ds_name
-                ds_cust = ll_new_old_master_id.ToString()
-                ds_initials = idw_details.getItemString ( ll_new_old_master_row, 'cust_initials')
-                ds_surname  = idw_details.getItemString ( ll_new_old_master_row, 'cust_surname_company')
-                setnull ( ds_name)
-                if isnull ( ds_cust)     then ds_cust = 'null'
-                if isnull ( ds_name)     then ds_name = 'null'
-                if not isnull ( ds_initials) then ds_name = ds_initials
-                if not isnull ( ds_surname)  then ds_name += " "+ds_surname
-                MessageBox.Show("RDS internal operation\n\n"
-                    + "Old Recipient promoted.  \n"
-                    + "cust_id = "+ds_cust+"  ( "+ds_name+") \n"
-                    , "w_maintain_address.of_promote_old_recipient" );
-                end if
-            // --------------------------------------------------------------------  */
             return ll_new_old_master_row;
         }
 
@@ -1311,18 +1266,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else
                         ds_cust = ll_cust.ToString();
-                    /*  ---------------------------- Debugging ----------------------------- //
-                        ds_name = ids_results.getItemstring ( ll_row,'cust_initials')  &
-                        +" "+ids_results.getItemstring ( ll_row,'cust_surname_company')
-                        if isnull ( ds_name) then ds_name = 'null'
-                        MessageBox.Show("NPAD interface message\n\n"
-                            + "Send delete_customer XML message for all recipients\n"
-                            + "   DPID = "+ds_dpid+"\n\n"
-                            + "   Cust = "+ds_cust+"\n"
-                            + "   Name = "+ls_name+"\n\n"
-                            + as_description
-                            , "w_maintain_address.of_npad_deleteall" );
-                    // --------------------------------------------------------------------  */
                     if (ll_dpid == null || ll_dpid < 1)
                     {
                         MessageBox.Show("The customer DPID is null.  \r\n" + "This may indicate an inconsistency in the database. \r\n\r\n" + "Cust ID = " + ds_cust + '~' + "DPID    = " + ds_dpid + '~', "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1430,14 +1373,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ds_dpid = "null";
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show("NPAD interface message\n\n"
-                     + "Send delete_customer XML message\n"
-                     + "   DPID = "+ds_dpid+"\n\n"
-                     + as_description+"\n"
-                     + is_npadoutfile
-                     , "w_maintain_address.of_npad_deleteone" );
-            // --------------------------------------------------------------------  */
             if (al_dpid == null || al_dpid < 1)
             {
                 MessageBox.Show("The customer DPID is null.  \n" 
@@ -1493,10 +1428,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 		-1	if an error occurs
             int li_rc;
             string ds_adrid;
-            /*  ---------------------------- Debugging ----------------------------- //
-                if isnull ( al_adrID) then ds_adrid = 'null' else ds_adrid = al_adrID.ToString()
-                MessageBox.Show (  & 'Delete the old address.\r\n'  & +'\r\n\r\nAdr_id = '+ds_adrid    ,  'w_maintain_address.of_deleteAddress' )
-            // --------------------------------------------------------------------  */
             li_rc = 0;
             /* delete from address
                 where adr_id = :al_adrID
@@ -1573,9 +1504,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ll_from_row = idw_details.RowCount;
                 }
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            MessageBox.Show ( & 'Master '+string ( al_master_id)  & +' has '+string ( ll_count)+' recipients. ' ,  'w_maintain_address.of_count_recipients' )
-            // --------------------------------------------------------------------  */
             return ll_count;
         }
 
@@ -1648,30 +1576,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ds_dpid = "null";
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_name
-            if not isnull ( as_title) then
-            ds_name = as_title
-            else
-            ds_name = ''
-            end if
-            if not isnull ( as_initials) then
-            if ds_name = '' then
-            ds_name = as_initials
-            else 
-            ds_name = ds_name + " " + as_initials
-            end if
-            end if
-            if not isnull ( as_surname) then
-            if ds_name = '' then
-            ds_name = as_surname
-            else 
-            ds_name = ds_name + " " + as_surname
-            end if
-            end if
-            if ds_name = '' then ds_name = 'NULL'
-            MessageBox.Show (  & 'NPAD interface message\r\n\r\n'  & +'Send modify_customer XML message\r\n' & +'DPID = '+ds_dpid+'\r\n'       & +ls_description + '\r\n\r\n'      & +'Name = '+ds_name+'\r\n'       & +is_npadoutfile               ,  'w_maintain_address.of_npad_modifyone' )
-            // --------------------------------------------------------------------  */
             if (al_dpid == null || al_dpid < 1)
             {
                 MessageBox.Show("The customer DPID is null.  \n" 
@@ -1729,18 +1633,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DDddwSuburbNames ldwc_child;
             //  Get a list of suburbs associated with the road and/or town
             ls_filter = inv_road.of_getsuburblist_asdict1(as_roadname, al_rtid, al_rsid, al_tcid);
-            /*  -------------------------- Debugging ----------------------- //
-                string	ds_roadname, ds_rtid, ds_rsid, ds_tcid
-                ds_roadname = as_roadname
-                if isnull ( as_roadname) then ds_roadname = 'NULL'
-                ds_rtid = al_rtid.ToString()
-                if isnull ( al_rtid) then ds_rtid = 'NULL'
-                ds_rsid = al_rsid.ToString()
-                if isnull ( al_rsid) then ds_rsid = 'NULL'
-                ds_tcid = al_tcid.ToString()
-                if isnull ( al_tcid) then ds_tcid = 'NULL'
-                MessageBox.Show (   & 'Road name = '+ds_roadname+'\r\n'  & +'Road type = '+ds_rtid+'\r\n'  & +'Road suffix = '+ds_rsid+'\r\n'  & +'Town = '+ds_tcid+'\r\n\r\n'  & +'Filter = '+ls_filter+'\r\n'  & ,  'w_maintain_address.of_filter_suburb_dddw' )
-            // ------------------------------------------------------------  */
             ldwc_child = (DDddwSuburbNames)idw_header.GetChild("sl_name");
             ldwc_child.FilterString = "sl_name = \"xxxx\"";
             ldwc_child.Filter<DddwSuburbNames>();
@@ -1774,18 +1666,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DDddwTownOnly ldwc_child;
             //  Get a list of towns associated with the road and/or suburb
             ls_filter2 = inv_road.of_gettownlist_asdict1(ls_road_name, ll_rt_id, ll_rs_id, ls_sl_name);
-            /*  -------------------------- Debugging ----------------------- //
-                string	ds_road_name, ds_rt_id, ds_rs_id, ds_sl_name
-                ds_road_name = ls_road_name
-                if isnull ( ls_road_name) then ds_road_name = 'NULL'
-                ds_rt_id = ll_rt_id.ToString()
-                if isnull ( ll_rt_id) then ds_rt_id = 'NULL'
-                ds_rs_id = ll_rs_id.ToString()
-                if isnull ( ll_rs_id) then ds_rs_id = 'NULL'
-                ds_sl_name = ls_sl_name.ToString()
-                if isnull ( ls_sl_name) then ds_sl_name = 'NULL'
-                MessageBox.Show (   & 'Road name = '+ds_road_name+'\r\n'  & +'Road type = '+ds_rt_id+'\r\n'  & +'Road suffix = '+ds_rs_id+'\r\n'  & +'Suburb = '+ds_sl_name+'\r\n\r\n'  & +'Filter = '+ls_filter+'\r\n'  & ,  'u_tab_address_search.of_filter_town_dddw' )
-            // ------------------------------------------------------------  */
             ldwc_child = (DDddwTownOnly)idw_header.GetChild("tc_id");
             ldwc_child.FilterString = "";
             ldwc_child.Filter<DddwTownOnly>();
@@ -1813,20 +1693,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_null = null;
             //  Get a list of suburbs associated with the road and/or town
             ls_filter = inv_road.of_getsuburblist_asdict1(ls_null, ll_null, ll_null, al_tcid);
-            /*  -------------------------- Debugging ----------------------- //
-            string	ds_roadname, ds_rtid, ds_rsid, ds_tcid
-            ds_roadname = 'NULL'
-            ds_rtid = 'NULL'
-            ds_rsid = 'NULL'
-            ds_tcid = al_tcid.ToString()
-            if isnull ( al_tcid) then ds_tcid = 'NULL'
-            MessageBox.Show ('Road name    = '+ds_roadname+'\r\n'
-                             +'Road type   = '+ds_rtid+'\r\n'
-                             +'Road suffix = '+ds_rsid+'\r\n'
-                             +'Town        = '+ds_tcid+'\r\n\r\n'
-                             +'Filter = '+ls_filter+'\r\n'
-                             ,'w_maintain_address.of_filter_suburb_dddw' )
-            // ------------------------------------------------------------  */
             ldwc_child = (DDddwSuburbNames)idw_header.GetChild("sl_name");
             ldwc_child.FilterString = "sl_name = \"xxxx\"";
             ldwc_child.Filter<DddwSuburbNames>();
@@ -1872,8 +1738,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  and set its ID to be saved with the address record.
             // 
             //  Returns
-            // 	  1	Success  ( including setting post code to null if there's no town)
-            // 	 -1	Failed to determine the post code  ( when the town was known)
+            // 	  1	Success (including setting post code to null if there's no town)
+            // 	 -1	Failed to determine the post code (when the town was known)
             int? ll_null = 0;
             int ll_row;
             int? ll_postcode_id = null;
@@ -1982,7 +1848,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 /* SELECT post_code, post_code_id
                     INTO :ls_postcode, :ll_postcode_id
                     FROM post_code pc, towncity tc
-                    WHERE post_code =  ( SELECT max ( pc.post_code)
+                    WHERE post_code = (SELECT max(pc.post_code)
                     FROM post_code pc, towncity tc
                     WHERE tc.tc_id = :al_tc_id
                     AND pc.post_mail_town = tc.tc_name)
@@ -2159,12 +2025,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 is_npadfilename = "RDS_NPAD_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + "_" + ls_npadfileseq + ".xml";
                 is_npadoutfile = is_npadoutdir + "\\" + is_npadfilename;
-                /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ("Message file = "+is_npadoutfile + "\r"
-                            + "DPID = " + al_dpid.ToString() + "\r"
-                            + "Occupied = "+as_occupied
-                            , "WMaintainAddress.of_npad_addr_occupied" );
-                // --------------------------------------------------------------------  */
                 /* select f_rds_npad_addr_occupied (  :al_dpid, :as_occupied, 
                     :is_userid, :as_description, :is_npadoutfile)
                     into :li_rc
@@ -2234,9 +2094,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  this is RD type
                 lb_return = true;
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            MessageBox.Show ( & "Adr ID  " + string ( al_adrID)   + "\r\n" & +"RD Contract? "+string ( lb_return,  'w_maintain_address.of_iscontractRD' )
-            // --------------------------------------------------------------------  */
             return lb_return;
         }
 
@@ -2335,12 +2192,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_null;
             ll_null = null;
             ls_null = null;
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_new_master
-                ds_new_master = al_new_master_id.ToString()
-                if isnull ( al_new_master_id) then ds_new_master = 'null'
-                MessageBox.Show ( & 'ids_results.rowcount = '+string ( ids_results.rowcount ( ))+'\r\n'  & +'New master = '+ds_new_master ,  'w_maintain_address.of_transfer_custs' )
-            // --------------------------------------------------------------------  */
             //  Work through all the transferring customers
             for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
             {
@@ -2380,9 +2231,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? ll_this_cust_id = 0;
             int? ll_this_cust_dpid = 0;
             int? ll_this_cust_master = 0;
-            /*  ---------------------------- Debugging ----------------------------- //
-            MessageBox.Show ( & 'ids_results.rowcount = '+string ( ids_results.rowcount ( ),  'w_maintain_address.of_copy_dpids' )
-            // --------------------------------------------------------------------  */
             //  Work through all the transferring customers
             for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
             {
@@ -2443,26 +2291,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  contract.
             //  Set the taborder for the fields to 0 
             //  so the user can't access them.
-            ((TextBox)(idw_header.DataObject.Controls["dp_id"])).ReadOnly = true;//idw_header.DataObject.Controls["dp_id"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["dp_id"])).ReadOnly = true;                         //idw_header.DataObject.Controls["dp_id"].Enabled = false;
 
-            ((TextBox)(idw_header.DataObject.Controls["adr_num"])).ReadOnly = true;//idw_header.DataObject.Controls["adr_num"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["adr_num"])).ReadOnly = true;                       //idw_header.DataObject.Controls["adr_num"].Enabled = false;
 
-            ((TextBox)(idw_header.DataObject.Controls["road_name"])).ReadOnly = true;//idw_header.DataObject.Controls["road_name"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["road_name"])).ReadOnly = true;                     //idw_header.DataObject.Controls["road_name"].Enabled = false;
 
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rt_id"])).Enabled = false; ;//idw_header.DataObject.Controls["rt_id"].Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rt_id"])).Enabled = false; ; //idw_header.DataObject.Controls["rt_id"].Enabled = false;
 
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rs_id"])).Enabled = false;//idw_header.DataObject.Controls["rs_id"].Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rs_id"])).Enabled = false;   //idw_header.DataObject.Controls["rs_id"].Enabled = false;
 
             // idw_header.setTabOrder ( 'sl_id',0)
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["sl_name"])).Enabled = false;//idw_header.DataObject.Controls["sl_name"].Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["sl_name"])).Enabled = false; //idw_header.DataObject.Controls["sl_name"].Enabled = false;
 
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["tc_id"])).Enabled = false;//idw_header.DataObject.Controls["tc_id"].Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["tc_id"])).Enabled = false;   //idw_header.DataObject.Controls["tc_id"].Enabled = false;
 
-            ((TextBox)(idw_header.DataObject.Controls["adr_rd_no"])).ReadOnly = true;//idw_header.DataObject.Controls["adr_rd_no"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["adr_rd_no"])).ReadOnly = true;                     //idw_header.DataObject.Controls["adr_rd_no"].Enabled = false;
 
-            ((TextBox)(idw_header.DataObject.Controls["post_code"])).ReadOnly = true;//idw_header.DataObject.Controls["post_code"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["post_code"])).ReadOnly = true;                     //idw_header.DataObject.Controls["post_code"].Enabled = false;
 
-            ((TextBox)(idw_header.DataObject.Controls["adr_property_identification"])).ReadOnly = true;//idw_header.DataObject.Controls["adr_property_identification"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["adr_property_identification"])).ReadOnly = true;   //idw_header.DataObject.Controls["adr_property_identification"].Enabled = false;
 
             ((PictureBox)dw_header.GetControlByName("contract_button")).Enabled = true;
 
@@ -2626,11 +2474,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_null = null;
             ls_null = null;
             ll_row = dw_header.GetRow();
-            /*  ---------------------------- Debugging ----------------------------- //
-                ls_temp = data
-                if isnull ( ls_temp) then ls_temp = 'NULL'
-                MessageBox.Show ( & 'Row = '+string ( row)+'\r\n'  & +'Column = '+col_name+'\r\n'  & +'Data   = '+ls_temp  ,  'w_maintain_address.dw_header.ue_filter_dropdowns' )
-                // --------------------------------------------------------------------  */
             /* *************************************************************
             * Road name changed
             ************************************************************* */
@@ -2817,13 +2660,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //  by mailtown only  ( RD number null).
                         of_set_postcode(ll_tc_id);
                     }
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    string	ls_postcode
-                    ls_postcode = this.getItemString ( ll_row,'post_code')
-                    if isnull ( ls_postcode) or ls_postcode = '' then
-                    MessageBox.Show (   & 'Unable to determine post code for mailtown.',  'w_maintain_address.dw_header.ue_filter_dropdowns' )
-                    end if
-                    // --------------------------------------------------------------------  */
                 }
                 else
                 {
@@ -2911,13 +2747,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ls_id = ll_id.ToString();
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_col_name
-                ls_temp = data
-                ds_col_name = column
-                if isnull ( ls_temp) then ls_temp = 'NULL'
-                MessageBox.Show ( & 'Row = '+string ( row)+'\r\n'      & +'Column = '+ds_col_name+'\r\n'  & +'Data   = '+ls_temp  ,  'w_maintain_address.dw_header.ue_validate_dropdown' )
-            // --------------------------------------------------------------------  */
             if (dwo == "rt_id")
             {
                 lds_temp = new DDddwRoadType();
@@ -3072,7 +2901,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_null = null;
             Cursor.Current = Cursors.WaitCursor;
             ls_rd_no = dw_header.GetItem<AddressDetails>(0).AdrRdNo;
-                // TJB  RD7_0019  Jan-20009
+                // TJB  RD7_0019  Jan-2009
                 //      The town_name is not retrieved (bug in application translation?)
             //ls_town_name = dw_header.GetItem<AddressDetails>(0).TownName;
             //if (ls_rd_no == null || ls_town_name == null || ls_town_name.Length <= 0)
@@ -3105,7 +2934,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 OR con_rd_ref_text like :ls_percent + :ls_comma + :ls_rd_no + :ls_percent 
                 OR con_rd_ref_text like :ls_percent + :ls_and   + :ls_rd_no + :ls_percent	)
                 USING	SQLCA; */
-            // TJB  RD7_0019  Jan-20009
+            // TJB  RD7_0019  Jan-2009
             //      Disable this validation.  It does not work reliably, we can only 
             //      change the contract number, and we only do so very occasionally.
             //      A later change request may ask for validation to be done.
@@ -3291,7 +3120,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //         }
             //     }
             // }
-            // TJB  RD7_0019  Jan-20009:   End disabled code
+            // TJB  RD7_0019  Jan-2009:   End disabled code
 
             return 1;
         }
@@ -3316,11 +3145,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Add road suffix processing
             ll_null = null;
             ls_null = null;
-            /*  ---------------------------- Debugging ----------------------------- //
-            ls_temp = data
-            if isnull ( ls_temp) then ls_temp = 'NULL'
-            MessageBox.Show ( & 'Row = '+string ( row)+'\r\n'  & +'Column = '+col_name+'\r\n'  & +'Data   = '+ls_temp  ,  'w_maintain_address.dw_header.ue_filter_dropdowns' )
-            // --------------------------------------------------------------------  */
+
             /* *************************************************************
             * Road name changed
             ************************************************************* */
@@ -3427,29 +3252,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 il_road_id = ll_road_id;
                 li_sl_id = dw_header.GetItem<AddressDetails>(row).SlId;
                 li_tc_id = dw_header.GetItem<AddressDetails>(row).TcId;
-                //  TJB  NPAD2 Apr 2006  pre-GoLive
-                //  Disable suburb stuff
-                //  	// Filter suburb
-                //  	ll_row = 0
-                //  	this.GetChild ( 'sl_id', ldwc_child)
-                //  	IF inv_road.of_FilterSuburbType ( ll_road_id, ldwc_child) THEN
-                //  		if not isnull ( li_sl_id) and li_sl_id > 0 then
-                //  				// If the current suburb is in the newly-filtered list
-                //  				// scroll to it.
-                //  			ll_row = ldwc_child.find ( 'sl_id = '+li_sl_id.ToString(),  &
-                //  									1,ldwc_child.RowCount)
-                //  			if ll_row > 0 then
-                //  				this.SetItem ( 1, 'sl_id', li_sl_id)
-                //  			end if
-                //  		end if
-                //  	END IF
-                //  		// If we can't continue to use the 'old' suburb
-                //  		// don't use any.
-                //  	if ll_row <= 0 then
-                //  		this.SetItem ( 1, 'sl_id', ll_null)
-                //  		setnull ( li_sl_id)
-                //  	END IF
-                //  Filter town
                 ll_row = 0;
                 ldwc_child = dw_header.GetChild("tc_id");
                 if (inv_road.of_filtertowntype(ll_road_id, ref ldwc_child))
@@ -3474,58 +3276,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     dw_header.GetItem<AddressDetails>(row).PostCode = ls_null;
                 }
             }
-            //  TJB  NPAD2 Apr 2006  pre-GoLive
-            //  Disable suburb stuff
-            //  /**************************************************************
-            //   * Suburb changed
-            //   **************************************************************/
-            //  IF col_name = 'sl_id' THEN
-            //  	li_sl_id = integer ( data)
-            //  	this.SetItem ( row, 'sl_id', li_sl_id)
-            // 
-            //  	li_tc_id = this.getItemNumber ( row,'tc_id')
-            // 
-            //  	ll_rs_id     = GetItemNumber ( row, 'rs_id')
-            //  	ll_rt_id     = GetItemNumber ( row, 'rt_id')
-            //  	ls_road_name = this.GetItemString ( row, 'road_name')
-            //  	ll_road_id   = inv_road.of_GetRoadId ( ls_road_name, ll_rt_id, ll_rs_id)
-            // 
-            //  	// Filter town
-            //  	lb_continue = FALSE
-            //  	this.GetChild ( 'tc_id', ldwc_child)
-            // 
-            //  	if not isnull ( ll_road_id) then	
-            //   			// If there's a road selected, filter by suburb and road
-            //  		lb_continue = inv_road.of_FilterTownBySuburbAndRoad (  li_sl_id, ll_road_id, ldwc_child)
-            //  	else
-            //  			// Otherwise, filter just by suburb  ( not road)
-            //  		lb_continue = inv_road.of_FilterTownBySuburb (  li_sl_id, ldwc_child)
-            //  	end if
-            // 
-            //  	ll_row = 0
-            //  	if lb_continue then
-            //  		if not isnull ( li_tc_id) and li_tc_id > 0 then
-            //  				// If the current town is in the newly-filtered list
-            //  				// scroll to it.  The post code won't change.
-            //  			ll_row = ldwc_child.find ( 'tc_id = '+li_tc_id.ToString(),  &
-            //  									1,ldwc_child.RowCount)
-            //  			if ll_row > 0 then
-            //  				this.SetItem ( 1, 'tc_id', li_tc_id)
-            //  			end if
-            //  		end if
-            //  	end if
-            //  			// If we can't continue to use the 'old' town
-            //  			// don't use any, and clear the post code.
-            //  	if ll_row <= 0 then
-            //  		this.SetItem ( row, 'tc_id', ll_null)
-            //  		setNull ( li_tc_id)
-            //  		this.SetItem ( row, 'post_code', ls_null)
-            //  	end if
-            // 
-            //  END IF  /* col_name = sl_id */
             /* *************************************************************
-            * Town changed
-            ************************************************************* */
+             * Town changed
+             ************************************************************* */
             if (col_name == "tc_id")
             {
                 string ls_tc_id;
@@ -3580,44 +3333,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ls_road_id = ll_road_id.ToString();
                 }
-                //  Filter suburb
-                //  TJB  NPAD2 Apr 2006  pre-GoLive
-                //  Disable suburb stuff
-                //  	lb_continue = FALSE
-                //  	this.GetChild ( 'sl_id', ldwc_child)
-                // 
-                //  	if not isnull ( ll_road_id) then	
-                //   			// If there's a road selected, filter by suburb and road
-                //  		lb_continue = inv_road.of_FilterSuburbByTownAndRoad ( il_road_id, li_tc_id, ldwc_child)
-                //  	else
-                //  			// Otherwise, filter just by suburb  ( not road)
-                //  		lb_continue = inv_road.of_FilterSuburbByTown (  li_tc_id, ldwc_child)
-                //  	end if
-                // 
-                //  	ll_row = 0
-                //  	if lb_continue then
-                //  		if not isnull ( li_sl_id) and li_sl_id > 0 then
-                //  				// If the current suburb is in the newly-filtered list
-                //  				// scroll to it.
-                //  			ll_row = ldwc_child.find ( 'sl_id = '+li_sl_id.ToString(),  &
-                //  									1,ldwc_child.RowCount)
-                //  			if ll_row > 0 then
-                //  				this.SetItem ( 1, 'sl_id', li_sl_id)
-                /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & 'Suburb filtered OK; saving old suburb ID'+'\r\n'  & +'ll_road_id = '+ls_road_id+'\r\n'  & +'ll_rt_id = '+ls_rt_id+'\r\n'  & +'ll_rs_id = '+ls_rs_id+'\r\n'  & +'li_tc_id = '+ls_tc_id+'\r\n'  & +'li_sl_id = '+ls_sl_id+'\r\n'  & +'ll_row   = '+string ( ll_row)+'\r\n'  ,  'w_maintain_address.dw_header.ue_filter_dropdowns' )
-                // --------------------------------------------------------------------  */
-                //  			end if
-                //  		end if
-                //  	end if
-                //  			// If we can't continue to use the 'old' suburb
-                //  			// don't use any.
-                //  	if ll_row <= 0 then
-                //  		this.SetItem ( row, 'sl_id', ll_null)
-                //  		setNull ( li_sl_id)
-                /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show ( & 'Suburb filter failed; clearing old suburb ID'+'\r\n'  & +'ll_road_id = '+ls_road_id+'\r\n'  & +'ll_rt_id = '+ls_rt_id+'\r\n'  & +'ll_rs_id = '+ls_rs_id+'\r\n'  & +'li_tc_id = '+ls_tc_id+'\r\n'  & +'li_sl_id = '+ls_sl_id+'\r\n'  & +'ll_row   = '+string ( ll_row)+'\r\n'  ,  'w_maintain_address.dw_header.ue_filter_dropdowns' )
-                // --------------------------------------------------------------------  */
-                //  	end if
             }
             //  Set the post code
             //  Doing it anyway is easier than trying to keep track of whether
@@ -3761,16 +3476,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Else if the road type is a valid item,
             // 		move the item row from filterd! buffer back to primary buffer!
             data = data.ToLower().Trim();
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_col_name, ds_data
-                ds_data = data
-                ds_col_name = column
-                if isnull ( ds_data) then ds_data = 'NULL'
-                MessageBox.Show ('Row = '+string ( row)+'\r\n'
-                                 +'Column = '+ds_col_name+'\r\n'
-                                 +'Data   = '+ds_data
-                                 ,'w_maintain_address.dw_header.itemerror' )
-            // --------------------------------------------------------------------  */
             if (column == "rt_id")
             {
                 lds_temp = new DDddwRoadType();
@@ -3961,14 +3666,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             dw_header.AcceptText();
             ll_row = dw_header.GetRow();
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_closestatus;
-                ds_closestatus = ib_closestatus.ToString();
-                if (ib_closestatus == null) then ds_closestatus = "null";
-                MessageBox.Show("dw_header pfc_validation  \n"
-                    +"ib_closestatus = "+ds_closestatus
-                    ,"Windows.Ruralwin.w_maintain_address.dw_header_pfc_validation" );
-            // --------------------------------------------------------------------  */
+
             //  Check that the contract #, road name, and town/city are specified.
             //  Check that a road name has been specified
             ls_road_name = dw_header.GetItem<AddressDetails>(ll_row).RoadName;
@@ -4104,19 +3802,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // select f_validate_road ( :ls_road_name, :ll_rt_id, :ll_rs_id, :ls_sl_name, :ll_tc_id) into :ll_road_id from dummy; 
             RDSDataService dataService = RDSDataService.CheckValidateRoad(ll_tc_id, ls_sl_name, ls_road_name, ll_rt_id, ll_rs_id);
             ll_road_id = dataService.intVal;
-            /*  ------------------------- Debugging ------------------------- //
-            string	ds_reason = "Huh?"
-            string	ds_road, ds_suburb, ds_town
-            if ll_road_id >  0 then ds_reason = "Existing road"
-            if ll_road_id = -1 then ds_reason = "Road doesn't already exist"
-            if ll_road_id = -2 then ds_reason = "Road doesn't exist in the mailtown"
-            if ll_road_id = -3 then ds_reason = "Road doesn't exist in the suburb"
-            if ll_road_id = -4 then ds_reason = "Suburb doesn't exist in the mailtown"
-            if isnull ( ls_road_name) then ds_road   = 'NULL' else ds_road   = ls_road_name
-            if isnull ( ls_sl_name)   then ds_suburb = 'NULL' else ds_suburb = ls_sl_name
-            if isnull ( ll_tc_id)     then ds_town   = 'NULL' else ds_town   = ll_tc_id.ToString()
-            MessageBox.Show ( & 'f_validate_road returned '+string ( ll_road_id)& +'   ( '+ds_reason+')\r\n\r\n'     & +'Road   = '+ds_road+'\r\n'    & +'Suburb = '+ds_suburb+'\r\n'  & +'Town   = '+ds_town         ,  'w_maintain_address.dw_header.pfc_validation' )
-            // -------------------------------------------------------------  */
             if (ll_road_id < 0)
             {
                 //  If not OK, tell the user and ask if a new road should be created
@@ -4127,9 +3812,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // select f_create_road (  :ls_road_name, :ll_rt_id, :ll_rs_id, :ls_sl_name, :ll_tc_id, :ls_userid) into :ll_road_id from dummy; 
                     dataService = RDSDataService.GetCreateRoadId(ls_userid, ll_rs_id, ll_tc_id, ls_sl_name, ls_road_name, ll_rt_id);
                     ll_road_id = dataService.intVal;
-                    /*  --------------------- Debugging --------------------- //
-                    MessageBox.Show ( & 'f_create_road returned '+string ( ll_road_id,  'w_maintain_address.ue_clicked_ok' )
-                    // -----------------------------------------------------  */
                     //  TJB  Release 6.8.11 fixup
                     //  f_create_road returns 0 or -4 if it is unable to create 
                     //  the road or its links to suburb or town.  If this
@@ -4165,46 +3847,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Set the address 'last amended' values
             dw_header.GetItem<AddressDetails>(ll_row).AdrLastAmendedUser = ls_userid;
             dw_header.GetItem<AddressDetails>(ll_row).AdrLastAmendedDate = System.DateTime.Today;
-            /*   ( TJB NPAD2 Apr 2006: this is the pre-NPAD handling)
-            ll_sl_id      = this.GetItemNumber ( 1, 'sl_id')
-            ldwItemStatus = this.GetItemStatus ( 1, 'road_id', Primary!)
-            ll_road_id    = this.GetItemNumber ( 1, 'road_id')
-            IF IsNull ( ll_road_id) OR ll_road_id <= 0 OR ldwItemStatus = DataModified! THEN
-            ll_rt_id = this.GetItemNumber ( 1, 'rt_id')
-            ll_rs_id = this.GetItemNumber ( 1, 'rs_id')
-            // TJB  Sept 2005:  Added rs_id to of_GetRoadId parameter list
-            ll_road_id = inv_road.of_GetRoadId ( ls_road_name, ll_rt_id, ll_rs_id)
-            IF IsNull ( ll_road_id) OR ll_road_id <= 0 THEN
-            // Do not display message if this is closing
-            IF ib_closestatus THEN
-            RETURN -1
-            ELSE
-            ll_rc = MessageBox ( 'Road Creation',   &
-            'The road entered does not exist in the system currently.\r\n' &
-            +'Do you wish to continue using this new road?', &
-            Question!, YesNo!, 2) 
-            IF ll_rc = 1 THEN
-            lb_new_road = TRUE
-            ELSE
-            // no do not continue
-            RETURN -1
-            END IF
-            END IF
-            END IF
-            END IF
-            // TJB  Sept 2005:  Added rs_id to of_CreateRoad parameter list
-            IF lb_new_road THEN
-            ll_road_id = inv_road.of_CreateRoad ( ls_road_name, ll_rt_id, ll_sl_id, ll_tc_id, ll_rs_id)
-            IF IsNull ( ll_road_id) OR ll_road_id <=0 THEN
-            RETURN -1
-            END IF
-            ELSE
-            // Need to store mappings between suburb/town/road if necessary
-            inv_road.of_UpdateMappings ( ll_road_id, ll_sl_id, ll_tc_id)
-            END IF
-            this.SetItem ( 1, 'road_id', ll_road_id)
-             */
-            return 1;//? ancestorreturnvalue;
+            return 1;   //? ancestorreturnvalue;
         }
 
         public virtual void dw_details_ue_click_open()
@@ -4313,14 +3956,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 WCustomer w_customer = new WCustomer();
                 StaticMessage.PowerObjectParm = lnv_msg;
                 w_customer.ShowDialog();
-                /*  ---------------------------- Debugging ----------------------------- //
-                ll_temp = message.doubleParm
-                if isnull ( ll_temp) then
-                MessageBox.Show (  & 'There were no changes' ,  'w_maintain_address.ue_click_open' )
-                else
-                MessageBox.Show (  & 'There were some changes' ,  'w_maintain_address.ue_click_open' )
-                end if
-                // --------------------------------------------------------------------  */
+
                 //  Upon the closure of Customer maintenance window, we need
                 //  to check for any recipients being added or removed from 
                 //  the primary contact.
@@ -4410,7 +4046,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_contract = idw_header.GetItem<AddressDetails>(ll_addr_row).ContractNo;
                 if (ll_contract == null || ll_contract < 1)
                 {
-                    MessageBox.Show("Please enter a contract for this address and press \'save\'.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Please enter a contract for this address and press \'save\'."
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
                 ll_addr_id = idw_header.GetItem<AddressDetails>(ll_addr_row).AdrId;
@@ -4500,11 +4138,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (ib_npad_enabled && !lb_unnumbered && of_iscontractrd(ll_addr_id))
                 {
                     //  If the occupation status has changed
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    boolean db_unoccupied
-                    db_unoccupied = of_isunoccupied ( ll_addr_id)
-                    MessageBox.Show ( & "Address DPID = "+string ( ll_addr_dpid)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_unoccupied)+"\r\n" & +"    now = "+string ( not db_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_new' )
-                    // --------------------------------------------------------------------  */
                     if (!(lb_unoccupied == of_isunoccupied(ll_addr_id)))
                     {
                         //  Send the new occupation status to NPAD.
@@ -4602,7 +4235,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_selected_row = idw_details.GetRow();
             if (ll_selected_row < 0)
             {
-                MessageBox.Show("You must select a customer before moving the customer out.", "Move customer out", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a customer before moving the customer out."
+                               , "Move customer out"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             Cursor.Current = Cursors.WaitCursor;
@@ -4659,7 +4294,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ds_temp = "null";
                 }
-                MessageBox.Show("Unable to determine address of moving customer ( s)\r\n" + "Primary customer ID is " + ds_temp, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Unable to determine address of moving customer(s)\n" 
+                                  + "Primary customer ID is " + ds_temp
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             lb_unnumbered = of_isunnumbered(ll_old_adr_id);
@@ -4707,11 +4345,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lb_all_moving = true;
             }
             lb_master_moving = false;
-            /*  ---------------------------- Debugging ----------------------------- //
-            ds_temp = ll_old_master_id.ToString()
-            if isnull ( ll_old_master_id) then ds_temp = 'null'
-            MessageBox.Show ( & 'lb_isMaster        = '+string ( lb_ismaster)  +'\r\n'  & +'lb_all_moving      = '+string ( lb_all_moving)+'\r\n'  & +'old_master_id      = '+ds_temp              +'\r\n'  & +'old_adr_id         = '+string ( ll_old_adr_id)+'\r\n'  & +'old adr unnumbered = '+string ( lb_unnumbered)       & ,  'w_maintain_address.dw_details.ue_click_remove' )
-            // --------------------------------------------------------------------  */
             /* ******************************************************************
             * ids_results now contains a list of occupants moving out 
             * If none of the customers moving is a primary customer
@@ -4727,18 +4360,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             * the rds_customer and customer_address_moves tables.  Leave the
             * master behind with the 'move_out_date' set.
             ******************************************************************* */
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_surname, ds_initials, ds_id
-            FOR ll_row = 1 TO ids_results.RowCount
-            ds_id       = string ( ids_results.getitemNumber ( ll_row,'cust_id'))
-            ds_surname  = ids_results.getitemstring ( ll_row,'cust_surname_company')
-            ds_initials = ids_results.getitemstring ( ll_row,'cust_initials')
-            if isnull ( ds_id)       then ds_id       = 'null'
-            if isnull ( ds_surname)  then ds_surname  = 'null'
-            if isnull ( ds_initials) then ds_initials = 'null'
-            MessageBox.Show ( & 'Results: row '+string ( ll_row)+'\r\n'  & +'ID       = '+ds_id+'\r\n'  & +'Surname  = '+ds_surname+'\r\n'  & +'Initials = '+ds_initials ,  'w_maintain_address.dw_details.ue_click_remove' )
-            NEXT	
-            // --------------------------------------------------------------------  */
+
             //  See if the master is moving.
             //  Note: There can only ever be one master customer moving since 
             // 			the set to select from is either a single recipient or 
@@ -4802,18 +4424,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ldt_moveout = ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutDate;
                 ls_reason = ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutSource;
                 ls_user = ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutUser;
-                /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_custid, ds_moveout, ds_reason, ds_user
-                ds_custid = ll_this_custid.ToString()
-                if isnull ( ll_this_custid) then ds_custid = 'null'
-                ds_moveout = ldt_moveout.ToString()
-                if isnull ( ds_moveout) then ds_moveout = 'null'
-                ds_reason  = ls_reason
-                if isnull ( ds_reason) then ds_reason = 'null'
-                ds_user    = ls_user
-                if isnull ( ds_user) then ds_user = 'null'
-                MessageBox.Show (   & 'Cust       = '+ds_custid+'\r\n'  & +'Moveout   = '+ds_moveout+'\r\n' & +'Reason    = '+ds_reason+'\r\n'  & +'User      = '+ds_user,  'w_maintain_address.dw_details.ue_click_remove' )
-                // --------------------------------------------------------------------  */
                 if (ldt_moveout == null)
                 {
                     ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutDate = ldt_now;
@@ -4909,12 +4519,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 for (ll_row = 0; ll_row < ll_deleted_custs; ll_row++)
                 {
                     ll_this_custid = ll_deleted_cust_id[ll_row];
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    string ds_cust
-                    ds_cust = ll_this_custid.ToString()
-                    if isnull ( ll_this_custid) then ds_cust = 'null'
-                    MessageBox.Show (   & 'Delete recipient '+ds_cust ,  'w_maintain_address.dw_details.ue_click_remove' )
-                    // --------------------------------------------------------------------  */
                     of_delete_recipient(ll_this_custid);
                 }
                 li_rc = 1; ids_results.Save();
@@ -4938,10 +4542,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (!lb_update_ok)
             {
                 MessageBox.Show("Failed to update database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                /*  ---------------------------- Debugging ----------------------------- //
-                else
-                MessageBox.Show (   & 'Updates successful',  'w_maintain_address.dw_details.ue_click_remove' )
-                // --------------------------------------------------------------------  */
             }
             /* ******************************************************************
             *
@@ -4960,24 +4560,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lb_npad_enabled = ib_npad_enabled;
             if (lb_update_ok && ib_npad_enabled && lb_unnumbered)
             {
-                /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_old_adr_id, ds_old_master
-                string	ds_promoted
-                if isnull ( ll_old_adr_id)		then ds_old_adr_id = 'null' else ds_old_adr_id = ll_old_adr_id.ToString()
-                if isnull ( ll_old_master_id)	then ds_old_master = 'null' else ds_old_master = ll_old_master_id.ToString()
-                if isnull ( ll_old_master_dpid)	then ds_old_master += '  ( null)' else ds_old_master += '  ( '+ll_old_master_dpid)+'.ToString()'
-                if isnull ( il_cust_promoted)	then ds_promoted   = 'null' else ds_promoted   = il_cust_promoted.ToString()
-                if isnull ( il_promoted_dpid)	then ds_promoted += '  ( null)' else ds_promoted += ' ( '+il_promoted_dpid)+'.ToString()'
-                MessageBox.Show ( & 'Move-out from an unnumbered address.\r\n'  & +'Customers moved = '+string ( ll_results_rows)+'\r\n'  & +'Old address     = '+ds_old_adr_id+'\r\n'  & +'Old master      = '+ds_old_master+'\r\n'  & +'Old master moving = '+string ( lb_master_moving)+'\r\n'  &	 +'Cust promoted   = '+ds_promoted+'\r\n'				,  'w_maintain_address.dw_details.ue_click_remove' )
-                // --------------------------------------------------------------------  */
                 //  If the master is moving and at least one recipient isn't 
                 //  and has been promoted to be the new master, send a transfer 
                 //  message so the two swap roles in NPAD's eyes.
                 if (lb_master_moving && ll_promoted_dpid > 0)
                 {
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'Promote recipient '+string ( ll_promoted_dpid,  'w_maintain_address.dw_details.ue_click_remove' )
-                    // --------------------------------------------------------------------  */
                     of_npad_xferone(ll_old_master_dpid, ll_promoted_dpid, "RDS swap master - recipient");
                 }
                 //  If the master and all recipients are moving,
@@ -4987,9 +4574,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  to being the master at the old address.
                 if (lb_master_moving && ll_promoted_dpid == 0)
                 {
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'All moved out.  Move out master'+string ( ll_old_master_dpid,  'w_maintain_address.dw_details.ue_click_remove' )
-                    // --------------------------------------------------------------------  */
                     of_npad_deleteone(ll_old_master_dpid, "RDS delete master");
                 }
                 else
@@ -5000,9 +4584,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     for (ll_row = 0; ll_row < ll_moved_custs; ll_row++)
                     {
                         ll_this_dpid = ll_moved_cust_dpid[ll_row];
-                        /*  ---------------------------- Debugging ----------------------------- //
-                        MessageBox.Show ( & 'Move out recipient '+string ( ll_this_dpid,  'w_maintain_address.dw_details.ue_click_remove' )
-                        // --------------------------------------------------------------------  */
                         of_npad_deleteone(ll_this_dpid, "RDS delete recipient");
                     }
                 }
@@ -5014,9 +4595,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 if (of_isunoccupied(ll_old_adr_id))
                 {
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'Address is now unoccupied - delete it.  \r\n'  & +string ( ll_old_adr_id,  'w_maintain_address.dw_details.ue_click_remove' )
-                    // --------------------------------------------------------------------  */
                     /* delete from address  where adr_id = :ll_old_adr_id  using SQLCA; */
                     RDSDataService dataService = RDSDataService.DeleteAddressByAdrId(ll_old_adr_id);
                     if (dataService.SQLCode < 0)
@@ -5036,11 +4614,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (lb_update_ok && ib_npad_enabled && !lb_unnumbered && of_iscontractrd(ll_addr_id))
             {
                 //  If the occupation status has changed
-                /*  ---------------------------- Debugging ----------------------------- //
-                boolean db_unoccupied
-                db_unoccupied = of_isunoccupied ( ll_addr_id)
-                MessageBox.Show ( & "Address DPID = "+string ( ll_addr_dpid)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_unoccupied)+"\r\n" & +"    now = "+string ( not db_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_remove' )
-                // --------------------------------------------------------------------  */
                 if (!(lb_unoccupied == of_isunoccupied(ll_addr_id)))
                 {
                     //  Send the new occupation status to NPAD.
@@ -5501,55 +5074,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_first_recipient, ds_dummy_master, ds_no_details, ds_no_results
-            string	ds_msg2
-            if isnull(ll_old_master_id)  then ds_temp = 'null' else ds_temp = ll_old_master_id.ToString()
-            if isnull(ll_new_master_id)  then ds_cust = 'null' else ds_cust = ll_new_master_id.ToString()
-            ds_no_details = string(idw_details.RowCount)
-            ds_no_results = string(ids_results.RowCount)
-            ds_dummy_master = ''
-            if il_dummy_masters > 0 then
-            ds_dummy_master = '(DPID ='+il_dummy_master_dpid.ToString()  &
-            +', Cust ='+il_dummy_master_cust)+'.ToString()\n'
-            end if
-            ds_first_recipient = ''
-            if il_dummy_recipients > 0 then
-            ds_first_recipient = '(DPID ='+il_dummy_dpid[1].ToString()  &
-            +', Cust ='+il_dummy_cust[1])+'.ToString()\n'
-            end if
-            ds_msg2 = 'Transfer '
-            if lb_old_unnumbered then ds_msg2 += 'unnumbered' else ds_msg2 += 'numbered'	
-            ds_msg2 += ' to '
-            if lb_new_unnumbered then ds_msg2 += 'unnumbered' else ds_msg2 += 'numbered'	
-            li_temp = messagebox ( 'w_maintain_address.idw_details.ue_click_transfer',  &
-            'ib_npad_enabled     = '+ib_npad_enabled.ToString()+'\n\n'  &
-            +'lb_isMaster        = '+lb_ismaster.ToString()  +'\n'  &
-            +'lb_all_moving      = '+lb_all_moving.ToString()+'\n'  &
-            +'old_master_id      = '+ds_temp              +'\n'  &
-            +'old_adr_id         = '+ll_old_adr_id.ToString()+'\n'  &
-            +'old adr unnumbered = '+lb_old_unnumbered.ToString()+'\n'  &
-            +'new_adr_id         = '+ll_new_adr_id.ToString()+'\n'  &
-            +'new adr unnumbered = '+lb_new_unnumbered.ToString()+'\n'  &
-            +'new_master_id      = '+ds_cust              +'\n'  &
-            +'new_master_exists  = '+lb_new_master_exists.ToString()+'\n'  &
-            +'lb_replace_custs   = '+lb_replace_custs.ToString() +'\n'  &
-            +'# details          = '+ds_no_details+'\n'  &
-            +'# results          = '+ds_no_results+'\n'  &
-            +'il_dummy_masters   = '+il_dummy_masters.ToString()+'\n'  &
-            +ds_dummy_master &
-            +'il_dummy_recipients = '+il_dummy_recipients.ToString()+'\n'  &
-            +ds_first_recipient &
-            +\n'+ds_msg2+'\n'  &
-            +'*** '+ds_msg+' ***'  &
-            ,Exclamation!,OkCancel!)
-            // --------------------------------------------------------------------  */
             if (li_temp == 2 || ds_msg.Substring(0, 10) == "Incorrect " || ds_msg.Substring(0, 9) == "Too many " || ds_msg.Substring(0, 9) == "No dummy ")
             {
-                /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show('Cancelling transfer ...' 
-                 *              , 'w_maintain_address.idw_details.ue_click_transfer' )
-                // --------------------------------------------------------------------  */
                 ResumeLayout();
                 return;
             }
@@ -5756,7 +5282,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                // 
                 //  A master and possibly some or all of the recipients are 
                 //  transferring.
                 // 
@@ -5900,21 +5425,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            /*  ---------------------------- Debugging ----------------------------- //
-            string	ds_addr_dpid, ds_to_master, ds_new_adr
-            string	ds_promo_dpid
-            ds_new_adr    = ll_new_adr_id.ToString()
-            ds_to_master  = ll_to_master_dpid.ToString()
-            ds_promo_dpid = ll_promoted_dpid.ToString()
-            if isnull(ds_new_adr)    then ds_new_adr    = 'NULL'
-            if isnull(ds_to_master)  then ds_to_master  = 'NULL'
-            if isnull(ds_promo_dpid) then ds_promo_dpid = 'NULL'
-            MessageBox.Show('Update "to" address dpid?  n'
-                            +'ll_promoted_dpid  = '+ds_promo_dpid +'\n'
-                            +'ll_new_adr_id     = '+ds_new_adr    +'\n'
-                            +'ll_to_master_dpid = '+ds_to_master  +'\n'
-                            ,  'w_maintain_address.idw_details.ue_click_transfer' )
-            // --------------------------------------------------------------------  */
             //  If a recipient was promoted at the 'from' address, we need to 
             //  update the address' DPID.
             if (ll_promoted_dpid > 0)
@@ -5929,7 +5439,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 li_rc = of_update_to_address_dpid(ll_new_adr_id, ll_to_master_dpid);
             }
             /* ******************************************************************
-            *
             * Now we delete all the dummy customers from the RDS database 
             * that have been involved in this transfer. We do it now so that
             * if the rds_customer and customer_address_moves updates fail and 
@@ -5966,13 +5475,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ds_temp = li_temp.ToString();
                 }
-                /*  ---------------------------- Debugging ----------------------------- //
-                MessageBox.Show('RDS internal operation\n\n'
-                                +'Delete dummy master\n\n'
-                                +'cust_id = '+ds_cust +'\n'
-                                +'(rc = '+ds_temp+')'
-                               ,'w_maintain_address.idw_details.ue_click_transfer' )
-                // --------------------------------------------------------------------  */
             }
             if (il_dummy_custs > 0)
             {
@@ -6011,21 +5513,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         ds_temp = li_temp.ToString();
                     }
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show('RDS internal operation\n\n'
-                                    +'Delete dummy customer\n\n'
-                                    +'cust_id = '+ds_cust +'\n'
-                                    +'Row '+ds_row+' of '+ds_rows+'\n'
-                                    +'(rc = '+ds_temp+')'
-                                   ,'w_maintain_address.idw_details.ue_click_transfer' )
-                    // --------------------------------------------------------------------  */
                 }
             }
             /* ******************************************************************
-            *
             * Now we update the rds_customer and customer_address_moves tables
             * with the accumulated changes.
-            *
             ****************************************************************** */
             lb_update_ok = false;
             if (li_rc == 0)
@@ -6051,10 +5543,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lb_update_ok = false;
             }
             /* ******************************************************************
-            *
             * If the update was successful and NPAD is enabled, we need to tell 
             * NPAD what to change to keep the databases synchronised.
-            *
             ****************************************************************** */
             if (lb_update_ok && ib_npad_enabled)
             {
@@ -6135,22 +5625,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // 
                     // ****************************************************
                     //  Nothing to tell NPAD; it doesn't care.
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show('NPAD interface operation\n\n'
-                                    +'Transfer from numbered to numbered address.\n'
-                                    +'Customers transferred = '+string(ll_results_rows)+'\n'
-                                    +'Old address     = '+ds_old_adr_id+'\n'
-                                    +'Old master      = '+ds_old_master+'\n'
-                                    +'Old master dpid = '+ds_old_dpid+'\n'
-                                    +'Old master moving = '+string(lb_master_moving)+'\n'
-                                    +'New address     = '+ds_new_adr_id+'\n'
-                                    +'New master      = '+ds_new_master+'\n'
-                                    +'New master dpid = '+ds_new_dpid+'\n'
-                                    +'Cust promoted   = '+ds_promoted+'\n'
-                                    +'***********\n'
-                                    +"Nothing to tell NPAD; it doesn't care."
-                                   ,'w_maintain_address.idw_details.ue_click_tansfer' )
-                    // --------------------------------------------------------------------  */
                 }
                 else if (!lb_old_unnumbered && lb_new_unnumbered)
                 {
@@ -6161,19 +5635,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // ****************************************************
                     //  Send 'modify_customer' messages to NPAD to change the 
                     //  'Dummy' names to the transferring customers' names.
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show('NPAD interface operation\n\n'
-                                    +'Transfer from numbered to unnumbered address.\n'
-                                    +'Customers transferred = '+string(ll_results_rows)+'\n'
-                                    +'Old address     = '+ds_old_adr_id+'\n'
-                                    +'Old master      = '+ds_old_master+'\n'
-                                    +'Old master dpid = '+ds_old_dpid+'\n'
-                                    +'Old master moving = '+string(lb_master_moving)+'\n'
-                                    +'New address     = '+ds_new_adr_id+'\n'
-                                    +'New master      = '+ds_new_master+'\n'
-                                    +'New master dpid = '+ds_new_dpid+'\n'
-                                    +'Cust promoted   = '+ds_promoted+'\r\n'    & +'\r\n' & +'il_dummy_masters    = '+string ( il_dummy_masters)+'\r\n'		& +'il_dummy_recipients = '+string ( il_dummy_recipients)+'\r\n'	,  'w_maintain_address.idw_details.ue_click_tansfer' )
-                    // --------------------------------------------------------------------  */
                     for (ll_row = 0; ll_row < ids_results.RowCount; ll_row++)
                     {
                         if (ids_results.GetItem<AddressSelectOccupants>(ll_row).MoveOutDate == null)
@@ -6193,9 +5654,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  Transfer from unnumbered to numbered address       
                     // 
                     // ****************************************************
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show ( & 'NPAD interface operation\r\n\r\n'  & +'Transfer from unnumbered to numbered address.\r\n'       & +'Customers transferred = '+string ( ll_results_rows)+'\r\n' & +'Old address     = '+ds_old_adr_id+'\r\n'  & +'Old master      = '+ds_old_master+'\r\n'  & +'Old master dpid = '+ds_old_dpid+'\r\n'    & +'Old master moving = '+string ( lb_master_moving)+'\r\n'  & +'New address     = '+ds_new_adr_id+'\r\n'  & +'New master      = '+ds_new_master+'\r\n'  & +'New master dpid = '+ds_new_dpid+'\r\n'		& +'Cust promoted   = '+ds_promoted+'\r\n'		,  'w_maintain_address.idw_details.ue_click_tansfer' )
-                    // --------------------------------------------------------------------  */
                     //  If only recipients have transferred, send delete_customer 
                     //  messages to NPAD for all those who have transferred.
                     if (!lb_master_moving)
@@ -6241,6 +5699,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
+                    // ****************************************************
                     // 
                     //  Transfer from unnumbered to unnumbered address     
                     // 
@@ -6281,27 +5740,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         il_dummy_master_dpid = 0;
                     }
-                    /*  ---------------------------- Debugging ----------------------------- //
-                        ds_new_master = ll_new_master_id.ToString()
-                        ds_new_dpid = ll_new_master_dpid.ToString()
-                        MessageBox.Show('NPAD interface operation \n\n'
-                                        +'Transfer from unnumbered to unnumbered address.\n'
-                                        +'Customers transferred = '+string(ll_results_rows)+'\n'
-                                        +'Old address     = '+ds_old_adr_id+'\n'
-                                        +'Old master      = '+ds_old_master+'\n'
-                     * +'Old master dpid = '+ds_old_dpid+'\n'
-                     * +'Old master moving = '+string(lb_master_moving)+'\n'
-                     * +'New address     = '+ds_new_adr_id+'\n'
-                     * +'New master      = '+ds_new_master+'\n'
-                     * +'New master dpid = '+ds_new_dpid+'\n'
-                     * +'Cust promoted   = '+ds_promoted+'\n'
-                     * +'\n'
-                     * +'il_dummy_masters    = '+string(il_dummy_masters)+'\n'
-                     * +'il_dummy_recipients = '+stringil_dummy_recipients)+'\n'
-                     * +'Dummy master        = '+string(il_dummy_master_cust)+'\n'
-                     * +'Dummy master DPID   = '+string(il_dummy_master_dpid)+'\n'
-                     * ,'w_maintain_address.idw_details.ue_click_tansfer' )
-                    // --------------------------------------------------------------------  */
                     int? ll_master_dpid = 0;
                     if (!lb_master_moving)
                     {
@@ -6456,11 +5894,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lb_RDcontract = of_iscontractrd(ll_old_adr_id);
                 if (!lb_old_unnumbered && lb_RDcontract)
                 {
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    boolean db_old_unoccupied
-                    db_old_unoccupied = of_isunoccupied(ll_old_adr_id)
-                    MessageBox.Show ( & "Old address DPID = "+string(ll_old_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_old_unoccupied)+"\r\n" & +"    now = "+string ( not db_old_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
-                    // --------------------------------------------------------------------  */
                     if (!(lb_old_unoccupied == of_isunoccupied(ll_old_adr_id)))
                     {
                         //  Send the new occupation status to NPAD.
@@ -6483,11 +5916,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //        as the DPID of its new master customer, it's easier
                     //        to look it up here if we need it.
                     ll_new_dp_id = of_get_addr_dpid(ll_new_adr_id);
-                    /*  ---------------------------- Debugging ----------------------------- //
-                    boolean db_new_unoccupied
-                    db_new_unoccupied = of_isunoccupied(ll_new_adr_id)
-                    MessageBox.Show ( & "New address DPID = "+string(ll_new_dp_id)+"\r\n" & +"Occupied status:\r\n" & +"    old = "+string ( not lb_new_unoccupied)+"\r\n" & +"    now = "+string ( not db_new_unoccupied)+"\r\n" ,  'w_maintain_address.dw_details.ue_click_transfer' )
-                    // --------------------------------------------------------------------  */
                     if (!(lb_new_unoccupied == of_isunoccupied(ll_new_adr_id)))
                     {
                         //  Send the new occupation status to NPAD.
@@ -6645,7 +6073,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    MessageBox.Show("Unable to find the old primary customer\'s record", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Unable to find the old primary customer\'s record"
+                                   , "ERROR"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return; //? return 1;
                 }
                 //  TJB  NPAD2  Jan 2006
@@ -6770,13 +6200,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ds_new_master_dpid = "null";
                 }
-                /*  ---------------------------- Debugging ----------------------------- //
-                    MessageBox.Show (   & 'of_npad_xferOne\r\n'  & +'Old DPID = '+ds_old_master_dpid+'\r\n'  & +'New DPID = '+ds_new_master_dpid+'\r\n'  & +'RDS Swap unnumbered masters',  'w_maintain_address.dw_details.ue_postitemchanged' )
-                // --------------------------------------------------------------------  */
                 ll_rc = of_npad_xferone(ll_master_cust_dpid, ll_this_cust_dpid, "RDS Swap unnumbered masters");
                 if (!(ll_rc == 0))
                 {
-                    MessageBox.Show("Error writing NPAD transfer_customer XML file\r\n" + "Error code    = " + ll_rc + '~' + "Old Master DPID = " + ds_old_master_dpid + '~' + "New Master DPID = " + ds_new_master_dpid + '~' + "XML filename    = " + is_npadoutfile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Error writing NPAD transfer_customer XML file \n" 
+                                      + "Error code    = " + ll_rc + '\n' 
+                                      + "Old Master DPID = " + ds_old_master_dpid + '\n' 
+                                      + "New Master DPID = " + ds_new_master_dpid + '\n' 
+                                      + "XML filename    = " + is_npadoutfile
+                                    , "Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             //  Refresh the display
@@ -6806,7 +6239,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  NPAD2  Jan 2006
             if (ib_npad_enabled && ib_unnumbered && ib_RDcontract)
             {
-                MessageBox.Show("Inserting new customers is not allowed for unnumbered \r\n" + "addresses using this screen.  Please use the NPAD    \r\n" + "address creation function.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Inserting new customers is not allowed for unnumbered \n" 
+                                 + "addresses using this screen.  Please use the NPAD  \n" 
+                                 + "address creation function."
+                                 , "Warning"
+                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return; //? return FAILURE;
             }
             //  Override ancestor, trigger the ue_click_new ( ) event
@@ -7203,16 +6640,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Change Suburb and Town dropdowns to name only
             //  Lookups for sl_id, RD-no and post_code handled separately
             ll_null = null;
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_col_name, ds_data;
-                ds_data = data;
-                ds_col_name = column;
-                if (ds_data == null) then ds_data = "NULL";
-                MessageBox.Show ("Row = "+string(row)+"\n"
-                    + "Column = "+ds_col_name+"\n
-                    + "Data   = '+ds_data
-                    , "w_maintain_address.dw_header.itemchanged" );
-            // --------------------------------------------------------------------  */
             if (column == "adr_num")
             {
                 ls_adr_num = data;
@@ -7371,17 +6798,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             object value = dw_details.GetValue(row, column);
             string data = value != null ? value.ToString() : null;
             //  TJB  NPAD2  Jan 2006
-            /*  ---------------------------- Debugging ----------------------------- //
-                string	ds_dwoname, ds_data, ds_temp, ds_npad
-                ds_dwoname = column
-                ds_data    = data
-                if isnull ( data) then ds_data = 'null'
-                ds_temp = ib_unnumbered.ToString()
-                if isnull ( ib_unnumbered) then ds_temp = 'null'
-                ds_npad = ib_npad_enabled.ToString()
-                if isnull ( ib_npad_enabled) then ds_npad = 'null'
-                MessageBox.Show ( & 'column = '+ds_dwoname+'\r\n'    & +'row      = '+string ( row)+'\r\n'  & +'data     = '+ds_data+'\r\n'      & +'ib_unnumbered = '+ds_temp+'\r\n' & +'ib_npad_enabled = '+ds_npad 	,  'w_maintain_address.dw_details.itemchanged' )
-            // --------------------------------------------------------------------  */
             //!if (column == "primary_ind")
             if (((DAddressOccupants)(dw_details.DataObject)).Grid.CurrentColumnName == "primary_ind")
             {
@@ -7585,15 +7001,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (ll_updated == 1 && ib_npad_enabled && of_iscontractrd(ll_addr_id))
             {
                 //  If the occupation status has changed
-                /*  ---------------------------- Debugging ----------------------------- //
-                    boolean db_unoccupied;
-                    db_unoccupied = of_isunoccupied(ll_addr_id);
-                    MessageBox.Show("Address DPID = "+string(ll_addr_dpid)+"\n"
-                        + "Occupied status:\n"
-                        + "    old = "+string(not lb_unoccupied)+"\n"
-                        + "    now = "+string(not db_unoccupied)+"\n" 
-                        , "w_maintain_address.dw_details.ue_click_remove" );
-                // --------------------------------------------------------------------  */
                 if (!(lb_unoccupied == of_isunoccupied(ll_addr_id)))
                 {
                     //  Send the new occupation status to NPAD.
@@ -7610,10 +7017,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            /*  ------------------- Debugging ------------------ //
-                MessageBox.Show("ll_updated = " + ll_updated.ToString()
-                    , "w_maintain_address.cb_undelete.clicked" );
-            // ------------------------------------------------  */
             //  If so, refresh the occupants list
             if (ll_updated == 1)
             {
