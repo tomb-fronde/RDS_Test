@@ -65,10 +65,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT distinct sl_name " +
-                        "from road  left outer join road_suburb on road.road_id= road_suburb.road_id " +
-                        "left outer join suburblocality  on road_suburb.sl_id = suburblocality.sl_id " +
-                        " where road.road_name like '%'  ";
+                    cm.CommandText = "SELECT DISTINCT sl_name " 
+                                  +    "FROM road LEFT OUTER JOIN road_suburb " 
+                                  +                   "ON road.road_id = road_suburb.road_id "
+                                  +              "LEFT OUTER JOIN suburblocality " 
+                                  +                   "ON road_suburb.sl_id = suburblocality.sl_id " 
+                                  +   "WHERE road.road_name like '%' "
+                                  +   "ORDER BY sl_name ASC";
 
                     ParameterCollection pList = new ParameterCollection();
                     List<DddwSuburbs> _list = new List<DddwSuburbs>();

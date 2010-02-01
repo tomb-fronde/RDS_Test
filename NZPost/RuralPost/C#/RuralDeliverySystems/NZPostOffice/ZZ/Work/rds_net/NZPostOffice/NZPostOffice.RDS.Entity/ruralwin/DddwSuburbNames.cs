@@ -74,9 +74,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT DISTINCT suburblocality.sl_name " +
-                        "FROM suburblocality  ORDER BY suburblocality.sl_name ASC";
-
+                    cm.CommandText = "SELECT DISTINCT sl_name " 
+                                   +   "FROM suburblocality "
+                                   +  "ORDER BY sl_name ASC";
 
 					List<DddwSuburbNames> _list = new List<DddwSuburbNames>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

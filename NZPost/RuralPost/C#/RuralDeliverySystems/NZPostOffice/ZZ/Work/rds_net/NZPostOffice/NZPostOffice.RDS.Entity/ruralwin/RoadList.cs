@@ -243,25 +243,30 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-                    cm.CommandText = " SELECT  DISTINCT"
-                                        + " road_name,"
-                                        + " road_type.rt_id,"
-                                        + " rt_name,"
-                                        + " road_suffix.rs_id,"
-                                        + " rs_name,"
-                                        + " suburblocality.sl_id,"
-                                        + " sl_name,"
-                                        + " towncity.tc_id,"
-                                        + " tc_name"
-                                        + " FROM"
-                                        + " road"
-                                        + " LEFT OUTER JOIN road_type ON (road.rt_id = road_type.rt_id)"
-                                        + " LEFT OUTER JOIN road_suffix ON (road.rs_id = road_suffix.rs_id)"
-                                        + " LEFT OUTER JOIN road_suburb ON (road.road_id = road_suburb.road_id)"
-                                        + " LEFT OUTER JOIN suburblocality ON (road_suburb.sl_id = suburblocality.sl_id)"
-                                        + " LEFT OUTER JOIN town_road ON (road.road_id = town_road.road_id)"
-                                        + " LEFT OUTER JOIN towncity ON (town_road.tc_id = towncity.tc_id)";
-					ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = " SELECT DISTINCT"
+                                   +        " road_name,"
+                                   +        " road_type.rt_id,"
+                                   +        " rt_name,"
+                                   +        " road_suffix.rs_id,"
+                                   +        " rs_name,"
+                                   +        " suburblocality.sl_id,"
+                                   +        " sl_name,"
+                                   +        " towncity.tc_id,"
+                                   +        " tc_name"
+                                   +   " FROM road"
+                                   +            " LEFT OUTER JOIN road_type " 
+                                   +                  "ON (road.rt_id = road_type.rt_id)"
+                                   +            " LEFT OUTER JOIN road_suffix " 
+                                   +                  "ON (road.rs_id = road_suffix.rs_id)"
+                                   +            " LEFT OUTER JOIN road_suburb " 
+                                   +                  "ON (road.road_id = road_suburb.road_id)"
+                                   +            " LEFT OUTER JOIN suburblocality " 
+                                   +                  "ON (road_suburb.sl_id = suburblocality.sl_id)"
+                                   +            " LEFT OUTER JOIN town_road " 
+                                   +                  "ON (road.road_id = town_road.road_id)"
+                                   +            " LEFT OUTER JOIN towncity " 
+                                   +                  "ON (town_road.tc_id = towncity.tc_id)";
+                    ParameterCollection pList = new ParameterCollection();
 
 					List<RoadList> _list = new List<RoadList>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
