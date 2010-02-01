@@ -111,13 +111,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-					cm.CommandText ="SELECT DISTINCT address.contract_no ,post_code.post_mail_town ,towncity.tc_id "+
-                        "FROM rd.address ,rd.post_code ,rd.towncity "+
-                        "WHERE (rd.post_code.post_code_id =rd.address.post_code_id) and  "+
-                        "(rd.post_code.post_mail_town =rd.towncity.tc_name )  "+
-                        "ORDER BY rd.address.contract_no ASC,"+
-                        "rd.post_code.post_mail_town ASC";
-
+					cm.CommandText ="SELECT DISTINCT address.contract_no ,post_code.post_mail_town ,towncity.tc_id "
+                                   +  "FROM rd.address, rd.post_code, rd.towncity "
+                                   + "WHERE rd.post_code.post_code_id = rd.address.post_code_id " 
+                                   +   "AND rd.post_code.post_mail_town =rd.towncity.tc_name "
+                                   + "ORDER BY rd.address.contract_no ASC, rd.post_code.post_mail_town ASC";
 
 					List<ContractMailtown> _list = new List<ContractMailtown>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

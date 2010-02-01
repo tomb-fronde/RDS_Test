@@ -311,12 +311,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "in_cmb_id", in_cmb_id);
 
-                    cm.CommandText ="SELECT cmb_address.cmb_id,cmb_address.contract_no,cmb_address.cmb_box_no,"+
-                        "cmb_address.tc_id,cmb_address.post_code_id,cmb_address.cmb_cust_surname,"+
-                        "cmb_address.cmb_cust_initials,cmb_address.cmb_date_added,cmb_address.cmb_last_amended_date,"+
-                        "cmb_address.cmb_last_amended_user, '0000' as post_code,cmb_address.adr_rd_no "+
-                        "FROM rd.cmb_address "+
-                        "WHERE (cmb_address.cmb_id = @in_cmb_id )";
+                    cm.CommandText ="SELECT cmb_address.cmb_id,cmb_address.contract_no,cmb_address.cmb_box_no,"
+                                   +       "cmb_address.tc_id,cmb_address.post_code_id,cmb_address.cmb_cust_surname,"
+                                   +       "cmb_address.cmb_cust_initials,cmb_address.cmb_date_added,"
+                                   +       "cmb_address.cmb_last_amended_date,cmb_address.cmb_last_amended_user," 
+                                   +       "'0000' as post_code,cmb_address.adr_rd_no " 
+                                   +  "FROM rd.cmb_address "
+                                   + "WHERE cmb_address.cmb_id = @in_cmb_id";
 					List<CmbAddressDetail> _list = new List<CmbAddressDetail>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
@@ -383,7 +384,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 pList.Add(cm, "cmb_date_added", CmbDateAdded);
                 pList.Add(cm, "cmb_last_amended_date", CmbLastAmendedDate);
                 pList.Add(cm, "cmb_last_amended_user", CmbLastAmendedUser);
-                cm.CommandText = "INSERT INTO cmb_address(contract_no, adr_rd_no, cmb_id, cmb_box_no, tc_id, post_code_id, cmb_cust_surname, cmb_cust_initials, cmb_date_added, cmb_last_amended_date, cmb_last_amended_user) VALUES(@contract_no, @adr_rd_no, @cmb_id, @cmb_box_no, @tc_id, @post_code_id, @cmb_cust_surname, @cmb_cust_initials, @cmb_date_added, @cmb_last_amended_date, @cmb_last_amended_user) ";
+                cm.CommandText = "INSERT INTO cmb_address(contract_no, adr_rd_no, cmb_id, cmb_box_no, tc_id, post_code_id, cmb_cust_surname, cmb_cust_initials, cmb_date_added, cmb_last_amended_date, cmb_last_amended_user)" 
+                               + " VALUES(@contract_no, @adr_rd_no, @cmb_id, @cmb_box_no, @tc_id, @post_code_id, @cmb_cust_surname, @cmb_cust_initials, @cmb_date_added, @cmb_last_amended_date, @cmb_last_amended_user) ";
 				//if (GenerateInsertCommandText(cm, "cmb_address", pList))
 				try
                 {

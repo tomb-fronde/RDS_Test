@@ -177,12 +177,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 {
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT DISTINCT address.contract_no ,address.adr_rd_no ,post_code.post_code ," +
-                        "post_code.post_mail_town ,towncity.tc_id ,post_code.post_code_id " +
-                        " FROM rd.address ,rd.post_code ,rd.towncity " +
-                        " WHERE (address.post_code_id = post_code.post_code_id) and " +
-                        "(post_code.post_mail_town = towncity.tc_name ) " +
-                        " ORDER BY address.contract_no ASC,post_code.post_mail_town ASC,address.adr_rd_no ASC";
+                    cm.CommandText = "SELECT DISTINCT "
+                                   +        "address.contract_no, address.adr_rd_no, post_code.post_code, " 
+                                   +        "post_code.post_mail_town, towncity.tc_id, post_code.post_code_id " 
+                                   +   "FROM rd.address, rd.post_code, rd.towncity " 
+                                   +  "WHERE address.post_code_id = post_code.post_code_id " 
+                                   +    "AND post_code.post_mail_town = towncity.tc_name " 
+                                   +  "ORDER BY address.contract_no ASC, post_code.post_mail_town ASC, address.adr_rd_no ASC";
 
                     List<DddwContractRd> _list = new List<DddwContractRd>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

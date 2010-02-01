@@ -155,11 +155,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "in_contract", in_contract);
-					cm.CommandText="SELECT v_contract_towns.tc_id ,v_contract_towns.contract_no ,"+
-                        "v_contract_towns.tc_name ,v_contract_towns.post_code_id ,v_contract_towns.post_code "+
-                        "FROM v_contract_towns "+
-                        "WHERE (v_contract_towns.contract_no = @in_contract )";
-
+					cm.CommandText="SELECT v_contract_towns.tc_id, v_contract_towns.contract_no, "
+                                  +       "v_contract_towns.tc_name, v_contract_towns.post_code_id, "
+                                  +       "v_contract_towns.post_code " 
+                                  +  "FROM v_contract_towns "
+                                  + "WHERE v_contract_towns.contract_no = @in_contract ";
 
 					List<ContractTown> _list = new List<ContractTown>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

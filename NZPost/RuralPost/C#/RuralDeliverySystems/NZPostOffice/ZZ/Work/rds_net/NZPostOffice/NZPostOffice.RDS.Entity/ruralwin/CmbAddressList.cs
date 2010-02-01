@@ -278,14 +278,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "in_contract_no", in_contract_no);
 
-                    cm.CommandText = "SELECT cmb_address.cmb_id,cmb_address.contract_no,cmb_address.cmb_box_no," +
-                        "cmb_address.tc_id,cmb_address.post_code_id,cmb_address.cmb_cust_surname," +
-                        "cmb_address.cmb_cust_initials,towncity.tc_name,post_code.post_code," +
-                        "cmb_address.adr_rd_no " +
-                        "FROM rd.cmb_address,rd.towncity,rd.post_code " +
-                        " WHERE (towncity.tc_id = cmb_address.tc_id) and (post_code.post_code_id = cmb_address.post_code_id) and " +
-                        "((cmb_address.contract_no = @in_contract_no )) ORDER BY towncity.tc_name ASC," +
-                        "cmb_address.adr_rd_no ASC,cmb_address.cmb_box_no ASC";
+                    cm.CommandText = "SELECT cmb_address.cmb_id, cmb_address.contract_no, cmb_address.cmb_box_no," 
+                                   +        "cmb_address.tc_id, cmb_address.post_code_id, cmb_address.cmb_cust_surname," 
+                                   +        "cmb_address.cmb_cust_initials, towncity.tc_name, post_code.post_code," 
+                                   +        "cmb_address.adr_rd_no " 
+                                   +   "FROM rd.cmb_address, rd.towncity, rd.post_code "
+                                   +  "WHERE towncity.tc_id = cmb_address.tc_id "
+                                   +    "AND post_code.post_code_id = cmb_address.post_code_id "
+                                   +    "AND cmb_address.contract_no = @in_contract_no "
+                                   +  "ORDER BY towncity.tc_name ASC, cmb_address.adr_rd_no ASC, cmb_address.cmb_box_no ASC";
   
 					List<CmbAddressList> _list = new List<CmbAddressList>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
