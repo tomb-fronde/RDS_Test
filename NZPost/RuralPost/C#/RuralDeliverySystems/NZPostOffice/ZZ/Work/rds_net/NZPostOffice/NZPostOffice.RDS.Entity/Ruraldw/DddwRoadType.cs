@@ -88,15 +88,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT road_type.rt_name,  road_type.rt_id  FROM road_type  UNION ALL  SELECT '' as rt_name,  NULL as rt_id  FROM DUMMY  ";
-
-                    //pp! added sorting - here so not to make performance worse
-                    cm.CommandText = string.Format("{0} {1}", cm.CommandText, " order by rt_name");
+                    cm.CommandText = "SELECT rt_name, rt_id "
+                                   +   "FROM road_type "
+                                   + "UNION ALL "
+                                   + "SELECT '' as rt_name, NULL as rt_id "
+                                   + "ORDER BY rt_name";
 
 					ParameterCollection pList = new ParameterCollection();
-
 					List<DddwRoadType> _list = new List<DddwRoadType>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
 						{
@@ -121,10 +121,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "road_type", ref pList))
 				{
-					cm.CommandText += " WHERE  road_type.rt_id = @rt_id ";
+					cm.CommandText += " WHERE road_type.rt_id = @rt_id ";
 
 					pList.Add(cm, "rt_id", GetInitialValue("_rt_id"));
 					DBHelper.ExecuteNonQuery(cm, pList);
@@ -140,7 +140,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateInsertCommandText(cm, "road_type", pList))
 				{
 					DBHelper.ExecuteNonQuery(cm, pList);
@@ -158,10 +158,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"rt_id", GetInitialValue("_rt_id"));
-						cm.CommandText = "DELETE FROM road_type WHERE " +
-						"road_type.rt_id = @rt_id ";
+					cm.CommandText = "DELETE FROM road_type " + 
+                                      "WHERE road_type.rt_id = @rt_id ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
