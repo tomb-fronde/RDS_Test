@@ -319,7 +319,22 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT frequency_adjustments.contract_no,  frequency_adjustments.contract_seq_number,  frequency_adjustments.fd_unique_seq_number,  frequency_adjustments.fd_adjustment_amount,  frequency_adjustments.fd_paid_to_date,  frequency_adjustments.fd_bm_after_extn,  frequency_adjustments.fd_confirmed,  frequency_adjustments.fd_amount_to_pay,  frequency_adjustments.pct_id,  frequency_adjustments.fd_effective_date,  frequency_adjustments.sf_key,  frequency_adjustments.rf_delivery_days  FROM frequency_adjustments  WHERE frequency_adjustments.contract_no = @contract_no  AND frequency_adjustments.contract_seq_number = @sequence  ORDER BY frequency_adjustments.fd_unique_seq_number   ASC  ";
+					cm.CommandText = "SELECT frequency_adjustments.contract_no"
+                                        + ", frequency_adjustments.contract_seq_number"
+                                        + ", frequency_adjustments.fd_unique_seq_number"
+                                        + ", frequency_adjustments.fd_adjustment_amount"
+                                        + ", frequency_adjustments.fd_paid_to_date"
+                                        + ", frequency_adjustments.fd_bm_after_extn"
+                                        + ", frequency_adjustments.fd_confirmed"
+                                        + ", frequency_adjustments.fd_amount_to_pay"
+                                        + ", frequency_adjustments.pct_id"
+                                        + ", frequency_adjustments.fd_effective_date"
+                                        + ", frequency_adjustments.sf_key"
+                                        + ", frequency_adjustments.rf_delivery_days"
+                                   +  " FROM frequency_adjustments"
+                                   + " WHERE frequency_adjustments.contract_no = @contract_no"
+                                   +   " AND frequency_adjustments.contract_seq_number = @sequence"
+                                   + " ORDER BY frequency_adjustments.fd_unique_seq_number   ASC";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "contract_no", contract_no);
 					pList.Add(cm, "sequence", sequence);
