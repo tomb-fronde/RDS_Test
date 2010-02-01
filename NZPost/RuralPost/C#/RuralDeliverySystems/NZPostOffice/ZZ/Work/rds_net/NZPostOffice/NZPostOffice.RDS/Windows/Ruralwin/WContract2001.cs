@@ -1529,11 +1529,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 idw_contract.GetControlByName("con_title").Focus();
             }
-            dwChild = idw_contract.GetChild("ct_key");//idw_contract.GetChild("ct_key", dwChild);
+            //idw_contract.GetChild("ct_key", dwChild);
+            dwChild = idw_contract.GetChild("ct_key");
             ll_ct_key = idw_contract.GetItem<Contract>(0).CtKey.GetValueOrDefault();
             if (ll_ct_key > 0)
             {
-                ll_found = dwChild.Find("ct_key", ll_ct_key);//ll_found = dwChild.Find( "ct_key = " + ll_ct_key).ToString().Length);
+                //ll_found = dwChild.Find( "ct_key = " + ll_ct_key).ToString().Length);
+                ll_found = dwChild.Find("ct_key", ll_ct_key);
                 if (ll_found > 0)
                 {
                     sManRDRef = dwChild.GetItem<DddwContractTypes>(ll_found).CtRdRefMandatory;
@@ -1628,14 +1630,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            else if (idw_contract.GetItem<Contract>(arow).RgCode != idw_contract.GetItem<Contract>(arow).GetInitialValue<int?>("RgCode")) //else if (idw_contract.GetItemStatus(arow, "rg_code", primary!) == datamodified!) 
+            //else if (idw_contract.GetItemStatus(arow, "rg_code", primary!) == datamodified!) 
+            else if (idw_contract.GetItem<Contract>(arow).RgCode != idw_contract.GetItem<Contract>(arow).GetInitialValue<int?>("RgCode")) 
             {
                 lRGCode = idw_contract.GetItem<Contract>(arow).RgCode.GetValueOrDefault();
-                /*select rr_frozen_indicator into :sFrozenInd from renewal_rate where rg_code = :lRGCode and rr_rates_effective_date  =  ( select max ( rr_rates_effective_date) from renewal_rate where rg_code = :lRGCode);*/
+                /*select rr_frozen_indicator into :sFrozenInd from renewal_rate where rg_code = :lRGCode and rr_rates_effective_date  = (select max(rr_rates_effective_date) from renewal_rate where rg_code = :lRGCode);*/
                 sFrozenInd = RDSDataService.GetRenewalRateRrFrozenIndicator(lRGCode);
                 if (sFrozenInd != "Y")
                 {
-                    MessageBox.Show("This renewal group cannot be selected because the\n" + "latest renewal rates have not been frozen yet.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This renewal group cannot be selected because the\n" 
+                                      + "latest renewal rates have not been frozen yet."
+                                   , this.Text
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     sReturn = "rg_code";
                 }
             }
