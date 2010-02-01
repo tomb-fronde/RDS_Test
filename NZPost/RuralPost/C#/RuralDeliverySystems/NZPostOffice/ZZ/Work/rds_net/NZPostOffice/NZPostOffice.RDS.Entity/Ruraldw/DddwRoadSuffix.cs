@@ -110,10 +110,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT road_suffix.rs_name,  road_suffix.rs_id,  road_suffix.rs_abbrev  FROM road_suffix  UNION ALL  SELECT ''  as rs_name,  NULL as rs_id,  NULL as rs_abbrev  FROM DUMMY  ";
-                    cm.CommandText += " order by road_suffix.rs_name ";//! added sorting
+					cm.CommandText = "SELECT rs_name, rs_id, rs_abbrev " 
+                                   +  " FROM road_suffix " 
+                                   + "UNION ALL " 
+                                   + "SELECT '' as rs_name, NULL as rs_id, NULL as rs_abbrev " 
+                                   + " ORDER BY rs_name";   //! added sorting
 					ParameterCollection pList = new ParameterCollection();
-
 					List<DddwRoadSuffix> _list = new List<DddwRoadSuffix>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
