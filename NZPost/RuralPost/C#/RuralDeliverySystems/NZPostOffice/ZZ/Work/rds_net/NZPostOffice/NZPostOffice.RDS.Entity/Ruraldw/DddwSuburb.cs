@@ -89,15 +89,14 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				{
 					cm.CommandType = CommandType.Text;
                     /*PP! - changed CommandText as it was taken from DddwSuburbs by mistake
-                    cm.CommandText = "select distinct sl_name" +
-                        "  from rd.road  left outer join rd.road_suburb on road.road_id = road_suburb.road_id" +
-                        "             left outer join rd.suburblocality on road_suburb.sl_id = suburblocality.sl_id" +
-                        " where road.road_name like '%'";
+                    *cm.CommandText = "select distinct sl_name" +
+                    *    "  from rd.road  left outer join rd.road_suburb on road.road_id = road_suburb.road_id" +
+                    *    "                left outer join rd.suburblocality on road_suburb.sl_id = suburblocality.sl_id" +
+                    *    " where road.road_name like '%'";
                     */
-                    cm.CommandText = "SELECT  suburblocality.sl_id , suburblocality.sl_name FROM suburblocality";
-
+                    cm.CommandText = "SELECT sl_id, sl_name " 
+                                   +   "FROM suburblocality";
 					ParameterCollection pList = new ParameterCollection();
-
 					List<DddwSuburb> _list = new List<DddwSuburb>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
@@ -127,8 +126,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "suburblocality", ref pList))
 				{
-					cm.CommandText += " WHERE  suburblocality.sl_id = @sl_id ";
-
+					cm.CommandText += " WHERE suburblocality.sl_id = @sl_id";
 					pList.Add(cm, "sl_id", GetInitialValue("_sl_id"));
 					DBHelper.ExecuteNonQuery(cm, pList);
 				}
@@ -161,10 +159,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"sl_id", GetInitialValue("_sl_id"));
-						cm.CommandText = "DELETE FROM suburblocality WHERE " +
-						"suburblocality.sl_id = @sl_id ";
+					cm.CommandText = "DELETE FROM suburblocality " 
+                                    + "WHERE suburblocality.sl_id = @sl_id ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
