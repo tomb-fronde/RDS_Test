@@ -65,19 +65,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ctr.Visible = false;
                 }
             }
-
             //p! same code is in in InitComp
             this.cb_cancel.Visible = false;
             this.cb_select.Visible = false;
+            this.AcceptButton = this.cb_search;
 
 //!?            this.dw_results.DataObject = new DSearchAddressResultsV2b();
             dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
+            // TJB  RD7_0042  Jan-2010: Added
+            this.tab_criteria.GotFocus += new System.EventHandler(tab_criteria_gainfocus);
+
             //jlwang:moved from InitializeComponent
 //!?            ((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
 //!?            ((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);
 //!?            dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
             //jlwang:end
-
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -92,7 +94,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
                 //jlwang:end
             }
-            
             base.OnHandleCreated(e);
         }
 
@@ -103,132 +104,151 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_criteria = new NZPostOffice.RDS.Windows.Ruralwin.UTabAddressSearch();
+            this.cb_search = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_clear = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_open = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_new = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.dw_results = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_select = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.st_count = new NZPostOffice.Shared.VisualComponents.USt();
+            this.cb_print = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.tab_criteria = new UTabAddressSearch();
-            this.cb_search = new UCb();
-            this.cb_clear = new UCb();
-            this.cb_open = new UCb();
-            this.cb_new = new UCb();
-            this.dw_results = new URdsDw();
-        
-            this.cb_select = new UCb();
-            this.cb_cancel = new UCb();
-            this.st_count = new USt();
-            this.cb_print = new Button();
-            Controls.Add(tab_criteria);
-            Controls.Add(cb_search);
-            Controls.Add(cb_clear);
-            Controls.Add(cb_open);
-            Controls.Add(cb_new);
-            Controls.Add(dw_results);
-            // TJB  RD7_0042 Dec-2009: was commented out
-            // cb_select addition re-enabled so button can be enabled by
-            // AddressSearchSelect.
-            Controls.Add(cb_select);  
-            //!Controls.Add(cb_cancel);
-            Controls.Add(st_count);
-            Controls.Add(cb_print);
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Text = "Address Search";
-            this.Location = new System.Drawing.Point(1, 1);
-            this.Size = new System.Drawing.Size(665, 439);
-            //!            this.KeyPress += new KeyPressEventHandler(key);
             // 
             // st_label
             // 
-            st_label.Text = "w_address_search";
-            st_label.Location = new System.Drawing.Point(8, 376);
-
+            this.st_label.Location = new System.Drawing.Point(8, 387);
+            this.st_label.Size = new System.Drawing.Size(171, 16);
+            this.st_label.Text = "w_address_search";
             // 
             // tab_criteria
             // 
-            tab_criteria.SizeMode = TabSizeMode.FillToRight;
-            tab_criteria.BackColor = System.Drawing.Color.FromArgb(192, 192, 192);
-            tab_criteria.TabIndex = 1;
-            tab_criteria.Size = new System.Drawing.Size(545, 136);
-            tab_criteria.Left = 8;
+            this.tab_criteria.Location = new System.Drawing.Point(8, 0);
+            this.tab_criteria.Name = "tab_criteria";
+            this.tab_criteria.SelectedIndex = 0;
+            this.tab_criteria.Size = new System.Drawing.Size(588, 128);
+            this.tab_criteria.TabIndex = 1;
             // 
             // cb_search
             // 
-            this.AcceptButton = cb_search;
-            cb_search.Text = "&Search";
-            cb_search.TabIndex = 2;
-            cb_search.Location = new System.Drawing.Point(576, 5);
-            cb_search.Click += new EventHandler(cb_search_clicked);
+            this.cb_search.Location = new System.Drawing.Point(605, 19);
+            this.cb_search.Name = "cb_search";
+            this.cb_search.Size = new System.Drawing.Size(75, 23);
+            this.cb_search.TabIndex = 2;
+            this.cb_search.Text = "&Search";
+            this.cb_search.Click += new System.EventHandler(this.cb_search_clicked);
             // 
             // cb_clear
             // 
-            cb_clear.Text = "&Clear";
-            cb_clear.TabIndex = 3;
-            cb_clear.Location = new System.Drawing.Point(576, 32);
-            cb_clear.Click += new EventHandler(cb_clear_clicked);
+            this.cb_clear.Location = new System.Drawing.Point(605, 46);
+            this.cb_clear.Name = "cb_clear";
+            this.cb_clear.Size = new System.Drawing.Size(75, 23);
+            this.cb_clear.TabIndex = 3;
+            this.cb_clear.Text = "&Clear";
+            this.cb_clear.Click += new System.EventHandler(this.cb_clear_clicked);
             // 
             // cb_open
             // 
-            cb_open.Text = "&Open";
-            cb_open.TabIndex = 5;
-            cb_open.Location = new System.Drawing.Point(576, 137);
-            cb_open.Tag = "ComponentPrivilege=C;ComponentPrivilege=R;ComponentPrivilege=M;ComponentPrivilege=R;";
-            cb_open.Click += new EventHandler(cb_open_clicked);
+            this.cb_open.Location = new System.Drawing.Point(605, 131);
+            this.cb_open.Name = "cb_open";
+            this.cb_open.Size = new System.Drawing.Size(75, 23);
+            this.cb_open.TabIndex = 5;
+            this.cb_open.Tag = "ComponentPrivilege=C;ComponentPrivilege=R;ComponentPrivilege=M;ComponentPrivilege=R;";
+            this.cb_open.Text = "&Open";
+            this.cb_open.Click += new System.EventHandler(this.cb_open_clicked);
             // 
             // cb_new
             // 
-            cb_new.Text = "&New";
-            cb_new.Enabled = false;
-            cb_new.TabIndex = 6;
-            cb_new.Location = new System.Drawing.Point(576, 164);
-            cb_new.Tag = "ComponentPrivilege=C;";
-            cb_new.Click += new EventHandler(cb_new_clicked);
+            this.cb_new.Enabled = false;
+            this.cb_new.Location = new System.Drawing.Point(605, 158);
+            this.cb_new.Name = "cb_new";
+            this.cb_new.Size = new System.Drawing.Size(75, 23);
+            this.cb_new.TabIndex = 6;
+            this.cb_new.Tag = "ComponentPrivilege=C;";
+            this.cb_new.Text = "&New";
+            this.cb_new.Click += new System.EventHandler(this.cb_new_clicked);
             // 
             // dw_results
             // 
-            //this.dw_results.HorizontalScroll.Visible = true;//dw_results.hscrollbar = true;
-            dw_results.TabIndex = 4;
-            dw_results.Location = new System.Drawing.Point(8, 136);
-            dw_results.Size = new System.Drawing.Size(545, 224);
-
-            //((DSearchAddressResultsV2b)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
-            //((DSearchAddressResultsV2b)dw_results.DataObject).CellClick += new EventHandler(dw_results_clicked);
-            //dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
-
+            this.dw_results.DataObject = null;
+            this.dw_results.FireConstructor = false;
+            this.dw_results.Location = new System.Drawing.Point(8, 134);
+            this.dw_results.Name = "dw_results";
+            this.dw_results.Size = new System.Drawing.Size(588, 250);
+            this.dw_results.TabIndex = 4;
             // 
             // cb_select
             // 
-            cb_select.Text = "Select";
-            cb_select.Enabled = false;
-            cb_select.TabIndex = 0;
-            cb_select.Location = new System.Drawing.Point(695, 100);
-            cb_select.Visible = false;
-            cb_select.Click += new EventHandler(cb_select_clicked);
+            this.cb_select.Enabled = false;
+            this.cb_select.Location = new System.Drawing.Point(721, 194);
+            this.cb_select.Name = "cb_select";
+            this.cb_select.Size = new System.Drawing.Size(75, 23);
+            this.cb_select.TabIndex = 0;
+            this.cb_select.Text = "Select";
+            this.cb_select.Visible = false;
+            this.cb_select.Click += new System.EventHandler(this.cb_select_clicked);
             // 
             // cb_cancel
             // 
-            this.CancelButton = cb_cancel;
-            cb_cancel.Visible = false;
-            cb_cancel.Text = "Cancel";
-            cb_cancel.TabIndex = 7;
-            cb_cancel.Location = new System.Drawing.Point(692, 140);
-            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
+            this.cb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_cancel.Location = new System.Drawing.Point(692, 140);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(75, 23);
+            this.cb_cancel.TabIndex = 7;
+            this.cb_cancel.Text = "Cancel";
+            this.cb_cancel.Visible = false;
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // st_count
             // 
-            st_count.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            st_count.Text = "";
-            st_count.Width = 275;
-            st_count.Location = new System.Drawing.Point(269, 376);
-            st_count.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Bold);
+            this.st_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_count.Location = new System.Drawing.Point(388, 387);
+            this.st_count.Name = "st_count";
+            this.st_count.Size = new System.Drawing.Size(208, 16);
+            this.st_count.TabIndex = 0;
+            this.st_count.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // cb_print
             // 
-            cb_print.Text = "Print";
-            cb_print.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_print.TabIndex = 7;
-            cb_print.Location = new System.Drawing.Point(575, 336);
-            cb_print.Size = new System.Drawing.Size(77, 23);
-            cb_print.Click += new EventHandler(cb_print_clicked);
-            this.Name = "w_address_search";
-            this.ResumeLayout();
+            this.cb_print.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_print.Location = new System.Drawing.Point(605, 362);
+            this.cb_print.Name = "cb_print";
+            this.cb_print.Size = new System.Drawing.Size(77, 23);
+            this.cb_print.TabIndex = 7;
+            this.cb_print.Text = "Print";
+            this.cb_print.Click += new System.EventHandler(this.cb_print_clicked);
+            // 
+            // WAddressSearch
+            // 
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_cancel;
+            this.ClientSize = new System.Drawing.Size(690, 406);
+            this.Controls.Add(this.tab_criteria);
+            this.Controls.Add(this.cb_search);
+            this.Controls.Add(this.cb_clear);
+            this.Controls.Add(this.cb_open);
+            this.Controls.Add(this.cb_new);
+            this.Controls.Add(this.st_count);
+            this.Controls.Add(this.dw_results);
+            this.Controls.Add(this.cb_print);
+            this.Controls.Add(this.cb_select);
+            this.Location = new System.Drawing.Point(1, 1);
+            this.Name = "WAddressSearch";
+            this.Text = "Address Search";
+            this.Controls.SetChildIndex(this.cb_select, 0);
+            this.Controls.SetChildIndex(this.cb_print, 0);
+            this.Controls.SetChildIndex(this.dw_results, 0);
+            this.Controls.SetChildIndex(this.st_count, 0);
+            this.Controls.SetChildIndex(this.cb_new, 0);
+            this.Controls.SetChildIndex(this.cb_open, 0);
+            this.Controls.SetChildIndex(this.cb_clear, 0);
+            this.Controls.SetChildIndex(this.cb_search, 0);
+            this.Controls.SetChildIndex(this.tab_criteria, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>
@@ -287,7 +307,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             is_addr_perms = of_getpermissions("Address");
             if ((is_addr_perms == null) || !(is_addr_perms.IndexOf('R') >= 0))
             {
-                MessageBox.Show("You do not have sufficient permission to search for  \n" + "or view addresses", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You do not have sufficient permission to search for  \n" 
+                                 + "or view addresses"
+                               , "Warning"
+                               , MessageBoxButtons.OK
+                               , MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -301,20 +325,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //?this.inv_resize.of_register(cb_new, this.inv_resize.FIXEDRIGHT);
                 //?this.inv_resize.of_register(cb_cancel, this.inv_resize.FIXEDRIGHT);
                 //?this.inv_resize.of_register(cb_print, this.inv_resize.FIXEDRIGHT);
-                inv_road = (NRoad)(StaticVariables.gnv_app.of_get_road_map());//inv_road = StaticVariables.gnv_app.of_get_road_map();
-                if (!((StaticMessage.PowerObjectParm == null)) && (StaticMessage.PowerObjectParm != null))
+                //inv_road = StaticVariables.gnv_app.of_get_road_map();
+                inv_road = (NRoad)(StaticVariables.gnv_app.of_get_road_map());
+                if (!((StaticMessage.PowerObjectParm == null)) 
+                       && (StaticMessage.PowerObjectParm != null))
                 {
-                    //ls_classname = ClassName(StaticMessage.PowerObjectParm);
-                    //if (ls_classname == "w_frequencies2001")
-                    //{
-                    //    lw_parent = StaticMessage.PowerObjectParm;
-                    //}
                     if (StaticMessage.PowerObjectParm is WFrequencies2001)
                     {
                         lw_parent = (WFrequencies2001)StaticMessage.PowerObjectParm;
                     }
                 }
-                if ((lw_parent != null)) //if (IsValid(lw_parent))
+                if ((lw_parent != null))
                 {
                     ll_contract_id = lw_parent.of_get_contract_id();
                 }
@@ -330,7 +351,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void pfc_postopen()
         {
             base.pfc_postopen();
-            if (StaticVariables.gnv_app.of_get_npadenabled() && tab_criteria.of_getrdflag() == 1)
+            if (StaticVariables.gnv_app.of_get_npadenabled() 
+                && tab_criteria.of_getrdflag() == 1)
             {
                 cb_new.Enabled = false;
             }
@@ -338,7 +360,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 cb_new.Enabled = true;
             }
-            if (!(is_addr_perms.IndexOf('C') >= 0)) //if (!(Match(is_addr_perms, 'C')))
+            //if (!(Match(is_addr_perms, 'C')))
+            if (!(is_addr_perms.IndexOf('C') >= 0))
             {
                 cb_new.Enabled = false;
             }
@@ -349,7 +372,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void open()
         {
             base.open();
-            if ((is_addr_perms == null) || !(is_addr_perms.IndexOf('R') >= 0)) //if (IsNull(is_addr_perms) || !(Match(is_addr_perms, 'R')))
+             //if (IsNull(is_addr_perms) || !(Match(is_addr_perms, 'R')))
+            if ((is_addr_perms == null) 
+                || !(is_addr_perms.IndexOf('R') >= 0))
             {
                 this.Close();
             }
@@ -365,42 +390,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_componentID = StaticVariables.gnv_app.of_get_securitymanager().of_get_componentid(as_name);
             ls_perms = "";
             if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "C", false))
-            {
                 ls_perms += "C";
-            }
+
             if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "R", false))
-            {
                 ls_perms += "R";
-            }
+
             if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "M", false))
-            {
                 ls_perms += "M";
-            }
+
             if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "D", false))
-            {
                 ls_perms += "D";
-            }
+            
             if (ls_perms == "")
-            {
                 ls_perms = null;
-            }
             return ls_perms;
         }
 
         public virtual void of_set_open(bool ab_on)
         {
             if (ab_on)
-            {
                 cb_open.Enabled = true;
-            }
             else
-            {
                 cb_open.Enabled = false;
-            }
-        }
-
-        public virtual void ue_row_selected()
-        {
         }
 
         public virtual void dw_results_ue_process_duplication()
@@ -411,24 +422,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_prime_contact = dw_results.GetItem<SearchAddressResultsV2b>(al_row).PrimaryContract;
             if ((ls_prime_contact == null) || ls_prime_contact.Length <= 0)
             {
-                li_rc = (MessageBox.Show("This address is recorded in the system multiple number of times.\n" + "It is recommended that this duplicated entry be removed from \n" + "the system immediately. \n\n" + "Do you wish to delete this duplicated entry now?", "Duplicated Address", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes ? 1 : 2);//li_rc = MessageBox("Duplicated Address", "This address is recorded in the system multiple number of times.\n" + "It is recommended that this duplicated entry be removed from \n" + "the system immediately. \n\n" + "Do you wish to delete this duplicated entry now?", question!, yesno!, 1);
+                li_rc = (MessageBox.Show("This address is recorded in the system multiple number of times.\n" 
+                                           + "It is recommended that this duplicated entry be removed from \n" 
+                                           + "the system immediately. \n\n" 
+                                           + "Do you wish to delete this duplicated entry now?"
+                                        , "Duplicated Address"
+                                        , MessageBoxButtons.YesNo
+                                        , MessageBoxIcon.Question
+                                        , MessageBoxDefaultButton.Button1) 
+                         == DialogResult.Yes ? 1 : 2);
                 if (li_rc == 1)
                 {
                     dw_results.DataObject.DeleteItemAt(al_row);
-                    dw_results.Save(); //li_rc = dw_results.Update();
-                    //if (li_rc == 1)
-                    //{
-                    //    Commit;
-                    //}
-                    //else
-                    //{
-                    //    Rollback;
-                    //}
+                    dw_results.Save();
                 }
             }
             else
             {
-                MessageBox.Show("This address is recorded in the system multiple number of times.\n" + "Please transfer out/remove the primary contact residing on this record to\n" + "before this duplicated address can be removed from the system.", "Duplicated Address", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("This address is recorded in the system multiple number of times.\n" 
+                                  + "Please transfer out/remove the primary contact residing on this record to\n" 
+                                  + "before this duplicated address can be removed from the system."
+                               , "Duplicated Address"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -477,7 +492,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             lnv_msg.of_addcriteria(lnv_Criteria);
             ib_action_button_clicked = true;
-            if (!(this.IsMdiChild) && !(this.IsMdiContainer)) //if (this.WindowType == response!) {
+             //if (this.WindowType == response!) {
+            if (!(this.IsMdiChild) && !(this.IsMdiContainer))
             {
                 //OpenWithParm(lw_maintain, lnv_msg, "w_maintain_address_only");
                 StaticMessage.PowerObjectParm = lnv_msg;
@@ -517,44 +533,58 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rowCount = idw_results.RowCount;
             if (ll_rowCount > 0)
             {
-                if (cb_open.Visible)
-                {
-                    this.AcceptButton = cb_open;
-                }
-                else
-                {
-                    this.AcceptButton = cb_select;
-                }
-                cb_open.Enabled = true;
-
                 //! added to refresh symbols in first two columns of the grid that are assigned in CellFormatting event handler of grid                
                 ((Metex.Windows.DataEntityGrid)(dw_results.GetControlByName("grid"))).Refresh();
                 dw_results.DataObject.BindingSource.CurrencyManager.Refresh();
 
-                ((DSearchAddressResultsV2b)idw_results.DataObject).Focus();
-                dw_results.Focus();
-                //idw_results.ue_row_selected(1);the user event do noting -- by ybfan                
+                //((DSearchAddressResultsV2b)idw_results.DataObject).Focus();
+                idw_results.Focus();
+                idw_results.SelectRow(1, true);
+
+                cb_open.Enabled = true;
+                if (cb_open.Visible)
+                {
+                    this.cb_open.TabIndex = 5;
+                    this.cb_select.TabIndex = 0;
+                    this.AcceptButton = cb_open;
+                }
+                else
+                {
+                    this.cb_open.TabIndex = 0;
+                    this.cb_select.TabIndex = 5;
+                    this.AcceptButton = cb_select;
+                }
             }
             else
             {
                 cb_open.Enabled = false;
-                this.AcceptButton = null;
+                this.cb_open.TabIndex = 0;
+                this.cb_select.TabIndex = 5;
+                this.AcceptButton = cb_search;
             }
-            st_count.Text = ll_rowCount.ToString() + " rows retrieved";
+            string rows_retrieved = (ll_rowCount == 1) ? " row retrieved" : " rows retrieved";
+            st_count.Text = ll_rowCount.ToString() + rows_retrieved;
         }
 
         public virtual void ue_click_clear()
         {
             tab_criteria.of_clear_fields();
             dw_results.of_Reset();
+            // TJB  RD7_0042 Jan-2010: Added inv_road.of_clear_fields
+            inv_road.of_clear_fields();
             st_count.Text = "";
             of_set_open(false);
+            this.AcceptButton = cb_search;
+        }
+
+        public virtual void tab_criteria_gainfocus(object sender, EventArgs e)
+        {
+            ue_criteria_gainfocus();
         }
 
         public virtual void ue_criteria_gainfocus()
         {
             this.AcceptButton = null;
-            this.AcceptButton = null; ;
             this.AcceptButton = cb_search;
         }
 
@@ -563,7 +593,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_rows;
             int? ll_rd_flag;
             int? ll_contract_type;
-            if (StaticVariables.gnv_app.of_get_npadenabled() && tab_criteria.of_getrdflag() == 1)
+            if (StaticVariables.gnv_app.of_get_npadenabled() 
+                && tab_criteria.of_getrdflag() == 1)
             {
                 cb_new.Enabled = false;
             }
@@ -571,7 +602,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 cb_new.Enabled = true;
             }
-            if (!(is_addr_perms.IndexOf('C') >= 0)) //if (!(Match(is_addr_perms, 'C')))
+            if (!(is_addr_perms.IndexOf('C') >= 0))
             {
                 cb_new.Enabled = false;
             }
@@ -606,7 +637,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_Row = dw_results.GetSelectedRow(0);
             if (ll_Row == -1)
             {
-                MessageBox.Show("Please search for an address before trying to select one.", "Address Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please search for an address before trying to select one."
+                               , "Address Search"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             ll_AddressId = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrId;
@@ -617,7 +650,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ls_address = "";
             }
             ls_address = ls_address + " " + dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).RoadName;
-            ls_address = ls_address.TrimStart();// LeftTrim(ls_address);
+            ls_address = ls_address.TrimStart();
             ls_address = ls_address.Trim();
             ll_custId = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).CustId;
             lnv_Criteria = new NCriteria();
@@ -642,17 +675,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_Row = dw_results.GetSelectedRow(0);
             if (ll_Row < 0)
             {
-                MessageBox.Show("Please search for an address before trying to open one.", "Address Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please search for an address before trying to open one."
+                               , "Address Search"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             ll_AddressID = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrId;
             ll_custNo = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).CustId;
             ll_rdContractSelect = tab_criteria.of_getrdflag();
-            /*select count ( *) into :ll_temp from address where adr_id = :ll_addressID using SQLCA;*/
             ll_temp = RDSDataService.SelectAddressCount(ll_AddressID);
             if (ll_temp < 1)
             {
-                MessageBox.Show("The selected address has been removed.  \n" + "Please refresh the search results.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The selected address has been removed.  \n" 
+                                  + "Please refresh the search results."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             ib_action_button_clicked = true;
@@ -666,14 +703,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
       
         public virtual void key(object sender, KeyPressEventArgs e)
         {
-            //?base.key();
-            //?if (keyflags == 2)
-            //{
             if (e.KeyChar == 'I') //if (key == keyi!) {
             {
                 this.ue_click_new();
             }
-            //}
         }
 
         public virtual void cb_search_clicked(object sender, EventArgs e)
@@ -703,14 +736,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_results_rowfocuschanged(object sender, EventArgs e)
         {
             dw_results.SelectRow(0, false);
-            dw_results.SelectRow(dw_results.GetRow() + 1, true); //dw_results.SelectRow(currentrow, true);
+            dw_results.SelectRow(dw_results.GetRow() + 1, true);
+            // TJB RD7_0042 Jan-2010: added
+            if (cb_open.Enabled && cb_open.Visible)
+            {
+                this.cb_open.TabIndex = 5;
+                this.cb_select.TabIndex = 0;
+                this.AcceptButton = cb_open;
+            }
+            else
+            {
+                this.cb_open.TabIndex = 0;
+                this.cb_select.TabIndex = 5;
+                this.AcceptButton = cb_select;
+            }
         }
 
         public virtual void dw_results_doubleclicked(object sender, EventArgs e)
         {
             dw_results.URdsDw_DoubleClick(sender, e);
             Cursor.Current = Cursors.WaitCursor;
-            if (!(this.IsMdiChild) && !(this.IsMdiContainer))//if (parent.WindowType == response!) {
+            if (!(this.IsMdiChild) && !(this.IsMdiContainer))
             {
                 this.ue_click_select();
             }
@@ -727,8 +773,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string sDeliveryDays;
             int ll_contract_id;
             int row = dw_results.GetRow();
-            sObjectAtPointer = dw_results.DataObject.GetColumnName(); //sObjectAtPointer = dw_results.GetObjectAtPointer();
-            if (sObjectAtPointer.Length > 9 && sObjectAtPointer.Substring(0, 9) == "indicator") //if (Left(sObjectAtPointer, 9) == "indicator")
+            //sObjectAtPointer = dw_results.GetObjectAtPointer();
+            sObjectAtPointer = dw_results.DataObject.GetColumnName(); 
+             //if (Left(sObjectAtPointer, 9) == "indicator")
+            if (sObjectAtPointer.Length > 9 
+                && sObjectAtPointer.Substring(0, 9) 
+                == "indicator")
             {
                 //?if (dw_results.GetItem<SearchAddressResultsV2b>(row).Indicator != "")
                 //{
@@ -739,7 +789,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 if (dw_results.GetValue<string>(row, "multiple_prime") != "")
                 {
-                    MessageBox.Show("This is NOT a duplicate record but there is more than\n" + "one primary customer attached to this address.", "Multiple Primary Customers", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("This is NOT a duplicate record but there is more than\n" 
+                                      + "one primary customer attached to this address."
+                                   , "Multiple Primary Customers"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -1186,8 +1239,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ev.Graphics.DrawString(header2, printFont, System.Drawing.Brushes.Black,
             leftMargin, yPos, new System.Drawing.StringFormat());
             //! EOF header per page
-
-           
             
             // Print each line of the file.            
             while (count < linesPerPage && linesPrinted < lines.Count)
@@ -1200,7 +1251,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 count++;
                 linesPrinted++;
             }
-            
 
             // If more lines exist, print another page.
             if (linesPrinted < lines.Count)
@@ -1210,8 +1260,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ev.HasMorePages = false;                
             }
         }
-
-
         #endregion
     }
 }
