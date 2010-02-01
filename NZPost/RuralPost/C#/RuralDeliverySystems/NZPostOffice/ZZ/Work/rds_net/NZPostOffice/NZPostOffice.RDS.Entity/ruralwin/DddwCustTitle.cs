@@ -64,7 +64,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		protected override object GetIdValue()
 		{
 			return "";
-		}
+        }
 		#endregion
 
 		#region Factory Methods
@@ -89,8 +89,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT customer_title.customer_title_name ,customer_title.customer_title_id " +
-                        " FROM customer_title  ORDER BY customer_title.customer_title_id  ASC";
+                    cm.CommandText = "SELECT customer_title_name ,customer_title_id " 
+                                     + "FROM customer_title " 
+                                     + "ORDER BY customer_title_id ASC";
 
 					List<DddwCustTitle> _list = new List<DddwCustTitle>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -99,11 +100,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 						{
 							DddwCustTitle instance = new DddwCustTitle();
                             instance._customer_title = GetValueFromReader<string>(dr,0);
-                            instance._customer_title_id = GetValueFromReader<int?>(dr,1);
-							instance.MarkOld();
-                            instance.StoreInitialValues();
-                            if (instance._customer_title != null)//! remove null value otherwise dropdown throws exception
+                            //! remove null value otherwise dropdown throws exception
+                            if (instance._customer_title != null)
                             {
+                                instance._customer_title_id = GetValueFromReader<int?>(dr, 1);
+							    instance.MarkOld();
+                                instance.StoreInitialValues();
                                 _list.Add(instance);
                             }
 						}
