@@ -29,63 +29,52 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Size = new System.Drawing.Size(661, 413);
-            // 
-            // st_label
-            // 
-            st_label.Text = "w_address_search_select";
-            st_label.Location = new System.Drawing.Point(3, 368);
-            // 
-            // tab_criteria
-            // 
-            tab_criteria.Width = 551;
-            // 
-            // cb_search
-            // 
-            cb_search.Left = 569;
-            // 
-            // cb_clear
-            // 
-            cb_clear.Left = 569;
             // 
             // cb_open
             // 
-            cb_open.Enabled = false;
-            cb_open.TabIndex = 0;
-            cb_open.Location = new System.Drawing.Point(697, 97);
-            cb_open.Visible = false;
+            this.cb_open.Enabled = false;
+            this.cb_open.Location = new System.Drawing.Point(697, 97);
+            this.cb_open.TabIndex = 0;
+            this.cb_open.Visible = false;
             // 
             // cb_new
             // 
-            this.CancelButton = cb_new;
-            cb_new.Location = new System.Drawing.Point(569, 165);
-            // 
-            // dw_results
-            // 
-            dw_results.Width = 551;
+            this.cb_new.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_new.Location = new System.Drawing.Point(605, 165);
             // 
             // cb_select
             // 
-            cb_select.Enabled = true;
-            cb_select.TabIndex = 5;
-            cb_select.Location = new System.Drawing.Point(569, 137);
-            cb_select.Visible = true;
+            this.cb_select.Enabled = true;
+            this.cb_select.Location = new System.Drawing.Point(605, 131);
+            this.cb_select.TabIndex = 5;
+            this.cb_select.Visible = true;
             // 
-            // cb_cancel
+            // st_label
             // 
+            this.st_label.Location = new System.Drawing.Point(5, 387);
+            this.st_label.Text = "w_address_search_select";
             // 
-            // st_count
+            // WAddressSearchSelect
             // 
-            st_count.Location = new System.Drawing.Point(278, 456);
-            // 
-            // cb_print
-            // 
-            cb_print.Left = 569;
+            this.CancelButton = this.cb_new;
+            this.ClientSize = new System.Drawing.Size(690, 406);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WAddressSearchSelect";
+            this.Controls.SetChildIndex(this.cb_select, 0);
+            this.Controls.SetChildIndex(this.cb_print, 0);
+            this.Controls.SetChildIndex(this.idw_results, 0);
+            this.Controls.SetChildIndex(this.st_count, 0);
+            this.Controls.SetChildIndex(this.cb_new, 0);
+            this.Controls.SetChildIndex(this.cb_open, 0);
+            this.Controls.SetChildIndex(this.cb_clear, 0);
+            this.Controls.SetChildIndex(this.cb_search, 0);
+            this.Controls.SetChildIndex(this.tab_criteria, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            this.ResumeLayout();
         }
 
         /// <summary>
@@ -132,7 +121,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // when called as addressSearchSelect.
             cb_select.Enabled = true;
             cb_select.Visible = true;
-            cb_select.Location = new System.Drawing.Point(569, 137);
+            cb_select.Location = new System.Drawing.Point(605, 131);
             if (!((il_rdContractSelect == null)))
             {
                 tab_criteria.of_setrdflag(il_rdContractSelect, 1);
