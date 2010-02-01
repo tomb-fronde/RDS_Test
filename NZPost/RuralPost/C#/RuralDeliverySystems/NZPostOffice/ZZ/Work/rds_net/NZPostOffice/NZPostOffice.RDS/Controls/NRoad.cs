@@ -864,13 +864,6 @@ namespace NZPostOffice.RDS.Controls
                     continue;
 
                 string itemRoadName = item.RoadName.ToLower();   //.Trim();
-                // TJB  Jan 2010
-                // Added for debugging to provide a way to see what's happening in the loop
-                if (itemRoadName == "james")
-                {
-                    int i = 0;
-                    int j = i;
-                }
                 //if (!string.IsNullOrEmpty(AsRoadName) 
                 //    && !string.IsNullOrEmpty(item.RoadName) 
                 //    && item.RoadName.ToLower() == AsRoadName
