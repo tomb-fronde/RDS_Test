@@ -8,7 +8,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DSearchAddress
     {
-
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -88,9 +87,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.adr_no_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.adr_no_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.adr_no_t.ForeColor = System.Drawing.Color.Black;
-            this.adr_no_t.Location = new System.Drawing.Point(0, 4);
+            this.adr_no_t.Location = new System.Drawing.Point(-7, 5);
             this.adr_no_t.Name = "adr_no_t";
-            this.adr_no_t.Size = new System.Drawing.Size(90, 13);
+            this.adr_no_t.Size = new System.Drawing.Size(105, 13);
             this.adr_no_t.TabIndex = 0;
             this.adr_no_t.Text = "Street/Road No";
             this.adr_no_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -99,7 +98,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.road_type_t.Font = new System.Drawing.Font("Arial", 7F);
             this.road_type_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.road_type_t.Location = new System.Drawing.Point(266, 7);
+            this.road_type_t.Location = new System.Drawing.Point(261, 8);
             this.road_type_t.Name = "road_type_t";
             this.road_type_t.Size = new System.Drawing.Size(35, 11);
             this.road_type_t.TabIndex = 1;
@@ -110,7 +109,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.road_suffix_t.Font = new System.Drawing.Font("Arial", 7F);
             this.road_suffix_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.road_suffix_t.Location = new System.Drawing.Point(333, 7);
+            this.road_suffix_t.Location = new System.Drawing.Point(328, 8);
             this.road_suffix_t.Name = "road_suffix_t";
             this.road_suffix_t.Size = new System.Drawing.Size(35, 12);
             this.road_suffix_t.TabIndex = 2;
@@ -122,7 +121,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.adr_num.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "AdrNum", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.adr_num.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.adr_num.ForeColor = System.Drawing.Color.Black;
-            this.adr_num.Location = new System.Drawing.Point(96, 0);
+            this.adr_num.Location = new System.Drawing.Point(104, 1);
             this.adr_num.MaxLength = 10;
             this.adr_num.Name = "adr_num";
             this.adr_num.Size = new System.Drawing.Size(70, 20);
@@ -133,9 +132,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.tc_id_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.tc_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.tc_id_t.ForeColor = System.Drawing.Color.Black;
-            this.tc_id_t.Location = new System.Drawing.Point(0, 72);
+            this.tc_id_t.Location = new System.Drawing.Point(-7, 73);
             this.tc_id_t.Name = "tc_id_t";
-            this.tc_id_t.Size = new System.Drawing.Size(90, 13);
+            this.tc_id_t.Size = new System.Drawing.Size(105, 13);
             this.tc_id_t.TabIndex = 11;
             this.tc_id_t.Text = "Town/City";
             this.tc_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -145,9 +144,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.sl_id_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.sl_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.sl_id_t.ForeColor = System.Drawing.Color.Black;
-            this.sl_id_t.Location = new System.Drawing.Point(0, 49);
+            this.sl_id_t.Location = new System.Drawing.Point(-7, 50);
             this.sl_id_t.Name = "sl_id_t";
-            this.sl_id_t.Size = new System.Drawing.Size(90, 13);
+            this.sl_id_t.Size = new System.Drawing.Size(105, 13);
             this.sl_id_t.TabIndex = 12;
             this.sl_id_t.Text = "Suburb/Locality";
             this.sl_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -157,9 +156,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.road_id_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.road_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.road_id_t.ForeColor = System.Drawing.Color.Black;
-            this.road_id_t.Location = new System.Drawing.Point(-4, 26);
+            this.road_id_t.Location = new System.Drawing.Point(-7, 27);
             this.road_id_t.Name = "road_id_t";
-            this.road_id_t.Size = new System.Drawing.Size(96, 13);
+            this.road_id_t.Size = new System.Drawing.Size(105, 13);
             this.road_id_t.TabIndex = 13;
             this.road_id_t.Text = "Street/Road Name";
             this.road_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -169,7 +168,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.road_name.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RoadName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.road_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.road_name.ForeColor = System.Drawing.Color.Black;
-            this.road_name.Location = new System.Drawing.Point(96, 22);
+            this.road_name.Location = new System.Drawing.Point(104, 23);
             this.road_name.MaxLength = 0;
             this.road_name.Name = "road_name";
             this.road_name.Size = new System.Drawing.Size(147, 20);
@@ -181,41 +180,39 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rt_id.AutoRetrieve = true;
             this.rt_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RtId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rt_id.DisplayMember = "RtName";
-            this.rt_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.rt_id.DropDownWidth = 63;
             this.rt_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rt_id.ForeColor = System.Drawing.Color.Black;
-            this.rt_id.Location = new System.Drawing.Point(247, 22);
+            this.rt_id.Location = new System.Drawing.Point(255, 23);
             this.rt_id.Name = "rt_id";
             this.rt_id.Size = new System.Drawing.Size(63, 21);
             this.rt_id.TabIndex = 30;
             this.rt_id.Value = null;
             this.rt_id.ValueMember = "RtId";
-            this.rt_id.KeyPress += new KeyPressEventHandler(ComboboxKeyPress);
+            this.rt_id.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboboxKeyPress);
             // 
             // rs_id
             // 
             this.rs_id.AutoRetrieve = true;
             this.rs_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RsId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rs_id.DisplayMember = "RsName";
-            this.rs_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.rs_id.DropDownWidth = 63;
             this.rs_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rs_id.ForeColor = System.Drawing.Color.Black;
-            this.rs_id.Location = new System.Drawing.Point(314, 22);
+            this.rs_id.Location = new System.Drawing.Point(322, 23);
             this.rs_id.Name = "rs_id";
             this.rs_id.Size = new System.Drawing.Size(63, 21);
             this.rs_id.TabIndex = 40;
             this.rs_id.Value = null;
             this.rs_id.ValueMember = "RsId";
-            this.rs_id.KeyPress += new KeyPressEventHandler(ComboboxKeyPress);
+            this.rs_id.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboboxKeyPress);
             // 
             // contract_no_t
             // 
             this.contract_no_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.contract_no_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.contract_no_t.ForeColor = System.Drawing.Color.Black;
-            this.contract_no_t.Location = new System.Drawing.Point(370, 4);
+            this.contract_no_t.Location = new System.Drawing.Point(378, 5);
             this.contract_no_t.Name = "contract_no_t";
             this.contract_no_t.Size = new System.Drawing.Size(67, 15);
             this.contract_no_t.TabIndex = 41;
@@ -226,7 +223,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.contract_no.Location = new System.Drawing.Point(443, 1);
+            this.contract_no.Location = new System.Drawing.Point(451, 2);
             this.contract_no.Name = "contract_no";
             this.contract_no.Size = new System.Drawing.Size(59, 20);
             this.contract_no.TabIndex = 70;
@@ -236,9 +233,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.dp_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.dp_id_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.dp_id_t.Location = new System.Drawing.Point(400, 47);
+            this.dp_id_t.Location = new System.Drawing.Point(394, 48);
             this.dp_id_t.Name = "dp_id_t";
-            this.dp_id_t.Size = new System.Drawing.Size(37, 15);
+            this.dp_id_t.Size = new System.Drawing.Size(51, 15);
             this.dp_id_t.TabIndex = 71;
             this.dp_id_t.Text = "DP_ID";
             this.dp_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -248,7 +245,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.adr_rd_no_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.adr_rd_no_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.adr_rd_no_t.ForeColor = System.Drawing.Color.Black;
-            this.adr_rd_no_t.Location = new System.Drawing.Point(391, 25);
+            this.adr_rd_no_t.Location = new System.Drawing.Point(399, 26);
             this.adr_rd_no_t.Name = "adr_rd_no_t";
             this.adr_rd_no_t.Size = new System.Drawing.Size(46, 15);
             this.adr_rd_no_t.TabIndex = 72;
@@ -260,7 +257,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.adr_rd_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "AdrRdNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.adr_rd_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.adr_rd_no.ForeColor = System.Drawing.Color.Black;
-            this.adr_rd_no.Location = new System.Drawing.Point(443, 22);
+            this.adr_rd_no.Location = new System.Drawing.Point(451, 23);
             this.adr_rd_no.MaxLength = 40;
             this.adr_rd_no.Name = "adr_rd_no";
             this.adr_rd_no.Size = new System.Drawing.Size(59, 20);
@@ -270,7 +267,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.dp_id.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DpId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.dp_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.dp_id.Location = new System.Drawing.Point(443, 44);
+            this.dp_id.Location = new System.Drawing.Point(451, 45);
             this.dp_id.Name = "dp_id";
             this.dp_id.Size = new System.Drawing.Size(59, 20);
             this.dp_id.TabIndex = 90;
@@ -281,9 +278,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rd_contract_select.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RdContractSelect", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rd_contract_select.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rd_contract_select.ForeColor = System.Drawing.Color.Black;
-            this.rd_contract_select.Location = new System.Drawing.Point(358, 71);
+            this.rd_contract_select.Location = new System.Drawing.Point(366, 71);
             this.rd_contract_select.Name = "rd_contract_select";
-            this.rd_contract_select.Size = new System.Drawing.Size(143, 15);
+            this.rd_contract_select.Size = new System.Drawing.Size(143, 18);
             this.rd_contract_select.TabIndex = 100;
             this.rd_contract_select.Text = "Rural Delivery Contracts";
             // 
@@ -292,32 +289,29 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.tc_id.AutoRetrieve = true;
             this.tc_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "TcId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.tc_id.DisplayMember = "TcName";
-            this.tc_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.tc_id.DropDownWidth = 244;
             this.tc_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.tc_id.ForeColor = System.Drawing.Color.Black;
-            this.tc_id.Location = new System.Drawing.Point(96, 68);
+            this.tc_id.Location = new System.Drawing.Point(104, 69);
             this.tc_id.Name = "tc_id";
             this.tc_id.Size = new System.Drawing.Size(244, 21);
             this.tc_id.TabIndex = 60;
             this.tc_id.Value = null;
             this.tc_id.ValueMember = "TcId";
-            this.tc_id.KeyPress += new KeyPressEventHandler(ComboboxKeyPress);
+            this.tc_id.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboboxKeyPress);
             // 
             // sl_name
             // 
-//!            this.sl_name.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bindingSource, "SlName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.sl_name.DisplayMember = "SlName";
-            this.sl_name.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.sl_name.DropDownWidth = 244;
             this.sl_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.sl_name.ForeColor = System.Drawing.Color.Black;
-            this.sl_name.Location = new System.Drawing.Point(96, 45);
+            this.sl_name.Location = new System.Drawing.Point(104, 46);
             this.sl_name.Name = "sl_name";
             this.sl_name.Size = new System.Drawing.Size(244, 21);
             this.sl_name.TabIndex = 50;
             this.sl_name.ValueMember = "SlName";
-            this.sl_name.KeyPress += new KeyPressEventHandler(ComboboxKeyPress);
+            this.sl_name.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ComboboxKeyPress);
             // 
             // DSearchAddress
             // 
@@ -343,11 +337,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.tc_id);
             this.Controls.Add(this.sl_name);
             this.Name = "DSearchAddress";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(602, 104);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         //p! added autocomplete code
@@ -357,14 +350,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
             string strFindStr = "";
 
-            if (e.KeyChar == (char)8)
+            if (e.KeyChar == (char)8)  /* Backspace */
             {
                 if (cb.SelectionStart <= 1)
                 {
                     cb.Text = "";
                     return;
                 }
-
                 if (cb.SelectionLength == 0)
                     strFindStr = cb.Text.Substring(0, cb.Text.Length - 1);
                 else
@@ -381,7 +373,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             int intIdx = -1;
 
             // Search the string in the ComboBox list.
-
             intIdx = cb.FindString(strFindStr);
 
             if (intIdx != -1)
@@ -396,32 +387,62 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             {
                 e.Handled = false;
             }
-
         }
         //p! END OF added autocomplete code
 
         void road_name_KeyPress(object sender, KeyEventArgs e)
         {
-            if (e.KeyData ==  Keys.D0 || e.KeyData == Keys.D1 || e.KeyData == Keys.D2 || e.KeyData == Keys.D3 || e.KeyData == Keys.D4 || e.KeyData == Keys.D5 || e.KeyData == Keys.D6 || e.KeyData == Keys.D7 || e.KeyData == Keys.D8 || e.KeyData == Keys.D9 || e.KeyData == Keys.A || e.KeyData == Keys.B || e.KeyData == Keys.C || e.KeyData == Keys.D || e.KeyData == Keys.E || e.KeyData == Keys.F || e.KeyData == Keys.G || e.KeyData == Keys.H || e.KeyData == Keys.I || e.KeyData == Keys.J || e.KeyData == Keys.K || e.KeyData == Keys.L || e.KeyData == Keys.M || e.KeyData == Keys.N || e.KeyData == Keys.O || e.KeyData == Keys.P || e.KeyData == Keys.Q || e.KeyData == Keys.R || e.KeyData == Keys.S || e.KeyData == Keys.T || e.KeyData == Keys.U || e.KeyData == Keys.V || e.KeyData == Keys.W || e.KeyData == Keys.X || e.KeyData == Keys.Y || e.KeyData == Keys.Z)
+            Keypress = false;
+            Keyback = false;
+            Keycode = (int)e.KeyCode;
+            // Check for alphabetic or numeric characters
+            if ((e.KeyData >= Keys.A && e.KeyData <= Keys.Z)
+                 || (e.KeyData >= Keys.D0 && e.KeyData <= Keys.D9)
+                 || (e.KeyData >= Keys.NumPad0 && e.KeyData <= Keys.NumPad9)
+               )
             {
                 Keypress = true;
+                return;
             }
-            else
+
+            // Check for special characters (most don't have a Keys enumreation)
+            if (e.KeyData == Keys.Space
+                || Keycode == 189 || e.KeyData == Keys.Subtract   /* "-" */
+                || Keycode == 55    /* "&" */
+                || Keycode == 222   /* "'" */
+               )
             {
-                Keypress = false;
+                Keypress = true;
+                return;
             }
+//    TJB  RD7_0042  Jan-2010: rewritten
+//          Above tests for groups of characters rather than individually
+//          and now includes the special characters.
+//            if (e.KeyData ==  Keys.D0 || e.KeyData == Keys.D1 || e.KeyData == Keys.D2 || e.KeyData == Keys.D3 || e.KeyData == Keys.D4 
+//                || e.KeyData == Keys.D5 || e.KeyData == Keys.D6 || e.KeyData == Keys.D7 || e.KeyData == Keys.D8 || e.KeyData == Keys.D9 
+//                || e.KeyData == Keys.A || e.KeyData == Keys.B || e.KeyData == Keys.C || e.KeyData == Keys.D || e.KeyData == Keys.E 
+//                || e.KeyData == Keys.F || e.KeyData == Keys.G || e.KeyData == Keys.H || e.KeyData == Keys.I || e.KeyData == Keys.J 
+//                || e.KeyData == Keys.K || e.KeyData == Keys.L || e.KeyData == Keys.M || e.KeyData == Keys.N || e.KeyData == Keys.O 
+//                || e.KeyData == Keys.P || e.KeyData == Keys.Q || e.KeyData == Keys.R || e.KeyData == Keys.S || e.KeyData == Keys.T 
+//                || e.KeyData == Keys.U || e.KeyData == Keys.V || e.KeyData == Keys.W || e.KeyData == Keys.X || e.KeyData == Keys.Y 
+//                || e.KeyData == Keys.Z
+//                || e.KeyData == Keys.Space)
+//            {
+//                Keypress = true;
+//            }
+//            else
+//                Keypress = false;
+
+            if (e.KeyData == Keys.Back)
+                Keyback = true;
         }
 
         void road_name_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Back)
-            {
                 Keyback = true;
-            }
             else
-            {
                 Keyback = false;
-            }
         }
 
         private void StringaToBool(object sender, ConvertEventArgs e)
@@ -453,7 +474,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
         #endregion
         public bool Keyback = false;
-        public bool Keypress = false;       
+        public bool Keypress = false;
+        public int Keycode;       
 
     }
 }
