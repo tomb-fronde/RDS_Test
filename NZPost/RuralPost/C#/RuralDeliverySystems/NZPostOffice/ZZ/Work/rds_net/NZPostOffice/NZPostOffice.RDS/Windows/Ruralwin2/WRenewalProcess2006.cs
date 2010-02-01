@@ -11,7 +11,7 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.Windows.Ruralwin;
 using NZPostOffice.RDS.DataService;
 using NZPostOffice.RDS.Windows.Ruralbase;
-using System.Threading;
+//using System.Threading;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
@@ -92,8 +92,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_printbm;
 
-        #endregion
+        public TextBox st_status;
 
+        public Label note_1;
+        public Label note_2;
+
+        #endregion
         // TJB  RD7_0051 Oct-2009
         // Fix display of page control buttons on Benchmark report panel.  The more-likely
         // actual fix is the commenting-out of the SetChildIndex method calls in the
@@ -119,6 +123,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Changed to make report resizeable
             //dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_bm_report.DataObject.BorderStyle = BorderStyle.None;
+            st_status.Visible = false;
 
             //pp! following lines moved from InitializeComponent to the ctnructor of windiw in order to open design mode of this window
             dw_criteria1.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria1_constructor);
@@ -185,6 +190,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_schedule = new NZPostOffice.RDS.Controls.URdsDw();
             this.tab_1 = new System.Windows.Forms.TabControl();
             this.tabpage_1 = new System.Windows.Forms.TabPage();
+            this.note_1 = new System.Windows.Forms.Label();
+            this.note_2 = new System.Windows.Forms.Label();
             this.cb_clear = new NZPostOffice.Shared.VisualComponents.UCb();
             this.l_1 = new System.Windows.Forms.Panel();
             this.dw_criteria1 = new NZPostOffice.RDS.Controls.URdsDw();
@@ -200,6 +207,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_2 = new System.Windows.Forms.TabPage();
             this.dw_bm_report = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_printbm = new System.Windows.Forms.Button();
+            this.st_status = new System.Windows.Forms.TextBox();
             this.tab_1.SuspendLayout();
             this.tabpage_1.SuspendLayout();
             this.tabpage_2.SuspendLayout();
@@ -207,9 +215,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // st_label
             // 
-            this.st_label.Location = new System.Drawing.Point(19, 479);
+            this.st_label.Location = new System.Drawing.Point(13, 484);
+            this.st_label.Size = new System.Drawing.Size(171, 20);
             this.st_label.Text = "WRenewalProcess2006";
-            this.st_label.Visible = true;
             // 
             // dw_schedule
             // 
@@ -229,12 +237,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tab_1.Location = new System.Drawing.Point(5, 3);
             this.tab_1.Name = "tab_1";
             this.tab_1.SelectedIndex = 0;
-            this.tab_1.Size = new System.Drawing.Size(570, 400);
+            this.tab_1.Size = new System.Drawing.Size(570, 469);
             this.tab_1.TabIndex = 2;
             // 
             // tabpage_1
             // 
             this.tabpage_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tabpage_1.Controls.Add(this.note_1);
+            this.tabpage_1.Controls.Add(this.note_2);
             this.tabpage_1.Controls.Add(this.cb_clear);
             this.tabpage_1.Controls.Add(this.l_1);
             this.tabpage_1.Controls.Add(this.dw_criteria1);
@@ -250,10 +260,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_1.Location = new System.Drawing.Point(4, 22);
             this.tabpage_1.Name = this.tabpage_1.Text;
-            this.tabpage_1.Size = new System.Drawing.Size(562, 374);
+            this.tabpage_1.Size = new System.Drawing.Size(562, 443);
             this.tabpage_1.TabIndex = 0;
             this.tabpage_1.Text = "Benchmark";
             this.tabpage_1.ToolTipText = "Contract selection tabpage for creating pendings and benchmarking";
+            // 
+            // note_1
+            // 
+            note_1.Text = "Double Click on contract to open";
+            note_1.Name = "note_1";
+            note_1.Location = new System.Drawing.Point(51, 390);
+            note_1.Size = new System.Drawing.Size(350, 15);
+            note_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            // 
+            // note_2
+            // 
+            note_2.Text = "NOTE:  Only contracts that can be renewed will be retrieved";
+            note_2.Name = "note_2";
+            note_2.Location = new System.Drawing.Point(51, 403);
+            note_2.Size = new System.Drawing.Size(350, 13);
+            note_2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             // 
             // cb_clear
             // 
@@ -267,12 +293,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // l_1
             // 
             this.l_1.BackColor = System.Drawing.Color.Black;
-//            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.l_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.l_1.Location = new System.Drawing.Point(55, 338);
             this.l_1.Name = "l_1";
             this.l_1.Size = new System.Drawing.Size(345, 1);
-            this.l_1.TabIndex = 14;
+            this.l_1.Visible = false;
             // 
             // dw_criteria1
             // 
@@ -280,7 +304,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_criteria1.FireConstructor = false;
             this.dw_criteria1.Location = new System.Drawing.Point(51, 4);
             this.dw_criteria1.Name = "dw_criteria1";
-            this.dw_criteria1.Size = new System.Drawing.Size(350, 90);
+            this.dw_criteria1.Size = new System.Drawing.Size(350, 99);
             this.dw_criteria1.TabIndex = 12;
             this.dw_criteria1.ItemChanged += new System.EventHandler(this.dw_criteria1_itemchanged);
             // 
@@ -288,7 +312,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             this.dw_listings.DataObject = null;
             this.dw_listings.FireConstructor = false;
-            this.dw_listings.Location = new System.Drawing.Point(51, 95);
+            this.dw_listings.Location = new System.Drawing.Point(51, 109);
             this.dw_listings.Name = "dw_listings";
             this.dw_listings.Size = new System.Drawing.Size(350, 275);
             this.dw_listings.TabIndex = 4;
@@ -320,7 +344,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // cb_2s
             // 
             this.cb_2s.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_2s.Location = new System.Drawing.Point(437, 88);
+            this.cb_2s.Location = new System.Drawing.Point(437, 103);
             this.cb_2s.Name = "cb_2s";
             this.cb_2s.Size = new System.Drawing.Size(76, 22);
             this.cb_2s.TabIndex = 2;
@@ -355,9 +379,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             this.cb_printsked.Enabled = false;
             this.cb_printsked.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_printsked.Location = new System.Drawing.Point(437, 332);
+            this.cb_printsked.Location = new System.Drawing.Point(429, 332);
             this.cb_printsked.Name = "cb_printsked";
-            this.cb_printsked.Size = new System.Drawing.Size(97, 22);
+            this.cb_printsked.Size = new System.Drawing.Size(105, 22);
             this.cb_printsked.TabIndex = 8;
             this.cb_printsked.Tag = "ComponentName=Print Schedules;";
             this.cb_printsked.Text = "Print Schedules...";
@@ -376,7 +400,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // cb_1
             // 
             this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_1.Location = new System.Drawing.Point(437, 120);
+            this.cb_1.Location = new System.Drawing.Point(437, 135);
             this.cb_1.Name = "cb_1";
             this.cb_1.Size = new System.Drawing.Size(76, 22);
             this.cb_1.TabIndex = 5;
@@ -391,7 +415,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_2.Location = new System.Drawing.Point(4, 22);
             this.tabpage_2.Name = this.tabpage_2.Text;
-            this.tabpage_2.Size = new System.Drawing.Size(562, 374);
+            this.tabpage_2.Size = new System.Drawing.Size(562, 443);
             this.tabpage_2.TabIndex = 1;
             this.tabpage_2.Text = "Report";
             this.tabpage_2.ToolTipText = "Benchmark report - enabled only when benchmark process is successful";
@@ -402,36 +426,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_bm_report.FireConstructor = false;
             this.dw_bm_report.Location = new System.Drawing.Point(5, 8);
             this.dw_bm_report.Name = "dw_bm_report";
-            this.dw_bm_report.Size = new System.Drawing.Size(550, 318);
+            this.dw_bm_report.Size = new System.Drawing.Size(550, 404);
             this.dw_bm_report.TabIndex = 12;
-            this.dw_bm_report.Click += new System.EventHandler(this.dw_bm_report_Click);
             // 
             // cb_printbm
             // 
             this.cb_printbm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_printbm.Location = new System.Drawing.Point(486, 334);
+            this.cb_printbm.Location = new System.Drawing.Point(486, 420);
             this.cb_printbm.Name = "cb_printbm";
             this.cb_printbm.Size = new System.Drawing.Size(70, 22);
             this.cb_printbm.TabIndex = 3;
             this.cb_printbm.Text = "&Print";
             this.cb_printbm.Click += new System.EventHandler(this.cb_printbm_clicked);
             // 
+            // st_status
+            // 
+            this.st_status.BackColor = System.Drawing.SystemColors.Control;
+            this.st_status.Location = new System.Drawing.Point(219, 484);
+            this.st_status.Name = "st_status";
+            this.st_status.Size = new System.Drawing.Size(352, 20);
+            this.st_status.BorderStyle = BorderStyle.None;
+            // 
             // WRenewalProcess2006
             // 
             this.AcceptButton = this.cb_searchs;
-            this.ClientSize = new System.Drawing.Size(585, 427);
+            this.ClientSize = new System.Drawing.Size(585, 517);
             this.Controls.Add(this.tab_1);
             this.Controls.Add(this.dw_schedule);
+            this.Controls.Add(this.st_status);
             this.Location = new System.Drawing.Point(1, 1);
             this.Name = "WRenewalProcess2006";
             this.Text = "Renewal Process";
-            // TJB  RD7_0051  Oct2009
-            // Comment these out to have page selection bottons on report panel
+            //this.Controls.SetChildIndex(this.st_status, 0);
             //this.Controls.SetChildIndex(this.dw_schedule, 0);
             //this.Controls.SetChildIndex(this.tab_1, 0);
             //this.Controls.SetChildIndex(this.st_label, 0);
             this.tab_1.ResumeLayout(false);
             this.tabpage_1.ResumeLayout(false);
+            this.tabpage_1.PerformLayout();
             this.tabpage_2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1020,22 +1052,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lSequence;
             int lLoop;
             int lUpperBound;
-            DateTime dDate = new DateTime();
+            DateTime? dDate;   // = new DateTime();
             int ll_Cnt;
             int ll_Ctr = 0;
             int li_sched_row;
             string ls_dispatch = null;
             bool lb_printReport;
 
-                //OpenWithParm(w_select_schedules2001, of_getparent());
-            StaticMessage.PowerObjectParm = this.of_getparent();
-            WSelectSchedules2001 w_select_schedules2001 = new WSelectSchedules2001();
-            w_select_schedules2001.ShowDialog();
+            // TJB  RD7_0051 Oct-2009: testing
+            int fileseq;
+            string filename;
+            string st_message;
+            dDate = null;
 
-            if (StaticMessage.DoubleParm != 1)
-            {
-                return;
-            }
+            // TJB  RD7_0051 Oct-2009
+            // Swapped check for selected row(s) with display of schedules to select
             lRow = dw_listing.GetSelectedRow(0);
             if (lRow < 0)
             {
@@ -1044,16 +1075,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            //OpenWithParm(w_select_schedules2001, of_getparent());
+            StaticMessage.PowerObjectParm = this.of_getparent();
+            WSelectSchedules2001 w_select_schedules2001 = new WSelectSchedules2001();
+            w_select_schedules2001.ShowDialog();
+
+            if (StaticMessage.DoubleParm != 1)
+            {
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
             ll_Cnt = of_getnumselectedrows();
  
                 //jlwang: thread            
-            Thread thread = new Thread(new ThreadStart(WStatusabortShow));
-            thread.Priority = ThreadPriority.Highest;
-            thread.Start();
+            /*
+             * Thread thread = new Thread(new ThreadStart(WStatusabortShow));
+             * thread.Priority = ThreadPriority.Highest;
+             * thread.Start();
+             */
+
+            // TJB  RD7_0051 Oct-2009: testing
+            fileseq = 0;
+            st_message = "";
+            this.st_status.Text = st_message;
+            this.st_status.Visible = true;
 
             lUpperBound = sScheduleDWs.Count;    //..UpperBound;
             while (lRow >= 0)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 ll_Ctr++;
                     //?if (IsValid(w_statusabort))
                     //{
@@ -1061,9 +1113,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //}
                 lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
                 lSequence = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).MaxSequence;
+                // TJB  RD7_0051 Oct-2009: testing
+                st_message = "Processing contract " + lContract.ToString()
+                                     + " (" + ll_Ctr.ToString() + " of " + ll_Cnt.ToString() + ")";
+                this.st_status.Text = st_message;
+                //((WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text = "Processing contract " + lContract.ToString()
+                //                                                                 + " (" + ll_Ctr.ToString() + " of " + ll_Cnt.ToString() + ")";
+                //((WMainMdi)StaticVariables.MainMDI).Refresh();
                 for (lLoop = 0; lLoop < lUpperBound; lLoop++)
                 {
-                        //dw_schedule.DataObject = sScheduleDWs[lLoop];
+
+                    //dw_schedule.DataObject = sScheduleDWs[lLoop];
                         //!dw_schedule.SetDataObject(DEFAULT_ASSEMBLY, DEFAULT_VERSION, 
                         //!    "NZPostOffice.RDS.DataControls.Ruralrpt." + StaticFunctions.migrateName(sScheduleDWs[lLoop].ToString()));
                         //
@@ -1075,16 +1135,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     dw_schedule.DataObject = System.Activator.CreateInstance(type) as Metex.Windows.DataUserControl;
 
                         //?dw_schedule.settransobject(StaticVariables.sqlca);
-                    if (sScheduleDWs[lLoop].ToString() == "r_contract_summary")
+                    //if (sScheduleDWs[lLoop].ToString() == "r_contract_summary")
+                    string report = sScheduleDWs[lLoop].ToString();
+                    this.st_status.Text = st_message + " - " + report.Substring(2);
+                    if (report == "r_contract_summary")
                     {
                             //?dDate = StaticFunctions.RelativeDate(Today(), 0 - Day(Today()));
-                        dw_schedule.Retrieve(new object[] { lContract, lSequence, dDate });
+                        //dw_schedule.Retrieve(new object[]{ lContract, lSequence, dDate });
+                        dw_schedule.Retrieve(new object[]{ lContract, (lSequence - 1), dDate });
                     }
                     else
                     {
-                        dw_schedule.Retrieve(new object[] { lContract, lSequence });
+                        dw_schedule.Retrieve(new object[]{lContract,lSequence});
                     }
-                         //  TJB SR4615
+                    Cursor.Current = Cursors.WaitCursor;
+                    //  TJB SR4615
                          //  Don't print where there's nothing to print on a schedule of mail carried.
                          //     ( decided by there being nothing in the mc_dispatch_carried column)
                     lb_printReport = true;
@@ -1093,14 +1158,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         li_sched_row = dw_schedule.GetRow();
 
                         if(dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") != null)
-                        {
                             ls_dispatch = dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried").ToString();
-                        }
 
                         if (ls_dispatch == null)
-                        {
                             lb_printReport = false;
-                        }
                     }
                     if (lb_printReport == true)
                     {                      
@@ -1111,35 +1172,67 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         {
                             viewer.RefreshReport();
 
-                            ((CrystalDecisions.CrystalReports.Engine.ReportClass)
-                                (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
-                                              (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).PrintToPrinter(1, false, 0, 0);
+                            // TJB  RD7_0051 Oct-2009: testing
+                            // public virtual void PrintToPrinter(int nCopies, bool collated, int startPageN, int endPageN);
+                            //((CrystalDecisions.CrystalReports.Engine.ReportClass)
+                            //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
+                            //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).PrintToPrinter(1, false, 0, 0);
+                            fileseq++;
+                            filename = @"C:\tmp\report-" + fileseq.ToString() + "-"
+                                           + lContract.ToString() + "_" + report.Substring(2);
+
+                            //((CrystalDecisions.CrystalReports.Engine.ReportClass)
+                            //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
+                            //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).SaveAs(filename,true);
+                            //((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).SaveAs(filename, true);
+                            ((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).PrintToPrinter(1, false, 0, 0);
+
+                            //((CrystalDecisions.CrystalReports.Engine.ReportClass)
+                            //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
+                            //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).Close();
+                            ((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).Close();
+
+                            //((CrystalDecisions.CrystalReports.Engine.ReportClass)
+                            //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
+                            //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).Dispose();
+                            if (viewer != null)
+                                ((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).Dispose();
                         }
-                    }                  
-
-
-                    if (ib_PrintAbort)
-                    {
-                        lLoop = lUpperBound;
-                        break;
                     }
+                   /*
+                    * if (ib_PrintAbort)
+                    * {
+                    *     lLoop = lUpperBound;
+                    *     break;
+                    * }
+                    */
                 }
-                if (ib_PrintAbort)
-                {
-                    lRow = 0;
-                }
-                else
-                {
-                        //dw_listing.SelectRow ( lRow, False)
-                    lRow = dw_listing.GetSelectedRow(lRow + 1);
-                }
+               /*
+                * if (ib_PrintAbort)
+                * {
+                *     lRow = 0;
+                * }
+                * else
+                * {
+                *     //dw_listing.SelectRow ( lRow, False)
+                *     lRow = dw_listing.GetSelectedRow(lRow + 1);
+                * }
+                */
+                lRow = dw_listing.GetSelectedRow(lRow + 1);
             }
-
-            if (thread != null && w_statusabort != null)
-            {
-                    //w_statusabort.Close();
-                thread.Abort();
-            }
+           /*
+            * if (thread != null && w_statusabort != null)
+            * {
+            *     //w_statusabort.Close();
+            *     thread.Abort();
+            * }
+            */
+            dw_listing.SelectRow(0, false);
+            Cursor.Current = Cursors.Default;
+            this.st_status.Text = "";
+            this.st_status.Visible = false;
+            //((WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text = "Ready";
+            //((WMainMdi)StaticVariables.MainMDI).Refresh();
         }
 
 
@@ -1248,8 +1341,5 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         #endregion
 
-        private void dw_bm_report_Click(object sender, EventArgs e)
-        {
-        }
     }
 }
