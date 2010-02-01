@@ -1,3 +1,7 @@
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
+
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DCustomerDetails2
@@ -20,6 +24,40 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             base.Dispose(disposing);
         }
 
+        private System.Windows.Forms.Label cust_surname_company_t;
+        private System.Windows.Forms.Label cust_initials_t;
+        private System.Windows.Forms.TextBox cust_initials;
+        private System.Windows.Forms.Label cust_title_t;
+        private System.Windows.Forms.Label cust_phone_day_t;
+        private System.Windows.Forms.Label cust_phone_mobile_t;
+        private System.Windows.Forms.Label t_1;
+        private System.Windows.Forms.Label cust_care_of_t;
+        private System.Windows.Forms.Label t_2;
+        private System.Windows.Forms.Label cust_date_commenced_t;
+        private System.Windows.Forms.Label t_3;
+        private System.Windows.Forms.MaskedTextBox cust_phone_mobile;
+        private System.Windows.Forms.Label cust_phone_night_t;
+        // TJB RD7_0042 Jan-2010: Changed to ComboBox
+        //private Metex.Windows.DataEntityCombo cust_title;
+        private System.Windows.Forms.ComboBox cust_title;
+
+        private System.Windows.Forms.TextBox cust_adpost_quantity;
+        private System.Windows.Forms.TextBox cust_care_of;
+        private System.Windows.Forms.MaskedTextBox cust_phone_day;
+        private System.Windows.Forms.MaskedTextBox cust_phone_night;
+        private System.Windows.Forms.Label cust_id_t;
+        private NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox cust_date_commenced;// System.Windows.Forms.MaskedTextBox cust_date_commenced;
+        private System.Windows.Forms.Label t_cust_dpid;
+        private System.Windows.Forms.TextBox cust_id;
+        private System.Windows.Forms.TextBox cust_dpid;
+        private System.Windows.Forms.TextBox cust_surname_company;
+        private System.Windows.Forms.Label customer_category_t;
+        private System.Windows.Forms.CheckBox cust_business;
+        private System.Windows.Forms.CheckBox cust_rural_resident;
+        private System.Windows.Forms.CheckBox cust_rural_farmer;
+        private System.Windows.Forms.RadioButton cust_dir_listing_ind_1;
+        private System.Windows.Forms.RadioButton cust_dir_listing_ind_2;
+
         #region Component Designer generated code
 
         /// <summary> 
@@ -29,29 +67,29 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private void InitializeComponent()
         {
             this.cust_surname_company_t = new System.Windows.Forms.Label();
+            this.cust_surname_company = new System.Windows.Forms.TextBox();
             this.cust_initials_t = new System.Windows.Forms.Label();
             this.cust_initials = new System.Windows.Forms.TextBox();
             this.cust_title_t = new System.Windows.Forms.Label();
+            this.cust_title = new System.Windows.Forms.ComboBox();
             this.cust_phone_day_t = new System.Windows.Forms.Label();
+            this.cust_phone_day = new System.Windows.Forms.MaskedTextBox();
             this.cust_phone_mobile_t = new System.Windows.Forms.Label();
+            this.cust_phone_mobile = new System.Windows.Forms.MaskedTextBox();
+            this.cust_phone_night_t = new System.Windows.Forms.Label();
+            this.cust_phone_night = new System.Windows.Forms.MaskedTextBox();
             this.t_1 = new System.Windows.Forms.Label();
             this.cust_care_of_t = new System.Windows.Forms.Label();
             this.t_2 = new System.Windows.Forms.Label();
             this.cust_date_commenced_t = new System.Windows.Forms.Label();
             this.t_3 = new System.Windows.Forms.Label();
-            this.cust_phone_mobile = new System.Windows.Forms.MaskedTextBox();
-            this.cust_phone_night_t = new System.Windows.Forms.Label();
-            this.cust_title = new Metex.Windows.DataEntityCombo();
             this.cust_adpost_quantity = new System.Windows.Forms.TextBox();
             this.cust_care_of = new System.Windows.Forms.TextBox();
-            this.cust_phone_day = new System.Windows.Forms.MaskedTextBox();
-            this.cust_phone_night = new System.Windows.Forms.MaskedTextBox();
             this.cust_id_t = new System.Windows.Forms.Label();
-            this.cust_date_commenced = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();// System.Windows.Forms.MaskedTextBox();
+            this.cust_date_commenced = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.t_cust_dpid = new System.Windows.Forms.Label();
             this.cust_id = new System.Windows.Forms.TextBox();
             this.cust_dpid = new System.Windows.Forms.TextBox();
-            this.cust_surname_company = new System.Windows.Forms.TextBox();
             this.customer_category_t = new System.Windows.Forms.Label();
             this.cust_business = new System.Windows.Forms.CheckBox();
             this.cust_rural_resident = new System.Windows.Forms.CheckBox();
@@ -74,6 +112,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_surname_company_t.TabIndex = 0;
             this.cust_surname_company_t.Text = "Surname / Company";
             this.cust_surname_company_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cust_surname_company
+            // 
+            this.cust_surname_company.BackColor = System.Drawing.Color.Aqua;
+            this.cust_surname_company.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustSurnameCompany", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cust_surname_company.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_surname_company.Location = new System.Drawing.Point(107, 58);
+            this.cust_surname_company.MaxLength = 45;
+            this.cust_surname_company.Name = "cust_surname_company";
+            this.cust_surname_company.Size = new System.Drawing.Size(256, 20);
+            this.cust_surname_company.TabIndex = 20;
             // 
             // cust_initials_t
             // 
@@ -105,6 +154,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_title_t.Text = "Title";
             this.cust_title_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cust_title
+            // 
+            this.cust_title.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cust_title.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cust_title.DisplayMember = "CustomerTitle";
+            this.cust_title.DropDownWidth = 74;
+            this.cust_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_title.Location = new System.Drawing.Point(289, 80);
+            this.cust_title.Name = "cust_title";
+            this.cust_title.Size = new System.Drawing.Size(74, 21);
+            this.cust_title.TabIndex = 40;
+            this.cust_title.ValueMember = "CustomerTitle";
+            // 
             // cust_phone_day_t
             // 
             this.cust_phone_day_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -115,6 +177,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_phone_day_t.Text = "Day";
             this.cust_phone_day_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cust_phone_day
+            // 
+            this.cust_phone_day.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneDay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cust_phone_day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_phone_day.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.cust_phone_day.Location = new System.Drawing.Point(107, 102);
+            this.cust_phone_day.Mask = "(##) ###-######";
+            this.cust_phone_day.Name = "cust_phone_day";
+            this.cust_phone_day.PromptChar = ' ';
+            this.cust_phone_day.Size = new System.Drawing.Size(110, 20);
+            this.cust_phone_day.TabIndex = 50;
+            this.cust_phone_day.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            // 
             // cust_phone_mobile_t
             // 
             this.cust_phone_mobile_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -124,6 +199,42 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_phone_mobile_t.TabIndex = 0;
             this.cust_phone_mobile_t.Text = "Mobile";
             this.cust_phone_mobile_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cust_phone_mobile
+            // 
+            this.cust_phone_mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneMobile", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cust_phone_mobile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_phone_mobile.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.cust_phone_mobile.Location = new System.Drawing.Point(107, 123);
+            this.cust_phone_mobile.Mask = "(###) ###-#####";
+            this.cust_phone_mobile.Name = "cust_phone_mobile";
+            this.cust_phone_mobile.PromptChar = ' ';
+            this.cust_phone_mobile.Size = new System.Drawing.Size(110, 20);
+            this.cust_phone_mobile.TabIndex = 70;
+            this.cust_phone_mobile.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            // 
+            // cust_phone_night_t
+            // 
+            this.cust_phone_night_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_phone_night_t.Location = new System.Drawing.Point(226, 107);
+            this.cust_phone_night_t.Name = "cust_phone_night_t";
+            this.cust_phone_night_t.Size = new System.Drawing.Size(37, 13);
+            this.cust_phone_night_t.TabIndex = 0;
+            this.cust_phone_night_t.Text = "Night";
+            this.cust_phone_night_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cust_phone_night
+            // 
+            this.cust_phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneNight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cust_phone_night.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_phone_night.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.cust_phone_night.Location = new System.Drawing.Point(272, 103);
+            this.cust_phone_night.Mask = "(##) ###-######";
+            this.cust_phone_night.Name = "cust_phone_night";
+            this.cust_phone_night.PromptChar = ' ';
+            this.cust_phone_night.Size = new System.Drawing.Size(91, 20);
+            this.cust_phone_night.TabIndex = 60;
+            this.cust_phone_night.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // t_1
             // 
@@ -175,47 +286,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_3.Text = "dd/MM/yyyy";
             this.t_3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cust_phone_mobile
-            // 
-            this.cust_phone_mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneMobile", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_phone_mobile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_mobile.Location = new System.Drawing.Point(107, 123);
-            this.cust_phone_mobile.Mask = "(###) ###-#####";
-            this.cust_phone_mobile.DataBindings[0].FormatString = "(##) ###-######";
-            this.cust_phone_mobile.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_phone_mobile.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.cust_phone_mobile.PromptChar = ' ';
-            this.cust_phone_mobile.DataBindings[0].DataSourceNullValue = null;
-            this.cust_phone_mobile.Name = "cust_phone_mobile";
-            this.cust_phone_mobile.Size = new System.Drawing.Size(110, 20);
-            this.cust_phone_mobile.TabIndex = 70;
-            this.cust_phone_mobile.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
-            // 
-            // cust_phone_night_t
-            // 
-            this.cust_phone_night_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_night_t.Location = new System.Drawing.Point(226, 107);
-            this.cust_phone_night_t.Name = "cust_phone_night_t";
-            this.cust_phone_night_t.Size = new System.Drawing.Size(37, 13);
-            this.cust_phone_night_t.TabIndex = 0;
-            this.cust_phone_night_t.Text = "Night";
-            this.cust_phone_night_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cust_title
-            // 
-            this.cust_title.AutoRetrieve = true;
-            this.cust_title.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustTitle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_title.DisplayMember = "CustomerTitle";
-            this.cust_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_title.Location = new System.Drawing.Point(289, 80);
-            this.cust_title.Name = "cust_title";
-            this.cust_title.Size = new System.Drawing.Size(74, 21);
-            this.cust_title.TabIndex = 40;
-            this.cust_title.Value = null;
-            this.cust_title.ValueMember = "CustomerTitle";
-            //! even original application does not let user add new values
-            this.cust_title.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            // 
             // cust_adpost_quantity
             // 
             this.cust_adpost_quantity.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustAdpostQuantity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -235,36 +305,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_care_of.Size = new System.Drawing.Size(257, 20);
             this.cust_care_of.TabIndex = 90;
             // 
-            // cust_phone_day
-            // 
-            this.cust_phone_day.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneDay", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_phone_day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_day.Location = new System.Drawing.Point(107, 102);
-            this.cust_phone_day.Mask = "(##) ###-######";
-            this.cust_phone_day.DataBindings[0].FormatString = "(##) ###-######";
-            this.cust_phone_day.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_phone_day.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.cust_phone_day.PromptChar = ' ';
-            this.cust_phone_day.DataBindings[0].DataSourceNullValue = null;
-            this.cust_phone_day.Name = "cust_phone_day";
-            this.cust_phone_day.Size = new System.Drawing.Size(110, 20);
-            this.cust_phone_day.TabIndex = 50;
-            // 
-            // cust_phone_night
-            // 
-            this.cust_phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneNight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_phone_night.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_night.Location = new System.Drawing.Point(272, 103);
-            this.cust_phone_night.Mask = "(##) ###-######";
-            this.cust_phone_night.DataBindings[0].FormatString = "(##) ###-######";
-            this.cust_phone_night.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_phone_night.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.cust_phone_night.PromptChar = ' ';
-            this.cust_phone_night.DataBindings[0].DataSourceNullValue = null;
-            this.cust_phone_night.Name = "cust_phone_night";
-            this.cust_phone_night.Size = new System.Drawing.Size(91, 20);
-            this.cust_phone_night.TabIndex = 60;
-            // 
             // cust_id_t
             // 
             this.cust_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -279,18 +319,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.cust_date_commenced.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustDateCommenced", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_date_commenced.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            //this.cust_date_commenced.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.cust_date_commenced.Location = new System.Drawing.Point(107, 25);
             this.cust_date_commenced.Mask = "00/00/0000";
             this.cust_date_commenced.Name = "cust_date_commenced";
-            //this.cust_date_commenced.PromptChar = '0';
             this.cust_date_commenced.Size = new System.Drawing.Size(82, 20);
             this.cust_date_commenced.TabIndex = 10;
-            //this.cust_date_commenced.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            //this.cust_date_commenced.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_date_commenced.DataBindings[0].DataSourceNullValue = null;
-            this.cust_date_commenced.DataBindings[0].FormatString = "dd/MM/yyyy";
-            //this.cust_date_commenced.ValidatingType = typeof(System.DateTime);
+            this.cust_date_commenced.Text = "00000000";
+            this.cust_date_commenced.Value = null;
             // 
             // t_cust_dpid
             // 
@@ -322,21 +357,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_dpid.Size = new System.Drawing.Size(67, 20);
             this.cust_dpid.TabIndex = 140;
             // 
-            // cust_surname_company
-            // 
-            this.cust_surname_company.BackColor = System.Drawing.Color.Aqua;
-            this.cust_surname_company.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustSurnameCompany", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_surname_company.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_surname_company.Location = new System.Drawing.Point(107, 58);
-            this.cust_surname_company.MaxLength = 45;
-            this.cust_surname_company.Name = "cust_surname_company";
-            this.cust_surname_company.Size = new System.Drawing.Size(256, 20);
-            this.cust_surname_company.TabIndex = 20;
-            // 
             // customer_category_t
             // 
             this.customer_category_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.customer_category_t.Location = new System.Drawing.Point(4, 184);
+            this.customer_category_t.Location = new System.Drawing.Point(4, 189);
             this.customer_category_t.Name = "customer_category_t";
             this.customer_category_t.Size = new System.Drawing.Size(101, 13);
             this.customer_category_t.TabIndex = 0;
@@ -348,7 +372,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_business.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cust_business.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CustBusiness", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_business.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_business.Location = new System.Drawing.Point(117, 182);
+            this.cust_business.Location = new System.Drawing.Point(117, 187);
             this.cust_business.Name = "cust_business";
             this.cust_business.Size = new System.Drawing.Size(105, 20);
             this.cust_business.TabIndex = 110;
@@ -359,7 +383,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_rural_resident.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cust_rural_resident.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CustRuralResident", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_rural_resident.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_rural_resident.Location = new System.Drawing.Point(117, 199);
+            this.cust_rural_resident.Location = new System.Drawing.Point(117, 204);
             this.cust_rural_resident.Name = "cust_rural_resident";
             this.cust_rural_resident.Size = new System.Drawing.Size(105, 20);
             this.cust_rural_resident.TabIndex = 120;
@@ -370,7 +394,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_rural_farmer.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cust_rural_farmer.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CustRuralFarmer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_rural_farmer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_rural_farmer.Location = new System.Drawing.Point(117, 216);
+            this.cust_rural_farmer.Location = new System.Drawing.Point(117, 221);
             this.cust_rural_farmer.Name = "cust_rural_farmer";
             this.cust_rural_farmer.Size = new System.Drawing.Size(105, 20);
             this.cust_rural_farmer.TabIndex = 130;
@@ -435,7 +459,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.cust_rural_resident);
             this.Controls.Add(this.cust_rural_farmer);
             this.Name = "DCustomerDetails2";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(452, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -444,35 +468,5 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
         #endregion
 
-        private System.Windows.Forms.Label cust_surname_company_t;
-        private System.Windows.Forms.Label cust_initials_t;
-        private System.Windows.Forms.TextBox cust_initials;
-        private System.Windows.Forms.Label cust_title_t;
-        private System.Windows.Forms.Label cust_phone_day_t;
-        private System.Windows.Forms.Label cust_phone_mobile_t;
-        private System.Windows.Forms.Label t_1;
-        private System.Windows.Forms.Label cust_care_of_t;
-        private System.Windows.Forms.Label t_2;
-        private System.Windows.Forms.Label cust_date_commenced_t;
-        private System.Windows.Forms.Label t_3;
-        private System.Windows.Forms.MaskedTextBox cust_phone_mobile;
-        private System.Windows.Forms.Label cust_phone_night_t;
-        private Metex.Windows.DataEntityCombo cust_title;
-        private System.Windows.Forms.TextBox cust_adpost_quantity;
-        private System.Windows.Forms.TextBox cust_care_of;
-        private System.Windows.Forms.MaskedTextBox cust_phone_day;
-        private System.Windows.Forms.MaskedTextBox cust_phone_night;
-        private System.Windows.Forms.Label cust_id_t;
-        private NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox cust_date_commenced;// System.Windows.Forms.MaskedTextBox cust_date_commenced;
-        private System.Windows.Forms.Label t_cust_dpid;
-        private System.Windows.Forms.TextBox cust_id;
-        private System.Windows.Forms.TextBox cust_dpid;
-        private System.Windows.Forms.TextBox cust_surname_company;
-        private System.Windows.Forms.Label customer_category_t;
-        private System.Windows.Forms.CheckBox cust_business;
-        private System.Windows.Forms.CheckBox cust_rural_resident;
-        private System.Windows.Forms.CheckBox cust_rural_farmer;
-        private System.Windows.Forms.RadioButton cust_dir_listing_ind_1;
-        private System.Windows.Forms.RadioButton cust_dir_listing_ind_2;
     }
 }
