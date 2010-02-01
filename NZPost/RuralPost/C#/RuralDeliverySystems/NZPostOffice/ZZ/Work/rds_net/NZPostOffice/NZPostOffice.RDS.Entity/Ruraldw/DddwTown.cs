@@ -154,7 +154,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT towncity.tc_id,  towncity.region_id,  towncity.tc_name,  post_code.post_code,  post_code.post_code_id  FROM rd.towncity LEFT OUTER JOIN rd.post_code ON towncity.tc_name = post_code.post_mail_town  ";
+					cm.CommandText = "SELECT tc_id, region_id, tc_name, post_code, post_code_id " 
+                                   +   "FROM rd.towncity " 
+                                   +             "LEFT OUTER JOIN rd.post_code " 
+                                   +                   "ON tc_name = post_mail_town "
+                                   +  "ORDER BY tc_name ASC";
 					ParameterCollection pList = new ParameterCollection();
 
 					List<DddwTown> _list = new List<DddwTown>();

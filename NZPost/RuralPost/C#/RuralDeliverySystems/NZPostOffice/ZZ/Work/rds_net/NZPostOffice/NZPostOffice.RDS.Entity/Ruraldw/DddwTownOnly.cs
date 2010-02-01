@@ -89,7 +89,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = " SELECT DISTINCT tc_id,tc_name   FROM towncity ORDER BY tc_name ASC";
+                    cm.CommandText = "SELECT DISTINCT tc_id, tc_name " 
+                                   +   "FROM towncity " 
+                                   +  "ORDER BY tc_name ASC";
 
 					List<DddwTownOnly> _list = new List<DddwTownOnly>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
