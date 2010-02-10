@@ -1118,8 +1118,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 dw_address.DataObject.BindingSource.CurrencyManager.Refresh();
 
+                // Clear the RD number
                 is_rd_no = "";
 
+                // Clear the road type
                 ldwc_child = dw_address.DataObject.GetChild("rt_id");
                 ldwc_child.FilterString = "";
                 ldwc_child.FilterOnce<DddwRoadType>(RoadTypeNoFilter);
@@ -1130,7 +1132,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //ldwc_child.SetCurrent(0);
                 //dw_address.GetItem<SearchAddress>(0).RtId = -100;
 
-                //dw_address.GetChild("rs_id", ldwc_child);
+                // Clear the road suffix
                 ldwc_child = dw_address.DataObject.GetChild("rs_id");
                 ldwc_child.FilterString = "";
                 ldwc_child.FilterOnce<DddwRoadSuffix>(RoadSuffixNoFilter);
@@ -1153,6 +1155,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //((DSearchAddress)(dw_address.DataObject)).SuburbsCombo.DataSource = source;
                 ((DSearchAddress)(dw_address.DataObject)).SuburbsCombo.DataSource = SuburbSource;
 
+                // TJB  RD7_0042 Feb-2010: Bug fix
+                //     Added to clear suburb name when clearing the search criteria
+                idw_address.GetControlByName("sl_name").Text = "";
+
+                // Clear the Town/City 
                 ldwc_child = dw_address.DataObject.GetChild("tc_id");
                 ldwc_child.FilterOnce<DddwTownOnly>(TownOnlyNoFilter);
                 if (!string.IsNullOrEmpty(ldwc_child.SortString))
