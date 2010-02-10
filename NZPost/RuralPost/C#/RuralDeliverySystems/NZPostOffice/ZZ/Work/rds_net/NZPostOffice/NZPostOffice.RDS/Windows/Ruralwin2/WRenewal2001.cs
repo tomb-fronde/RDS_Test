@@ -401,32 +401,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         }
 
-        //void dw_contract_vehicle_DataSourceChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
-        //{
-        //    //if (tbPanel.Controls.Count == idw_vehicle.RowCount)
-        //    //    return;
-        //    for (int i = 0; i < idw_vehicle.RowCount; i++)
-        //    {
-        //        tbPanel.Controls.Clear();
-        //        t = new URdsDw();
-        //        t.DataObject = new NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle();
-        //        t.Name = i.ToString();
-        //        t.Size = new System.Drawing.Size(550, 300);
-        //        t.DataObject.BindingSource.DataSource = idw_vehicle.DataObject.BindingSource.List[i];
-        //        Console.WriteLine(t.DataObject.BindingSource.DataSource.ToString());
-        //        t.ItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
-        //        t.Constructor += new UserEventDelegate(dw_contract_vehicle_constructor);
-        //        t.PfcPreInsertRow += new UserEventDelegate(dw_contract_vehicle_pfc_preinsertrow);
-        //        t.PfcPreDeleteRow += new UserEventDelegate(dw_contract_vehicle_pfc_predeleterow);
-        //        t.PfcInsertRow += new UserEventDelegate(dw_contract_vehicle_pfc_insertrow);
-        //        t.PfcPostUpdate += new UserEventDelegate(dw_contract_vehicle_pfc_postupdate);
-
-        //        this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-        //        tbPanel.SetRow(t, i);
-        //        tbPanel.Controls.Add(t, 0, i);
-        //    }
-        //}
-
         //added by jlwang
 
         void WRenewal2001_CellLeave(object sender, DataGridViewCellEventArgs e)
@@ -551,6 +525,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nPrevVehicle = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
                 nPrevFtKey = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
                 dcPrevVehBenchmark = wf_getVehBenchmark();
+            }
+
+            // TJB  Dec-2009:  Test using stars to display Vehicle Safety Rating
+            //  - For testing, use vehicle year to determine the number of stars
+            int nRows = dw_contract_vehicle.RowCount;
+            int? VYear = 0;
+            int n_stars = 0;
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                VYear = idw_vehicle.GetItem<ContractVehicle>(nRow).VVehicleYear;
+                if (VYear == null)
+                    n_stars = 0;
+                else
+                    n_stars = 5 - (int)(2007 - VYear);
+                //((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicleTest)(((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[nRow])).set_stars(n_stars);
+                //int i1 = ((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicleTest)(((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[nRow])).get_stars();
+                ((DContractVehicleTest)(((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[nRow])).set_stars(n_stars);
+                int i1 = ((DContractVehicleTest)(((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[nRow])).get_stars();
+                int i2 = i1;
             }
             nRow = dw_renewal.RowCount;
             nRow = dw_renewal.GetRow();
@@ -2201,17 +2194,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             nThisVehicle = idw_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
             nThisFtKey = idw_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
             dcThisVehBenchmark = wf_getVehBenchmark();
-            /* ------------------------------ Debugging ------------------------------- //
-            MessageBox.Show("Prev Vehicle = " + nPrevVehicle + "\n"
-                 + "This Vehicle = " + nThisVehicle + "\n"
-                 + "Prev Ft Key = " + nPrevFtKey + "\n"
-                 + "This Ft Key = " + nThisFtKey + "\n\n"
-                 + "Prev Benchmark = " + dcPrevVehBenchmark + "\n"
-                 + "This Benchmark = " + dcThisVehBenchmark
-               , "dw_contract_vehicle_pfc_postupdate"
-               , MessageBoxButtons.OK
-               , MessageBoxIcon.Information);
-            // ------------------------------------------------------------------------ */
 
             if (ib_new_veh_added)
             {
@@ -2245,13 +2227,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , MessageBoxButtons.OK, MessageBoxIcon.Error );
                 }
             }
-            //  PBY 25/06/2002 SR#4409 Make sure no column is editable after a save
-            ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
+            // TJB  Feb-2010
+            //   Removed this Re-retrieval of the Vehicle records.  It was triggering an 
+            //   itemchanged event with a null dw_contract (why??) in some cases and causing 
+            //   the application to crash.
+            ////  PBY 25/06/2002 SR#4409 Make sure no column is editable after a save
+            //((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
+
+            // TJB  Feb-2010: Vehicle safety-rating prototype
+            //   Added
+            //   Re-calculate the number of stars to display and update them.
+            int nRows = dw_contract_vehicle.RowCount;
+            if (nRows > 0)
+            {
+                nRow = dw_contract_vehicle.GetRow();
+                int? VYear = idw_vehicle.GetItem<ContractVehicle>(nRow).VVehicleYear;
+                int  n_stars = 0;
+                if (!(VYear == null))
+                    n_stars = 5 - (int)(2007 - VYear);
+
+                ((DContractVehicleTest)(((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[nRow])).set_stars(n_stars);
+            }
 
             // TJB  RD7_0037  Aug 2007
             // These are the new "Previous" values
             nPrevVehicle = nThisVehicle;
-            nPrevFtKey = nThisFtKey;
+            nPrevFtKey   = nThisFtKey;
             dcPrevVehBenchmark = dcThisVehBenchmark;
         }
 
@@ -2334,6 +2335,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_vor_rc;
             int ll_nvor_rc;
             int ll_nvorh_rc;
+            int ll_row;
 
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
             int TestExpr = tab_renewal.SelectedIndex;// newindex;
@@ -2396,7 +2398,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 idw_vehicle.URdsDw_GetFocus(null, null); //added by jlwang
 
-                if (idw_vehicle.RowCount == 0)
+                //if (idw_vehicle.RowCount == 0)
+                ll_row = idw_vehicle.RowCount;
+                if (ll_row == 0)
                 {
                     ((DContractVehicle)idw_vehicle.DataObject).Retrieve(il_contract, il_sequence);
                 }
@@ -2439,14 +2443,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ll_Ret = idw_renewal.Save();
                     ((DRenewal)idw_renewal.DataObject).Retrieve(il_contract, il_sequence);
                     if (ll_Ret < 0)
-                    {
                         return;
-                    }
                 }
                 else
-                {
                     idw_renewal.DataObject.Reset();
-                }
             }
             //?idw_frequency_adjustment.DataObject.AcceptText();
             //if (idw_frequency_adjustment.DeletedCount() > 0 || idw_frequency_adjustment.ModifiedCount() > 0) {
@@ -2463,14 +2463,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ll_Ret = idw_frequency_adjustment.Save();
 
                     if (ll_Ret < 0)
-                    {
                         return;
-                    }
                 }
                 else
-                {
                     idw_frequency_adjustment.DataObject.Reset();
-                }
             }
             //?idw_contract_adjustment.DataObject.AcceptText();
             //if (idw_contract_adjustment.DeletedCount() > 0 || idw_contract_adjustment.ModifiedCount() > 0) {
@@ -2486,14 +2482,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     // ll_Ret = base.pfc_save();
                     ll_Ret = idw_contract_adjustment.Save(); 
                     if (ll_Ret < 0)
-                    {
                         return;
-                    }
                 }
                 else
-                {
                     idw_contract_adjustment.DataObject.Reset();
-                }
             }
             //?idw_owner_drivers.DataObject.AcceptText();
             //if (idw_owner_drivers.DeletedCount() > 0 || idw_owner_drivers.ModifiedCount() > 0) {
@@ -2509,17 +2501,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //ll_Ret = base.pfc_save();
                     ll_Ret = idw_owner_drivers.Save();
                     if (ll_Ret < 0)
-                    {
                         return;
-                    }
                 }
                 else
-                {
                     idw_owner_drivers.DataObject.Reset();
-                }
             }
             //?idw_vehicle.DataObject.AcceptText();
             //if (idw_vehicle.DeletedCount() > 0 || idw_vehicle.ModifiedCount() > 0) {
+            ll_Row = idw_vehicle.GetRow();
             if (StaticFunctions.IsDirty(idw_vehicle.DataObject))
             {
                 di_ret = MessageBox.Show("Do you want to update the contract_vehicle database?"
@@ -2531,14 +2520,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //ll_Ret = base.pfc_save();
                     ll_Ret = idw_vehicle.Save();
                     if (ll_Ret < 0)
-                    {
                         return;
-                    }
                 }
                 else
-                {
                     idw_vehicle.DataObject.Reset();
-                }
             }
         }
 
@@ -2595,16 +2580,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_renewal.URdsDw_Itemchanged(sender, e);
 
             string changed_column = dw_renewal.GetColumnName();
-            string t = changed_column;
             int nRow = dw_renewal.GetRow();
-            if (dw_renewal.GetColumnName() == "con_acceptance_flag")
+            if (changed_column == "con_acceptance_flag")
             {
                 if (!(wf_checkaccepted()))
                 {
                     dw_renewal.SetValue(nRow, "con_acceptance_flag", false);
                 }
             }
-            else if (dw_renewal.GetColumnName() == "con_volume_at_renewal")
+            else if (changed_column == "con_volume_at_renewal")
             {
                 // TJB  RD7_0040  Aug2009
                 // Moved code to separate function
@@ -2765,35 +2749,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int SQLCode = 0;
 
             string column_name = ((Control)sender).Name;
-            if (column_name == "v_vehicle_registration_number")       //"vehicle_v_vehicle_registration_number")
+            if (column_name == "v_vehicle_registration_number")
             {
-                sRegNo = Convert.ToString(dw_contract_vehicle.DataObject.GetValue(dw_contract_vehicle.GetRow(), "v_vehicle_registration_number"));//.GetText();
-                /*SELECT vehicle.vehicle_number,   
-                    vehicle.vt_key,   
-                    vehicle.ft_key,   
-                    vehicle.v_vehicle_make,   
-                    vehicle.v_vehicle_model,   
-                    vehicle.v_vehicle_year,   
-                    vehicle.v_vehicle_cc_rating,   
-                    vehicle.v_road_user_charges_indicator,   
-                    vehicle.v_purchased_date,   
-                    vehicle.v_purchase_value,   
-                    vehicle.v_leased,
-                    vehicle.v_vehicle_month
-                    INTO :lVehicleNo,   
-                    :lVTKey,   
-                    :lFTKey,   
-                    :sMake,   
-                    :sModel,   
-                    :lYear,   
-                    :lCCRate,   
-                    :sRoadUser,   
-                    :dPurchase,   
-                    :lPurchase,   
-                    :sLeased,
-                    :lMonth
-                    FROM vehicle
-                    WHERE vehicle.v_vehicle_registration_number = :sRegNo   ;*/
+                //int nRow = idw_vehicle.GetRow();
+                int nRow = dw_contract_vehicle.GetRow();
+                //sRegNo = Convert.ToString(dw_contract_vehicle.DataObject.GetValue(nRow, "v_vehicle_registration_number"));
+                sRegNo = (string)dw_contract_vehicle.DataObject.GetValue(nRow, "v_vehicle_registration_number");
                 List<VehicleItem> list = new List<VehicleItem>();
                 RDSDataService dataService = RDSDataService.GetVehicleList(sRegNo, ref SQLCode);
                 list = dataService.VehicleList;
@@ -2829,18 +2790,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else
                 {
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "vehicle_number", lVehicleNo);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "vt_key", lVTKey);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "ft_key", lFTKey);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_vehicle_make", sMake);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_vehicle_model", sModel);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_vehicle_year", lYear);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_vehicle_cc_rating", lCCRate);
-                    dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).VRoadUserChargesIndicator = ("Y" == sRoadUSer);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_purchased_date", dPurchase);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_purchase_value", lPurchase);
-                    dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).VLeased = ("Y" == sLeased);
-                    dw_contract_vehicle.DataObject.SetValue(dw_contract_vehicle.GetRow(), "v_vehicle_month", lMonth);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "vehicle_number", lVehicleNo);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "vt_key", lVTKey);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "ft_key", lFTKey);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_make", sMake);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_model", sModel);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_year", lYear);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_cc_rating", lCCRate);
+                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VRoadUserChargesIndicator = ("Y" == sRoadUSer);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_purchased_date", dPurchase);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_purchase_value", lPurchase);
+                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VLeased = ("Y" == sLeased);
+                    dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_month", lMonth);
                 }
                 //  PBY 12/06/2002 SR#4402
             }
@@ -2849,7 +2810,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 int l_ft_key;
 
                 l_ft_key = Convert.ToInt32(dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).FtKey);
-                //l_ft_key = Convert.ToInt32(((Metex.Windows.DataEntityCombo)(((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicleTest)(((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[0])).GetControlByName("vehicle_ft_key"))).Value);
                 if (l_ft_key == 4)
                 {
                     //  This is diesel
