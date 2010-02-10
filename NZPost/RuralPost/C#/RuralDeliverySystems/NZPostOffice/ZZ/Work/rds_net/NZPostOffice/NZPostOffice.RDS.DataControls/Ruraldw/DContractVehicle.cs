@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -12,11 +13,108 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     public partial class DContractVehicleTest : Metex.Windows.DataUserControl
     {
+        private bool[] safety_filled = new bool[6];
+        private Button[] star = new Button[6];
+
         public DContractVehicleTest()
         {
             InitializeComponent();
             //InitializeDropdown();
+
+            // TJB  Dec-2009:  Test using stars to display Vehicle Safety Rating
+            //  - For testing, use vehicle year to determine the number of stars
+            Safety1.Click += new EventHandler(Safety1_Click);
+            Safety2.Click += new EventHandler(Safety2_Click);
+            Safety3.Click += new EventHandler(Safety3_Click);
+            Safety4.Click += new EventHandler(Safety4_Click);
+            Safety5.Click += new EventHandler(Safety5_Click);
+
+            initialize_stars();
+
+            Star_tooltip.SetToolTip(Safety1, "Very dodgy");
+            Star_tooltip.SetToolTip(Safety2, "Dodgy");
+            Star_tooltip.SetToolTip(Safety3, "OK");
+            Star_tooltip.SetToolTip(Safety4, "Safe");
+            Star_tooltip.SetToolTip(Safety5, "Very safe");
         }
+
+        // TJB  Dec-2009:  Safety-stars prototype
+        //  Test using stars to display Vehicle Safety Rating
+        //  - For testing, use vehicle year to determine the number of stars
+        void Safety1_Click(object sender, EventArgs e)
+        {
+            if (safety_filled[1] && safety_filled[2])
+                set_stars(1);
+            else if (safety_filled[1] && ! safety_filled[2])
+                set_stars(0);
+            else if (!safety_filled[1])
+                set_stars(1);
+        }
+
+        void Safety2_Click(object sender, EventArgs e)
+        {
+            set_stars(2);
+        }
+
+        void Safety3_Click(object sender, EventArgs e)
+        {
+            set_stars(3);
+        }
+
+        void Safety4_Click(object sender, EventArgs e)
+        {
+            set_stars(4);
+        }
+
+        void Safety5_Click(object sender, EventArgs e)
+        {
+            set_stars(5);
+        }
+
+        private void initialize_stars()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                safety_filled[i] = false;
+            }
+            star[1] = Safety1;
+            star[2] = Safety2;
+            star[3] = Safety3;
+            star[4] = Safety4;
+            star[5] = Safety5;
+        }
+
+        public int get_stars()
+        {
+            int i;
+            for (i = 1; i <= 5; i++)
+            {
+                if (!safety_filled[i])
+                    break;
+            }
+            return (i- 1);
+        }
+        public void set_stars(int star_n)
+        {
+            if (star_n < 0) star_n = 0;
+            if (star_n > 5) star_n = 5;
+            if (star_n >= 1)
+                for (int i = 1; i <= star_n; i++)
+                    if (!safety_filled[i])
+                    {
+                        star[i].Image = NZPostOffice.RDS.DataControls.Properties.Resources.star_filled;
+                        safety_filled[i] = true;
+                    }
+
+            if (star_n < 5)
+                for (int i = (star_n + 1); i <= 5; i++)
+                    if (safety_filled[i])
+                    {
+                        star[i].Image = NZPostOffice.RDS.DataControls.Properties.Resources.star_empty;
+                        safety_filled[i] = false;
+                    }
+        }
+        // TJB  Dec-2009:  END: Test using stars to display Vehicle Safety Rating
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -63,6 +161,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
             return RetrieveCore<ContractVehicle>(new List<ContractVehicle>
                 (ContractVehicle.GetAllContractVehicle(contract_no, contract_seq_number)));
+        }
+
+        private void Star1_tooltip_Popup(object sender, PopupEventArgs e)
+        {
+
         }
     }
 }
