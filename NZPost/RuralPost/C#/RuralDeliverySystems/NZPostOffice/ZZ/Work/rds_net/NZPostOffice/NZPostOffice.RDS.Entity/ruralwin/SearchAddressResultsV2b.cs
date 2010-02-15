@@ -367,6 +367,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
         #endregion
 
+        private int _sqldbcode = -1;
+        public int SQLDBCode
+        {
+            get
+            {
+                return _sqldbcode;
+            }
+        }
+
+        private string _sqlerrtext = "";
+        public string SQLErrText
+        {
+            get
+            {
+                return _sqlerrtext;
+            }
+        }
+
         #region Factory Methods
         public static SearchAddressResultsV2b NewSearchAddressResultsV2b(string in_AdrNum, string in_roadName, int? in_roadType, int? in_roadSuffix, string in_Suburb, string in_Town, int? in_Contract, string in_RDNo, string in_Surname, string in_Initials, string in_UI_UserId, int? in_ComponentId, int? in_rd_contract, int? in_dpid)
         {
@@ -390,7 +408,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandTimeout = 150;
+                    // TJB RD7_0042 Feb-2010: Changed 150 --> 200
+                    //     Occasional unexplained crashes; assumed to be due to timeout
+                    cm.CommandTimeout = 200;
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_AdrNum", in_AdrNum);
@@ -413,28 +433,37 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     List<SearchAddressResultsV2b> _list = new List<SearchAddressResultsV2b>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
-                        while (dr.Read())
-                        {
-                            SearchAddressResultsV2b instance = new SearchAddressResultsV2b();
-                            instance._adr_id = GetValueFromReader<int?>(dr, 0);
-                            instance._cust_id = GetValueFromReader<int?>(dr, 1);
-                            instance._cust_surname_company = GetValueFromReader<string>(dr, 2);
-                            instance._cust_initials = GetValueFromReader<string>(dr, 3);
-                            instance._adr_num = GetValueFromReader<string>(dr, 4);
-                            instance._road_name = GetValueFromReader<string>(dr, 5);
-                            instance._sl_id = GetValueFromReader<int?>(dr, 6);
-                            instance._tc_id = GetValueFromReader<int?>(dr, 7);
-                            instance._adr_rd_no = GetValueFromReader<string>(dr, 8);
-                            instance._road_id = GetValueFromReader<int?>(dr, 9);
-                            instance._adr_unit = GetValueFromReader<string>(dr, 10);
-                            instance._adr_no = GetValueFromReader<string>(dr, 11);
-                            instance._adr_alpha = GetValueFromReader<string>(dr, 12);
+                        // TJB RD7_0042 Feb-2010
+                        //   Tried 'try' block for debugging; disabled for now ...
+                        // try
+                        // {
+                            while (dr.Read())
+                            {
+                                SearchAddressResultsV2b instance = new SearchAddressResultsV2b();
+                                instance._adr_id = GetValueFromReader<int?>(dr, 0);
+                                instance._cust_id = GetValueFromReader<int?>(dr, 1);
+                                instance._cust_surname_company = GetValueFromReader<string>(dr, 2);
+                                instance._cust_initials = GetValueFromReader<string>(dr, 3);
+                                instance._adr_num = GetValueFromReader<string>(dr, 4);
+                                instance._road_name = GetValueFromReader<string>(dr, 5);
+                                instance._sl_id = GetValueFromReader<int?>(dr, 6);
+                                instance._tc_id = GetValueFromReader<int?>(dr, 7);
+                                instance._adr_rd_no = GetValueFromReader<string>(dr, 8);
+                                instance._road_id = GetValueFromReader<int?>(dr, 9);
+                                instance._adr_unit = GetValueFromReader<string>(dr, 10);
+                                instance._adr_no = GetValueFromReader<string>(dr, 11);
+                                instance._adr_alpha = GetValueFromReader<string>(dr, 12);
 
-                            instance.MarkOld();
-                            instance.StoreInitialValues();
-                            _list.Add(instance);
-                        }
-                        list = _list.ToArray();
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
+                        // }
+                        // catch (Exception e)
+                        // {
+                        //     _sqlerrtext = e.Message;
+                        // }
                     }
                 }
             }
