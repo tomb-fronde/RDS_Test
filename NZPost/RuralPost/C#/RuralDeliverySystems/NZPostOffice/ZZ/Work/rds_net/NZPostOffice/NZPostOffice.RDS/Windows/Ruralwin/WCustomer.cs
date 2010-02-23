@@ -240,7 +240,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // Allocate a cust_id
                 il_customer = StaticFunctions.GetNextSequence("Customer");
                 dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                // TJB  RD7_CR002  Feb-2010: Changed
+                // Changed to set only the date, not date + time
+                //dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
                 dw_generic.DataObject.BindingSource.CurrencyManager.Refresh();
                 // 	idw_customer.setitem(ll_row,"cust_dir_listing_ind","Y")
                 // 	idw_customer.setitem(ll_row,"cust_business","N")
@@ -295,7 +298,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_CustTitle;
 
             //  Determine if NPAD is enabled
-            ib_npad_enabled = /*false;*/ StaticVariables.gnv_app.of_get_npadenabled();
+            ib_npad_enabled = StaticVariables.gnv_app.of_get_npadenabled();
             is_npadoutdir = StaticVariables.gnv_app.of_get_npaddirectory();
             is_userid = StaticVariables.LoginId;
             if (ib_npad_enabled == null)
@@ -538,7 +541,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_row = dw_generic.GetRow();
             if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced == null)
             {
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                // TJB  RD7_CR002  Feb-2010: Changed
+                // Changed to set only the date, not date + time
+                //dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
             }
             //  If this is a new customer, it will be a new master.
             if (ib_new)
@@ -900,7 +906,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  (NOTE: it may be null either before or after)
                 ll_row = dw_generic.GetRow();
                 ll_tmp_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
-                ll_tmp_dpid  = (ll_tmp_dpid == null) ? 0 : ll_tmp_dpid;
+                ll_tmp_dpid  = (ll_tmp_dpid == null)  ? 0 : ll_tmp_dpid;
                 il_cust_dpid = (il_cust_dpid == null) ? 0 : il_cust_dpid;
                 if (!(ll_tmp_dpid == il_cust_dpid))
                 {
@@ -1383,7 +1389,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     dw_recipients2.GetItem<Recipient>(ll_row).CustId = ll_getsequence;
                     dw_recipients2.GetItem<Recipient>(ll_row).MasterCustId = il_customer;
                     dw_recipients2.GetItem<Recipient>(ll_row).CustDirListingInd = "N";
-                    dw_recipients2.GetItem<Recipient>(ll_row).CustDateCommenced = System.DateTime.Today;
+                    // TJB  RD7_CR002  Feb-2010: Changed
+                    // Changed to set only the date, not date + time
+                    //dw_recipients2.GetItem<Recipient>(ll_row).CustDateCommenced = System.DateTime.Today;
+                    dw_recipients2.GetItem<Recipient>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
                 }
             }
             dw_recipients2.AcceptText();
