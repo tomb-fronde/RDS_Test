@@ -637,36 +637,36 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "contract_no", contract_no);
                     pList.Add(cm, "contract_seq_number", contract_seq_number);
-                    cm.CommandText = "  SELECT contract_vehical.vehicle_number,   " +
-                        "contract_vehical.contract_no,   " +
-                        "contract_vehical.contract_seq_number,   " +
-                        "contract_vehical.start_kms,   " +
-                        "contract_vehical.vehicle_allowance_paid_to_date,   " +
-                        "vehicle.vt_key,   " +
-                        "vehicle.ft_key,   " +
-                        "vehicle.v_vehicle_make,   " +
-                        "vehicle.v_vehicle_model,   " +
-                        "vehicle.v_vehicle_registration_number,   " +
-                        "vehicle.v_vehicle_year,   " +
-                        "vehicle.v_vehicle_cc_rating,   " +
-                        "vehicle.v_road_user_charges_indicator,   " +
-                        "vehicle.v_purchased_date,   " +
-                        "vehicle.v_purchase_value,   " +
-                        "vehicle.v_leased,   " +
-                        "contract_vehical.cv_vehical_status,   " +
-                        "vehicle.v_vehicle_month,   " +
-                        "vehicle.v_vehicle_transmission,   " +
-                        "vehicle.v_remaining_economic_life,   " +
-                        "vehicle.vs_key,   " +
-                        "contract_vehical.signage_compliant,   " +
-                        "vehicle.v_vehicle_speedo_kms,   " +
-                        "vehicle.v_vehicle_speedo_date,   " +
-                        "vehicle.v_salvage_value  " +
-                        "FROM contract_vehical,            vehicle  " +
-                        "WHERE ( contract_vehical.vehicle_number = vehicle.vehicle_number ) and  " +
-                        "( ( contract_vehical.contract_no = @contract_no ) AND  " +
-                        "( contract_vehical.contract_seq_number = @contract_seq_number ) )   " +
-                        "ORDER BY vehicle.v_purchased_date DESC   ";
+                    cm.CommandText = "SELECT contract_vehical.vehicle_number, " +
+                        "contract_vehical.contract_no, " +
+                        "contract_vehical.contract_seq_number, " +
+                        "contract_vehical.start_kms, " +
+                        "contract_vehical.vehicle_allowance_paid_to_date, " +
+                        "vehicle.vt_key, " +
+                        "vehicle.ft_key, " +
+                        "vehicle.v_vehicle_make, " +
+                        "vehicle.v_vehicle_model, " +
+                        "vehicle.v_vehicle_registration_number, " +
+                        "vehicle.v_vehicle_year, " +
+                        "vehicle.v_vehicle_cc_rating, " +
+                        "vehicle.v_road_user_charges_indicator, " +
+                        "vehicle.v_purchased_date, " +
+                        "vehicle.v_purchase_value, " +
+                        "vehicle.v_leased, " +
+                        "contract_vehical.cv_vehical_status, " +
+                        "vehicle.v_vehicle_month, " +
+                        "vehicle.v_vehicle_transmission, " +
+                        "vehicle.v_remaining_economic_life, " +
+                        "vehicle.vs_key, " +
+                        "contract_vehical.signage_compliant, " +
+                        "vehicle.v_vehicle_speedo_kms, " +
+                        "vehicle.v_vehicle_speedo_date, " +
+                        "vehicle.v_salvage_value " +
+                        "FROM contract_vehical, vehicle " +
+                        "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
+                        "AND contract_vehical.contract_no = @contract_no " +
+                        "AND contract_vehical.contract_seq_number = @contract_seq_number " +
+                        "ORDER BY vehicle.v_purchased_date DESC ";
 
                     List<ContractVehicle> _list = new List<ContractVehicle>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -724,7 +724,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "contract_vehical", ref pList))
                 {
-                    cm.CommandText += " WHERE  contract_vehical.vehicle_number = @vehicle_number AND " +
+                    cm.CommandText += " WHERE contract_vehical.vehicle_number = @vehicle_number AND " +
                         "contract_vehical.contract_no = @contract_no AND " +
                         "contract_vehical.contract_seq_number = @contract_seq_number ";
 
