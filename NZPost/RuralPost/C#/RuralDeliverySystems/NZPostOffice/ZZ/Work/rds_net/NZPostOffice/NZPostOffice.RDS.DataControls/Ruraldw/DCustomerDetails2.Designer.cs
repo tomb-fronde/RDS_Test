@@ -96,6 +96,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_rural_farmer = new System.Windows.Forms.CheckBox();
             this.cust_dir_listing_ind_1 = new System.Windows.Forms.RadioButton();
             this.cust_dir_listing_ind_2 = new System.Windows.Forms.RadioButton();
+            this.move_in_date_t = new System.Windows.Forms.Label();
+            this.move_in_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,7 +108,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // cust_surname_company_t
             // 
             this.cust_surname_company_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_surname_company_t.Location = new System.Drawing.Point(-6, 61);
+            this.cust_surname_company_t.Location = new System.Drawing.Point(-6, 62);
             this.cust_surname_company_t.Name = "cust_surname_company_t";
             this.cust_surname_company_t.Size = new System.Drawing.Size(109, 13);
             this.cust_surname_company_t.TabIndex = 0;
@@ -170,7 +172,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // cust_phone_day_t
             // 
             this.cust_phone_day_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_day_t.Location = new System.Drawing.Point(74, 105);
+            this.cust_phone_day_t.Location = new System.Drawing.Point(74, 106);
             this.cust_phone_day_t.Name = "cust_phone_day_t";
             this.cust_phone_day_t.Size = new System.Drawing.Size(28, 13);
             this.cust_phone_day_t.TabIndex = 0;
@@ -193,7 +195,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // cust_phone_mobile_t
             // 
             this.cust_phone_mobile_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_mobile_t.Location = new System.Drawing.Point(63, 126);
+            this.cust_phone_mobile_t.Location = new System.Drawing.Point(63, 128);
             this.cust_phone_mobile_t.Name = "cust_phone_mobile_t";
             this.cust_phone_mobile_t.Size = new System.Drawing.Size(39, 13);
             this.cust_phone_mobile_t.TabIndex = 0;
@@ -205,7 +207,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_phone_mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneMobile", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_phone_mobile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cust_phone_mobile.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_phone_mobile.Location = new System.Drawing.Point(107, 123);
+            this.cust_phone_mobile.Location = new System.Drawing.Point(107, 124);
             this.cust_phone_mobile.Mask = "(###) ###-#####";
             this.cust_phone_mobile.Name = "cust_phone_mobile";
             this.cust_phone_mobile.PromptChar = ' ';
@@ -216,7 +218,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // cust_phone_night_t
             // 
             this.cust_phone_night_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_phone_night_t.Location = new System.Drawing.Point(226, 107);
+            this.cust_phone_night_t.Location = new System.Drawing.Point(226, 106);
             this.cust_phone_night_t.Name = "cust_phone_night_t";
             this.cust_phone_night_t.Size = new System.Drawing.Size(37, 13);
             this.cust_phone_night_t.TabIndex = 0;
@@ -228,7 +230,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustPhoneNight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_phone_night.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cust_phone_night.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.cust_phone_night.Location = new System.Drawing.Point(272, 103);
+            this.cust_phone_night.Location = new System.Drawing.Point(272, 102);
             this.cust_phone_night.Mask = "(##) ###-######";
             this.cust_phone_night.Name = "cust_phone_night";
             this.cust_phone_night.PromptChar = ' ';
@@ -251,7 +253,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_care_of_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cust_care_of_t.Location = new System.Drawing.Point(53, 150);
             this.cust_care_of_t.Name = "cust_care_of_t";
-            this.cust_care_of_t.Size = new System.Drawing.Size(50, 13);
+            this.cust_care_of_t.Size = new System.Drawing.Size(49, 13);
             this.cust_care_of_t.TabIndex = 0;
             this.cust_care_of_t.Text = "Care Of";
             this.cust_care_of_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -259,7 +261,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_2
             // 
             this.t_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_2.Location = new System.Drawing.Point(0, 168);
+            this.t_2.Location = new System.Drawing.Point(0, 170);
             this.t_2.Name = "t_2";
             this.t_2.Size = new System.Drawing.Size(106, 13);
             this.t_2.TabIndex = 0;
@@ -290,7 +292,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.cust_adpost_quantity.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustAdpostQuantity", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_adpost_quantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_adpost_quantity.Location = new System.Drawing.Point(310, 125);
+            this.cust_adpost_quantity.Location = new System.Drawing.Point(310, 124);
             this.cust_adpost_quantity.Name = "cust_adpost_quantity";
             this.cust_adpost_quantity.Size = new System.Drawing.Size(54, 20);
             this.cust_adpost_quantity.TabIndex = 80;
@@ -330,7 +332,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_cust_dpid
             // 
             this.t_cust_dpid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_cust_dpid.Location = new System.Drawing.Point(208, 8);
+            this.t_cust_dpid.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.t_cust_dpid.Location = new System.Drawing.Point(208, 6);
             this.t_cust_dpid.Name = "t_cust_dpid";
             this.t_cust_dpid.Size = new System.Drawing.Size(81, 13);
             this.t_cust_dpid.TabIndex = 0;
@@ -339,33 +342,40 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // cust_id
             // 
+            this.cust_id.BackColor = System.Drawing.SystemColors.Control;
             this.cust_id.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.cust_id.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cust_id.Enabled = false;
             this.cust_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_id.ForeColor = System.Drawing.SystemColors.WindowText;
             this.cust_id.Location = new System.Drawing.Point(107, 6);
             this.cust_id.Name = "cust_id";
+            this.cust_id.ReadOnly = true;
             this.cust_id.Size = new System.Drawing.Size(82, 13);
             this.cust_id.TabIndex = 0;
+            this.cust_id.TabStop = false;
             // 
             // cust_dpid
             // 
+            this.cust_dpid.BackColor = System.Drawing.SystemColors.Control;
+            this.cust_dpid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.cust_dpid.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustDpid", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_dpid.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_dpid.Location = new System.Drawing.Point(296, 4);
+            this.cust_dpid.Location = new System.Drawing.Point(296, 6);
             this.cust_dpid.Name = "cust_dpid";
-            this.cust_dpid.Size = new System.Drawing.Size(67, 20);
-            this.cust_dpid.TabIndex = 140;
+            this.cust_dpid.ReadOnly = true;
+            this.cust_dpid.Size = new System.Drawing.Size(67, 13);
+            this.cust_dpid.TabIndex = 0;
+            this.cust_dpid.TabStop = false;
             // 
             // customer_category_t
             // 
             this.customer_category_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.customer_category_t.Location = new System.Drawing.Point(4, 189);
+            this.customer_category_t.Location = new System.Drawing.Point(6, 188);
             this.customer_category_t.Name = "customer_category_t";
-            this.customer_category_t.Size = new System.Drawing.Size(101, 13);
+            this.customer_category_t.Size = new System.Drawing.Size(97, 13);
             this.customer_category_t.TabIndex = 0;
             this.customer_category_t.Text = "Customer Category";
-            this.customer_category_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.customer_category_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // cust_business
             // 
@@ -424,10 +434,39 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_dir_listing_ind_2.Text = "No";
             this.cust_dir_listing_ind_2.UseVisualStyleBackColor = true;
             // 
+            // move_in_date_t
+            // 
+            this.move_in_date_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.move_in_date_t.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.move_in_date_t.Location = new System.Drawing.Point(211, 29);
+            this.move_in_date_t.Name = "move_in_date_t";
+            this.move_in_date_t.Size = new System.Drawing.Size(78, 13);
+            this.move_in_date_t.TabIndex = 143;
+            this.move_in_date_t.Text = "Move In Date";
+            this.move_in_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // move_in_date
+            // 
+            this.move_in_date.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.move_in_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustMoveInDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.move_in_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.move_in_date.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.move_in_date.Location = new System.Drawing.Point(296, 29);
+            this.move_in_date.Mask = "00/00/0000";
+            this.move_in_date.Name = "move_in_date";
+            this.move_in_date.ReadOnly = true;
+            this.move_in_date.Size = new System.Drawing.Size(62, 13);
+            this.move_in_date.TabIndex = 0;
+            this.move_in_date.TabStop = false;
+            this.move_in_date.Text = "00000000";
+            this.move_in_date.Value = null;
+            // 
             // DCustomerDetails2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.move_in_date);
+            this.Controls.Add(this.move_in_date_t);
             this.Controls.Add(this.cust_id);
             this.Controls.Add(this.cust_dir_listing_ind_2);
             this.Controls.Add(this.cust_dir_listing_ind_1);
@@ -467,6 +506,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         }
 
         #endregion
+
+        private Label move_in_date_t;
+        private NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox move_in_date;
 
     }
 }
