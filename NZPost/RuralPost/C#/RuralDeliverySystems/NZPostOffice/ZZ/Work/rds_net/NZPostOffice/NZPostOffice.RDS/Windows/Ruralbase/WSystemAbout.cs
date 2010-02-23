@@ -74,6 +74,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
                               + string.Format("{0:dd/MMM/yyyy HH:mm}", 
                                            System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location))
                               + ")";
+            this.st_copyright.Text = "Copyright © 2010, all rights reserved";
         }
 
         #region Form Design
@@ -134,7 +135,6 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.st_copyright.Name = "st_copyright";
             this.st_copyright.Size = new System.Drawing.Size(212, 18);
             this.st_copyright.TabIndex = 3;
-            this.st_copyright.Text = "Copyright © 2009, all rights reserved";
             // 
             // st_version
             // 
