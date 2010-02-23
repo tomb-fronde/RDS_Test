@@ -27,23 +27,24 @@ namespace NZPostOffice.RDS
             bool ret = LoginService.TryConnectNZPO();
             LogonAttrib lg = new LogonAttrib();
             lg.appName = config.AppSettings.Settings["AppName"].Value.ToString();
-            lg.version = "Version " + config.AppSettings.Settings["Version"].Value.ToString() + " ( Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")";
+            lg.version = "Version " + config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")";
             lg.userID = config.AppSettings.Settings["DefaultUserName"].Value.ToString();
             WLogon wLogonDlg = new WLogon(lg);
             if (wLogonDlg.ShowDialog() == DialogResult.Yes)
             {
-                StaticVariables.DisplayName = "Rural Delivery System with NPAD Extensions(enabled)";
+                StaticVariables.DisplayName = lg.appName + " (enabled)";
                 WMainMdi wMainForm = new WMainMdi();
                 this.MainForm = wMainForm;
                 wMainForm.Show();
             }
             else
             {
-                //?MessageBox.Show("Unable to logon at this time", "Rural Delivery System with NPAD Extensions", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //?MessageBox.Show("Unable to logon at this time"
+                //               , "Rural Delivery System with NPAD Extensions"
+                //               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 System.Windows.Forms.Application.Exit();
             }
         }
-
 
         /// <summary>
         /// The main entry point for the application.
