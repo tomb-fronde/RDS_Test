@@ -571,7 +571,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_userid = StaticVariables.LoginId;
             dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
             dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
-            ll_rc = 1; dw_generic.Save();
+            ll_rc = 1; 
+            dw_generic.Save();
             if (!(ll_rc == 1))
             {
                 //  If there's a problem, tell the user about it

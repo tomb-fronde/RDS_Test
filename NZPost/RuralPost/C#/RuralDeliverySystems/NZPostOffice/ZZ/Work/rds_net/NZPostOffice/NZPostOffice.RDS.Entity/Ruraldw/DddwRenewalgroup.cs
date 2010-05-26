@@ -89,7 +89,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				{
 					cm.CommandType = CommandType.StoredProcedure;
 					ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "sp_DDDW_RenewalGroupList";
+                    cm.CommandText = "rd.sp_DDDW_RenewalGroupList";
 
 					List<DddwRenewalgroup> _list = new List<DddwRenewalgroup>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

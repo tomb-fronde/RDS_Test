@@ -61,6 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Report\AllowanceDetailDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -155,6 +160,15 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Report\DetailedCustomerListingDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\EclDataImportExeptionReportDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\REclDataImportExeptionTest.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>REclDataImportExeptionTest.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Report\MailCarriedSingleContractDataSet.cs">
@@ -300,6 +314,12 @@
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDEclDataImportExeptionReport.cs">
+      <SubType>Component</SubType>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>REDEclDataImportExeptionReport.rpt</DependentUpon>
     </Compile>
     <Compile Include="Report\REDMailmergeCustDownloadData.cs">
       <DependentUpon>REDMailmergeCustDownloadData.rpt</DependentUpon>
@@ -925,6 +945,18 @@
     </Compile>
     <Compile Include="Ruraldw\DContractorDs.Designer.cs">
       <DependentUpon>DContractorDs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DEclDataImport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DEclDataImport.designer.cs">
+      <DependentUpon>DEclDataImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DEclDataImportExeptionReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DEclDataImportExeptionReport.designer.cs">
+      <DependentUpon>DEclDataImportExeptionReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DMailCarriedFormTest.cs">
       <SubType>UserControl</SubType>
@@ -2797,6 +2829,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REclDataImportExeptionTest.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REclDataImportExeptionTest.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\REDCustCount.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REDCustCount.cs</LastGenOutput>
@@ -2832,6 +2873,10 @@
     <EmbeddedResource Include="Report\REDDetailedCustomerListing.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REDDetailedCustomerListing.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDEclDataImportExeptionReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDEclDataImportExeptionReport.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDMailmergeCustDownloadData.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -3140,6 +3185,14 @@
     <EmbeddedResource Include="Ruraldw\DAddressDetails.resx">
       <DependentUpon>DAddressDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DAddressSearchPrimContact.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAddressSearchPrimContact.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DArticalCountDateStart.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DArticalCountDateStart.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DBenchmarkCalcCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DBenchmarkCalcCriteria.cs</DependentUpon>
@@ -3164,9 +3217,17 @@
       <SubType>Designer</SubType>
       <DependentUpon>DCustomerDetails2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DEclDataImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DEclDataImport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DExtension2005.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DExtension2005.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DNonVehicleOverrideRates.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DNonVehicleOverrideRates.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DPieceRateImportDiffRateReport.resx">
       <SubType>Designer</SubType>
@@ -3196,6 +3257,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DSearchAddress.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DVehicleOverrideRates.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DVehicleOverrideRates.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DVehicleRates2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DVehicleRates2001.cs</DependentUpon>
@@ -3218,12 +3283,20 @@
     <EmbeddedResource Include="Ruralrpt\DReportGenericCriteriaWithMonth.resx">
       <DependentUpon>DReportGenericCriteriaWithMonth.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportGenericResults.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DReportGenericResults.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DReportRcmCriteria.resx">
       <DependentUpon>DReportRcmCriteria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\ROd.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ROd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin2\DsVehicleOverrideRate.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DsVehicleOverrideRate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin2\DWhatifCalculatorReport2005.resx">
       <SubType>Designer</SubType>
@@ -3236,6 +3309,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagramRDS_DataControls.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\star_empty.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\star_filled.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

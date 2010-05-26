@@ -17,7 +17,7 @@ namespace NZPostOffice.RDS.Controls
     //declare  delegates.
     public delegate void EventDelegate(object send, EventArgs e);
     public delegate void UserEventDelegate();
-    public delegate int UserEventDelegate1(); //added by jlwang
+    public delegate int  UserEventDelegate1(); //added by jlwang
     public delegate bool UserEventDelegate2(); //added by jlwang
 
     public class URdsDw : UDw
@@ -506,15 +506,24 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual int Save()
         {
+            int thisNewCount;
+            int thisModifiedCount;
+            thisNewCount = this.NewCount();
+            thisModifiedCount = this.ModifiedCount();
             // if (this.NewCount() > 0 || this.ModifiedCount() > 0)
+/*
             if (this.DataObject.DeletedCount==0 || this.NewCount() >0 ||
                 (this.DataObject.DeletedCount >0 && this.ModifiedCount()>0) ||
                 (this.DataObject.DeletedCount >0 && this.NewCount()>0))
+*/
+            if (this.DataObject.DeletedCount == 0 || thisNewCount > 0 ||
+                (this.DataObject.DeletedCount > 0 && thisModifiedCount > 0) ||
+                (this.DataObject.DeletedCount > 0 && thisNewCount > 0))
             {
                 this.ProcessDialogKey(Keys.Tab ); //added by jlwang:for fix the focus bug
                 this.URdsDw_GetFocus(null, null); //added by jlwang for fix tab key change the focus
             }
-             int rst = 1;
+            int rst = 1;
             if (this.ModifiedCount() > 0 || this.DataObject.DeletedCount > 0)//? ||this.NewCount() > 0)
             {
                 rst = -1;
@@ -736,8 +745,13 @@ namespace NZPostOffice.RDS.Controls
 
                                         if (!DateTime.TryParse(fields[i].Trim(), out result))
                                         {
-                                            MessageBox.Show("Item " + "'" + fields[i].Trim() + "'" + " does not pass validation test.", "Rural Delivery System with NPAD Extensions", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                            if (MessageBox.Show("Item validation error on IMPORT.Continue IMPORT?", "Rural Delivery System with NPAD Extensions", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+                                            MessageBox.Show("Item " + "'" + fields[i].Trim() + "'" + " does not pass validation test."
+                                                          , "Rural Delivery System with NPAD Extensions"
+                                                          , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                            if (MessageBox.Show("Item validation error on IMPORT.Continue IMPORT?"
+                                                              , "Rural Delivery System with NPAD Extensions"
+                                                              , MessageBoxButtons.YesNo, MessageBoxIcon.Information) 
+                                                == DialogResult.No)
                                             {
                                                 return ret_value;
                                             }

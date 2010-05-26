@@ -343,9 +343,33 @@
       <SubType>Designer</SubType>
       <DependentUpon>DOutletList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DPieceRateSupplier.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPieceRateSupplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DPieceRateType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPieceRateType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DPostCodeType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPostCodeType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DProcurement.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DProcurement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DRegion.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRegion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DRenewalGroup.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRenewalGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DRouteFreqPointType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRouteFreqPointType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DUiIdDetails.resx">
       <SubType>Designer</SubType>

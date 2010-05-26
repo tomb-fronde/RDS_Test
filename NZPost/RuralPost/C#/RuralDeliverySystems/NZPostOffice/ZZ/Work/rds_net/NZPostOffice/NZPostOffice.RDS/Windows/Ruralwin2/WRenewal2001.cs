@@ -398,7 +398,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_article_count.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         //added by jlwang
@@ -470,6 +469,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             iw_renewal = this;
         }
 
+        private string decimal_mask(decimal value)
+        {
+            string value_mask = "###,###.00";
+
+            if (value < 100000.00m)
+                value_mask = "##,###.00";
+            if (value < 10000.00m)
+                value_mask = "#,###.00";
+            if (value < 1000.00m)
+                value_mask = "###.00";
+            if (value < 100.00m)
+                value_mask = "##.00";
+            
+            return value_mask;
+        }
+        private string integer_mask(int value)
+        {
+            string value_mask = "###,###";
+
+            if (value < 100000)
+                value_mask = "##,###";
+            if (value < 10000)
+                value_mask = "#,###";
+            if (value < 1000)
+                value_mask = "###";
+            if (value < 100)
+                value_mask = "##";
+
+            return value_mask;
+        }
+
         public override void pfc_postopen()
         {
             base.pfc_postopen();
@@ -493,8 +523,60 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 m_sheet._m_renewalrates.Visible = true;
 
             }
+            // TJB  RPI_001 May-2010: testing
+            decimal bm = (decimal)idw_renewal.GetItem<Renewal>(0).ConRenewalBenchmarkPrice;
+            decimal pay = (decimal)idw_renewal.GetItem<Renewal>(0).ConRenewalPaymentValue;
+            int vol = (int)idw_renewal.GetItem<Renewal>(0).ConVolumeAtRenewal;
+            decimal delHrs = (decimal)idw_renewal.GetItem<Renewal>(0).ConDelHrsWeekAtRenewal;
+            int dist = (int)idw_renewal.GetItem<Renewal>(0).ConDistanceAtRenewal;
+            decimal procHrs = (decimal)idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek;
+
+            string bm_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_renewal_benchmark_price");
+            string bm_mask2 = "$" + decimal_mask(bm);
+
+            string pay_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_renewal_payment_value");
+            string pay_mask2 = "$" + decimal_mask(pay);
+            string vol_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_volume_at_renewal");
+            string vol_mask2 = integer_mask(vol);
+            string dist_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_distance_at_renewal");
+            string dist_mask2 = integer_mask(dist);
+            string delHrs_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_del_hrs_week_at_renewal");
+            string procHrs_mask = ((DRenewal)idw_renewal.DataObject).getDisplayEditMask("con_processing_hours_per_week");
+            //((DRenewal)idw_renewal.DataObject).setDisplayText("con_processing_hours_per_week", procHrs.ToString(procHrs_mask));
+            //((DRenewal)idw_renewal.DataObject).setDisplayText("con_del_hrs_week_at_renewal", delHrs.ToString(delHrs_mask));
+
+            //MessageBox.Show("Benchmark = " + bm.ToString() + " Mask = " + bm_mask + " Mask2 = " + bm_mask2 + "\n"
+            //          + "Payment = " + pay.ToString() + " Mask = " + pay_mask + " Mask2 = " + pay_mask2 + "\n"
+            //          + "Volume = " + vol.ToString(vol_mask) + " Mask = " + vol_mask + " Mask2 = " + vol_mask2 + "\n"
+            //          + "Distance = " + dist.ToString(dist_mask) + " Mask = " + dist_mask + " Mask2 = " + dist_mask2 + "\n"
+            //          + "Del Hrs = " + delHrs.ToString() + " Mask = " + delHrs_mask + "\n"
+            //          + "Proc Hrs = " + procHrs.ToString() + " Mask = " + procHrs_mask + "\n"
+            //          , "pfc_postopen");
+
+            if (bm_mask2 != bm_mask)
+            {
+                ((DRenewal)idw_renewal.DataObject).setDisplayEditMask("con_renewal_benchmark_price", bm_mask2);
+            }
+            ((DRenewal)idw_renewal.DataObject).setDisplayText("con_renewal_benchmark_price", bm.ToString(bm_mask2));
+            if (pay_mask2 != pay_mask)
+            {
+                ((DRenewal)idw_renewal.DataObject).setDisplayEditMask("con_renewal_payment_value", pay_mask2);
+            }
+            ((DRenewal)idw_renewal.DataObject).setDisplayText("con_renewal_payment_value", pay.ToString(pay_mask2));
+            if (vol_mask2 != vol_mask)
+            {
+                ((DRenewal)idw_renewal.DataObject).setDisplayEditMask("con_volume_at_renewal", vol_mask2);
+            }
+            ((DRenewal)idw_renewal.DataObject).setDisplayText("con_volume_at_renewal", vol.ToString(vol_mask2));
+            //((DRenewal)idw_renewal.DataObject).setDisplayText("con_volume_at_renewal", vol.ToString(vol_mask));
+            if (dist_mask2 != dist_mask)
+            {
+                ((DRenewal)idw_renewal.DataObject).setDisplayEditMask("con_distance_at_renewal", dist_mask2);
+            }
+            ((DRenewal)idw_renewal.DataObject).setDisplayText("con_distance_at_renewal", dist.ToString(dist_mask2));
+            //((DRenewal)idw_renewal.DataObject).setDisplayText("con_distance_at_renewal", dist.ToString(dist_mask));
+
             //  TWC 13/06/2003 Manually showing the article count tab if have privilege
-          
             this.tabpage_article_count.Show();
 
             //  TJB  SR4695  Jan-2007

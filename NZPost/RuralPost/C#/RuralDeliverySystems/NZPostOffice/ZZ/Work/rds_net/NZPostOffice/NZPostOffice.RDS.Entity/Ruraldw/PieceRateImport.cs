@@ -23,8 +23,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("prt_key", "_prt_key", "piece_rate_delivery")]
     [MapInfo("contract_no", "_contract_no", "piece_rate_delivery")]
 	[MapInfo("errormsg", "_errormsg", "")]
-    [MapInfoIndex(new string[] { "contract", "prd_date", "prt_code", "prd_quantity", "prd_cost" ,
-       "prd_rd_cost", "prt_key", "contract_no", "errormsg" })]
+    [MapInfoIndex(new string[] { "contract",    "prd_date", "prt_code",    "prd_quantity", "prd_cost" ,
+                                 "prd_rd_cost", "prt_key",  "contract_no", "errormsg" })]
     [System.Serializable()]
 
 	public class PieceRateImport : Entity<PieceRateImport>

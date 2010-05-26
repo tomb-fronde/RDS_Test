@@ -650,7 +650,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 return ( _contract_no.GetValueOrDefault().ToString()) + "/" + ( _contract_seq_number.GetValueOrDefault().ToString()) + " " + (_con_title);
             }
         }
-        
+
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}", _contract_no, _contract_seq_number);

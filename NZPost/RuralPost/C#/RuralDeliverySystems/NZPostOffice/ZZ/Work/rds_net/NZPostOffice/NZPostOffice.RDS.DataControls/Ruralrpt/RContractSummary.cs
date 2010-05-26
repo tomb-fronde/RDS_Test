@@ -116,7 +116,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.viewer.EnableDrillDown = false;
             this.viewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.viewer.Location = new System.Drawing.Point(0, rptIndex * rptHeight);
-            this.viewer.Name = "viewer" + rptIndex.ToString();
+            // TJB  RD7_0051  Oct-2009
+            // Removed rptIndex from viewer name; name looked up by wRenewalProcess2006
+            this.viewer.Name = "viewer";    // +rptIndex.ToString();
             this.viewer.ReportSource = this.reRContractSummary;
             this.viewer.Size = new System.Drawing.Size(671, rptHeight);
             this.viewer.TabIndex = rptIndex;

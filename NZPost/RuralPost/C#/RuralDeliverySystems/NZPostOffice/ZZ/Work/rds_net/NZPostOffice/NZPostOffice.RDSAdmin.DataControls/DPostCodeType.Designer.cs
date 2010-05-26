@@ -18,6 +18,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 			base.Dispose(disposing);
 		}
 
+        // TJB  RD7_CR001  Nov-2009
+        //      Added Contract_no
+        //      [Dec-2009] Also added RdNo
 		private Metex.Windows.DataEntityGrid grid;
 		#region Component Designer generated code
 		private void InitializeComponent()
@@ -30,6 +33,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.post_code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.post_mail_town = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.post_district = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RdNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ContractNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -58,6 +62,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.post_code,
             this.post_mail_town,
             this.post_district,
+            this.RdNo,
             this.ContractNo});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -66,7 +71,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(582, 360);
+            this.grid.Size = new System.Drawing.Size(681, 360);
             this.grid.TabIndex = 0;
             // 
             // post_code
@@ -104,10 +109,16 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.post_district.Name = "post_district";
             this.post_district.Width = 201;
             // 
+            // RdNo
+            // 
+            this.RdNo.DataPropertyName = "RdNo";
+            this.RdNo.HeaderText = "Rd No";
+            this.RdNo.Name = "RdNo";
+            // 
             // ContractNo
             // 
             this.ContractNo.DataPropertyName = "ContractNo";
-            this.ContractNo.HeaderText = "ContractNo";
+            this.ContractNo.HeaderText = "Contract No";
             this.ContractNo.Name = "ContractNo";
             // 
             // DPostCodeType
@@ -117,7 +128,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DPostCodeType";
-            this.Size = new System.Drawing.Size(582, 360);
+            this.Size = new System.Drawing.Size(681, 360);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -128,6 +139,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn post_code;
         private System.Windows.Forms.DataGridViewTextBoxColumn post_mail_town;
         private System.Windows.Forms.DataGridViewTextBoxColumn post_district;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RdNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ContractNo;
 
 	}

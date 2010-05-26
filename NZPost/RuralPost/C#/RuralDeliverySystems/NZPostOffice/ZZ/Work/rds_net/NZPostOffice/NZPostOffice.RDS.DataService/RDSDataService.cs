@@ -20,7 +20,7 @@ namespace NZPostOffice.RDS.DataService
         public bool ret = false;
         private string dataObject;
         public int intVal;
-        private int ll_count;
+//        private int ll_count;
         public DateTime? dtVal;
         public string strVal;
         public decimal? decVal;
@@ -346,7 +346,7 @@ namespace NZPostOffice.RDS.DataService
         }
        
         ///<summary>
-        /// select f_getNextSequence ( 'NPADFileSeq',1,10000) into :ll_npadfileseq from dummy
+        /// select f_getNextSequence('NPADFileSeq',1,10000) into :ll_npadfileseq from dummy
         public static RDSDataService GetRdsFGetNextSequence()
         {
             RDSDataService obj = Execute("_GetRdsFGetNextSequence");
@@ -354,7 +354,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select count ( *) into :ll_at_adr from customer_address_moves   where adr_id = :al_adr_id  and move_out_date is null
+        /// select count(*) into :ll_at_adr from customer_address_moves where adr_id = :al_adr_id  and move_out_date is null
         /// 
         public static int GetRdsCustomerAddressMoves(int? al_adr_id)
         {
@@ -829,7 +829,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// SELECT max(vr_rates_effective_date)  INTO   @ld_Max_Effective_Date  FROM   vehicle_rate WHERE  vt_key 	= @ll_vtKey;
+        /// SELECT max(vr_rates_effective_date) INTO @ld_Max_Effective_Date FROM vehicle_rate WHERE vt_key = @ll_vtKey;
         /// </summary>
         public static DateTime? GetVehicleRateMax(int? ll_vtKey)
         {
@@ -2481,6 +2481,77 @@ namespace NZPostOffice.RDS.DataService
             Execute("_CleanupFDRows", sf_key, contract_no, rd_sequence, rf_delivery_days);
         }
 
+        // TJB  May-2010  ECL Data Upload
+        public static bool InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors
+                                                      , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_InsertIntoECLUploadHistory", lBatchNo, dtDateUploaded, lRecordsUploaded, lUploadErrors);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        public static int GetECLUploadHistoryCurrentBatchNo(ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetECLUploadHistoryCurrentBatchNo");
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
+        }
+
+        public static int GetECLUploadHistoryNextBatchNo( ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetECLUploadHistoryNextBatchNo");
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
+        }
+
+        public static bool UpdateECLUploadHistoryUpload(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors
+                                                      , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateECLUploadHistoryUpload", lBatchNo, dtDateUploaded, lRecordsUploaded, lUploadErrors);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        public static bool UpdateECLUploadHistoryInsert(int lBatchNo, DateTime dtDateInserted, int lRecordsInserted, int lInsertErrors
+                                                      , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateECLUploadHistoryInsert", lBatchNo, dtDateInserted, lRecordsInserted, lInsertErrors);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        public static bool IsDuplicateECLUploadData(string sTicketNo, string sTicketPart
+                                                      , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_IsDuplicateECLUploadData", sTicketNo, sTicketPart);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        public static int GetECLUploadedBatchSize(int lBatchNo, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetECLUploadedBatchSize", lBatchNo);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
+        }
+
+        public static int SpInsertECLUploadedData(int lBatchNo, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_SpInsertECLUploadedData", lBatchNo);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
+        }
+
+        // TJB  May-2010  ECL Data Upload ----------- end  -----------
+
         #endregion
 
         #region Server-side Code
@@ -2492,7 +2563,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT sl.sl_id FROM town_suburb join suburblocality sl on town_suburb.sl_id=sl.sl_id " +
+                    cm.CommandText = "SELECT sl.sl_id FROM rd.town_suburb join rd.suburblocality sl on town_suburb.sl_id=sl.sl_id " +
                         "WHERE sl_name = @as_slname AND tc_id = @al_tcid  " +
                         "ORDER BY sl_name";
                     pList.Add(cm, "al_tcid", al_tcid);
@@ -2555,7 +2626,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE vehicle_rate  SET vr_ruc = @ldc_new_standard_ruc_rate " +
+                    cm.CommandText = "UPDATE rd.vehicle_rate  SET vr_ruc = @ldc_new_standard_ruc_rate " +
                         "WHERE vr_rates_effective_date = @ld_rates_effective_date";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ldc_new_standard_ruc_rate", ldc_new_standard_ruc_rate);
@@ -2584,7 +2655,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE rds_customer SET printedon = getdate() WHERE customer.cust_id = @lcust";
+                    cm.CommandText = "UPDATE rd.rds_customer SET printedon = getdate() WHERE customer.cust_id = @lcust";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lcust", lcust);
                     try
@@ -2611,16 +2682,18 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "SELECT piece_rate.pr_rate, piece_rate.pr_effective_date" +
-                                    "    FROM contract join contract_renewals on(contract.contract_no = contract_renewals.contract_no) join piece_rate" +
-                                    "    on  contract_renewals.con_rg_code_at_renewal = piece_rate.rg_code" +
-                                    "    and contract_renewals.con_rates_effective_date = piece_rate.pr_effective_date" +
-                                    "    and piece_rate.prt_key = @lPRKey" +
+                                    "    FROM rd.contract join rd.contract_renewals " +
+                                                              " on (contract.contract_no = contract_renewals.contract_no)" + 
+                                                        " join rd.piece_rate" +
+                                                              " on  contract_renewals.con_rg_code_at_renewal = piece_rate.rg_code" +
+                                                              " and contract_renewals.con_rates_effective_date = piece_rate.pr_effective_date" +
+                                                              " and piece_rate.prt_key = @lPRKey" +
                                     "    WHERE contract.contract_no = @lContract " +
                                     "    AND contract_renewals.contract_seq_number = " +
-                                    "     ( SELECT max ( contract_seq_number) " +
-                                    "    FROM contract_renewals " +
-                                    "    WHERE contract_renewals.con_start_date <= @dPRDDate " +
-                                    "    and contract_renewals.contract_no = contract.contract_no) ";
+                                                     " (SELECT max(contract_seq_number) " +
+                                                        " FROM contract_renewals " +
+                                                       " WHERE contract_renewals.con_start_date <= @dPRDDate " +
+                                                         " and contract_renewals.contract_no = contract.contract_no) ";
 
                     pList.Add(cm, "lPRKey", lPRKey);
                     pList.Add(cm, "lContract", lContract);
@@ -2674,28 +2747,28 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "INSERT INTO frequency_adjustments ( " +
-                        "contract_no,contract_seq_number,  " +
-                        "fd_unique_seq_number, " +
-                        "fd_adjustment_amount, " +
-                        "fd_paid_to_date, " +
-                        "fd_bm_after_extn," +
-                        "fd_confirmed, " +
-                        "fd_amount_to_pay, " +
-                        "fd_effective_date, " +
-                        "sf_key,  " +
-                        "rf_delivery_days) " +
-                        " VALUES   ( @il_Contract_no, " +
-                        "@il_Sequence_no, " +
-                        "@lNextSeq, " +
-                        "@idc_adjustment_amount, " +
-                        "null, " +
-                        "@idc_new_benchmark, " +
-                        "@is_confirmed, " +
-                        "@idc_amount_to_pay," +
-                        "@id_Effective_Date, " +
-                        "@il_sf_key, " +
-                        "@is_Delivery_Days)";
+                    cm.CommandText = "INSERT INTO rd.frequency_adjustments ( " +
+                           "contract_no,contract_seq_number,  " +
+                           "fd_unique_seq_number, " +
+                           "fd_adjustment_amount, " +
+                           "fd_paid_to_date, " +
+                           "fd_bm_after_extn," +
+                           "fd_confirmed, " +
+                           "fd_amount_to_pay, " +
+                           "fd_effective_date, " +
+                           "sf_key,  " +
+                           "rf_delivery_days) " +
+                        "VALUES (@il_Contract_no, " +
+                           "@il_Sequence_no, " +
+                           "@lNextSeq, " +
+                           "@idc_adjustment_amount, " +
+                           "null, " +
+                           "@idc_new_benchmark, " +
+                           "@is_confirmed, " +
+                           "@idc_amount_to_pay," +
+                           "@id_Effective_Date, " +
+                           "@il_sf_key, " +
+                           "@is_Delivery_Days)";
                     pList.Add(cm, "il_Contract_no", il_Contract_no);
                     pList.Add(cm, "il_Sequence_no", il_Sequence_no);
                     pList.Add(cm, "lNextSeq", lNextSeq);
@@ -2731,9 +2804,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     int sequence = 0;
-                    cm.CommandText = "SELECT max(fd_unique_seq_number) FROM frequency_adjustments " +
-                        "WHERE contract_no = @il_Contract_no AND " +
-                        "contract_seq_number = @il_Sequence_no";
+                    cm.CommandText = "SELECT max(fd_unique_seq_number) " + 
+                                       "FROM rd.frequency_adjustments " +
+                                      "WHERE contract_no = @il_Contract_no " +
+                                        "AND contract_seq_number = @il_Sequence_no";
                     pList.Add(cm, "il_Contract_no", il_Contract_no);
                     pList.Add(cm, "il_Sequence_no", il_Sequence_no);
 
@@ -2771,7 +2845,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     int sequence = 0;
-                    cm.CommandText = "SELECT  count(*) from contract where contract_no = @lContract";
+                    cm.CommandText = "SELECT count(*) from rd.contract where contract_no = @lContract";
                     pList.Add(cm, "lContract", lContract);
 
                     try
@@ -2808,18 +2882,18 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "INSERT INTO frequency_distances ( " +
-                        "fd_effective_date, " +
-                        "contract_no, " +
-                        "sf_key,  " +
-                        "rf_delivery_days, " +
-                        "fd_change_reason) " +
+                    cm.CommandText = "INSERT INTO rd.frequency_distances ( " +
+                            "fd_effective_date, " +
+                            "contract_no, " +
+                            "sf_key,  " +
+                            "rf_delivery_days, " +
+                            "fd_change_reason) " +
                         "VALUES ( " +
-                        "@id_Effective_Date ," +
-                        "@il_Contract_no, " +
-                        "@il_sf_key, " +
-                        "@is_Delivery_Days, " +
-                        "@is_Reason)";
+                            "@id_Effective_Date ," +
+                            "@il_Contract_no, " +
+                            "@il_sf_key, " +
+                            "@is_Delivery_Days, " +
+                            "@is_Reason)";
                     pList.Add(cm, "id_Effective_Date", id_Effective_Date);
                     pList.Add(cm, "il_Contract_no", il_Contract_no);
                     pList.Add(cm, "il_sf_key", il_sf_key);
@@ -2851,9 +2925,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = " insert into NPAD_msg_log(msg_date, " + 
-                        " msg_username,msg_type,msg_dpid,msg_status,msg_description) values( " + 
-                        " @now,@username,'transfer customer',@s_old_dpid,@status,@errmsg)";
+                    cm.CommandText = " insert into rd.NPAD_msg_log(msg_date, " + 
+                            " msg_username,msg_type,msg_dpid,msg_status,msg_description) " + 
+                        "values(@now,@username,'transfer customer',@s_old_dpid,@status,@errmsg)";
                     pList.Add(cm, "now", nowDate);
                     pList.Add(cm, "username", username);
                     pList.Add(cm, "username", msg_type); 
@@ -2885,8 +2959,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     int sequence = 0;
-                    cm.CommandText = "SELECT count (*) FROM frequency_distances " +
-                        "WHERE	contract_no	= @il_Contract_no AND " +
+                    cm.CommandText = "SELECT count(*) FROM rd.frequency_distances " +
+                        "WHERE contract_no = @il_Contract_no AND " +
                         "sf_key = @il_SF_Key AND " +
                         "rf_delivery_days = @is_Delivery_Days AND " +
                         "fd_effective_date = @ad_Effective_Date";
@@ -2929,8 +3003,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     string sequence = string.Empty;
-                    cm.CommandText = "SELECT  route_freq_point_type.rfpt_description " +
-                        "FROM route_freq_point_type " +
+                    cm.CommandText = "SELECT route_freq_point_type.rfpt_description " +
+                        "FROM rd.route_freq_point_type " +
                         "WHERE route_freq_point_type.rfpt_id = @ai_rfpt_id  ";
                     pList.Add(cm, "ai_rfpt_id", ai_rfpt_id);
 
@@ -2968,9 +3042,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     int sequence = 0;
-                    cm.CommandText = "SELECT  count(artical_count.contract_no) FROM artical_count " +
-                        "WHERE ( artical_count.contract_no = @lContract ) AND " +
-                        "(artical_count.contract_seq_number = @ilRenewal )  ";
+                    cm.CommandText = "SELECT count(artical_count.contract_no) " + 
+                                       "FROM rd.artical_count " +
+                                      "WHERE artical_count.contract_no = @lContract AND " +
+                                            "artical_count.contract_seq_number = @ilRenewal";
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "ilRenewal", ilRenewal);
                     try
@@ -3007,12 +3082,12 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     int sequence = 0;
-                    cm.CommandText = "SELECT  contract_renewals.contract_seq_number  " +
-                        "From contract JOIN contract_renewals ON contract.contract_no = contract_renewals.contract_no " +
-                        "WHERE contract.contract_no = @lContract AND" +
-                        "( contract_renewals.contract_seq_number = ( contract.con_active_sequence + 1) OR " +
-                        "( contract.con_active_sequence IS NULL  AND contract_renewals.contract_seq_number = 1))";
-
+                    cm.CommandText = "SELECT contract_renewals.contract_seq_number " +
+                                       "FROM rd.contract JOIN rd.contract_renewals " + 
+                                                        "ON contract.contract_no = contract_renewals.contract_no " +
+                                      "WHERE contract.contract_no = @lContract " +
+                                        "AND (contract_renewals.contract_seq_number = (contract.con_active_sequence + 1) " +
+                                              "OR (contract.con_active_sequence IS NULL AND contract_renewals.contract_seq_number = 1))";
                     pList.Add(cm, "lContract", lContract);
 
                     try
@@ -3048,13 +3123,15 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "UPDATE vehicle_override_rate vor1 " +
-                        "SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate " +
-                        "WHERE	vor1.contract_no = @ll_contract_no AND " +
-                        "vor1.contract_seq_number = @ll_sequence_no AND " +
-                        "vor1.vor_effective_date >= @ld_rates_effective_date AND " +
-                        "vor1.vor_effective_date = ( SELECT 	max(vor2.vor_effective_date)  FROM vehicle_override_rate vor2 " +
-                        "WHERE vor2.contract_no = vor1.contract_no AND vor2.contract_seq_number = vor1.contract_seq_number)";
+                    cm.CommandText = "UPDATE rd.vehicle_override_rate vor1 " +
+                                        "SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate " +
+                                      "WHERE vor1.contract_no = @ll_contract_no AND " +
+                                            "vor1.contract_seq_number = @ll_sequence_no AND " +
+                                            "vor1.vor_effective_date >= @ld_rates_effective_date AND " +
+                                           "vor1.vor_effective_date = (SELECT max(vor2.vor_effective_date) " + 
+                                                                        "FROM rd.vehicle_override_rate vor2 " +
+                                                                       "WHERE vor2.contract_no = vor1.contract_no " + 
+                                                                         "AND vor2.contract_seq_number = vor1.contract_seq_number)";
 
                     pList.Add(cm, "ldc_new_override_fuel_rate", ldc_new_override_fuel_rate);
                     pList.Add(cm, "ll_contract_no", ll_contract_no);
@@ -3084,9 +3161,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     Decimal? sequence = null;
-                    cm.CommandText = "SELECT  pr_rate  FROM piece_rate " +
-                        "WHERE prt_key = @li_prt_key AND " +
-                        "pr_effective_date = @ld_con_rates_effective_date";
+                    cm.CommandText = "SELECT pr_rate FROM rd.piece_rate " +
+                                      "WHERE prt_key = @li_prt_key AND " +
+                                            "pr_effective_date = @ld_con_rates_effective_date";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "li_prt_key", li_prt_key);
@@ -3115,8 +3192,9 @@ namespace NZPostOffice.RDS.DataService
                     cm.CommandType = CommandType.Text;
                     DateTime? sequence = null;
                     cm.CommandText = "SELECT con_rates_effective_date " +
-                        "FROM contract_renewals WHERE contract_no = @li_contract_no AND " +
-                        "contract_seq_number = @li_seq_num";
+                                       "FROM rd.contract_renewals " + 
+                                      "WHERE contract_no = @li_contract_no AND " +
+                                            "contract_seq_number = @li_seq_num";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "li_contract_no", li_contract_no);
@@ -3143,10 +3221,10 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  con_start_date, con_expiry_date " +
-                        "from contract_renewals  " +
-                        "where contract_seq_number = @li_seq_num  and " +
-                        "contract_no = @li_contract_no";
+                    cm.CommandText = "SELECT con_start_date, con_expiry_date " +
+                                       "from rd.contract_renewals  " +
+                                      "where contract_seq_number = @li_seq_num  and " +
+                                            "contract_no = @li_contract_no";
 
                     pList.Add(cm, "li_seq_num", li_seq_num);
                     pList.Add(cm, "li_contract_no", li_contract_no);
@@ -3187,8 +3265,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  count(cam.cust_id) " +
-                        "from rds_customer c, customer_address_moves cam " +
+                    cm.CommandText = "SELECT count(cam.cust_id) " +
+                        "from rd.rds_customer c, rd.customer_address_moves cam " +
                         "where c.cust_id = cam.cust_id and cam.adr_id = @ll_new_adr_id and " +
                         "cam.move_out_date is null and c.cust_surname_company like 'Dummy%'";
                     pList.Add(cm, "ll_new_adr_id", ll_new_adr_id);
@@ -3221,7 +3299,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "delete from address where adr_id = @ll_old_adr_id";
+                    cm.CommandText = cm.CommandText = "delete from rd.address where adr_id = @ll_old_adr_id";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_old_adr_id", ll_old_adr_id);
                     _sqlcode = -1;
@@ -3287,7 +3365,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  rd.f_validate_road (@ls_road_name, @ll_rt_id, @ll_rs_id, @ls_sl_name,@ll_tc_id)";
+                    cm.CommandText = "SELECT rd.f_validate_road (@ls_road_name, @ll_rt_id, @ll_rs_id, @ls_sl_name,@ll_tc_id)";
                     pList.Add(cm, "ll_tc_id", ll_tc_id);
                     pList.Add(cm, "ls_sl_name", ls_sl_name);
                     pList.Add(cm, "ls_road_name", ls_road_name);
@@ -3323,10 +3401,10 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  contract_no FROM contract " +
+                    cm.CommandText = "SELECT contract_no FROM rd.contract " +
                         " WHERE con_date_terminated IS NULL AND " +
                         "con_rd_ref_text LIKE @ls_percent + @ls_town_name + @ls_percent AND " +
-                        "( con_rd_ref_text like @ls_rd_no + @ls_space + @ls_percent OR " +
+                        "(con_rd_ref_text like @ls_rd_no + @ls_space + @ls_percent OR " +
                         "con_rd_ref_text like @ls_rd_no + @ls_comma + @ls_percent OR " +
                         "con_rd_ref_text like @ls_rd_no + @ls_and + @ls_percent OR " +
                         "con_rd_ref_text like @ls_percent + @ls_space + @ls_rd_no + @ls_percent OR " +
@@ -3368,7 +3446,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  contract_no FROM contract " +
+                    cm.CommandText = "SELECT contract_no FROM rd.contract " +
                         "WHERE con_date_terminated IS NULL AND " +
                         "contract_no = @ll_contract_no AND " +
                         "con_rd_ref_text LIKE @ls_percent + @ls_town_name + @ls_percent AND " +
@@ -3415,10 +3493,10 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM contract " +
+                    cm.CommandText = "SELECT count(*) FROM rd.contract " +
                         "WHERE con_date_terminated IS NULL AND " +
                         "con_rd_ref_text LIKE @ls_percent + @ls_town_name + @ls_percent AND " +
-                        "( con_rd_ref_text like @ls_rd_no + @ls_space + @ls_percent OR " +
+                        "(con_rd_ref_text like @ls_rd_no + @ls_space + @ls_percent OR " +
                         "con_rd_ref_text like @ls_rd_no + @ls_comma + @ls_percent OR " +
                         "con_rd_ref_text like @ls_rd_no + @ls_and + @ls_percent OR " +
                         "con_rd_ref_text like @ls_percent + @ls_space + @ls_rd_no + @ls_percent OR " +
@@ -3459,7 +3537,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count ( *) FROM address a, types_for_contract tfc " +
+                    cm.CommandText = "SELECT count(*) FROM rd.address a, rd.types_for_contract tfc " +
                         "WHERE a.adr_id = @al_adrID AND " +
                         "tfc.contract_no = a.contract_no AND " +
                         "ct_key = @ll_contract_type_rd";
@@ -3541,7 +3619,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT dp_id FROM address WHERE adr_id = @al_adrid";
+                    cm.CommandText = "SELECT dp_id FROM rd.address WHERE adr_id = @al_adrid";
                     pList.Add(cm, "al_adrid", al_adrid);
 
                     try
@@ -3572,9 +3650,9 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select 1 from contract_renewals " +
+                    cm.CommandText = "select 1 from rd.contract_renewals " +
                         "where contract_renewals.contract_no = @al_contractNo and " +
-                        "getdate ( ) between contract_renewals.con_start_date and contract_renewals.con_expiry_date";
+                        "getdate() between contract_renewals.con_start_date and contract_renewals.con_expiry_date";
                     pList.Add(cm, "al_contractNo", al_contractNo);
 
                     try
@@ -3605,7 +3683,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select contract_no, con_date_terminated from contract " +
+                    cm.CommandText = "select contract_no, con_date_terminated from rd.contract " +
                         "where contract.contract_no = @al_contractNo";
                     pList.Add(cm, "al_contractNo", al_contractNo);
                     _ContractNoConDateTerminatedList = new List<ContractNoConDateTerminatedItem>();
@@ -3655,9 +3733,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "SELECT post_code, post_code_id " 
-                                   +   "FROM post_code pc, towncity tc " 
+                                   +   "FROM rd.post_code pc, towncity tc " 
                                    +  "WHERE post_code = (SELECT max(pc.post_code) "
-                                   +                       "FROM post_code pc, towncity tc " 
+                                   +                       "FROM rd.post_code pc, rd.towncity tc " 
                                    +                      "WHERE tc.tc_id = @al_tc_id " 
                                    +                        "AND pc.post_mail_town = tc.tc_name)";
                     pList.Add(cm, "al_tc_id", al_tc_id);
@@ -3694,7 +3772,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "SELECT TOP 1 post_code_id, post_code " 
-                                   +   "FROM post_code, towncity " 
+                                   +   "FROM rd.post_code, rd.towncity " 
                                    +  "WHERE post_mail_town = tc_name " 
                                    +    "AND tc_id = @al_tcid " 
                                    +    "AND rd_no = @ls_rdno";
@@ -3732,8 +3810,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code " 
-                                   +   "FROM post_code pc, towncity tc " 
+                    cm.CommandText = "SELECT TOP 1 post_code_id, post_code "
+                                   + "FROM rd.post_code pc, rd.towncity tc " 
                                    +  "WHERE post_mail_town = tc_name "
                                    +    "AND tc_id = @al_tcid "
                                    +    "AND rd_no is null";
@@ -3770,7 +3848,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE address set dp_id = @al_new_master_dpid where adr_id = @al_new_adr_id";
+                    cm.CommandText = cm.CommandText = "UPDATE rd.address set dp_id = @al_new_master_dpid where adr_id = @al_new_adr_id";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_new_master_dpid", al_new_master_dpid);
                     pList.Add(cm, "al_new_adr_id", al_new_adr_id);
@@ -3799,7 +3877,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "delete from address where adr_id = @al_adrID";
+                    cm.CommandText = cm.CommandText = "delete from rd.address where adr_id = @al_adrID";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_adrID", al_adrID);
                     _sqlcode = -1;
@@ -3894,7 +3972,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "select count ( *)  from customer_address_moves   where adr_id = @al_adr_id  and move_out_date is null";
+                    cm.CommandText = "select count(*) from rd.customer_address_moves where adr_id = @al_adr_id  and move_out_date is null";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_adr_id", al_adr_id);
                     try
@@ -3925,10 +4003,11 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select cam.dp_id, cam.cust_id from rds_customer c, customer_address_moves cam " +
-                        "where c.cust_id = cam.cust_id and cam.adr_id = @al_adrid and " +
-                        "cam.move_out_date is null and c.master_cust_id is null and " +
-                        "c.cust_surname_company like 'Dummy%'";
+                    cm.CommandText = "select cam.dp_id, cam.cust_id " + 
+                                       "from rd.rds_customer c, rd.customer_address_moves cam " +
+                                      "where c.cust_id = cam.cust_id and cam.adr_id = @al_adrid and " +
+                                            "cam.move_out_date is null and c.master_cust_id is null and " +
+                                            "c.cust_surname_company like 'Dummy%'";
                     pList.Add(cm, "al_adrid", al_adrid);
                     _CustomerAddressMovesDpIdCustIdList = new List<CustomerAddressMovesDpIdCustIdItem>();
                     try
@@ -3962,11 +4041,11 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select cam.dp_id, cam.cust_id from " +
-                        "rds_customer c, customer_address_moves cam " +
-                        "where c.cust_id = cam.cust_id and cam.adr_id = @al_adrid and " +
-                        "cam.move_out_date is null and c.master_cust_id is not null and " +
-                        "c.cust_surname_company like 'Dummy%'";
+                    cm.CommandText = "select cam.dp_id, cam.cust_id " +
+                                       "from rd.rds_customer c, rd.customer_address_moves cam " +
+                                      "where c.cust_id = cam.cust_id and cam.adr_id = @al_adrid and " +
+                                            "cam.move_out_date is null and c.master_cust_id is not null and " +
+                                            "c.cust_surname_company like 'Dummy%'";
 
                     pList.Add(cm, "al_adrid", al_adrid);
                     _RdsCustomInfoList = new List<RdsCustomInfoItem>();
@@ -4001,7 +4080,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE customer_address_moves " +
+                    cm.CommandText = cm.CommandText = "UPDATE rd.customer_address_moves " +
                         "SET move_out_date = CAST(FLOOR(CAST(GETDATE() AS FLOAT)) AS DATETIME) " +
                         "WHERE cust_id = @al_cust and move_out_date is null";
                     ParameterCollection pList = new ParameterCollection();
@@ -4070,7 +4149,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT adr_id FROM customer_address_moves WHERE cust_id = @al_custID AND move_out_date is null";
+                    cm.CommandText = "SELECT adr_id FROM rd.customer_address_moves WHERE cust_id = @al_custID AND move_out_date is null";
                     pList.Add(cm, "al_custID", al_custID);
 
                     try
@@ -4101,7 +4180,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select adr_no from address where adr_id = @al_adr_id";
+                    cm.CommandText = "select adr_no from rd.address where adr_id = @al_adr_id";
                     pList.Add(cm, "al_adr_id", al_adr_id);
 
                     try
@@ -4132,7 +4211,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT dp_id FROM customer_address_moves WHERE cust_id = @al_custID AND move_out_date is null";
+                    cm.CommandText = "SELECT dp_id FROM rd.customer_address_moves WHERE cust_id = @al_custID AND move_out_date is null";
                     pList.Add(cm, "al_custID", al_custID);
 
                     try
@@ -4163,7 +4242,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT tc_id FROM towncity WHERE tc_name = @as_tcname";
+                    cm.CommandText = "SELECT tc_id FROM rd.towncity WHERE tc_name = @as_tcname";
                     pList.Add(cm, "as_tcname", as_tcname);
 
                     try
@@ -4194,7 +4273,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM types_for_contract " +
+                    cm.CommandText = "SELECT count(*) FROM rd.types_for_contract " +
                         "WHERE contract_no = @al_contract_no AND " +
                         "ct_key = @ll_contract_type_rd";
 
@@ -4261,7 +4340,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "insert into customer_address_moves " +
+                    cm.CommandText = cm.CommandText = "insert into rd.customer_address_moves " +
                         "( adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user) " +
                         "values ( @il_addrid, @ll_custid, null, @ldt_movein, null, null, null )";
                     ParameterCollection pList = new ParameterCollection();
@@ -4293,7 +4372,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE rds_customer set master_cust_id = @al_master where cust_id = @al_custID";
+                    cm.CommandText = cm.CommandText = "UPDATE rd.rds_customer set master_cust_id = @al_master where cust_id = @al_custID";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_master", al_master);
                     pList.Add(cm, "al_custID", al_custID);
@@ -4421,7 +4500,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM non_vehicle_rate, contract_renewals, contract " +
+                    cm.CommandText = "SELECT count(*) FROM rd.non_vehicle_rate, rd.contract_renewals, rd.contract " +
                         "WHERE contract.contract_no = contract_renewals.contract_no and " +
                         "contract.rg_code = non_vehicle_rate.rg_code and " +
                         "contract_renewals.con_rates_effective_date = non_vehicle_rate.nvr_rates_effective_date and " +
@@ -4494,7 +4573,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select max( contract_seq_number) from contract_renewals where contract_no = @li_contract";
+                    cm.CommandText = "select max(contract_seq_number) from rd.contract_renewals where contract_no = @li_contract";
                     pList.Add(cm, "li_contract", li_contract);
 
                     try
@@ -4525,7 +4604,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT get_prev_bench ( @li_contract) FROM sys.dummy";
+                    cm.CommandText = "SELECT rd.get_prev_bench(@li_contract) FROM sys.dummy";
                     pList.Add(cm, "li_contract", li_contract);
 
                     try
@@ -4556,8 +4635,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT min(nvr.rg_code) FROM non_vehicle_rate nvr " +
-                        "WHERE nvr.nvr_contract_end = ( SELECT min(nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end >= @mcdate) ";
+                    cm.CommandText = "SELECT min(nvr.rg_code) FROM rd.non_vehicle_rate nvr " +
+                        "WHERE nvr.nvr_contract_end = (SELECT min(nvr2.nvr_contract_end) FROM rd.non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end >= @mcdate) ";
                     pList.Add(cm, "mcdate", mcdate);
 
                     try
@@ -4588,9 +4667,17 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT min(nvr.rg_code) FROM non_vehicle_rate nvr " +
-                        "WHERE nvr.rg_code <> @rg_code and " +
-                        "nvr.nvr_contract_end = (SELECT min ( nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end > @mcdate and nvr2.nvr_contract_end >  ( select min ( nvr3.nvr_contract_end) from 	non_vehicle_rate nvr3 where nvr3.nvr_contract_end >=@mcdate))";
+                    cm.CommandText = "SELECT min(nvr.rg_code) " + 
+                                       "FROM rd.non_vehicle_rate nvr " +
+                                      "WHERE nvr.rg_code <> @rg_code and " +
+                                            "nvr.nvr_contract_end = " + 
+                                                   "(SELECT min(nvr2.nvr_contract_end) " + 
+                                                      "FROM rd.non_vehicle_rate nvr2 " + 
+                                                     "WHERE nvr2.nvr_contract_end > @mcdate and " + 
+                                                           "nvr2.nvr_contract_end > " + 
+                                                                   "(select min(nvr3.nvr_contract_end) " + 
+                                                                      "from rd.non_vehicle_rate nvr3 " + 
+                                                                     "where nvr3.nvr_contract_end >=@mcdate))";
 
                     pList.Add(cm, "rg_code", rg_code);
                     pList.Add(cm, "mcdate", mcdate);
@@ -4623,15 +4710,15 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "INSERT INTO frequency_adjustments " +
-                        "( contract_no, contract_seq_number, " +
+                    cm.CommandText = cm.CommandText = "INSERT INTO rd.frequency_adjustments " +
+                        "(contract_no, contract_seq_number, " +
                         "fd_unique_seq_number, fd_adjustment_amount, " +
                         "fd_paid_to_date, fd_bm_after_extn, " +
                         "fd_confirmed, fd_amount_to_pay, " +
                         "fd_effective_date, sf_key, rf_delivery_days) " +
-                        "VALUES ( @lContract, @lSequence, " +
-                        "@lNextSeq, @dBenchmark, n" +
-                        "ull, rd.BenchmarkCalc2005 ( @lContract, @lSequence), " +
+                        "VALUES (@lContract, @lSequence, " +
+                        "@lNextSeq, @dBenchmark, " +
+                        "null, rd.BenchmarkCalc2005(@lContract, @lSequence), " +
                         "'N', @dAmountToPay, " +
                         "@dEffectiveDate, @lSFKey, @sDeliveryDays)";
 
@@ -4670,7 +4757,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select max(fd_unique_seq_number) " +
-                        "from frequency_adjustments " +
+                        "from rd.frequency_adjustments " +
                         "where contract_no = @lContract and contract_seq_number = @lSequence";
 
                     pList.Add(cm, "lSequence", lSequence);
@@ -4705,7 +4792,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select max(contract_seq_number) " +
-                        "from contract_renewals where contract_no = @lContract";
+                        "from rd.contract_renewals where contract_no = @lContract";
                     pList.Add(cm, "lContract", lContract);
 
                     try
@@ -4736,7 +4823,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE route_frequency " +
+                    cm.CommandText = cm.CommandText = "UPDATE rd.route_frequency " +
                         "SET rf_distance = rf_distance + @dDistance " +
                         "WHERE contract_no = @lContract AND " +
                         "sf_key = @lSFKey AND " +
@@ -4772,7 +4859,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "INSERT INTO frequency_distances " +
+                    cm.CommandText = cm.CommandText = "INSERT INTO rd.frequency_distances " +
                         "( fd_effective_date, contract_no, sf_key, " +
                         "rf_delivery_days, fd_distance, fd_no_of_boxes, " +
                         "fd_no_rural_bags, fd_no_other_bags, fd_no_private_bags, " +
@@ -4827,7 +4914,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count (*) from frequency_distances " +
+                    cm.CommandText = "select count (*) from rd.frequency_distances " +
                         "WHERE contract_no = @lContract and " +
                         "sf_key = @lSFKey and " +
                         "rf_delivery_days = @sDeliveryDays and " +
@@ -4867,7 +4954,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select count(*) " +
-                        "from contract join contract_renewals on contract.contract_no = contract_renewals.contract_no and " +
+                        "from rd.contract join rd.contract_renewals on contract.contract_no = contract_renewals.contract_no and " +
                         "contract.con_active_sequence = contract_renewals.contract_seq_number " +
                         "where @dEffectiveDate between contract_renewals.con_start_date and " +
                         "contract_renewals.con_expiry_date and contract.contract_no = @lContract";
@@ -4930,7 +5017,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "DELETE address_frequency_sequence WHERE contract_no = @il_oldcontractno";
+                    cm.CommandText = cm.CommandText = "DELETE rd.address_frequency_sequence WHERE contract_no = @il_oldcontractno";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "il_oldcontractno", il_oldcontractno);
                     _sqlcode = -1;
@@ -4958,7 +5045,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE Address SET contract_no = @ll_newcontractno WHERE contract_no = @il_oldcontractno";
+                    cm.CommandText = cm.CommandText = "UPDATE rd.Address SET contract_no = @ll_newcontractno WHERE contract_no = @il_oldcontractno";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_newcontractno", ll_newcontractno);
                     pList.Add(cm, "il_oldcontractno", il_oldcontractno);
@@ -4987,7 +5074,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT Count(*) FROM contract WHERE contract_no = @ll_newcontractno and con_date_terminated is null";
+                    cm.CommandText = "SELECT Count(*) FROM rd.contract WHERE contract_no = @ll_newcontractno and con_date_terminated is null";
                     pList.Add(cm, "ll_newcontractno", ll_newcontractno);
 
                     try
@@ -5018,7 +5105,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select contract.con_title, outlet.o_name from contract, outlet " +
+                    cm.CommandText = "select contract.con_title, outlet.o_name " + 
+                        "from rd.contract, rd.outlet " +
                         "where contract.contract_no = @il_contract_no and " +
                         "contract.con_base_office = outlet.outlet_id";
 
@@ -5055,8 +5143,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "Insert Into address_frequency_sequence ( adr_id, sf_key, rf_delivery_days, contract_no, seq_num) " +
-                        "Values ( @ll_address_id, @il_sf_key, @is_delivery_days, @il_contract_no, @ll_sequence_no)";
+                    cm.CommandText = cm.CommandText = "Insert Into rd.address_frequency_sequence (adr_id, sf_key, rf_delivery_days, contract_no, seq_num) " +
+                        "Values (@ll_address_id, @il_sf_key, @is_delivery_days, @il_contract_no, @ll_sequence_no)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "il_sf_key", il_sf_key);
                     pList.Add(cm, "ll_sequence_no", ll_sequence_no);
@@ -5088,7 +5176,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "Delete from address_frequency_sequence " +
+                    cm.CommandText = cm.CommandText = "Delete from rd.address_frequency_sequence " +
                         "where contract_no = @il_contract_no and " +
                         "sf_key = @il_sf_key and " +
                         "rf_delivery_days = @is_delivery_days";
@@ -5122,7 +5210,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select con_title from contract where contract_no = @il_contract_no";
+                    cm.CommandText = "select con_title from rd.contract where contract_no = @il_contract_no";
                     pList.Add(cm, "il_contract_no", il_contract_no);
 
                     try
@@ -5153,7 +5241,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "UPDATE customer_address_moves " +
+                    cm.CommandText = cm.CommandText = "UPDATE rd.customer_address_moves " +
                         "set dp_id = @al_dpid " +
                         "where cust_id = @il_customer and move_out_date is null";
 
@@ -5185,7 +5273,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "insert into customer_address_moves ( adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user ) " +
+                    cm.CommandText = cm.CommandText = "insert into rd.customer_address_moves (adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user) " +
                         "values ( @il_adrid, @ll_cust, NULL, getdate(), NULL, NULL, NULL )";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_cust", ll_cust);
@@ -5295,7 +5383,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = cm.CommandText = "insert into customer_address_moves ( adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user ) " +
+                    cm.CommandText = cm.CommandText = "insert into rd.customer_address_moves ( adr_id, cust_id, dp_id, move_in_date, move_out_date, move_out_source, move_out_user ) " +
                         "values ( @il_adrid, @ll_cust, @ll_dpid, CAST(FLOOR(CAST(GetDate() AS FLOAT)) AS DATETIME), NULL, NULL, NULL )";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_cust", ll_cust);
@@ -5326,7 +5414,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select 1 from customer_address_moves cam where cust_id = @il_cust_id and move_out_date is null";
+                    cm.CommandText = "select 1 from rd.customer_address_moves cam where cust_id = @il_cust_id and move_out_date is null";
                     pList.Add(cm, "il_cust_id", il_cust_id);
 
                     try
@@ -5357,7 +5445,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select dp_id from customer_address_moves where cust_id = @al_custId and move_out_date is null";
+                    cm.CommandText = "select dp_id from rd.customer_address_moves where cust_id = @al_custId and move_out_date is null";
                     pList.Add(cm, "al_custId", al_custId);
 
                     try
@@ -5388,7 +5476,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select vor_effective_date from vehicle_override_rate " +
+                    cm.CommandText = "select vor_effective_date from rd.vehicle_override_rate " +
                         "where contract_no = @il_contract and " +
                         "contract_seq_number = @il_sequence and " +
                         "vor_effective_date = @ld_effective_date";
@@ -5425,7 +5513,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count (*) FROM contract WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence";
+                    cm.CommandText = "SELECT count(*) FROM rd.contract WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence";
                     pList.Add(cm, "il_sequence", il_sequence);
                     pList.Add(cm, "il_contract", il_contract);
 
@@ -5457,7 +5545,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count ( *) FROM frequency_distances " +
+                    cm.CommandText = "SELECT count(*) FROM rd.frequency_distances " +
                         "WHERE contract_no = @al_contract AND " +
                         "sf_key = @ll_sfkey AND " +
                         "rf_delivery_days = @ls_deldays AND " +
@@ -5496,7 +5584,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM frequency_distances " +
+                    cm.CommandText = "SELECT count(*) FROM rd.frequency_distances " +
                         "WHERE contract_no = @al_contract AND " +
                         "sf_key = @ll_sfkey AND " +
                         "rf_delivery_days = @ls_deldays AND " +
@@ -5534,7 +5622,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT top 1 sf_key, rf_delivery_days FROM route_frequency WHERE contract_no = @al_contract AND rf_active = 'Y'";
+                    cm.CommandText = "SELECT top 1 sf_key, rf_delivery_days FROM rd.route_frequency WHERE contract_no = @al_contract AND rf_active = 'Y'";
                     pList.Add(cm, "al_contract", al_contract);
                     _FirstRouteFrequenctSfKeyList = new List<FirstRouteFrequenctSfKeyItem>();
                     try
@@ -5568,7 +5656,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select con_date_terminated from contract where contract_no = @al_contract";
+                    cm.CommandText = "select con_date_terminated from rd.contract where contract_no = @al_contract";
                     pList.Add(cm, "al_contract", al_contract);
 
                     try
@@ -5599,7 +5687,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT vehicle.v_remaining_economic_life FROM contract_vehical, vehicle " +
+                    cm.CommandText = "SELECT vehicle.v_remaining_economic_life " + 
+                         "FROM rd.contract_vehical, rd.vehicle " +
                         "WHERE vehicle.vehicle_number = contract_vehical.vehicle_number and " +
                         "contract_vehical.contract_no = @il_contract AND " +
                         "contract_vehical.contract_seq_number = @il_sequence";
@@ -5871,7 +5960,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int sequence = 0;
-                    cm.CommandText = "select max ( contract_seq_number)  from contract_renewals  where contract_no = @li_contract_no";
+                    cm.CommandText = "select max(contract_seq_number) from rd.contract_renewals where contract_no = @li_contract_no";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "li_contract_no", li_contract_no);
 
@@ -5909,7 +5998,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int sequence = 0;
-                    cm.CommandText = "select count ( prt_key) from piece_rate_delivery where contract_no = @lContract and prt_key = @lPRKey and prd_date = @dPRDDate";
+                    cm.CommandText = "select count(prt_key) from rd.piece_rate_delivery where contract_no = @lContract and prt_key = @lPRKey and prd_date = @dPRDDate";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lPRKey", lPRKey);
@@ -5949,7 +6038,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int sequence = 0;
-                    cm.CommandText = "select prt_key  from piece_rate_type where prt_code = @sPRCode";
+                    cm.CommandText = "select prt_key from rd.piece_rate_type where prt_code = @sPRCode";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "sPRCode", sPRCode);
 
@@ -5987,7 +6076,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int sequence = 0;
-                    cm.CommandText = "select contract_no from contract where con_old_mail_service_no = @sMSNumber";
+                    cm.CommandText = "select contract_no from rd.contract where con_old_mail_service_no = @sMSNumber";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "sMSNumber", sMSNumber);
 
@@ -6065,8 +6154,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int sequence = 0;
-                    cm.CommandText = "select top 1 pvt_bag_count  " +
-                        "from private_bags where pvt_frequency =@num and " +
+                    cm.CommandText = "select top 1 pvt_bag_count " +
+                        "from rd.private_bags where pvt_frequency =@num and " +
                         "region_id = @il_region order by pvt_date desc";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "num", num);
@@ -6077,7 +6166,7 @@ namespace NZPostOffice.RDS.DataService
                     else
                     {
                         cm.CommandText = "select top 1 pvt_bag_count  " +
-                            "from private_bags where pvt_frequency =@num and " +
+                            "from rd.private_bags where pvt_frequency =@num and " +
                             "region_id is null order by pvt_date desc";
                     }
 
@@ -6115,8 +6204,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "insert into rd.private_bags ( pvt_frequency, pvt_bag_count, region_id) " +
-                        "values ( @num, @ll_1, @il_region)";
+                    cm.CommandText = "insert into rd.private_bags (pvt_frequency, pvt_bag_count, region_id) " +
+                        "values (@num, @ll_1, @il_region)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "num", num);
                     pList.Add(cm, "ll_1", ll_1);
@@ -6144,11 +6233,11 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 region_id  from rds_user_rights rur, " +
-                        " rds_user_id_group rui, rds_component rc,  rds_user_id rid " +
+                    cm.CommandText = "select top 1 region_id " + 
+                        " from rd.rds_user_rights rur, rd.rds_user_id_group rui, rd.rds_component rc, rd.rds_user_id rid " +
                         "where rc.rc_name = 'Private Bags' and rid.ui_userid = @ls_userid" +
-                        " and rui.ui_id = rid.ui_id and rur.ug_id = rui.ug_id and " +
-                        "rc.rc_id = rur.rc_id and rur.rur_read = 'Y'  and rur.ug_id = rui.ug_id";
+                        "  and rui.ui_id = rid.ui_id and rur.ug_id = rui.ug_id " +
+                        "  and rc.rc_id = rur.rc_id and rur.rur_read = 'Y' and rur.ug_id = rui.ug_id";
 
                     pList.Add(cm, "ls_userid", ls_userid);
 
@@ -6187,7 +6276,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select ru.region_id from rds_user ru, rds_user_id rui " +
+                    cm.CommandText = "select ru.region_id " + 
+                        " from rd.rds_user ru, rd.rds_user_id rui " +
                         "where rui.ui_userid = @ls_userid  and ru.u_id = rui.u_id";
                     pList.Add(cm, "ls_userid", ls_userid);
 
@@ -6272,7 +6362,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*)  FROM contract  WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence";
+                    cm.CommandText = "SELECT count(*) FROM rd.contract WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence";
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "il_sequence", il_sequence);
                     try
@@ -6314,8 +6404,8 @@ namespace NZPostOffice.RDS.DataService
                                            + "vehicle.v_vehicle_model,vehicle.v_vehicle_year, " 
                                            + "vehicle.v_vehicle_cc_rating, vehicle.v_road_user_charges_indicator, "
                                            + "vehicle.v_purchased_date, vehicle.v_purchase_value, "
-                                           + "vehicle.v_leased, vehicle.v_vehicle_month " 
-                                      + "FROM vehicle " 
+                                           + "vehicle.v_leased, vehicle.v_vehicle_month "
+                                      + "FROM rd.vehicle " 
                                      + "WHERE vehicle.v_vehicle_registration_number = @sRegNo ";
 
                     pList.Add(cm, "sRegNo", sRegNo);
@@ -6364,7 +6454,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "Select count(*)  From contractor Where contractor_supplier_no = @lSupplier";
+                    cm.CommandText = "Select count(*) From rd.contractor Where contractor_supplier_no = @lSupplier";
                     pList.Add(cm, "lSupplier", lSupplier);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6405,7 +6495,7 @@ namespace NZPostOffice.RDS.DataService
         //                    _sqlcode = 0;
         //                }
         //            }
-
+        //
         //            intVal = sequence;
         //        }
         //    }
@@ -6420,7 +6510,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contractor.contractor_supplier_no FROM contractor " +
+                    cm.CommandText = "SELECT contractor.contractor_supplier_no FROM rd.contractor " +
                         " WHERE (contractor.c_surname_company  + case when contractor.c_first_names is null then '' else ',' end +  case when contractor.c_first_names is null then '' else contractor.c_first_names end) = @sContractorName";
                     pList.Add(cm, "sContractorName", sContractorName);
 
@@ -6451,7 +6541,7 @@ namespace NZPostOffice.RDS.DataService
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "SELECT contractor.c_surname_company  + case when contractor.c_first_names is null then '' else ',' end +  case when contractor.c_first_names is null then '' else contractor.c_first_names end    " +
-                        " FROM contractor WHERE contractor.contractor_supplier_no = @lContractor";
+                        " FROM rd.contractor WHERE contractor.contractor_supplier_no = @lContractor";
                     pList.Add(cm, "lContractor", lContractor);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6479,7 +6569,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select con_active_sequence  from contract   where contract_no = @il_contract";
+                    cm.CommandText = "select con_active_sequence from rd.contract where contract_no = @il_contract";
                     pList.Add(cm, "il_contract", il_contract);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6513,12 +6603,12 @@ namespace NZPostOffice.RDS.DataService
                      * TJB  RD7_0051  Oct-2009
                      * * Original ignores override rate:
                      * cm.CommandText = "select non_vehicle_rate.nvr_item_proc_rate_per_hr" 
-                     *                 + " from non_vehicle_rate"
+                     *                 + " from rd.non_vehicle_rate"
                      *                 + " where non_vehicle_rate.rg_code = @lRgCode"
                      *                 + " and non_vehicle_rate.nvr_rates_effective_date = @dDate";
                      * ----------------------------------------------------------- */
                     cm.CommandText = "select isnull(nvor_item_proc_rate_per_hour,nvr_item_proc_rate_per_hr) "
-                                     + "from non_vehicle_rate as nvr left outer join non_vehicle_override_rate as nvor "
+                                     + "from rd.non_vehicle_rate as nvr left outer join rd.non_vehicle_override_rate as nvor "
                                      + "        on nvor.contract_no = @lContractNo and "
                                      + "           nvor.contract_seq_number = @lSeqNo "
                                      + "where rg_code = @lRgCode"
@@ -6601,7 +6691,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from contractor_renewals " 
+                    cm.CommandText = "select count(*) from rd.contractor_renewals " 
                                     + "where contract_no = @lContract and contract_seq_number = @lSequence";
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
@@ -6630,7 +6720,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select con_expiry_date from contract_renewals " 
+                    cm.CommandText = "select con_expiry_date from rd.contract_renewals " 
                                     + "where contract_no = @lContract and contract_seq_number = @lSequence";
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
@@ -6659,7 +6749,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE vehicle SET vt_key = @lVTKey, " +
+                    cm.CommandText = "UPDATE rd.vehicle SET vt_key = @lVTKey, " +
                         " ft_key = @lFTKey, v_vehicle_make = @sMake, v_vehicle_model = @sModel, " +
                         " v_vehicle_year = @lYear,   v_vehicle_month = @lmonth,   v_vehicle_registration_number = @sRegistration,   " +
                         " v_vehicle_cc_rating = @lCCRate,  v_road_user_charges_indicator = @sUserCharge, v_purchased_date = @dPurchase,   " +
@@ -6710,7 +6800,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "INSERT INTO vehicle" +
+                    cm.CommandText = "INSERT INTO rd.vehicle" +
                         " (vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year," +
                         " v_vehicle_registration_number, v_vehicle_cc_rating, v_road_user_charges_indicator," +
                         " v_purchased_date, v_purchase_value, v_leased, v_vehicle_month, v_vehicle_transmission," +
@@ -6764,8 +6854,8 @@ namespace NZPostOffice.RDS.DataService
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select nvr_frozen_indicator " +
-                        "from non_vehicle_rate where rg_code = @lRenewal " +
-                        " and nvr_rates_effective_date = (select max(nvr_rates_effective_date) from non_vehicle_rate where rg_code = @lRenewal)";
+                        "from rd.non_vehicle_rate where rg_code = @lRenewal " +
+                        " and nvr_rates_effective_date = (select max(nvr_rates_effective_date) from rd.non_vehicle_rate where rg_code = @lRenewal)";
                     pList.Add(cm, "lRenewal", lRenewal);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6793,7 +6883,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE contract_renewals SET con_renewal_payment_value = con_renewal_benchmark_price" +
+                    cm.CommandText = "UPDATE rd.contract_renewals SET con_renewal_payment_value = con_renewal_benchmark_price" +
                         " WHERE contract_renewals.contract_no = @lContract AND contract_renewals.contract_seq_number = @lSequence";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
@@ -6822,7 +6912,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE contract_renewals" + 
+                    cm.CommandText = "UPDATE rd.contract_renewals" + 
                                        " set con_renewal_benchmark_price = rd.BenchmarkCalc2005(@lContract, @lSequence)" +
                                      " where contract_no = @lContract and contract_seq_number = @lSequence";
                     ParameterCollection pList = new ParameterCollection();
@@ -6852,7 +6942,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "insert into contract_renewals " +
+                    cm.CommandText = "insert into rd.contract_renewals " +
                         " ( contract_no, contract_seq_number, con_relief_driver_name,con_relief_driver_address, con_relief_driver_home_phone)" +
                         " values( @lContract, @lSequence, @sname,@saddr, @sphone)";
                     ParameterCollection pList = new ParameterCollection();
@@ -6883,10 +6973,10 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  contract_renewals.con_relief_driver_name," +
+                    cm.CommandText = "SELECT contract_renewals.con_relief_driver_name," +
                         "contract_renewals.con_relief_driver_address," +
                         "contract_renewals.con_relief_driver_home_phone " +
-                        "FROM contract_renewals " + 
+                        "FROM rd.contract_renewals " + 
                         "WHERE contract_renewals.contract_no = @lcontract " +
                         "AND contract_renewals.contract_seq_number = @lsequence";
 
@@ -6927,7 +7017,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contract.con_date_terminated FROM contract WHERE contract.contract_no = @lContract  ";
+                    cm.CommandText = "SELECT contract.con_date_terminated FROM rd.contract WHERE contract.contract_no = @lContract  ";
                     pList.Add(cm, "lContract", lContract);
                     try
                     {
@@ -6963,7 +7053,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from route_audit where ra_date_of_check = @dtCheck and contract_no = @ll_Contract ";
+                    cm.CommandText = "select count(*) from rd.route_audit where ra_date_of_check = @dtCheck and contract_no = @ll_Contract ";
                     pList.Add(cm, "dtCheck", dtCheck);
                     pList.Add(cm, "ll_Contract", ll_Contract);
                     try
@@ -6998,7 +7088,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE contract SET con_last_work_msrmnt_check = @checkdate WHERE contract.contract_no = @ilcontract";
+                    cm.CommandText = "UPDATE rd.contract SET con_last_work_msrmnt_check = @checkdate WHERE contract.contract_no = @ilcontract";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "checkdate", checkdate);
                     pList.Add(cm, "ilcontract", ilcontract);
@@ -7025,7 +7115,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE contract SET con_last_delivery_check = @checkdate WHERE contract.contract_no = @ilcontract";
+                    cm.CommandText = "UPDATE rd.contract SET con_last_delivery_check = @checkdate WHERE contract.contract_no = @ilcontract";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "checkdate", checkdate);
                     pList.Add(cm, "ilcontract", ilcontract);
@@ -7051,7 +7141,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rds_customer SET printedon = (select getdate() from dummy) WHERE customer.cust_id = @lCustId ";
+                    cm.CommandText = "UPDATE rd.rds_customer SET printedon = getdate() WHERE cust_id = @lCustId ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lCustId", lCustID);
                     try
@@ -7077,7 +7167,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rds_customer SET printedon = getdate() WHERE customer.cust_id = @lcust ";
+                    cm.CommandText = "UPDATE rd.rds_customer SET printedon = getdate() WHERE customer.cust_id = @lcust ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lcust", lcust);
                     _sqlcode = -1;
@@ -7131,7 +7221,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count (*) from address where adr_id = @ll_addressID";
+                    cm.CommandText = "select count(*) from rd.address where adr_id = @ll_addressID";
                     pList.Add(cm, "ll_addressID", ll_addressID);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -7153,7 +7243,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "UPDATE artical_count SET ac_scale_factor = @decScalingFactor  " +
+                    cm.CommandText = "UPDATE rd.artical_count SET ac_scale_factor = @decScalingFactor  " +
                         "WHERE artical_count.ac_start_week_period = @dDate  " +
                         "AND artical_count.contract_seq_number is null ";
 
@@ -7172,7 +7262,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "UPDATE artical_count SET ac_scale_factor = @decScalingFactor  " +
+                    cm.CommandText = "UPDATE rd.artical_count SET ac_scale_factor = @decScalingFactor  " +
                         "WHERE artical_count.ac_start_week_period = @dDate  " +
                         "AND ac_scale_factor is null AND contract_seq_number is null;  ";
 
@@ -7192,7 +7282,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM non_vehicle_rate " +
+                    cm.CommandText = "SELECT count(*) FROM rd.non_vehicle_rate " +
                         "WHERE rg_code = @ll_rgCode AND " +
                         "nvr_rates_effective_date > @ld_EffDate";
 
@@ -7219,7 +7309,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select outlet_id from outlet where o_name = @sOutlet ";
+                    cm.CommandText = "select outlet_id from rd.outlet where o_name = @sOutlet ";
                     pList.Add(cm, "sOutlet", sOutlet);
                     try
                     {
@@ -7255,7 +7345,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM non_vehicle_rate " +
+                    cm.CommandText = "SELECT count(*) FROM rd.non_vehicle_rate " +
                         "WHERE rg_code = @ll_rgcode AND " +
                         "(nvr_frozen_indicator = 'N' or nvr_frozen_indicator is null)";
 
@@ -7281,7 +7371,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select min ( tc_id) from towncity  " +
+                    cm.CommandText = "select min(tc_id) from rd.towncity  " +
                         "where towncity.tc_name = @ls_town";
                     pList.Add(cm, "ls_town", ls_town);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -7305,7 +7395,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM non_vehicle_rate " +
+                    cm.CommandText = "SELECT count(*) FROM rd.non_vehicle_rate " +
                         "WHERE non_vehicle_rate.rg_code = @ll_rgcode AND " +
                         "non_vehicle_rate.nvr_rates_effective_date = @ld_EffDate ";
                     pList.Add(cm, "ll_rgCode", ll_rgCode);
@@ -7332,9 +7422,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(non_vehicle_rate.rg_code) FROM non_vehicle_rate,vehicle_rate " +
+                    cm.CommandText = "SELECT count(non_vehicle_rate.rg_code) FROM rd.non_vehicle_rate,vehicle_rate " +
                         "WHERE non_vehicle_rate.nvr_rates_effective_date = vehicle_rate.vr_rates_effective_date  and  " +
-                        "(non_vehicle_rate.nvr_frozen_indicator is null  OR  non_vehicle_rate.nvr_frozen_indicator = 'N' ) " +
+                        "(non_vehicle_rate.nvr_frozen_indicator is null OR non_vehicle_rate.nvr_frozen_indicator = 'N' ) " +
                         "and vehicle_rate.vr_rates_effective_date = @id_renewaldate ";
 
                     pList.Add(cm, "id_renewaldate", id_renewaldate);
@@ -7359,7 +7449,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max(vr_rates_effective_date) FROM vehicle_rate WHERE  vt_key = @ll_vtKey; ";
+                    cm.CommandText = "SELECT max(vr_rates_effective_date) FROM rd.vehicle_rate WHERE  vt_key = @ll_vtKey; ";
                     pList.Add(cm, "ll_vtKey", ll_vtKey);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -7382,7 +7472,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select cust_list_updated  from rd.contract  " +
+                    cm.CommandText = "select cust_list_updated from rd.contract  " +
                         "where contract_no = @ll_selected_contracts and " +
                         "cust_list_updated is not null ";
                     pList.Add(cm, "ll_selected_contracts", ll_selected_contracts);
@@ -7406,8 +7496,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into rds_temp ( rds_id, rds_code) " +
-                        "values ( @ll_selected_contracts, @ll_recip)";
+                    cm.CommandText = "insert into rd.rds_temp (rds_id, rds_code) " +
+                        "values (@ll_selected_contracts, @ll_recip)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_selected_contracts", ll_selected_contracts);
                     pList.Add(cm, "ll_recip", ll_recip);
@@ -7434,7 +7524,7 @@ namespace NZPostOffice.RDS.DataService
                         cm.Transaction = tran;
                         string str = "";
                         ParameterCollection pList = new ParameterCollection();
-                        cm.CommandText = "DELETE FROM non_vehicle_rate " +
+                        cm.CommandText = "DELETE FROM rd.non_vehicle_rate " +
                             "WHERE non_vehicle_rate.nvr_rates_effective_date =@id_renewaldate AND " +
                             "non_vehicle_rate.rg_code = @il_rg_code";
                         pList.Add(cm, "id_renewaldate", id_renewaldate);
@@ -7451,7 +7541,7 @@ namespace NZPostOffice.RDS.DataService
                             return;
                         }
                         pList.Clear();
-                        cm.CommandText = "DELETE FROM piece_rate WHERE piece_rate.pr_effective_date = @id_renewaldate AND " +
+                        cm.CommandText = "DELETE FROM rd.piece_rate WHERE piece_rate.pr_effective_date = @id_renewaldate AND " +
                             "piece_rate.rg_code =  @il_rg_code";
                         pList.Add(cm, "id_renewaldate", id_renewaldate);
                         pList.Add(cm, "il_rg_code", il_rg_code);
@@ -7468,7 +7558,7 @@ namespace NZPostOffice.RDS.DataService
                         }
 
                         pList.Clear();
-                        cm.CommandText = "DELETE FROM fuel_rates  WHERE fuel_rates.rg_code = @il_rg_code AND " +
+                        cm.CommandText = "DELETE FROM rd.fuel_rates WHERE fuel_rates.rg_code = @il_rg_code AND " +
                             "fuel_rates.rr_rates_effective_date = @id_renewaldate";
 
                         pList.Add(cm, "il_rg_code", il_rg_code);
@@ -7485,7 +7575,7 @@ namespace NZPostOffice.RDS.DataService
                         }
 
                         pList.Clear();
-                        cm.CommandText = "DELETE FROM rate_days WHERE rate_days.rg_code =@il_rg_code  AND " +
+                        cm.CommandText = "DELETE FROM rd.rate_days WHERE rate_days.rg_code =@il_rg_code  AND " +
                             "rate_days.rr_rates_effective_date = @id_renewaldate";
                         pList.Add(cm, "il_rg_code", il_rg_code);
                         pList.Add(cm, "id_renewaldate", id_renewaldate);
@@ -7502,7 +7592,7 @@ namespace NZPostOffice.RDS.DataService
                         }
 
                         pList.Clear();
-                        cm.CommandText = "DELETE FROM misc_rate  WHERE misc_rate.rg_code = @il_rg_code  AND  " +
+                        cm.CommandText = "DELETE FROM rd.misc_rate WHERE misc_rate.rg_code = @il_rg_code  AND  " +
                             "misc_rate.mr_effective_date =@id_renewaldate ";
                         pList.Add(cm, "il_rg_code", il_rg_code);
                         pList.Add(cm, "id_renewaldate", id_renewaldate);
@@ -7518,7 +7608,7 @@ namespace NZPostOffice.RDS.DataService
                             return;
                         }
                         pList.Clear();
-                        cm.CommandText = " DELETE FROM vehicle_rate  WHERE vr_rates_effective_date = @id_renewaldate ";
+                        cm.CommandText = " DELETE FROM rd.vehicle_rate WHERE vr_rates_effective_date = @id_renewaldate ";
                         pList.Add(cm, "id_renewaldate", id_renewaldate);
                         try
                         {
@@ -7548,7 +7638,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max ( nvr_rates_effective_date) FROM non_vehicle_rate WHERE rg_code = @il_rg_code;";
+                    cm.CommandText = "SELECT max(nvr_rates_effective_date) FROM rd.non_vehicle_rate WHERE rg_code = @il_rg_code;";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -7571,7 +7661,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT nvr_contract_end FROM non_vehicle_rate WHERE rg_code = @il_rg_code AND " +
+                    cm.CommandText = "SELECT nvr_contract_end FROM rd.non_vehicle_rate WHERE rg_code = @il_rg_code AND " +
                         "nvr_rates_effective_date = @ld_Max_Effective_Date";
 
                     pList.Add(cm, "il_rg_code", il_rg_code);
@@ -7598,7 +7688,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max(rr_rates_effective_date)  FROM Fuel_rates where rg_code = @il_rg_code";
+                    cm.CommandText = "SELECT max(rr_rates_effective_date) FROM rd.Fuel_rates where rg_code = @il_rg_code";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     try
                     {
@@ -7632,7 +7722,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max(pr_effective_date) FROM piece_rate WHERE rg_code = @il_rg_code;";
+                    cm.CommandText = "SELECT max(pr_effective_date) FROM rd.piece_rate WHERE rg_code = @il_rg_code;";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     try
                     {
@@ -7666,7 +7756,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max( rr_rates_effective_date) FROM rate_days WHERE rg_code =@il_rg_code";
+                    cm.CommandText = "SELECT max(rr_rates_effective_date) FROM rd.rate_days WHERE rg_code =@il_rg_code";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     try
                     {
@@ -7700,7 +7790,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = " SELECT max(mr_effective_date) FROM misc_rate WHERE rg_code = @il_rg_code";
+                    cm.CommandText = "SELECT max(mr_effective_date) FROM rd.misc_rate WHERE rg_code = @il_rg_code";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     try
                     {
@@ -7735,7 +7825,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "select count(*) from fuel_type ,fuel_rates " +
+                    cm.CommandText = "select count(*) from rd.fuel_type, rd.fuel_rates " +
                         " where fuel_type.ft_key = fuel_rates.ft_key and fuel_rates.rr_rates_effective_date = @ld_Date " +
                         " and fuel_rates.rg_code = @ll_RGCode and (fuel_rates.fr_fuel_rate is null or fuel_rates.fr_fuel_consumtion_rate is null)";
 
@@ -7763,7 +7853,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = " select count(*) from standard_frequency ,rate_days " +
+                    cm.CommandText = " select count(*) from rd.standard_frequency, rd.rate_days " +
                         "where standard_frequency.sf_key = rate_days.sf_key and " +
                         "rate_days.rr_rates_effective_date = @ld_Date and rate_days.rg_code = @ll_RGCode and " +
                         "rate_days.rtd_days_per_annum is null";
@@ -7792,8 +7882,8 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT count(*) FROM piece_rate WHERE piece_rate.pr_effective_date = @ld_Date AND " +
-                        "piece_rate.rg_code = @ll_RGCode  AND pr_active_status = 'Y' AND pr_rate is null ";
+                    cm.CommandText = "SELECT count(*) FROM rd.piece_rate WHERE piece_rate.pr_effective_date = @ld_Date AND " +
+                        "piece_rate.rg_code = @ll_RGCode AND pr_active_status = 'Y' AND pr_rate is null ";
 
                     pList.Add(cm, "ld_Date", ld_Date);
                     pList.Add(cm, "ll_RGCode", ll_RGCode);
@@ -7819,7 +7909,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT count(*) FROM vehicle_type ";
+                    cm.CommandText = "SELECT count(*) FROM rd.vehicle_type ";
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -7843,7 +7933,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = " SELECT count(vehicle_rate.vt_key) FROM vehicle_rate " +
+                    cm.CommandText = " SELECT count(vehicle_rate.vt_key) FROM rd.vehicle_rate " +
                         "WHERE vehicle_rate.vr_rates_effective_date = @ld_Date  AND  " +
                         "vehicle_rate.vr_nominal_vehicle_value is not null  AND " +
                         "vehicle_rate.vr_repairs_maintenance_rate is not null AND " +
@@ -7876,7 +7966,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select max ( ca_effective_date) from contract_allowance " +
+                    cm.CommandText = "select max(ca_effective_date) from rd.contract_allowance " +
                         "where contract_no = @il_contract and alt_key = @ll_altkey";
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "ll_altkey", ll_altkey);
@@ -7921,7 +8011,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE artical_count set contract_seq_number = null " +
+                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number = null " +
                         "where contract_no = @lContract and contract_seq_number = @lrenewal";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
@@ -7951,7 +8041,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE contract set cust_list_printed = getdate() where contract_no = @il_id";
+                    cm.CommandText = "UPDATE rd.contract set cust_list_printed = getdate() where contract_no = @il_id";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "il_id", il_id);
                     _sqlcode = -1;
@@ -7980,7 +8070,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count ( artical_count.contract_no) from artical_count " +
+                    cm.CommandText = "select count(artical_count.contract_no) from rd.artical_count " +
                         "where artical_count.contract_no = @lContract  and " +
                         "artical_count.contract_seq_number is null and " +
                         "artical_count.ac_start_week_period > @ldt_YearAgo";
@@ -8022,8 +8112,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count ( *) " +
-                                   " from address addr " +
+                    cm.CommandText = "select count(*) " +
+                                   " from rd.address addr " +
                                   " where addr.tc_id = @il_long_parm";
                     pList.Add(cm, "il_long_parm", il_long_parm);
                     _sqlcode = -1;
@@ -8061,8 +8151,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count ( *) " +
-                                   " from address addr " +
+                    cm.CommandText = "select count(*) " +
+                                   " from rd.address addr " +
                                   " where addr.contract_no = @il_long_parm";
                     pList.Add(cm, "il_long_parm", il_long_parm);
                     _sqlcode = -1;
@@ -8100,7 +8190,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select con_start_date from contract_renewals " +
+                    cm.CommandText = "select con_start_date from rd.contract_renewals " +
                         "where contract_renewals.contract_no = @lContract and " +
                         "contract_renewals.contract_seq_number = @lrenewal - 1;";
                     pList.Add(cm, "lContract", lContract);
@@ -8140,13 +8230,13 @@ namespace NZPostOffice.RDS.DataService
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select contract_renewals.con_volume_at_renewal + sum(isnull(frequency_distances.fd_volume,0)) "
-                                     + "from contract_renewals, "
-                                     +      "route_frequency left outer join frequency_distances " 
+                                     + "from rd.contract_renewals, "
+                                          + "rd.route_frequency left outer join rd.frequency_distances " 
                                      +           "on route_frequency.contract_no = frequency_distances.contract_no and " 
                                      +              "route_frequency.sf_key = frequency_distances.sf_key and " 
                                      +              "route_frequency.rf_delivery_days = frequency_distances.rf_delivery_days and " 
-                                     +              "frequency_distances.fd_effective_date>= @dStartDate " 
-                                     +    ", rate_days "
+                                     +              "frequency_distances.fd_effective_date>= @dStartDate "
+                                     +    ", rd.rate_days "
                                      + "where contract_renewals.contract_no = route_frequency.contract_no and "
                                      +       "route_frequency.sf_key = rate_days.sf_key and "
                                      +       "contract_renewals.con_rates_effective_date = rate_days.rr_rates_effective_date and "
@@ -8193,7 +8283,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE contract_renewals set con_volume_at_renewal = @lVolAtRen " 
+                    cm.CommandText = "UPDATE rd.contract_renewals set con_volume_at_renewal = @lVolAtRen " 
                                      + "where contract_no = @lContract and contract_seq_number = @lrenewal";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lVolAtRen", lVolAtRen);
@@ -8222,7 +8312,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE artical_count " 
+                    cm.CommandText = "UPDATE rd.artical_count " 
                                      +  "set contract_seq_number = @lrenewal " 
                                      + "where contract_no = @lContract and " 
                                      +       "contract_seq_number is null and " 
@@ -8254,9 +8344,9 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE artical_count set contract_seq_number=@lrenewal " +
-                        "where contract_no=@lContract and ( contract_seq_number is null or contract_seq_number=@lrenewal) " +
-                        "and ac_start_week_period = ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) and  ac_start_week_period > @ldt_YearAgo)";
+                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number=@lrenewal " +
+                        "where contract_no=@lContract and (contract_seq_number is null or contract_seq_number=@lrenewal) " +
+                        "and ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 where a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) and  ac_start_week_period > @ldt_YearAgo)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lrenewal", lrenewal);
                     pList.Add(cm, "lContract", lContract);
@@ -8285,9 +8375,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select max(ac_start_week_period) from artical_count as a2 " +
+                    cm.CommandText = "select max(ac_start_week_period) from rd.artical_count as a2 " +
                         "where a2.contract_no = @lContract and  " +
-                        "( contract_seq_number is null or contract_seq_number = @lrenewal) and " +
+                        "(contract_seq_number is null or contract_seq_number = @lrenewal) and " +
                         "ac_start_week_period > @ldt_YearAgo";
 
                     pList.Add(cm, "lContract", lContract);
@@ -8331,7 +8421,7 @@ namespace NZPostOffice.RDS.DataService
                     cm.CommandText = "SELECT route_frequency.sf_key, " +
                         "route_frequency.rf_delivery_days, " +
                         "route_frequency.rf_distance " +
-                        "FROM route_frequency " +
+                        "FROM rd.route_frequency " +
                         "WHERE route_frequency.rf_active = 'Y' AND " +
                         "route_frequency.contract_no = @ll_Contract";
 
@@ -8371,7 +8461,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "select rtd_days_per_annum from rate_days " +
+                    cm.CommandText = "select rtd_days_per_annum from rd.rate_days " +
                         "where rg_code = @il_RGCode and " +
                         "rr_rates_effective_date = @ld_EffectDate and " +
                         "sf_key = @ll_SfKey ";
@@ -8401,7 +8491,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT  vt_key,vt_description FROM vehicle_type ";
+                    cm.CommandText = "SELECT vt_key, vt_description FROM rd.vehicle_type ";
                     // union SELECT  vt_key, vt_description FROM vehicle_type where vt_key = 1
                     // union SELECT  vt_key, vt_description FROM vehicle_type where vt_key not in  ( 1, 2);";
 
@@ -8428,9 +8518,9 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE artical_count set contract_seq_number=@lrenewal " +
-                        "where contract_no=@lContract and ( contract_seq_number is null  or contract_seq_number=@lrenewal) " +
-                        "and ac_start_week_period =  ( select max ( ac_start_week_period) from artical_count as a2 where  a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) " +
+                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number=@lrenewal " +
+                        "where contract_no=@lContract and (contract_seq_number is null or contract_seq_number=@lrenewal) " +
+                        "and ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 where a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) " +
                         "and  ac_start_week_period > @ldt_YearAgo and  ac_start_week_period < @ldt_LastCountDate)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lrenewal", lrenewal);
@@ -8463,7 +8553,7 @@ namespace NZPostOffice.RDS.DataService
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select top 1 cmb_id "
-                                   +   "from cmb_address "
+                                   +   "from rd.cmb_address "
                                    +  "where contract_no = @il_contract "
                                    +    "and post_code_id = @ll_pcid "
                                    +    "and cmb_box_no = @ls_box_no";
@@ -8502,7 +8592,7 @@ namespace NZPostOffice.RDS.DataService
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select top 1 cmb_id "
-                                   +   "from cmb_address " 
+                                   +   "from rd.cmb_address " 
                                    +  "where contract_no = @il_contract "
                                    +    "and post_code_id = @ll_pcid "
                                    +    "and cmb_box_no = @ls_box_no "
@@ -8542,7 +8632,7 @@ namespace NZPostOffice.RDS.DataService
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select top 1 adr_rd_no "
-                                   +   "from address "
+                                   +   "from rd.address "
                                    +  "where contract_no = @al_contract "
                                    +    "and post_code_id = @al_pcid";
                     pList.Add(cm, "al_contract", al_contract);
@@ -8577,7 +8667,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT rgn_name  FROM region  WHERE region_id = @ll_regionId";
+                    cm.CommandText = "SELECT rgn_name FROM rd.region WHERE region_id = @ll_regionId";
                     pList.Add(cm, "ll_regionId", ll_regionId);
                     try
                     {
@@ -8609,7 +8699,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT outlet.o_name  FROM outlet WHERE outlet.outlet_id = @lOutlet";
+                    cm.CommandText = "SELECT outlet.o_name FROM rd.outlet WHERE outlet.outlet_id = @lOutlet";
                     pList.Add(cm, "lOutlet", lOutlet);
                     try
                     {
@@ -8641,7 +8731,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contract_type.contract_type  FROM contract_type " 
+                    cm.CommandText = "SELECT contract_type.contract_type " + 
+                                       "FROM rd.contract_type " 
                                     + "WHERE contract_type.ct_key = @lContractType";
                     pList.Add(cm, "lContractType", lContractType);
                     try
@@ -8674,7 +8765,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT rg_description FROM renewal_group WHERE rg_code = @ll_rgCode";
+                    cm.CommandText = "SELECT rg_description FROM rd.renewal_group WHERE rg_code = @ll_rgCode";
                     pList.Add(cm, "ll_rgCode", ll_rgCode);
                     try
                     {
@@ -8706,7 +8797,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contract_type FROM contract_type WHERE ct_key = @ll_ctKey;";
+                    cm.CommandText = "SELECT contract_type FROM rd.contract_type WHERE ct_key = @ll_ctKey;";
                     pList.Add(cm, "ll_ctKey", ll_ctKey);
                     try
                     {
@@ -8738,7 +8829,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select tc_name from towncity where tc_id = @al_tcid;";
+                    cm.CommandText = "select tc_name from rd.towncity where tc_id = @al_tcid;";
                     pList.Add(cm, "al_tcid", al_tcid);
                     try
                     {
@@ -8770,8 +8861,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select post_code " 
-                                   +   "from post_code " 
+                    cm.CommandText = "select post_code "
+                                   +   "from rd.post_code " 
                                    +  "where post_code_id = @al_pcid;";
                     pList.Add(cm, "al_pcid", al_pcid);
                     try
@@ -8807,8 +8898,8 @@ namespace NZPostOffice.RDS.DataService
                     //string sequence = null;
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select contract_no " 
-                                   +   "from post_code " 
+                    cm.CommandText = "select contract_no "
+                                   +   "from rd.post_code " 
                                    +  "where post_code = @as_postcode;";
                     pList.Add(cm, "as_postcode", as_postcode);
                     try
@@ -8841,11 +8932,11 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "  SELECT vr_nominal_vehicle_value, vr_repairs_maintenance_rate, vr_tyre_tubes_rate, " +
+                    cm.CommandText = "SELECT vr_nominal_vehicle_value, vr_repairs_maintenance_rate, vr_tyre_tubes_rate, " +
                         " vr_vehicle_allowance_rate, vr_licence_rate, vr_vehicle_rate_of_return_pct," +
                         " vr_salvage_ratio, vr_ruc, vr_sundries_k, " +
                         " vr_vehicle_value_insurance_pct,vr_livery, nvr_vehicle_insurance_base_premium" +
-                        " FROM vehicle_rate, non_vehicle_rate " +
+                        " FROM rd.vehicle_rate, rd.non_vehicle_rate " +
                         " WHERE vt_key = @ll_vtkey AND vr_rates_effective_date = @id_effectdate " +
                         " AND non_vehicle_rate.nvr_rates_effective_date  = vehicle_rate.vr_rates_effective_date " +
                         " AND non_vehicle_rate.rg_code = @il_rgcode ";
@@ -8894,7 +8985,7 @@ namespace NZPostOffice.RDS.DataService
                     cm.CommandText = "  SELECT top 1 vor_nominal_vehicle_value ,vor_repairs_maintenance_rate ,vor_tyre_tubes_rate,vor_vehical_allowance_rate ," +
                         "vor_licence_rate ,vor_vehicle_rate_of_return_pct ,vor_salvage_ratio ,vor_ruc ," +
                         "vor_sundries_k ,vor_vehicle_insurance_premium ,vor_livery " +
-                        " FROM vehicle_override_rate " +
+                        " FROM rd.vehicle_override_rate " +
                         " WHERE contract_no = @il_contract and contract_seq_number = @il_sequence " +
                         " order by vor_effective_date desc; ";
                     pList.Add(cm, "il_contract", il_contract);
@@ -8934,7 +9025,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM contractor " +
+                    cm.CommandText = "SELECT count(*) FROM rd.contractor " +
                         "WHERE	Upper(c_surname_company) = @sSurname AND	" +
                         "( @sFirstName IS NULL OR Upper(c_first_names) = @sFirstName)";
                     pList.Add(cm, "sSurname", sSurname);
@@ -8972,10 +9063,10 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = " UPDATE artical_count set contract_seq_number=@lrenewal  " +
+                    cm.CommandText = " UPDATE rd.artical_count set contract_seq_number=@lrenewal  " +
                                      " where contract_no=@lContract and " +
                                      " (contract_seq_number is null  or contract_seq_number=@lrenewal) and " +
-                                     " ac_start_week_period = (select max(ac_start_week_period) from artical_count as a2 " +
+                                     " ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 " +
                                                                "where  a2.contract_no = @lContract and " + 
                                                                       "(contract_seq_number is null or contract_seq_number = @lrenewal) and " + 
                                                                       "ac_start_week_period > @ldt_YearAgo and " + 
@@ -9014,16 +9105,16 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select count(mail_carried.mc_dispatch_carried) " +
-                                    " from contract " +
-                                    " , outlet " +
-                                    " , contract_renewals " +
-                                    " , mail_carried " +
+                                    " from rd.contract " +
+                                       " , rd.outlet " +
+                                       " , rd.contract_renewals " +
+                                       " , rd.mail_carried " +
                                     " where contract.contract_no = @lContract " +
-                                    " and contract.con_base_office=outlet.outlet_id " +
-                                    " and (contract.contract_no=contract_renewals.contract_no " +
-                                    " and contract_renewals.contract_seq_number= @lSequence) " +
-                                    " and (contract.contract_no=mail_carried.contract_no " +
-                                    " and mail_carried.mc_disbanded_date is null)";
+                                      " and contract.con_base_office=outlet.outlet_id " +
+                                      " and (contract.contract_no=contract_renewals.contract_no " +
+                                      " and contract_renewals.contract_seq_number= @lSequence) " +
+                                      " and (contract.contract_no=mail_carried.contract_no " +
+                                      " and mail_carried.mc_disbanded_date is null)";
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
                     try
@@ -9060,7 +9151,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "Select count(*) From contractor_renewals cr, contract c, outlet o " +
+                    cm.CommandText = "Select count(*) From rd.contractor_renewals cr, rd.contract c, rd.outlet o " +
                         "Where cr.contract_no=c.contract_no And " +
                         "c.con_base_office=o.outlet_id And " +
                         "o.region_id=@ll_Region And " +
@@ -9102,7 +9193,7 @@ namespace NZPostOffice.RDS.DataService
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = " SELECT max(rtd_days_per_annum) " +
-                        "FROM standard_frequency join rate_days on standard_frequency.sf_key = rate_days.sf_key " +
+                        "FROM rd.standard_frequency join rd.rate_days on standard_frequency.sf_key = rate_days.sf_key " +
                         "and rate_days.rg_code = @il_RgCode and rate_days.rr_rates_effective_date= @id_EffectiveDate " +
                         "and standard_frequency.sf_days_week = @iWeekDelDays";
 
@@ -9131,7 +9222,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = " select max(ac_start_week_period) from artical_count as a2  " +
+                    cm.CommandText = " select max(ac_start_week_period) from rd.artical_count as a2  " +
                         " where	 a2.contract_no = @lContract and " +
                         " (contract_seq_number is null or contract_seq_number = @lrenewal) and	 " +
                         " ac_start_week_period > @ldt_YearAgo";
@@ -9174,7 +9265,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select region_id from outlet where outlet_id = @ll_Outlet";
+                    cm.CommandText = "select region_id from rd.outlet where outlet_id = @ll_Outlet";
                     pList.Add(cm, "ll_Outlet", ll_Outlet);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9196,7 +9287,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "Insert into fixed_asset_register( fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) " +
+                    cm.CommandText = "Insert into rd.fixed_asset_register(fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) " +
                         "Values (@sFixedAssetKey,@lFatId, @sFAOwner,@dFAPurchaseDate,@decFAPurchasePrice)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "sFixedAssetKey", sFixedAssetKey);
@@ -9224,7 +9315,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE fixed_asset_register " +
+                    cm.CommandText = "UPDATE rd.fixed_asset_register " +
                         "set fat_id = @lFatId,fa_owner = @sFAOwner, " +
                             "fa_purchase_date = @dFAPurchaseDate," + 
                             "fa_purchase_price = @decFAPurchasePrice " +
@@ -9256,7 +9347,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select cust_list_printed from contract where contract_no = @il_Contract_no ";
+                    cm.CommandText = "select cust_list_printed from rd.contract where contract_no = @il_Contract_no ";
                     pList.Add(cm, "il_Contract_no", il_Contract_no);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9286,7 +9377,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select cust_list_updated from contract where contract_no = @il_Contract_no";
+                    cm.CommandText = "select cust_list_updated from rd.contract where contract_no = @il_Contract_no";
                     pList.Add(cm, "il_Contract_no", il_Contract_no);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9309,7 +9400,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE contract set cust_list_updated = @ld_custlist_updated " + 
+                    cm.CommandText = "UPDATE rd.contract set cust_list_updated = @ld_custlist_updated " + 
                                       "where contract_no = @il_contract_no";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ld_custlist_updated", ld_custlist_updated);
@@ -9338,7 +9429,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "INSERT INTO contract_cust_transfer" + 
+                    cm.CommandText = "INSERT INTO rd.contract_cust_transfer" + 
                                            " (from_contract_no, to_contract_no, transfer_date) " + 
                                     " VALUES (@lContractNo, @ln, @tod)";
                     ParameterCollection pList = new ParameterCollection();
@@ -9369,7 +9460,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into t_custstat (id) values (@lID)";
+                    cm.CommandText = "insert into rd.t_custstat (id) values (@lID)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lID", lID);
 
@@ -9397,7 +9488,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 (tc_id) from address where contract_no = @ai_contract_no";
+                    cm.CommandText = "select top 1 (tc_id) from rd.address where contract_no = @ai_contract_no";
                     pList.Add(cm, "ai_contract_no", ai_contract_no);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9420,7 +9511,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max(pc.post_code_id) FROM post_code pc, towncity tc " +
+                    cm.CommandText = "SELECT max(pc.post_code_id) FROM rd.post_code pc, rd.towncity tc " +
                         "WHERE tc.tc_id = @ai_tc_id AND pc.post_mail_town = tc.tc_name";
                     pList.Add(cm, "ai_tc_id", ai_tc_id);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -9444,7 +9535,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = "";
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select top 1 address.adr_rd_no FROM address " + 
+                    cm.CommandText = "select top 1 address.adr_rd_no FROM rd.address " + 
                                       "WHERE tc_id = @al_tcid AND post_code_id = @al_pcid";
                     pList.Add(cm, "al_tcid", al_tcid);
                     pList.Add(cm, "al_pcid", al_pcid);
@@ -9469,7 +9560,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT Count(*) FROM address WHERE contract_no = @lContractNo";
+                    cm.CommandText = "SELECT Count(*) FROM rd.address WHERE contract_no = @lContractNo";
                     pList.Add(cm, "lContractNo", lContractNo);
                     _sqlcode = -1;
                     try
@@ -9506,10 +9597,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = "";
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select rr_frozen_indicator from renewal_rate " +
+                    cm.CommandText = "select rr_frozen_indicator from rd.renewal_rate " +
                         "where rg_code = @lRGCode and " +
-                        "rr_rates_effective_date = (select max(rr_rates_effective_date) " + 
-                                                     "from renewal_rate where rg_code = @lRGCode);";
+                        "rr_rates_effective_date = (select max(rr_rates_effective_date) " +
+                                                     "from rd.renewal_rate where rg_code = @lRGCode);";
                     pList.Add(cm, "lRGCode", lRGCode);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9531,7 +9622,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select outlet_id, region_id from outlet where o_name = @sOutlet";
+                    cm.CommandText = "select outlet_id, region_id from rd.outlet where o_name = @sOutlet";
                     pList.Add(cm, "sOutlet", sOutlet);
                     _outletItem = new OutletItem();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -9555,7 +9646,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "Select outlet_id From outlet Where o_name = @sOutlet";
+                    cm.CommandText = "Select outlet_id From rd.outlet Where o_name = @sOutlet";
                     pList.Add(cm, "sOutlet", sOutlet);
                     _sqlcode = -1;
                     try
@@ -9602,13 +9693,13 @@ namespace NZPostOffice.RDS.DataService
                     //! " AND vor1.contract_seq_number = @ll_sequence_no AND vor1.vor_effective_date >= @ld_rates_effective_date " +
                     //! " AND vor1.vor_effective_date = (SELECT max (vor2.vor_effective_date) FROM vehicle_override_rate vor2 " +
                     //! " WHERE vor2.contract_no = vor1.contract_no AND vor2.contract_seq_number = vor1.contract_seq_number)";
-                    cm.CommandText = " UPDATE vehicle_override_rate " +
+                    cm.CommandText = " UPDATE rd.vehicle_override_rate " +
                                         " SET vor_fuel_rate = @ldc_new_override_fuel_rate " + 
                                       " WHERE contract_no = @ll_contract_no " +
                                         " AND contract_seq_number = @ll_sequence_no " + 
                                         " AND vor_effective_date >= @ld_rates_effective_date " +
-                                        " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " + 
-                                                                    " FROM vehicle_override_rate vor2 " +
+                                        " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " +
+                                                                    " FROM rd.vehicle_override_rate vor2 " +
                                                                    " WHERE vor2.contract_no = vehicle_override_rate.contract_no" + 
                                                                      " AND vor2.contract_seq_number = vehicle_override_rate.contract_seq_number)";
 
@@ -9642,7 +9733,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from contract, contract_renewals " +
+                    cm.CommandText = "select count(*) from rd.contract, contract_renewals " +
                         "where contract.contract_no = @il_Contract_no and " +
                         "contract.contract_no = contract_renewals.contract_no and  " +
                         "(contract.con_active_sequence is null or  " +
@@ -9677,7 +9768,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "sp_CreateTFC";
+                    cm.CommandText = "rd.sp_CreateTFC";
                     ParameterCollection pList = new ParameterCollection();
 
                     try
@@ -9700,7 +9791,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "delete from contract_renewals where contract_no=@lcontract and contract_seq_number=@lsequence";
+                    cm.CommandText = "delete from rd.contract_renewals where contract_no=@lcontract and contract_seq_number=@lsequence";
                     pList.Add(cm, "lcontract", lcontract);
                     pList.Add(cm, "lsequence", lsequence);
                     try
@@ -9726,7 +9817,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "delete from t_custstat";
+                    cm.CommandText = "delete from rd.t_custstat";
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -9749,7 +9840,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "delete from tmp_rand_cust_list";
+                    cm.CommandText = "delete from rd.tmp_rand_cust_list";
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -9772,7 +9863,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "delete from report_temp";
+                    cm.CommandText = "delete from rd.report_temp";
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -9795,7 +9886,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "delete from rds_temp ";
+                    cm.CommandText = "delete from rd.rds_temp ";
                     _sqlcode = -1;
                     try
                     {
@@ -9820,7 +9911,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from contract_fixed_assets " +
+                    cm.CommandText = "select count(*) from rd.contract_fixed_assets " +
                         "where fa_fixed_asset_no = @sFixedAssetno and " +
                         "contract_no <> @il_Contract_no";
                     pList.Add(cm, "sFixedAssetno", sFixedAssetno);
@@ -9856,7 +9947,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select fat_id, fa_owner,fa_purchase_date,fa_purchase_price " +
-                        "from fixed_asset_register " +
+                        "from rd.fixed_asset_register " +
                         "where fa_fixed_asset_no = @sFixedAssetno";
                     pList.Add(cm, "sFixedAssetno", sFixedAssetno);
                     _fixedAssetRegisterItem = new FixedAssetRegisterItem();
@@ -9896,7 +9987,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select top 1 a.adr_rd_no, p.post_code_id, t.tc_id " +
-                        "from address a, post_code p, towncity t " +
+                        "from rd.address a, rd.post_code p, rd.towncity t " +
                         "where a.post_code_id = p.post_code_id and " +
                         "t.tc_name = p.post_mail_town and " +
                         "a.contract_no = @il_contract_no order by a.adr_rd_no";
@@ -9925,7 +10016,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT rgn_name FROM region WHERE region_id = @ll_regionId";
+                    cm.CommandText = "SELECT rgn_name FROM rd.region WHERE region_id = @ll_regionId";
                     pList.Add(cm, "ll_regionId", ll_regionId);
                     try
                     {
@@ -9962,7 +10053,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT outlet.o_name  FROM outlet WHERE outlet.outlet_id = @lOutlet;";
+                    cm.CommandText = "SELECT outlet.o_name  FROM rd.outlet WHERE outlet.outlet_id = @lOutlet;";
                     pList.Add(cm, "lOutlet", lOutlet);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -9989,7 +10080,7 @@ namespace NZPostOffice.RDS.DataService
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT renewal_group.rg_description FROM renewal_group  " +
+                    cm.CommandText = "SELECT renewal_group.rg_description FROM rd.renewal_group  " +
                         "WHERE renewal_group.rg_code = @lRenGroup";
 
                     pList.Add(cm, "lRenGroup", lRenGroup);
@@ -10028,7 +10119,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contract.con_title FROM contract WHERE contract.contract_no = @lContract ";
+                    cm.CommandText = "SELECT contract.con_title FROM rd.contract WHERE contract.contract_no = @lContract ";
                     pList.Add(cm, "lContract", lContract);
                     try
                     {
@@ -10097,7 +10188,7 @@ namespace NZPostOffice.RDS.DataService
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT contract_type.contract_type FROM contract_type WHERE contract_type.ct_key = @lContractType ";
+                    cm.CommandText = "SELECT contract_type.contract_type FROM rd.contract_type WHERE contract_type.ct_key = @lContractType ";
 
                     pList.Add(cm, "lContractType", lContractType);
 
@@ -10122,7 +10213,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select outlet_id from outlet where o_name = @sOutlet";
+                    cm.CommandText = "select outlet_id from rd.outlet where o_name = @sOutlet";
                     pList.Add(cm, "sOutlet", sOutlet);
                     try
                     {
@@ -10156,7 +10247,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(*) FROM Contract WHERE Contract.contract_no = @ll_contract_num  ";
+                    cm.CommandText = "SELECT count(*) FROM rd.Contract WHERE Contract.contract_no = @ll_contract_num  ";
                     pList.Add(cm, "ll_contract_num", ll_contract_num);
 
                     try
@@ -10193,7 +10284,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from tmp_rand_cust_list ";
+                    cm.CommandText = "select count(*) from rd.tmp_rand_cust_list ";
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
                         if (dr.Read())
@@ -10215,7 +10306,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = " SELECT tc_id  FROM TownCity WHERE TownCity.tc_name = @ls_tc_name   ";
+                    cm.CommandText = " SELECT tc_id  FROM rd.TownCity WHERE TownCity.tc_name = @ls_tc_name   ";
                     pList.Add(cm, "ls_tc_name", ls_tc_name);
                     try
                     {
@@ -10249,7 +10340,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = " SELECT min(TownCity.tc_id) FROM TownCity WHERE TownCity.tc_name = @ls_tc_name   ";
+                    cm.CommandText = " SELECT min(TownCity.tc_id) FROM rd.TownCity WHERE TownCity.tc_name = @ls_tc_name   ";
                     pList.Add(cm, "ls_tc_name", ls_tc_name);
                     try
                     {
@@ -10283,7 +10374,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT min((move_in_date)) FROM customer_address_moves WHERE move_out_date is null";
+                    cm.CommandText = "SELECT min((move_in_date)) FROM rd.customer_address_moves WHERE move_out_date is null";
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -10316,7 +10407,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime sequence = DateTime.MinValue;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT mail_count_date.mail_count_date FROM mail_count_date ";
+                    cm.CommandText = "SELECT mail_count_date.mail_count_date FROM rd.mail_count_date ";
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -10344,9 +10435,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT min(nvr.rg_code) FROM non_vehicle_rate nvr " +
-                        "WHERE nvr.nvr_contract_end = (SELECT min( nvr2.nvr_contract_end) " + 
-                                                        "FROM non_vehicle_rate nvr2 " + 
+                    cm.CommandText = "SELECT min(nvr.rg_code) FROM rd.non_vehicle_rate nvr " +
+                        "WHERE nvr.nvr_contract_end = (SELECT min( nvr2.nvr_contract_end) " +
+                                                        "FROM rd.non_vehicle_rate nvr2 " + 
                                                        "WHERE nvr2.nvr_contract_end >= @mcdate)  ";
                     pList.Add(cm, "mcdate", mcdate);
 
@@ -10384,13 +10475,13 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT min(nvr.rg_code) FROM non_vehicle_rate nvr " +
+                    cm.CommandText = "SELECT min(nvr.rg_code) FROM rd.non_vehicle_rate nvr " +
                         "WHERE nvr.rg_code <> @rg_code and " + 
-                              "nvr.nvr_contract_end = (SELECT min(nvr2.nvr_contract_end) " + 
-                                                        "FROM non_vehicle_rate nvr2 " + 
+                              "nvr.nvr_contract_end = (SELECT min(nvr2.nvr_contract_end) " +
+                                                        "FROM rd.non_vehicle_rate nvr2 " + 
                                                        "WHERE nvr2.nvr_contract_end > @mcdate and " + 
-                                                             "nvr2.nvr_contract_end > (select min(nvr3.nvr_contract_end) " + 
-                                                                                        "from non_vehicle_rate nvr3 " + 
+                                                             "nvr2.nvr_contract_end > (select min(nvr3.nvr_contract_end) " +
+                                                                                        "from rd.non_vehicle_rate nvr3 " + 
                                                                                        "where nvr3.nvr_contract_end >= @mcdate))";
                     pList.Add(cm, "rg_code", rg_code);
                     pList.Add(cm, "mcdate", mcdate);
@@ -10429,7 +10520,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT count(mail_count_date.mail_count_date) FROM mail_count_date";
+                    cm.CommandText = "SELECT count(mail_count_date.mail_count_date) FROM rd.mail_count_date";
 
                     try
                     {
@@ -10461,7 +10552,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = " INSERT INTO mail_count_date (mail_count_date) VALUES (@mcdate) ";
+                    cm.CommandText = " INSERT INTO rd.mail_count_date (mail_count_date) VALUES (@mcdate) ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "mcdate", mcdate);
 
@@ -10485,7 +10576,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE mail_count_date SET mail_count_date = @mcdate";
+                    cm.CommandText = "UPDATE rd.mail_count_date SET mail_count_date = @mcdate";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "mcdate", mcdate);
 
@@ -10509,7 +10600,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT  next_value from id_codes where sequence_name = @sequencename ;";
+                    cm.CommandText = "SELECT next_value from rd.id_codes where sequence_name = @sequencename ;";
                     pList.Add(cm, "sequencename", sequencename);
                     _sqlcode = 100;
                     try
@@ -10546,7 +10637,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "insert into id_codes (sequence_name, next_value) values (@sequencename, 2) ";
+                    cm.CommandText = "insert into rd.id_codes (sequence_name, next_value) values (@sequencename, 2) ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "sequencename", sequencename);
 
@@ -10570,7 +10661,7 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE id_codes set next_value = @nNextValue + 1 where sequence_name = @sequencename ; ";
+                    cm.CommandText = "UPDATE rd.id_codes set next_value = @nNextValue + 1 where sequence_name = @sequencename ; ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "nNextValue", nNextValue);
                     pList.Add(cm, "sequencename", sequencename);
@@ -10732,7 +10823,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "ai_contract", ai_contract);
                     pList.Add(cm, "ai_sfkey", ai_sfkey);
                     pList.Add(cm, "as_deldays", as_deldays);
-                    cm.CommandText = "SELECT count (*) FROM frequency_distances fd, contract c, contract_renewals cr " + 
+                    cm.CommandText = "SELECT count (*) FROM rd.frequency_distances fd, rd.contract c, rd.contract_renewals cr " + 
                                      "WHERE" +
                                           " fd.contract_no = :ai_contract AND " +
                                           " fd.sf_key = :ai_sfkey AND " +
@@ -10776,7 +10867,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "rd_sequence", rd_sequence);
                     pList.Add(cm, "rf_delivery_days", rf_delivery_days);
 
-                    cm.CommandText = "DELETE FROM route_description"
+                    cm.CommandText = "DELETE FROM rd.route_description"
                                    + " WHERE route_description.sf_key = @sf_key"
                                      + " and route_description.contract_no = @contract_no"
                                      + " and route_description.rf_delivery_days = @rf_delivery_days"
@@ -10796,6 +10887,302 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  May-2010  ECL Data Upload
+        [ServerMethod]
+        private void _GetECLUploadHistoryCurrentBatchNo()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "select max(ecl_batch_no) from rd.ECL_upload_history " +
+                        "WHERE ecl_date_inserted is null";
+                    ParameterCollection pList = new ParameterCollection();
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = 0;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _GetECLUploadHistoryNextBatchNo()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "select max(ecl_batch_no) from rd.ECL_upload_history";
+                    ParameterCollection pList = new ParameterCollection();
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0) + 1;
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = 1;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = "INSERT INTO rd.ECL_upload_history "
+                         + "( ecl_batch_no, ecl_date_uploaded, ecl_records_uploaded, ecl_upload_errors ) " +
+                        "VALUES "
+                         + "( @batchNo, @dateUploaded, @recordsUploaded, @uploadErrors )";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "batchNo", lBatchNo);
+                    pList.Add(cm, "dateUploaded", dtDateUploaded);
+                    pList.Add(cm, "recordsUploaded", lRecordsUploaded);
+                    pList.Add(cm, "uploadErrors", lUploadErrors);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _UpdateECLUploadHistoryUpload(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = "UPDATE rd.ECL_upload_history " +
+                        "SET ecl_date_uploaded = @dateUploaded " +
+                          ", ecl_records_uploaded = @recordsUploaded " +
+                          ", ecl_upload_errors = @uploadErrors" +
+                        "WHERE ecl_batch_no = @batchNo";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "batchNo", lBatchNo);
+                    pList.Add(cm, "dateUploaded", dtDateUploaded);
+                    pList.Add(cm, "recordsUploaded", lRecordsUploaded);
+                    pList.Add(cm, "uploadErrors", lUploadErrors);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        private void _UpdateECLUploadHistoryInsert(int lBatchNo, DateTime dtDateInserted, int lRecordsInserted, int lInsertErrors)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = "UPDATE rd.ECL_upload_history " +
+                        "SET ecl_date_inserted = @dateInserted " +
+                          ", ecl_records_inserted = @recordsInserted " +
+                          ", ecl_insert_errors = @insertErrors" +
+                        "WHERE contract_no = @batchNo";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "batchNo", lBatchNo);
+                    pList.Add(cm, "dateInserted", dtDateInserted);
+                    pList.Add(cm, "recordsInserted", lRecordsInserted);
+                    pList.Add(cm, "insertErrors", lInsertErrors);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _IsDuplicateECLUploadData(string sTicketNo, string sTicketPart)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = 
+                        "select count(*) from rd.ECL_upload_data "
+                         + "where ecl_ticket_no = @ticketNo "
+                         + "and ecl_ticket_part = @ticketPart ";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "ticketNo", sTicketNo);
+                    pList.Add(cm, "ticketPart", sTicketPart);
+                    _sqlcode = -1;
+                    try
+                    {
+                        ret = false;
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            intVal = 0;
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                        if (intVal >= 1)
+                        {
+                            ret = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _GetECLUploadedBatchSize(int lBatchNo)
+        {   // Returns the number or frcords in the batch that haven't been inserted
+            // ... by extension, returns 0 if the batch has already been loaded
+            //     (since there must be at least one record in the batch for it to be uploaded)
+            // Returns -1 if the batch hasn't been loaded
+
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    //cm.CommandText = "select count(*) from rd.ECL_upload_data "
+                    //    + "WHERE ecl_batch_no = @batchNo"
+                    //    + "  AND ecl_date_inserted is null";
+                    cm.CommandText = "IF exists (SELECT 1 FROM rd.ECL_upload_history h WHERE h.ecl_batch_no = @batchNo) "
+                                   + "   SELECT count(*) FROM rd.ECL_upload_data d, rd.ECL_upload_history h "
+                                   + "    WHERE d.ecl_batch_no = @batchNo "
+                                   + "      AND h.ecl_batch_no = d.ecl_batch_no "
+                                   + "      AND h.ecl_date_inserted is null "
+                                   + "ELSE "
+                                   + "   SELECT -1 ";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "batchNo", lBatchNo);
+
+                    try
+                    {
+                        intVal = 0;
+                        _sqlcode = 0;
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            else  // No records found
+                            {
+                                intVal = -1;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = 0;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _SpInsertECLUploadedData(int in_batchNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_InsertECLUploadedData";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "in_batchNo", in_batchNo);
+
+                    intVal = 0;
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+        // TJB  May-2010  ECL Data Upload ---------- End ----------
         #endregion
     }
 
@@ -10977,7 +11364,6 @@ namespace NZPostOffice.RDS.DataService
                 return con_relief_driver_home_phone;
             }
         }
-
     }
 
     [Serializable()]
@@ -11031,7 +11417,6 @@ namespace NZPostOffice.RDS.DataService
                 return _vt_description;
             }
         }
-
     }
 
     [Serializable()]
@@ -11345,7 +11730,6 @@ namespace NZPostOffice.RDS.DataService
     [Serializable()]
     public class CaLoadResultsItem
     {
-
         internal int _rows_inserted;
         public int RowsInserted
         {
@@ -11354,7 +11738,6 @@ namespace NZPostOffice.RDS.DataService
                 return _rows_inserted;
             }
         }
-
 
         internal int _rows_skipped;
         public int RowsSkipped
@@ -11365,7 +11748,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal int _row_errors;
         public int RowErrors
         {
@@ -11375,7 +11757,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal decimal _amount_inserted;
         public decimal AmountInserted
         {
@@ -11384,7 +11765,6 @@ namespace NZPostOffice.RDS.DataService
                 return _amount_inserted;
             }
         }
-
     }
 
     [Serializable()]
@@ -11400,7 +11780,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal string _rf_delivery_days;
         public string RfDeliveryDays
         {
@@ -11409,13 +11788,11 @@ namespace NZPostOffice.RDS.DataService
                 return _rf_delivery_days;
             }
         }
-
     }
 
     [Serializable()]
     public class ContractInfoByNoItem
     {
-
         internal string _con_title;
         public string ConTitle
         {
@@ -11425,7 +11802,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal string _o_name;
         public string OName
         {
@@ -11434,13 +11810,11 @@ namespace NZPostOffice.RDS.DataService
                 return _o_name;
             }
         }
-
     }
 
     [Serializable()]
     public class RdsCustomInfoItem
     {
-
         internal int? _dp_id;
         public int? DpId
         {
@@ -11450,7 +11824,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal int? _cust_id;
         public int? CustId
         {
@@ -11459,13 +11832,11 @@ namespace NZPostOffice.RDS.DataService
                 return _cust_id;
             }
         }
-
     }
 
     [Serializable()]
     public class CustomerAddressMovesDpIdCustIdItem
     {
-
         internal int? _dp_id;
         public int? DpId
         {
@@ -11475,7 +11846,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal int? _cust_id;
         public int? CustId
         {
@@ -11484,13 +11854,11 @@ namespace NZPostOffice.RDS.DataService
                 return _cust_id;
             }
         }
-
     }
 
     [Serializable()]
     public class FirstPostCodeIdCodeItem
     {
-
         internal int? _post_code_id;
         public int? PostCodeId
         {
@@ -11500,7 +11868,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal string _post_code;
         public string PostCode
         {
@@ -11509,13 +11876,11 @@ namespace NZPostOffice.RDS.DataService
                 return _post_code;
             }
         }
-
     }
 
     [Serializable()]
     public class PostCodeIdCodeItem
     {
-
         internal string _post_code;
         public string PostCode
         {
@@ -11525,7 +11890,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal int? _post_code_id;
         public int? PostCodeId
         {
@@ -11534,13 +11898,11 @@ namespace NZPostOffice.RDS.DataService
                 return _post_code_id;
             }
         }
-
     }
 
     [Serializable()]
     public class ContractNoConDateTerminatedItem
     {
-
         internal int? _contract_no;
         public int? ContractNo
         {
@@ -11550,7 +11912,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
         internal DateTime? _con_date_terminated;
         public DateTime? ConDateTerminated
         {
@@ -11559,7 +11920,6 @@ namespace NZPostOffice.RDS.DataService
                 return _con_date_terminated;
             }
         }
-
     }
     #endregion
 }

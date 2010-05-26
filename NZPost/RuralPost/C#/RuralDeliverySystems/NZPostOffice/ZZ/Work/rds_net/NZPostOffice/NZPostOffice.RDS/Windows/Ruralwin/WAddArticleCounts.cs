@@ -153,17 +153,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void pfc_postopen()
         {
+            // TJB  RPI_006  May 2010
+            //    Was getting unhandled exception here and in dw_date_ue_getcontracts
+            //    - invalid index
             base.pfc_postopen();
-            dw_date.InsertItem<ArticalCountDateStart>(0);
+            // TJB  RPI_006  May 2010: removed
+            //dw_date.InsertItem<ArticalCountDateStart>(0);
             MSheet mCurrent;
             mCurrent = this.m_sheet;
             mCurrent.m_deleterow.Enabled = false;
             mCurrent.m_insertrow.Enabled = false;
             mCurrent.m_updatedatabase.Enabled = false;
-            dw_date.Reset();
-            dw_date.InsertItem<ArticalCountDateStart>(0);
+            // TJB  RPI_006  May 2010: Added check for RowCount > 0
+            if (dw_date.RowCount > 0)
+            {
+                dw_date.Reset();
+            }
+            // TJB  RPI_006  May 2010: Changed InsertItem to InsertRow
+            dw_date.InsertRow(0);
+            //dw_date.InsertItem<ArticalCountDateStart>(0);
             dw_date.Focus();
-
         }
 
         public override void pfc_preopen()
@@ -212,11 +221,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             MMainMenu mCurrent;
             lRegion = dw_date.GetItem<ArticalCountDateStart>(0).RegionId;
             lRenewal = dw_date.GetItem<ArticalCountDateStart>(0).RgCode;
-            if (dw_date.GetControlByName("weekstart").Text != "00/00/00")
+            //if (dw_date.GetControlByName("weekstart").Text != "00/00/00")
+            string s_weekStart = dw_date.GetControlByName("weekstart").Text;
+            if (s_weekStart != "00/00/0000")
             {
-                dDate = Convert.ToDateTime(dw_date.GetControlByName("weekstart").Text);//dw_date.GetItem<ArticalCountDateStart>(0).Weekstart;
+                //dw_date.GetItem<ArticalCountDateStart>(0).Weekstart;
+                dDate = Convert.ToDateTime(dw_date.GetControlByName("weekstart").Text);
             }
-            if (!(StaticFunctions.f_nempty(lRegion)) && !(StaticFunctions.f_nempty(lRenewal)) && !(dDate == null))//if (!(f_nEmpty(lRegion)) && !(f_nEmpty(lRenewal)) && !(IsNull(dDate)))
+            //if (!(f_nEmpty(lRegion)) && !(f_nEmpty(lRenewal)) && !(IsNull(dDate)))
+            if (!(StaticFunctions.f_nempty(lRegion)) && !(StaticFunctions.f_nempty(lRenewal)) && !(dDate == null))
             {
                 dw_generic.Retrieve(new object[] { lRegion, lRenewal, dDate });
 
@@ -226,14 +239,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.of_SetUpdateable(true);
             for (ll_Ctr = 0; ll_Ctr < dw_generic.RowCount; ll_Ctr++)
             {
+                //if (dw_generic.GetItemNumber(ll_Ctr, "ac_w1_medium_letters") == 0 
+                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_other_envelopes") == 0 
+                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_small_parcels") == 0 
+                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_large_parcels") == 0 
+                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_inward_mail") == 0)
                 if (dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1MediumLetters == 0 &&
                     dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1OtherEnvelopes == 0 &&
                     dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1SmallParcels == 0 &&
                     dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1LargeParcels == 0 &&
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1InwardMail == 0)//if (dw_generic.GetItemNumber(ll_Ctr, "ac_w1_medium_letters") == 0 && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_other_envelopes") == 0 && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_small_parcels") == 0 && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_large_parcels") == 0 && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_inward_mail") == 0)
+                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1InwardMail == 0)
                 {
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).MarkAsNewAndModified();//dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
+                    //dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
+                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).MarkAsNewAndModified();
                 }
+            }
+            // TJB  RPI_006  May 2010: 
+            //    Added focus setting to stop tabbing going to <save> button
+            //    Tried to get focus on 1st element in dw_generic (didn't work?)
+            if (dw_generic.RowCount > 0)
+            {
+                dw_generic.SelectRow(0, true);
+                dw_generic.Focus();
             }
         }
       

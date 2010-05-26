@@ -60,6 +60,9 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripMenuItem m_piecerateimport;
 
+        // TJB  ECL Data Import  Apr-2010: Added
+        public ToolStripMenuItem m_ecldataimport;
+
         // public ToolStripMenuItem m_-4;
 
         public ToolStripMenuItem m_renewalrates;
@@ -98,7 +101,8 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripMenuItem m_rcmsstatisticalreport;
 
-        public ToolStripMenuItem m_ieceratesummary;
+        // TJB  ECL Data Import  Apr-2010: Changed from m_ieceratesummary
+        public ToolStripMenuItem m_pieceratesummary;
 
         public ToolStripMenuItem m_vehiclesummary;
 
@@ -321,6 +325,7 @@ namespace NZPostOffice.RDS.Menus
             m_setscalingfactors = new ToolStripMenuItem();
             m_contractadjustmentsimport = new ToolStripMenuItem();
             m_piecerateimport = new ToolStripMenuItem();
+            m_ecldataimport = new ToolStripMenuItem();        // TJB  ECL Data Import  Apr-2010: Added
             m_nationalfueloverride = new ToolStripMenuItem();
             m_privatebags = new ToolStripMenuItem();
 
@@ -334,6 +339,7 @@ namespace NZPostOffice.RDS.Menus
             m_ruraldelivery.DropDownItems.Add(m_setscalingfactors);
             m_ruraldelivery.DropDownItems.Add(m_contractadjustmentsimport);
             m_ruraldelivery.DropDownItems.Add(m_piecerateimport);
+            m_ruraldelivery.DropDownItems.Add(m_ecldataimport);        // TJB  ECL Data Import  Apr-2010: Added
             m_ruraldelivery.DropDownItems.Add(m_nationalfueloverride);
             m_ruraldelivery.DropDownItems.Add(m_privatebags);
 
@@ -432,17 +438,27 @@ namespace NZPostOffice.RDS.Menus
             // 
             m_contractadjustmentsimport.Text = "Contract Adjustments Import";
             m_contractadjustmentsimport.Click += new EventHandler(m_contractadjustmentsimport_clicked);
-           
+
             // 
             // m_piecerateimport
             // 
             m_piecerateimport.Text = "Piece Rate &Import";
             m_piecerateimport.Visible = false;//add
             m_piecerateimport.Enabled = false; //add
-
             m_piecerateimport.ToolTipText = "Import piece rates from a file";
             m_piecerateimport.Tag = "ComponentName=Piece Rate Import;";
             m_piecerateimport.Click += new EventHandler(m_piecerateimport_clicked);
+
+            // TJB  ECL Data Import  Apr-2010: Added
+            // 
+            // m_ecldataimport
+            // 
+            m_ecldataimport.Text = "ECL Data &Import";
+            m_ecldataimport.Visible = false;//add
+            m_ecldataimport.Enabled = false; //add
+            m_ecldataimport.ToolTipText = "Import ECL data from a file";
+            m_ecldataimport.Tag = "ComponentName=ECL Data Import;";
+            m_ecldataimport.Click += new EventHandler(m_ecldataimport_clicked);
 
             // 
             // m_nationalfueloverride
@@ -636,7 +652,7 @@ namespace NZPostOffice.RDS.Menus
             m_financialsstatistics.Tag = "ComponentName=RCMs Stats Report;ComponentName=Piece Rate Summary;ComponentName=Vehicle Summary;ComponentName=Performance Summary;";
 
             m_rcmsstatisticalreport = new ToolStripMenuItem();
-            m_ieceratesummary = new ToolStripMenuItem();
+            m_pieceratesummary = new ToolStripMenuItem();
             m_vehiclesummary = new ToolStripMenuItem();
             //? m_performancesummary = new ToolStripMenuItem();
             m_vehicleexpiry = new ToolStripMenuItem();
@@ -644,7 +660,7 @@ namespace NZPostOffice.RDS.Menus
             m_outstandingvalidationlist = new ToolStripMenuItem();
 
             m_financialsstatistics.DropDownItems.Add(m_rcmsstatisticalreport);
-            m_financialsstatistics.DropDownItems.Add(m_ieceratesummary);
+            m_financialsstatistics.DropDownItems.Add(m_pieceratesummary);
             m_financialsstatistics.DropDownItems.Add(m_vehiclesummary);
             //? m_financialsstatistics.DropDownItems.Add(m_performancesummary);
             m_financialsstatistics.DropDownItems.Add(m_vehicleexpiry);
@@ -662,14 +678,14 @@ namespace NZPostOffice.RDS.Menus
             m_rcmsstatisticalreport.Click += new EventHandler(m_rcmsstatisticalreport_clicked);
         
             // 
-            // m_ieceratesummary
+            // m_pieceratesummary
             // 
-            m_ieceratesummary.Text = "P&iece Rate Summary";
-            m_ieceratesummary.Visible = false; //add
-            m_ieceratesummary.Enabled = false;  //add
+            m_pieceratesummary.Text = "P&iece Rate Summary";
+            m_pieceratesummary.Visible = false; //add
+            m_pieceratesummary.Enabled = false;  //add
 
-            m_ieceratesummary.Tag = "ComponentName=Piece Rate Summary;";
-            m_ieceratesummary.Click += new EventHandler(m_ieceratesummary_clicked);
+            m_pieceratesummary.Tag = "ComponentName=Piece Rate Summary;";
+            m_pieceratesummary.Click += new EventHandler(m_pieceratesummary_clicked);
             
             // 
             // m_vehiclesummary
@@ -1348,6 +1364,13 @@ namespace NZPostOffice.RDS.Menus
             OpenSheet<WPieceRateImport>(StaticVariables.MainMDI);//OpenSheet(w_piece_rate_import, w_main_mdi, 0, original!);
         }
 
+        // TJB  ECL Data Import  Apr-2010: Added
+        public virtual void m_ecldataimport_clicked(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            OpenSheet<WEclDataImport>(StaticVariables.MainMDI);
+        }
+
         public virtual void m_renewalrates_clicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1494,10 +1517,10 @@ namespace NZPostOffice.RDS.Menus
             StaticMessage.StringParm = "RCMs Statistical Report";
         }
 
-        public virtual void m_ieceratesummary_clicked(object sender, EventArgs e)
+        public virtual void m_pieceratesummary_clicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            StaticVariables.gnv_app.of_set_componenttoopen(StaticVariables.gnv_app.of_get_securitymanager().of_get_componentname(m_ieceratesummary.Tag.ToString()));
+            StaticVariables.gnv_app.of_set_componenttoopen(StaticVariables.gnv_app.of_get_securitymanager().of_get_componentname(m_pieceratesummary.Tag.ToString()));
             //OpenSheet(w_piece_rate_search, w_main_mdi, 0, original!);
             StaticMessage.StringParm = "";
             OpenSheet<WPieceRateSearch>(StaticVariables.MainMDI);

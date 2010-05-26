@@ -34,9 +34,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             m_main_menu = new MMainMenu(this);
             // TJB  Aug2009
             // Changed content of Toolstrip StatusLabel4 to show purpose of app
-            //this.toolStripStatusLabel4.Text = "DEV Version";
+            this.toolStripStatusLabel4.Text = "DEV Version";
             //this.toolStripStatusLabel4.Text = "Test Version";
-            this.toolStripStatusLabel4.Text = "Production Version";
+            //this.toolStripStatusLabel4.Text = "Production Version";
+            // TJB  Dec-2009
+            // Changed the 'Environment' value to the RDS version number
+            // since its value was meaningless (just like the clock).
+            //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.2.10";
+            //this.toolStripStatusLabel6.Text = "16/02/2010 11:30 am";
         }
 
         public virtual void reset_clock()
@@ -69,25 +75,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             // string ls_command
             // 
-            // if GetCommandDDE ( ls_command) < 0 then
-            // 	messagebox ( "Error","Error receiving the DDE message")
+            // if GetCommandDDE(ls_command) < 0 then
+            // 	messagebox("Error","Error receiving the DDE message")
             // end if
             // 
-            // ls_command = trim ( ls_command)
+            // ls_command = trim(ls_command)
             // 
             // choose case ls_command
             // 
             // 	case "Contract Search"
-            // 		opensheet ( w_contract_search, w_main_mdi, 0, original!)
+            // 		opensheet(w_contract_search, w_main_mdi, 0, original!)
             // 
             // 	case "Owner Driver"
-            // 		opensheet ( w_Contractor_Search, w_main_mdi, 0, originaL!)
+            // 		opensheet(w_Contractor_Search, w_main_mdi, 0, originaL!)
             // 
             // 	case "Piece Rates Import"
             // 		if g_Security.Access_Groups[1] = 7 then
-            // 			opensheet ( w_piece_rate_import, w_main_mdi, 0, original!)
+            // 			opensheet(w_piece_rate_import, w_main_mdi, 0, original!)
             // 		else
-            // 			MessageBox ( "Renewal Process","Your UserID does not have access to this window.")
+            // 			MessageBox("Renewal Process","Your UserID does not have access to this window.")
             // 		end if		
             // end choose
             // 
@@ -145,7 +151,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Removed condition: was always TRUE prior to adding commandline parameters 
             //  but failed when user specified connection to use.  This meant the default 
             //  contract search screen didn't display.
-            //  if	gnv_App.of_get_commandline ( )= "" or not ( gnv_App.ib_Secure)  then
+            //  if	gnv_App.of_get_commandline()= "" or not(gnv_App.ib_Secure)  then
             lb_HasPrivilege = lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Contract")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Customer")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Renewal")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Frequency")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Route Audit")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Contract Type")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Allowance")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Article Count")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Piece Rate")) || lnv_User.of_hasprivilege(lnv_RSM.of_get_componentid("Fixed Asset"));
             if (lb_HasPrivilege)
             {
@@ -168,26 +174,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WMainMdi));
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.IsMdiContainer = true;
-            this.Icon = global::NZPostOffice.Shared.Properties.Resources.RDSYSTAB;
-            this.WindowState = FormWindowState.Maximized;
-
-
-            this.Text = StaticVariables.DisplayName;
-            this.Location = new System.Drawing.Point(0, 0);
-            this.Size = new System.Drawing.Size(803, 601);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Move += new EventHandler(WMainMdi_Move);
-            this.Resize += new EventHandler(WMainMdi_Resize);
-            this.ResumeLayout();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusStrip.SuspendLayout();
+            this.SuspendLayout();
             // 
             // toolStripStatusLabel1
             // 
@@ -248,7 +244,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.toolStripStatusLabel5.BorderStyle = System.Windows.Forms.Border3DStyle.Raised;
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
             this.toolStripStatusLabel5.Size = new System.Drawing.Size(170, 17);
-            this.toolStripStatusLabel5.Text = "";//Sysadmin(National User)";
             // 
             // toolStripStatusLabel6
             // 
@@ -260,18 +255,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
             this.toolStripStatusLabel6.Size = new System.Drawing.Size(100, 17);
             this.toolStripStatusLabel6.Text = "12/12/12 09:12 pm";
-            //
-            //statusStrip
-            //
-            statusStrip = new StatusStrip();
-            statusStrip.Items.Add(toolStripStatusLabel1);
-            statusStrip.Items.Add(toolStripStatusLabel2);
-            statusStrip.Items.Add(toolStripStatusLabel3);
-            statusStrip.Items.Add(toolStripStatusLabel4);
-            statusStrip.Items.Add(toolStripStatusLabel5);
-            statusStrip.Items.Add(toolStripStatusLabel6);
-            this.Resize += new EventHandler(WMainMdi_Resize);
-            this.Controls.Add(statusStrip);
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabel4,
+            this.toolStripStatusLabel5,
+            this.toolStripStatusLabel6});
+            this.statusStrip.Location = new System.Drawing.Point(0, 545);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(795, 22);
+            this.statusStrip.TabIndex = 2;
+            // 
+            // WMainMdi
+            // 
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(795, 567);
+            this.Controls.Add(this.statusStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.IsMdiContainer = true;
+            this.Name = "WMainMdi";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.WMainMdi_Load);
+            this.Move += new System.EventHandler(this.WMainMdi_Move);
+            this.Resize += new System.EventHandler(this.WMainMdi_Resize);
+            this.Controls.SetChildIndex(this.statusStrip, 0);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         private void WMainMdi_Resize(object sender, EventArgs e)
@@ -311,7 +328,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void resize(object sender, EventArgs args)
         {
             base.resize(sender, args);
-            reset_clock();
+        //    reset_clock();
+        }
+
+        private void WMainMdi_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

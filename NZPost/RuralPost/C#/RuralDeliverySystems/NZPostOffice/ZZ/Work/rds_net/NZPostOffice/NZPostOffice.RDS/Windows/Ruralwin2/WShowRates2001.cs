@@ -658,41 +658,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Check rg_code
             if (ll_rgcode == 0 || ll_rgcode == null)
             {
-                MessageBox.Show("A renewal groups must be specified", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A renewal groups must be specified"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();
                 return false;
             }
             //  Are we entering a date which is earlier than a previous one?
-            //SELECT count(*) INTO :ll_Count FROM non_vehicle_rate  WHERE rg_code = :ll_rgCode AND nvr_rates_effective_date > :ld_EffDate;
+            //SELECT count(*) INTO :ll_Count 
+            //  FROM non_vehicle_rate 
+            // WHERE rg_code = :ll_rgCode 
+            //   AND nvr_rates_effective_date > :ld_EffDate;
             ll_Count = RDSDataService.GetNonVehicleRateCount(ll_rgcode, ld_EffDate);
 
             if (ll_Count > 0)
             {
-                MessageBox.Show("A renewal groups rates cannot be defined for a group before a current set of rate" + "s", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A renewal groups rates cannot be defined for a \n" 
+                               + "group before a current set of rates."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //iuo_nonvehiclerates.DataControl["nvr_rates_effective_date"].Focus();
                 iuo_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
                 return false;
             }
             //  Do we already have a non-frozen rate for a renewal group?
-            if (iuo_nonvehiclerates.DataObject.GetItem<NonVehicleRates2005>(0).IsDirty)// (iuo_nonvehiclerates.GetItemStatus(1, 0, primary!) == newmodified!)
+            // (iuo_nonvehiclerates.GetItemStatus(1, 0, primary!) == newmodified!)
+            if (iuo_nonvehiclerates.DataObject.GetItem<NonVehicleRates2005>(0).IsDirty)
             {
-                //SELECT count(*) INTO :ll_Count FROM non_vehicle_rate WHERE rg_code = :ll_rgcode AND (nvr_frozen_indicator = 'N' or nvr_frozen_indicator is null);
+                //SELECT count(*) INTO :ll_Count 
+                //  FROM non_vehicle_rate 
+                // WHERE rg_code = :ll_rgcode 
+                //   AND (nvr_frozen_indicator = 'N' or nvr_frozen_indicator is null);
                 ll_Count = RDSDataService.GetNonVehicleRateCount2(ll_rgcode);
 
-                if (ll_Count > 0)
+                // TJB  RPI_007  7-May-2010
+                //   Changed count to > 1
+                if (ll_Count > 1)
                 {
-                    MessageBox.Show("A renewal group can only have one non frozen set of renewal rates at any one time" + "", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("A renewal group can only have one non frozen set of \n" 
+                                   + "renewal rates at any one time."
+                                   , this.Text
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();//.DataControl["rg_code"].Focus();
                     return false;
                 }
             }
             // Is already one with the same date?
-            //SELECT count(*)  INTO :ll_Count  FROM non_vehicle_rate WHERE non_vehicle_rate.rg_code = :ll_rgcode AND non_vehicle_rate.nvr_rates_effective_date = :ld_EffDate ;
+            //SELECT count(*)  INTO :ll_Count  
+            //  FROM non_vehicle_rate 
+            // WHERE non_vehicle_rate.rg_code = :ll_rgcode 
+            //   AND non_vehicle_rate.nvr_rates_effective_date = :ld_EffDate
 
             ll_Count = RDSDataService.GetNonVehicleRateCount3(ll_rgcode, ld_EffDate);
             if (ll_Count >= 1 && is_editable == "W")
             {
-                MessageBox.Show("There are already rates defined for this renewal group on the entered date", "Rates Already Defined", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("There are already rates defined for this renewal group \n" 
+                               + "on the entered date"
+                               , "Rates Already Defined"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //iuo_nonvehiclerates.DataControl["nvr_rates_effective_date"].Focus();
                 iuo_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
                 return false;
@@ -1678,6 +1701,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
+            int i, t;
+
+            i = 1;
+            t = i;
             // Boolean bReturnValue = True
             // Long    lMessageReturn = 0
             // 

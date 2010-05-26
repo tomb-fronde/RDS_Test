@@ -12,12 +12,14 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
     // TJB  RD7_CR001  Nov-2009
     //    Added contract_no (here and below)
+    //    [Dec-2009] Also added RdNo
 	[MapInfo("post_mail_town", "_post_mail_town", "post_code")]
 	[MapInfo("post_district", "_post_district", "post_code")]
 	[MapInfo("post_code", "_post_code", "post_code")]
 	[MapInfo("post_code_id", "_post_code_id", "post_code",true)]
-    [MapInfo("contract_no","_contract_no","post_code")]
-	[System.Serializable()]
+    [MapInfo("rd_no", "_rd_no", "post_code")]
+    [MapInfo("contract_no", "_contract_no", "post_code")]
+    [System.Serializable()]
 
 	public class PostCodeType : Entity<PostCodeType>
 	{
@@ -35,8 +37,10 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
         private int? _post_code_id;
 
         [DBField()]
-        private int? _contract_no;
+        private string _rd_no;
 
+        [DBField()]
+        private int? _contract_no;
 
 		public virtual string PostMailTown
 		{
@@ -109,6 +113,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 }
             }
         }
+
+        // TJB  RD7_CR001  Nov-2009: Added
         public virtual int? ContractNo
         {
             get
@@ -126,6 +132,26 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 }
             }
         }
+
+        // TJB  RD7_CR001  Dec-2009: Added
+        public virtual string RdNo
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _rd_no;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_rd_no != value)
+                {
+                    _rd_no = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         private PostCodeType[] dataList;
 
 		protected override object GetIdValue()
@@ -159,6 +185,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                                    +      ", post_code.post_district"
                                    +      ", post_code.post_code"
                                    +      ", post_code.post_code_id"
+                                   +      ", post_code.rd_no"
                                    +      ", post_code.contract_no"
                                    + " FROM post_code ";
 					ParameterCollection pList = new ParameterCollection();

@@ -650,7 +650,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandType = CommandType.StoredProcedure;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_Contract", in_Contract);
-                    cm.CommandText = "sp_getcontractodps";
+                    cm.CommandText = "rd.sp_getcontractodps";
                     List<Contract> _list = new List<Contract>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {

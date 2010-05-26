@@ -42,6 +42,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_relief_driver_home_phone = new System.Windows.Forms.TextBox();
             this.t_1 = new System.Windows.Forms.Label();
             this.gb_3 = new System.Windows.Forms.GroupBox();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.con_start_date_t = new System.Windows.Forms.Label();
             this.con_expiry_date_t = new System.Windows.Forms.Label();
             this.con_date_last_assigned_t = new System.Windows.Forms.Label();
@@ -52,7 +53,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_last_paid_date_t = new System.Windows.Forms.Label();
             this.con_last_paid_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.con_expiry_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
-            this.con_start_date = new DateTimeMaskedTextBox();
+            this.con_start_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.gb_4 = new System.Windows.Forms.GroupBox();
             this.con_processing_hours_per_week_t = new System.Windows.Forms.Label();
             this.con_processing_hours_per_week = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
@@ -70,13 +71,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_other_bags_at_renewal_t = new System.Windows.Forms.Label();
             this.con_no_cmb_custs_at_renewal_t = new System.Windows.Forms.Label();
             this.con_del_hrs_week_at_renewal_t = new System.Windows.Forms.Label();
-
             this.con_rg_code_at_renewal_t = new System.Windows.Forms.Label();
-            this.con_rg_code_at_renewal_t2 = new Label();
-
+            this.con_rg_code_at_renewal_t2 = new System.Windows.Forms.Label();
             this.con_rg_code_at_renewal = new Metex.Windows.DataEntityCombo();
             this.t_2 = new System.Windows.Forms.Label();
-            this.con_rates_effective_date = new DateTimeMaskedTextBox();
+            this.con_rates_effective_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.con_no_private_bags_at_renewa = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.con_no_post_offices_at_renewa = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.con_no_cmbs_at_renewal = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
@@ -212,6 +211,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // gb_3
             // 
+            this.gb_3.Controls.Add(this.maskedTextBox1);
             this.gb_3.Controls.Add(this.con_start_date_t);
             this.gb_3.Controls.Add(this.con_expiry_date_t);
             this.gb_3.Controls.Add(this.con_date_last_assigned_t);
@@ -230,6 +230,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.gb_3.TabIndex = 0;
             this.gb_3.TabStop = false;
             // 
+            // maskedTextBox1
+            // 
+            //this.maskedTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConRenewalBenchmarkPriceString", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.maskedTextBox1.Location = new System.Drawing.Point(178, 61);
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(100, 20);
+            this.maskedTextBox1.TabIndex = 42;
+            // 
             // con_start_date_t
             // 
             this.con_start_date_t.AutoSize = true;
@@ -237,7 +245,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_start_date_t.Location = new System.Drawing.Point(4, 17);
             this.con_start_date_t.Name = "con_start_date_t";
             this.con_start_date_t.Size = new System.Drawing.Size(102, 13);
-            this.con_start_date_t.TabIndex = 36;
+            this.con_start_date_t.TabIndex = 31;
             this.con_start_date_t.Text = "Contract Term: Start";
             this.con_start_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -248,17 +256,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_expiry_date_t.Location = new System.Drawing.Point(176, 17);
             this.con_expiry_date_t.Name = "con_expiry_date_t";
             this.con_expiry_date_t.Size = new System.Drawing.Size(35, 13);
-            this.con_expiry_date_t.TabIndex = 35;
+            this.con_expiry_date_t.TabIndex = 33;
             this.con_expiry_date_t.Text = "Expiry";
             this.con_expiry_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // con_date_last_assigned_t
             // 
             this.con_date_last_assigned_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.con_date_last_assigned_t.Location = new System.Drawing.Point(31, 41);
+            this.con_date_last_assigned_t.Location = new System.Drawing.Point(27, 41);
             this.con_date_last_assigned_t.Name = "con_date_last_assigned_t";
             this.con_date_last_assigned_t.Size = new System.Drawing.Size(78, 13);
-            this.con_date_last_assigned_t.TabIndex = 37;
+            this.con_date_last_assigned_t.TabIndex = 35;
             this.con_date_last_assigned_t.Text = "Date Assigned";
             this.con_date_last_assigned_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -266,18 +274,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_date_last_assigned.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_date_last_assigned.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConDateLastAssigned", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_date_last_assigned.ReadOnly = true;//.Enabled = false;
             this.con_date_last_assigned.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_date_last_assigned.Location = new System.Drawing.Point(109, 41);
-            this.con_date_last_assigned.Mask = "00/00/00";
+            this.con_date_last_assigned.Mask = "00/00/0000";
             this.con_date_last_assigned.Name = "con_date_last_assigned";
-            //this.con_date_last_assigned.InsertKeyMode = InsertKeyMode.Overwrite;
-            //this.con_date_last_assigned.TextMaskFormat = MaskFormat.IncludePrompt;
-            //this.con_date_last_assigned.ValidatingType = typeof(System.DateTime);
-            //this.con_date_last_assigned.PromptChar = ' ';
+            this.con_date_last_assigned.ReadOnly = true;
             this.con_date_last_assigned.Size = new System.Drawing.Size(63, 13);
-            this.con_date_last_assigned.TabIndex = 38;
-            this.con_date_last_assigned.DataBindings[0].FormatString = "dd/MM/yy";
+            this.con_date_last_assigned.TabIndex = 36;
+            this.con_date_last_assigned.Text = "00000000";
+            this.con_date_last_assigned.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.con_date_last_assigned.ValidatingType = typeof(System.DateTime);
+            this.con_date_last_assigned.Value = null;
             // 
             // con_acceptance_flag
             // 
@@ -285,9 +292,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_acceptance_flag.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.con_acceptance_flag.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "ConAcceptanceFlag", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.con_acceptance_flag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.con_acceptance_flag.Location = new System.Drawing.Point(20, 65);
+            this.con_acceptance_flag.Location = new System.Drawing.Point(7, 65);
             this.con_acceptance_flag.Name = "con_acceptance_flag";
-            this.con_acceptance_flag.Size = new System.Drawing.Size(114, 16);
+            this.con_acceptance_flag.Size = new System.Drawing.Size(126, 16);
             this.con_acceptance_flag.TabIndex = 41;
             this.con_acceptance_flag.Text = "Contract Accepted";
             this.con_acceptance_flag.ThreeState = true;
@@ -295,10 +302,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // con_start_pay_date_t
             // 
             this.con_start_pay_date_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.con_start_pay_date_t.Location = new System.Drawing.Point(31, 91);
+            this.con_start_pay_date_t.Location = new System.Drawing.Point(27, 91);
             this.con_start_pay_date_t.Name = "con_start_pay_date_t";
             this.con_start_pay_date_t.Size = new System.Drawing.Size(78, 13);
-            this.con_start_pay_date_t.TabIndex = 32;
+            this.con_start_pay_date_t.TabIndex = 37;
             this.con_start_pay_date_t.Text = "Payment: Start";
             this.con_start_pay_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -306,27 +313,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_start_pay_date.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_start_pay_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConStartPayDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_start_pay_date.ReadOnly = true;//.Enabled = false;
             this.con_start_pay_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_start_pay_date.Location = new System.Drawing.Point(109, 91);
-            this.con_start_pay_date.Mask = "00/00/00";
+            this.con_start_pay_date.Mask = "00/00/0000";
             this.con_start_pay_date.Name = "con_start_pay_date";
+            this.con_start_pay_date.ReadOnly = true;
             this.con_start_pay_date.Size = new System.Drawing.Size(72, 13);
-            this.con_start_pay_date.TabIndex = 31;
-            //this.con_start_pay_date.InsertKeyMode = InsertKeyMode.Overwrite;
-            //this.con_start_pay_date.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            //this.con_start_pay_date.ValidatingType = typeof(System.DateTime);
-            // this.con_start_pay_date.PromptChar ='0';
-            this.con_start_pay_date.DataBindings[0].FormatString = "dd/MM/yy";
-
+            this.con_start_pay_date.TabIndex = 38;
+            this.con_start_pay_date.Text = "00000000";
+            this.con_start_pay_date.Value = null;
             // 
             // con_last_paid_date_t
             // 
             this.con_last_paid_date_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.con_last_paid_date_t.Location = new System.Drawing.Point(184, 91);
+            this.con_last_paid_date_t.Location = new System.Drawing.Point(182, 91);
             this.con_last_paid_date_t.Name = "con_last_paid_date_t";
             this.con_last_paid_date_t.Size = new System.Drawing.Size(29, 13);
-            this.con_last_paid_date_t.TabIndex = 34;
+            this.con_last_paid_date_t.TabIndex = 39;
             this.con_last_paid_date_t.Text = "Last";
             this.con_last_paid_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -334,40 +337,41 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_last_paid_date.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_last_paid_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConLastPaidDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_last_paid_date.ReadOnly = true;//.Enabled = false;
             this.con_last_paid_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_last_paid_date.Location = new System.Drawing.Point(215, 91);
-            this.con_last_paid_date.Mask = "00/00/00";
+            this.con_last_paid_date.Mask = "00/00/0000";
             this.con_last_paid_date.Name = "con_last_paid_date";
-            // this.con_last_paid_date.PromptChar = '0';
+            this.con_last_paid_date.ReadOnly = true;
             this.con_last_paid_date.Size = new System.Drawing.Size(63, 13);
-            this.con_last_paid_date.TabIndex = 33;
+            this.con_last_paid_date.TabIndex = 40;
+            this.con_last_paid_date.Text = "00000000";
+            this.con_last_paid_date.Value = null;
             // 
             // con_expiry_date
             // 
-            this.con_expiry_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.con_expiry_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConExpiryDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.con_expiry_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_expiry_date.Location = new System.Drawing.Point(214, 19);
             this.con_expiry_date.Mask = "00/00/0000";
-            this.con_expiry_date.DataBindings[0].FormatString = "dd/MM/yyyy";
             this.con_expiry_date.Name = "con_expiry_date";
-            // this.con_expiry_date.PromptChar = '0';
             this.con_expiry_date.Size = new System.Drawing.Size(66, 20);
-            this.con_expiry_date.TabIndex = 40;
+            this.con_expiry_date.TabIndex = 34;
+            this.con_expiry_date.Text = "00000000";
+            this.con_expiry_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.con_expiry_date.Value = null;
             // 
             // con_start_date
             // 
-            this.con_start_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.con_start_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConStartDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.con_start_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_start_date.Location = new System.Drawing.Point(109, 19);
             this.con_start_date.Mask = "00/00/0000";
             this.con_start_date.Name = "con_start_date";
-            this.con_start_date.DataBindings[0].FormatString = "dd/MM/yyyy";
-            // this.con_start_date.PromptChar = '0';
             this.con_start_date.Size = new System.Drawing.Size(64, 20);
-            this.con_start_date.TabIndex = 39;
+            this.con_start_date.TabIndex = 32;
+            this.con_start_date.Text = "00000000";
+            this.con_start_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.con_start_date.Value = null;
             // 
             // gb_4
             // 
@@ -388,8 +392,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.gb_4.Controls.Add(this.con_no_cmb_custs_at_renewal_t);
             this.gb_4.Controls.Add(this.con_del_hrs_week_at_renewal_t);
             this.gb_4.Controls.Add(this.con_rg_code_at_renewal_t);
-            this.gb_4.Controls.Add(this.con_rg_code_at_renewal_t2); //added by jlwang
-
+            this.gb_4.Controls.Add(this.con_rg_code_at_renewal_t2);
             this.gb_4.Controls.Add(this.con_rg_code_at_renewal);
             this.gb_4.Controls.Add(this.t_2);
             this.gb_4.Controls.Add(this.con_rates_effective_date);
@@ -426,10 +429,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_processing_hours_per_week.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_processing_hours_per_week.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConProcessingHoursPerWeek", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_processing_hours_per_week.EditMask = "##.00";
+            //this.con_processing_hours_per_week.EditMask = "99.00";
             this.con_processing_hours_per_week.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_processing_hours_per_week.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_processing_hours_per_week.Location = new System.Drawing.Point(99, 25);
+            //this.con_processing_hours_per_week.Mask = "##.00";
             this.con_processing_hours_per_week.Name = "con_processing_hours_per_week";
             this.con_processing_hours_per_week.PromptChar = ' ';
             this.con_processing_hours_per_week.ReadOnly = true;
@@ -453,16 +457,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_distance_at_renewal.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_distance_at_renewal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConDistanceAtRenewal", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_distance_at_renewal.EditMask = "###,###.00";
-            this.con_distance_at_renewal.DataBindings[0].FormatString = "###,###.00";
+            this.con_distance_at_renewal.EditMask = "###,###";
             this.con_distance_at_renewal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_distance_at_renewal.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_distance_at_renewal.Location = new System.Drawing.Point(270, 25);
+            this.con_distance_at_renewal.Mask = "###,###";
             this.con_distance_at_renewal.Name = "con_distance_at_renewal";
             this.con_distance_at_renewal.PromptChar = ' ';
-            this.con_distance_at_renewal.ReadOnly = true;
+            //this.con_distance_at_renewal.ReadOnly = true;
             this.con_distance_at_renewal.Size = new System.Drawing.Size(61, 13);
             this.con_distance_at_renewal.TabIndex = 171;
+            this.con_distance_at_renewal.Text = "";
             this.con_distance_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_distance_at_renewal.Value = "";
             // 
@@ -492,19 +497,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_renewal_benchmark_price.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_renewal_benchmark_price.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConRenewalBenchmarkPrice", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_renewal_benchmark_price.EditMask = "###,###.00";
-            this.con_renewal_benchmark_price.DataBindings[0].FormatString = "###,###.00";
+            this.con_renewal_benchmark_price.EditMask = "$999,999.00";
             this.con_renewal_benchmark_price.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_renewal_benchmark_price.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_renewal_benchmark_price.Location = new System.Drawing.Point(99, 48);
+            this.con_renewal_benchmark_price.Mask = "$###,###.00";
             this.con_renewal_benchmark_price.Name = "con_renewal_benchmark_price";
             this.con_renewal_benchmark_price.PromptChar = ' ';
             this.con_renewal_benchmark_price.ReadOnly = true;
             this.con_renewal_benchmark_price.Size = new System.Drawing.Size(61, 13);
             this.con_renewal_benchmark_price.TabIndex = 180;
             this.con_renewal_benchmark_price.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.con_renewal_benchmark_price.Value = "";
-
+            this.con_renewal_benchmark_price.Value = "$   ,   .";
             // 
             // con_no_customers_at_renewal_t
             // 
@@ -615,20 +619,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_rg_code_at_renewal_t.TabIndex = 170;
             this.con_rg_code_at_renewal_t.Text = "Renewal Group";
             this.con_rg_code_at_renewal_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-
-
             // 
             // con_rg_code_at_renewal_t2
             // 
-            //? this.con_rg_code_at_renewal_t2.AutoSize = true;
             this.con_rg_code_at_renewal_t2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_rg_code_at_renewal_t2.Location = new System.Drawing.Point(269, 120);
             this.con_rg_code_at_renewal_t2.Name = "con_rg_code_at_renewal_t2";
-            this.con_rg_code_at_renewal_t2.Size = new System.Drawing.Size(108, 22);
+            this.con_rg_code_at_renewal_t2.Size = new System.Drawing.Size(133, 28);
             this.con_rg_code_at_renewal_t2.TabIndex = 170;
-            this.con_rg_code_at_renewal_t2.Text = "";
-            this.con_rg_code_at_renewal_t2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-
+            this.con_rg_code_at_renewal_t2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // con_rg_code_at_renewal
             // 
@@ -636,15 +635,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_rg_code_at_renewal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConRgCodeAtRenewal", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.con_rg_code_at_renewal.DisplayMember = "RgDescription";
             this.con_rg_code_at_renewal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            //?this.con_rg_code_at_renewal.Enabled = false;
             this.con_rg_code_at_renewal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_rg_code_at_renewal.Location = new System.Drawing.Point(269, 120);
             this.con_rg_code_at_renewal.Name = "con_rg_code_at_renewal";
             this.con_rg_code_at_renewal.Size = new System.Drawing.Size(108, 21);
             this.con_rg_code_at_renewal.TabIndex = 168;
             this.con_rg_code_at_renewal.Value = null;
-            this.con_rg_code_at_renewal.TextChanged += new System.EventHandler(con_rg_code_at_renewal_TextChanged);
             this.con_rg_code_at_renewal.ValueMember = "RgCode";
+            this.con_rg_code_at_renewal.TextChanged += new System.EventHandler(this.con_rg_code_at_renewal_TextChanged);
             // 
             // t_2
             // 
@@ -661,15 +659,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.con_rates_effective_date.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.con_rates_effective_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConRatesEffectiveDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_rates_effective_date.ReadOnly = true;//.Enabled = false;
             this.con_rates_effective_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_rates_effective_date.Location = new System.Drawing.Point(453, 122);
             this.con_rates_effective_date.Mask = "00/00/0000";
             this.con_rates_effective_date.Name = "con_rates_effective_date";
-            //this.con_rates_effective_date.PromptChar = '0';
+            this.con_rates_effective_date.ReadOnly = true;
             this.con_rates_effective_date.Size = new System.Drawing.Size(73, 13);
-            this.con_rates_effective_date.DataBindings[0].FormatString = "dd/MM/yyyy";
             this.con_rates_effective_date.TabIndex = 167;
+            this.con_rates_effective_date.Text = "00000000";
+            this.con_rates_effective_date.Value = null;
             // 
             // con_no_private_bags_at_renewa
             // 
@@ -684,7 +682,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_private_bags_at_renewa.TabIndex = 187;
             this.con_no_private_bags_at_renewa.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_private_bags_at_renewa.Value = "";
-            this.con_no_private_bags_at_renewa.DataBindings[0].DataSourceNullValue = 0;
             // 
             // con_no_post_offices_at_renewa
             // 
@@ -699,7 +696,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_post_offices_at_renewa.TabIndex = 188;
             this.con_no_post_offices_at_renewa.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_post_offices_at_renewa.Value = "";
-            this.con_no_post_offices_at_renewa.DataBindings[0].DataSourceNullValue = 0;
             // 
             // con_no_cmbs_at_renewal
             // 
@@ -714,7 +710,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_cmbs_at_renewal.TabIndex = 189;
             this.con_no_cmbs_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_cmbs_at_renewal.Value = "";
-            this.con_no_cmbs_at_renewal.DataBindings[0].DataSourceNullValue = 0;
             // 
             // con_no_cmb_custs_at_renewal
             // 
@@ -729,7 +724,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_cmb_custs_at_renewal.TabIndex = 190;
             this.con_no_cmb_custs_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_cmb_custs_at_renewal.Value = "";
-            this.con_no_cmb_custs_at_renewal.DataBindings[0].DataSourceNullValue = 0;
             // 
             // con_no_other_bags_at_renewal
             // 
@@ -744,8 +738,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_other_bags_at_renewal.TabIndex = 186;
             this.con_no_other_bags_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_other_bags_at_renewal.Value = "";
-            this.con_no_other_bags_at_renewal.DataBindings[0].DataSourceNullValue = 0;
-
             // 
             // con_no_rural_private_bags_at_
             // 
@@ -760,8 +752,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_rural_private_bags_at_.TabIndex = 185;
             this.con_no_rural_private_bags_at_.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_rural_private_bags_at_.Value = "";
-            this.con_no_rural_private_bags_at_.DataBindings[0].DataSourceNullValue = 0;
-
             // 
             // con_no_customers_at_renewal
             // 
@@ -776,52 +766,55 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.con_no_customers_at_renewal.TabIndex = 184;
             this.con_no_customers_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_no_customers_at_renewal.Value = "";
-
             // 
             // con_renewal_payment_value
             // 
             this.con_renewal_payment_value.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConRenewalPaymentValue", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_renewal_payment_value.DataBindings[0].FormatString = "###,###.00";
-            this.con_renewal_payment_value.EditMask = "###,###.00";
+            this.con_renewal_payment_value.EditMask = "$999,999.00";
             this.con_renewal_payment_value.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_renewal_payment_value.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_renewal_payment_value.Location = new System.Drawing.Point(100, 70);
+            this.con_renewal_payment_value.Mask = "$###,###.00";
             this.con_renewal_payment_value.Name = "con_renewal_payment_value";
             this.con_renewal_payment_value.PromptChar = ' ';
+            this.con_renewal_payment_value.ReadOnly = true;
             this.con_renewal_payment_value.Size = new System.Drawing.Size(61, 20);
             this.con_renewal_payment_value.TabIndex = 181;
+            this.con_renewal_payment_value.Text = "$   ,   .";
             this.con_renewal_payment_value.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.con_renewal_payment_value.Value = "";
             this.con_renewal_payment_value.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-
+            this.con_renewal_payment_value.Value = "$   ,   .";
             // 
             // con_volume_at_renewal
             // 
             this.con_volume_at_renewal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConVolumeAtRenewal", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_volume_at_renewal.EditMask = "###,###";
-            this.con_volume_at_renewal.Mask = "###,###";
+            this.con_volume_at_renewal.EditMask = "999,990";
             this.con_volume_at_renewal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_volume_at_renewal.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_volume_at_renewal.Location = new System.Drawing.Point(99, 96);
+            this.con_volume_at_renewal.Mask = "###,###";
             this.con_volume_at_renewal.Name = "con_volume_at_renewal";
             this.con_volume_at_renewal.PromptChar = ' ';
+            this.con_volume_at_renewal.ReadOnly = true;
             this.con_volume_at_renewal.Size = new System.Drawing.Size(61, 20);
             this.con_volume_at_renewal.TabIndex = 182;
+            this.con_volume_at_renewal.Text = "";
             this.con_volume_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_volume_at_renewal.Value = "";
             // 
             // con_del_hrs_week_at_renewal
             // 
             this.con_del_hrs_week_at_renewal.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ConDelHrsWeekAtRenewal", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.con_del_hrs_week_at_renewal.EditMask = "##.00";
-            this.con_del_hrs_week_at_renewal.Mask = "##.00";
+            //this.con_del_hrs_week_at_renewal.EditMask = "99.00";
             this.con_del_hrs_week_at_renewal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.con_del_hrs_week_at_renewal.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.con_del_hrs_week_at_renewal.Location = new System.Drawing.Point(99, 122);
+            //this.con_del_hrs_week_at_renewal.Mask = "##.00";
             this.con_del_hrs_week_at_renewal.Name = "con_del_hrs_week_at_renewal";
             this.con_del_hrs_week_at_renewal.PromptChar = ' ';
             this.con_del_hrs_week_at_renewal.Size = new System.Drawing.Size(61, 20);
             this.con_del_hrs_week_at_renewal.TabIndex = 183;
+            //this.con_del_hrs_week_at_renewal.Text = "";
             this.con_del_hrs_week_at_renewal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.con_del_hrs_week_at_renewal.Value = "";
             // 
@@ -873,8 +866,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             if (this.con_rg_code_at_renewal_t2.Visible)
                 this.con_rg_code_at_renewal_t2.Text = this.con_rg_code_at_renewal.Text;
         }
-
-
 
         void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
         {
@@ -964,8 +955,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                     this.con_rg_code_at_renewal.Enabled = true;
                 }
             }
-
-        }
+       }
 
         #endregion
 
@@ -1028,9 +1018,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private NumericalMaskedTextBox con_renewal_payment_value;
         private NumericalMaskedTextBox con_volume_at_renewal;
         private NumericalMaskedTextBox con_del_hrs_week_at_renewal;
+        private MaskedTextBox maskedTextBox1;
     }
 }
-
-
-
-

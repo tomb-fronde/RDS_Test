@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
+    <Compile Include="Ruraldw\EclDataImport.cs" />
+    <Compile Include="Ruraldw\EclDataImportErrors.cs" />
+    <Compile Include="Ruraldw\EclDataImportExeptionReport.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustomerDownloadSearch.cs" />
     <Compile Include="Ruralmailmerge\MailmergeDownloadSearchResults.cs" />
@@ -345,6 +348,7 @@
     <Compile Include="ruralwin\ContractAllowancesV2.cs" />
     <Compile Include="ruralwin\ContractMailtown.cs" />
     <Compile Include="ruralwin\ContractTown.cs" />
+    <Compile Include="ruralwin\DddwCustTitle1.cs" />
     <Compile Include="ruralwin\DddwContractMailtown.cs" />
     <Compile Include="ruralwin\DddwContractRd.cs" />
     <Compile Include="ruralwin\DddwCustTitle.cs" />

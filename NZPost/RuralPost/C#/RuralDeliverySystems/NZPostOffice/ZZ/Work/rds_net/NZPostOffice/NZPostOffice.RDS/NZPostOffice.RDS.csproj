@@ -15,6 +15,25 @@
     </SccAuxPath>
     <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
     <ApplicationIcon>RDSYSTAB.ICO</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>63D946DBFD5B61D04B6BE31BA305599270C05EEA</ManifestCertificateThumbprint>
+    <ManifestKeyFile>NZPostOffice.RDS_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <TargetZone>LocalIntranet</TargetZone>
+    <SignManifests>true</SignManifests>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
+    <ApplicationVersion>7.1.2.%2a</ApplicationVersion>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +54,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Framework, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Enterprise.InfoStore, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
     <Reference Include="CrystalDecisions.ReportSource, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Shared, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Windows.Forms, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -51,6 +72,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\WINDOWS\assembly\GAC_MSIL\System.Web.Services\2.0.0.0__b03f5f7f11d50a3a\System.Web.Services.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -103,21 +128,77 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WEclExceptionReportTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WEclExceptionReportTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralbase\WSystemAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WSystemAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralrpt\WMailCountSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WMailCountSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralrpt\WMailingListSearch.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WMailingListSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralrpt\WPieceRateSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WPieceRateSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WContractRate2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WContractRate2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WECLDataImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WECLDataImport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WRenewal2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WRenewal2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WRenewalProcess2006.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WRenewalProcess2006.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WWhatifCalc2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WWhatifCalc2001.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\UTabAddressSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UTabAddressSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WAddArticleCounts.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddArticleCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddressSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddressSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddressSearchSelect.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddressSearchSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WContract2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WContract2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WContractSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WContractSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WCustomer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WMainMdi.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WMainMdi.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -135,6 +216,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="ClassDiagramRDS.cd" />
+    <None Include="NZPostOffice.RDS_TemporaryKey.pfx" />
+    <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -143,6 +226,24 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WEclDataImportExceptionReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WEclDataImportExceptionReport.Designer.cs">
+      <DependentUpon>WEclDataImportExceptionReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WEclExceptionReportTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WEclExceptionReportTest.Designer.cs">
+      <DependentUpon>WEclExceptionReportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WECLDataImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Struct\StPrintPreview.cs" />
     <Compile Include="Windows\Struct\StSearch.cs" />
@@ -590,9 +691,6 @@
     <Compile Include="Windows\Ruralwin2\WSelectEffectiveDate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Windows\Ruralwin2\WRouteAudit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -621,10 +719,10 @@
     <Compile Include="Windows\Ruralwin\WContractorSearch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralwin\WContractRate2001.cs">
+    <Compile Include="Windows\Ruralwin2\WContractRate2001.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralwin\WContractRate2001.Designer.cs">
+    <Compile Include="Windows\Ruralwin2\WContractRate2001.Designer.cs">
       <DependentUpon>WContractRate2001.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\Ruralwin\WContractSearch.cs">
@@ -798,6 +896,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RDSYSTAB.ICO" />
+    <None Include="Resources\star1d.ico" />
+    <None Include="Resources\star1c.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
