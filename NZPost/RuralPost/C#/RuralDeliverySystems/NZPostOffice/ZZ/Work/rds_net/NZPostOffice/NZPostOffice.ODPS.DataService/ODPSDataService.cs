@@ -161,7 +161,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// insert into odps.t_shell_import ( contract_no,contractor,total_deduction) values ( :ls_contract_no,:ls_contractor,:dc_total_deduction)
+        /// insert into odps.t_shell_import (contract_no,contractor,total_deduction) values (:ls_contract_no,:ls_contractor,:dc_total_deduction)
         /// </summary>
         public static ODPSDataService InsertTShellImport(string ls_contract_no, string ls_contractor, Decimal? dc_total_deduction)
         {
@@ -170,7 +170,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count ( distinct ( contract_no)), sum ( total_deduction) into :ls_total_contracts, :ls_import_total from odps.t_shell_import
+        /// select count(distinct(contract_no)), sum(total_deduction) into :ls_total_contracts, :ls_import_total from odps.t_shell_import
         /// </summary>
         public static ODPSDataService SelectTShellImport()
         {
@@ -197,7 +197,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select odps.OD_RPF_Invoice_pay_piecerate_detail ( :alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey ) into :lreturn from sys.dummy
+        /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey) into :lreturn from sys.dummy
         /// </summary>
         public static ODPSDataService GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey)
         {
@@ -206,7 +206,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count ( *) into :li_exists from rd.contractor_renewals where contractor_supplier_no = :ll_supplier and contract_no = :ll_contract
+        /// select count(*) into :li_exists from rd.contractor_renewals where contractor_supplier_no = :ll_supplier and contract_no = :ll_contract
         /// </summary>
         public static ODPSDataService SelectCountContractorRenewals(int ll_supplier, int ll_contract)
         {
@@ -215,7 +215,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT string ( today ( )) INTO :ls_today FROM dummy
+        /// SELECT string(today()) INTO :ls_today FROM dummy
         /// </summary>
         public static ODPSDataService SelectDateDummy()
         {
@@ -224,7 +224,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// INSERT INTO odps.post_tax_deductions (  ded_id,ded_description,ded_priority,...
+        /// INSERT INTO odps.post_tax_deductions (ded_id,ded_description,ded_priority,...
         /// </summary>
         public static ODPSDataService InsertPostTaxDeductions(string ls_today)
         {
@@ -233,7 +233,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT count ( *), sum ( ded_fixed_amount) INTO :li_imported, :dc_hashtotal FROM odps.post_tax_deductions WHERE ded_reference like :ls_select
+        /// SELECT count(*), sum(ded_fixed_amount) INTO :li_imported, :dc_hashtotal FROM odps.post_tax_deductions WHERE ded_reference like :ls_select
         /// </summary>
         public static ODPSDataService SelectPostTaxDeductions(string ls_select)
         {
@@ -242,7 +242,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count ( *) into :ll_import from odps.post_tax_deductions where ded_description like :ls_temp
+        /// select count(*) into :ll_import from odps.post_tax_deductions where ded_description like :ls_temp
         /// </summary>
         public static ODPSDataService SelectPostTaxDeductions2(string ls_temp)
         {
@@ -290,7 +290,8 @@ namespace NZPostOffice.ODPS.DataService
 
 
         /// <summary>
-        /// insert into odps.t_telecom_import ( 	bill_month,		 bill_cycle,		 customer_no, account_no,		 account_name, 	 open_bal, payments,		 adj_tran,			 bal_bf, curr_chg,		 total_due,			 supplier_no, contract_no ) values  ( 	:ls_bill_month, :li_bill_cycle,   :ll_customer_no, :ll_account_no, :ls_account_name, :dc_open_bal, :dc_payments,   :dc_adj_tran, 	 :dc_bal_bf, :dc_curr_chg,	 :dc_total_due,	 :il_supplier,:il_contract )
+        /// insert into odps.t_telecom_import (bill_month, bill_cycle, customer_no, account_no, account_name, open_bal, payments, adj_tran, bal_bf, curr_chg, total_due, supplier_no, contract_no) 
+        /// values (:ls_bill_month, :li_bill_cycle, :ll_customer_no, :ll_account_no, :ls_account_name, :dc_open_bal, :dc_payments, :dc_adj_tran, :dc_bal_bf, :dc_curr_chg, :dc_total_due, :il_supplier, :il_contract)
         /// </summary>
         public static ODPSDataService InsertTelecomImport(
             string ls_bill_month, 
@@ -325,7 +326,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count ( *), sum ( curr_chg) into :ll_rowcount, :dc_hashtotal from odps.t_telecom_import
+        /// select count(*), sum(curr_chg) into :ll_rowcount, :dc_hashtotal from odps.t_telecom_import
         /// </summary>
         public static ODPSDataService SelectTelecomImport()
         {
@@ -376,7 +377,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count ( *) into :li_contract_types from rd.contract_type
+        /// select count(*) into :li_contract_types from rd.contract_type
         /// </summary>
         public static ODPSDataService SelectContractType()
         {
@@ -394,7 +395,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT	ui_id INTO		:ll_ui_id FROM		rd.rds_user_id WHERE		ui_userid = :ls_ui_userid
+        /// SELECT	ui_id0 INTO	:ll_ui_id FROM rd.rds_user_id WHERE ui_userid = :ls_ui_userid
         /// </summary>
         public static ODPSDataService SelectRdsUserId(String ui_userid)
         {
@@ -403,7 +404,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT	up_password INTO	:OldPass FROM	rd.used_password WHERE	ui_id = :ll_ui_id AND	up_password = :sNewPassword
+        /// SELECT	up_password INTO :OldPass FROM rd.used_password WHERE ui_id = :ll_ui_id AND	up_password = :sNewPassword
         /// </summary>
         public static ODPSDataService SelectUsedPassword(Int32 ui_id, String up_password)
         {
@@ -412,7 +413,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// UPDATE	rd.rds_user_id SET		ui_password = :sNewPassword,ui_password_expiry = :dExpiry,ui_grace_logins = 4 WHERE		ui_userid = :ls_ui_userid
+        /// UPDATE	rd.rds_user_id SET ui_password = :sNewPassword,ui_password_expiry = :dExpiry,ui_grace_logins = 4 WHERE		ui_userid = :ls_ui_userid
         /// </summary>
         public static ODPSDataService UpdateRdsUserId(String ui_password, DateTime ui_password_expiry, String ui_userid)
         {
@@ -421,7 +422,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// INSERT INTO	rd.used_password ( ui_id,up_password) VALUES ( :ll_ui_id,:sOldPassword)
+        /// INSERT INTO	rd.used_password (ui_id,up_password) VALUES (:ll_ui_id,:sOldPassword)
         /// </summary>
         public static ODPSDataService InserIntoUsedPassword(Int32 ui_id, String up_password)
         {
@@ -526,8 +527,8 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into rd.used_password ( up_code,up_password) " +
-                        " values ( :u_usercode,:sOldPassword) ";
+                    cm.CommandText = "insert into rd.used_password (up_code,up_password) " +
+                        " values (:u_usercode,:sOldPassword) ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "u_usercode", up_code);
                     pList.Add(cm, "sOldPassword", up_password);
@@ -582,11 +583,11 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into odps.t_shell_import ( " +
+                    cm.CommandText = "insert into odps.t_shell_import (" +
                         " contract_no, " +
                         " contractor, " +
-                        " total_deduction ) " +
-                        " values ( " +
+                        " total_deduction) " +
+                        " values (" +
                         " :ls_contract_no, " +
                         " :ls_contractor, " +
                         " :dc_total_deduction)";
@@ -623,7 +624,6 @@ namespace NZPostOffice.ODPS.DataService
                     cm.CommandType = CommandType.Text;
                     cm.CommandText = "select count(distinct(contract_no)), sum(total_deduction) " +
                         " from odps.t_shell_import";
-
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, null))
@@ -658,53 +658,54 @@ namespace NZPostOffice.ODPS.DataService
                 {
                     string cmdText =
                     " INSERT INTO odps.post_tax_deductions  " +
-                    "  (  " +
-                    " ded_description," +
-                    " ded_priority,   " +
-                    " pct_id,   " +
-                    " ded_reference,   " +
-                    " ded_type_period,   " +
-                    " ded_percent_gross,   " +
-                    " ded_percent_net,   " +
-                    " ded_percent_start_balance,   " +
-                    " ded_fixed_amount,   " +
-                    " ded_min_threshold_gross,   " +
-                    " ded_max_threshold_net_pct,   " +
-                    " ded_default_minimum,   " +
-                    " ded_start_balance,   " +
-                    " ded_end_balance,   " +
-                    " contractor_supplier_no,   " +
-                    " ded_pay_highest_value )" +
+                    " (" +
+                       " ded_description," +
+                       " ded_priority," +
+                       " pct_id," +
+                       " ded_reference," +
+                       " ded_type_period," +
+                       " ded_percent_gross," +
+                       " ded_percent_net," +
+                       " ded_percent_start_balance," +
+                       " ded_fixed_amount," +
+                       " ded_min_threshold_gross," +
+                       " ded_max_threshold_net_pct," +
+                       " ded_default_minimum," +
+                       " ded_start_balance," +
+                       " ded_end_balance," +
+                       " contractor_supplier_no," +
+                       " ded_pay_highest_value)" +
                     " select " +
-                    " 'Shell Deduction Month' + ' ' + convert (varchar,Month ( getdate()-30))," +
-                    " 1,   				" +
-                    " 6,    				" +
-                    " 'Shell Deductions imported on ' + convert (varchar(10), getdate ( ), 20)," +//! need format: yyyy-mm-dd
-                    " 'M',   " +
-                    " null, " +
-                    " null, " +
-                    " null, " +
-                    " sum ( total_deduction),null,    	" +
-                    " null,      	" +
-                    " sum ( total_deduction), " +
-                    " sum ( total_deduction), " +
-                    " sum ( total_deduction)," +
-                    "  (  SELECT rd.contractor_renewals.contractor_supplier_no  " +
-                    " FROM rd.contract,   " +
-                    " rd.contract_renewals, " +
-                    " rd.contractor_renewals  " +
-                    " WHERE rd.contract_renewals.contract_no = rd.contract.contract_no and  " +
-                    " rd.contract.con_active_sequence = rd.contract_renewals.contract_seq_number  and  " +
-                    " rd.contractor_renewals.contract_no = rd.contract_renewals.contract_no  and  " +
-                    " rd.contractor_renewals.contract_seq_number = rd.contract_renewals.contract_seq_number  and  " +
-                    " rd.contractor_renewals.cr_effective_date = " +
-                    "  ( select max ( cr_effective_date) " +
-                    " from   rd.contractor_renewals cr " +
-                    " where  cr.contract_no         = contract_renewals.contract_no " +
-                    " and    cr.contract_seq_number = contract_renewals.contract_seq_number " +
-                    " and    cr_effective_date      <= getdate ( ) ) " +
-                    " and contract.contract_no = t_shell_import.contract_no) as contractor," +
-                    " 0" +
+                       " 'Shell Deduction Month' + ' ' + convert (varchar,Month(getdate()-30))," +
+                       " 1," +
+                       " 6," +
+                       " 'Shell Deductions imported on ' + convert(varchar(10), getdate(), 20)," +//! need format: yyyy-mm-dd
+                       " 'M'," +
+                       " null," +
+                       " null," +
+                       " null," +
+                       " sum(total_deduction), " +
+                       " null," +
+                       " null," +
+                       " sum(total_deduction)," +
+                       " sum(total_deduction)," +
+                       " sum(total_deduction)," +
+                       " (SELECT rd.contractor_renewals.contractor_supplier_no" +
+                          " FROM rd.contract," +
+                               " rd.contract_renewals," +
+                               " rd.contractor_renewals " +
+                         " WHERE rd.contract_renewals.contract_no = rd.contract.contract_no and" +
+                               " rd.contract.con_active_sequence = rd.contract_renewals.contract_seq_number and" +
+                               " rd.contractor_renewals.contract_no = rd.contract_renewals.contract_no and" +
+                               " rd.contractor_renewals.contract_seq_number = rd.contract_renewals.contract_seq_number and" +
+                               " rd.contractor_renewals.cr_effective_date =" +
+                                      " (select max(cr_effective_date)" +
+                                         " from rd.contractor_renewals cr" +
+                                        " where cr.contract_no = contract_renewals.contract_no" +
+                                          " and cr.contract_seq_number = contract_renewals.contract_seq_number" +
+                                          " and cr_effective_date <= getdate()) and" +
+                               " rd.contract.contract_no = t_shell_import.contract_no) as contractor," +
+                       " 0" +
                     " from odps.t_shell_import" +
                     " group by contract_no, contractor";
 
@@ -889,41 +890,41 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     string sql = " INSERT INTO odps.post_tax_deductions "
-                                    + "  (ded_description,"
-                                    + " ded_priority,   "
-                                    + " pct_id,   "
-                                    + " ded_reference,   "
-                                    + " ded_type_period,  "
-                                    + " ded_percent_gross, "
-                                    + " ded_percent_net,   "
-                                    + " ded_percent_start_balance,   "
-                                    + " ded_fixed_amount,   "
-                                    + " ded_min_threshold_gross,   "
-                                    + " ded_max_threshold_net_pct,  "
-                                    + " ded_default_minimum,   "
-                                    + " ded_start_balance,   "
-                                    + " ded_end_balance,   "
-                                    + " contractor_supplier_no,   "
-                                    + " ded_pay_highest_value )"
-                                    + "  SELECT"
+                                    + "(ded_description,"
+                                    + " ded_priority,"
+                                    + " pct_id,"
+                                    + " ded_reference,"
+                                    + " ded_type_period,"
+                                    + " ded_percent_gross,"
+                                    + " ded_percent_net,"
+                                    + " ded_percent_start_balance,"
+                                    + " ded_fixed_amount,"
+                                    + " ded_min_threshold_gross,"
+                                    + " ded_max_threshold_net_pct,"
+                                    + " ded_default_minimum,"
+                                    + " ded_start_balance,"
+                                    + " ded_end_balance,"
+                                    + " contractor_supplier_no,"
+                                    + " ded_pay_highest_value)"
+                               + " SELECT"
                                     + " 'Telecom Deduction Month '+bill_month,"
-                                    + " 1,   				"
-                                    + " 6,    				"
+                                    + " 1,"
+                                    + " 6,"
                                     + " 'Telecom Deduction Contract '+cast(contract_no as varchar)+' imported on '+:ls_today,"
-                                    + " 'M',   "
-                                    + " null, "
-                                    + " null, "
-                                    + " null, "
-                                    + " sum ( curr_chg),"
-                                    + " null,    	"
-                                    + " null,      	"
-                                    + " sum ( curr_chg), "
-                                    + " sum ( curr_chg), "
-                                    + " sum ( curr_chg),"
+                                    + " 'M',"
+                                    + " null,"
+                                    + " null,"
+                                    + " null,"
+                                    + " sum(curr_chg),"
+                                    + " null,"
+                                    + " null,"
+                                    + " sum(curr_chg),"
+                                    + " sum(curr_chg),"
+                                    + " sum(curr_chg),"
                                     + " supplier_no,"
                                     + " 0"
-                                    + " FROM odps.t_telecom_import"
-                                    + " GROUP BY bill_month, contract_no, supplier_no";
+                               + " FROM odps.t_telecom_import"
+                               + " GROUP BY bill_month, contract_no, supplier_no";
 
                     cm.CommandType = CommandType.Text;
                     cm.CommandText = sql;
@@ -956,7 +957,7 @@ namespace NZPostOffice.ODPS.DataService
                     postTaxDeductions = new PostTaxDeductions();
 
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = " SELECT count ( *), sum(ded_fixed_amount)  " +
+                    cm.CommandText = " SELECT count(*), sum(ded_fixed_amount)" +
                         " FROM odps.post_tax_deductions " +
                         " WHERE ded_reference like :ls_select";
 
@@ -1144,7 +1145,7 @@ namespace NZPostOffice.ODPS.DataService
 
                     cm.CommandType = CommandType.Text;
                   //?  cm.CommandText = "select count( distinct(contract_no)), sum(total_deduction) from odps.t_shell_import";
-                    cm.CommandText = "select count (*), sum ( curr_chg) from odps.t_telecom_import";
+                    cm.CommandText = "select count(*), sum(curr_chg) from odps.t_telecom_import";
 
                     try
                     {
@@ -1385,7 +1386,7 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = " DELETE FROM t_posttax_deductions_not_applied";
+                    cm.CommandText = " DELETE FROM odps.t_posttax_deductions_not_applied";
 
                     try
                     {
@@ -1675,7 +1676,7 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "INSERT INTO rd.used_password ( ui_id,up_password) VALUES ( @ll_ui_id,@sOldPassword)";
+                    cm.CommandText = "INSERT INTO rd.used_password (ui_id,up_password) VALUES (@ll_ui_id,@sOldPassword)";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_ui_id", ui_id);
