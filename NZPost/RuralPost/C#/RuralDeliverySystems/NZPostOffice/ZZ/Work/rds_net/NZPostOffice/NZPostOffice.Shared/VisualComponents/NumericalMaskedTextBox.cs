@@ -264,6 +264,11 @@ namespace NZPostOffice.Shared.VisualComponents
             get
             {
                 bool isShow = true;
+                //if (decimalIndex > 0 && decimalIndex == this.Mask.Length)
+                //{
+                //    isShow = false;
+                //}
+                //else 
                 if (decimalIndex > 0 && this.Mask.Substring(decimalIndex).IndexOf('#') > 0)
                 {
                     isShow = false;
@@ -277,7 +282,9 @@ namespace NZPostOffice.Shared.VisualComponents
             if (this.MaskedTextProvider != null)
             {
                 current = this.MaskedTextProvider.ToString(false, false);
-                if (!IsShowZeroAfterDecimal)
+                //if (!IsShowZeroAfterDecimal)
+                bool showZeroAfterDecimal = IsShowZeroAfterDecimal;
+                if (!showZeroAfterDecimal && val != null)
                 {
                     int tempIndex = this.val.IndexOf('.');
                     if (tempIndex > 0 || this.val.StartsWith("."))
