@@ -154,13 +154,46 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         //jlwang:
         private void WPaymentRunSearch_KeyPress1(object sender, KeyPressEventArgs e)
         {
-            if (((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart == 4)
+            // TJB  RD7_0041 Feb-2010: Removed
+            //    Don't know what this was supposed to do, but it stuffed up entry of the end date royally.
+            //    I suspect the "substring(3)" should have been "substring(2)".
+            //if (((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart == 4)
+            //{
+            //    //string str = ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text;
+            //    str = ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text;
+            //    //((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text = "20" + str.Substring(3);
+            //    ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart = 4;
+            //}
+
+            // TJB  RD7_0041 Feb-2010: Added
+            //    Check the day and month for valid values.  Warn the user if they're wrong
+            //    and substitute appropriate vaulus.  Note: the year isn't checked here,
+            //    but the date is checked for appropriatness elsewhere.
+            int this_selectionstart = ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart;
+            string str = ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text;
+            string mth = str.Substring(3, 2);
+            int month = Int32.Parse(mth);
+            if (month < 1 || month > 12)
             {
-                string str = ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text;
-                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text = "20" + str.Substring(3);
-                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart = 4;
+                MessageBox.Show("Invalid month; please enter the end date in dd/mm/yyyy format.",
+                                 "Warning");
+                if (month < 1) mth = "01";
+                if (month > 12) mth = "12";
+                str = str.Substring(0, 3) + mth + str.Substring(5);
+                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text = str;
+                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart = 3;
+            }
+            string day = str.Substring(0, 2);
+            int dayno = Int32.Parse(day);
+            if (dayno != 20)
+            {
+                MessageBox.Show("Invalid day; the end date must be the 20th of the month.",
+                                 "Warning");
+                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).Text = "20" + str.Substring(2);
+                ((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart = 3;
             }
 
+            // If we're at the end of the date, treat as a tab.
             if (((DateTimeMaskedTextBox)this.dw_search.GetControlByName("end_date")).SelectionStart == 10)
             {
                 this.ProcessDialogKey(Keys.Tab);
