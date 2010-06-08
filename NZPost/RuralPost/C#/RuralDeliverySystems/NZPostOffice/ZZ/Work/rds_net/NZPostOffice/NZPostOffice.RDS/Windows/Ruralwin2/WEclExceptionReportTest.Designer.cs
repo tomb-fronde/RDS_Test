@@ -29,14 +29,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private void InitializeComponent()
         {
             this.cb_cancel = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.st_label = new System.Windows.Forms.Label();
             this.crystalReportViewer1 = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
             this.rEclDataImportExeptionTest1 = new NZPostOffice.RDS.DataControls.Report.REclDataImportExeptionTest();
             this.SuspendLayout();
             // 
             // cb_cancel
             // 
-            this.cb_cancel.Location = new System.Drawing.Point(541, 234);
+            this.cb_cancel.Location = new System.Drawing.Point(741, 297);
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(75, 23);
             this.cb_cancel.TabIndex = 1;
@@ -44,44 +44,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel.UseVisualStyleBackColor = true;
             this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_Click);
             // 
-            // label2
+            // st_label
             // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label2.Location = new System.Drawing.Point(12, 244);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(133, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "WEclExceptionReportTest";
+            this.st_label.AutoSize = true;
+            this.st_label.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.st_label.Location = new System.Drawing.Point(12, 302);
+            this.st_label.Name = "st_label";
+            this.st_label.Size = new System.Drawing.Size(133, 13);
+            this.st_label.TabIndex = 0;
+            this.st_label.Text = "WEclExceptionReportTest";
             // 
             // crystalReportViewer1
             // 
-            this.crystalReportViewer1.ActiveViewIndex = 0;
+            this.crystalReportViewer1.ActiveViewIndex = -1;
             this.crystalReportViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.crystalReportViewer1.DisplayGroupTree = false;
             this.crystalReportViewer1.Location = new System.Drawing.Point(15, 12);
             this.crystalReportViewer1.Name = "crystalReportViewer1";
-            this.crystalReportViewer1.ReportSource = this.rEclDataImportExeptionTest1;
-            this.crystalReportViewer1.Size = new System.Drawing.Size(601, 216);
+            this.crystalReportViewer1.SelectionFormula = "";
+            this.crystalReportViewer1.Size = new System.Drawing.Size(801, 279);
             this.crystalReportViewer1.TabIndex = 3;
-            // 
-            // rEclDataImportExeptionTest1
-            // 
-            this.rEclDataImportExeptionTest1.FileName = "rassdk://C:\\Documents and Settings\\brittont.SYNERGYINT\\Local Settings\\Temp\\temp_d" +
-                "ac97ebd-ceb5-4c47-b247-b1b592a000a2.rpt";
+            this.crystalReportViewer1.ViewTimeSelectionFormula = "";
             // 
             // WEclExceptionReportTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 266);
+            this.ClientSize = new System.Drawing.Size(828, 326);
             this.Controls.Add(this.crystalReportViewer1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.st_label);
             this.Controls.Add(this.cb_cancel);
             this.Name = "WEclExceptionReportTest";
             this.Text = "WEclExceptionReportTest";
             this.Controls.SetChildIndex(this.cb_cancel, 0);
-            this.Controls.SetChildIndex(this.label2, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
             this.Controls.SetChildIndex(this.crystalReportViewer1, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -91,7 +87,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #endregion
 
         private System.Windows.Forms.Button cb_cancel;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label st_label;
         private CrystalDecisions.Windows.Forms.CrystalReportViewer crystalReportViewer1;
         private NZPostOffice.RDS.DataControls.Report.REclDataImportExeptionTest rEclDataImportExeptionTest1;
     }

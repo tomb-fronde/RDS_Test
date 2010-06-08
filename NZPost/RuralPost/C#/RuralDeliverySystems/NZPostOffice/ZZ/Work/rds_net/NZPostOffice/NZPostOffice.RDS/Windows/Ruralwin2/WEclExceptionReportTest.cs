@@ -12,27 +12,89 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public partial class WEclExceptionReportTest : WMaster
     {
+        private WEclDataImport lw_parent;
+        private string sBatchNo;
+
         public WEclExceptionReportTest()
         {
             InitializeComponent();
-            wf_open();
+            lw_parent = (WEclDataImport)StaticMessage.PowerObjectParm;
+            sBatchNo = StaticMessage.StringParm;
+            showreport();
         }
 
-        public void wf_open()
+        private System.Data.DataSet EclErrDataset;
+        private System.Data.DataTable EclErrDatatable;
+        //        public List<EclImportError> ecl_import_error_list;
+
+        private bool cr_error_datatable(string pBatchNo)
         {
-            string ls_msg;
-            base.open();
-            WEclDataImport lw_parent = (WEclDataImport)StaticMessage.PowerObjectParm;
-            int n = lw_parent.ecl_import_error_list.Count;
-            ls_msg = "Ticket No              Part   Error";
-            for (int i = 0; i < n; i++ )
+            int nRows;
+            string sTicketNo   = "";
+            string sTicketPart = "";
+            string sBatchId    = "";
+            string sErrorValue = "";
+            string sErrorText = "";
+            System.Data.DataRow r;
+
+            EclErrDatatable = new DataTable("EclErrorList");
+            
+            try
             {
-                ls_msg = ls_msg + "\n"
-                         + lw_parent.ecl_import_error_list[i].EclTicketNo + "  "
-                         + lw_parent.ecl_import_error_list[i].EclTicketPart  + "    "
-                         + lw_parent.ecl_import_error_list[i].ErrorMsgText;
+                EclErrDatatable.Columns.Add("EclBatchNo", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclTicketNo", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclTicketPart", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclBatchId", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclErrorValue", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclErrorText", Type.GetType("System.String"));
+
+                nRows = lw_parent.ecl_import_error_list.Count;
+                for (int i = 0; i < nRows; i++)
+                {
+                    sTicketNo = lw_parent.ecl_import_error_list[i].EclTicketNo;
+                    sTicketPart = lw_parent.ecl_import_error_list[i].EclTicketPart;
+                    sBatchId = lw_parent.ecl_import_error_list[i].EclBatchId;
+                    sErrorValue = lw_parent.ecl_import_error_list[i].ErrorValue;
+                    sErrorText = lw_parent.ecl_import_error_list[i].ErrorMsgText;
+
+                    r = EclErrDatatable.NewRow();
+                    r["EclBatchNo"] = pBatchNo;
+                    r["EclTicketNo"] = sTicketNo;
+                    r["EclTicketPart"] = sTicketPart;
+                    r["EclBatchId"] = sBatchId;
+                    r["EclErrorValue"] = sErrorValue;
+                    r["EclErrorText"] = sErrorText;
+                    EclErrDatatable.Rows.Add(r);
+                }
             }
-            MessageBox.Show(ls_msg,"ECL Data Import Exception Report");
+
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void showreport()
+        {
+            int nRows = 0;
+            string sTopLine = "---------------------------------------\n\n";
+            string sBottomLine = "\n\n---------------------------------------";
+
+            if (!cr_error_datatable(sBatchNo))
+            {
+                MessageBox.Show(sTopLine + "Oops\n" + sBottomLine
+                                , "ECL Data Import");
+            }
+            EclErrDataset = new DataSet();
+            EclErrDataset.Tables.Add(EclErrDatatable);
+
+            nRows = EclErrDataset.Tables.Count;
+            nRows = EclErrDatatable.Rows.Count;
+
+            this.rEclDataImportExeptionTest1.SetDataSource(EclErrDataset.Tables[0]);
+            this.crystalReportViewer1.ReportSource = this.rEclDataImportExeptionTest1;
+            this.crystalReportViewer1.Refresh();
         }
 
         private void cb_cancel_Click(object sender, EventArgs e)
