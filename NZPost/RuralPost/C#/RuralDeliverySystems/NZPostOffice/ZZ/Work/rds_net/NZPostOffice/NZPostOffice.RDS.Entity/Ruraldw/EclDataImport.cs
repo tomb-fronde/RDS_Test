@@ -10,9 +10,12 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB ECL Data Import  June 2010:  New
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
+
     [MapInfo("ecl_batch_no", "_ecl_batch_no", "ECL_upload_data")]
     [MapInfo("ecl_ticket_no", "_ecl_ticket_no", "ECL_upload_data")]
     [MapInfo("ecl_ticket_part", "_ecl_ticket_part", "ECL_upload_data")]
@@ -35,12 +38,14 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("ecl_sig_captured", "_ecl_sig_captured", "ECL_upload_data")]
     [MapInfo("ecl_sig_name", "_ecl_sig_name", "ECL_upload_data")]
     [MapInfo("ecl_pr_code", "_ecl_pr_code", "ECL_upload_data")]
+    [MapInfo("ecl_ro5_flag", "_ecl_ro5_flag", "ECL_upload_data")]
+    [MapInfo("ecl_effective_date", "_ecl_effective_date", "ECL_upload_data")]
     [MapInfoIndex(new string[] { "ecl_batch_no",      "ecl_ticket_no",   "ecl_ticket_part",  "ecl_customer_name", 
                                  "ecl_customer_code", "ecl_seq",         "ecl_driver_id",    "ecl_rate_code", 
                                  "ecl_rate_descr",    "ecl_pkg_descr",   "ecl_batch_id",     "ecl_run_id", 
                                  "ecl_run_no",        "ecl_driver_date", "ecl_date_entered", "ecl_ticket_payable", 
                                  "ecl_rural_payable", "ecl_scan_count",  "ecl_sig_req_flag", "ecl_sig_captured", 
-                                 "ecl_sig_name",      "ecl_pr_code" })]
+                                 "ecl_sig_name",      "ecl_pr_code",     "ecl_ro5_flag",     "ecl_effective_date" })]
     [System.Serializable()]
 
     public class EclDataImport : Entity<EclDataImport>
@@ -86,16 +91,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string  _ecl_customer_name;
 
         [DBField()]
-        private int?    _ecl_customer_code;
+        private string  _ecl_customer_code;
 
         [DBField()]
-        private int?    _ecl_seq;
+        private string  _ecl_seq;
 
         [DBField()]
-        private int?    _ecl_driver_id;
+        private string  _ecl_driver_id;
 
         [DBField()]
-        private int?    _ecl_rate_code;
+        private string  _ecl_rate_code;
 
         [DBField()]
         private string  _ecl_rate_descr;
@@ -104,10 +109,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string  _ecl_pkg_descr;
 
         [DBField()]
-        private int?    _ecl_batch_id;
+        private string  _ecl_batch_id;
 
         [DBField()]
-        private int?    _ecl_run_id;
+        private string  _ecl_run_id;
 
         [DBField()]
         private string  _ecl_run_no;
@@ -116,7 +121,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private DateTime?  _ecl_driver_date;
 
         [DBField()]
-        private DateTime?  _ecl_date_entered;
+        private string  _ecl_date_entered;
 
         [DBField()]
         private string  _ecl_ticket_payable;
@@ -125,7 +130,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string  _ecl_rural_payable;
 
         [DBField()]
-        private int?    _ecl_scan_count;
+        private string  _ecl_scan_count;
 
         [DBField()]
         private string  _ecl_sig_req_flag;
@@ -137,7 +142,13 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string  _ecl_sig_name;
 
         [DBField()]
-        private string  _ecl_pr_code;
+        private string _ecl_pr_code;
+
+        [DBField()]
+        private string _ecl_ro5_flag;
+
+        [DBField()]
+        private DateTime? _ecl_effective_date;
 
 
         public virtual int EclBatchNo
@@ -212,7 +223,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclCustomerCode
+        public virtual string EclCustomerCode
         {
             get
             {
@@ -230,7 +241,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclSeq
+        public virtual string EclSeq
         {
             get
             {
@@ -248,7 +259,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclDriverId
+        public virtual string EclDriverId
         {
             get
             {
@@ -266,7 +277,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclRateCode
+        public virtual string EclRateCode
         {
             get
             {
@@ -320,7 +331,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclBatchId
+        public virtual string EclBatchId
         {
             get
             {
@@ -338,7 +349,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclRunID
+        public virtual string EclRunID
         {
             get
             {
@@ -392,7 +403,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual DateTime? EclDateEntered
+        public virtual string EclDateEntered
         {
             get
             {
@@ -446,7 +457,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? EclScanCount
+        public virtual string EclScanCount
         {
             get
             {
@@ -536,6 +547,42 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual string EclRo5Flag
+        {
+            get
+            {
+                CanReadProperty("EclRo5Flag", true);
+                return _ecl_ro5_flag;
+            }
+            set
+            {
+                CanWriteProperty("EclRo5Flag", true);
+                if (_ecl_ro5_flag != value)
+                {
+                    _ecl_ro5_flag = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? EclEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("EclEffectiveDate", true);
+                return _ecl_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("EclEffectiveDate", true);
+                if (_ecl_effective_date != value)
+                {
+                    _ecl_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
 		{
 			return string.Format( "{0}/{1}/{2}", _ecl_batch_no, _ecl_ticket_no, _ecl_ticket_part );
@@ -561,6 +608,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void InsertEntity()
         {
+            _sqlcode = 0;
+            _sqlerrtext = "";
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
@@ -574,6 +624,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     }
                     catch (Exception e)
                     {
+                        _sqlcode = -1;
                         _sqlerrtext = e.Message;
                     }
                 }
@@ -581,7 +632,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 MarkClean();
             }
         }
-/*
+/*  These are sample code!
         [ServerMethod]
         private void FetchEntity(  )
         {
@@ -675,15 +726,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         }
 */
         #endregion
-/*
-        [ServerMethod()]
-        private void CreateEntity( DateTime? prd_date, int? prt_key, int? contract_no )
-        {
-            _prd_date = prd_date;
-            _prt_key = prt_key;
-            _contract_no = contract_no;
-        }
-*/
+
         [ServerMethod()]
         private void CreateEntity(int ecl_batch_no, string ecl_ticket_no, string ecl_ticket_part)
         {
