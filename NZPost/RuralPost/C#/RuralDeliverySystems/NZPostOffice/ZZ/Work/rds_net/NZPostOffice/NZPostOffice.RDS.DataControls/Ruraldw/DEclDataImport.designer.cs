@@ -66,6 +66,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ecl_sig_captured = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ecl_sig_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ecl_pr_code = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ecl_ro5_flag = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -115,7 +116,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ecl_sig_req_flag,
             this.ecl_sig_captured,
             this.ecl_sig_name,
-            this.ecl_pr_code});
+            this.ecl_pr_code,
+            this.ecl_ro5_flag});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -397,6 +399,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ecl_pr_code.ReadOnly = true;
             this.ecl_pr_code.Width = 64;
             // 
+            // ecl_ro5_flag
+            // 
+            this.ecl_ro5_flag.DataPropertyName = "EclRo5Flag";
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle22.ForeColor = System.Drawing.Color.Black;
+            this.ecl_ro5_flag.DefaultCellStyle = dataGridViewCellStyle22;
+            this.ecl_ro5_flag.HeaderText = "RO5 Flag";
+            this.ecl_ro5_flag.Name = "ecl_ro5_flag";
+            this.ecl_ro5_flag.ReadOnly = true;
+            this.ecl_ro5_flag.Width = 64;
+            // 
             // DEclDataImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -471,11 +486,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.DataGridViewTextBoxColumn ecl_sig_captured;
         private System.Windows.Forms.DataGridViewTextBoxColumn ecl_sig_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn ecl_pr_code;
-
-
-
-
-
-
+        private System.Windows.Forms.DataGridViewTextBoxColumn ecl_ro5_flag;
     }
 }
