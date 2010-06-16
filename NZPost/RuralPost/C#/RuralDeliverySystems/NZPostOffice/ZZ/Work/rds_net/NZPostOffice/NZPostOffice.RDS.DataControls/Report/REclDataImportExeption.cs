@@ -16,14 +16,14 @@ namespace NZPostOffice.RDS.DataControls.Report {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class REclDataImportExeptionTest : ReportClass {
+    public class REclDataImportExeption : ReportClass {
         
-        public REclDataImportExeptionTest() {
+        public REclDataImportExeption() {
         }
         
         public override string ResourceName {
             get {
-                return "REclDataImportExeptionTest.rpt";
+                return "REclDataImportExeption.rpt";
             }
             set {
                 // Do nothing
@@ -72,9 +72,9 @@ namespace NZPostOffice.RDS.DataControls.Report {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedREclDataImportExeptionTest : Component, ICachedReport {
+    public class CachedREclDataImportExeption : Component, ICachedReport {
         
-        public CachedREclDataImportExeptionTest() {
+        public CachedREclDataImportExeption() {
         }
         
         [Browsable(false)]
@@ -111,7 +111,7 @@ namespace NZPostOffice.RDS.DataControls.Report {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            REclDataImportExeptionTest rpt = new REclDataImportExeptionTest();
+            REclDataImportExeption rpt = new REclDataImportExeption();
             rpt.Site = this.Site;
             return rpt;
         }

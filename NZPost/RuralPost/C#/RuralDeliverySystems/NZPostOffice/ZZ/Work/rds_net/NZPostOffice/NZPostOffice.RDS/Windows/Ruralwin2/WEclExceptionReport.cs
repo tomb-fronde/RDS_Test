@@ -92,8 +92,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             nRows = EclErrDataset.Tables.Count;
             nRows = EclErrDatatable.Rows.Count;
 
-            this.rEclDataImportExeptionTest1.SetDataSource(EclErrDataset.Tables[0]);
-            this.crystalReportViewer1.ReportSource = this.rEclDataImportExeptionTest1;
+            this.rEclDataImportExeption1.SetDataSource(EclErrDataset.Tables[0]);
+            this.crystalReportViewer1.ReportSource = this.rEclDataImportExeption1;
             this.crystalReportViewer1.Refresh();
         }
 

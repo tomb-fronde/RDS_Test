@@ -31,7 +31,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel = new System.Windows.Forms.Button();
             this.st_label = new System.Windows.Forms.Label();
             this.crystalReportViewer1 = new CrystalDecisions.Windows.Forms.CrystalReportViewer();
-            this.rEclDataImportExeptionTest1 = new NZPostOffice.RDS.DataControls.Report.REclDataImportExeptionTest();
+            this.rEclDataImportExeption1 = new NZPostOffice.RDS.DataControls.Report.REclDataImportExeption();
             this.SuspendLayout();
             // 
             // cb_cancel
@@ -95,6 +95,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private System.Windows.Forms.Button cb_cancel;
         private System.Windows.Forms.Label st_label;
         private CrystalDecisions.Windows.Forms.CrystalReportViewer crystalReportViewer1;
-        private NZPostOffice.RDS.DataControls.Report.REclDataImportExeptionTest rEclDataImportExeptionTest1;
+        private NZPostOffice.RDS.DataControls.Report.REclDataImportExeption rEclDataImportExeption1;
     }
 }
