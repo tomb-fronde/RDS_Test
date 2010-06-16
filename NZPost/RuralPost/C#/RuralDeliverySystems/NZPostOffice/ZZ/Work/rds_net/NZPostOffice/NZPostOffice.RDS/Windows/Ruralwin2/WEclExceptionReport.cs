@@ -10,12 +10,12 @@ using NZPostOffice.Shared;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
-    public partial class WEclExceptionReportTest : WMaster
+    public partial class WEclExceptionReport : WMaster
     {
         private WEclDataImport lw_parent;
         private string sBatchNo;
 
-        public WEclExceptionReportTest()
+        public WEclExceptionReport()
         {
             InitializeComponent();
             lw_parent = (WEclDataImport)StaticMessage.PowerObjectParm;

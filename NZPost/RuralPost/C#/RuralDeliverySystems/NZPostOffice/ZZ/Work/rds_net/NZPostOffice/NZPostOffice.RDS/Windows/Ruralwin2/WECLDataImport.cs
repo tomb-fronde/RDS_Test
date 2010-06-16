@@ -27,28 +27,59 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             public string EclTicketNo;
             public string EclTicketPart;
             public string EclCustomerName;
-            public int? EclCustomerCode;
-            public int? EclSeq;
-            public int? EclDriverId;
-            public int? EclRateCode;
+            public string EclCustomerCode;
+            public string EclSeq;
+            public string EclDriverId;
+            public string EclRateCode;
             public string EclRateDescr;
             public string EclPkgDescr;
-            public int? EclBatchId;
-            public int? EclRunID;
+            public string EclBatchId;
+            public string EclRunID;
             public string EclRunNo;
             public DateTime? EclDriverDate;
-            public DateTime? EclDateEntered;
+            public string EclDateEntered;
             public string EclTicketPayable;
             public string EclRuralPayable;
-            public int? EclScanCount;
+            public string EclScanCount;
             public string EclSigReqFlag;
             public string EclSigCaptured;
             public string EclSigName;
             public string EclPrCode;
+            public string ErrorValue;
             public string ErrorMsgText;
+        }
+        
+        public struct EclImportText
+        {
+            public int    nEclBatchNo;
+            public string sEclTicketNo;
+            public string sEclTicketPart;
+            public string sEclCustomerName;
+            public string sEclCustomerCode;
+            public string sEclSeq;
+            public string sEclDriverId;
+            public string sEclRateCode;
+            public string sEclRateDescr;
+            public string sEclPkgDescr;
+            public string sEclBatchId;
+            public string sEclRunID;
+            public string sEclRunNo;
+            public DateTime? dEclDriverDate;
+            public string sEclDateEntered;
+            public string sEclTicketPayable;
+            public string sEclRuralPayable;
+            public string sEclScanCount;
+            public string sEclSigReqFlag;
+            public string sEclSigCaptured;
+            public string sEclSigName;
+            public string sEclPrCode;
         }
 
         public List<EclImportError> ecl_import_error_list;
+
+        public List<EclImportText> ecl_import_data_list;
+
+        public List<EclQualityMappingItem> ecl_quality_mappings_list;
 
         public URdsDw dw_import;
 
@@ -85,6 +116,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public int newBatchNo = 0;
         string sBlankLine = "                              \n";
         string sTopLine = "---------------------------------------\n\n";
+        private Label st_status;
         string sBottomLine = "\n\n---------------------------------------";
 
         #endregion
@@ -119,24 +151,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public override void pfc_postopen()
         {
             int l_batchNo;
-            int sqlCode=0;
-            string sqlErrText="";
+            int SQLCode = 0;
+            string SQLErrText = "";
 
             // The 'current' batch number is the newest one that has been loaded but not inserted
-            currentBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryCurrentBatchNo(ref sqlCode, ref sqlErrText);
+            currentBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryCurrentBatchNo(ref SQLCode, ref SQLErrText);
             if ((l_batchNo == 0))
             {
                 // If there is no current batch, get the next one
-                newBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryNextBatchNo(ref sqlCode, ref sqlErrText);
+                newBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryNextBatchNo(ref SQLCode, ref SQLErrText);
             }
             string s_BatchNo = l_batchNo.ToString();
             //MessageBox.Show("l_batch_no = " + s_BatchNo + "\n"
             //               , "Debugging");
 
+            RDSDataService dataService = RDSDataService.GetEclQualityMappings(
+                                         ref SQLCode,
+                                         ref SQLErrText);
+            if (SQLCode != 0)
+            {
+                MessageBox.Show("Error getting the quality mappings.\n"
+                                + "SQLCode = " + SQLCode.ToString() + "\n"
+                                + SQLErrText
+                                , "ERROR: pfc_postOpen");
+            }
+            ecl_quality_mappings_list = dataService.EclQualityMappingsList;
+
             //?base.pfc_postopen();
             dw_import.URdsDw_GetFocus(new object(), new EventArgs());
             tb_batch_no.Text = s_BatchNo;
-            this.cb_insert.Visible = false;
 
             cb_upload.Visible = true;
             cb_insert.Visible = true;
@@ -158,10 +201,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_upload = new System.Windows.Forms.Button();
             this.cb_insert = new System.Windows.Forms.Button();
             this.cb_cancel = new System.Windows.Forms.Button();
-            //this.dw_errors = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_stop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tb_batch_no = new System.Windows.Forms.MaskedTextBox();
+            this.st_status = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // st_label
@@ -250,28 +293,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel.Text = "&Cancel";
             this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
-            // dw_errors
-            // 
-            /*
-                this.dw_errors.DataObject = null;
-                this.dw_errors.FireConstructor = false;
-                this.dw_errors.Location = new System.Drawing.Point(662, 0);
-                this.dw_errors.Name = "dw_errors";
-                this.dw_errors.Size = new System.Drawing.Size(433, 144);
-                this.dw_errors.TabIndex = 8;
-                this.dw_errors.Visible = false;
-            */
-            // 
             // cb_stop
             // 
-            this.cb_stop.Enabled = false;
+            this.cb_stop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_stop.Font = new System.Drawing.Font("Arial", 8F);
-            this.cb_stop.Location = new System.Drawing.Point(522, 361);
+            this.cb_stop.Location = new System.Drawing.Point(543, 361);
             this.cb_stop.Name = "cb_stop";
-            this.cb_stop.Size = new System.Drawing.Size(65, 21);
+            this.cb_stop.Size = new System.Drawing.Size(52, 21);
             this.cb_stop.TabIndex = 8;
             this.cb_stop.Text = "Sto&p";
-            this.cb_stop.Visible = false;
             this.cb_stop.Click += new System.EventHandler(this.cb_stop_clicked);
             // 
             // label1
@@ -294,12 +324,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tb_batch_no.TabIndex = 11;
             this.tb_batch_no.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
             // 
+            // st_status
+            // 
+            this.st_status.Location = new System.Drawing.Point(141, 361);
+            this.st_status.Name = "st_status";
+            this.st_status.Size = new System.Drawing.Size(353, 23);
+            this.st_status.TabIndex = 12;
+            this.st_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // WEclDataImport
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(665, 386);
             this.Controls.Add(this.tb_batch_no);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.st_status);
             this.Controls.Add(this.dw_import);
             this.Controls.Add(this.sle_1);
             this.Controls.Add(this.st_1);
@@ -307,7 +346,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Controls.Add(this.cb_select);
             this.Controls.Add(this.cb_upload);
             this.Controls.Add(this.cb_insert);
-            //this.Controls.Add(this.dw_errors);
             this.Controls.Add(this.cb_cancel);
             this.Controls.Add(this.cb_stop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -315,7 +353,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Text = "ECL Data Import";
             this.Controls.SetChildIndex(this.cb_stop, 0);
             this.Controls.SetChildIndex(this.cb_cancel, 0);
-            //this.Controls.SetChildIndex(this.dw_errors, 0);
             this.Controls.SetChildIndex(this.cb_insert, 0);
             this.Controls.SetChildIndex(this.cb_upload, 0);
             this.Controls.SetChildIndex(this.cb_select, 0);
@@ -323,6 +360,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Controls.SetChildIndex(this.st_1, 0);
             this.Controls.SetChildIndex(this.sle_1, 0);
             this.Controls.SetChildIndex(this.dw_import, 0);
+            this.Controls.SetChildIndex(this.st_status, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.tb_batch_no, 0);
             this.Controls.SetChildIndex(this.st_label, 0);
@@ -370,148 +408,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 */
         }
 
-        public virtual bool wf_checkdate(int pRow, DateTime pToday)
-        {   // Validate the contract date
-            // If valid
-            //    Return TRUE
-            // If invalid
-            //    Return FALSE
-            //    Add record to ErrorList
-            //    (but do not delete - done by calling routine)
-/*
-            DateTime thisPrdDate;
-
-            thisPrdDate = (DateTime)dw_import.DataObject.GetItem<EclDataImport>(pRow).PrdDate;
-            if ( thisPrdDate > pToday )
-            {
-                wf_saveerror_info( pRow, "Invalid date" );
-                return false;
-            }
-*/
-            return true;
-        }
-
-        public virtual bool wf_check_contract(int pRow)
-        {   // Validate the contract number
-            // Save the number (as a number) in ContractNo
-            // If valid
-            //    Return TRUE
-            // If invalid
-            //    Return FALSE
-            //    Add record to ErrorList
-            //    (but do not delete - done by calling routine)
-/*
-            string sMSNumber;
-            int lContract;
-            int lCount;
-            int SQLCode = 0;
-
-            sMSNumber = dw_import.DataObject.GetItem<EclDataImport>(pRow).Contract;
-            if ( ! int.TryParse(sMSNumber, out lContract) )
-            {
-                // select contract_no into :lContract from contract where con_old_mail_service_no = :sMSNumber;
-                lContract = RDSDataService.GetContractNo(sMSNumber);
-            }
-            // select count(*) into :lCount from contract where contract_no = :lContract;
-            lCount = RDSDataService.GetContractCount(lContract, ref SQLCode);
-            if (SQLCode == 0 && lCount > 0)
-            {
-                dw_import.DataObject.GetItem<EclDataImport>(pRow).ContractNo = lContract;
-            }
-            else
-            {
-                dw_import.DataObject.GetItem<EclDataImport>(pRow).ContractNo = -1;
-                wf_saveerror_info(pRow, "Contract not found on database");
-                return false;
-            }
-*/
-            return true;
-        }
-        public virtual int wf_select_invalid(int pRow )
-        {
-            // Select duplicate row to reject
-            //Called when record pRow - 1 matches record pRow (matched by wf_is_duplicate)
-            // Returns
-            //    1    Previous record (pRow - 1) is rejected
-            //    2    Current record (pRow) is rejected
-            return 2;
-        }
-
-        public virtual bool wf_is_duplicate(int pRow, string pTicketNo, string pTicketPart, int pSeqNo)
-        {   // Check for duplicate records.  Parameters contain previous record's values.
-            //If duplicate
-            //   Return true
-
-            string thisTicketNo;
-            string thisTicketPart;
-            int? tBatchId;
-            //int? tSeqNo;
-            //int thisSeqNo;
-            //string msg, t;
-
-            thisTicketNo   = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketNo;
-            thisTicketPart = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketPart;
-            tBatchId = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclBatchId;
-            //tSeqNo = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclSeq;
-            //thisSeqNo = (int)dw_import.DataObject.GetItem<EclDataImport>(pRow).EclSeq;
-            //thisSeqNo = (thisSeqNo == null) ? -2 : thisSeqNo;
-
-            //msg = (tSeqNo == null) ? "Seq No is null\n" : "";
-            //msg += (tBatchId == null) ? "Batch ID is null\n" : "";
-            //if (msg.Length != 0)
-            //{
-            //    t = "Row " + pRow.ToString() + "\n" + msg; 
-            //}
-
-            //if ((thisTicketNo == pTicketNo
-            //     && thisTicketPart == pTicketPart
-            //     && thisSeqNo == pSeqNo))
-            if ((thisTicketNo == pTicketNo
-                 && thisTicketPart == pTicketPart))
-            {
-                //wf_saveerror_info(pRow, "Duplicate data row (contract, date, prt_code)");
-                //MessageBox.Show("Duplicate data row " + pRow.ToString() + "\n"
-                //                + "Ticket No " + thisTicketNo + "\n"
-                //                + "Ticket Part " + thisTicketPart + "\n"
-                //                , "Error"
-                //                );
-                return true;
-            }
-            return false;
-        }
-
-        public virtual bool wf_check_piece_rate(int pRow)
-        {   // Validate the piecerate
-            // Set the PrtKey value for the record
-            // Save the number (as a number) in ContractNo
-            // If valid
-            //    Return TRUE
-            // If invalid
-            //    Return FALSE
-            //    Add record to ErrorList
-            //    (but do not delete - done by calling routine)
-/*
-            string thisPrtCode;
-            int thisPrtKey;
-            int SQLCode = 0;
-
-            thisPrtCode = dw_import.DataObject.GetItem<EclDataImport>(pRow).PrtCode;
-
-            // select prt_key into :lPRKey from piece_rate_type where prt_code = :sPRCode;
-            thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
-            if (SQLCode == 0)
-            {
-                //dw_import.DataObject.GetItem<EclDataImport>(arow).PrtKey = lPRKey;
-                dw_import.SetValue(pRow, "prt_key", thisPrtKey);
-            }
-            else
-            {
-                wf_saveerror_info( pRow, "Piece rate key not found on database" );
-                return false;
-            }
-*/            return true;
-        }
-
         //pp! using private function as the performance deteriorates severely if function from URdsDw is used
         private int SaveErrorFile(string filename, string saveastype, int nErrors)
         {
@@ -526,10 +422,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             nOut = ecl_import_error_list.Count;
             if (nErrors > 0)
             {
-                //        MessageBox.Show( nErrorRows + " errors found.\n"
-                //                       + "Please select a file to save the error records to."
-                //                       , "Import Error"
-                //                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 try
                 {
                     SaveFileDialog savedlg = new SaveFileDialog();
@@ -560,7 +452,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     using (System.IO.StreamWriter sw = new System.IO.StreamWriter(filename))
                     {
                         // Write out the header saved from the input file
-                        sw.Write(ecl_import_header + "\r\n");
+                        sw.Write("Error Text" + sep + "Error Value" + sep + ecl_import_header + "\r\n");
 
                         // Extract the list elements in reverse order - this writes them to the file
                         // in the order they were added to the list (and so match the input file order).
@@ -569,17 +461,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             sDriverDate = null;
                             sDateEntered = null;
                             dtDriverDate = (DateTime)ecl_import_error_list[nOut].EclDriverDate;
-                            dtDateEntered = (DateTime)ecl_import_error_list[nOut].EclDateEntered;
                             if (dtDriverDate != null)
                             {
                                 sDriverDate = dtDriverDate.ToString(sDateFmt);
                             }
-                            if (dtDateEntered != null)
-                            {
-                                sDateEntered = dtDateEntered.ToString(sDateFmt);
-                            }
+                            sDateEntered = ecl_import_error_list[nOut].EclDateEntered;
+                            //dtDateEntered = (DateTime)ecl_import_error_list[nOut].EclDateEntered;
+                            //if (dtDateEntered != null)
+                            //{
+                            //    sDateEntered = dtDateEntered.ToString(sDateFmt);
+                            //}
 
-                            sBuffer = ecl_import_error_list[nOut].EclCustomerName + sep
+                            sBuffer = ecl_import_error_list[nOut].ErrorMsgText + sep
+                                         + ecl_import_error_list[nOut].ErrorValue + sep
+                                         + ecl_import_error_list[nOut].EclCustomerName + sep
                                          + ecl_import_error_list[nOut].EclCustomerCode.ToString() + sep
                                          + ecl_import_error_list[nOut].EclTicketNo + sep
                                          + ecl_import_error_list[nOut].EclTicketPart + sep
@@ -599,8 +494,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                          + ecl_import_error_list[nOut].EclSigReqFlag + sep
                                          + ecl_import_error_list[nOut].EclSigCaptured + sep
                                          + ecl_import_error_list[nOut].EclSigName + sep
-                                         + ecl_import_error_list[nOut].EclRateCode
-                                         ;
+                                         + ecl_import_error_list[nOut].EclPrCode;
+                            ;
                             sw.Write(sBuffer);
                             sw.Write("\r\n");
                         }
@@ -637,131 +532,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        public virtual bool wf_calculate_rate(int pRow)
-        {   // 
-            // Assumes the PrtKey value for the record has been set (in wf_check_piece_rate)
-            // Save the pr_rate in PrRdCost
-            // If valid
-            //    Return TRUE
-            // If invalid
-            //    Return FALSE
-            //    Add record to ErrorList
-            //    (but do not delete - done by calling routine)
-/*
-            DateTime thisConStartDate = new DateTime();
-            DateTime thisConEndDate = new DateTime();
-            DateTime prevConStartDate = new DateTime();
-            DateTime prevConEndDate = new DateTime();
-            DateTime? thisConRatesEffectiveDate = new DateTime();
-            DateTime? prevConRatesEffectiveDate = new DateTime();
-            DateTime? thisPrdDate = new DateTime();
-            int thisConSeqNum = int.MinValue;
-            int prevConSeqNum = int.MinValue;
-            int thisRgCode;
-            int thisPrtKey;
-            int? thisPrdQuantity;
-            int? thisContractNo;
-            string thisPrtCode;
-            System.Decimal prevPrRate;
-            System.Decimal prevPrdCost;
-            System.Decimal? thisPrRate;
-            System.Decimal? thisPrdCost = Decimal.MinValue;
-            int SQLCode = 0;
-
-            EclDataImport current = dw_import.DataObject.GetItem<EclDataImport>(pRow);
-
-            // Get the required values from dw_import.
-            thisContractNo  = current.ContractNo;
-            thisPrdDate     = current.PrdDate;
-            thisPrdQuantity = current.PrdQuantity;
-            thisPrtCode = (string.IsNullOrEmpty(current.PrtCode)) ? "" : current.PrtCode.Trim();
-            //if (!string.IsNullOrEmpty(current.PrtCode))
-            //    {
-            //    thisPrtCode = current.PrtCode.Trim();
-            //}
-
-            // Get the max seq number to determine what renewal a contract is in
-            // select max(contract_seq_number) into :li_seq_num  from contract_renewals where contract_no = :li_contract_no;
-            thisConSeqNum = RDSDataService.GetMaxContractSeqNumber(thisContractNo);
-
-            // Get the start and end date of the current renewal
-            //select con_start_date, con_expiry_date  into :ld_start, :ld_end  from contract_renewals  where contract_seq_number = :li_seq_num  and contract_no = :li_contract_no;
-
-            RDSDataService dataService 
-                           = RDSDataService.GetContractRenewalsDate(thisConSeqNum, thisContractNo);
-            List<ContractRenewalsDateItem> list = dataService.ContractRenewalsDateItemList;
-            thisConStartDate = list[0].Con_start_date;
-            thisConEndDate   = list[0].Con_expiry_date;
-
-            // Use the prt code from dw_import to determine the prt_key
-            // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-            thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
-
-            // Get the contract rates' effective date to narrow down the search for the correct rate
-            //select con_rates_effective_date into :ld_con_rates_effective_date  from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num;
-            thisConRatesEffectiveDate 
-                           = RDSDataService.GetConRatesEffDate(thisContractNo, thisConSeqNum);
-
-            // Use the prt_key to determine the the rate
-            // select pr_rate into :ldec_pr_rate from piece_rate  where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-            thisPrRate = RDSDataService.GetPrRateFromPieceRate(thisPrtKey, thisConRatesEffectiveDate);
-
-            // Check that the prd date is in the current renewal
-            if (thisPrdDate >= thisConStartDate && thisPrdDate <= thisConEndDate)
-            {
-                thisPrdCost = thisPrdQuantity * thisPrRate;
-
-                // Display the answer on the dw_import
-                //!dw_import.DataObject.GetItem<EclDataImport>(arow).PrdCost = ldec_prd_cost;
-                dw_import.DataObject.GetItem<EclDataImport>(pRow).PrdCost = thisPrdCost;
-            }
-            else
-            {
-                // Minus 1 from the current renewal 
-                //li_seq_num_min_one = li_seq_num - 1;
-                prevConSeqNum = thisConSeqNum - 1;
-
-                // select con_start_date, con_expiry_date  into :ld_prev_start, :ld_prev_end from contract_renewals  where contract_no = :li_contract_no  and contract_seq_number = :li_seq_num_min_one;
-                dataService = RDSDataService.GetContractRenewalsDate(prevConSeqNum, thisContractNo);
-                list = dataService.ContractRenewalsDateItemList;
-                if (list != null && list.Count > 0)
-                {
-                    prevConStartDate = list[0].Con_start_date;
-                    prevConEndDate   = list[0].Con_expiry_date;
-                }
-
-                //if (ld_prd_date >= ld_prev_start && ld_prd_date <= ld_prev_end)
-                if (thisPrdDate >= prevConStartDate && thisPrdDate <= prevConEndDate)
-                {
-                    // Use the prt code from dw_import to determine the prt_key
-                    // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-                    thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
-
-                    // Get the contract rates effective date to norrow down the search for the correct rate
-                    //select con_rates_effective_date into :ld_con_rates_effective_date from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num_min_one;
-                    prevConRatesEffectiveDate = RDSDataService.GetConRatesEffDate(thisContractNo, prevConSeqNum);
-
-                    //  TJB  20 Jul 2005
-                    //  Fix bug: use the correct contract sequence number
-                    // 		   and contract_seq_number = :li_seq_num;
-                    // Use the prt_key to determine the the rate
-                    //select pr_rate into :ldec_pr_rate from piece_rate where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-                    prevPrRate = (decimal)RDSDataService.GetPrRateFromPieceRate(thisPrtKey, prevConRatesEffectiveDate);
-                    prevPrdCost = (decimal)(thisPrdQuantity * prevPrRate);
-
-                    // Display the answer on the dw_import
-                    dw_import.DataObject.GetItem<EclDataImport>(pRow).PrdCost = prevPrdCost;
-                }
-                else
-                {
-                    wf_saveerror_info(pRow, "Prd_cost not determined");
-                    return false;
-                }
-            }
-*/
-            return true;
-        }
-
         private bool filterWithEmptystring(EclDataImport item)
         {
             return true;
@@ -769,16 +539,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         private bool dw_import_filter(EclDataImport t)
         {
-/*
-            {if (t.PrdDate > DateTime.Today)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-*/
             return true;
         }
 
@@ -825,8 +585,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             sle_1.Enabled = true;
             st_1.Enabled = true;
             st_label.Enabled = true;
-            cb_stop.Enabled = false;
-            cb_stop.Visible = false;
+            //cb_stop.Enabled = false;
+            //cb_stop.Visible = false;
             return;
         }
 /*
@@ -840,15 +600,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #region Events
         public virtual void cb_import_clicked(object sender, EventArgs e)
         {
-            int lBatchNo=0;
+            // Import raw data from selected file into dw_import.  This is
+            // done in the ImportFile routine.
+            // The data is then quality-checked in the wf_process_input routine 
+            // with errors reported and saved to an error file.
+            //
+            // Subsequently, the user can upload the data to a staging table 
+            // in the database (cb_upload_clicked - button marked "Save").  When
+            // all elements of the batch have been imported and uploaded 
+            // (including errors corrected), the batch can be "Inserted"
+            // (cb_insert_clicked).
+            int nBatchNo = 0;
             string inFilename;
+
+            UpdateStatusText("");
 
             //dw_import.InsertItem<EclDataImport>(0);
             dw_import.DataObject.Reset();
             //ecl_import_errors = new EclImportError[20];
             ecl_import_error_list = new List<EclImportError>();
+            ecl_import_data_list = new List<EclImportText>();
 
-            if (!getBatchNo(ref lBatchNo))
+            if (!getBatchNo(ref nBatchNo))
                 return;
 
             inFilename = sle_1.Text;
@@ -861,9 +634,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            cb_stop.Visible = true;
+            was_cb_stop_clicked = false;
             Cursor.Current = Cursors.WaitCursor;
 
-            int rc = ImportFile(inFilename, lBatchNo);
+            DateTime dtStartImport = DateTime.Now;
+
+            int rc = ImportFile(inFilename, nBatchNo);
+            //int rc = ImportFileAsText(inFilename, nBatchNo);
+
             if (rc < 0)
             {
                 MessageBox.Show(sTopLine
@@ -873,8 +652,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            if (rc == 1)
+            {
+                cb_stop.Visible = false;
+                return;
+            }
+            DateTime dtEndImport = DateTime.Now;
+            TimeSpan tsTimeImport = dtEndImport.Subtract(dtStartImport);
+            string sTimeImport = tsToString(tsTimeImport);
+            AppendStatusText("  In " + sTimeImport);
 
-            if (dw_import.RowCount <= 0 )
+            int nImportedRows = dw_import.RowCount;
+            //nImportedRows = 0;          // Testing import times
+            if (nImportedRows <= 0)
             {
                 MessageBox.Show(sTopLine
                                + "You cannot import because there are no values!"
@@ -885,7 +675,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
-            wf_process_input();
+            wf_process_input(dtStartImport);
         }
 
         public virtual void cb_select_clicked(object sender, EventArgs e)
@@ -932,7 +722,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void cb_upload_clicked(object sender, EventArgs e)
         {   // Save
             bool RC;
-            int rc;
+            int rc=0;
             int lBatchNo=0;
             int nUploadRows;
             DateTime dtDateUploaded;
@@ -942,10 +732,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string firstTicketNo;
             string firstTicketPart;
 
-            if (! getBatchNo(ref lBatchNo))
+            UpdateStatusText("");
+
+            if (!getBatchNo(ref lBatchNo))
                 return;
 
-            dtDateUploaded = DateTime.Today;
+            if (was_cb_stop_clicked)
+            {
+                MessageBox.Show("The previous import was stopped before it finished.\n"
+                                + "Only completed imports can be loaded."
+                                , "Warning");
+                return;
+            }
+
+            //dtDateUploaded = DateTime.Today;
+            dtDateUploaded = DateTime.Now;
             nUploadRows = dw_import.RowCount;
             if (nUploadRows > 0)
             {
@@ -981,12 +782,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            rc = dw_import.Save();
+            DateTime dtStartUpload = DateTime.Now;
+            UpdateStatusText("Uploading data - please wait");
+
+            rc = wf_UploadData();
+            int nUploadedRows = Math.Abs(rc);
+            //rc = dw_import.Save();
+
+            DateTime dtEndUpload = DateTime.Now;
+            TimeSpan tsUploadTime = dtEndUpload.Subtract(dtStartUpload);
+            string sUploadTime = tsToString(tsUploadTime);
+            string sMessage = "Uploaded " + nUploadedRows.ToString() + " records in " + sUploadTime;
+            UpdateStatusText(sMessage);
+
+            sMessage = nUploadedRows.ToString();
+            if (nUploadedRows < nUploadRows)
+                sMessage += " of " + nUploadRows.ToString();
+            string sUploadStatus = "";
+            if (rc < 0) sUploadStatus = " with errors";
+            UpdateStatusText("");
             //?commit;
             MessageBox.Show(sTopLine
-                           + "The ECL data has been saved to the database\n"
+                           + "The ECL data has been saved to the database" + sUploadStatus + ".\n"
                            + "    Batch " + lBatchNo.ToString() + "\n"
-                           + "    " + nUploadRows.ToString() + " rows"
+                           + "    " + sMessage + " records\n"
+                           + "    Upload time: " + sUploadTime
                            + sBottomLine
                            , "ECL Data Upload"
                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1004,6 +824,93 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             ib_disableclosequery = true;
             //this.Close();
+        }
+        private int stringToInt(string s)
+        {
+            int n;
+            if (int.TryParse(s, out n))
+            {
+                return n;
+            }
+            return 0;
+        }
+
+        private string tsToString(TimeSpan ts)
+        {
+            int HH = ts.Hours;
+            int MM = ts.Minutes;
+            int SS = ts.Seconds;
+            return HH.ToString("00:") + MM.ToString("00:") + SS.ToString("00");
+        }
+
+        private DateTime stringToDate(string s)
+        {
+            DateTime dt;
+            if (DateTime.TryParse(s, out dt))
+            {
+                return dt;
+            }
+            return DateTime.MinValue;
+        }
+
+        private int wf_UploadData()
+        {
+            int nRows;
+            int nSqlCode = 0;
+            string sSqlError = "";
+            NZPostOffice.RDS.DataService.EclImportData ImportItem = new NZPostOffice.RDS.DataService.EclImportData();
+            //EclDataImport ImportItem = new EclDataImport();
+
+            nRows = dw_import.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                // Update the number of records processed periodically
+                if (((nRow % 100) == 0))
+                {
+                    UpdateStatusText("Uploading data", nRow, nRows);
+                    if (was_cb_stop_clicked)
+                    {
+                        return nRow;
+                    }
+                }
+
+                ImportItem.EclBatchNo = dw_import.DataObject.GetItem<EclDataImport>(0).EclBatchNo;
+                ImportItem.EclTicketNo = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketNo;
+                ImportItem.EclTicketPart = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketPart;
+                ImportItem.EclCustomerName = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclCustomerName;
+                ImportItem.EclCustomerCode = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclCustomerCode;
+                ImportItem.EclSeq = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclSeq);
+                ImportItem.EclDriverId = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclDriverId);
+                ImportItem.EclRateCode = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRateCode);
+                ImportItem.EclRateDescr = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRateDescr;
+                ImportItem.EclPkgDescr = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclPkgDescr;
+                ImportItem.EclBatchId = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclBatchId);
+                ImportItem.EclRunID = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRunID);
+                ImportItem.EclRunNo = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRunNo;
+                ImportItem.EclDriverDate = (DateTime)dw_import.DataObject.GetItem<EclDataImport>(nRow).EclDriverDate;
+                ImportItem.EclDateEntered = stringToDate(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclDateEntered);
+                ImportItem.EclTicketPayable = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketPayable;
+                ImportItem.EclRuralPayable = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRuralPayable;
+                ImportItem.EclScanCount = stringToInt(dw_import.DataObject.GetItem<EclDataImport>(nRow).EclScanCount);
+                ImportItem.EclSigReqFlag = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclSigReqFlag;
+                ImportItem.EclSigCaptured = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclSigCaptured;
+                ImportItem.EclSigName = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclSigName;
+                ImportItem.EclPrCode = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclPrCode;
+                ImportItem.EclRo5Flag = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRo5Flag;
+                ImportItem.EclEffectiveDate = (DateTime)dw_import.DataObject.GetItem<EclDataImport>(nRow).EclEffectiveDate;
+
+                RDSDataService.InsertIntoECLUploadData(ImportItem, ref nSqlCode, ref sSqlError);
+
+                if (nSqlCode != 0)
+                {
+                    MessageBox.Show("Error uploading row " + nRow.ToString() + "\n"
+                                    + sSqlError + "\n"
+                                    , "Error"
+                                    );
+                    return (nRow * -1);
+                }
+            }
+            return nRows;
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
@@ -1024,6 +931,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
+        private bool was_cb_stop_clicked = false;
         public virtual void cb_stop_clicked(object sender, EventArgs e)
         {
             DialogResult answer = MessageBox.Show("Do you want to stop processing?"
@@ -1032,7 +940,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                                  , MessageBoxIcon.Question);
             if (answer == DialogResult.Yes)
             {
-                post_yield();
+                was_cb_stop_clicked = true;
+                //post_yield();
             }
         }
 
@@ -1042,6 +951,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int nBatch, nRecords, nErrors;
             int sqlCode = 0;
             string sqlErrText = "";
+
+            UpdateStatusText("");
 
             if (!getBatchNo(ref lBatchNo))
                 return;
@@ -1056,30 +967,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , "ECL Data Insert: Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (nBatch == 0)
+            if (nBatch == -2)
+            {
+                MessageBox.Show(sTopLine
+                               + sBatchNo + " does not exist."
+                               + sBottomLine
+                               , "ECL Data Insert: Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else if (nBatch == -1)
             {
                 MessageBox.Show(sTopLine 
                                + sBatchNo + " has already been inserted."
-                //                               + " \n"
-                //                               + "No records inserted."
                                + sBottomLine
                                , "ECL Data Insert: Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            else if (nBatch < 0)
+            else if (nBatch == 0)
             {
                 MessageBox.Show(sTopLine
-                               + sBatchNo + " has not been uploaded."
-                //                               + " \n"
-                //                               + "No records inserted."
+                               + sBatchNo + " has no records to insert?"
                                + sBottomLine
                                , "ECL Data Insert: Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            nRecords = RDSDataService.SpInsertECLUploadedData(lBatchNo, ref sqlCode, ref sqlErrText);
-            nErrors = nBatch - nRecords;
+            DateTime dtStartInsert = DateTime.Now;
+            UpdateStatusText("Inserting " + sBatchNo + " - please wait");
+            nRecords = RDSDataService.sp_ECLInsertData(lBatchNo, ref sqlCode, ref sqlErrText);
+            DateTime dtEndInsert = DateTime.Now;
+            TimeSpan tsInsertTime = dtEndInsert.Subtract(dtStartInsert);
+            string sInsertTime = tsToString(tsInsertTime);
+            UpdateStatusText("");
+            //nErrors = nBatch - nRecords;
             if (sqlCode != 0)
             {
                 MessageBox.Show("Error inserting batch" + lBatchNo.ToString() + " \n"
@@ -1093,56 +1015,414 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 MessageBox.Show(sTopLine
                                + sBatchNo + " processed.\n"
                                + " \n"
-                               + "    " + nRecords.ToString() + " records inserted.\n"
-                               + "    " + nErrors.ToString() + " errors."
+                               + "    " + nBatch.ToString() + " records in batch.\n"
+                               + "    " + nRecords.ToString() + " summarised records inserted.\n"
+                               + "    Insert time: " + sInsertTime
                                + sBottomLine
                                , "ECL Data Insert"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
+            else if (nRecords == 0)
             {
                 MessageBox.Show(sTopLine
                                + sBatchNo + " processed.\n"
                                + " \n"
+                               + "    " + nBatch.ToString() + " records in batch.\n"
                                + "    " + "No records inserted.\n"
-                               + "    " + nErrors.ToString() + " errors."
+                               + sBottomLine
+                               , "ECL Data Insert: Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (nRecords < 0)
+            {
+                MessageBox.Show(sTopLine
+                               + sBatchNo + " has already been processed."
                                + sBottomLine
                                , "ECL Data Insert: Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        public virtual void wf_process_input()
-        {   
-            int nRows, nRow;
+        private bool wf_blankFields(int pRow, ref string pErrName)
+        {
+            // Check for blank fields
+            // Return TRUE if any found, and message passed back in pErrName
+            // Otherwise, return FALSE
+            //
+            // Exceptions
+            //    Batch ID may be blank
+            //    SigName msy be blank
+            //    Piece Rate Code may be blank in some cases (checked separately
+
+            EclDataImport item = dw_import.DataObject.GetItem<EclDataImport>(pRow);
+            if (item.EclCustomerName.Length == 0)
+            {
+                pErrName += "Blank Customer Name";
+                return true;
+            }
+            if (item.EclCustomerCode.Length == 0)
+            {
+                pErrName += "Blank Customer Code";
+                return true;
+            }
+            if (item.EclTicketNo.Length == 0)
+            {
+                pErrName += "Blank Ticket Number";
+                return true;
+            }
+            if (item.EclTicketPart.Length == 0)
+            {
+                pErrName += "Blank Ticket Part";
+                return true;
+            }
+            if (item.EclSeq.Length == 0)
+            {
+                pErrName += "Blank Sequence";
+                return true;
+            }
+            if (item.EclDriverId.Length == 0)
+            {
+                pErrName += "Blank Driver ID";
+                return true;
+            }
+            if (item.EclRateCode.Length == 0)
+            {
+                pErrName += "Blank ECL Rate Code";
+                return true;
+            }
+            if (item.EclRateDescr.Length == 0)
+            {
+                pErrName += "Blank Rate Description";
+                return true;
+            }
+            //if (item.EclPkgDescr.Length == 0)
+            //{
+            //    pErrName += "Blank Product Description";
+            //    return true;
+            //}
+            if (item.EclRunID.Length == 0)
+            {
+                pErrName += "Blank Run ID";
+                return true;
+            }
+            if (item.EclRunNo.Length == 0)
+            {
+                pErrName += "Blank Ticket Part";
+                return true;
+            }
+            if (!item.EclDriverDate.HasValue)
+            {
+                pErrName += "Blank Driver Date";
+                return true;
+            }
+            if (item.EclDateEntered.Length == 0)
+            {
+                pErrName += "Blank Date Entered";
+                return true;
+            };
+            if (item.EclTicketPayable.Length == 0)
+            {
+                pErrName += "Blank Ticket Payable";
+                return true;
+            }
+            if (item.EclRuralPayable.Length == 0)
+            {
+                pErrName += "Blank Rural Payable";
+                return true;
+            }
+            if (item.EclScanCount.Length == 0)
+            {
+                pErrName += "Blank Scan Count";
+                return true;
+            }
+            if (item.EclSigReqFlag.Length == 0)
+            {
+                pErrName += "Blank Signature Required";
+                return true;
+            }
+            if (item.EclSigCaptured.Length == 0)
+            {
+                pErrName += "Blank Signature Captured";
+                return true;
+            }
+            return false;
+        }
+
+        private bool wf_MatchMapping(string pColName, string pMatchString)
+        {
+            // Match the pMatchString against the mapping file strings
+            // for pColName.
+            // 
+            // Returns
+            //    true    If pMatchString matches a mapping value
+            //    false   otherwise
+
+            string sThisColName = "";
+            string sThisMatchString = "";
+            string sThisMatchType = "";
+            for (int i = 0; i < ecl_quality_mappings_list.Count; i++)
+            {
+                sThisColName = ecl_quality_mappings_list[i].Column_name;
+                if (sThisColName == pColName)
+                {
+                    sThisMatchString = ecl_quality_mappings_list[i].Match_string;
+                    sThisMatchType = ecl_quality_mappings_list[i].Match_type;
+                    if (sThisMatchType == "S")
+                    {
+                        if (pMatchString.StartsWith(sThisMatchString))
+                            return true;
+                    }
+                    else if (sThisMatchType == "C")
+                    {
+                        if (pMatchString.Contains(sThisMatchString))
+                            return true;
+                    }
+                    else if (sThisMatchType == "E")
+                    {
+                        if (pMatchString.EndsWith(sThisMatchString))
+                            return true;
+                    }
+                    else if (sThisMatchType == "M")
+                    {
+                        if (pMatchString.Equals(sThisMatchString))
+                            return true;
+                    }
+                }
+            }
+            return false;      // No match
+        }
+
+        private bool wf_ValidPrCode(string pRateDescr)
+        {
+            // If EclPrCode is blank, check the Rate Description.
+            // 
+            // Returns
+            //    true    If the Rate Description matches a specified value
+            //    false   otherwise
+
+            return wf_MatchMapping("ecl_rate_descr", pRateDescr);
+        }
+
+        private bool wf_ValidCust(string pCustomerName)
+        {
+            // If the ScanCount is > 2, sometimes this is OK.
+            //
+            // Return
+            //   true    If the Customer Name is "DHL%", it is OK
+            //   false   Otherwise the Scan Count is invalid
+
+            return wf_MatchMapping("ecl_customer_name", pCustomerName);
+        }
+
+        public virtual bool wf_is_duplicate(int pRow, string pPrevTicketNo, string pPrevTicketPart)
+        {   // Check for duplicate records.  Parameters contain previous record's values.
+            // Return true if the previous ticket number and part are the same as this ticket's
+            // A separate routine determines which of the two is to be kept  
+
+            if (pPrevTicketNo == dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketNo
+                && pPrevTicketPart == dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketPart)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool wf_Check_RO5_Eligibility(string pEclSigName)
+        {
+            // If ecl_sig_req _flag is "SIG REQ", we checj to see if a signiture has been 
+            // recorded.  A valid signiture is any non-blank string (a blank signiture is 
+            // currently [June 2010] treated as valid due to a bug in the supplier's system)
+            // that isn't a "No Signiture Obtained" equivalent.
+            //
+            // Returns
+            //    true    if the signiture is valid
+            //    false   otherwise
+            //
+            // NOTE: This returns the reverse of some other matches because
+            //       the mapping strings are equivalents of "No Signiture Obtained"
+
+            return (! wf_MatchMapping("ecl_sig_name", pEclSigName));
+        }
+
+        public virtual int wf_select_invalid(int pRow)
+        {
+            // Select duplicate row to reject
+            //Called when record pRow - 1 matches record pRow (matched by wf_is_duplicate)
+            // Returns
+            //    1    Previous record (pRow - 1) is rejected
+            //    2    Current record (pRow) is rejected
+            int prevRow = pRow - 1;
+
+            // If either the SigName of the previous or current record are empty, 
+            // that record is invalid (if both are empty, we flag the current record)
+            string sThisSigName = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclSigName;
+            if (sThisSigName.Length == 0)
+                return 2;
+            string sPrevSigName = dw_import.DataObject.GetItem<EclDataImport>(prevRow).EclSigName;
+            if (sPrevSigName.Length == 0)
+                return 1;
+            // If neither is empty ...
+
+            // If either the TicketPayable flag of the previous or current record is "N", 
+            // that record is invalid (if both are "N", we flag the current record)
+            string sThisTicketPayable = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketPayable;
+            if (sThisTicketPayable == "N")
+                return 2;
+            string sPrevTicketPayable = dw_import.DataObject.GetItem<EclDataImport>(prevRow).EclTicketPayable;
+            if (sPrevTicketPayable == "N")
+                return 1;
+            // If neither is "N" ...
+
+            // We keep the record with the earliest Driver Date.  Since the records 
+            // were sorted in Driver Date order, the "Previous" record will either be
+            // dated earlier than the current one, or the same.  Reject the current one.
+            return 2;
+        }
+
+        private int wf_quality_check_input(int pRow, string pPrevTicketNo, string pPrevTicketPart, ref string pErrValue, ref string pErrName)
+        {
+            // Do "Quality checking" - validate input data
+            int n;
+
+            // Skip any with EclRuralPayable == "N"
+            string sRuralPayable = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRuralPayable;
+            if (sRuralPayable == "N")
+            {
+                pErrName += "Rural payable=N";
+                return 1;          // Skip this row
+            }
+            if (wf_blankFields(pRow, ref pErrName))
+            {
+                // If any fields are blank (that aren't supposed to be) the
+                // errName is populated by the checking routine, which then
+                // returns TRUE.
+                return 2;
+            }
+            string sPrCode = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclPrCode;
+            string sRateDescr = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRateDescr;
+            if (sPrCode.Length == 0)
+            {
+                // If the PrCode is blank, the Rate Description is used to determine the
+                // appropriate value.  Otherwise an error is raised.
+                if (sPrCode.Length == 0)
+                {
+                    //if (wf_ValidPrCode(sRateDescr))
+                    if(wf_MatchMapping("ecl_rate_descr", sRateDescr))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        int len = sRateDescr.Length;
+                        if (len == 0)
+                        {
+                            pErrValue = "Rate Descr empty";
+                        }
+                        else
+                        {
+                            len = (len > 10) ? 10 : len;
+                            pErrValue = "Rate Descr: " + sRateDescr.Substring(0,len);
+                        }
+                    }
+                    pErrName = "Blank Piece Rate Code";
+                    return 2;
+                }
+            }
+            //int nScanCount = (int)dw_import.DataObject.GetItem<EclDataImport>(pRow).EclScanCount;
+            string sScanCount = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclScanCount;
+            int nScanCount = int.TryParse( sScanCount, out n ) ? n : 0;
+            if (nScanCount != 1)
+            {
+                // If the Scan Count is 0, or doesn't match a specified customer name 
+                // (eg the customer name doesn't start with "DHL"), this is an error.
+                string sCustomerName = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclCustomerName;
+                //if (nScanCount == 0 || (! wf_ValidCust(sCustomerName)))
+                if (nScanCount == 0 || (! wf_MatchMapping("ecl_customer_name", sCustomerName)))
+                {
+                    int len = sCustomerName.Length;
+                    if (len > 1)
+                    {
+                        len = (len > 10) ? 10 : len;
+                        pErrValue = sScanCount + " - Cust: " + sCustomerName.Substring(0, len);
+                    }
+                    else
+                    {
+                        pErrValue = sScanCount + " - Cust name empty";
+                    }
+                    pErrName += "Invalid Scan Count";
+                    return 2;
+                }
+            }
+            string sThisTicketNo = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketNo;
+            string sThisTicketPart = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclTicketPart;
+            if (pPrevTicketNo == sThisTicketNo
+                && pPrevTicketPart == sThisTicketPart)
+            {
+                // Check for duplicate records.
+                // Return true if the previous ticket number and part are the same as this ticket's
+                // A separate routine determines which of the two is to be kept  
+                pErrName += "Duplicate ticket";
+                return wf_select_invalid(pRow);
+            }
+            string sSigReqFlag = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclSigReqFlag;
+            string sSigName = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclSigName;
+            if (sSigReqFlag == "SIG REQ" && sThisTicketPart == "D")
+            {
+                //if (wf_Check_RO5_Eligibility(sSigName))
+                if(! wf_MatchMapping("ecl_sig_name", sSigName.Trim().ToUpper()))
+                {
+                    dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRo5Flag = "Y";
+                }
+                else
+                    dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRo5Flag = "N";
+            }
+            else
+            {
+                dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRo5Flag = "N";
+            }
+            return 0;
+        }
+
+        public virtual void wf_process_input(DateTime pStartImport)
+        {
+            // This routine does input data quality checking following importation 
+            // of the raw data from the input file.
+            int tRows, nRows, nRow;
             string sFileName = string.Empty;
             DateTime dToday = DateTime.Today;
-            string prevTicketNo;
-            string prevTicketPart;
-            string sRuralPayable;
-            int prevSeqNo;
+            string sErrValue = string.Empty;
+            string sErrName = string.Empty;
+            string sLastErrName = string.Empty;
+            string sPrevTicketNo = string.Empty;
+            string sPrevTicketPart = string.Empty;
             int nData = 0;
             //bool delRow = false;
             int delRow = 0;  // 1 = delete prev; 2 = delete this
             string inFilename, outFilenameDefault;
-            string errName = "";
             DialogResult answer;
+            int nImportedSkipped;
+
+            DateTime dtStartSort = DateTime.Now;
+            DateTime dtStartProcess;
+            DateTime dtEndProcess;
 
             inFilename = sle_1.Text;
-/*
-            // Reset all 3 datawindows.
-            dw_errors.DataObject.Reset();
-            //dw_errorsList.Clear();
-*/
-            dw_import.DataObject.SortString = "EclTicketNo A, EclTicketPart A, EclSeq A";
+
+            // NOTE: Duplicates are identified as having the same EclTicketNo and EclTicketPart
+            //       Where duplicates are encountered, in general, the earliest (EclDriverDate) 
+            //       may be used.
+            dw_import.DataObject.SortString = "EclTicketNo A, EclTicketPart A, EclDriverDate A";
             dw_import.DataObject.Sort<EclDataImport>();
 
-            prevTicketNo   = "";
-            prevTicketPart = "";
-            prevSeqNo = -1;
-            nImportedErrors = 0;
+            dtStartProcess = DateTime.Now;
+
+            sPrevTicketNo = "";
+            sPrevTicketPart = "";
+            nImportedErrors  = 0;
+            nImportedSkipped = 0;
             nImportedRecords = dw_import.RowCount;
             nRows = dw_import.RowCount;
+            tRows = dw_import.RowCount;   // Remember how many we started with
             if (nRows > 0)
             {
                 // Scan each input record, applying various validations
@@ -1152,127 +1432,84 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nRow = 0;
                 while(nRow < nRows)
                 {
-                    delRow = 0;             // false;
-                    if (((nRow % 10) == 0))
+                    delRow = 0;             // The row is OK
+                    sErrValue = sErrName = "";
+                    if (((nRow % 100) == 0))
                     {
-                        UpdateStatusText("Processing", nRow, nRows, nImportedErrors);
+                        UpdateStatusText("Processing", nRow, tRows, nImportedErrors);
+                        if (was_cb_stop_clicked)
+                        {
+                            return;
+                        }
                     }
-                    //errName = "";
-                    sRuralPayable = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclRuralPayable;
-                    if (sRuralPayable == "N")
+                    delRow = wf_quality_check_input(nRow, sPrevTicketNo, sPrevTicketPart, ref sErrValue, ref sErrName);
+
+                    if (delRow == 1)   // Skip this row
                     {
-                        errName = "Rural payable = N";
-                        delRow = 2;          // true;
+                        nImportedSkipped++;
+                        dw_import.DeleteItemAt(nRow);
+                        // If we've deleted a row, the number of rows is less and
+                        // the current row number points to the next unprocessed row.
+                        nRows = dw_import.RowCount;
                     }
-                    if (wf_is_duplicate(nRow, prevTicketNo, prevTicketPart, prevSeqNo))
-                    {
-                        errName = "Duplicate ticket";
-                        delRow = wf_select_invalid(nRow);
-                    }
-                    //    - the code fragments are executed only if the validation is FALSE
-/*
-                    if (! wf_checkdate(nRow, dToday))
-                    {
-                        errName = "checkdate";
-                        delRow = true;
-                    }
-                    else if (! wf_check_contract(nRow))
-                    {
-                        errName = "check_contract";
-                        delRow = true;
-                    }
-                    else if (! wf_check_duplicate(nRow, prevContractNo, prevPrtCode, prevPrdDate))
-                    {
-                        errName = "check_duplicate";
-                        delRow = true;
-                    }
-                    else if (! wf_check_piece_rate(nRow))
-                    {
-                        errName = "check_piece_rate";
-                        delRow = true;
-                    }
-                    else if (! wf_confirm_rate(nRow))
-                    {
-                        errName = "check_confirm_rate";
-                        delRow = true;
-                    }
-                    else if (! wf_calculate_rate(nRow))
-                    {
-                        errName = "check_calculate_rate";
-                        delRow = true;
-                    }
- */
-                    if (delRow > 0)
+                    else if (delRow > 0)  // Error in this row
                     {
                         //ecl_import_errors[nImportedErrors] = CopyEclDataImportItem(dw_import.DataObject.GetItem<EclDataImport>(nRow));
-                        ecl_import_error_list.Add(CopyEclDataImportItem(dw_import.DataObject.GetItem<EclDataImport>(nRow), errName));
+                        ecl_import_error_list.Add(CopyEclDataImportItem(dw_import.DataObject.GetItem<EclDataImport>(nRow), sErrValue, sErrName));
 
                         nImportedErrors++;
                         dw_import.DeleteItemAt(nRow);
-                            // If we've deleted a row, the number of rows is less and
-                            // the current row number points to the next unprocessed row.
+                        // If we've deleted a row, the number of rows is less and
+                        // the current row number points to the next unprocessed row.
                         nRows = dw_import.RowCount;
+                        sLastErrName = sErrName;
                     }
                     else
                     {
                         // If we haven't deleted a row
                         // Save some of the current processed row's data to use to
                         // check the next record to see if it a duplicate.  If the current row 
-                        // was deleted, ignore it - - we only look for duplicate good records.
+                        // was deleted, ignore it - we only look for duplicate good records.
 
-                        prevTicketNo = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketNo;
-                        prevTicketPart = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketPart;
-                        prevSeqNo = (int)dw_import.DataObject.GetItem<EclDataImport>(nRow).EclSeq;
-                        prevSeqNo = (prevSeqNo == null) ? -2 : prevSeqNo;
+                        sPrevTicketNo = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketNo;
+                        sPrevTicketPart = dw_import.DataObject.GetItem<EclDataImport>(nRow).EclTicketPart;
                         // Increment the row number to the next unprocessed row.
                         nRow++;
                     }
                 }  // End record-scanning loop
                 UpdateStatusText("Processed", nRow, nRows, nImportedErrors);
+                dtEndProcess = DateTime.Now;
+                TimeSpan tsProcessTime = dtEndProcess.Subtract(dtStartProcess);
+                string sProcessTime = tsToString(tsProcessTime);
+                AppendStatusText( "  In " + sProcessTime);
+
             }
+            cb_stop.Visible = false;
             //nImportedErrors = dw_errorsList.Count;
             nData = dw_import.RowCount;
-            if (nImportedRecords != (nImportedErrors + nData))
+            if (nImportedRecords != (nImportedErrors + nImportedSkipped + nData))
             {
                 MessageBox.Show(sTopLine
                                + "Incorrect number of records after validation.\n"
                                + "   " + nImportedRecords + " records imported.\n"
                                + "   " + nImportedErrors + " error records found.\n"
-                               + "   " + "(last) Error message: " + errName + "\n"
+                               + "   " + nImportedSkipped + " records skipped.\n"
+                               + "   " + "(last) Error message: " + sLastErrName + "\n"
                                + "   " + nData + " records validated (nRows = " + nRows.ToString() + ")."
                                + sBottomLine
                                , "ECL Data Import: WARNING"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-/*
-            if (nImportedErrors == 0)
-            {
-                //!dw_errors.DataObject.InsertItem<EclDataImportExeptionReport>(0);
-                //!dw_errors.DataObject.GetItem<EclDataImportExeptionReport>(0).Errormsg = "No errors found in import file";
-                EclDataImportExeptionReport newError = new EclDataImportExeptionReport();
-                newError.Errormsg = "No errors found in import file";
-                dw_errorsList.Insert(0, newError);
-            }
-            ((DEclDataImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
 
-            //dw_errors.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
-            //dw_errors.DataObject.Sort<EclDataImportExeptionReport>();
-            if (nImportedErrors > 0)
-            {
-                MessageBox.Show(nImportedErrors + " Errors encountered.  Saving error records.\n"
-                             + "Please select a file to save the faulty records to."
-                             , ""
-                             , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                int i = inFilename.LastIndexOf('.');
-                outFilenameDefault = inFilename.Substring(0,i) + "-errors";
-                this.SaveErrorFile(outFilenameDefault, "text");
-            }
-*/
             if (nImportedErrors == 0)
             {
+                string skippedMsg = (nImportedSkipped == 0) 
+                                         ? "No records skipped.\n" 
+                                         : nImportedSkipped + " records skipped.\n";
                 MessageBox.Show(sTopLine
                                + nData.ToString() + " records imported,\n"
-                               + "No errors encountered."
+                               + "   " + "No errors encountered.\n"
+                               + "   " + skippedMsg
                                + sBottomLine
                                , "ECL Data Import"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1280,15 +1517,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             else
             {
                 string errcountmsg;
-                errcountmsg = ((nImportedErrors == 1) ? "1 error" : nImportedErrors + " errors") + " encountered.";
-
+                errcountmsg = ((nImportedErrors == 1) 
+                                     ? "1 error" 
+                                     : nImportedErrors + " errors") 
+                              + " encountered.";
+                DateTime dtNow = DateTime.Now;
+                TimeSpan tsImportTime = dtStartSort.Subtract(pStartImport);
+                TimeSpan tsSortTime = dtStartProcess.Subtract(dtStartSort);
+                TimeSpan tsProcessTime = dtNow.Subtract(dtStartProcess);
+                TimeSpan tsTotalTime = dtNow.Subtract(pStartImport);
                 answer = MessageBox.Show(sTopLine
                                + nImportedRecords.ToString() + " records imported\n"
-                               + "    " + nData.ToString() + " records validated\n"
-                               + "    " + errcountmsg + "\n"
-                               + "    (last) Error message: " + errName + "\n"
+                               + "   " + nData.ToString() + " records validated\n"
+                               + "   " + errcountmsg + "\n"
+                               + "   " + nImportedSkipped + " records skipped.\n"
+                               + "   (last) Error message: " + sLastErrName + "\n"
+                               + "   Timings: \n"
+                               + "      Import time  " + tsToString(tsImportTime) + "     \n"
+                               + "      Sort time    " + tsToString(tsSortTime)   + "     \n"
+                               + "      Process time " + tsToString(tsProcessTime)+ "     \n"
+                               + "      Total time   " + tsToString(tsTotalTime)  + "     \n"
                                + "\n"
-                               + "Do you want to print the error report?"
+                               + "Do you want to see the error report?"
                                + sBottomLine
                                , "ECL Data Import"
                                , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1297,9 +1547,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     StaticVariables.gnv_app.of_get_parameters().longparm = ecl_import_error_list.Count;
                     StaticMessage.PowerObjectParm = this;
+                    StaticMessage.StringParm = currentBatchNo.ToString();
                     //OpenSheet<WEclDataImportExceptionReport>(StaticVariables.MainMDI);
 
-                    WEclExceptionReportTest w_ecl_exception_report = new WEclExceptionReportTest();
+                    WEclExceptionReport w_ecl_exception_report = new WEclExceptionReport();
                     w_ecl_exception_report.ShowDialog();
                     string test = StaticVariables.gnv_app.of_get_parameters().stringparm;
                     string t = test;
@@ -1319,36 +1570,92 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             //?w_main_mdi.SetMicroHelp("");
             //post_yield();
-            cb_stop.Visible = false;
+            //cb_stop.Visible = false;
         }
         #endregion
+
+        private System.Data.DataTable EclErrDatatable;
+        //        public List<EclImportError> ecl_import_error_list;
+
+        private bool cr_error_datatable()
+        {
+            string sTicketNo = "";
+            string sTicketPart = "";
+            string sBatchId = "";
+            string sErrorText = "";
+            System.Data.DataRow r;
+
+            EclErrDatatable = new System.Data.DataTable();
+            try
+            {
+                EclErrDatatable.Columns.Add("EclTicketNo", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclTicketPart", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclBatchId", Type.GetType("System.String"));
+                EclErrDatatable.Columns.Add("EclErrorText", Type.GetType("System.String"));
+
+                int nRows = ecl_import_error_list.Count;
+                for (int i = 0; i < nRows; i++)
+                {
+                    sTicketNo = ecl_import_error_list[i].EclTicketNo;
+                    sTicketPart = ecl_import_error_list[i].EclTicketPart;
+                    sBatchId = ecl_import_error_list[i].EclBatchId;
+                    sErrorText = ecl_import_error_list[i].ErrorMsgText;
+
+                    r = EclErrDatatable.NewRow();
+                    r["EclTicketNo"] = sTicketNo;
+                    r["EclTicketPart"] = sTicketPart;
+                    r["EclBatchId"] = sBatchId;
+                    r["EclErrorText"] = sErrorText;
+                    EclErrDatatable.Rows.Add(r);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                string msg = e.Message;
+                string t = msg;
+                return false;
+            }
+        }
 
         #region Code added by John Mao
         //private char[] separator = new char[] { '\t', ',' };
         private char[] separator = new char[] { '\t' };
 
+        private void AppendStatusText(string sCaption)
+        {
+            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text
+                               += sCaption;
+            //this.st_status.Text += sCaption;
+            Application.DoEvents();
+        }
+
         private void UpdateStatusText(string sCaption)
         {
-            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text =
-                sCaption;
+            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text 
+                               = sCaption;
+            //this.st_status.Text = sCaption;
             Application.DoEvents();
         }
 
         private void UpdateStatusText(string sCaption, int current, int total)
         {
-            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text =
-                string.Format("{0} row {1} of {2}", sCaption, current, total);
+            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text 
+                               = string.Format("{0} row {1} of {2}", sCaption, current, total);
+            //this.st_status.Text = string.Format("{0} row {1} of {2}", sCaption, current, total);
             Application.DoEvents();
         }
 
         private void UpdateStatusText(string sCaption, int current, int total, int nErrors)
         {
-            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text =
-                string.Format("{0} row {1} of {2} Errors {3}", sCaption, current, total, nErrors);
+            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text
+                               = string.Format("{0} row {1} of {2} Errors {3}", sCaption, current, total, nErrors);
+            //this.st_status.Text = string.Format("{0} row {1} of {2} Errors {3}", sCaption, current, total, nErrors);
             Application.DoEvents();
         }
 
         // Data Import
+        //private int ImportFile(string path, int batch_no)
         private int ImportFile(string path, int batch_no)
         {
             nImportedRecords = 0;
@@ -1399,50 +1706,129 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // The first row (i = 0) is column headings: save them for adding to the error file (if any)
                 ecl_import_header = buffer[0];
 
-                for (i = 1; i < buffer.Count; i++)
+                // Check the first record to see if the batch has already been loaded
+                // Do it now since the data files are very large and take a long time
+                // to import.  Its better to check at the beginning than to wait.
+                dw_import.DataObject.AddItem<EclDataImport>(ParseStringToEclDataImport(buffer[1], batch_no));
+                nImportedRecords++;
+
+                int sqlCode = 0;
+                string sqlErrText = "";
+                string firstTicketNo = dw_import.DataObject.GetItem<EclDataImport>(0).EclTicketNo;
+                string firstTicketPart = dw_import.DataObject.GetItem<EclDataImport>(0).EclTicketPart;
+                bool RC = RDSDataService.IsDuplicateECLUploadData(firstTicketNo, firstTicketPart
+                                                      , ref sqlCode, ref sqlErrText);
+                if (sqlCode != 0)
+                {
+                    MessageBox.Show("Error checking for already-uploaded data\n"
+                        + "  Sql Code = " + sqlCode.ToString() + "\n"
+                        + "  Sql Text = " + sqlErrText
+                        , "ECL Data Import: Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (RC)
+                {
+                    DialogResult answer = MessageBox.Show(sTopLine
+                                   + "This data appears to have already been loaded!\n\n"
+                                   + "Do you want to continue importing the file?"
+                                   + sBottomLine
+                                   , "ECL Data Import: Warning"
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (answer == DialogResult.No)
+                    {
+                        return 1;
+                    }
+                }
+
+                dw_import.SuspendLayout();
+                for (i = 2; i < buffer.Count; i++)
                 {
                     // Update the number of records processed periodically
-                    if (((i % 10) == 0))
+                    if (((i % 100) == 0))
                     {
                         UpdateStatusText("Importing", i, buffer.Count);
+                        if (was_cb_stop_clicked)
+                        {
+                            return 1;
+                        }
+                        dw_import.SuspendLayout();
                     }
                     dw_import.DataObject.AddItem<EclDataImport>(ParseStringToEclDataImport(buffer[i], batch_no));
                     nImportedRecords++;
 
-                    // Check the first record to see if the batch has already been loaded
-                    // Do it now since the data files are very large and take a long time
-                    // to import.  Its better to check at the beginning than to wait.
-                    if (i == 1)
-                    {
-                        int sqlCode = 0;
-                        string sqlErrText = "";
-                        string firstTicketNo = dw_import.DataObject.GetItem<EclDataImport>(0).EclTicketNo;
-                        string firstTicketPart = dw_import.DataObject.GetItem<EclDataImport>(0).EclTicketPart;
-                        bool RC = RDSDataService.IsDuplicateECLUploadData(firstTicketNo, firstTicketPart
-                                                              , ref sqlCode, ref sqlErrText);
-                        if (sqlCode != 0)
-                        {
-                            MessageBox.Show("Error checking for already-uploaded data\n"
-                                + "  Sql Code = " + sqlCode.ToString() + "\n"
-                                + "  Sql Text = " + sqlErrText
-                                , "ECL Data Import: Error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        if (RC)
-                        {
-                            DialogResult answer = MessageBox.Show(sTopLine
-                                           + "This data appears to have already been loaded!\n\n"
-                                           + "Do you want to continue importing the file?"
-                                           + sBottomLine
-                                           , "ECL Data Import: Warning"
-                                           , MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                            if (answer == DialogResult.No)
-                            {
-                                return 1;
-                            }
-                        }
+                    //err_msg = ParseStringToEclDataImport(buffer[i]);
+                    //if (!string.IsNullOrEmpty(err_msg))
+                    //{
+                    //    err_count++;
+                    //    MessageBox.Show("Row " + i.ToString() + ": \n" + err_msg
+                    //                   , "ImportFile");
+                    //}
+                }
+                UpdateStatusText("Imported", i, buffer.Count);
+                dw_import.ResumeLayout();
 
+                //dw_import.DataObject.Refresh();
+                return dw_import.RowCount;
+                //return err_count;
+            }
+            else
+            {
+                return -8;
+            }
+        }
+
+        private int ImportFileAsText(string path, int batch_no)
+        {
+            int sqlCode = 0;
+            string sqlErrText = "";
+
+            nImportedRecords = 0;
+            if (!string.IsNullOrEmpty(path))
+            {
+                int i;
+
+                #region open the stream
+                StreamReader sr;
+                try
+                {
+                    sr = new StreamReader(path);
+                }
+                catch (Exception e)
+                {
+                    sqlErrText = e.Message;
+                    MessageBox.Show("Error opening input file.\n"
+                                   + sqlErrText
+                                   , "ERROR: ImportFileAsText");
+                    return -4;
+                }
+                #endregion
+
+                #region populate the buffer
+                List<string> buffer = new List<string>();
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    buffer.Add(line);
+                }
+                sr.Close();
+                #endregion
+
+                //int err_count = 0;
+                //string err_msg;
+                // The first row (i = 0) is column headings: save them for adding to the error file (if any)
+                ecl_import_header = buffer[0];
+
+                for (i = 1; i < buffer.Count; i++)
+                {
+                    // Update the number of records processed periodically
+                    if (((i % 100) == 0))
+                    {
+                        UpdateStatusText("Importing", i, buffer.Count);
                     }
+                    ecl_import_data_list.Add(ParseStringToEclImportText(buffer[i],batch_no));
+                    //dw_import.DataObject.AddItem<EclDataImport>(ParseStringToEclDataImport(buffer[i], batch_no));
+                    nImportedRecords++;
+
                     //err_msg = ParseStringToEclDataImport(buffer[i]);
                     //if (!string.IsNullOrEmpty(err_msg))
                     //{
@@ -1453,7 +1839,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 UpdateStatusText("Imported", i, buffer.Count);
 
-                dw_import.DataObject.Refresh();
+                //dw_import.DataObject.Refresh();
                 return dw_import.RowCount;
                 //return err_count;
             }
@@ -1463,7 +1849,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        private EclImportError CopyEclDataImportItem(EclDataImport bad_item, string sErrorMsg)
+        private EclImportError CopyEclDataImportItem(EclDataImport bad_item, string sErrorValue, string sErrorText)
         {
             // Copy a bad EclDataImport item to an EclImportError item
             // The only difference is that EclDataImport has a Batch_no field
@@ -1489,13 +1875,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             item.EclSigCaptured = bad_item.EclSigCaptured;
             item.EclSigName = bad_item.EclSigName;
             item.EclPrCode = bad_item.EclPrCode;
-            item.ErrorMsgText = sErrorMsg;
+            item.ErrorValue   = sErrorValue;
+            item.ErrorMsgText = sErrorText;
             return item;
         }
-
+/*
         private EclDataImport ParseStringToEclDataImport(string text, int batch_no)
         //private string ParseStringToEclDataImport(string text)
-        {   
+        {
             // Fields are <tab> separated
             // Missing data represented with the string "NULL" (not <null>)
             // Ticket_number + ticket_part is a unique key
@@ -1696,7 +2083,299 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //return err_msg;
             return item;
         }
-        #endregion
+*/
+        private EclDataImport ParseStringToEclDataImport(string text, int batch_no)
+        //private string ParseStringToEclDataImport(string text)
+        {
+            // Fields are <tab> separated
+            // Missing data represented with the string "NULL" (not <null>)
+            // Ticket_number + ticket_part is a unique key
+            //
+            // Format expected:
+            // ticket_number    varchar
+            // ticket_part      char        D, P, or N
+            // customer_name    varchar
+            // customer_code    number
+            // seq              number
+            // driver_id        number
+            // rate_code        number
+            // rate_description varchar
+            // package_desc     varchar
+            // batch_entry_id   number
+            // run_id           number
+            // run_number       number
+            // driver_date      timestamp   yyyy-mm-dd hh:mm:ss.xxx
+            // date_entered     timestamp   yyyy-mm-dd hh:mm:ss.xxx
+            // ticket_payable   char        Y or N
+            // rural_payable    char        Y or N
+            // scan_count       number
+            // signature_flag   varchar
+            // sig_captured     varchar
+            // signame          varchar
+            // rc_piece_rate_code   varchar
 
+            int i;
+            string s;
+            DateTime dt;
+            DateTime DriverDate = DateTime.MinValue;
+            int err_count = 0;
+            string err_msg = "";
+
+            EclDataImport item = new EclDataImport();
+            text = text.Replace("\"", "");
+            text = text.Replace("\'", "");
+
+            item.EclBatchNo = batch_no;
+
+            string[] fields = text.Split(separator);
+            for (i = 0; i < fields.Length; i++)
+            {
+                err_msg = "";
+                err_count = 0;
+
+                // s = fields[i];
+                // if (s == "NULL")
+                // {
+                //     s = "";
+                // }
+                s = (fields[i] == "NULL") ? "" : fields[i];
+                switch (i)
+                {
+                    case 0:    // customer_name
+                        item.EclCustomerName = s;
+                        break;
+                    case 1:    // customer_code
+                        item.EclCustomerCode = s;
+                        break;
+                    case 2:    // ticket_number
+                        item.EclTicketNo = s;
+                        break;
+                    case 3:    // ticket_part
+                        item.EclTicketPart = s;
+                        break;
+                    case 4:    // seq
+                        item.EclSeq = s;
+                        break;
+                    case 5:    // driver_id
+                        item.EclDriverId = s;
+                        break;
+                    case 6:    // rate_code
+                        item.EclRateCode = s;
+                        break;
+                    case 7:    // rate_descr
+                        item.EclRateDescr = s;
+                        break;
+                    case 8:    // pkg_descr
+                        item.EclPkgDescr = s;
+                        break;
+                    case 9:    // batch_id
+                        item.EclBatchId = s;
+                        break;
+                    case 10:   // run_id
+                        item.EclRunID = s;
+                        break;
+                    case 11:   // run_no
+                        item.EclRunNo = s;
+                        break;
+                    case 12:   // driver_date
+                        if (DateTime.TryParse(s, out dt))
+                        {
+                            item.EclDriverDate = dt;
+                            DriverDate = dt;
+                        }
+                        else
+                        {
+                            err_count++;
+                            err_msg = err_msg + "   driver_date = " + s + "\n";
+                        }
+                        break;
+                    case 13:   // date_entered
+                        item.EclDateEntered = s;
+                        break;
+                    case 14:   // ticket_payable
+                        item.EclTicketPayable = s;
+                        break;
+                    case 15:   // rural_payable
+                        item.EclRuralPayable = s;
+                        break;
+                    case 16:   // scan_count
+                        item.EclScanCount = s;
+                        break;
+                    case 17:   // sig_req_flag
+                        item.EclSigReqFlag = s;
+                        break;
+                    case 18:   // sig_captured
+                        item.EclSigCaptured = s;
+                        break;
+                    case 19:   // sig_name
+                        item.EclSigName = s;
+                        break;
+                    case 20:   // rc_pr_code
+                        item.EclPrCode = s;
+                        break;
+                    default:
+                        err_count++;
+                        err_msg = err_msg + "  Field " + i.ToString() + ": default\n";
+                        break;
+                }
+            }
+            item.EclEffectiveDate = lastDayOfMonth(DriverDate);
+            return item;
+        }
+
+        private DateTime lastDayOfMonth(DateTime pDate)
+        {
+            DateTime dt = DateTime.MinValue;
+            TimeSpan OneDay = TimeSpan.FromDays(1);
+            int mth = pDate.Month;
+            int yr = pDate.Year;
+            mth++;
+            if (mth > 12)
+            {
+                mth = 1;
+                yr++;
+            }
+            string t = "1-" + mth.ToString() + "-" + yr.ToString();
+            if (DateTime.TryParse(t, out dt))
+            {
+                dt = dt.Subtract(OneDay);
+            }
+            return dt;
+        }
+        private EclImportText ParseStringToEclImportText(string pText, int pBatchNo)
+        //private string ParseStringToEclDataImport(string text)
+        {   
+            // Fields are <tab> separated
+            // Missing data represented with the string "NULL" (not <null>)
+            // Ticket_number + ticket_part is a unique key
+            //
+            // Format expected:
+            // ticket_number    varchar
+            // ticket_part      char        D, P, or N
+            // customer_name    varchar
+            // customer_code    number
+            // seq              number
+            // driver_id        number
+            // rate_code        number
+            // rate_description varchar
+            // package_desc     varchar
+            // batch_entry_id   number
+            // run_id           number
+            // run_number       number
+            // driver_date      timestamp   yyy-mm-dd hh:mm:ss.xxx
+            // date_entered     timestamp   yyy-mm-dd hh:mm:ss.xxx
+            // ticket_payable   char        Y or N
+            // rural_payable    char        Y or N
+            // scan_count       number
+            // signature_flag   varchar
+            // sig_captured     varchar
+            // signame          varchar
+            // rc_piece_rate_code   varchar
+
+            int i;
+            string s;
+            DateTime dt;
+            int err_count = 0;
+            string err_msg = "";
+
+            pText = pText.Replace("\"", "");
+            pText = pText.Replace("\'", "");
+
+            EclImportText item = new EclImportText();
+            item.nEclBatchNo = pBatchNo;
+            
+            string[] fields = pText.Split(separator);
+            for (i = 0; i < fields.Length; i++)
+            {
+                s = fields[i];
+                err_msg = "";
+                err_count = 0;
+
+                if (s == "NULL")
+                {
+                    s = "";
+                }
+                switch (i)
+                {
+                    case 0:    // customer_name
+                        item.sEclCustomerName = s;
+                        break;
+                    case 1:    // customer_code
+                        item.sEclCustomerCode = s;
+                        break;
+                    case 2:    // ticket_number
+                        item.sEclTicketNo = s;
+                        break;
+                    case 3:    // ticket_part
+                        item.sEclTicketPart = s;
+                        break;
+                    case 4:    // seq
+                        item.sEclSeq = s;
+                        break;
+                    case 5:    // driver_id
+                        item.sEclDriverId = s;
+                        break;
+                    case 6:    // rate_code
+                        item.sEclRateCode = s;
+                        break;
+                    case 7:    // rate_descr
+                        item.sEclRateDescr = s;
+                        break;
+                    case 8:    // pkg_descr
+                        item.sEclPkgDescr = s;
+                        break;
+                    case 9:    // batch_id
+                        item.sEclBatchId = s;
+                        break;
+                    case 10:   // run_id
+                        item.sEclRunID = s;
+                        break;
+                    case 11:   // run_no
+                        item.sEclRunNo = s;
+                        break;
+                    case 12:   // driver_date
+                        if (DateTime.TryParse(s, out dt))
+                        {
+                            item.dEclDriverDate = dt;
+                        }
+                        else
+                        {
+                            err_count++;
+                            err_msg = err_msg + "   driver_date = " + s + "\n";
+                        }
+                        break;
+                    case 13:   // date_entered
+                        item.sEclDateEntered = s;
+                        break;
+                    case 14:   // ticket_payable
+                        item.sEclTicketPayable = s;
+                        break;
+                    case 15:   // rural_payable
+                        item.sEclRuralPayable = s;
+                        break;
+                    case 16:   // scan_count
+                        item.sEclScanCount = s;
+                        break;
+                    case 17:   // sig_req_flag
+                        item.sEclSigReqFlag = s;
+                        break;
+                    case 18:   // sig_captured
+                        item.sEclSigCaptured = s;
+                        break;
+                    case 19:   // sig_name
+                        item.sEclSigName = s;
+                        break;
+                    case 20:   // rc_pr_code
+                        item.sEclPrCode = s;
+                        break;
+                    default:
+                        err_count++;
+                        err_msg = err_msg + "  Field " + i.ToString() + ": default\n";
+                        break;
+                }
+            }
+            return item;
+        }
+        #endregion
     }
 }
