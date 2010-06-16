@@ -71,7 +71,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             st_version.Text = "Version "
                               + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString()
                               + " (Built on " 
-                              + string.Format("{0:dd/MMM/yyyy HH:mm}", 
+                              + string.Format("{0:dd-MMM-yyyy HH:mm}", 
                                            System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location))
                               + ")";
             this.st_copyright.Text = "Copyright © 2010, all rights reserved";
