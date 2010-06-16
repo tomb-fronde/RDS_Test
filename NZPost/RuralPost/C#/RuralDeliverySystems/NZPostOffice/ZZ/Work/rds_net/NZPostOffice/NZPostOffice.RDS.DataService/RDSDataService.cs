@@ -13,10 +13,45 @@ using Metex.Core.Security;
 //************************************************************************************************
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB  ECL Data Import  June-2010
+    // Multiple additions in labelled sections.
+    //
+    // TJB  ECL Data Import  June-2010
+    // Added struct to hold data row being imported into database
+    // (see InsertIntoECLUploadData and _InsertIntoECLUploadData)
+    public struct EclImportData
+    {
+        public int EclBatchNo;
+        public string EclTicketNo;
+        public string EclTicketPart;
+        public string EclCustomerName;
+        public string EclCustomerCode;
+        public int EclSeq;
+        public int EclDriverId;
+        public int EclRateCode;
+        public string EclRateDescr;
+        public string EclPkgDescr;
+        public int EclBatchId;
+        public int EclRunID;
+        public string EclRunNo;
+        public DateTime EclDriverDate;
+        public DateTime EclDateEntered;
+        public string EclTicketPayable;
+        public string EclRuralPayable;
+        public int EclScanCount;
+        public string EclSigReqFlag;
+        public string EclSigCaptured;
+        public string EclSigName;
+        public string EclPrCode;
+        public string EclRo5Flag;
+        public DateTime EclEffectiveDate;
+    }
+
     [Serializable()]
     public class RDSDataService : CommandEntity<RDSDataService>
     {
         #region Factory Methods
+
         public bool ret = false;
         private string dataObject;
         public int intVal;
@@ -2105,7 +2140,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///select count ( prt_key) into @lCount from piece_rate_delivery where contract_no = @lContract and prt_key     = @lPRKey  and prd_date    = @dPRDDate
+        ///select count(prt_key) into @lCount from piece_rate_delivery where contract_no = @lContract and prt_key     = @lPRKey  and prd_date    = @dPRDDate
         /// </summary>
         public static int GetPieceRateDeliveryCount(int? lContract, int? lPRKey, DateTime? dPRDDate)
         {
@@ -2115,7 +2150,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///select max(contract_seq_number)  into @li_seq_num   from contract_renewals  where contract_no = @li_contract_no
+        ///select max(contract_seq_number) into @li_seq_num from contract_renewals  where contract_no = @li_contract_no
         /// </summary>
         public static int GetMaxContractSeqNumber(int? li_contract_no)
         {
@@ -2125,7 +2160,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// SELECT	min ( date ( move_in_date)) INTO		@ld_move_in_early FROM		customer_address_moves WHERE		move_out_date is null USING		SQLCA;
+        /// SELECT min(date(move_in_date)) INTO @ld_move_in_early FROM customer_address_moves WHERE move_out_date is null
         /// </summary>
         public static DateTime? GetCustomerAddressMovesMoveInDateMin(ref int sqlCode, ref string sqlErrText)
         {
@@ -2136,7 +2171,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// SELECT mail_count_date.mail_count_date  INTO 	@mcdate  FROM 	mail_count_date  ;
+        /// SELECT mail_count_date.mail_count_date INTO @mcdate FROM mail_count_date;
         /// </summary>
         public static DateTime? GetMailCountDateMailCountDate()
         {
@@ -2145,7 +2180,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///SELECT 	min ( nvr.rg_code) INTO		@rg_code FROM 		non_vehicle_rate nvr WHERE 	nvr.nvr_contract_end = ( SELECT min (  nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end >= @mcdate)  ;
+        ///SELECT min(nvr.rg_code) INTO @rg_code FROM non_vehicle_rate nvr WHERE nvr.nvr_contract_end = ( SELECT min (  nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end >= @mcdate);
         /// </summary>
         public static int GetNonVehicleRateRgCodeMin(DateTime? mcdate, ref int sqlCode, ref string sqlErrText)
         {
@@ -2156,7 +2191,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///SELECT 	min ( nvr.rg_code) INTO		@rgcode2 FROM 		non_vehicle_rate nvr WHERE 	nvr.rg_code <> @rg_code and  nvr.nvr_contract_end =  ( SELECT min ( nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end > @mcdate and nvr2.nvr_contract_end >  ( select min ( nvr3.nvr_contract_end) from 	non_vehicle_rate nvr3 where nvr3.nvr_contract_end >= @mcdate));
+        ///SELECT min(nvr.rg_code) INTO @rgcode2 FROM non_vehicle_rate nvr WHERE nvr.rg_code <> @rg_code and  nvr.nvr_contract_end =  ( SELECT min ( nvr2.nvr_contract_end ) FROM non_vehicle_rate nvr2 WHERE nvr2.nvr_contract_end > @mcdate and nvr2.nvr_contract_end >  ( select min ( nvr3.nvr_contract_end) from 	non_vehicle_rate nvr3 where nvr3.nvr_contract_end >= @mcdate));
         /// </summary>
         public static int GetNonVehicleRateRgCodeMin1(int? rg_code, DateTime? mcdate, ref int sqlCode, ref string sqlErrText)
         {
@@ -2167,7 +2202,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///SELECT count ( mail_count_date.mail_count_date) INTO @lcount  FROM mail_count_date  ;
+        ///SELECT count(mail_count_date.mail_count_date) INTO @lcount FROM mail_count_date;
         /// </summary>
         public static int GetMailCountDateMailCountDateCount()
         {
@@ -2177,7 +2212,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// INSERT INTO mail_count_date   (  mail_count_date )  VALUES  (  @mcdate )  ;
+        /// INSERT INTO mail_count_date (mail_count_date) VALUES (@mcdate);
         /// </summary>
         public static void InsertMailCountDate(DateTime? mcdate)
         {
@@ -2193,7 +2228,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select con_start_date, con_expiry_date  into @ld_start, @ld_end  from contract_renewals  where contract_seq_number = @li_seq_num  and contract_no = @li_contract_no
+        /// select con_start_date, con_expiry_date into @ld_start, @ld_end from contract_renewals  where contract_seq_number = @li_seq_num  and contract_no = @li_contract_no
         /// </summary>
         public static RDSDataService GetContractRenewalsDate(int? li_seq_num, int? li_contract_no)
         {
@@ -2207,7 +2242,6 @@ namespace NZPostOffice.RDS.DataService
         public static DateTime? GetConRatesEffDate(int? li_contract_no, int? li_seq_num)
         {
             RDSDataService obj = Execute("_GetConRatesEffDate", li_contract_no, li_seq_num);
-
             return obj.dtVal;
         }
 
@@ -2217,15 +2251,20 @@ namespace NZPostOffice.RDS.DataService
         public static Decimal? GetPrRateFromPieceRate(int? li_prt_key, DateTime? ld_con_rates_effective_date)
         {
             RDSDataService obj = Execute("_GetPrRateFromPieceRate", li_prt_key, ld_con_rates_effective_date);
-
             return obj.decVal;
         }
 
         /// <summary>
-        /// UPDATE	vehicle_override_rate vor1  SET	vor1.vor_fuel_rate = @ldc_new_override_fuel_rate WHERE	vor1.contract_no = @ll_contract_no
-        ///                   AND		vor1.contract_seq_number = @ll_sequence_no AND		vor1.vor_effective_date >= @ld_rates_effective_date
-        ///                    AND		vor1.vor_effective_date =  ( SELECT	max ( vor2.vor_effective_date)  FROM		vehicle_override_rate vor2 
-        ///                    WHERE		vor2.contract_no = vor1.contract_no AND		vor2.contract_seq_number = vor1.contract_seq_number)
+        /// UPDATE vehicle_override_rate vor1  
+        ///    SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate 
+        ///  WHERE vor1.contract_no = @ll_contract_no
+        ///    AND vor1.contract_seq_number = @ll_sequence_no 
+        ///    AND vor1.vor_effective_date >= @ld_rates_effective_date
+        ///    AND vor1.vor_effective_date 
+        ///             = (SELECT max(vor2.vor_effective_date)
+        ///                  FROM vehicle_override_rate vor2 
+        ///                 WHERE vor2.contract_no = vor1.contract_no 
+        ///                   AND vor2.contract_seq_number = vor1.contract_seq_number)
         /// </summary>
         public static void UpdateVehicleOverrideRate(
             decimal? ldc_new_override_fuel_rate,
@@ -2241,9 +2280,13 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select contract_renewals.contract_seq_number  into @lRenewal from contract key join contract_renewals where contract.contract_no = @lContract
-        ///                and  ( contract_renewals.contract_seq_number =  ( contract.con_active_sequence + 1)
-        ///               or  ( contract.con_active_sequence is null  and contract_renewals.contract_seq_number = 1))
+        /// select contract_renewals.contract_seq_number 
+        ///   into @lRenewal 
+        ///   from contract key join contract_renewals 
+        ///  where contract.contract_no = @lContract
+        ///    and (contract_renewals.contract_seq_number = (contract.con_active_sequence + 1)
+        ///          or (contract.con_active_sequence is null 
+        ///               and contract_renewals.contract_seq_number = 1))
         /// </summary>
         public static int GetContractSeqNumber(int? lContract, ref int SQLCode)
         {
@@ -2254,7 +2297,11 @@ namespace NZPostOffice.RDS.DataService
 
         /// <summary>
         /// 
-        /// SELECT count ( artical_count.contract_no  ) INTO @lCount  FROM artical_count   WHERE  (  artical_count.contract_no = @lContract ) AND  (  artical_count.contract_seq_number = @ilRenewal )  
+        /// SELECT count(artical_count.contract_no ) 
+        ///   INTO @lCount  
+        ///   FROM artical_count  
+        ///  WHERE (artical_count.contract_no = @lContract) 
+        ///    AND (artical_count.contract_seq_number = @ilRenewal )  
         /// </summary>
         public static int GetArticalCountCount2(int? lContract, int ilRenewal)
         {
@@ -2481,7 +2528,7 @@ namespace NZPostOffice.RDS.DataService
             Execute("_CleanupFDRows", sf_key, contract_no, rd_sequence, rf_delivery_days);
         }
 
-        // TJB  May-2010  ECL Data Upload
+        // TJB  June-2010  ECL Data Upload -----------------------------------------------
         public static bool InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors
                                                       , ref int sqlCode, ref string sqlErrText)
         {
@@ -2542,15 +2589,36 @@ namespace NZPostOffice.RDS.DataService
             return obj.intVal;
         }
 
-        public static int SpInsertECLUploadedData(int lBatchNo, ref int sqlCode, ref string sqlErrText)
+        public static int sp_ECLInsertData(int lBatchNo, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_SpInsertECLUploadedData", lBatchNo);
+            RDSDataService obj = Execute("_sp_ECLInsertData", lBatchNo);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.intVal;
         }
 
-        // TJB  May-2010  ECL Data Upload ----------- end  -----------
+        /// <summary>
+        /// SELECT * from ecl_quality_mappings
+        /// </summary>
+        public static RDSDataService GetEclQualityMappings(ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetEclQualityMappings");
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj;
+        }
+
+        /// <summary>
+        /// insert into ecl_upload_data (...) Values (...)
+        /// </summary>
+        public static RDSDataService InsertIntoECLUploadData(EclImportData item, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_InsertIntoECLUploadData", item);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj;
+        }
+        // TJB  June-2010  ECL Data Upload --------------------- End ---------------------
 
         #endregion
 
@@ -7626,7 +7694,6 @@ namespace NZPostOffice.RDS.DataService
                     }
                 }
             }
-
         }
 
         [ServerMethod]
@@ -10887,7 +10954,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  May-2010  ECL Data Upload
+        // TJB  June-2010  ECL Data Upload -----------------------------------------------
         [ServerMethod]
         private void _GetECLUploadHistoryCurrentBatchNo()
         {
@@ -11067,7 +11134,7 @@ namespace NZPostOffice.RDS.DataService
                     cm.CommandText = cm.CommandText = 
                         "select count(*) from rd.ECL_upload_data "
                          + "where ecl_ticket_no = @ticketNo "
-                         + "and ecl_ticket_part = @ticketPart ";
+                         + "  and ecl_ticket_part = @ticketPart ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ticketNo", sTicketNo);
                     pList.Add(cm, "ticketPart", sTicketPart);
@@ -11101,25 +11168,26 @@ namespace NZPostOffice.RDS.DataService
 
         [ServerMethod]
         private void _GetECLUploadedBatchSize(int lBatchNo)
-        {   // Returns the number or frcords in the batch that haven't been inserted
-            // ... by extension, returns 0 if the batch has already been loaded
-            //     (since there must be at least one record in the batch for it to be uploaded)
-            // Returns -1 if the batch hasn't been loaded
+        {   // Returns 
+            //     n    the number of rcords in the batch that haven't been inserted
+            //    -1    if the batch has already been inserted
+            //    -2    If the batch doesn't exist (hasn't been loaded)
 
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    //cm.CommandText = "select count(*) from rd.ECL_upload_data "
-                    //    + "WHERE ecl_batch_no = @batchNo"
-                    //    + "  AND ecl_date_inserted is null";
-                    cm.CommandText = "IF exists (SELECT 1 FROM rd.ECL_upload_history h WHERE h.ecl_batch_no = @batchNo) "
-                                   + "   SELECT count(*) FROM rd.ECL_upload_data d, rd.ECL_upload_history h "
-                                   + "    WHERE d.ecl_batch_no = @batchNo "
-                                   + "      AND h.ecl_batch_no = d.ecl_batch_no "
-                                   + "      AND h.ecl_date_inserted is null "
+                    cm.CommandText = "IF not exists (SELECT 1 FROM rd.ECL_upload_history h "
+                                                   + "WHERE h.ecl_batch_no = @batchNo) "
+                                   + "   SELECT -2 "
+                                   + "ELSE IF not exists (SELECT 1 FROM rd.ECL_upload_history h "
+                                                    + "WHERE h.ecl_batch_no = @batchNo "
+                                                    + "AND h.ecl_date_inserted is null)"
+                                   + "   SELECT -1 "
                                    + "ELSE "
-                                   + "   SELECT -1 ";
+                                   + "   SELECT count(*) FROM rd.ECL_upload_data d"
+                                   + "    WHERE d.ecl_batch_no = @batchNo "
+                                   ;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "batchNo", lBatchNo);
 
@@ -11150,14 +11218,14 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _SpInsertECLUploadedData(int in_batchNo)
+        private void _sp_ECLInsertData(int in_batchNo)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "rd.sp_InsertECLUploadedData";
+                    cm.CommandText = "rd.sp_ECLInsertData";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_batchNo", in_batchNo);
@@ -11182,11 +11250,163 @@ namespace NZPostOffice.RDS.DataService
                 }
             }
         }
-        // TJB  May-2010  ECL Data Upload ---------- End ----------
+
+        private List<EclQualityMappingItem> _eclQualityMappingsList;
+        public List<EclQualityMappingItem> EclQualityMappingsList
+        {
+            get
+            {
+                return _eclQualityMappingsList;
+            }
+        }
+
+        // This method returns a list of the entries in the ecl_quality_mappings table
+        [ServerMethod]
+        private void _GetEclQualityMappings()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+
+                    cm.CommandText = "SELECT * FROM ecl_quality_mappings";
+
+                    _eclQualityMappingsList = new List<EclQualityMappingItem>();
+                    try
+                    {
+                        _sqlcode = 100;
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                EclQualityMappingItem rf = new EclQualityMappingItem();
+                                rf.column_name = dr.GetString(0);
+                                rf.match_string = dr.GetString(1);
+                                rf.match_type = dr.GetString(2);
+                                rf.pr_code = dr.GetString(3);
+                                _eclQualityMappingsList.Add(rf);
+                                _sqlcode = 0;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _InsertIntoECLUploadData( EclImportData item )
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = "INSERT INTO rd.ECL_upload_data "
+                         + "( ecl_batch_no, ecl_ticket_no, ecl_ticket_part, ecl_customer_name, "
+                         + "  ecl_customer_code, ecl_seq, ecl_driver_id, ecl_rate_code, "
+                         + "  ecl_rate_descr, ecl_pkg_descr, ecl_batch_id, ecl_run_id, "
+                         + "  ecl_run_no, ecl_driver_date, ecl_date_entered, ecl_ticket_payable, "
+                         + "  ecl_rural_payable, ecl_scan_count, ecl_sig_req_flag, ecl_sig_captured, "
+                         + "  ecl_sig_name, ecl_pr_code, ecl_ro5_flag, ecl_effective_date )"
+                        + "VALUES "
+                         + "( @BatchNo, @TicketNo, @TicketPart, @CustomerName, "
+                         + "  @CustomerCode, @Seq, @DriverId, @RateCode, "
+                         + "  @RateDescr, @PkgDescr, @BatchId, @RunID, "
+                         + "  @RunNo, @DriverDate, @DateEntered, @TicketPayable, "
+                         + "  @RuralPayable, @ScanCount, @SigReqFlag, @SigCaptured, "
+                         + "  @SigName, @PrCode, @Ro5Flag, @EffectiveDate )";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "BatchNo", item.EclBatchNo);
+                    pList.Add(cm, "TicketNo", item.EclTicketNo);
+                    pList.Add(cm, "TicketPart", item.EclTicketPart);
+                    pList.Add(cm, "CustomerName", item.EclCustomerName);
+                    pList.Add(cm, "CustomerCode", item.EclCustomerCode);
+                    pList.Add(cm, "Seq", item.EclSeq);
+                    pList.Add(cm, "DriverId", item.EclDriverId);
+                    pList.Add(cm, "RateCode", item.EclRateCode);
+                    pList.Add(cm, "RateDescr", item.EclRateDescr);
+                    pList.Add(cm, "PkgDescr", item.EclPkgDescr);
+                    pList.Add(cm, "BatchId", item.EclBatchId);
+                    pList.Add(cm, "RunID", item.EclRunID);
+                    pList.Add(cm, "RunNo", item.EclRunNo);
+                    pList.Add(cm, "DriverDate", item.EclDriverDate);
+                    pList.Add(cm, "DateEntered", item.EclDateEntered);
+                    pList.Add(cm, "TicketPayable", item.EclTicketPayable);
+                    pList.Add(cm, "RuralPayable", item.EclRuralPayable);
+                    pList.Add(cm, "ScanCount", item.EclScanCount);
+                    pList.Add(cm, "SigReqFlag", item.EclSigReqFlag);
+                    pList.Add(cm, "SigCaptured", item.EclSigCaptured);
+                    pList.Add(cm, "SigName", item.EclSigName);
+                    pList.Add(cm, "PrCode", item.EclPrCode);
+                    pList.Add(cm, "Ro5Flag", item.EclRo5Flag);
+                    pList.Add(cm, "EffectiveDate", item.EclEffectiveDate);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  June-2010  ECL Data Upload --------------------- End ---------------------
         #endregion
     }
 
     #region Method Class
+
+    // TJB  June-2010  ECL Data Upload -----------------------------------------------
+    [Serializable()]
+    public class EclQualityMappingItem
+    {
+        internal string column_name;
+        public string Column_name
+        {
+            get
+            {
+                return column_name;
+            }
+        }
+        internal string match_string;
+        public string Match_string
+        {
+            get
+            {
+                return match_string;
+            }
+        }
+        internal string match_type;
+        public string Match_type
+        {
+            get
+            {
+                return match_type;
+            }
+        }
+        internal string pr_code;
+        public string Pr_code
+        {
+            get
+            {
+                return pr_code;
+            }
+        }
+    }
+    // TJB  June-2010  ECL Data Upload --------------------- End ---------------------
+
     [Serializable()]
     public class VehicleItem
     {
