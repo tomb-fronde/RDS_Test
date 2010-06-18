@@ -868,6 +868,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     UpdateStatusText("Uploading data", nRow, nRows);
                     if (was_cb_stop_clicked)
                     {
+                        AppendStatusText(" - Stopped");
                         return nRow;
                     }
                 }
@@ -1437,6 +1438,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         UpdateStatusText("Processing", nRow, tRows, nImportedErrors);
                         if (was_cb_stop_clicked)
                         {
+                            AppendStatusText(" - Stopped");
                             return;
                         }
                     }
@@ -1624,13 +1626,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text
                                += sCaption;
-            //this.st_status.Text += sCaption;
+            //this.st_status.Text = sCaption;
             Application.DoEvents();
         }
 
         private void UpdateStatusText(string sCaption)
         {
-            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text 
+            ((NZPostOffice.RDS.Windows.Ruralwin.WMainMdi)StaticVariables.MainMDI).toolStripStatusLabel1.Text
                                = sCaption;
             //this.st_status.Text = sCaption;
             Application.DoEvents();
@@ -1747,6 +1749,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         UpdateStatusText("Importing", i, buffer.Count);
                         if (was_cb_stop_clicked)
                         {
+                            AppendStatusText(" - Stopped");
                             return 1;
                         }
                         dw_import.SuspendLayout();
