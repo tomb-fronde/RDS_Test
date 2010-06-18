@@ -41,7 +41,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(75, 23);
             this.cb_cancel.TabIndex = 1;
-            this.cb_cancel.Text = "Cancel";
+            this.cb_cancel.Text = "&Close";
             this.cb_cancel.UseVisualStyleBackColor = true;
             this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_Click);
             // 

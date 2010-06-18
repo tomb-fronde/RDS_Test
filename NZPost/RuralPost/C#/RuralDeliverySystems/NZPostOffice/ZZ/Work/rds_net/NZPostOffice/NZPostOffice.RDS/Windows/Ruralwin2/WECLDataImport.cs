@@ -113,7 +113,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public int nImportedRecords;
         public int nImportedErrors;
         public int currentBatchNo = 0;
-        public int newBatchNo = 0;
         string sBlankLine = "                              \n";
         string sTopLine = "---------------------------------------\n\n";
         private Label st_status;
@@ -159,11 +158,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if ((l_batchNo == 0))
             {
                 // If there is no current batch, get the next one
-                newBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryNextBatchNo(ref SQLCode, ref SQLErrText);
+                currentBatchNo = l_batchNo = RDSDataService.GetECLUploadHistoryNextBatchNo(ref SQLCode, ref SQLErrText);
             }
-            string s_BatchNo = l_batchNo.ToString();
-            //MessageBox.Show("l_batch_no = " + s_BatchNo + "\n"
-            //               , "Debugging");
 
             RDSDataService dataService = RDSDataService.GetEclQualityMappings(
                                          ref SQLCode,
@@ -179,7 +175,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             //?base.pfc_postopen();
             dw_import.URdsDw_GetFocus(new object(), new EventArgs());
-            tb_batch_no.Text = s_BatchNo;
+            tb_batch_no.Text = currentBatchNo.ToString();
 
             cb_upload.Visible = true;
             cb_insert.Visible = true;
@@ -290,7 +286,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(52, 21);
             this.cb_cancel.TabIndex = 7;
-            this.cb_cancel.Text = "&Cancel";
+            this.cb_cancel.Text = "&Close";
             this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // cb_stop
@@ -323,6 +319,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tb_batch_no.Size = new System.Drawing.Size(100, 20);
             this.tb_batch_no.TabIndex = 11;
             this.tb_batch_no.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            this.tb_batch_no.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.tb_batch_no_MaskInputRejected);
+            this.tb_batch_no.Leave += new System.EventHandler(this.tb_batch_no_Leave);
             // 
             // st_status
             // 
@@ -710,7 +708,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             else
             {
                 MessageBox.Show(sTopLine
-                              + "Invalid batch number - please enter a correct one."
+                              + "Invalid batch number - must be a simple integer."
                               + sBottomLine
                               , "ECL Data Processing: Warning"
                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2377,5 +2375,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return item;
         }
         #endregion
+
+        private void tb_batch_no_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            MessageBox.Show("Bad batch number.  Must be a simple integer."
+                            , "Error");
+        }
+
+        private void tb_batch_no_Leave(object sender, EventArgs e)
+        {
+            string sBatchNo = tb_batch_no.Text;
+            int n;
+            if (int.TryParse(sBatchNo, out n))
+                currentBatchNo = n;
+            else
+            {
+                MessageBox.Show("Bad batch number.  Must be a simple integer."
+                                , "Error"
+                                );
+                tb_batch_no.Text = currentBatchNo.ToString();
+            }
+        }
     }
 }
