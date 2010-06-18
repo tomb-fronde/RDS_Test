@@ -34,6 +34,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             m_main_menu = new MMainMenu(this);
             // TJB  Aug2009
             // Changed content of Toolstrip StatusLabel4 to show purpose of app
+            this.Text = "Rural Delivery System";
             this.toolStripStatusLabel4.Text = "DEV Version";
             //this.toolStripStatusLabel4.Text = "Test Version";
             //this.toolStripStatusLabel4.Text = "Production Version";
@@ -41,8 +42,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Changed the 'Environment' value to the RDS version number
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.2.12";
-            //this.toolStripStatusLabel6.Text = "16/02/2010 11:30 am";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.2.13";
+            this.toolStripStatusLabel6.Text = "18-Jun-2010 16:30";
         }
 
         public virtual void reset_clock()
