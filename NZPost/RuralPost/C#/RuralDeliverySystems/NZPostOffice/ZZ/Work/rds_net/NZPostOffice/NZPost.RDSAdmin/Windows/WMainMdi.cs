@@ -193,7 +193,12 @@ namespace NZPostOffice.RDSAdmin
 
         private void dw_detail_DataObjectChanged(object sender, EventArgs e)
         {
-            if (dw_detail.DataObject is DwGroupDetails || dw_detail.DataObject is DProcurement)
+            // TJB  June-2010  ECL Upload: Added DEclContractMapping and DEclQualityMappings
+            if (dw_detail.DataObject is DwGroupDetails
+                || dw_detail.DataObject is DProcurement
+                || dw_detail.DataObject is DEclContractMapping
+                || dw_detail.DataObject is DEclQualityMappings
+                )
             {
                 ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).CellMouseClick += new DataGridViewCellMouseEventHandler(Grid_CellMouseClick);
                 mRdsDw = new MRdsDw(this);
@@ -405,6 +410,19 @@ namespace NZPostOffice.RDSAdmin
             {
                 ((DNpadParameters)dw_detail.DataObject).InsertItem<NpadParameters>(row, NpadParameters.NewNpadParameters(null));
             }
+            // TJB  June-2010  ECL Upload: Added DEclContractMapping and DEclQualityMappings
+            else if (dw_detail.DataObject is DEclContractMapping)
+            {
+                ((DEclContractMapping)dw_detail.DataObject).InsertItem<EclContractMapping>(row, EclContractMapping.NewEclContractMapping(null));
+                ((DEclContractMapping)dw_detail.DataObject).Grid.ClearSelection();
+                ((DEclContractMapping)dw_detail.DataObject).Grid.Rows[dw_detail.GetRow()].Selected = true;
+            }
+            else if (dw_detail.DataObject is DEclQualityMappings)
+            {
+                ((DEclQualityMappings)dw_detail.DataObject).InsertItem<EclQualityMappings>(row, EclQualityMappings.NewEclQualityMappings(null));
+                ((DEclQualityMappings)dw_detail.DataObject).Grid.ClearSelection();
+                ((DEclQualityMappings)dw_detail.DataObject).Grid.Rows[dw_detail.GetRow()].Selected = true;
+            }
             ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).ClearSelection();
             ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).Rows[dw_detail.GetRow()].Selected = true;
         }
@@ -414,7 +432,12 @@ namespace NZPostOffice.RDSAdmin
             mRdsDw.m_delete.Visible = false;
             mRdsDw.m_insert.Visible = false;
             // Enable insert and Delete 
-            if (dw_detail.DataObject is DwGroupDetails || dw_detail.DataObject is DProcurement)
+            // TJB  June-2010  ECL Upload: Added DEclContractMapping and DEclQualityMappings
+            if (dw_detail.DataObject is DwGroupDetails
+                || dw_detail.DataObject is DProcurement
+                || dw_detail.DataObject is DEclContractMapping
+                || dw_detail.DataObject is DEclQualityMappings
+                )
             {
                 mRdsDw.m_insert.Visible = true;
                 mRdsDw.m_delete.Visible = true;
@@ -1755,8 +1778,8 @@ namespace NZPostOffice.RDSAdmin
             }
             //  TJB  Oct 2005  NPAD2 Address schema changes
             //  If the user creates a new road suffix, the rs_id won't be defined.
-            //  Look up the current max ( rs_id) and assign the next value to the new record.
-            //  Do it by scanning the datawindow rather than a "select max ( rs_id)"
+            //  Look up the current max(rs_id) and assign the next value to the new record.
+            //  Do it by scanning the datawindow rather than a "select max(rs_id)"
             //  because the user may add several suffixes before saving them.
             //  The alternative is to make the rs_id column an identity column
             //  but that may conflict with the assignments made in NPAD.
