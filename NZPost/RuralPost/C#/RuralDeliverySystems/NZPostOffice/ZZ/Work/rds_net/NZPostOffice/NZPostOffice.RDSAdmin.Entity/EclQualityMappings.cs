@@ -6,6 +6,8 @@ using System.Data.Common;using Metex.Core;using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  ECL Data Import  June-2010: New
+    //
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -16,7 +18,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 	[System.Serializable()]
 
 	public class EclQualityMappings : Entity<EclQualityMappings>
-	public class PieceRateType : Entity<PieceRateType>
 	{
 		#region Business Methods
 		[DBField()]

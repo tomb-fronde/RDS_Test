@@ -20,6 +20,14 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		}
 
 		private Metex.Windows.DataEntityGrid grid;
+        public Metex.Windows.DataEntityGrid Grid
+        {
+            get
+            {
+                return grid;
+            }
+        }
+
 		#region Component Designer generated code
 		private void InitializeComponent()
 		{
@@ -61,23 +69,23 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(173, 252);
+            this.grid.Size = new System.Drawing.Size(199, 252);
             this.grid.TabIndex = 0;
             this.grid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellContentClick);
             // 
             // eclDriverIdDataGridViewTextBoxColumn
             // 
             this.eclDriverIdDataGridViewTextBoxColumn.DataPropertyName = "EclDriverId";
-            this.eclDriverIdDataGridViewTextBoxColumn.HeaderText = "EclDriverId";
+            this.eclDriverIdDataGridViewTextBoxColumn.HeaderText = "Ecl Driver Id";
             this.eclDriverIdDataGridViewTextBoxColumn.Name = "eclDriverIdDataGridViewTextBoxColumn";
-            this.eclDriverIdDataGridViewTextBoxColumn.Width = 83;
+            this.eclDriverIdDataGridViewTextBoxColumn.Width = 89;
             // 
             // contractNoDataGridViewTextBoxColumn
             // 
             this.contractNoDataGridViewTextBoxColumn.DataPropertyName = "ContractNo";
-            this.contractNoDataGridViewTextBoxColumn.HeaderText = "ContractNo";
+            this.contractNoDataGridViewTextBoxColumn.HeaderText = "Contract No";
             this.contractNoDataGridViewTextBoxColumn.Name = "contractNoDataGridViewTextBoxColumn";
-            this.contractNoDataGridViewTextBoxColumn.Width = 86;
+            this.contractNoDataGridViewTextBoxColumn.Width = 89;
             // 
             // DEclContractMapping
             // 
@@ -86,7 +94,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DEclContractMapping";
-            this.Size = new System.Drawing.Size(173, 252);
+            this.Size = new System.Drawing.Size(199, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);

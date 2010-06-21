@@ -10,6 +10,7 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
+    // TJB  June-2010  ECL Upload:  New
 	public partial class DEclContractMapping : Metex.Windows.DataUserControl
 	{
 		public DEclContractMapping()
