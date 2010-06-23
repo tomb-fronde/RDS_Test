@@ -8,6 +8,8 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
+    // TJB June-2010: added timeout to FetchEntity to extend default (30)
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -200,6 +202,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
 					//cm.CommandType = CommandType.Text;
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.od_rps_yearlyearnings";
+                    cm.CommandTimeout = 2000;
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "sdate", sdate);
 					pList.Add(cm, "edate", edate);
