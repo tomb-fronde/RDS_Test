@@ -80,6 +80,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public List<EclImportText> ecl_import_data_list;
 
         public List<EclQualityMappingItem> ecl_quality_mappings_list;
+        public List<EclOldBatchItem> ecl_old_batch_list;
 
         public URdsDw dw_import;
 
@@ -99,7 +100,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_insert;
 
-        public Button cb_cancel;
+        public Button cb_close;
 
         public Button cb_stop;
 
@@ -196,7 +197,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_select = new System.Windows.Forms.Button();
             this.cb_upload = new System.Windows.Forms.Button();
             this.cb_insert = new System.Windows.Forms.Button();
-            this.cb_cancel = new System.Windows.Forms.Button();
+            this.cb_close = new System.Windows.Forms.Button();
             this.cb_stop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tb_batch_no = new System.Windows.Forms.MaskedTextBox();
@@ -279,15 +280,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_insert.Text = "I&nsert";
             this.cb_insert.Click += new System.EventHandler(this.cb_insert_clicked);
             // 
-            // cb_cancel
+            // cb_close
             // 
-            this.cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_cancel.Location = new System.Drawing.Point(604, 361);
-            this.cb_cancel.Name = "cb_cancel";
-            this.cb_cancel.Size = new System.Drawing.Size(52, 21);
-            this.cb_cancel.TabIndex = 7;
-            this.cb_cancel.Text = "&Close";
-            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
+            this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_close.Location = new System.Drawing.Point(604, 361);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(52, 21);
+            this.cb_close.TabIndex = 7;
+            this.cb_close.Text = "&Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
             // 
             // cb_stop
             // 
@@ -344,13 +345,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Controls.Add(this.cb_select);
             this.Controls.Add(this.cb_upload);
             this.Controls.Add(this.cb_insert);
-            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.cb_close);
             this.Controls.Add(this.cb_stop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "WEclDataImport";
             this.Text = "ECL Data Import";
             this.Controls.SetChildIndex(this.cb_stop, 0);
-            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
             this.Controls.SetChildIndex(this.cb_insert, 0);
             this.Controls.SetChildIndex(this.cb_upload, 0);
             this.Controls.SetChildIndex(this.cb_select, 0);
@@ -684,6 +685,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Clear the datawindow
             dw_import.DataObject.Reset();
 
+            UpdateStatusText("");
+
             //GetFileOpenName("Select the import file", sFileName, sDirectory, "txt", "Tab Delimited Files,*.TXT,dBase III Files,*.DBF");
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Tab Delimited Files|*.TXT|dBase III Files|*.DBF";
@@ -743,6 +746,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
+            string inFilename = sle_1.Text;
+            int i = inFilename.LastIndexOf('\\');
+            inFilename = inFilename.Substring(i + 1);
+
             //dtDateUploaded = DateTime.Today;
             dtDateUploaded = DateTime.Now;
             nUploadRows = dw_import.RowCount;
@@ -764,6 +771,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     MessageBox.Show(sTopLine 
                                    + "This data appears to have already been loaded!\n\n"
+                                   + "File  " + inFilename + "\n"
                                    + "Not saved."
                                    + sBottomLine
                                    , "ECL Data Upload: Error"
@@ -775,6 +783,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 MessageBox.Show(sTopLine 
                                + "No data to upload?"
+                               + "File  " + inFilename + "\n"
                                + sBottomLine
                                , "ECL Data Upload: Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -803,14 +812,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             MessageBox.Show(sTopLine
                            + "The ECL data has been saved to the database" + sUploadStatus + ".\n"
                            + "    Batch " + lBatchNo.ToString() + "\n"
+                           + "    File  " + inFilename + "\n"
                            + "    " + sMessage + " records\n"
                            + "    Upload time: " + sUploadTime
                            + sBottomLine
                            , "ECL Data Upload"
                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            RC = RDSDataService.InsertIntoECLUploadHistory(lBatchNo, dtDateUploaded, nUploadRows, nImportedErrors
-                                                      , ref sqlCode, ref sqlErrText);
+            RC = RDSDataService.InsertIntoECLUploadHistory(lBatchNo, dtDateUploaded
+                                                    , nUploadRows, nImportedErrors
+                                                    , inFilename 
+                                                    , ref sqlCode, ref sqlErrText);
             if (sqlCode != 0)
             {
                 MessageBox.Show("Error inserting record into the ECL upload history table\n"
@@ -912,8 +924,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return nRows;
         }
 
-        public virtual void cb_cancel_clicked(object sender, EventArgs e)
-        {     // Cancel
+        public virtual void cb_close_clicked(object sender, EventArgs e)
+        {     // Close
+            UpdateStatusText("");
             ib_disableclosequery = true;
             this.Close();
         }
@@ -1039,6 +1052,62 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                + sBottomLine
                                , "ECL Data Insert: Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Update the batch no 
+            lBatchNo++;
+            tb_batch_no.Text = lBatchNo.ToString();
+
+            // Check to see if there are any batches past their archive date
+            DateTime dtArchiveDate = DateTime.Today.AddMonths(-13);
+            RDSDataService dataservice = RDSDataService.GetECLUploadHistoryOldBatchNos(dtArchiveDate, ref sqlCode, ref sqlErrText);
+            if (sqlCode < 0)
+            {
+                MessageBox.Show(sTopLine 
+                                + "Error checking for batches past their archive date.\n" 
+                                + sqlErrText
+                                + sBottomLine
+                                , "Error");
+                return;
+            }
+            ecl_old_batch_list = dataservice.EclOldBatchList;
+            string s_old_batch_list = "";
+            int i = 0, nBatchNo;
+            for (i = 0; i < ecl_old_batch_list.Count; i++)
+            {
+                s_old_batch_list += "   " + ecl_old_batch_list[i].Batch_No.ToString() + "     "
+                                    + ecl_old_batch_list[i].Date_Inserted.ToShortDateString()
+                                    + "\n";
+            }
+            DialogResult answer = MessageBox.Show(sTopLine
+                            + "Archive date = " + dtArchiveDate.ToShortDateString() + "\n"
+                            + "These batches have passed their archive date (13 months ago)\n"
+                            + s_old_batch_list + "\n"
+                            + "Do you want to archive them now?\n"
+                            + sBottomLine
+                            , "Question"
+                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (answer == DialogResult.Yes)
+            {
+                for (i = 0; i < ecl_old_batch_list.Count; i++)
+                {
+                    nBatchNo = ecl_old_batch_list[i].Batch_No;
+                    RDSDataService.sp_ECLPurgeBatch( nBatchNo, ref sqlCode, ref sqlErrText);
+                    
+                    if (sqlCode < 0)
+                    {
+                        MessageBox.Show(sTopLine 
+                                        + "Error purging batch " + nBatchNo.ToString() + ".\n" 
+                                        + sqlErrText
+                                        + sBottomLine
+                                        , "Error");
+                        break;
+                    }
+                    MessageBox.Show(sTopLine 
+                                    + "Batch " + nBatchNo.ToString() + " purged.\n" 
+                                    + sBottomLine
+                                    , "");
+                }
             }
         }
 
