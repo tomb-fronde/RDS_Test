@@ -198,17 +198,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "inContractNo", inContractNo);
                     //GenerateSelectCommandText(cm, "contract_allowance");
                     //GenerateSelectCommandText(cm, "contract");
-                    cm.CommandText = "SELECT contract_allowance.alt_key ,contract_allowance.contract_no , "+
-                        "contract_allowance.ca_effective_date ,contract_allowance.ca_annual_amount ," +
-                        "contract_allowance.ca_notes,contract_allowance.ca_paid_to_date ,contract.con_title " +
-                        "FROM rd.contract_allowance ,rd.contract " +
-                        "WHERE (contract.contract_no = contract_allowance.contract_no) and "+
-                        "((contract_allowance.contract_no = @inContractNo ))";
-
+                    cm.CommandText = 
+                        " SELECT contract_allowance.alt_key" 
+                        + "    , contract_allowance.contract_no " 
+                        + "    , contract_allowance.ca_effective_date " 
+                        + "    , contract_allowance.ca_annual_amount" 
+                        + "    , contract_allowance.ca_notes " 
+                        + "    , contract_allowance.ca_paid_to_date" 
+                        + "    , contract.con_title " 
+                        + " FROM rd.contract_allowance, rd.contract " 
+                        + "WHERE contract.contract_no = contract_allowance.contract_no " 
+                        + "  AND contract_allowance.contract_no = @inContractNo ";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inContractNo", inContractNo);
 
 					List<AddAllowance> _list = new List<AddAllowance>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -240,12 +244,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+                ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "contract_allowance", ref pList))
 				{
-					cm.CommandText += " WHERE  contract_allowance.alt_key = @alt_key AND " + 
-						"contract_allowance.contract_no = @contract_no AND " + 
-						"contract_allowance.ca_effective_date = @ca_effective_date ";
+					cm.CommandText += 
+                        " WHERE contract_allowance.alt_key = @alt_key " 
+                        + " AND contract_allowance.contract_no = @contract_no " 
+                        + " AND contract_allowance.ca_effective_date = @ca_effective_date ";
 
 					pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
@@ -261,9 +266,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		{
 			using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
-				DbCommand cm = cn.CreateCommand();
-				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
 				if (GenerateInsertCommandText(cm, "contract_allowance", pList))
 				{
 					DBHelper.ExecuteNonQuery(cm, pList);
@@ -278,19 +283,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			{
 				using (DbTransaction tr = cn.BeginTransaction())
 				{
-					DbCommand cm=cn.CreateCommand();
-					cm.Transaction = tr;
-					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
-					pList.Add(cm,"alt_key", GetInitialValue("_alt_key"));
-					pList.Add(cm,"contract_no", GetInitialValue("_contract_no"));
-					pList.Add(cm,"ca_effective_date", GetInitialValue("_effective_date"));
-						cm.CommandText = "DELETE FROM contract_allowance WHERE " +
-						"contract_allowance.alt_key = @alt_key AND " + 
-						"contract_allowance.contract_no = @contract_no AND " + 
-						"contract_allowance.ca_effective_date = @ca_effective_date ";
-					DBHelper.ExecuteNonQuery(cm, pList);
-					tr.Commit();
+                    DbCommand cm=cn.CreateCommand();
+                    cm.Transaction = tr;
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = 
+                        " DELETE FROM contract_allowance " 
+                        + "WHERE contract_allowance.alt_key = @alt_key " 
+                        + "  AND contract_allowance.contract_no = @contract_no " 
+                        + "  AND contract_allowance.ca_effective_date = @ca_effective_date ";
+
+                    pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
+                    pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
+                    pList.Add(cm, "ca_effective_date", GetInitialValue("_effective_date"));
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                    tr.Commit();
 				}
 			}
 		}
