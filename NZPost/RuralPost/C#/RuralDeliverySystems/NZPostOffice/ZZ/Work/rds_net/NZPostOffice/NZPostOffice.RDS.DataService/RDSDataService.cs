@@ -2529,10 +2529,12 @@ namespace NZPostOffice.RDS.DataService
         }
 
         // TJB  June-2010  ECL Data Upload -----------------------------------------------
-        public static bool InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors
-                                                      , ref int sqlCode, ref string sqlErrText)
+        public static bool InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded
+                                                     , int lRecordsUploaded, int lUploadErrors
+                                                     , string sUploadFilename
+                                                     , ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_InsertIntoECLUploadHistory", lBatchNo, dtDateUploaded, lRecordsUploaded, lUploadErrors);
+            RDSDataService obj = Execute("_InsertIntoECLUploadHistory", lBatchNo, dtDateUploaded, lRecordsUploaded, lUploadErrors, sUploadFilename);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.ret;
@@ -2552,6 +2554,14 @@ namespace NZPostOffice.RDS.DataService
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.intVal;
+        }
+
+        public static RDSDataService GetECLUploadHistoryOldBatchNos(DateTime inDate, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetECLUploadHistoryOldBatchNos", inDate);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj;
         }
 
         public static bool UpdateECLUploadHistoryUpload(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors
@@ -2584,6 +2594,14 @@ namespace NZPostOffice.RDS.DataService
         public static int GetECLUploadedBatchSize(int lBatchNo, ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_GetECLUploadedBatchSize", lBatchNo);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
+        }
+
+        public static int sp_ECLPurgeBatch(int lBatchNo, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_sp_ECLPurgeBatch", lBatchNo);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.intVal;
@@ -10987,6 +11005,61 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        private List<EclOldBatchItem> _eclOldBatchList;
+        public List<EclOldBatchItem> EclOldBatchList
+        {
+            get
+            {
+                return _eclOldBatchList;
+            }
+        }
+
+        [ServerMethod]
+        private void _GetECLUploadHistoryOldBatchNos(DateTime inDate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "select distinct euh1.ecl_batch_no, euh1.ecl_date_inserted "
+                                    + " FROM rd.ECL_upload_history euh1 "
+                                    + "WHERE euh1.ecl_date_inserted < @inDate "
+                                    + "  AND euh1.ecl_date_purged is null "
+                                    + "  AND euh1.ecl_date_uploaded = (select max(ecl_date_uploaded) "
+                                    + " from ecl_upload_history euh2 "
+                                    +                                  "where euh2.ecl_batch_no = euh1.ecl_batch_no)"
+                                    ;
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inDate", inDate);
+
+                     _eclOldBatchList = new List<EclOldBatchItem>();
+
+                    try
+                    {
+                        _sqlcode = 100;
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                EclOldBatchItem rf = new EclOldBatchItem();
+                                rf.batch_no = dr.GetInt32(0);
+                                rf.date_inserted = dr.GetDateTime(1);
+                                _eclOldBatchList.Add(rf);
+                            }
+                            _sqlcode = 0;
+                            intVal = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
+                    }
+                }
+            }
+        }
+
         [ServerMethod]
         private void _GetECLUploadHistoryNextBatchNo()
         {
@@ -11019,7 +11092,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors)
+        private void _InsertIntoECLUploadHistory(int lBatchNo, DateTime dtDateUploaded, int lRecordsUploaded, int lUploadErrors, string sUploadFilename)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -11027,14 +11100,15 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     cm.CommandText = cm.CommandText = "INSERT INTO rd.ECL_upload_history "
-                         + "( ecl_batch_no, ecl_date_uploaded, ecl_records_uploaded, ecl_upload_errors ) " +
+                         + "( ecl_batch_no, ecl_date_uploaded, ecl_records_uploaded, ecl_upload_errors, ecl_upload_filename ) " +
                         "VALUES "
-                         + "( @batchNo, @dateUploaded, @recordsUploaded, @uploadErrors )";
+                         + "( @batchNo, @dateUploaded, @recordsUploaded, @uploadErrors, @uploadFilename )";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "batchNo", lBatchNo);
                     pList.Add(cm, "dateUploaded", dtDateUploaded);
                     pList.Add(cm, "recordsUploaded", lRecordsUploaded);
                     pList.Add(cm, "uploadErrors", lUploadErrors);
+                    pList.Add(cm, "uploadFilename", sUploadFilename);
                     _sqlcode = -1;
                     try
                     {
@@ -11212,6 +11286,40 @@ namespace NZPostOffice.RDS.DataService
                         _sqlcode = -1;
                         _sqlerrtext = ex.Message;
                         intVal = 0;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _sp_ECLPurgeBatch(int in_batchNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_ECLPurgeBatch";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "in_batchNo", in_batchNo);
+
+                    intVal = 0;
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
                     }
                 }
             }
@@ -11402,6 +11510,27 @@ namespace NZPostOffice.RDS.DataService
             get
             {
                 return pr_code;
+            }
+        }
+    }
+
+    [Serializable()]
+    public class EclOldBatchItem
+    {
+        internal int batch_no;
+        public int Batch_No
+        {
+            get
+            {
+                return batch_no;
+            }
+        }
+        internal DateTime date_inserted;
+        public DateTime Date_Inserted
+        {
+            get
+            {
+                return date_inserted;
             }
         }
     }
