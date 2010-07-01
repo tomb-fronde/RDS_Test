@@ -20,6 +20,17 @@ namespace NZPostOffice.ODPS.Windows.Odps
 {
     public partial class WExportCriteria : WMaster
     {
+        // TJB  RPI_004  June-2010
+        // Changed decimal? fields to strings in object definition (Ir348Detail)
+        // Changed related variables below to non-nullable decimals.
+        // Added str2dec() function above to convert the strings.
+        //
+        // TJB  RPI_005  June 2010
+        // Changed AP Interface filename prompt and removed unnecessary check 
+        // for existing filename.
+        //
+        // TJB  RPI_003  June 2010
+        // Change filename for GL Payments and GL Accruals
         public WExportCriteria()
         {
             InitializeComponent();
@@ -138,7 +149,6 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 dw_1.SetValue(0, "fedate", ldt_fedate);
 
             }
-
             cb_ok.Location = new Point(cb_ok.Left, 8 + dw_1.Height);
             cb_cancel.Location = new Point(cb_cancel.Left, cb_ok.Top);
             this.Height = cb_ok.Top + cb_ok.Height + 35;
@@ -182,6 +192,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             dEnd = System.Convert.ToDateTime(DateTime.Now.Year + "/" + DateTime.Now.Month + "/20");
             dw_1.SetValue(0, "sdate", dstart);
             dw_1.SetValue(0, "edate", dEnd);
+
             dw_1.DataObject.BindingSource.CurrencyManager.Refresh(); //added by jlwang
         }
 
@@ -232,7 +243,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Title = title;// "Save to File";
-            dialog.Filter = filter;// "Text files  ( *.TXT)|*.TXT";
+            dialog.Filter = filter;// "Text files (*.TXT)|*.TXT";
             if (ext != "")
             {
                 dialog.AddExtension = true;
@@ -303,7 +314,6 @@ namespace NZPostOffice.ODPS.Windows.Odps
         #endregion
 
         #region Events
-        //jlwang:
         private void WReportCriteria_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (((DateTimeMaskedTextBox)this.dw_1.GetControlByName("sdate")).SelectionStart == 10)
@@ -313,14 +323,21 @@ namespace NZPostOffice.ODPS.Windows.Odps
             }
         }
 
-        //jlwang:
         private void WReportCriteria_KeyPress1(object sender, KeyPressEventArgs e)
         {
-
             if (((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).SelectionStart == 10)
             {
                 this.ProcessDialogKey(Keys.Tab);
             }
+        }
+
+        // TJB  RPI_004  June-2010: Added
+        private decimal str2dec(string val)
+        {
+            decimal n = 0;
+            if (!decimal.TryParse(val, out n))
+                n = 0;
+            return n;
         }
 
         public virtual void cb_ok_clicked(object sender, EventArgs e)
@@ -338,15 +355,18 @@ namespace NZPostOffice.ODPS.Windows.Odps
             string sReturnedFIleName = "";
             string sInitFileName;
             dw_1.AcceptText();
-            dt_edate = dw_1.GetValue<DateTime>(0, "edate");
-            dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
             String TestExpr = this.Text;//parent.Title;
             if (TestExpr == "Updated Contractors Export")
             {
+                dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+                dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
                 ll_Ret = ((DwUpdatedContractors)dw_primary.DataObject).Retrieve(dt_sdate, dt_edate);
+
                 sInitFileName = "UpdContractors" + dt_edate.Month.ToString() + dt_edate.Year.ToString();
-                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_edate.Year.ToString().Substring(2, 2), "Text files  ( *.TXT)|*.TXT"))
+                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName
+                        , smonth_prefix + dt_edate.Year.ToString().Substring(2, 2)
+                        , "Text files (*.TXT)|*.TXT"))
                 {
                     if (System.IO.File.Exists(sReturnedFIleName))
                     {
@@ -365,14 +385,21 @@ namespace NZPostOffice.ODPS.Windows.Odps
             }
             else if (TestExpr == "General Ledger Interface-Payments")
             {
+                dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+
                 ((DwGlInterfaceForPayment)dw_primary.DataObject).Retrieve(dt_edate);
                 for (ll_Ctr = 0; ll_Ctr < dw_primary.RowCount; ll_Ctr++)
                 {
                     dw_primary.SetValue(ll_Ctr, "journal_line_number_5", ll_Ctr + 1);
                 }
-                sInitFileName = "rd_glint." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
+                // TJB  RPI_003 June-2010: Changed base filename to current standard
+                //sInitFileName = "rd_glint." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
+                DateTime dt_today = DateTime.Today;
+                sInitFileName = "gl_rdpa1_" + dt_today.ToString("ddMMyyyy");
 
-                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_edate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT"))
+                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName
+                                   , smonth_prefix + dt_edate.Year.ToString().Substring(2, 2)
+                                   , "Text Files (*.TXT)|*.TXT"))
                 {
                     //    if (FileExists(sReturnedFIleName)) 
                     //    {
@@ -391,37 +418,38 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 int iNoTransD = 0;
                 int iNoTransC = 0;
                 string sfname;
-                sInitFileName = "rd_gaint." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
+
+                dt_edate = dw_1.GetValue<DateTime>(0, "edate");
                 ((DwGlInterfaceForAccruals)dw_primary.DataObject).Retrieve(dt_edate);
+
                 // count no. of trans
                 for (ll_Ctr = 0; ll_Ctr < dw_primary.RowCount; ll_Ctr++)
                 {
-
                     if (dw_primary.GetValue(ll_Ctr, "primary_dr_cr_code_11").ToString() == "C")
-                    {
                         iNoTransC++;
-                    }
                     else
-                    {
                         iNoTransD++;
-                    }
-                    dw_primary.SetValue(ll_Ctr, "journal_line_number_5", ll_Ctr + 1);
 
+                    dw_primary.SetValue(ll_Ctr, "journal_line_number_5", ll_Ctr + 1);
                 }
+
                 // Save the file and grab the filename
-                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_edate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT"))
+                // TJB  RPI_003 June-2010: Changed base filename to current standard
+                //sInitFileName = "rd_gaint." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
+                DateTime dt_today = DateTime.Today;
+                sInitFileName = "gl_rdpc1_" + dt_today.ToString("ddMMyyyy");
+                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName
+                                   , smonth_prefix + dt_edate.Year.ToString().Substring(2, 2)
+                                   , "Text Files (*.TXT)|*.TXT"))
                 {
                     //if (FileExists(sReturnedFIleName)) 
                     //{
                     //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1)
-                    //    {
                     //        dw_primary.saveas(sReturnedFIleName, text!, true);
-                    //    }
                     //}
                     //else 
-                    //{
                     //    dw_primary.saveas(sReturnedFIleName, text!, true);
-                    //}
+                    //
                     dw_primary.SaveAs(sReturnedFIleName, "text");
                 }
                 if (MessageBox.Show("Do you want to print the General Ledger Accruals Audit report?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)// question!, yesno!, 1) == 1)
@@ -462,7 +490,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 ((DwIr13InterfaceHeader)dw_primary.DataObject).Retrieve(dt_edate);
                 ((DwIr13InterfaceDetail)dw_secondary.DataObject).Retrieve(dt_sdate, dt_edate);
                 sInitFileName = "rd_IR13h." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
-                if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT|CSV Files  ( *.CSV)|*.CSV"))
+                if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName
+                                   , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                   , "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
                 {
                     //if (FileExists(sReturnedFIleName))
                     //{
@@ -477,7 +507,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
                     dw_primary.SaveAs(sReturnedFIleName, "text");
 
                     sInitFileName = "rd_IR13d." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
-                    if (GetFileSaveName("Save Detail to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT| CSV Files  ( *.CSV)|*.CSV"))
+                    if (GetFileSaveName("Save Detail to File", sInitFileName, ref sReturnedFIleName
+                                       , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                       , "Text Files (*.TXT)|*.TXT| CSV Files (*.CSV)|*.CSV"))
                     {
                         //if (FileExists(sReturnedFIleName)) {
                         //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1) {
@@ -498,7 +530,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 ((DwInvoiceInterfaceHeader)dw_primary.DataObject).Retrieve(dt_sdate);
                 ((DwInvoiceInterfaceDetail)dw_secondary.DataObject).Retrieve(dt_sdate, dt_edate);
                 sInitFileName = "rd_Invh." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
-                if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_edate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT| CSV Files  ( *.CSV)| *.CSV"))
+                if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName
+                                   , smonth_prefix + dt_edate.Year.ToString().Substring(2, 2)
+                                   , "Text Files (*.TXT)|*.TXT| CSV Files (*.CSV)| *.CSV"))
                 {
                     //if (FileExists(sReturnedFIleName)) {
                     //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1) {
@@ -510,7 +544,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
                     //}
                     dw_primary.SaveAs(sReturnedFIleName, "text");
                     sInitFileName = "rd_Invd." + interfacealphaprefix(dt_edate) + dt_edate.Year.ToString().Substring(2, 2);//TextUtil.Right(Year(dt_edate).ToString(), 2);
-                    if (GetFileSaveName("Save Detail to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_edate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT| CSV Files  ( *.CSV)|*.CSV"))
+                    if (GetFileSaveName("Save Detail to File", sInitFileName, ref sReturnedFIleName
+                                       , smonth_prefix + dt_edate.Year.ToString().Substring(2, 2)
+                                       , "Text Files (*.TXT)|*.TXT| CSV Files (*.CSV)|*.CSV"))
                     {
                         //if (FileExists(sReturnedFIleName)) {
                         //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1) {
@@ -527,6 +563,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             else if (TestExpr == "Accounts Payable Interface")
             {
                 dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+                dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
                 ((DwApInterfaceHeaderRows)dw_primary.DataObject).Retrieve(dt_edate);
                 ((DwApInterfaceDetailRows)dw_secondary.DataObject).Retrieve(dt_edate);
                 // move rows here
@@ -610,32 +647,40 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 //? dw_primary.sort();
                 dw_primary.DataObject.Sort<ApInterfaceHeaderRows>();
 
-
                 // save
                 //  PBY 06/08/2002 SR#4442
                 //sInitFileName="rd_APInt."+InterfaceAlphaPrefix ( dt_edate)+right ( string ( year ( dt_edate)),2)
                 sInitFileName = "ap_rurl1_" + dt_edate.ToString("ddMMyyyy");
-                if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files  ( *.TXT)|*.TXT|CSV Files  ( *.CSV)|*.CSV"))
+                // TJB  RPI_005  Jne 2010
+                // Changed prompt string
+                //if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
+
+                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName
+                                    , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                    , "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
                 {
-                    if (System.IO.File.Exists(sReturnedFIleName))
-                    {
-                        DialogResult reasult = MessageBox.Show("Do you want to replace the existing file " + sReturnedFIleName + "?", "Save to File", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (reasult == DialogResult.Yes)
-                        {
-                            dw_primary.SaveAs(sReturnedFIleName, "text", false);
-                        }
-                    }
-                    else
-                    {
-                        dw_primary.SaveAs(sReturnedFIleName, "text", false);
-                    }
+                    // TJB  RPI_005  Jne 2010
+                    // This is not needed:  the GetFileSaveName checks for overwrite
+                    // (and the save was being done twice - once within the IF blocks and at the end??)
+                    //if (System.IO.File.Exists(sReturnedFIleName))
+                    //{
+                    //    DialogResult reasult = MessageBox.Show("Do you want to replace the existing file " + sReturnedFIleName + "?", "Save to File", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    //    if (reasult == DialogResult.Yes)
+                    //    {
+                    //        dw_primary.SaveAs(sReturnedFIleName, "text", false);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    dw_primary.SaveAs(sReturnedFIleName, "text", false);
+                    //}
                     dw_primary.SaveAs(sReturnedFIleName, "text", false);
                 }
             }
             else if (TestExpr == "IR348 Interface")
             {
-                // 	long	 ll_Ret
-                // long	 ll_Ctr
+                // long  ll_Ret
+                // long  ll_Ctr
                 string ls_Gross = string.Empty;
                 string ls_NotLiable = string.Empty;
                 string ls_FamilyAssistance = string.Empty;
@@ -645,6 +690,17 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 string ls_Name = string.Empty;
                 string ls_CleanName = string.Empty;
 
+                // TJB  RPI_004  June-2010
+                // Changed these fields to strings in object definition (Ir348Detail)
+                // from decimal? so changed these to non-nullable decimals.
+                // Added str2dec() function above to convert the strings.
+                decimal i_Gross = 0;
+                decimal i_NotLiable = 0;
+                decimal i_FamilyAssistance = 0;
+                decimal i_StudentLoan = 0;
+                decimal i_ChildSupport = 0;
+                decimal i_PAYE = 0;
+
                 dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
                 dt_edate = dw_1.GetValue<DateTime>(0, "edate");
                 ((DwIr348Header)dw_primary.DataObject).Retrieve(dt_sdate, dt_edate);
@@ -652,13 +708,6 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 ((DwIr348DetailException)dw_tertiary.DataObject).Retrieve(dt_sdate, dt_edate);
                 // Strip all special characters from the names of the contractors
                 // Easy! If you know what to do
-
-                decimal? i_Gross = 0;
-                decimal? i_NotLiable = 0;
-                decimal? i_FamilyAssistance = 0;
-                decimal? i_StudentLoan = 0;
-                decimal? i_ChildSupport = 0;
-                decimal? i_PAYE = 0;
 
                 for (ll_Ctr = 0; ll_Ctr < dw_secondary.RowCount; ll_Ctr++)
                 {
@@ -672,16 +721,21 @@ namespace NZPostOffice.ODPS.Windows.Odps
                     ls_CleanName = of_translate(ls_CleanName, "\"", "");
                     dw_secondary.SetValue(ll_Ctr, "employee_full_name", ls_CleanName);
 
-                    //jlwang
-                    i_Gross += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).GrossEarnings;
-                    i_NotLiable += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).NotLiable;
-                    i_FamilyAssistance += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).FamilyAssistance;
-                    i_StudentLoan += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).SlDeductions;
-                    i_ChildSupport += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).CsDeductions;
-                    i_PAYE += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).TotalPaye;
-                    //jlwang:end
-                }
+                    //i_Gross += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).GrossEarnings;
+                    //i_NotLiable += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).NotLiable;
+                    //i_FamilyAssistance += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).FamilyAssistance;
+                    //i_StudentLoan += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).SlDeductions;
+                    //i_ChildSupport += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).CsDeductions;
+                    //i_PAYE += dw_secondary.GetItem<Ir348Detail>(ll_Ctr).TotalPaye;
 
+                    // TJB  RPI_004  June-2010
+                    i_Gross += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).GrossEarnings);
+                    i_NotLiable += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).NotLiable);
+                    i_FamilyAssistance += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).FamilyAssistance);
+                    i_StudentLoan += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).SlDeductions);
+                    i_ChildSupport += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).CsDeductions);
+                    i_PAYE += str2dec(dw_secondary.GetItem<Ir348Detail>(ll_Ctr).TotalPaye);
+                }
                 ls_Gross = i_Gross == null ? "0" : i_Gross.ToString();                                 //? ls_Gross = dw_secondary.describe("Evaluate ( \'Sum ( gross_earnings for all)\',1)");
                 ls_NotLiable = i_NotLiable == null ? "0" : i_NotLiable.ToString();                      //? ls_NotLiable = dw_secondary.describe("Evaluate ( \'Sum ( not_liable for all)\',1)");
                 ls_FamilyAssistance = i_FamilyAssistance == null ? "0" : i_FamilyAssistance.ToString(); //? ls_FamilyAssistance = dw_secondary.describe("Evaluate ( \'Sum ( family_assistance for all)\',1)");
@@ -788,12 +842,13 @@ namespace NZPostOffice.ODPS.Windows.Odps
                             dw_tertiary.SaveAs(sReturnedFIleName, "csv");
 
                         }
-                        MessageBox.Show("Please combine the header and detail records into one file.\r\n" +
-                            "1) Copy the second line of the header file into the clipboard\r\n" +
-                            "2) Paste it into the first line  ( replace) of the detail file\r\n" +
-                            "3) Save the file using another filename then send it to IRFile\r\n" +
-                            "4) Do not forget to archive all files", "IR348",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Please combine the header and detail records into one file.\n" +
+                                        "1) Copy the second line of the header file into the clipboard\n" +
+                                        "2) Paste it into the first line (replace) of the detail file\n" +
+                                        "3) Save the file using another filename then send it to IRFile\n" +
+                                        "4) Do not forget to archive all files"
+                                        , "IR348"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //    }
                         //}
                         //else 
