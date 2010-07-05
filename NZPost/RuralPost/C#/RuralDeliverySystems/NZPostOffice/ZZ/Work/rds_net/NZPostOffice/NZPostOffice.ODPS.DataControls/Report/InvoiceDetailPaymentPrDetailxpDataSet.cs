@@ -6,9 +6,12 @@ using NZPostOffice.ODPS.Entity.OdpsInvoice;
 
 namespace NZPostOffice.ODPS.DataControls.Report
 {
-
     public class RInvoiceDetailPaymentPrDetailxp
     {
+        // TJB RPCR_012 2-July-2010
+        // Added 'Atype' (piece rate supplier name) to values returned
+        // Used in Invoice section headers
+
         public int InvoiceId
         {
             get
@@ -51,6 +54,13 @@ namespace NZPostOffice.ODPS.DataControls.Report
                 return 0;
             }
         }
+        public string Atype
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
         public int ContractNo
         {
             get { return 0; }
@@ -74,13 +84,15 @@ namespace NZPostOffice.ODPS.DataControls.Report
 
         public DataColumn Cost = new DataColumn("Cost", typeof(decimal));
 
+        public DataColumn Atype = new DataColumn("Atype", typeof(string));
+
         public DataColumn ContractNo = new DataColumn("ContractNo", typeof(int));
         public DataColumn ContractorNo = new DataColumn("ContractorNo", typeof(int));
 
         public InvoiceDetailPaymentPrDetailxpDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				InvoiceId,PrdDate,PrtCode,PrdQuantity,Rate,Cost,ContractNo,ContractorNo
+				InvoiceId,PrdDate,PrtCode,PrdQuantity,Rate,Cost,Atype,ContractNo,ContractorNo
 				});
         }
 
@@ -103,6 +115,7 @@ namespace NZPostOffice.ODPS.DataControls.Report
             row["PrdQuantity"] = GetFieldValue(data.PrdQuantity);
             row["Rate"] = GetFieldValue(data.Rate);
             row["Cost"] = GetFieldValue(data.Cost);
+            row["Atype"] = GetFieldValue(data.Atype);
 
             row["ContractNo"] = GetFieldValue(data.ContractNo);
             row["ContractorNo"] = GetFieldValue(data.ContractorNo);
