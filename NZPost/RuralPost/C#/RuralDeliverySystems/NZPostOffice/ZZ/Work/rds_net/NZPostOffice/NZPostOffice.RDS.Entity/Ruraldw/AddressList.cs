@@ -283,14 +283,21 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         // needs to implement compute expression manually:
         // compute control name=[address]
-        //if( len(private_bag) >; 0 ,  private_bag + ', ' , '') + if(adr_no<;>;'',   Upper(adr_no)+if(adr_alpha='', ' ', adr_alpha) , '') + if(adr_alpha ='',   adr_alpha , ' ') + if(len( road_name )>;0,  road_name + if(road_type='', ', ', ''), '') + if(len(  road_type )>;0,   ' ' + road_type + ', ', '') + if(len(  property_id ) >;0,  property_id + ', ', '') +if(len(  sl_name )>;0,   sl_name + ', ', '') + if(len(  tc_name )>;0,   tc_name , '') /* road_name + '  ' +  road_type  + ',  ' +   sl_name    + ',  ' +    tc_name  */
+        //if(len(private_bag) >; 0 ,  private_bag + ', ' , '') + if(adr_no<;>;'',   Upper(adr_no)+if(adr_alpha='', ' ', adr_alpha) , '') + if(adr_alpha ='',   adr_alpha , ' ') + if(len( road_name )>;0,  road_name + if(road_type='', ', ', ''), '') + if(len(  road_type )>;0,   ' ' + road_type + ', ', '') + if(len(  property_id ) >;0,  property_id + ', ', '') +if(len(  sl_name )>;0,   sl_name + ', ', '') + if(len(  tc_name )>;0,   tc_name , '') /* road_name + '  ' +  road_type  + ',  ' +   sl_name    + ',  ' +    tc_name  */
         public virtual string Address
         {
             get
             {
                 CanReadProperty("Address", true);
-                //if( len(private_bag) >; 0 ,  private_bag + ', ' , '') + if(adr_no<;>;'',   Upper(adr_no)+if(adr_alpha='', ' ', adr_alpha) , '') + if(adr_alpha ='',   adr_alpha , ' ') + if(len( road_name )>;0,  road_name + if(road_type='', ', ', ''), '') + if(len(  road_type )>;0,   ' ' + road_type + ', ', '') + if(len(  property_id ) >;0,  property_id + ', ', '') +if(len(  sl_name )>;0,   sl_name + ', ', '') + if(len(  tc_name )>;0,   tc_name , '') /* road_name + '  ' +  road_type  + ',  ' +   sl_name    + ',  ' +    tc_name  */
-                return (_private_bag == null || _private_bag.Length > 0 ? _private_bag + ", " : "") + (_adr_no == null || _adr_no != "" ? _adr_no.ToUpper() + (_adr_alpha == null || _adr_alpha == "" ? " " : _adr_alpha) : "") + (_adr_alpha == null || _adr_alpha == "" ? _adr_alpha : " ") + (_road_name == null || _road_name.Length > 0 ? _road_name + (_road_type == "" ? ", " : "") : "") + (_road_type == null || _road_type.Length > 0 ? " " + _road_type + ", " : "") + (_property_id == null || _property_id.Length > 0 ? _property_id + ", " : "") + (_sl_name == null || _sl_name.Length > 0 ? _sl_name + ", " : "") + (_tc_name == null || _tc_name.Length > 0 ? _tc_name : "");
+                //if(len(private_bag) >; 0 ,  private_bag + ', ' , '') + if(adr_no<;>;'',   Upper(adr_no)+if(adr_alpha='', ' ', adr_alpha) , '') + if(adr_alpha ='',   adr_alpha , ' ') + if(len( road_name )>;0,  road_name + if(road_type='', ', ', ''), '') + if(len(  road_type )>;0,   ' ' + road_type + ', ', '') + if(len(  property_id ) >;0,  property_id + ', ', '') +if(len(  sl_name )>;0,   sl_name + ', ', '') + if(len(  tc_name )>;0,   tc_name , '') /* road_name + '  ' +  road_type  + ',  ' +   sl_name    + ',  ' +    tc_name  */
+                return (_private_bag == null || _private_bag.Length > 0 ? _private_bag + ", " : "")
+                       + (_adr_no == null || _adr_no != "" ? _adr_no.ToUpper() + (_adr_alpha == null || _adr_alpha == "" ? " " : _adr_alpha) : "")
+                       + (_adr_alpha == null || _adr_alpha == "" ? _adr_alpha : " ")
+                       + (_road_name == null || _road_name.Length > 0 ? _road_name + (_road_type == "" ? ", " : "") : "")
+                       + (_road_type == null || _road_type.Length > 0 ? " " + _road_type + ", " : "")
+                       + (_property_id == null || _property_id.Length > 0 ? _property_id + ", " : "")
+                       + (_sl_name == null || _sl_name.Length > 0 ? _sl_name + ", " : "")
+                       + (_tc_name == null || _tc_name.Length > 0 ? _tc_name : "");
             }
         }
 
@@ -316,6 +323,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod]
         private void FetchEntity(int? al_contract_no)
         {
+            // TJB  RPI_009  July-2010
+            // Changed 'road_type' setting in query: Changed "when address.adr_unit" to "road_suffix.rs_name"
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -326,7 +335,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                             adr_no = case when address.adr_unit is null then '' + isnull(address.adr_no,'') else address.adr_unit +'/' + isnull(address.adr_no,'') end ,
                                             IsNull(address.adr_alpha, '') as adr_alpha,
                                             IsNull(road.road_name, '') as road_name,  
-                                            road_type = case when address.adr_unit is null then isNull(road_type.rt_name,'') + '' else isNull(road_type.rt_name,'') + ' '+road_suffix.rs_name end, 
+                                            road_type = case when road_suffix.rs_name is null then isNull(road_type.rt_name,'') + '' else isNull(road_type.rt_name,'') + ' '+road_suffix.rs_name end, 
                                             IsNull((SELECT sl_name FROM suburblocality WHERE sl_id = address.sl_id), '') AS sl_name, 
                                             IsNull((SELECT tc_name FROM towncity WHERE tc_id = address.tc_id), '')       AS tc_name,  
                                             (case when charindex('private bag',isNull(lower(adr_property_identification),''))> 0 then adr_property_identification else ''  end ) AS private_bag,
