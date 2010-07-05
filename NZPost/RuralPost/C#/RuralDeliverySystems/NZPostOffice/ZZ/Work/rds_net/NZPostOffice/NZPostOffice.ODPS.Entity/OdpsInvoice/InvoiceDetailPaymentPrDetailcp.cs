@@ -17,10 +17,15 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
     [MapInfo("prd_quantity", "_prd_quantity", "")]
     [MapInfo("rate", "_rate", "")]
     [MapInfo("cost", "_cost", "")]
+    [MapInfo("atype", "_atype", "")]
     [System.Serializable()]
 
     public class InvoiceDetailPaymentPrDetailcp : Entity<InvoiceDetailPaymentPrDetailcp>
     {
+        // TJB RPCR_012 2-July-2010
+        // Added 'atype' (piece rate supplier name) to values returned
+        // Used in Invoice section headers
+
         #region Business Methods
         [DBField()]
         private int? _invoice_id;
@@ -39,6 +44,9 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
 
         [DBField()]
         private decimal? _cost;
+
+        [DBField()]
+        private string _atype;
 
         public virtual int? InvoiceId
         {
@@ -98,12 +106,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
         {
             get
             {
-                CanReadProperty("CanReadProperty",true);
+                CanReadProperty("PrdQuantity", true);
                 return _prd_quantity;
             }
             set
             {
-                CanWriteProperty("CanReadProperty",true);
+                CanWriteProperty("PrdQuantity", true);
                 if (_prd_quantity != value)
                 {
                     _prd_quantity = value;
@@ -148,7 +156,25 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
             }
         }
 
-        // needs to implement compute expression manually:
+        public virtual string Atype
+        {
+            get
+            {
+                CanReadProperty("Atype", true);
+                return _atype;
+            }
+            set
+            {
+                CanWriteProperty("Atype", true);
+                if (_atype != value)
+                {
+                    _atype = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        // Need to implement compute expression manually:
         // compute control name=[rowcount]
         //?rowcount()
 
@@ -212,6 +238,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                             instance.PrdQuantity = GetValueFromReader<Int32?>(dr,3);
                             instance.Rate = GetValueFromReader<decimal?>(dr,4);
                             instance.Cost = GetValueFromReader<decimal?>(dr,5);
+                            instance.Atype = GetValueFromReader<string>(dr,6);
 
                             instance._contractNo = contractno;
                             instance._contractorNo = contractorno;
