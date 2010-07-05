@@ -15,6 +15,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
     public partial class WInvoice : WMaster
     {
+        // TJB RPCR_012 July-2010
+        // Adjusted size of screen and fixed resizing
         #region Define
         public bool ib_canexit = true;
 
@@ -30,7 +32,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             //TJB Jan-2009:  Added Dataobject definition (missing ??)
             //               Need to fix resizability 
             dw_1.DataObject = new DwInvoiceHeaderv5();
-
+            this.cb_save.Visible = false;
+            this.cb_save.Enabled = false;
             //? m_odps_report = new NZPostOffice.ODPS.Menus.MOdpsReport(this);
             //? m_odps_report_menu.SetFunctionalPart(m_odps_report);
             //? m_odps_report_toolbar.SetFunctionalPart(m_odps_report);
@@ -153,10 +156,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
         public override void resize(object sender, EventArgs args)
         {
             base.resize(this, new EventArgs());
-            dw_1.Height = this.Height - 100;
-            dw_1.Width = this.Width - 20;
-            cb_save.Location = new Point(557, dw_1.Location.Y + dw_1.Height + 20);
-            cb_export.Location = new Point(473, dw_1.Location.Y + dw_1.Height + 20);
+            //dw_1.Height = this.Height - 100;
+            //dw_1.Width = this.Width - 20;
+            //cb_save.Location = new Point(557, dw_1.Location.Y + dw_1.Height + 20);
+            //cb_export.Location = new Point(473, dw_1.Location.Y + dw_1.Height + 20);
         }
 
         public virtual void cb_export_clicked(object sender, EventArgs e)
@@ -254,7 +257,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "Save to File";
             saveFileDialog.DefaultExt = "PSR";
-            saveFileDialog.Filter = "PSR Files  ( *.PSR)|*.PSR";
+            saveFileDialog.Filter = "PSR Files (*.PSR)|*.PSR";
             li_ret = saveFileDialog.ShowDialog();
             sInitFileName = saveFileDialog.FileName;
             sReturnedFIleName = sInitFileName.Substring(sInitFileName.LastIndexOf("\\") + 1);
@@ -264,7 +267,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 //if (FileExists(sReturnedFIleName)) 
                 if (File.Exists(sInitFileName))
                 {
-                    if (MessageBox.Show("Do you want to replace the existing file " + sReturnedFIleName + '?', "Save to File", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    if (MessageBox.Show("Do you want to replace the existing file " + sReturnedFIleName + '?'
+                                       , "Save to File"
+                                       , MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) 
+                        == DialogResult.Yes)
                     {
                         //? dw_1.saveas(sReturnedFIleName, psreport!, true);
                         //FileStream fs = new FileStream(sInitFileName, FileMode.Create,FileAccess.Write);

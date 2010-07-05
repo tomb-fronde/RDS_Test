@@ -34,52 +34,64 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "WInvoice";
+            this.cb_export = new System.Windows.Forms.Button();
+            this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.cb_save = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.cb_export = new Button();
-            this.dw_1 = new URdsDw();
-            this.cb_save = new Button();
-            Controls.Add(cb_export);
-            Controls.Add(dw_1);
-            Controls.Add(cb_save);
-            //?this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Size = new System.Drawing.Size(660, 400);
-            this.Location = new System.Drawing.Point(10, 10);
-            
             // 
             // cb_export
             // 
-            cb_export.Text = "&Export";
-            cb_export.Enabled = false;
-            cb_export.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_export.TabIndex = 3;
-            cb_export.Location = new System.Drawing.Point(473, 379);
-            cb_export.Size = new System.Drawing.Size(75, 20);
-            cb_export.Visible = false;
-            cb_export.Click += new EventHandler(cb_export_clicked);
-            
+            this.cb_export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_export.Enabled = false;
+            this.cb_export.Font = new System.Drawing.Font("Arial", 8F);
+            this.cb_export.Location = new System.Drawing.Point(704, 332);
+            this.cb_export.Name = "cb_export";
+            this.cb_export.Size = new System.Drawing.Size(75, 20);
+            this.cb_export.TabIndex = 3;
+            this.cb_export.Text = "&Export";
+            this.cb_export.Visible = false;
+            this.cb_export.Click += new System.EventHandler(this.cb_export_clicked);
             // 
             // dw_1
             // 
-            //!this.dw_1.DataObject = new DwInvoiceHeaderv5();
-            dw_1.TabIndex = 1;
-            dw_1.Location = new System.Drawing.Point(16, 3);
-            dw_1.Size = new System.Drawing.Size(629, 368);
-            //?dw_1.RetrieveEnd += new EventHandler(dw_1_retrieveend);
-           
+            this.dw_1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_1.DataObject = null;
+            this.dw_1.FireConstructor = true;
+            this.dw_1.Location = new System.Drawing.Point(5, 5);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(866, 298);
+            this.dw_1.TabIndex = 1;
             // 
             // cb_save
             // 
-            cb_save.Text = "&Save( PSR)";
-            cb_save.Location = new System.Drawing.Point(557, 379);
-            cb_save.Size = new System.Drawing.Size(73, 20);
-            cb_save.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_save.TabIndex = 2;
-            cb_save.Click += new EventHandler(cb_save_clicked);
-            this.ResumeLayout();
+            this.cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_save.Font = new System.Drawing.Font("Arial", 8F);
+            this.cb_save.Location = new System.Drawing.Point(788, 332);
+            this.cb_save.Name = "cb_save";
+            this.cb_save.Size = new System.Drawing.Size(73, 20);
+            this.cb_save.TabIndex = 2;
+            this.cb_save.Text = "&Save(PSR)";
+            this.cb_save.Click += new System.EventHandler(this.cb_save_clicked);
+            // 
+            // WInvoice
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(874, 315);
+            this.Controls.Add(this.cb_export);
+            this.Controls.Add(this.dw_1);
+            this.Controls.Add(this.cb_save);
+            this.Location = new System.Drawing.Point(10, 10);
+            this.Name = "WInvoice";
+            this.Text = "WInvoice";
+            this.Controls.SetChildIndex(this.cb_save, 0);
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.Controls.SetChildIndex(this.cb_export, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         public Button cb_export;
