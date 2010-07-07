@@ -13,6 +13,10 @@ using Metex.Core.Security;
 //************************************************************************************************
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB RPCR_001 July-2010
+    // Added lSafety, lEmissions, and lConsumption to InsertVehicle and UpdateVehicle
+    // Added sqlCode, sqlErrText parameters for error handling
+    //
     // TJB  ECL Data Import  June-2010
     // Multiple additions in labelled sections.
     //
@@ -1800,9 +1804,20 @@ namespace NZPostOffice.RDS.DataService
         ///            @lCCRate, @sUserCharge, @dPurchase, @lPurchase, @sLeased , @lMonth, @sTransmission, 
         ///            @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage )
         /// </summary>
-        public static void InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth, string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage)
+        public static void InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel
+                                            , int? lYear, string sRegistration, int? lCCRate, string sUserCharge
+                                            , DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth
+                                            , string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life
+                                            , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lSafety
+                                            , int? lEmissions, int? lConsumption
+                                            , ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_InsertIntoVehicle", lvehicleNumber, lVTKey, lFTKey, sMake, sModel, lYear, sRegistration, lCCRate, sUserCharge, dPurchase, lPurchase, sLeased, lMonth, sTransmission, ll_VSKey, ll_remaining_economic_life, lSpeedoKms, dSpeedoDate, ll_salvage);
+            RDSDataService obj = Execute("_InsertIntoVehicle", lvehicleNumber, lVTKey, lFTKey, sMake, sModel, lYear
+                                            , sRegistration, lCCRate, sUserCharge, dPurchase, lPurchase, sLeased
+                                            , lMonth, sTransmission, ll_VSKey, ll_remaining_economic_life, lSpeedoKms
+                                            , dSpeedoDate, ll_salvage, lSafety, lEmissions, lConsumption);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
         }
 
         /// <summary>
@@ -1814,9 +1829,19 @@ namespace NZPostOffice.RDS.DataService
         ///            v_remaining_economic_life = @ll_remaining_economic_life,v_vehicle_speedo_kms  = @lSpeedoKms ,
         ///            v_vehicle_speedo_date = @dSpeedoDate, v_salvage_value = @ll_salvage WHERE vehicle_number = @lVehicleNumber
         /// </summary>
-        public static void UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth, string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase, int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lvehicleNumber)
+        public static void UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth
+                                            , string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase
+                                            , int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey
+                                            , int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate
+                                            , int? ll_salvage, int? lSafety, int? lEmissions, int? lConsumption
+                                            , int? lvehicleNumber, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateVehicle", lVTKey, lFTKey, sMake, sModel, lYear, lMonth, sRegistration, lCCRate, sUserCharge, dPurchase, lPurchase, sLeased, sTransmission, ll_VSKey, ll_remaining_economic_life, lSpeedoKms, dSpeedoDate, ll_salvage, lvehicleNumber);
+            RDSDataService obj = Execute("_UpdateVehicle", lVTKey, lFTKey, sMake, sModel, lYear, lMonth, sRegistration
+                                            , lCCRate, sUserCharge, dPurchase, lPurchase, sLeased, sTransmission, ll_VSKey
+                                            , ll_remaining_economic_life, lSpeedoKms, dSpeedoDate, ll_salvage, lSafety
+                                            , lEmissions, lConsumption, lvehicleNumber);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
         }
 
         /// <summary>
@@ -6826,8 +6851,15 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB RPCR_001 July-2010
+        // Added lSafety, lEmissions, and lConsumption
         [ServerMethod]
-        private void _UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth, string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase, int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lvehicleNumber)
+        private void _UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth
+                                   , string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase
+                                   , int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey
+                                   , int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate
+                                   , int? ll_salvage, int? lSafety, int? lEmissions, int? lConsumption
+                                   , int? lvehicleNumber)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -6835,13 +6867,18 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE rd.vehicle SET vt_key = @lVTKey, " +
-                        " ft_key = @lFTKey, v_vehicle_make = @sMake, v_vehicle_model = @sModel, " +
-                        " v_vehicle_year = @lYear,   v_vehicle_month = @lmonth,   v_vehicle_registration_number = @sRegistration,   " +
-                        " v_vehicle_cc_rating = @lCCRate,  v_road_user_charges_indicator = @sUserCharge, v_purchased_date = @dPurchase,   " +
-                        " v_purchase_value = @lPurchase, v_leased = @sLeased, v_vehicle_transmission = @sTransmission,vs_key = @ll_VSKey," +
-                        " v_remaining_economic_life = @ll_remaining_economic_life,v_vehicle_speedo_kms  = @lSpeedoKms ," +
-                        " v_vehicle_speedo_date = @dSpeedoDate, v_salvage_value = @ll_salvage WHERE vehicle_number = @lVehicleNumber";
+                    cm.CommandText = "UPDATE rd.vehicle " 
+                                      + "SET vt_key = @lVTKey, ft_key = @lFTKey, v_vehicle_make = @sMake, "
+                                      + " v_vehicle_model = @sModel, v_vehicle_year = @lYear, "
+                                      + " v_vehicle_month = @lmonth, v_vehicle_registration_number = @sRegistration, "
+                                      + " v_vehicle_cc_rating = @lCCRate, v_road_user_charges_indicator = @sUserCharge, "
+                                      + " v_purchased_date = @dPurchase, v_purchase_value = @lPurchase, "
+                                      + " v_leased = @sLeased, v_vehicle_transmission = @sTransmission, "
+                                      + " vs_key = @ll_VSKey, v_remaining_economic_life = @ll_remaining_economic_life, "
+                                      + " v_vehicle_speedo_kms  = @lSpeedoKms, v_vehicle_speedo_date = @dSpeedoDate, "
+                                      + " v_salvage_value = @ll_salvage, v_vehicle_safety = @lSafety, "
+                                      + " v_vehicle_emissions = @lEmissions, v_vehicle_consumption_rate = @lConsumption "
+                                      + "WHERE vehicle_number = @lVehicleNumber";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lvehicleNumber", lvehicleNumber);
@@ -6863,6 +6900,9 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "lSpeedoKms", lSpeedoKms);
                     pList.Add(cm, "dSpeedoDate", dSpeedoDate);
                     pList.Add(cm, "ll_salvage", ll_salvage);
+                    pList.Add(cm, "lSafety", lSafety);
+                    pList.Add(cm, "lEmissions", lEmissions);
+                    pList.Add(cm, "lConsumption", lConsumption);
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -6877,8 +6917,15 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB RPCR_001 July-2010
+        // Added lSafety, lEmissions, and lConsumption
         [ServerMethod]
-        private void _InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth, string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage)
+        private void _InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel
+                                       , int? lYear, string sRegistration, int? lCCRate, string sUserCharge
+                                       , DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth
+                                       , string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life
+                                       , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lSafety
+                                       , int? lEmissions, int? lConsumption)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -6886,15 +6933,19 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "INSERT INTO rd.vehicle" +
-                        " (vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year," +
+                    cm.CommandText = "INSERT INTO rd.vehicle (" +
+                        " vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year," +
                         " v_vehicle_registration_number, v_vehicle_cc_rating, v_road_user_charges_indicator," +
                         " v_purchased_date, v_purchase_value, v_leased, v_vehicle_month, v_vehicle_transmission," +
-                        " vs_key, v_remaining_economic_life, v_vehicle_speedo_kms, v_vehicle_speedo_date, v_salvage_value)" +
-                        " VALUES"  +
-                        " ( @lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration," +
+                        " vs_key, v_remaining_economic_life, v_vehicle_speedo_kms, v_vehicle_speedo_date," + 
+                        " v_salvage_value, v_vehicle_safety, v_vehicle_emissions, v_vehicle_consumption_rate" + 
+                        ")" +
+                        " VALUES ("  +
+                        " @lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration," +
                         " @lCCRate, @sUserCharge, @dPurchase, @lPurchase, @sLeased , @lMonth, @sTransmission," +
-                        " @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage )";
+                        " @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage, " + 
+                        " @lSafety, @lEmissions, @lConsumption" +
+                        ")";
                     ParameterCollection pList = new ParameterCollection();
 
                     pList.Add(cm, "lvehicleNumber", lvehicleNumber);
@@ -6916,6 +6967,9 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "lSpeedoKms", lSpeedoKms);
                     pList.Add(cm, "dSpeedoDate", dSpeedoDate);
                     pList.Add(cm, "ll_salvage", ll_salvage);
+                    pList.Add(cm, "lSafety", lSafety);
+                    pList.Add(cm, "lEmissions", lEmissions);
+                    pList.Add(cm, "lConsumption", lConsumption);
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -6939,9 +6993,13 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select nvr_frozen_indicator " +
-                        "from rd.non_vehicle_rate where rg_code = @lRenewal " +
-                        " and nvr_rates_effective_date = (select max(nvr_rates_effective_date) from rd.non_vehicle_rate where rg_code = @lRenewal)";
+                    cm.CommandText = "select nvr_frozen_indicator " 
+                        + " from rd.non_vehicle_rate " 
+                        + "where rg_code = @lRenewal "
+                        + "  and nvr_rates_effective_date = " 
+                                         + "(select max(nvr_rates_effective_date)" 
+                                         + "   from rd.non_vehicle_rate" 
+                                         + "  where rg_code = @lRenewal)";
                     pList.Add(cm, "lRenewal", lRenewal);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6969,8 +7027,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE rd.contract_renewals SET con_renewal_payment_value = con_renewal_benchmark_price" +
-                        " WHERE contract_renewals.contract_no = @lContract AND contract_renewals.contract_seq_number = @lSequence";
+                    cm.CommandText = "UPDATE rd.contract_renewals " 
+                        + "  SET con_renewal_payment_value = con_renewal_benchmark_price " 
+                        + "WHERE contract_renewals.contract_no = @lContract " 
+                        + "  AND contract_renewals.contract_seq_number = @lSequence";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
@@ -6998,9 +7058,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    cm.CommandText = "UPDATE rd.contract_renewals" + 
-                                       " set con_renewal_benchmark_price = rd.BenchmarkCalc2005(@lContract, @lSequence)" +
-                                     " where contract_no = @lContract and contract_seq_number = @lSequence";
+                    cm.CommandText = "UPDATE rd.contract_renewals " 
+                        + "  SET con_renewal_benchmark_price = rd.BenchmarkCalc2005(@lContract, @lSequence) " 
+                        + "WHERE contract_no = @lContract " 
+                        + "  AND contract_seq_number = @lSequence";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
