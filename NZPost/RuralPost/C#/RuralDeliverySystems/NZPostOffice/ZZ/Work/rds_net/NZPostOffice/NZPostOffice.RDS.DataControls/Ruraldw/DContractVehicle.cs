@@ -11,12 +11,12 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    public partial class DContractVehicleTest : Metex.Windows.DataUserControl
+    public partial class DContractVehicle : Metex.Windows.DataUserControl
     {
         private bool[] safety_filled = new bool[6];
         private Button[] star = new Button[6];
 
-        public DContractVehicleTest()
+        public DContractVehicle()
         {
             InitializeComponent();
             //InitializeDropdown();
@@ -28,6 +28,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             Safety3.Click += new EventHandler(Safety3_Click);
             Safety4.Click += new EventHandler(Safety4_Click);
             Safety5.Click += new EventHandler(Safety5_Click);
+            Safety_t.Click += new System.EventHandler(this.Safety_t_Click);
 
             initialize_stars();
 
@@ -92,12 +93,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 if (!safety_filled[i])
                     break;
             }
-            return (i- 1);
+            return (i - 1);
         }
+
         public void set_stars(int star_n)
         {
-            if (star_n < 0) star_n = 0;
-            if (star_n > 5) star_n = 5;
+            if (star_n <= 0) star_n = 0;
+            if (star_n >= 5) star_n = 5;
             if (star_n >= 1)
                 for (int i = 1; i <= star_n; i++)
                     if (!safety_filled[i])
@@ -113,8 +115,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                         star[i].Image = NZPostOffice.RDS.DataControls.Properties.Resources.star_empty;
                         safety_filled[i] = false;
                     }
+            //string sStars = star_n.ToString();
+            //SafetyValue.Text = sStars;
         }
         // TJB  Dec-2009:  END: Test using stars to display Vehicle Safety Rating
+
+        // TJB  RPCR_001  July-2010: Added to clear all stars/set 'not known'
+        private void Safety_t_Click(object sender, EventArgs e)
+        {
+            set_stars(0);
+        }
 
         protected override void OnHandleCreated(EventArgs e)
         {

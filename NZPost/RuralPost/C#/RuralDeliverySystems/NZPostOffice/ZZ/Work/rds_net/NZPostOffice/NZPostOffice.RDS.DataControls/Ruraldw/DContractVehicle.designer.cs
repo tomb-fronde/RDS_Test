@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    partial class DContractVehicleTest
+    partial class DContractVehicle
     {
         /// <summary> 
         /// Required designer variable.
@@ -78,13 +78,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_salvage_value = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
+            this.Safety_t = new System.Windows.Forms.Label();
             this.Safety1 = new System.Windows.Forms.Button();
             this.Safety2 = new System.Windows.Forms.Button();
             this.Safety3 = new System.Windows.Forms.Button();
             this.Safety4 = new System.Windows.Forms.Button();
             this.Safety5 = new System.Windows.Forms.Button();
             this.Star_tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.Emissions_t = new System.Windows.Forms.Label();
+            this.Emissions = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.Consumption_t = new System.Windows.Forms.Label();
+            this.Consumption = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.SafetyValue_t = new System.Windows.Forms.Label();
+            this.SafetyValue = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,27 +103,27 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.st_active.Location = new System.Drawing.Point(0, 0);
             this.st_active.Name = "st_active";
             this.st_active.Size = new System.Drawing.Size(100, 23);
-            this.st_active.TabIndex = 213;
+            this.st_active.TabIndex = 0;
             // 
             // st_sysadmin
             // 
             this.st_sysadmin.Location = new System.Drawing.Point(0, 0);
             this.st_sysadmin.Name = "st_sysadmin";
             this.st_sysadmin.Size = new System.Drawing.Size(100, 23);
-            this.st_sysadmin.TabIndex = 214;
+            this.st_sysadmin.TabIndex = 0;
             // 
             // st_title
             // 
             this.st_title.Location = new System.Drawing.Point(0, 0);
             this.st_title.Name = "st_title";
             this.st_title.Size = new System.Drawing.Size(100, 23);
-            this.st_title.TabIndex = 215;
+            this.st_title.TabIndex = 0;
             // 
             // contract_vehical_vehicle_number
             // 
             this.contract_vehical_vehicle_number.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VehicleNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_vehical_vehicle_number.Font = new System.Drawing.Font("Arial", 8F);
-            this.contract_vehical_vehicle_number.Location = new System.Drawing.Point(482, 23);
+            this.contract_vehical_vehicle_number.Location = new System.Drawing.Point(218, 23);
             this.contract_vehical_vehicle_number.Name = "contract_vehical_vehicle_number";
             this.contract_vehical_vehicle_number.Size = new System.Drawing.Size(42, 20);
             this.contract_vehical_vehicle_number.TabIndex = 0;
@@ -132,7 +138,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_registration_number.MaxLength = 8;
             this.v_vehicle_registration_number.Name = "v_vehicle_registration_number";
             this.v_vehicle_registration_number.Size = new System.Drawing.Size(84, 20);
-            this.v_vehicle_registration_number.TabIndex = 10;
+            this.v_vehicle_registration_number.TabIndex = 1;
             // 
             // v_vehicle_registration_number_t
             // 
@@ -153,7 +159,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vt_key.Location = new System.Drawing.Point(84, 49);
             this.vt_key.Name = "vt_key";
             this.vt_key.Size = new System.Drawing.Size(176, 21);
-            this.vt_key.TabIndex = 20;
+            this.vt_key.TabIndex = 2;
             this.vt_key.Value = null;
             this.vt_key.ValueMember = "VtKey";
             this.vt_key.TextChanged += new System.EventHandler(this.vehicle_vt_key_TextChanged);
@@ -187,7 +193,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vs_key.Location = new System.Drawing.Point(84, 73);
             this.vs_key.Name = "vs_key";
             this.vs_key.Size = new System.Drawing.Size(176, 21);
-            this.vs_key.TabIndex = 30;
+            this.vs_key.TabIndex = 3;
             this.vs_key.Value = null;
             this.vs_key.ValueMember = "VsKey";
             this.vs_key.TextChanged += new System.EventHandler(this.vehicle_vt_key_TextChanged);
@@ -220,7 +226,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_make.MaxLength = 20;
             this.v_vehicle_make.Name = "v_vehicle_make";
             this.v_vehicle_make.Size = new System.Drawing.Size(176, 20);
-            this.v_vehicle_make.TabIndex = 40;
+            this.v_vehicle_make.TabIndex = 4;
             // 
             // v_vehicle_model_t
             // 
@@ -240,7 +246,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_model.MaxLength = 20;
             this.v_vehicle_model.Name = "v_vehicle_model";
             this.v_vehicle_model.Size = new System.Drawing.Size(176, 20);
-            this.v_vehicle_model.TabIndex = 50;
+            this.v_vehicle_model.TabIndex = 5;
             // 
             // t_5
             // 
@@ -272,7 +278,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_year.Name = "v_vehicle_year";
             this.v_vehicle_year.PromptChar = ' ';
             this.v_vehicle_year.Size = new System.Drawing.Size(35, 20);
-            this.v_vehicle_year.TabIndex = 60;
+            this.v_vehicle_year.TabIndex = 6;
             this.v_vehicle_year.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.v_vehicle_year.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.v_vehicle_year.ValidatingType = typeof(System.DateTime);
@@ -286,7 +292,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_month.Location = new System.Drawing.Point(160, 145);
             this.v_vehicle_month.Name = "v_vehicle_month";
             this.v_vehicle_month.Size = new System.Drawing.Size(102, 21);
-            this.v_vehicle_month.TabIndex = 70;
+            this.v_vehicle_month.TabIndex = 7;
             this.v_vehicle_month.Value = null;
             this.v_vehicle_month.TextChanged += new System.EventHandler(this.vehicle_vt_key_TextChanged);
             // 
@@ -310,7 +316,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_cc_rating.Name = "v_vehicle_cc_rating";
             this.v_vehicle_cc_rating.PromptChar = ' ';
             this.v_vehicle_cc_rating.Size = new System.Drawing.Size(35, 20);
-            this.v_vehicle_cc_rating.TabIndex = 80;
+            this.v_vehicle_cc_rating.TabIndex = 8;
             this.v_vehicle_cc_rating.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.v_vehicle_cc_rating.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.v_vehicle_cc_rating.ValidatingType = typeof(System.DateTime);
@@ -334,7 +340,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ft_key.Location = new System.Drawing.Point(84, 193);
             this.ft_key.Name = "ft_key";
             this.ft_key.Size = new System.Drawing.Size(148, 21);
-            this.ft_key.TabIndex = 90;
+            this.ft_key.TabIndex = 10;
             this.ft_key.Value = null;
             this.ft_key.ValueMember = "FtKey";
             this.ft_key.TextChanged += new System.EventHandler(this.vehicle_vt_key_TextChanged);
@@ -367,7 +373,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_purchased_date.Mask = "00/00/0000";
             this.v_purchased_date.Name = "v_purchased_date";
             this.v_purchased_date.Size = new System.Drawing.Size(80, 20);
-            this.v_purchased_date.TabIndex = 120;
+            this.v_purchased_date.TabIndex = 16;
             this.v_purchased_date.Text = "00000000";
             this.v_purchased_date.Value = null;
             // 
@@ -376,17 +382,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_vehical_cv_vehical_status.AutoRetrieve = false;
             this.contract_vehical_cv_vehical_status.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CvVehicalStatus", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_vehical_cv_vehical_status.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.contract_vehical_cv_vehical_status.Location = new System.Drawing.Point(293, 274);
+            this.contract_vehical_cv_vehical_status.Location = new System.Drawing.Point(249, 274);
             this.contract_vehical_cv_vehical_status.Name = "contract_vehical_cv_vehical_status";
             this.contract_vehical_cv_vehical_status.Size = new System.Drawing.Size(92, 21);
-            this.contract_vehical_cv_vehical_status.TabIndex = 150;
+            this.contract_vehical_cv_vehical_status.TabIndex = 0;
             this.contract_vehical_cv_vehical_status.Value = null;
             this.contract_vehical_cv_vehical_status.Visible = false;
             // 
             // t_6
             // 
             this.t_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.t_6.Location = new System.Drawing.Point(240, 274);
+            this.t_6.Location = new System.Drawing.Point(196, 274);
             this.t_6.Name = "t_6";
             this.t_6.Size = new System.Drawing.Size(44, 21);
             this.t_6.TabIndex = 0;
@@ -432,7 +438,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_road_user_charges_indicator.Location = new System.Drawing.Point(458, 145);
             this.v_road_user_charges_indicator.Name = "v_road_user_charges_indicator";
             this.v_road_user_charges_indicator.Size = new System.Drawing.Size(56, 18);
-            this.v_road_user_charges_indicator.TabIndex = 170;
+            this.v_road_user_charges_indicator.TabIndex = 20;
             this.v_road_user_charges_indicator.Text = "RUC";
             this.v_road_user_charges_indicator.ThreeState = true;
             // 
@@ -444,7 +450,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_leased.Location = new System.Drawing.Point(334, 144);
             this.v_leased.Name = "v_leased";
             this.v_leased.Size = new System.Drawing.Size(102, 18);
-            this.v_leased.TabIndex = 160;
+            this.v_leased.TabIndex = 19;
             this.v_leased.Text = "Leased Vehicle";
             this.v_leased.ThreeState = true;
             // 
@@ -458,7 +464,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_remaining_economic_life.Name = "v_remaining_economic_life";
             this.v_remaining_economic_life.PromptChar = ' ';
             this.v_remaining_economic_life.Size = new System.Drawing.Size(66, 20);
-            this.v_remaining_economic_life.TabIndex = 180;
+            this.v_remaining_economic_life.TabIndex = 21;
             this.v_remaining_economic_life.Text = "0";
             this.v_remaining_economic_life.Value = "0";
             // 
@@ -480,7 +486,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.signage_compliant.Location = new System.Drawing.Point(318, 193);
             this.signage_compliant.Name = "signage_compliant";
             this.signage_compliant.Size = new System.Drawing.Size(118, 18);
-            this.signage_compliant.TabIndex = 190;
+            this.signage_compliant.TabIndex = 22;
             this.signage_compliant.Text = "Signage Compliant";
             this.signage_compliant.ThreeState = true;
             // 
@@ -512,7 +518,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_speedo_date.Mask = "00/00/0000";
             this.v_vehicle_speedo_date.Name = "v_vehicle_speedo_date";
             this.v_vehicle_speedo_date.Size = new System.Drawing.Size(80, 20);
-            this.v_vehicle_speedo_date.TabIndex = 200;
+            this.v_vehicle_speedo_date.TabIndex = 23;
             this.v_vehicle_speedo_date.Text = "00000000";
             this.v_vehicle_speedo_date.Value = null;
             // 
@@ -526,7 +532,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_vehicle_speedo_kms.Name = "v_vehicle_speedo_kms";
             this.v_vehicle_speedo_kms.PromptChar = ' ';
             this.v_vehicle_speedo_kms.Size = new System.Drawing.Size(52, 20);
-            this.v_vehicle_speedo_kms.TabIndex = 210;
+            this.v_vehicle_speedo_kms.TabIndex = 24;
             this.v_vehicle_speedo_kms.Value = "";
             // 
             // contract_vehical_start_kms
@@ -539,7 +545,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_vehical_start_kms.Name = "contract_vehical_start_kms";
             this.contract_vehical_start_kms.PromptChar = ' ';
             this.contract_vehical_start_kms.Size = new System.Drawing.Size(52, 20);
-            this.contract_vehical_start_kms.TabIndex = 140;
+            this.contract_vehical_start_kms.TabIndex = 18;
             this.contract_vehical_start_kms.Text = "0";
             this.contract_vehical_start_kms.Value = "0";
             // 
@@ -563,7 +569,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_purchase_value.Name = "v_purchase_value";
             this.v_purchase_value.PromptChar = ' ';
             this.v_purchase_value.Size = new System.Drawing.Size(52, 20);
-            this.v_purchase_value.TabIndex = 110;
+            this.v_purchase_value.TabIndex = 15;
             this.v_purchase_value.Text = "$0";
             this.v_purchase_value.Value = "$0";
             // 
@@ -577,7 +583,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_salvage_value.Name = "v_salvage_value";
             this.v_salvage_value.PromptChar = ' ';
             this.v_salvage_value.Size = new System.Drawing.Size(52, 20);
-            this.v_salvage_value.TabIndex = 130;
+            this.v_salvage_value.TabIndex = 17;
             this.v_salvage_value.Text = "$0";
             this.v_salvage_value.Value = "$0";
             // 
@@ -588,8 +594,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton1.Location = new System.Drawing.Point(85, 218);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(60, 17);
-            this.radioButton1.TabIndex = 211;
-            this.radioButton1.TabStop = true;
+            this.radioButton1.TabIndex = 11;
             this.radioButton1.Text = "Manual";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
@@ -600,19 +605,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton2.Location = new System.Drawing.Point(158, 218);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(72, 17);
-            this.radioButton2.TabIndex = 212;
-            this.radioButton2.TabStop = true;
+            this.radioButton2.TabIndex = 12;
             this.radioButton2.Text = "Automatic";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // Safety_t
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 241);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 216;
-            this.label1.Text = "Safety Rating";
+            this.Safety_t.AutoSize = true;
+            this.Safety_t.Location = new System.Drawing.Point(5, 241);
+            this.Safety_t.Name = "Safety_t";
+            this.Safety_t.Size = new System.Drawing.Size(71, 13);
+            this.Safety_t.TabIndex = 0;
+            this.Safety_t.Text = "Safety Rating";
             // 
             // Safety1
             // 
@@ -622,7 +626,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety1.Location = new System.Drawing.Point(87, 241);
             this.Safety1.Name = "Safety1";
             this.Safety1.Size = new System.Drawing.Size(15, 13);
-            this.Safety1.TabIndex = 217;
+            this.Safety1.TabIndex = 13;
             this.Safety1.UseVisualStyleBackColor = true;
             // 
             // Safety2
@@ -633,7 +637,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety2.Location = new System.Drawing.Point(108, 241);
             this.Safety2.Name = "Safety2";
             this.Safety2.Size = new System.Drawing.Size(15, 13);
-            this.Safety2.TabIndex = 218;
+            this.Safety2.TabIndex = 0;
             this.Safety2.UseVisualStyleBackColor = true;
             // 
             // Safety3
@@ -644,7 +648,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety3.Location = new System.Drawing.Point(129, 241);
             this.Safety3.Name = "Safety3";
             this.Safety3.Size = new System.Drawing.Size(15, 13);
-            this.Safety3.TabIndex = 219;
+            this.Safety3.TabIndex = 0;
             this.Safety3.UseVisualStyleBackColor = true;
             // 
             // Safety4
@@ -655,7 +659,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety4.Location = new System.Drawing.Point(150, 241);
             this.Safety4.Name = "Safety4";
             this.Safety4.Size = new System.Drawing.Size(15, 13);
-            this.Safety4.TabIndex = 220;
+            this.Safety4.TabIndex = 0;
             this.Safety4.UseVisualStyleBackColor = true;
             // 
             // Safety5
@@ -666,23 +670,93 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety5.Location = new System.Drawing.Point(172, 241);
             this.Safety5.Name = "Safety5";
             this.Safety5.Size = new System.Drawing.Size(15, 13);
-            this.Safety5.TabIndex = 221;
+            this.Safety5.TabIndex = 0;
             this.Safety5.UseVisualStyleBackColor = true;
             // 
             // Star_tooltip
             // 
             this.Star_tooltip.Popup += new System.Windows.Forms.PopupEventHandler(this.Star1_tooltip_Popup);
             // 
-            // DContractVehicleTest
+            // Emissions_t
+            // 
+            this.Emissions_t.AutoSize = true;
+            this.Emissions_t.Location = new System.Drawing.Point(122, 172);
+            this.Emissions_t.Name = "Emissions_t";
+            this.Emissions_t.Size = new System.Drawing.Size(87, 13);
+            this.Emissions_t.TabIndex = 0;
+            this.Emissions_t.Text = "Emissions (g/km)";
+            // 
+            // Emissions
+            // 
+            this.Emissions.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VVehicleEmissions", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Emissions.EditMask = "###,###";
+            this.Emissions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.Emissions.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.Emissions.Location = new System.Drawing.Point(215, 169);
+            this.Emissions.Name = "Emissions";
+            this.Emissions.PromptChar = ' ';
+            this.Emissions.Size = new System.Drawing.Size(45, 20);
+            this.Emissions.TabIndex = 9;
+            this.Emissions.Value = "";
+            // 
+            // Consumption_t
+            // 
+            this.Consumption_t.AutoSize = true;
+            this.Consumption_t.Location = new System.Drawing.Point(5, 263);
+            this.Consumption_t.Name = "Consumption_t";
+            this.Consumption_t.Size = new System.Drawing.Size(115, 13);
+            this.Consumption_t.TabIndex = 0;
+            this.Consumption_t.Text = "Mfg Consumption Rate";
+            // 
+            // Consumption
+            // 
+            this.Consumption.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VVehicleConsumptionRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Consumption.EditMask = "###,###";
+            this.Consumption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.Consumption.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.Consumption.Location = new System.Drawing.Point(125, 260);
+            this.Consumption.Name = "Consumption";
+            this.Consumption.PromptChar = ' ';
+            this.Consumption.Size = new System.Drawing.Size(62, 20);
+            this.Consumption.TabIndex = 14;
+            this.Consumption.Value = "";
+            // 
+            // SafetyValue_t
+            // 
+            this.SafetyValue_t.AutoSize = true;
+            this.SafetyValue_t.Location = new System.Drawing.Point(348, 277);
+            this.SafetyValue_t.Name = "SafetyValue_t";
+            this.SafetyValue_t.Size = new System.Drawing.Size(67, 13);
+            this.SafetyValue_t.TabIndex = 0;
+            this.SafetyValue_t.Text = "Safety Value";
+            this.SafetyValue_t.Visible = false;
+            // 
+            // SafetyValue
+            // 
+            this.SafetyValue.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VVehicleSafety", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.SafetyValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.SafetyValue.Location = new System.Drawing.Point(422, 273);
+            this.SafetyValue.Name = "SafetyValue";
+            this.SafetyValue.Size = new System.Drawing.Size(52, 20);
+            this.SafetyValue.TabIndex = 0;
+            this.SafetyValue.Visible = false;
+            // 
+            // DContractVehicle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.SafetyValue);
+            this.Controls.Add(this.SafetyValue_t);
+            this.Controls.Add(this.Consumption);
+            this.Controls.Add(this.Consumption_t);
+            this.Controls.Add(this.Emissions);
+            this.Controls.Add(this.Emissions_t);
             this.Controls.Add(this.Safety5);
             this.Controls.Add(this.Safety4);
             this.Controls.Add(this.Safety3);
             this.Controls.Add(this.Safety2);
             this.Controls.Add(this.Safety1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Safety_t);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.st_active);
@@ -729,7 +803,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.t_salvage);
             this.Controls.Add(this.v_purchase_value);
             this.Controls.Add(this.v_salvage_value);
-            this.Name = "DContractVehicleTest";
+            this.Name = "DContractVehicle";
             this.Size = new System.Drawing.Size(534, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -793,12 +867,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private NumericalMaskedTextBox v_salvage_value;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
-        private Label label1;
+        private Label Safety_t;
         private Button Safety1;
         private Button Safety2;
         private Button Safety3;
         private Button Safety4;
         private Button Safety5;
         private ToolTip Star_tooltip;
+        private Label Emissions_t;
+        private NumericalMaskedTextBox Emissions;
+        private Label Consumption_t;
+        private NumericalMaskedTextBox Consumption;
+        private Label SafetyValue_t;
+        private TextBox SafetyValue;
     }
 }
