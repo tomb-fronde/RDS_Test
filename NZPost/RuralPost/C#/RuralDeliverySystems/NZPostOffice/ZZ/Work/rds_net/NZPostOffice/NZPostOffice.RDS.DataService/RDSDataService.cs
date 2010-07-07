@@ -14,7 +14,7 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // TJB RPCR_001 July-2010
-    // Added lSafety, lEmissions, and lConsumption to InsertVehicle and UpdateVehicle
+    // Added lSafety, lEmissions, and nConsumption to InsertVehicle and UpdateVehicle
     // Added sqlCode, sqlErrText parameters for error handling
     //
     // TJB  ECL Data Import  June-2010
@@ -1809,13 +1809,13 @@ namespace NZPostOffice.RDS.DataService
                                             , DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth
                                             , string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life
                                             , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lSafety
-                                            , int? lEmissions, int? lConsumption
+                                            , int? lEmissions, Decimal? nConsumption
                                             , ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_InsertIntoVehicle", lvehicleNumber, lVTKey, lFTKey, sMake, sModel, lYear
                                             , sRegistration, lCCRate, sUserCharge, dPurchase, lPurchase, sLeased
                                             , lMonth, sTransmission, ll_VSKey, ll_remaining_economic_life, lSpeedoKms
-                                            , dSpeedoDate, ll_salvage, lSafety, lEmissions, lConsumption);
+                                            , dSpeedoDate, ll_salvage, lSafety, lEmissions, nConsumption);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
         }
@@ -1833,13 +1833,13 @@ namespace NZPostOffice.RDS.DataService
                                             , string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase
                                             , int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey
                                             , int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate
-                                            , int? ll_salvage, int? lSafety, int? lEmissions, int? lConsumption
+                                            , int? ll_salvage, int? lSafety, int? lEmissions, Decimal? nConsumption
                                             , int? lvehicleNumber, ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_UpdateVehicle", lVTKey, lFTKey, sMake, sModel, lYear, lMonth, sRegistration
                                             , lCCRate, sUserCharge, dPurchase, lPurchase, sLeased, sTransmission, ll_VSKey
                                             , ll_remaining_economic_life, lSpeedoKms, dSpeedoDate, ll_salvage, lSafety
-                                            , lEmissions, lConsumption, lvehicleNumber);
+                                            , lEmissions, nConsumption, lvehicleNumber);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
         }
@@ -6852,13 +6852,13 @@ namespace NZPostOffice.RDS.DataService
         }
 
         // TJB RPCR_001 July-2010
-        // Added lSafety, lEmissions, and lConsumption
+        // Added lSafety, lEmissions, and nConsumption
         [ServerMethod]
         private void _UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth
                                    , string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase
                                    , int? lPurchase, string sLeased, string sTransmission, int? ll_VSKey
                                    , int? ll_remaining_economic_life, int? lSpeedoKms, DateTime? dSpeedoDate
-                                   , int? ll_salvage, int? lSafety, int? lEmissions, int? lConsumption
+                                   , int? ll_salvage, int? lSafety, int? lEmissions, Decimal? nConsumption
                                    , int? lvehicleNumber)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -6877,7 +6877,7 @@ namespace NZPostOffice.RDS.DataService
                                       + " vs_key = @ll_VSKey, v_remaining_economic_life = @ll_remaining_economic_life, "
                                       + " v_vehicle_speedo_kms  = @lSpeedoKms, v_vehicle_speedo_date = @dSpeedoDate, "
                                       + " v_salvage_value = @ll_salvage, v_vehicle_safety = @lSafety, "
-                                      + " v_vehicle_emissions = @lEmissions, v_vehicle_consumption_rate = @lConsumption "
+                                      + " v_vehicle_emissions = @lEmissions, v_vehicle_consumption_rate = @nConsumption "
                                       + "WHERE vehicle_number = @lVehicleNumber";
 
                     ParameterCollection pList = new ParameterCollection();
@@ -6902,7 +6902,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "ll_salvage", ll_salvage);
                     pList.Add(cm, "lSafety", lSafety);
                     pList.Add(cm, "lEmissions", lEmissions);
-                    pList.Add(cm, "lConsumption", lConsumption);
+                    pList.Add(cm, "nConsumption", nConsumption);
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -6918,14 +6918,14 @@ namespace NZPostOffice.RDS.DataService
         }
 
         // TJB RPCR_001 July-2010
-        // Added lSafety, lEmissions, and lConsumption
+        // Added lSafety, lEmissions, and nConsumption
         [ServerMethod]
         private void _InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel
                                        , int? lYear, string sRegistration, int? lCCRate, string sUserCharge
                                        , DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth
                                        , string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life
                                        , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lSafety
-                                       , int? lEmissions, int? lConsumption)
+                                       , int? lEmissions, Decimal? nConsumption)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -6944,7 +6944,7 @@ namespace NZPostOffice.RDS.DataService
                         " @lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration," +
                         " @lCCRate, @sUserCharge, @dPurchase, @lPurchase, @sLeased , @lMonth, @sTransmission," +
                         " @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage, " + 
-                        " @lSafety, @lEmissions, @lConsumption" +
+                        " @lSafety, @lEmissions, @nConsumption" +
                         ")";
                     ParameterCollection pList = new ParameterCollection();
 
@@ -6969,7 +6969,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "ll_salvage", ll_salvage);
                     pList.Add(cm, "lSafety", lSafety);
                     pList.Add(cm, "lEmissions", lEmissions);
-                    pList.Add(cm, "lConsumption", lConsumption);
+                    pList.Add(cm, "nConsumption", nConsumption);
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);

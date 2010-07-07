@@ -131,7 +131,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private int? _v_vehicle_emissions;
 
         [DBField()]
-        private int? _v_vehicle_consumption_rate;
+        private decimal? _v_vehicle_consumption_rate;
 
         public virtual int? VehicleNumber
         {
@@ -622,7 +622,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? VVehicleConsumptionRate
+        public virtual decimal? VVehicleConsumptionRate
         {
             get
             {
@@ -779,7 +779,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._v_salvage_value = GetValueFromReader<Int32?>(dr, 24);
                             instance._v_vehicle_safety = GetValueFromReader<Int32?>(dr, 25);
                             instance._v_vehicle_emissions = GetValueFromReader<Int32?>(dr, 26);
-                            instance._v_vehicle_consumption_rate = GetValueFromReader<Int32?>(dr, 27);
+                            instance._v_vehicle_consumption_rate = GetValueFromReader<Decimal?>(dr, 27);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
