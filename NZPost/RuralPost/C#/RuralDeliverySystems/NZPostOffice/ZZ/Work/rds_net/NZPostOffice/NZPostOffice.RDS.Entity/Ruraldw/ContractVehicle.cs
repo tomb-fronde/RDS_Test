@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_001  July-2010
+    // Added _v_vehicle_safety, _v_vehicle_emissions, _v_vehicle_consumption_rate 
+    // and related code.
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -36,6 +40,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("v_vehicle_speedo_kms", "_v_vehicle_speedo_kms", "vehicle")]
     [MapInfo("v_vehicle_speedo_date", "_v_vehicle_speedo_date", "vehicle")]
     [MapInfo("v_salvage_value", "_v_salvage_value", "vehicle")]
+    [MapInfo("v_vehicle_safety", "_v_vehicle_safety", "vehicle")]
+    [MapInfo("v_vehicle_emissions", "_v_vehicle_emissions", "vehicle")]
+    [MapInfo("v_vehicle_consumption_rate", "_v_vehicle_consumption_rate", "vehicle")]
+
     [System.Serializable()]
 
     public class ContractVehicle : Entity<ContractVehicle>
@@ -115,6 +123,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _v_salvage_value;
+
+        [DBField()]
+        private int? _v_vehicle_safety;
+
+        [DBField()]
+        private int? _v_vehicle_emissions;
+
+        [DBField()]
+        private int? _v_vehicle_consumption_rate;
 
         public virtual int? VehicleNumber
         {
@@ -569,6 +586,60 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual int? VVehicleSafety
+        {
+            get
+            {
+                CanReadProperty("VVehicleSafety", true);
+                return _v_vehicle_safety;
+            }
+            set
+            {
+                CanWriteProperty("VVehicleSafety", true);
+                if (_v_vehicle_safety != value)
+                {
+                    _v_vehicle_safety = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? VVehicleEmissions
+        {
+            get
+            {
+                CanReadProperty("VVehicleEmissions", true);
+                return _v_vehicle_emissions;
+            }
+            set
+            {
+                CanWriteProperty("VVehicleEmissions", true);
+                if (_v_vehicle_emissions != value)
+                {
+                    _v_vehicle_emissions = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? VVehicleConsumptionRate
+        {
+            get
+            {
+                CanReadProperty("VVehicleConsumptionRate", true);
+                return _v_vehicle_consumption_rate;
+            }
+            set
+            {
+                CanWriteProperty("VVehicleConsumptionRate", true);
+                if (_v_vehicle_consumption_rate != value)
+                {
+                    _v_vehicle_consumption_rate = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual bool VVehicleTransmission1
         {
             get
@@ -661,7 +732,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         "contract_vehical.signage_compliant, " +
                         "vehicle.v_vehicle_speedo_kms, " +
                         "vehicle.v_vehicle_speedo_date, " +
-                        "vehicle.v_salvage_value " +
+                        "vehicle.v_salvage_value, " +
+                        "vehicle.v_vehicle_safety, " +
+                        "vehicle.v_vehicle_emissions, " +
+                        "vehicle.v_vehicle_consumption_rate " +
                         "FROM contract_vehical, vehicle " +
                         "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
                         "AND contract_vehical.contract_no = @contract_no " +
@@ -703,6 +777,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._v_vehicle_speedo_kms = GetValueFromReader<Int32?>(dr, 22);
                             instance._v_vehicle_speedo_date = GetValueFromReader<DateTime?>(dr, 23);
                             instance._v_salvage_value = GetValueFromReader<Int32?>(dr, 24);
+                            instance._v_vehicle_safety = GetValueFromReader<Int32?>(dr, 25);
+                            instance._v_vehicle_emissions = GetValueFromReader<Int32?>(dr, 26);
+                            instance._v_vehicle_consumption_rate = GetValueFromReader<Int32?>(dr, 27);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
@@ -717,9 +794,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void UpdateEntity()
         {
+            // TJB July-2010
+            // Note: the vehicle table is updated separately in RDS.DataService.RDSDataService.UpdateVehicle
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
-                DbCommand cm = cn.CreateCommand();
+                DbCommand cm= cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "contract_vehical", ref pList))
@@ -740,6 +819,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void InsertEntity()
         {
+            // TJB July-2010
+            // Note: the vehicle table is updated separately in RDS.DataService.RDSDataService.InsertVehicle
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
