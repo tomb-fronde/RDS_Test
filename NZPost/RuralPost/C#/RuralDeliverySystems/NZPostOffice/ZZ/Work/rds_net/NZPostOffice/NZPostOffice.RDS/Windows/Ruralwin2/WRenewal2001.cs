@@ -696,7 +696,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? ll_salvage;
             int? lSafety;
             int? lEmissions;
-            int? lConsumption;
+            Decimal?  nConsumption;
             DateTime? dPurchase;
             DateTime? dSpeedoDate;
             DateTime? ld_purchased_date;
@@ -738,7 +738,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Added Safety (stars) Emissions and Consumption
             lSafety = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleSafety;
             lEmissions = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleEmissions;
-            lConsumption = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleConsumptionRate;
+            nConsumption = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleConsumptionRate;
             // TJB  RPCR_001  July-2010
             // Added error checking (SQLCode, SQLErrText)
             if (StaticFunctions.f_nempty(idw_vehicle.GetItem<ContractVehicle>(arow).VehicleNumber))
@@ -749,7 +749,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 RDSDataService.InsertIntoVehicle(lvehicleNumber, lVTKey, lFTKey, sMake, sModel, lYear
                               , sRegistration, lCCRate, sUserCharge, dPurchase, lPurchase, sLeased
                               , lMonth, sTransmission, ll_VSKey, ll_remaining_economic_life, lSpeedoKms
-                              , dSpeedoDate, ll_salvage, lSafety, lEmissions, lConsumption
+                              , dSpeedoDate, ll_salvage, lSafety, lEmissions, nConsumption
                               , ref SQLCode, ref SQLErrText);
 
                 if (SQLCode != 0)
@@ -762,7 +762,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 RDSDataService.UpdateVehicle(lVTKey, lFTKey, sMake, sModel, lYear, lMonth, sRegistration
                               , lCCRate, sUserCharge, dPurchase, lPurchase, sLeased, sTransmission
                               , ll_VSKey, ll_remaining_economic_life, lSpeedoKms, dSpeedoDate, ll_salvage
-                              , lSafety, lEmissions, lConsumption, lvehicleNumber
+                              , lSafety, lEmissions, nConsumption, lvehicleNumber
                               , ref SQLCode, ref SQLErrText);
 
                 if (SQLCode != 0)

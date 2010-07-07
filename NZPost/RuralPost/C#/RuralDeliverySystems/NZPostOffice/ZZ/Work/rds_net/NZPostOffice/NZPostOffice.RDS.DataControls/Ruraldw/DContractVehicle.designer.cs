@@ -711,7 +711,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // Consumption
             // 
             this.Consumption.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VVehicleConsumptionRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.Consumption.EditMask = "###,###";
+            this.Consumption.EditMask = "";
             this.Consumption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.Consumption.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.Consumption.Location = new System.Drawing.Point(125, 260);
