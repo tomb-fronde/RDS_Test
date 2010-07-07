@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using System;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    partial class DContractVehicle
+    partial class DContractVehicleTest
     {
         /// <summary> 
         /// Required designer variable.

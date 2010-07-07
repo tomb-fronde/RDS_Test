@@ -9,9 +9,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    public partial class DContractVehicle : Metex.Windows.DataUserControl
+    public partial class DContractVehicleTest : Metex.Windows.DataUserControl
     {
-        public DContractVehicle()
+        public DContractVehicleTest()
         {
             InitializeComponent();
         }
