@@ -9,7 +9,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     partial class DAddAllowance
     {
-
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -32,8 +31,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private System.Windows.Forms.TextBox notes;
         private System.Windows.Forms.Label notes_t;
         private Metex.Windows.DataEntityCombo alt_key;
-        private DateTimeMaskedTextBox effective_date;// System.Windows.Forms.MaskedTextBox effective_date;
-        private DateTimeMaskedTextBox paid_to_date;// System.Windows.Forms.MaskedTextBox paid_to_date;
+        private DateTimeMaskedTextBox effective_date;   // System.Windows.Forms.MaskedTextBox effective_date;
+        private DateTimeMaskedTextBox paid_to_date;     // System.Windows.Forms.MaskedTextBox paid_to_date;
         private NumericalMaskedTextBox annual_amount;
 
         #region Component Designer generated code
@@ -49,7 +48,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.AddAllowance);
-            #region contract_title define
+            //
+            // contract_title
+            //
             this.contract_title = new System.Windows.Forms.TextBox();
             this.contract_title.Name = "contract_title";
             this.contract_title.Location = new System.Drawing.Point(3, 3);
@@ -60,10 +61,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.contract_title.Enabled = true;
             this.contract_title.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Bold);
             this.contract_title.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.contract_title.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractTitle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            #endregion
+            this.contract_title.DataBindings.Add(new System.Windows.Forms.Binding(
+                                "Text", this.bindingSource, "ContractTitle", true, 
+                                System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Controls.Add(contract_title);
-            #region allowance_t define
+            //
+            // allowance_t
+            //
             this.allowance_t = new System.Windows.Forms.Label();
             this.allowance_t.Name = "allowance_t";
             this.allowance_t.Location = new System.Drawing.Point(10, 39);
@@ -72,9 +76,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.allowance_t.Font = new System.Drawing.Font("Arial", 8);
             this.allowance_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.allowance_t.Text = "Allowance";
-            #endregion
             this.Controls.Add(allowance_t);
-            #region effective_date_t define
+            //
+            // effective_date_t
+            //
             this.effective_date_t = new System.Windows.Forms.Label();
             this.effective_date_t.Name = "effective_date_t";
             this.effective_date_t.Location = new System.Drawing.Point(197, 40);
@@ -83,9 +88,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.effective_date_t.Font = new System.Drawing.Font("Arial", 8);
             this.effective_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.effective_date_t.Text = "Effective";
-            #endregion
             this.Controls.Add(effective_date_t);
-            #region paid_to_date_t define
+            //
+            // paid_to_date_t 
+            //
             this.paid_to_date_t = new System.Windows.Forms.Label();
             this.paid_to_date_t.Name = "paid_to_date_t";
             this.paid_to_date_t.Location = new System.Drawing.Point(281, 25);
@@ -94,9 +100,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.paid_to_date_t.Font = new System.Drawing.Font("Arial", 8);
             this.paid_to_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.paid_to_date_t.Text = "First Paid Date";
-            #endregion
             this.Controls.Add(paid_to_date_t);
-            #region annual_amount_t define
+            //
+            // annual_amount_t
+            //
             this.annual_amount_t = new System.Windows.Forms.Label();
             this.annual_amount_t.Name = "annual_amount_t";
             this.annual_amount_t.Location = new System.Drawing.Point(363, 40);
@@ -105,9 +112,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.annual_amount_t.Font = new System.Drawing.Font("Arial", 8);
             this.annual_amount_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.annual_amount_t.Text = "Annual Amount";
-            #endregion
             this.Controls.Add(annual_amount_t);
-            #region notes define
+            //
+            // notes
+            //
             this.notes = new System.Windows.Forms.TextBox();
             this.notes.Name = "notes";
             this.notes.Location = new System.Drawing.Point(84, 83);
@@ -118,10 +126,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.notes.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.notes.Multiline = true;
             this.notes.MaxLength = 200;
-            this.notes.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Notes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            #endregion
+            this.notes.DataBindings.Add(new System.Windows.Forms.Binding(
+                       "Text", this.bindingSource, "Notes", true, 
+                       System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Controls.Add(notes);
-            #region notes_t define
+            //
+            // notes_t
+            //
             this.notes_t = new System.Windows.Forms.Label();
             this.notes_t.Name = "notes_t";
             this.notes_t.Location = new System.Drawing.Point(40, 84);
@@ -130,9 +141,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.notes_t.Font = new System.Drawing.Font("Arial", 8);
             this.notes_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.notes_t.Text = "Notes";
-            #endregion
             this.Controls.Add(notes_t);
-            #region alt_key define
+            //
+            // alt_key
+            //
             this.alt_key = new Metex.Windows.DataEntityCombo();
             this.alt_key.Name = "alt_key";
             this.alt_key.Location = new System.Drawing.Point(10, 58);
@@ -141,14 +153,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key.Enabled = true;
             this.alt_key.Font = new System.Drawing.Font("Arial", 8);
             //this.alt_key.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.alt_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AltKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.alt_key.DataBindings.Add(new System.Windows.Forms.Binding(
+                         "Value", this.bindingSource, "AltKey", true, 
+                         System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.alt_key.DisplayMember = "AltDescription";
             this.alt_key.ValueMember = "AltKey";
             this.alt_key.AutoRetrieve = true;
             this.alt_key.BackColor = System.Drawing.Color.Aqua;
-            #endregion
             this.Controls.Add(alt_key);
-            #region effective_date define
+            //
+            // effective_date
+            //
             this.effective_date = new DateTimeMaskedTextBox();// System.Windows.Forms.MaskedTextBox();
             this.effective_date.Name = "effective_date";
             this.effective_date.Location = new System.Drawing.Point(197, 59);
@@ -157,7 +172,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.effective_date.Enabled = true;
             this.effective_date.Font = new System.Drawing.Font("Arial", 8);
             this.effective_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.effective_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "EffectiveDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.effective_date.DataBindings.Add(new System.Windows.Forms.Binding(
+                                "Value", this.bindingSource, "EffectiveDate", true, 
+                                System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.effective_date.Mask = "00/00/0000";
             //this.effective_date.PromptChar = '0';
             this.effective_date.DataBindings[0].FormatString = "dd/MM/yyyy";
@@ -165,9 +182,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.effective_date.DataBindings[0].DataSourceNullValue = null;
             //this.effective_date.InsertKeyMode = InsertKeyMode.Overwrite;
             //this.effective_date.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
-            #endregion
             this.Controls.Add(effective_date);
-            #region paid_to_date define
+            //
+            // paid_to_date
+            //
             this.paid_to_date = new DateTimeMaskedTextBox();// System.Windows.Forms.MaskedTextBox();
             this.paid_to_date.Name = "paid_to_date";
             this.paid_to_date.Location = new System.Drawing.Point(281, 59);
@@ -181,11 +199,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             //this.paid_to_date.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
             this.paid_to_date.Font = new System.Drawing.Font("Arial", 8);
             this.paid_to_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.paid_to_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "PaidToDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.paid_to_date.DataBindings.Add(new System.Windows.Forms.Binding(
+                              "Value", this.bindingSource, "PaidToDate", true, 
+                              System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.paid_to_date.DataBindings[0].FormatString = "dd/MM/yyyy" ;
-            #endregion
             this.Controls.Add(paid_to_date);
-            #region annual_amount define
+            //
+            // annual_amount
+            //
             this.annual_amount = new NumericalMaskedTextBox();
             this.annual_amount.Name = "annual_amount";
             this.annual_amount.Location = new System.Drawing.Point(364, 59);
@@ -197,20 +218,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.annual_amount.Enabled = true;
             this.annual_amount.Font = new System.Drawing.Font("Arial", 8);
             this.annual_amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.annual_amount.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AnnualAmount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.annual_amount.DataBindings[0].FormatString = "###,###.00" ;// this.annual_amount.DataBindings["Text"].FormatString = "###,###.00" ;// this.annual_amount.Mask = "###,###.00";
+            this.annual_amount.DataBindings.Add(new System.Windows.Forms.Binding(
+                               "Value", this.bindingSource, "AnnualAmount", true, 
+                               System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            // this.annual_amount.DataBindings["Text"].FormatString = "###,###.00" ;
+            // this.annual_amount.Mask = "###,###.00";
+            this.annual_amount.DataBindings[0].FormatString = "###,###.00";
             this.annual_amount.DataBindings[0].DataSourceNullValue = null;
             this.annual_amount.BackColor = System.Drawing.Color.Aqua;
-            #endregion
             this.Controls.Add(annual_amount);
+
             this.Size = new System.Drawing.Size(547, 212);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
-
         #endregion
-
-
     }
 }
