@@ -11,9 +11,9 @@ using NZPostOffice.RDS.DataControls.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-	public partial class DAddAllowance : Metex.Windows.DataUserControl
+	public partial class DAddAllowance0 : Metex.Windows.DataUserControl
 	{
-		public DAddAllowance()
+		public DAddAllowance0()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
