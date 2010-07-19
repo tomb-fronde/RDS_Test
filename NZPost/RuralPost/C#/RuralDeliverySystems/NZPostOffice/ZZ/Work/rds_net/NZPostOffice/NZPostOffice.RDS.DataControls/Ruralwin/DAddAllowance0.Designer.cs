@@ -7,7 +7,7 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-    partial class DAddAllowance
+    partial class DAddAllowance0
     {
         /// <summary>
         /// Required designer variable.
