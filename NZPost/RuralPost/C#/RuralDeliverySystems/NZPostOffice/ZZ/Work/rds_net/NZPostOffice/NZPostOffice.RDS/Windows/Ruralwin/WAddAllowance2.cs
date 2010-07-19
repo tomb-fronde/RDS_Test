@@ -145,6 +145,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_title;
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
+
+            DateTime dtEffDate = DateTime.MinValue;
+            DateTime.TryParse("1-Nov-2009", out dtEffDate);
             this.of_set_componentname("Allowance");
             lnv_msg = (NRdsMsg)StaticMessage.PowerObjectParm;
             lvn_Criteria = lnv_msg.of_getcriteria();
@@ -153,7 +156,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             il_caRow = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("allowance_row"));
             ls_title = lvn_Criteria.of_getcriteria("contract_title") as string;
             idw_allowance.DataObject.Reset();
-            ((DAddAllowance2)idw_allowance.DataObject).Retrieve(il_contract);
+            //((DAddAllowance2)idw_allowance.DataObject).Retrieve(il_contract);
+            ((DAddAllowance2)idw_allowance.DataObject).Retrieve(il_contract,dtEffDate);
             idw_allowance.DataObject.AddItem<AddAllowance2>(new AddAllowance2());
 //            nRow = idw_allowance.GetRow();//.RowCount;
 //            idw_allowance.GetItem<AddAllowance>(nRow).ContractTitle = ls_title;
@@ -200,7 +204,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //}
             //? this.Close();//close(this);
             ((WContract2001)StaticVariables.window).idw_allowances.Reset();
-            ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[] { il_contract });
+            ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[]{il_contract});
             StaticVariables.window = null;
         }
 
@@ -233,21 +237,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return FAILURE2;
                 }
                 ld_maxdate = new DateTime();//System.Convert.ToDateTime("00/00/0000");
-                /*select max ( ca_effective_date) into :ld_maxdate from contract_allowance where contract_no = :il_contract and alt_key = :ll_altkey;*/
+                /*select max(ca_effective_date) into :ld_maxdate from contract_allowance 
+                 * where contract_no = :il_contract and alt_key = :ll_altkey;*/
                 int SQLCode = 0;
                 string SQLErrText = string.Empty;
-                ld_maxdate = RDSDataService.GetContractAllownceMaxCaEffective(il_contract, ll_altkey, ref SQLCode, ref SQLErrText);
+                ld_maxdate = RDSDataService.GetContractAllownceMaxCaEffective(il_contract, ll_altkey
+                                   , ref SQLCode, ref SQLErrText);
 
-                if (SQLCode != 0 && SQLCode != 100) //if (StaticVariables.sqlca.SQLCode != 0 && StaticVariables.sqlca.SQLCode != 100)
+                //if (StaticVariables.sqlca.SQLCode != 0 && StaticVariables.sqlca.SQLCode != 100)
+                if (SQLCode != 0 && SQLCode != 100) 
                 {
-                    MessageBox.Show("Failed looking up max ( ca_effective_date): ~r" + "contract=" + il_contract.ToString() + ", alt_key=" + ll_altkey.ToString() + "~r~r" + "Error Code: " + SQLCode.ToString() + "~" + "Error Text: " + SQLErrText, "Database error"); //MessageBox.Show("Failed looking up max ( ca_effective_date): ~r" + "contract=" + String(il_contract) + ", alt_key=" + String(ll_altkey) + "~r~r" + "Error Code: " + String(app.sqlca.SQLCode) + '~' + "Error Text: " + app.sqlca.SQLErrText, "Database error");
+                    MessageBox.Show("Failed looking up max(ca_effective_date): \n" 
+                                    + "contract=" + il_contract.ToString() + ", " 
+                                    + "alt_key=" + ll_altkey.ToString() + "\n\n"
+                                    + "Error Code: " + SQLCode.ToString() + "\n" 
+                                    + "Error Text: " + SQLErrText
+                                    , "Database error"); 
                     //?rollback;
                     return FAILURE2;
                 }
                 //?rollback;
                 if (ld_effdate <= ld_maxdate)
                 {
-                    is_errmsg = "The effective date must be greater than " + ld_maxdate.GetValueOrDefault().ToString("dd/MM/yyyy") + '.';
+                    is_errmsg = "The effective date must be greater than " 
+                                + ld_maxdate.GetValueOrDefault().ToString("dd/MM/yyyy") + '.';
                     return FAILURE;
                 }
             }
@@ -261,6 +274,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #region Events
+
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
             cb_save.Focus();
@@ -271,7 +285,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_RowCount = idw_allowance.RowCount;
             if (!(ll_RowCount == 1))
             {
-                is_errmsg = "Incorrect number of rows to insert  ( " + ll_RowCount.ToString() + ")??\r" + " ( programming bug - please report)";
+                is_errmsg = "Incorrect number of rows to insert (" + ll_RowCount.ToString() + ")??\n" 
+                            + "(programming bug - please report)";
                 ll_error = FAILURE;
             }
             else
@@ -287,10 +302,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return;//?return FAILURE;
             }
             idw_allowance.Save();//idw_allowance.Update();
-            if (idw_allowance.GetItem<AddAllowance>(0).SQLCode != 0) //(StaticVariables.sqlca.SQLCode != 0)
+            if (idw_allowance.GetItem<AddAllowance>(0).SQLCode != 0)
             {
-                //MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + String(app.sqlca.SQLCode) + "\n\n" + "Error Text: " + app.sqlca.SQLErrText, "Database Error");
-                MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + idw_allowance.GetItem<AddAllowance>(0).SQLCode.ToString() + "\n\n" + "Error Text: " + idw_allowance.GetItem<AddAllowance>(0).SQLErrText, "Database Error");
+                MessageBox.Show("Unable to update.  \n\n" 
+                               + "Error Code: " + idw_allowance.GetItem<AddAllowance>(0).SQLCode.ToString() + "\n\n" 
+                               + "Error Text: " + idw_allowance.GetItem<AddAllowance>(0).SQLErrText
+                               , "Database Error");
 
                 //?RollBack;
                 return;//?return FAILURE;
