@@ -3,8 +3,11 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-    partial class DAddAllowance3
+    partial class DAddAllowance
     {
+        // TJB RPCR_017 July-2010: New version
+        // See DAddAllowance.cs
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -57,7 +60,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // bindingSource
             // 
-            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.AddAllowance2);
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.AddAllowance);
             this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // grid
@@ -251,6 +254,27 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
         }
 
+        // TJB RPCR_017 July-2010
+        // alt_key_err_count is a hack.  If the user sets the allowance type on the new record
+        // then removes it, the 'syste,' still shows it as having the value (presumably the
+        // error is that it isn't supposed to have a null value).  This code (grid_DataError)
+        // is executed repeatedly waiting for the user to select an acceptable valu - the net
+        // effect being that the user cannot tab away from the allowance type field (on the new
+        // record).  This hack counts the number of times the user tries to tab away, and when 
+        // that number is reached, forces the value to NULL and the 'error' doesn't recur, 
+        // allowing the user to change focus away from the field.
+        // There may be a better way to do this ...
+        //
+        // NOTE:
+        //   1.  This code assumes the record at row 0 is the new record.  If this is changed
+        //       eg the new record is added at the end of the list) the test of the nRow will 
+        //       need to be changed.
+        //   2.  It is important that the allowance type be set to null.  The system sometimes 
+        //       tries to save the added record even when told to delete it.  The insert (of the
+        //       new record) fails when the allowance type is null, and this failure is ignored 
+        //       the code.  If the Allowance type is non-null, an invalid record may be saved 
+        //       to the database.
+        private int alt_key_err_count = 0;
         void grid_DataError(object sender, System.Windows.Forms.DataGridViewDataErrorEventArgs e)
         {
             // this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -270,9 +294,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             {
                 if (nRow == 0)
                 {
-                    if (grid.Rows[nRow].Cells["alt_key"].Value == null)
+                    alt_key_err_count++;
+                    if (grid.Rows[nRow].Cells["alt_key"].Value == null
+                        || alt_key_err_count >= 3)
                     {
-                        this.grid.CancelEdit();
+                        grid.Rows[nRow].Cells["alt_key"].Value = null;
+                        //this.grid.CancelEdit();
+                        alt_key_err_count = 0;
                     }
                 }
                 else

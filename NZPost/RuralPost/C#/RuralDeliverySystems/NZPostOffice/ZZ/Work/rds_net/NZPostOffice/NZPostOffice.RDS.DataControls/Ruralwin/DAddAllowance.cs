@@ -11,23 +11,28 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-	public partial class DAddAllowance3 : Metex.Windows.DataUserControl
+	public partial class DAddAllowance : Metex.Windows.DataUserControl
 	{
-		public DAddAllowance3()
+        // TJB RPCR_017 July-2010
+        // Significantly re-written
+        // Displays all current period records in a gris, rather than
+        // a single added record in a Windows form.
+        // See DAddAllowance0 for original
+
+		public DAddAllowance()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
 		}
 
-	        protected override void OnHandleCreated(EventArgs e)
-        	{
-	            if (!DesignMode)
-        	    {
-                	InitializeDropdown();
-	            }
-    
-	            base.OnHandleCreated(e);
-        	}
+        protected override void OnHandleCreated(EventArgs e)
+    	{
+            if (!DesignMode)
+    	    {
+            	InitializeDropdown();
+            }
+            base.OnHandleCreated(e);
+    	}
 
 		private void InitializeDropdown()
 		{
@@ -37,10 +42,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public int Retrieve( int? inContract, DateTime? inEffDate)
 		{
             set_row_readability();
-            return RetrieveCore<AddAllowance2>(new List<AddAllowance2>
-			                           	(AddAllowance2.GetAllAddAllowance(inContract, inEffDate)));
+            return RetrieveCore<AddAllowance>(new List<AddAllowance>
+			                           	(AddAllowance.GetAllAddAllowance(inContract, inEffDate)));
 		}
 
+        // TJB RPCR_017 July-2010
+        // These have been added to provide a mechanism for altering
+        // grid properties.  I couldn't figure out how to access the grid
+        // properties from the WAddAllowance form.
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
             this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
