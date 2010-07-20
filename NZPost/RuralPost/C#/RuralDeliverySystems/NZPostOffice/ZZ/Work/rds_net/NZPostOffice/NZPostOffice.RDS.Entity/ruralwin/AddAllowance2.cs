@@ -23,7 +23,28 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
 	public class AddAllowance2 : Entity<AddAllowance2>
 	{
-		#region Business Methods
+        // TJB RPCR_017 July-2010
+        // Added GetCurrentAllowances to limit allowance list to current allowances
+
+        private int _sqlcode = 0;
+        public int SQLCode
+        {
+            get
+            {
+                return _sqlcode;
+            }
+        }
+
+        private string _sqlerrtext = "";
+        public string SQLErrText
+        {
+            get
+            {
+                return _sqlerrtext;
+            }
+        }
+
+        #region Business Methods
 		[DBField()]
 		private int?  _alt_key;
 
@@ -205,39 +226,54 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			return Create(inContractNo);
 		}
 
-		public static AddAllowance2[] GetAllAddAllowance( int? inContractNo )
-		{
-			return Fetch(inContractNo).list;
-		}
-		#endregion
+        // TJB RPCR_017 July-2010
+        // Added inEffDate to limit allowance list to current allowances
+        public static AddAllowance2[] GetAllAddAllowance(int? inContractNo, DateTime? inEffDate)
+        {
+            return Fetch(inContractNo, inEffDate).list;
+        }
+      /*
+        // TJB RPCR_017 July-2010
+        // Added to limit allowance list to current allowances
+        public static AddAllowance2[] GetCurrentAllowances(int? inContractNo, DateTime? inEffDate)
+        {
+            return Fetch(inContractNo, inEffDate).list;
+        }
+      */
+        #endregion
 
 		#region Data Access
 		[ServerMethod]
-		private void FetchEntity( int? inContractNo )
+        private void FetchEntity(int? inContractNo, DateTime? inEffDate)
 		{
-			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
+            // TJB RPCR_017 July-2010: Added inEffDate parameter and modified query
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
-					cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandType = CommandType.Text;
 					//GenerateSelectCommandText(cm, "contract_allowance");
 					//GenerateSelectCommandText(cm, "contract");
-					cm.CommandText = 
-						" SELECT contract_allowance.alt_key" 
-						+ "    , contract_allowance.contract_no " 
-						+ "    , contract_allowance.ca_effective_date " 
-						+ "    , contract_allowance.ca_annual_amount" 
-						+ "    , contract_allowance.ca_notes " 
-						+ "    , contract_allowance.ca_paid_to_date" 
-						+ "    , contract_allowance.ca_approved " 
-						+ "    , contract.con_title " 
-						+ " FROM rd.contract_allowance, rd.contract " 
-						+ "WHERE contract.contract_no = contract_allowance.contract_no " 
-						+ "  AND contract_allowance.contract_no = @inContractNo "
-                        + "ORDER BY contract_allowance.ca_effective_date DESC "
-                        ;
-						ParameterCollection pList = new ParameterCollection();
-						pList.Add(cm, "inContractNo", inContractNo);
+                    cm.CommandText =
+                        " SELECT contract_allowance.alt_key"
+                        + "    , contract_allowance.contract_no "
+                        + "    , contract_allowance.ca_effective_date "
+                        + "    , contract_allowance.ca_annual_amount"
+                        + "    , contract_allowance.ca_notes "
+                        + "    , contract_allowance.ca_paid_to_date"
+                        + "    , contract_allowance.ca_approved "
+                        + "    , contract.con_title "
+                        + " FROM rd.contract_allowance, rd.contract "
+                        + "WHERE contract.contract_no = contract_allowance.contract_no "
+                        + "  AND contract_allowance.contract_no = @inContractNo ";
+                    pList.Add(cm, "inContractNo", inContractNo);
+                    if (inEffDate != null)
+                    {
+                        cm.CommandText += "  AND contract_allowance.ca_effective_date >= @inEffDate ";
+                        pList.Add(cm, "inEffDate", inEffDate);
+                    }
+                    cm.CommandText += "ORDER BY contract_allowance.ca_effective_date DESC ";
 
 					List<AddAllowance2> _list = new List<AddAllowance2>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -266,7 +302,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		[ServerMethod()]
 		private void UpdateEntity()
 		{
-			using ( DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+            _sqlcode = 0;
+            _sqlerrtext = "";
+
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
@@ -281,7 +320,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm, "ca_effective_date", GetInitialValue("_effective_date"));
-					DBHelper.ExecuteNonQuery(cm, pList);
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
 				}
 				// reinitialize original key/value list
 				StoreInitialValues();
@@ -290,14 +337,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		[ServerMethod()]
 		private void InsertEntity()
 		{
-			using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+            _sqlcode = 0;
+            _sqlerrtext = "";
+
+            using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
 				if (GenerateInsertCommandText(cm, "contract_allowance", pList))
 				{
-					DBHelper.ExecuteNonQuery(cm, pList);
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -2;
+                        _sqlerrtext = e.Message;
+                    }
 				}
 				StoreInitialValues();
 			}
