@@ -21,10 +21,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("con_title", "_contract_title", "contract")]
 	[System.Serializable()]
 
-	public class AddAllowance2 : Entity<AddAllowance2>
+	public class AddAllowance : Entity<AddAllowance>
 	{
         // TJB RPCR_017 July-2010
         // Added GetCurrentAllowances to limit allowance list to current allowances
+        // Added ca_approved column to table
 
         private int _sqlcode = 0;
         public int SQLCode
@@ -221,21 +222,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		#endregion
 
 		#region Factory Methods
-		public static AddAllowance2 NewAddAllowance( int? inContractNo )
+		public static AddAllowance NewAddAllowance( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
         // TJB RPCR_017 July-2010
         // Added inEffDate to limit allowance list to current allowances
-        public static AddAllowance2[] GetAllAddAllowance(int? inContractNo, DateTime? inEffDate)
+        public static AddAllowance[] GetAllAddAllowance(int? inContractNo, DateTime? inEffDate)
         {
             return Fetch(inContractNo, inEffDate).list;
         }
       /*
         // TJB RPCR_017 July-2010
         // Added to limit allowance list to current allowances
-        public static AddAllowance2[] GetCurrentAllowances(int? inContractNo, DateTime? inEffDate)
+        public static AddAllowance[] GetCurrentAllowances(int? inContractNo, DateTime? inEffDate)
         {
             return Fetch(inContractNo, inEffDate).list;
         }
@@ -275,12 +276,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     }
                     cm.CommandText += "ORDER BY contract_allowance.ca_effective_date DESC ";
 
-					List<AddAllowance2> _list = new List<AddAllowance2>();
+					List<AddAllowance> _list = new List<AddAllowance>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
 						{
-							AddAllowance2 instance = new AddAllowance2();
+							AddAllowance instance = new AddAllowance();
 							instance._alt_key = GetValueFromReader<int?>(dr,0);
 							instance._contract_no = GetValueFromReader<int?>(dr,1);
 							instance._effective_date = GetValueFromReader<DateTime?>(dr,2);
