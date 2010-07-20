@@ -17,6 +17,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WEclDataImport : WAncestorWindow
     {
+        // TJB ECL Data Upload  June-2010: New
+        // Process to upload, verify, and insert summarised ECL piece rate records.
+        //
+        // TJB ECL Data Upload July-2010: Updated
+        // Changed data quality matches to case insensitive.
+
         #region Define
 
         /// Required designer variable.
@@ -1224,17 +1230,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Returns
             //    true    If pMatchString matches a mapping value
             //    false   otherwise
+            //
+            // TJB July-2010: All matching done case-insensitive
 
             string sThisColName = "";
             string sThisMatchString = "";
             string sThisMatchType = "";
+
+            pColName     = pColName.ToUpper();
+            pMatchString = pMatchString.ToUpper();
+
             for (int i = 0; i < ecl_quality_mappings_list.Count; i++)
             {
-                sThisColName = ecl_quality_mappings_list[i].Column_name;
-                if (sThisColName == pColName)
+                sThisColName = (ecl_quality_mappings_list[i].Column_name).ToUpper();
+                if (sThisColName.ToUpper() == pColName)
                 {
-                    sThisMatchString = ecl_quality_mappings_list[i].Match_string;
-                    sThisMatchType = ecl_quality_mappings_list[i].Match_type;
+                    sThisMatchString = (ecl_quality_mappings_list[i].Match_string).ToUpper();
+                    sThisMatchType   = (ecl_quality_mappings_list[i].Match_type).ToUpper();
                     if (sThisMatchType == "S")
                     {
                         if (pMatchString.StartsWith(sThisMatchString))
@@ -1258,28 +1270,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             return false;      // No match
-        }
-
-        private bool wf_ValidPrCode(string pRateDescr)
-        {
-            // If EclPrCode is blank, check the Rate Description.
-            // 
-            // Returns
-            //    true    If the Rate Description matches a specified value
-            //    false   otherwise
-
-            return wf_MatchMapping("ecl_rate_descr", pRateDescr);
-        }
-
-        private bool wf_ValidCust(string pCustomerName)
-        {
-            // If the ScanCount is > 2, sometimes this is OK.
-            //
-            // Return
-            //   true    If the Customer Name is "DHL%", it is OK
-            //   false   Otherwise the Scan Count is invalid
-
-            return wf_MatchMapping("ecl_customer_name", pCustomerName);
         }
 
         public virtual bool wf_is_duplicate(int pRow, string pPrevTicketNo, string pPrevTicketPart)
@@ -1351,10 +1341,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             // Do "Quality checking" - validate input data
             int n;
+            string t;
+            DateTime? dt;
 
             // Skip any with EclRuralPayable == "N"
             string sRuralPayable = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRuralPayable;
-            if (sRuralPayable == "N")
+            if (sRuralPayable.ToUpper() == "N")
             {
                 pErrName += "Rural payable=N";
                 return 1;          // Skip this row
@@ -1367,7 +1359,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return 2;
             }
             string sPrCode = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclPrCode;
-            string sRateDescr = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclRateDescr;
+            string sPkgDescr = dw_import.DataObject.GetItem<EclDataImport>(pRow).EclPkgDescr;
             if (sPrCode.Length == 0)
             {
                 // If the PrCode is blank, the Rate Description is used to determine the
@@ -1375,21 +1367,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (sPrCode.Length == 0)
                 {
                     //if (wf_ValidPrCode(sRateDescr))
-                    if(wf_MatchMapping("ecl_rate_descr", sRateDescr))
+                    if(wf_MatchMapping("ecl_pkg_descr", sPkgDescr))
                     {
                         return 0;
                     }
                     else
                     {
-                        int len = sRateDescr.Length;
+                        int len = sPkgDescr.Length;
                         if (len == 0)
                         {
-                            pErrValue = "Rate Descr empty";
+                            pErrValue = "Pg Descr empty";
                         }
                         else
                         {
                             len = (len > 10) ? 10 : len;
-                            pErrValue = "Rate Descr: " + sRateDescr.Substring(0,len);
+                            pErrValue = "Pg Descr: " + sPkgDescr.Substring(0,len);
                         }
                     }
                     pErrName = "Blank Piece Rate Code";
