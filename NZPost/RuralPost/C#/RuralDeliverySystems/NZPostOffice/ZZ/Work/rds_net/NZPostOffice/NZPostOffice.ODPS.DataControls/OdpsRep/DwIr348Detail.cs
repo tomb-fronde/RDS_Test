@@ -25,7 +25,14 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
 
             foreach (Ir348Detail item in beforeFilter)
             {
-                if (item.GrossEarnings != 0)
+                // tjb  RPI_004  June-2010
+                // Changed GrossEarnings from decimal? to string in definition
+                // Changed test to suit.
+
+                //if (item.GrossEarnings != 0)
+                if (item.GrossEarnings != null
+                    && item.GrossEarnings.Length > 1
+                    && item.GrossEarnings != "0")
                 {
                     SourceList.Add(item);
                 }

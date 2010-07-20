@@ -76,7 +76,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.TabIndex = 0;
-
             //
             // dtl
             //
@@ -91,8 +90,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.dtl.ReadOnly = true;
             this.dtl.Width = 60;
             this.grid.Columns.Add(dtl);
-
-
             //
             // c_ird_no
             //
@@ -107,8 +104,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.c_ird_no.ReadOnly = true;
             this.c_ird_no.Width = 70;
             this.grid.Columns.Add(c_ird_no);
-
-
             //
             // employee_full_name
             //
@@ -123,8 +118,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.employee_full_name.ReadOnly = true;
             this.employee_full_name.Width = 305;
             this.grid.Columns.Add(employee_full_name);
-
-
             //
             // tax_code
             //
@@ -139,8 +132,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.tax_code.ReadOnly = true;
             this.tax_code.Width = 60;
             this.grid.Columns.Add(tax_code);
-
-
             //
             // start_date
             //
@@ -155,8 +146,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.start_date.ReadOnly = true;
             this.start_date.Width = 88;
             this.grid.Columns.Add(start_date);
-
-
             //
             // end_date
             //
@@ -171,8 +160,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.end_date.ReadOnly = true;
             this.end_date.Width = 88;
             this.grid.Columns.Add(end_date);
-
-
             //
             // gross_earnings
             //
@@ -187,8 +174,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.gross_earnings.ReadOnly = true;
             this.gross_earnings.Width = 88;
             this.grid.Columns.Add(gross_earnings);
-
-
             //
             // not_liable
             //
@@ -203,8 +188,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.not_liable.ReadOnly = true;
             this.not_liable.Width = 88;
             this.grid.Columns.Add(not_liable);
-
-
             //
             // lump_sum
             //
@@ -219,8 +202,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.lump_sum.ReadOnly = true;
             this.lump_sum.Width = 88;
             this.grid.Columns.Add(lump_sum);
-
-
             //
             // total_paye
             //
@@ -235,8 +216,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.total_paye.ReadOnly = true;
             this.total_paye.Width = 88;
             this.grid.Columns.Add(total_paye);
-
-
             //
             // cs_deductions
             //
@@ -251,8 +230,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.cs_deductions.ReadOnly = true;
             this.cs_deductions.Width = 88;
             this.grid.Columns.Add(cs_deductions);
-
-
             //
             // cs_deductioncode
             //
@@ -267,8 +244,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.cs_deductioncode.ReadOnly = true;
             this.cs_deductioncode.Width = 769;
             this.grid.Columns.Add(cs_deductioncode);
-
-
             //
             // sl_deductions
             //
@@ -283,8 +258,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.sl_deductions.ReadOnly = true;
             this.sl_deductions.Width = 88;
             this.grid.Columns.Add(sl_deductions);
-
-
             //
             // family_assistance
             //
@@ -308,6 +281,5 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.Controls.Add(grid);
         }
         #endregion
-
     }
 }
