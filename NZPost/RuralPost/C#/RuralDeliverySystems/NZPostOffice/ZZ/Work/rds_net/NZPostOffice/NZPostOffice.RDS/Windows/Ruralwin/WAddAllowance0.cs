@@ -10,8 +10,11 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    public class WAddAllowance : WAncestorWindow
+    public class WAddAllowance0 : WAncestorWindow
     {
+        // TJB RPCR_017 July-2010: Obsolete
+        // See WAddAllowance.cs
+
         #region Define
         //public dw_allowance idw_allowance;
         public URdsDw idw_allowance;
@@ -34,11 +37,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         #endregion
 
-        public WAddAllowance()
+        public WAddAllowance0()
         {
             this.InitializeComponent();
 
-            this.dw_allowance.DataObject = new DAddAllowance();
+            this.dw_allowance.DataObject = new DAddAllowance0();
             dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             //jlwang:moved from IC
@@ -57,7 +60,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             this.dw_allowance = new URdsDw();
-            //!this.dw_allowance.DataObject = new DAddAllowance();
+            //!this.dw_allowance.DataObject = new DAddAllowance0();
             this.cb_save = new Button();
             this.cb_cancel = new Button();
             Controls.Add(dw_allowance);
@@ -137,11 +140,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             il_caRow = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("allowance_row"));
             ls_title = lvn_Criteria.of_getcriteria("contract_title") as string;
             idw_allowance.DataObject.Reset();
-            idw_allowance.DataObject.AddItem<AddAllowance>(new AddAllowance());
+            idw_allowance.DataObject.AddItem<AddAllowance0>(new AddAllowance0());
             ll_row = idw_allowance.GetRow();//.RowCount;
-            idw_allowance.GetItem<AddAllowance>(ll_row).ContractTitle = ls_title;
-            idw_allowance.GetItem<AddAllowance>(ll_row).ContractNo = il_contract;
-            idw_allowance.GetItem<AddAllowance>(ll_row).AltKey = il_altKey;
+            idw_allowance.GetItem<AddAllowance0>(ll_row).ContractTitle = ls_title;
+            idw_allowance.GetItem<AddAllowance0>(ll_row).ContractNo = il_contract;
+            idw_allowance.GetItem<AddAllowance0>(ll_row).AltKey = il_altKey;
             idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
             idw_allowance.GetControlByName("alt_key").Focus();
         }
@@ -186,9 +189,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_altkey = null;
             int FAILURE2 = -(2);
             is_errmsg = "";
-            ld_effdate = idw_allowance.GetItem<AddAllowance>(arow).EffectiveDate;
-            ldc_amount = idw_allowance.GetItem<AddAllowance>(arow).AnnualAmount;
-            ll_altkey = idw_allowance.GetItem<AddAllowance>(arow).AltKey;
+            ld_effdate = idw_allowance.GetItem<AddAllowance0>(arow).EffectiveDate;
+            ldc_amount = idw_allowance.GetItem<AddAllowance0>(arow).AnnualAmount;
+            ll_altkey = idw_allowance.GetItem<AddAllowance0>(arow).AltKey;
             if ((ldc_amount == null) || ldc_amount == 0)
             {
                 is_errmsg = "You must enter an amount.";
@@ -255,15 +258,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 if (ll_error == FAILURE)
                 {
-                    MessageBox.Show(is_errmsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show(is_errmsg
+                                   , "Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 return;//?return FAILURE;
             }
-            idw_allowance.Save();//idw_allowance.Update();
-            if (idw_allowance.GetItem<AddAllowance>(0).SQLCode != 0) //(StaticVariables.sqlca.SQLCode != 0)
+            idw_allowance.Save();
+            if (idw_allowance.GetItem<AddAllowance0>(0).SQLCode != 0)
             {
-                //MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + String(app.sqlca.SQLCode) + "\n\n" + "Error Text: " + app.sqlca.SQLErrText, "Database Error");
-                MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + idw_allowance.GetItem<AddAllowance>(0).SQLCode.ToString() + "\n\n" + "Error Text: " + idw_allowance.GetItem<AddAllowance>(0).SQLErrText, "Database Error");
+                MessageBox.Show("Unable to update.  \n\n" 
+                               + "Error Code: " + idw_allowance.GetItem<AddAllowance0>(0).SQLCode.ToString() + "\n\n" 
+                               + "Error Text: " + idw_allowance.GetItem<AddAllowance0>(0).SQLErrText
+                               , "Database Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 //?RollBack;
                 return;//?return FAILURE;
