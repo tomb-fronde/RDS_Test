@@ -9,6 +9,10 @@ using NZPostOffice.Shared.LogicUnits;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
+    // TJB  RPI_004  June-2010
+    // Changed decimal? fields to strings so that, when saved to a csv file
+    // the decimal places (.00) are not included.
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -61,28 +65,35 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _end_date;
 
         [DBField()]
-        private decimal? _gross_earnings;
+        //private decimal? _gross_earnings;
+        private string _gross_earnings;
 
         [DBField()]
-        private decimal? _not_liable;
+        //private decimal? _not_liable;
+        private string _not_liable;
 
         [DBField()]
-        private decimal? _lump_sum;
+        //private decimal? _lump_sum;
+        private string _lump_sum;
 
         [DBField()]
-        private decimal? _total_paye;
+        //private decimal? _total_paye;
+        private string _total_paye;
 
         [DBField()]
-        private decimal? _cs_deductions;
+        //private decimal? _cs_deductions;
+        private string _cs_deductions;
 
         [DBField()]
         private string _cs_deductioncode;
 
         [DBField()]
-        private decimal? _sl_deductions;
+        //private decimal? _sl_deductions;
+        private string _sl_deductions;
 
         [DBField()]
-        private decimal? _family_assistance;
+        //private decimal? _family_assistance;
+        private string _family_assistance;
 
         public virtual string Dtl
         {
@@ -192,7 +203,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? GrossEarnings
+        //public virtual decimal? GrossEarnings
+        public virtual string GrossEarnings
         {
             get
             {
@@ -210,7 +222,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? NotLiable
+        //public virtual decimal? NotLiable
+        public virtual string NotLiable
         {
             get
             {
@@ -228,7 +241,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? LumpSum
+        //public virtual decimal? LumpSum
+        public virtual string LumpSum
         {
             get
             {
@@ -246,7 +260,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? TotalPaye
+        //public virtual decimal? TotalPaye
+        public virtual string TotalPaye
         {
             get
             {
@@ -264,7 +279,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? CsDeductions
+        //public virtual decimal? CsDeductions
+        public virtual string CsDeductions
         {
             get
             {
@@ -300,7 +316,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? SlDeductions
+        //public virtual decimal? SlDeductions
+        public virtual string SlDeductions
         {
             get
             {
@@ -318,7 +335,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual decimal? FamilyAssistance
+        //public virtual decimal? FamilyAssistance
+        public virtual string FamilyAssistance
         {
             get
             {
@@ -380,14 +398,21 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                             instance._tax_code = GetValueFromReader<string>(dr, 3);
                             instance._start_date = GetValueFromReader<string>(dr, 4);
                             instance._end_date = GetValueFromReader<string>(dr, 5);
-                            instance._gross_earnings = GetValueFromReader<decimal?>(dr, 6);
-                            instance._not_liable = GetValueFromReader<decimal?>(dr, 7);
-                            instance._lump_sum = GetValueFromReader<decimal?>(dr, 8);
-                            instance._total_paye = GetValueFromReader<decimal?>(dr, 9);
-                            instance._cs_deductions = GetValueFromReader<decimal?>(dr, 10);
+                            //instance._gross_earnings = GetValueFromReader<decimal?>(dr, 6);
+                            //instance._not_liable = GetValueFromReader<decimal?>(dr, 7);
+                            //instance._lump_sum = GetValueFromReader<decimal?>(dr, 8);
+                            //instance._total_paye = GetValueFromReader<decimal?>(dr, 9);
+                            //instance._cs_deductions = GetValueFromReader<decimal?>(dr, 10);
+                            instance._gross_earnings = GetValueFromReader<string>(dr, 6);
+                            instance._not_liable = GetValueFromReader<string>(dr, 7);
+                            instance._lump_sum = GetValueFromReader<string>(dr, 8);
+                            instance._total_paye = GetValueFromReader<string>(dr, 9);
+                            instance._cs_deductions = GetValueFromReader<string>(dr, 10);
                             instance._cs_deductioncode = GetValueFromReader<string>(dr, 11);
-                            instance._sl_deductions = GetValueFromReader<decimal?>(dr, 12);
-                            instance._family_assistance = GetValueFromReader<decimal?>(dr, 13);
+                            //instance._sl_deductions = GetValueFromReader<decimal?>(dr, 12);
+                            //instance._family_assistance = GetValueFromReader<decimal?>(dr, 13);
+                            instance._sl_deductions = GetValueFromReader<string>(dr, 12);
+                            instance._family_assistance = GetValueFromReader<string>(dr, 13);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
