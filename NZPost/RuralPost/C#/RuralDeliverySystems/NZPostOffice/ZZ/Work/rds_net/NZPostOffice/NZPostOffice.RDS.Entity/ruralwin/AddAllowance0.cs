@@ -20,8 +20,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("con_title", "_contract_title", "contract")]
 	[System.Serializable()]
 
-	public class AddAllowance : Entity<AddAllowance>
+	public class AddAllowance0 : Entity<AddAllowance0>
 	{
+        // TJB RPCR_017 July-2010: Obsolete
+        // See AddAllowance.cs
 		#region Business Methods
 		[DBField()]
 		private int?  _alt_key;
@@ -178,12 +180,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		#endregion
 
 		#region Factory Methods
-		public static AddAllowance NewAddAllowance( int? inContractNo )
+		public static AddAllowance0 NewAddAllowance0( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-		public static AddAllowance[] GetAllAddAllowance( int? inContractNo )
+		public static AddAllowance0[] GetAllAddAllowance0( int? inContractNo )
 		{
 			return Fetch(inContractNo).list;
 		}
@@ -214,12 +216,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContractNo", inContractNo);
 
-					List<AddAllowance> _list = new List<AddAllowance>();
+					List<AddAllowance0> _list = new List<AddAllowance0>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
 						{
-							AddAllowance instance = new AddAllowance();
+							AddAllowance0 instance = new AddAllowance0();
                             instance._alt_key = GetValueFromReader<int?>(dr,0);
                             instance._contract_no = GetValueFromReader<int?>(dr,1);
                             instance._effective_date = GetValueFromReader<DateTime?>(dr,2);
