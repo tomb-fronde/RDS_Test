@@ -10,6 +10,8 @@ namespace NZPostOffice.Shared.VisualComponents
 {
     public class DateTimeMaskedTextBox : MaskedTextBox
     {
+        // TJB July-2010: Added EditMask for DateTimeMaskedTextBoxEditingControl
+
         public DateTimeMaskedTextBox()
         {
             this.Text = "00000000";
@@ -148,6 +150,26 @@ namespace NZPostOffice.Shared.VisualComponents
             {
                 e.Handled = true;
                 //return;
+            }
+        }
+
+        // TJB July-2010: Added EditMask for DateTimeMaskedTextBoxEditingControl
+        private string editMask;
+
+        public string EditMask
+        {
+            get
+            {
+                return editMask;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    value = String.Empty;
+                }
+
+                editMask = value;
             }
         }
 
