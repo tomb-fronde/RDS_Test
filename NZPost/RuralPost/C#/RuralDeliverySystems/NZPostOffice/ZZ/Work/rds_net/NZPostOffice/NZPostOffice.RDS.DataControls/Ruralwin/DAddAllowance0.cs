@@ -13,6 +13,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
 	public partial class DAddAllowance0 : Metex.Windows.DataUserControl
 	{
+        // TJB RPCR_017 July-2010: Obsolete
+        // See DAddAllowance.cs
+
 		public DAddAllowance0()
 		{
 			InitializeComponent();
@@ -40,7 +43,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		public int Retrieve(int? inContractNo)
         {
-			return RetrieveCore<AddAllowance>(AddAllowance.GetAllAddAllowance(inContractNo));
+			return RetrieveCore<AddAllowance0>(AddAllowance0.GetAllAddAllowance0(inContractNo));
 		}
 	}
 }
