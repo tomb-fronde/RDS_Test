@@ -11,22 +11,24 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    public class WAddAllowance3 : WAncestorWindow
+    public class WAddAllowance : WAncestorWindow
     {
+        // TJB RPCR_017 July-2010
+        // Re-written to list all current-period allowances as a grid
+        // and allow inserts, uopdates and deletes on un-paid allowances.
+        // Add 'authorised' flag to database record
+        // See WAddAllowance0 for previous version.
         #region Define
         //public dw_allowance idw_allowance;
         public URdsDw idw_allowance;
 
         public int il_contract;
         public int il_contract_seq;
-        int newRow;
+        public int newRow;
 
         public int il_altKey;
-
         public int il_caRow;
-
         public string is_errmsg = String.Empty;
-
         private System.ComponentModel.IContainer components = null;
 
         public URdsDw dw_allowance;
@@ -35,22 +37,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Label Title;
         private Label Total;
         private Button cb_delete;
-
         public Button cb_cancel;
 
         #endregion
 
-        public WAddAllowance3()
+        public WAddAllowance()
         {
             this.InitializeComponent();
 
-            this.dw_allowance.DataObject = new DAddAllowance3();
+            this.dw_allowance.DataObject = new DAddAllowance();
             //dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_allowance.DataObject.BorderStyle = BorderStyle.None;
 
-            //jlwang:moved from IC
-            dw_allowance.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_allowance_constructor);
-            //jlwang:end
+            //dw_allowance.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_allowance_constructor);
 
             idw_allowance = dw_allowance;
         }
@@ -153,8 +152,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.Add(this.Title);
             this.Controls.Add(this.cb_cancel);
             this.Location = new System.Drawing.Point(46, 55);
-            this.Name = "WAddAllowance3";
-            this.Text = "Add Contract Allowance";
+            this.Name = "WAddAllowance";
+            this.Text = "Maintain Contract Allowance";
             this.Controls.SetChildIndex(this.cb_cancel, 0);
             this.Controls.SetChildIndex(this.Title, 0);
             this.Controls.SetChildIndex(this.cb_save, 0);
@@ -207,23 +206,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             il_caRow = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("allowance_row"));
             ls_title = lvn_Criteria.of_getcriteria("contract_title") as string;
             this.Title.Text = ls_title;
+
+            // Get the Effective Date for this contract.
+            // We only list those allowances whose effective date falls in the Contract's current period
             tmpDate = RDSDataService.GetConRatesEffDate((int?) il_contract, (int?) il_contract_seq);
             dtEffDate = (DateTime)tmpDate;
 
             idw_allowance.DataObject.Reset();
-            ((DAddAllowance3)idw_allowance.DataObject).Retrieve(il_contract, dtEffDate);
-            //idw_allowance.DataObject.AddItem<AddAllowance2>(new AddAllowance2());
-            idw_allowance.DataObject.InsertItem<AddAllowance2>(0, new AddAllowance2());
-            nRows = idw_allowance.RowCount;
-            newRow = 0; // newRow = nRows - 1;
-            idw_allowance.GetItem<AddAllowance2>(newRow).ContractTitle = ls_title;
-            idw_allowance.GetItem<AddAllowance2>(newRow).ContractNo = il_contract;
-            idw_allowance.GetItem<AddAllowance2>(newRow).EffectiveDate = dtToday;
+            ((DAddAllowance)idw_allowance.DataObject).Retrieve(il_contract, dtEffDate);
+            
+            // Insert a new record at the beginning of the list
+            //idw_allowance.DataObject.AddItem<AddAllowance>(new AddAllowance());
+            idw_allowance.DataObject.InsertItem<AddAllowance>(0, new AddAllowance());
+
+            // NOTE: 'newRow' is the row number of the added row.  If the row is added 
+            // elsewhere (eg at the end of the list), newRow must be changed.
+            newRow = 0;
+            // Set default values on the new row
+            idw_allowance.GetItem<AddAllowance>(newRow).ContractTitle = ls_title;
+            idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
+            idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
             // Calculate the total of the AnnualPayments
             dTotalAmt = 0.0M;
+            nRows = idw_allowance.RowCount;
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                dThisAmt = idw_allowance.GetItem<AddAllowance2>(nRow).AnnualAmount;
+                dThisAmt = idw_allowance.GetItem<AddAllowance>(nRow).AnnualAmount;
                 if (dThisAmt != null)
                     dTotalAmt += (decimal)dThisAmt;
             }
@@ -234,21 +242,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // if so mark the row read-only.
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                dtPaidToDate = idw_allowance.GetItem<AddAllowance2>(nRow).PaidToDate;
+                dtPaidToDate = idw_allowance.GetItem<AddAllowance>(nRow).PaidToDate;
                 if ( dtPaidToDate != null )
-                    ((DAddAllowance3)(idw_allowance.DataObject)).SetGridRowReadOnly(nRow, true);
+                    ((DAddAllowance)(idw_allowance.DataObject)).SetGridRowReadOnly(nRow, true);
             }
 
             // Check to see if this user is allowed to approve allowances
             string grouplist = "Payroll, System Administrators";
             bool ismemberofgroup = StaticVariables.gnv_app.inv_Security_Manager.inv_User.of_ismemberof_list(grouplist);
             if (ismemberofgroup)
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", false);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", false);
             else
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
 
             // Set the focus on the new record (which has been added as the last row)
-            ((DAddAllowance3)(idw_allowance.DataObject)).SetCurrent(newRow);
+            ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(newRow);
             
             //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
         }
@@ -261,24 +269,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void close()
         {
-            //?base.close();
             //  Tell the parent to refresh
-            int ll_sheetcount;
-            int ll_rc;
             Dictionary<int, WContract2001> lw_opensheets = new Dictionary<int, WContract2001>();
             FormBase lw_frame;
             lw_frame = StaticVariables.gnv_app.of_getframe();
-            //?if ((lw_frame.inv_sheetmanager != null) == false) {
-            //    lw_frame.inv_sheetmanager = new NCstWinsrvSheetmanager();
-            //}
-            //?ll_sheetcount = lw_frame.inv_sheetmanager.of_getsheetsbyclass(lw_opensheets, "w_contract2001");
-            //if (ll_sheetcount < 2 && ll_sheetcount > 0) {
-            //    ll_rc = lw_opensheets[1].idw_allowances.Reset();
-            //    ll_rc = lw_opensheets[1].idw_allowances.Retrieve(new object[]{il_contract});
-            //    ll_rc = lw_opensheets[1].idw_allowances.SelectRow(0, false);
-            //    ll_rc = lw_opensheets[1].idw_allowances.SelectRow(il_caRow, true);
-            //}
-            //? this.Close();//close(this);
+
             ((WContract2001)StaticVariables.window).idw_allowances.Reset();
             ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[]{il_contract});
             StaticVariables.window = null;
@@ -307,38 +302,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             // Check to see if anything has been entered for the inserted record
             // If not, accept the record; it will not be inserted (silently).
-            ll_altkey = idw_allowance.GetItem<AddAllowance2>(pRow).AltKey;
+            ll_altkey = idw_allowance.GetItem<AddAllowance>(pRow).AltKey;
             if (ll_altkey == null)
             {
                 pErrmsg = "You must enter an allowance type.";
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "alt_key", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "alt_key", true);
                 return FAILURE;
             }
-            ldc_amount = idw_allowance.GetItem<AddAllowance2>(pRow).AnnualAmount;
+            ldc_amount = idw_allowance.GetItem<AddAllowance>(pRow).AnnualAmount;
             if (ldc_amount == null || ldc_amount == 0)
             {
                 pErrmsg = "You must enter an amount.";
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_annual_amount", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_annual_amount", true);
                 return FAILURE;
             }
-            ld_effdate = idw_allowance.GetItem<AddAllowance2>(pRow).EffectiveDate;
+            ld_effdate = idw_allowance.GetItem<AddAllowance>(pRow).EffectiveDate;
             if (ld_effdate == null || ld_effdate == DateTime.MinValue)
             {
                 pErrmsg = "You must enter an effective date.";
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                 return FAILURE;
             }
-            ls_notes = idw_allowance.GetItem<AddAllowance2>(pRow).Notes;
+            ls_notes = idw_allowance.GetItem<AddAllowance>(pRow).Notes;
             if (ls_notes == null || ls_notes == "")
             {
                 pErrmsg = "You must enter a Note.";
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_notes", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_notes", true);
                 return FAILURE;
             }
             if (!(StaticVariables.gnv_app.of_sanedate(ld_effdate.GetValueOrDefault(), "effective date")))
             {
                 pErrmsg = "Date failed sanity check";
-                ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                 return FAILURE2;
             }
             // if this is the new record, check that its effective date is later than that
@@ -361,7 +356,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                     , "Database error");
                     //?rollback;
                     pErrmsg = "Failed looking up max(ca_effective_date)";
-                    ((DAddAllowance3)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
+                    ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                     return FAILURE2;
                 }
                 //?rollback;
@@ -388,8 +383,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             for (int nRow = 0; nRow < idw_allowance.RowCount; nRow++)
             {
-                nSQLCode = idw_allowance.GetItem<AddAllowance2>(nRow).SQLCode;
-                sSQLErrText = idw_allowance.GetItem<AddAllowance2>(nRow).SQLErrText;
+                nSQLCode = idw_allowance.GetItem<AddAllowance>(nRow).SQLCode;
+                sSQLErrText = idw_allowance.GetItem<AddAllowance>(nRow).SQLErrText;
                 sErrType = "Save: Other error";
 
                 if (nSQLCode == -1)
@@ -443,10 +438,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 string ls_notes;
                 int? ll_altkey;
 
-                ll_altkey = idw_allowance.GetItem<AddAllowance2>(newRow).AltKey;
-                ldc_amount = idw_allowance.GetItem<AddAllowance2>(newRow).AnnualAmount;
-                ld_effdate = idw_allowance.GetItem<AddAllowance2>(newRow).EffectiveDate;
-                ls_notes = idw_allowance.GetItem<AddAllowance2>(newRow).Notes;
+                ll_altkey = idw_allowance.GetItem<AddAllowance>(newRow).AltKey;
+                ldc_amount = idw_allowance.GetItem<AddAllowance>(newRow).AnnualAmount;
+                ld_effdate = idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate;
+                ls_notes = idw_allowance.GetItem<AddAllowance>(newRow).Notes;
 
                 if (ll_altkey == null
                     && ldc_amount == null
@@ -477,7 +472,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 rc = wf_validate(nRow, out errmsg);
                 if (!(rc == SUCCESS))
                 {
-                    ((DAddAllowance3)(idw_allowance.DataObject)).SetCurrent(nRow);
+                    ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(nRow);
                     this.ResumeLayout(true);
                     if (rc == FAILURE)
                         MessageBox.Show(errmsg
@@ -489,7 +484,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if (deleteNewRow)
             {
-                idw_allowance.GetItem<AddAllowance2>(newRow).AltKey = null;
+                idw_allowance.GetItem<AddAllowance>(newRow).AltKey = null;
                 idw_allowance.DeleteItemAt(newRow);
                 newRow = -1;
                 //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
@@ -504,7 +499,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // successful).  This error wasn't reported to the user in check_for_save_error
                 // but may be reported here (just in case the user intended to insert 
                 // something).
-                int nSQLCode = idw_allowance.GetItem<AddAllowance2>(nRow).SQLCode;
+                int nSQLCode = idw_allowance.GetItem<AddAllowance>(nRow).SQLCode;
                 if ( !(nSQLCode == -2 && nRow == newRow))
                 //{
                 //}
@@ -527,12 +522,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             int nRow = 0;
             nRow = idw_allowance.DataObject.GetRow();
-            if (!((DAddAllowance3)(idw_allowance.DataObject)).GetGridRowReadOnly(nRow))
+            if (!((DAddAllowance)(idw_allowance.DataObject)).GetGridRowReadOnly(nRow))
             {
                 if ((nRow == newRow))
                 {
                     newRow = -1;
-                    idw_allowance.GetItem<AddAllowance2>(nRow).AltKey = null;
+                    idw_allowance.GetItem<AddAllowance>(nRow).AltKey = null;
                 }
                 idw_allowance.DataObject.DeleteItemAt(nRow);
                 //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
