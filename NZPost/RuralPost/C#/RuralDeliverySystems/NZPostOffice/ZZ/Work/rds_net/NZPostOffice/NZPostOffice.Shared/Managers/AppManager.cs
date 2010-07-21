@@ -493,7 +493,7 @@ namespace NZPostOffice.Shared.Managers
             DateTime dtCheck;
             DialogResult iBox;
 
-            dtCheck = DateTime.Today.AddDays(90);//StaticMethods.RelativeDate(Today(), 90);
+            dtCheck = DateTime.Today.AddDays(90);
             iBox = DialogResult.Yes;
 
             //added condition PP -  in PowerBuilder null date passes this validation
@@ -504,24 +504,28 @@ namespace NZPostOffice.Shared.Managers
 
             if (dtCheck < adt_date)
             {
-                iBox = MessageBox.Show("The date you have chosen for " + as_column + " is more than 90 days in the future.\r" + "Are you sure you want to use this date?", "Date Sanity Check", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                iBox = MessageBox.Show("The date you have chosen for " + as_column 
+                                      + " is more than 90 days in the future.\n" 
+                                      + "Are you sure you want to use this date?"
+                                      , "Date Sanity Check"
+                                      , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
             else
             {
-                dtCheck = DateTime.Today.AddDays(-90);//StaticMethods.RelativeDate(Today(), -(90));
+                dtCheck = DateTime.Today.AddDays(-90);
                 if (dtCheck > adt_date)
                 {
-                    iBox = MessageBox.Show("The date you have chosen for " + as_column + " is more than 90 days in the past.\r" + "Are you sure you want to use this date?", "Date Sanity Check", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    iBox = MessageBox.Show("The date you have chosen for " + as_column 
+                                          + " is more than 90 days in the past.\n" 
+                                          + "Are you sure you want to use this date?"
+                                          , "Date Sanity Check"
+                                          , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
             }            
             if (iBox == DialogResult.Yes)
-            {
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
         public virtual int of_checkdigit(string aaccount)
