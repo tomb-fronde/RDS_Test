@@ -12,10 +12,24 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     public partial class DAllowanceBreakdown : Metex.Windows.DataUserControl
     {
+        // TJB  RPCR_017 July-2010
+        // Added 'Approved' column + associated layout changes
+        // Added setTotal method so WAllowanceBreakdown can 
+        // save recalculated compute_1 value.
+
         public DAllowanceBreakdown()
         {
             InitializeComponent();
         }
+
+        // TJB  RPCR_017 July-2010: added
+        // Called from WAllowanceBreakdown when a record is deleted.
+        public void setTotal(decimal? newTotal)
+        {
+            // Resets the total (Compute1)
+            this.compute_1.Text = "$" + string.Format("{0:#,##0.00}", newTotal);
+        }
+
         public int Retrieve(int? inContractNo, int? inAltKey)
         {
             //compute column 
