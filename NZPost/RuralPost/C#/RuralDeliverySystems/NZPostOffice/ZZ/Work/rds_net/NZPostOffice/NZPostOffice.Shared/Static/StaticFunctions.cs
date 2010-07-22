@@ -10,6 +10,11 @@ namespace NZPostOffice.Shared
 {
     public class StaticFunctions
     {
+        // TJB RPCR_017 July-2010: New
+        // Added variant methods to check a selected row instead of the whole control
+        //     IsDirty(Metex.Windows.DataUserControl dw, int pRow)
+        //     IsModified(Metex.Windows.DataUserControl dw, int pRow)
+
         /// <summary>
         /// Convert PB naming style to .NET
         /// </summary>
@@ -50,7 +55,7 @@ namespace NZPostOffice.Shared
 
         public static int GetNextSequence(string sequencename)
         {
-            // Purpose: 	Get the next sequence number for a given table name
+            // Purpose: Get the next sequence number for a given table name
             // Author:	Lightning author
             int nReturn = 0;
             int nNextValue;
@@ -404,6 +409,34 @@ namespace NZPostOffice.Shared
             }
             return false;
         }
+
+        // TJB RPCR_017 July-2010: New
+        // Added variant to check a selected row instead of the whole control
+        public static bool IsDirty(Metex.Windows.DataUserControl dw, int pRow)
+        {
+            if (dw == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (pRow >= 0 && pRow < dw.RowCount)
+                {
+                    Metex.Core.EntityBase BE = dw.GetItem<Metex.Core.EntityBase>(pRow);
+                    if (BE.IsNew)
+                    {
+                        if (BE.IsDirty)
+                            return true;
+                    }
+                    else if (BE.IsDirty)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static bool IsModified(Metex.Windows.DataUserControl dw)
         {
             if (dw == null)
@@ -415,8 +448,8 @@ namespace NZPostOffice.Shared
                 for (int i = 0; i < dw.RowCount; i++)
                 {
                     Metex.Core.EntityBase BE = dw.GetItem<Metex.Core.EntityBase>(i);
-                    
-                     System.Reflection.FieldInfo field = BE.GetType().GetField("_newModified", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+                    System.Reflection.FieldInfo field = BE.GetType().GetField("_newModified", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                     if (field != null && field.GetValue(BE).ToString().ToLower() == "true")
                     {
                         return true;
@@ -426,13 +459,34 @@ namespace NZPostOffice.Shared
             return false;
         }
 
+        // TJB RPCR_017 July-2010: New
+        // Added variant to check a selected row instead of the whole control
+        // (doesn't seem to work ... try IsDirty)
+        public static bool IsModified(Metex.Windows.DataUserControl dw, int pRow)
+        {
+            if (dw == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (pRow >= 0 && pRow < dw.RowCount)
+                {
+                    Metex.Core.EntityBase BE = dw.GetItem<Metex.Core.EntityBase>(pRow);
 
+                    System.Reflection.FieldInfo field = BE.GetType().GetField("_newModified", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    if (field != null && field.GetValue(BE).ToString().ToLower() == "true")
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         // general purpose exception-safe function to get field/property value from a data control
         public static object GetValueUsingReflection(Metex.Windows.DataUserControl control, int row, string field_name)
         {
-          
-
             if (control.BindingSource.List.Count <= row)
                 return null;
             else
@@ -456,8 +510,6 @@ namespace NZPostOffice.Shared
 
         public static int GetValueUsingReflectionDecmi(Metex.Windows.DataUserControl control, int row, string field_name)
         {
-
-
             if (control.BindingSource.List.Count <= row)
                 return 0;
             else
