@@ -248,7 +248,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_contract_allowances.PfcInsertRow = new UserEventDelegate(dw_contract_allowances_pfc_preinsertrow);
             dw_contract_allowances.PfcPreUpdate += new UserEventDelegate1(dw_contract_allowances_pfc_preupdate);
             //dw_contract_allowances.UpdateStart = new UserEventDelegate(dw_contract_allowances_updatestart);
-            dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate);
 
             dw_artical_counts.Constructor += new UserEventDelegate(dw_artical_counts_constructor);
             dw_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_artical_counts_pfc_preinsertrow);
@@ -1390,10 +1390,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     lnv_Criteria.of_addcriteria("alt_key", idw_allowances.GetItem<ContractAllowancesV2>(al_row).AltKey);
                     lnv_Criteria.of_addcriteria("allowance_row", al_row);
                     lnv_msg.of_addcriteria(lnv_Criteria);
-                    //OpenSheetWithParm(w_allowance_breakdown, lnv_msg, w_main_mdi, 0, original!);
                     StaticMessage.PowerObjectParm = lnv_msg;
                     WAllowanceBreakdown w_allowance_breakdown = new WAllowanceBreakdown();
-                    StaticVariables.window = w_allowance_breakdown;
+                    // TJB  RPCR_017 July-2010: Bug fix 
+                    // Set StaticVariables.window to this window so WAllowanceBreakdown
+                    // can tell its parent to reset.
+                    //StaticVariables.window = w_allowance_breakdown;
+                    StaticVariables.window = this;
                     w_allowance_breakdown.MdiParent = StaticVariables.MainMDI;
                     w_allowance_breakdown.Show();
                 }
