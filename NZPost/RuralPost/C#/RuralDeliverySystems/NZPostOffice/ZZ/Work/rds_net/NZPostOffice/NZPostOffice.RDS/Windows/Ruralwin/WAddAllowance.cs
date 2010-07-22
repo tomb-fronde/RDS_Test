@@ -132,11 +132,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_delete
             // 
-            this.cb_delete.Location = new System.Drawing.Point(328, 234);
+            this.cb_delete.Location = new System.Drawing.Point(335, 234);
             this.cb_delete.Name = "cb_delete";
-            this.cb_delete.Size = new System.Drawing.Size(82, 23);
+            this.cb_delete.Size = new System.Drawing.Size(75, 23);
             this.cb_delete.TabIndex = 7;
-            this.cb_delete.Text = "Delete record";
+            this.cb_delete.Text = "Delete";
             this.cb_delete.UseVisualStyleBackColor = true;
             this.cb_delete.Click += new System.EventHandler(this.cb_delete_Click);
             // 
