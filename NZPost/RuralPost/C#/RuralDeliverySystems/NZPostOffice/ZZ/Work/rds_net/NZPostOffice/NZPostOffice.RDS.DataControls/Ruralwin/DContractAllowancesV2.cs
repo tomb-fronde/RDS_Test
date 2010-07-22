@@ -28,7 +28,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		public int Retrieve( int? inContractNo )
         {
-
             //compute column 
             decimal? total = 0;
             List<ContractAllowancesV2> rstList = new List<ContractAllowancesV2>(ContractAllowancesV2.GetAllContractAllowancesV2(inContractNo));
@@ -46,5 +45,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		}
 
         public event EventHandler CellDoubleClick;
+
 	}
 }

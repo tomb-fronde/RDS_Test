@@ -13,9 +13,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label allowance_total;
-        private System.Windows.Forms.DataGridViewTextBoxColumn net_amount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn compute_0004;
-        private System.Windows.Forms.DataGridViewTextBoxColumn alt_description;
         private System.Windows.Forms.Label t_1;
 
         protected override void Dispose(bool disposing)
@@ -32,141 +29,151 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         #region Component Designer generated code
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            grid = new Metex.Windows.DataEntityGrid();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.grid = new Metex.Windows.DataEntityGrid();
+            this.t_1 = new System.Windows.Forms.Label();
+            this.line = new System.Windows.Forms.GroupBox();
+            this.allowance_total = new System.Windows.Forms.Label();
+            this.alt_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.net_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.compute_0004 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
-
             // 
             // bindingSource
-            //
+            // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.ContractAllowancesV2);
-
-            //
-            // t_1
-            //
-            this.t_1 = new System.Windows.Forms.Label();
-            this.t_1.Font = new System.Drawing.Font("Arial", 8F, FontStyle.Bold);
-            this.t_1.ForeColor = System.Drawing.Color.Black;
-            this.t_1.Location = new System.Drawing.Point(0, 0);
-            this.t_1.Name = "t_1";
-            this.t_1.Size = new System.Drawing.Size(500, 14);
-            this.t_1.Text = "Rural Delivery Contracts";
-            this.t_1.TextAlign = ContentAlignment.MiddleLeft;
-            this.t_1.BackColor = System.Drawing.SystemColors.ButtonFace;
-
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // grid
             // 
             this.grid.AllowUserToAddRows = false;
+            this.grid.AllowUserToDeleteRows = false;
             this.grid.AllowUserToResizeRows = false;
-            this.grid.AutoGenerateColumns = false;
             this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                 | System.Windows.Forms.AnchorStyles.Left)
-                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-            this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F, FontStyle.Bold);
-            this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grid.AutoGenerateColumns = false;
+            this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
+            this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.grid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.grid.ColumnHeadersHeight = 28;
-            this.grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.alt_description,
+            this.net_amount,
+            this.compute_0004});
             this.grid.DataSource = this.bindingSource;
-            //this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 14);
-            this.grid.MultiSelect = true;
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
+            this.grid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(638, 210);
-            this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.grid.TabIndex = 0;
-            this.grid.CellBorderStyle = DataGridViewCellBorderStyle.None;
-            //this.grid.BorderStyle = BorderStyle.None;
-            this.grid.ScrollBars = ScrollBars.Vertical;
-
-            //
-            // alt_description
-            //
-            alt_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.alt_description.DataPropertyName = "AltDescription";
-            this.alt_description.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.alt_description.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.alt_description.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.alt_description.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            this.alt_description.HeaderText = "Allowance";
-            this.alt_description.Name = "alt_description";
-            this.alt_description.ReadOnly = true;
-            this.alt_description.Width = 300;
-            this.grid.Columns.Add(alt_description);
-
-            //
-            // net_amount
-            //
-            net_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.net_amount.DataPropertyName = "NetAmount";
-            this.net_amount.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.net_amount.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.net_amount.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.net_amount.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.net_amount.DefaultCellStyle.Format = "$#,##0.00";
-            this.net_amount.HeaderText = "Net amount";
-            this.net_amount.Name = "net_amount";
-            this.net_amount.ReadOnly = true;
-            this.net_amount.Width = 78;
-            this.grid.Columns.Add(net_amount);
-
-            //
-            // compute_0004
-            //
-            compute_0004 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.compute_0004.DataPropertyName = "Compute0004";
-            this.compute_0004.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.compute_0004.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.compute_0004.DefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.compute_0004.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.compute_0004.HeaderText = "";
-            this.compute_0004.Name = "compute_0004";
-            this.compute_0004.ReadOnly = true;
-            this.compute_0004.Width = 217;
-            this.compute_0004.Visible = false;
-            this.grid.Columns.Add(compute_0004);
-            line = new GroupBox();
-            line.Height = 3;
-            line.Width = 75;
-            line.Left = 300;
-
-            //
+            // 
+            // t_1
+            // 
+            this.t_1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.t_1.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
+            this.t_1.ForeColor = System.Drawing.Color.Black;
+            this.t_1.Location = new System.Drawing.Point(0, 0);
+            this.t_1.Name = "t_1";
+            this.t_1.Size = new System.Drawing.Size(500, 14);
+            this.t_1.TabIndex = 1;
+            this.t_1.Text = "Rural Delivery Contracts";
+            this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // line
+            // 
+            this.line.Location = new System.Drawing.Point(300, 0);
+            this.line.Name = "line";
+            this.line.Size = new System.Drawing.Size(75, 3);
+            this.line.TabIndex = 2;
+            this.line.TabStop = false;
+            // 
             // allowance_total
-            //
-            this.allowance_total = new System.Windows.Forms.Label();
+            // 
             this.allowance_total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.allowance_total.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             this.allowance_total.BackColor = System.Drawing.SystemColors.ButtonFace;
-            //this.allowance_total.BorderStyle = BorderStyle.None;
+            this.allowance_total.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             this.allowance_total.ForeColor = System.Drawing.Color.Black;
             this.allowance_total.Location = new System.Drawing.Point(380, 244);
             this.allowance_total.Name = "allowance_total";
             this.allowance_total.Size = new System.Drawing.Size(100, 20);
             this.allowance_total.TabIndex = 1;
-            this.allowance_total.TextAlign = ContentAlignment.MiddleRight;
-
+            this.allowance_total.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // alt_description
+            // 
+            this.alt_description.DataPropertyName = "AltDescription";
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.alt_description.DefaultCellStyle = dataGridViewCellStyle2;
+            this.alt_description.HeaderText = "Allowance";
+            this.alt_description.Name = "alt_description";
+            this.alt_description.ReadOnly = true;
+            this.alt_description.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.alt_description.Width = 300;
+            // 
+            // net_amount
+            // 
+            this.net_amount.DataPropertyName = "NetAmount";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.Format = "$#,##0.00";
+            this.net_amount.DefaultCellStyle = dataGridViewCellStyle3;
+            this.net_amount.HeaderText = "Net amount";
+            this.net_amount.Name = "net_amount";
+            this.net_amount.ReadOnly = true;
+            this.net_amount.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.net_amount.Width = 78;
+            // 
+            // compute_0004
+            // 
+            this.compute_0004.DataPropertyName = "Compute0004";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.compute_0004.DefaultCellStyle = dataGridViewCellStyle4;
+            this.compute_0004.HeaderText = "";
+            this.compute_0004.Name = "compute_0004";
+            this.compute_0004.ReadOnly = true;
+            this.compute_0004.Visible = false;
+            this.compute_0004.Width = 217;
+            // 
+            // DContractAllowancesV2
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Controls.Add(this.grid);
+            this.Controls.Add(this.t_1);
+            this.Controls.Add(this.line);
+            this.Controls.Add(this.allowance_total);
+            this.Name = "DContractAllowancesV2";
+            this.Size = new System.Drawing.Size(638, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-            this.ResumeLayout(false); this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Size = new System.Drawing.Size(638, 252);
-            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ResumeLayout(false);
 
-            this.Controls.Add(grid);
-            this.Controls.Add(t_1);
-            this.Controls.Add(line);
-            this.Controls.Add(allowance_total);
-            this.bindingSource.ListChanged += new ListChangedEventHandler(bindingSource_ListChanged);
         }
         private System.Windows.Forms.GroupBox line;
         void bindingSource_ListChanged(object sender, ListChangedEventArgs e)
@@ -184,5 +191,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.allowance_total.Text = li.ToString("$#,##0.00");
         }
         #endregion
+
+        private DataGridViewTextBoxColumn alt_description;
+        private DataGridViewTextBoxColumn net_amount;
+        private DataGridViewTextBoxColumn compute_0004;
     }
 }
