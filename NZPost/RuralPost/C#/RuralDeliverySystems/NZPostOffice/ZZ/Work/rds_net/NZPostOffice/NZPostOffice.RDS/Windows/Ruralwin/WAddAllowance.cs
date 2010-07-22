@@ -270,10 +270,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void close()
         {
             //  Tell the parent to refresh
-            Dictionary<int, WContract2001> lw_opensheets = new Dictionary<int, WContract2001>();
-            FormBase lw_frame;
-            lw_frame = StaticVariables.gnv_app.of_getframe();
-
             ((WContract2001)StaticVariables.window).idw_allowances.Reset();
             ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[]{il_contract});
             StaticVariables.window = null;
@@ -469,6 +465,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nRows = idw_allowance.RowCount;
             for (nRow = startRow; nRow < nRows; nRow++)
             {
+                // Only validate the row if it has been changed; assume an unchanged row is OK
+                // The deeper reason is that within the validate function, the effective 
+                // date is checked against the current date (actually a date 90 days in 
+                // the past) and it is possible the effective date on an unchanged record 
+                // will fail this test.
+                bool isRowChanged = StaticFunctions.IsDirty(idw_allowance.DataObject, nRow);
+                if (! isRowChanged) continue;
                 rc = wf_validate(nRow, out errmsg);
                 if (!(rc == SUCCESS))
                 {
