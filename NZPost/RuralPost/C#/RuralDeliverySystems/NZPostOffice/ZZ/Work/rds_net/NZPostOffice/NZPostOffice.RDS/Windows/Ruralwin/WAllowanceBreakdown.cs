@@ -13,6 +13,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WAllowanceBreakdown : WMaster
     {
+        // TJB RPCR_017 July-2010
+        // Fixed delete row function
+        // - Fixed bug in pfc_deleteRow that allowed a paid allowance to be deleted
+        // - Added recalculation of allowance total when row deleted
+        // - Added parent reset when row deleted
+
         #region Define
         public int il_contract;
 
@@ -84,7 +90,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_1
             // 
-            //!this.dw_1.DataObject.BorderStyle = BorderStyle.None;
+            ///!this.dw_1.DataObject.BorderStyle = BorderStyle.None;
             dw_1.VerticalScroll.Visible = false;
             dw_1.Size = new System.Drawing.Size(641, 272);
             dw_1.RowFocusChanged += new EventHandler(dw_1_rowfocuschanged);
@@ -144,14 +150,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_1.of_set_createpriv(false);
             idw_1.of_set_modifypriv(false);
             idw_1.of_set_deletepriv(lb_hasDelPriv);
-            idw_1.Focus();//idw_1.postevent("getfocus");
+            idw_1.Focus();
         }
 
         public override int pfc_save()
         {
             base.pfc_save();
-            idw_1.Save();//idw_1.update();
-            //?commit;
+            idw_1.Save();
             this.Close();
             return 1;
         }
@@ -159,24 +164,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void close()
         {
             base.close();
-            int ll_sheetcount;
-            int ll_rc;
-            Dictionary<int, WContract2001> lw_opensheets = new Dictionary<int, WContract2001>();//Cl_w_contract2001Array lw_opensheets = new Cl_w_contract2001Array();
-            FormBase lw_frame;//w_frame lw_frame;
-            lw_frame = StaticVariables.gnv_app.of_getframe();
-            //?if (IsValid(lw_frame.inv_sheetmanager) == false)
-            //{
-            //    lw_frame.inv_sheetmanager = new n_cst_winsrv_sheetmanager();
-            //}
-            //ll_sheetcount = lw_frame.inv_sheetmanager.of_getsheetsbyclass(lw_opensheets, "w_contract2001");
-            //if (ll_sheetcount < 2 && ll_sheetcount > 0)
-            //{
-            //    ll_rc = lw_opensheets[1].idw_allowances.Reset();
-            //    ll_rc = lw_opensheets[1].idw_allowances.Retrieve(new object[] { il_contract });
-            //    ll_rc = lw_opensheets[1].idw_allowances.SelectRow(0, false);
-            //    ll_rc = lw_opensheets[1].idw_allowances.SelectRow(il_caRow, true);
-            //}
-            //?this.Close();//close(this);
+            // TJB RPCR_017 July 2010: Add
+            // Tell parent to reset to pick up any changes
+            // (the only change is a row deletion).
+            if (rowDeleted)
+            {
+                ((WContract2001)StaticVariables.window).idw_allowances.Reset();
+                ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[] { il_contract });
+                StaticVariables.window = null;
+            }
         }
 
         public virtual void dw_1_constructor()
@@ -187,21 +183,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual int dw_1_pfc_predeleterow()
         {
-            int ll_row;
+            int nRow;
             DateTime? ld_paidToDate;
-            int DODELETE = 1;
-            int DONTDELETE = 0;
-            ll_row = idw_1.GetRow();
-            //ld_paidToDate = idw_1.GetItemDateTime(ll_row, "paid_to_date").Date;
-            ld_paidToDate = idw_1.GetItem<AllowanceBreakdown>(0).PaidToDate;
+            //int DODELETE = 1;
+            //int DONTDELETE = 0;
+
+            // TJB July 2010: bug fix
+            // Changed index from 0 to index of selected row
+            // Was allowing deletion of paid-to record if row 0 was deletable
+            nRow = idw_1.GetRow();
+            ld_paidToDate = idw_1.GetItem<AllowanceBreakdown>(nRow).PaidToDate;
             if ((ld_paidToDate == null))
             {
-                return 1;//return DODELETE;
+                return 1;  //return DODELETE;
             }
-            MessageBox.Show("You cannot delete an allowance that has been paid.  ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            return -1;//return DONTDELETE;
+            MessageBox.Show("You cannot delete an allowance that has been paid.  "
+                           , "Warning"
+                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            return -1;     //return DONTDELETE;
         }
 
+        private bool rowDeleted = false;
         public virtual void dw_1_pfc_deleterow()
         {
             //?if (ancestorreturnvalue == 1) {
@@ -210,7 +212,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //}
             dw_1.SelectRow(0, false);
             dw_1.SelectRow(dw_1.GetRow() + 1, true);
-            return;//return 1;
+            // TJB RPCR_017 July-2010: added
+            // Recalculate the total after deleting a record.
+            decimal? TotalAmount = 0;
+            decimal? A = 0;
+            for (int i = 0; i < idw_1.RowCount; i++)
+            {
+                A = idw_1.GetItem<AllowanceBreakdown>(i).AnnualAmount;
+                if (A == null) A = 0;
+                TotalAmount += A;
+            }
+            ((DAllowanceBreakdown)dw_1.DataObject).setTotal(TotalAmount);
+            rowDeleted = true;
+            return;
         }
 
         #region Events
