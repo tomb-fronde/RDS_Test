@@ -8,13 +8,18 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB RPCR_017 July-2010
+    // Added column ca_approved and associated changes
+    // Reformatted query strings
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("contract_no", "_contract_no", "contract_allowance")]
 	[MapInfo("alt_key", "_alt_key", "contract_allowance")]
 	[MapInfo("ca_effective_date", "_effective_date", "contract_allowance")]
-	[MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
+    [MapInfo("ca_approved", "_approved", "contract_allowance")]
+    [MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
 	[MapInfo("ca_annual_amount", "_annual_amount", "contract_allowance")]
 	[MapInfo("ca_notes", "_notes", "contract_allowance")]
 	[MapInfo("alt_description", "_alt_description", "allowance_type")]
@@ -31,6 +36,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
 		[DBField()]
 		private DateTime?  _effective_date;
+
+        [DBField()]
+        private string _approved;
 
 		[DBField()]
 		private DateTime?  _paid_to_date;
@@ -99,7 +107,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			}
 		}
 
-		public virtual DateTime? PaidToDate
+        public virtual string Approved
+        {
+            get
+            {
+                CanReadProperty("Approved", true);
+                return _approved;
+            }
+            set
+            {
+                CanWriteProperty("Approved", true);
+                if (_approved != value)
+                {
+                    _approved = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? PaidToDate
 		{
 			get
 			{
@@ -203,15 +229,20 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					pList.Add(cm, "inAltKey", inAltKey);
                     //GenerateSelectCommandText(cm, "contract_allowance");
                     //GenerateSelectCommandText(cm, "allowance_type");
-                    cm.CommandText="SELECT contract_allowance.contract_no,contract_allowance.alt_key,"+
-                        "contract_allowance.ca_effective_date ,contract_allowance.ca_paid_to_date ,"+
-                        "contract_allowance.ca_annual_amount ,contract_allowance.ca_notes ,"+
-                        "allowance_type.alt_description "+
-                        "FROM rd.contract_allowance ,rd.allowance_type "+     
-                        "WHERE (allowance_type.alt_key = contract_allowance.alt_key) and "+
-                        "((contract_allowance.contract_no = @inContractNo ) And  "+
-                        "(contract_allowance.alt_key = @inAltKey)) "+
-                        "ORDER BY contract_allowance.ca_effective_date DESC";
+                    cm.CommandText="SELECT contract_allowance.contract_no, " 
+                                        + "contract_allowance.alt_key, "
+                                        + "contract_allowance.ca_effective_date, " 
+                                        + "contract_allowance.ca_paid_to_date, "
+                                        + "contract_allowance.ca_annual_amount," 
+                                        + "contract_allowance.ca_notes, "
+                                        + "allowance_type.alt_description, "
+                                        + "contract_allowance.ca_approved "
+                                   + "FROM rd.contract_allowance, " 
+                                        + "rd.allowance_type "
+                                  + "WHERE allowance_type.alt_key = contract_allowance.alt_key " 
+                                    + "and contract_allowance.contract_no = @inContractNo " 
+                                    + "and contract_allowance.alt_key = @inAltKey "
+                                  + "ORDER BY contract_allowance.ca_effective_date DESC";
 
 					List<AllowanceBreakdown> _list = new List<AllowanceBreakdown>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -226,7 +257,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             instance._annual_amount = GetValueFromReader<decimal?>(dr,4);
                             instance._notes = GetValueFromReader<string>(dr,5);
                             instance._alt_description = GetValueFromReader<string>(dr,6);
-							instance.MarkOld();
+                            instance._approved = GetValueFromReader<string>(dr, 7);
+                            instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
 						}
@@ -246,9 +278,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "contract_allowance", ref pList))
 				{
-					cm.CommandText += " WHERE  contract_allowance.contract_no = @contract_no AND " + 
-						"contract_allowance.alt_key = @alt_key AND " + 
-						"contract_allowance.ca_effective_date = @ca_effective_date ";
+					cm.CommandText += " WHERE contract_allowance.contract_no = @contract_no " 
+                                       + "AND contract_allowance.alt_key = @alt_key " 
+                                       + "AND contract_allowance.ca_effective_date = @ca_effective_date ";
 
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
@@ -284,14 +316,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "DELETE FROM contract_allowance "
+                                    + "WHERE contract_allowance.contract_no = @contract_no "
+                                    + "AND contract_allowance.alt_key = @alt_key "
+                                    + "AND contract_allowance.ca_effective_date = @ca_effective_date ";
+
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm,"alt_key", GetInitialValue("_alt_key"));
 					pList.Add(cm,"ca_effective_date", GetInitialValue("_effective_date"));
-						cm.CommandText = "DELETE FROM contract_allowance WHERE " +
-						"contract_allowance.contract_no = @contract_no AND " + 
-						"contract_allowance.alt_key = @alt_key AND " + 
-						"contract_allowance.ca_effective_date = @ca_effective_date ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
