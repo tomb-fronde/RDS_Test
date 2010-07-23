@@ -43,7 +43,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
             this.toolStripStatusLabel3.Text = "RDS 7.1.3.0";
-            this.toolStripStatusLabel6.Text = "23-Jul-2010 09:15";
+            this.toolStripStatusLabel6.Text = "23-Jul-2010 4:20pm";
         }
 
         public virtual void reset_clock()
