@@ -71,7 +71,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DWhatifContractSelection)dw_listing.DataObject).CellDoubleClick += new EventHandler(dw_listing_doubleclicked);
             dw_listing.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listing_constructor);
             //jlwagn:end
-           
         }
 
         #region Form Design
@@ -340,11 +339,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             //?dw_listing.settransobject(StaticVariables.sqlca);
             dw_listing.URdsDw_GetFocus(null, null);//added by jlwang
+
+            // TJB RPI_007 July-2010: Added
+            // Check to see if the the 'New Rates' button should be enabled.
+            enableNewRates();
         }
 
         public override void pfc_preopen()
         {
             this.of_set_componentname("Renewal Rates");
+        }
+
+        // TJB RPI_007 July-2010: Added
+        private void enableNewRates()
+       {
+            // Check to see if the 'New Rates' Button should be enabled
+            string Frozen = "";
+            bool allFrozen = true;
+            int nRows = dw_renewals.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                Frozen = dw_renewals.GetItem<RenewalDates2001a>(nRow).RrFrozenIndicator;
+                if (!(Frozen == "Y"))
+                    allFrozen = false;
+            }
+            if (allFrozen)
+                this.cb_newrates.Enabled = true;
+            else
+                this.cb_newrates.Enabled = false;
         }
 
         public virtual int of_openrates(bool ab_newrates)
@@ -415,6 +437,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int of_retrievelist()
         {
             dw_renewals.Retrieve(new object[] { il_region });
+
+            // TJB RPI_007 July-2010: Added
+            // Check to see if the user froze the editable rates and
+            // enable the 'New Rates' button if all rates are now frozen.
+            // (of_retrievelist is called from WShowRates)
+            enableNewRates();
+
             return 1;
         }
 
