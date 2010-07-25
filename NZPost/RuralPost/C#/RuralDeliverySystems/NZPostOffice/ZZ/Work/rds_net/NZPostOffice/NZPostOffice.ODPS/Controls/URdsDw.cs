@@ -19,6 +19,9 @@ namespace NZPostOffice.ODPS.Controls
 
     public class URdsDw : UDw
     {
+        // TJB  RPI_005  June 2010
+        // Changed ValidateExportValue to allow " " strings to pass untrimmed
+
         public string is_Componentname = String.Empty;
 
         //public const int SUCCESS = 1;
@@ -1847,9 +1850,14 @@ namespace NZPostOffice.ODPS.Controls
 
         private string ValidateExportValue(object value)
         {
+            // TJB  RPI_005  June 2010
+            // Changed to allow " " strings to pass untrimmed
+
             System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("[,\"\\t\\r\\n]");
             if (value == null)
+            {
                 return "";
+            }
             else if (value is DateTime)
             {
                 return ((DateTime)value).ToShortDateString();
@@ -1859,13 +1867,19 @@ namespace NZPostOffice.ODPS.Controls
                 return string.Format("{0:F2}", value);
             }
             else if (!(value is string))
+            {
                 return value.ToString();
+            }
             else
             {
                 if (rx.Match((string)value).Success)
                     return '"' + ((string)value).Replace("\"", "\"\"") + '"';
                 else
-                    return ((string)value).Trim();
+                    // TJB RPI_005 June-2010: Added length condition so " " would be untrimmed
+                    if (((string)value).Length > 1)
+                        return ((string)value).Trim();
+                    else
+                        return ((string)value);
             }
         }
     }
