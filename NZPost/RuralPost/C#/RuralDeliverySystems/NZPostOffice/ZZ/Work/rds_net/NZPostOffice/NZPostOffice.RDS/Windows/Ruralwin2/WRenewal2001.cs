@@ -51,10 +51,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //  TJB  Jan-2007 SR4695 
         public int il_del_record = 0;
 
-        //   0  = nothing to delete   1  = delete associated frequency_distances record   2  = delete associated vehicle_override_rates record   3  = delete associated nonvehicle_override_rates record  These are used to pass selection information from the pfc_predelete  event to the pfc_delete event for dw_renewal_freq_adjust  contract_seq_number of the currently active il_contract 
+        // These are used to pass selection information from the pfc_predelete 
+        // event to the pfc_delete event for dw_renewal_freq_adjust 
+        // contract_seq_number of the currently active il_contract 
+        // 0  = nothing to delete   
+        // 1  = delete associated frequency_distances record 
+        // 2  = delete associated vehicle_override_rates record 
+        // 3  = delete associated nonvehicle_override_rates record  
         public int il_current_seq;
 
-        //   ( il_sequence is the sequence for the selected contract    which may be inactive)  effective date of the selected frequency adjustment 
+        // (il_sequence is the sequence for the selected contract which may be inactive)  
+        // effective date of the selected frequency adjustment 
         public DateTime? id_effective = DateTime.MinValue;
 
         //  sf_key of the the selected frequency adjustment 
@@ -482,6 +489,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             idw_renewal.of_set_createpriv(false);
             // Check if user has edit privileges for the renewal component
             ll_Null = null;
+            string sUser = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_username();
             if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege("Renewal Rates", 0, "", true))
             {
                 //MSheet lm_sheet = new MSheet(this); ;
@@ -539,8 +547,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             nStars = (VSafety == null) ? 0 : (int)VSafety;
             ((DContractVehicle)dw_contract_vehicle.DataObject).set_stars(nStars);
 
-            nRow = dw_renewal.RowCount;
-            nRow = dw_renewal.GetRow();
+            // TJB  RPCR_001  Aug-2010: Fixup
+            // If the user is sysadmin, allow the Consumption to be modified
+            if (sUser == "sysadmin")
+            {
+                ((DContractVehicle)dw_contract_vehicle.DataObject).setConsumptionReadonly( false );
+            }
+
             nPrevRgCode = idw_renewal.GetItem<Renewal>(0).ConRgCodeAtRenewal;
             nPrevVolume = idw_renewal.GetItem<Renewal>(0).ConVolumeAtRenewal;
             int? n = nPrevRgCode;

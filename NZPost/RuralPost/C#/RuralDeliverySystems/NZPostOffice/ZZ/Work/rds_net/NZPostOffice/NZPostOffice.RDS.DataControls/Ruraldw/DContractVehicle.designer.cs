@@ -720,6 +720,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Consumption.Size = new System.Drawing.Size(62, 20);
             this.Consumption.TabIndex = 14;
             this.Consumption.Value = "";
+            this.Consumption.ReadOnly = true;
             // 
             // SafetyValue_t
             // 

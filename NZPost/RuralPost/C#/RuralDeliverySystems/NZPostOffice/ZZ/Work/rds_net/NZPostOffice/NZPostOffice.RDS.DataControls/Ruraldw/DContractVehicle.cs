@@ -127,6 +127,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             set_stars(0);
         }
 
+        // TJB  RPCR_001  Aug-2010: Fixup
+        // Added to allow wRenewals to determine whether Consumption 
+        // can be modified by the user (eg only sysadmin)
+        public void setConsumptionReadonly(bool pValue)
+        {
+            this.Consumption.ReadOnly = pValue;
+        }
+
         protected override void OnHandleCreated(EventArgs e)
         {
             if (!DesignMode)
