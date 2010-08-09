@@ -6,6 +6,9 @@ namespace NZPostOffice.Shared.VisualComponents
     // PFC datawindow menu class
     public class MDw : ContextMenuStrip
     {
+        // TJB  Release 7.1.3 fixups Aug 2010
+        // Added m_modify and m_modify_clicked
+        
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
 
@@ -24,6 +27,8 @@ namespace NZPostOffice.Shared.VisualComponents
         public ToolStripSeparator m_dash11;
 
         public ToolStripMenuItem m_insert;
+
+        public ToolStripMenuItem m_modify;
 
         public ToolStripMenuItem m_addrow;
 
@@ -86,6 +91,7 @@ namespace NZPostOffice.Shared.VisualComponents
             m_selectall = new ToolStripMenuItem();
             m_dash11 = new ToolStripSeparator();
             m_insert = new ToolStripMenuItem();
+            m_modify = new ToolStripMenuItem();
             m_addrow = new ToolStripMenuItem();
             m_delete = new ToolStripMenuItem();
             m_restorerow = new ToolStripMenuItem();
@@ -103,6 +109,7 @@ namespace NZPostOffice.Shared.VisualComponents
             Items.Add(m_selectall);
             Items.Add(m_dash11);
             Items.Add(m_insert);
+            Items.Add(m_modify);
             Items.Add(m_addrow);
             Items.Add(m_delete);
             Items.Add(m_restorerow);
@@ -149,6 +156,14 @@ namespace NZPostOffice.Shared.VisualComponents
             m_insert.ToolTipText = "Inserts a new row";
             m_insert.Enabled = false;
             m_insert.ShortcutKeys = (Keys)Shortcut.CtrlIns;
+            // 
+            // m_modify
+            // 
+            m_modify.Text = "&Update";
+            m_modify.ToolTipText = "Update a row";
+            m_modify.Enabled = false;
+            m_modify.Visible = false;
+            //m_modify.ShortcutKeys = (Keys)Shortcut.CtrlIns;
             // 
             // m_addrow
             // 
@@ -226,6 +241,7 @@ namespace NZPostOffice.Shared.VisualComponents
             m_paste.Click += new EventHandler(m_paste_clicked);
             m_selectall.Click += new EventHandler(m_selectall_clicked);
             m_insert.Click += new EventHandler(m_insert_clicked);
+            m_modify.Click += new EventHandler(m_modify_clicked);
             m_addrow.Click += new EventHandler(m_addrow_clicked);
             m_delete.Click += new EventHandler(m_delete_clicked);
             m_restorerow.Click += new EventHandler(m_restorerow_clicked);
@@ -311,6 +327,12 @@ namespace NZPostOffice.Shared.VisualComponents
         }
 
         public virtual void m_insert_clicked(object sender, EventArgs e)
+        {
+            //idw_parent.pfc_insertrow();
+            //!idw_parent.InsertRow(0);
+        }
+
+        public virtual void m_modify_clicked(object sender, EventArgs e)
         {
             //idw_parent.pfc_insertrow();
             //!idw_parent.InsertRow(0);
