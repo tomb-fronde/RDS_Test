@@ -7,8 +7,6 @@ namespace NZPostOffice.RDS.Menus
 {
     public class MSheet : MMainMenu
     {
-        
-
         public MSheet(Form form)
             : base(form)
         {
