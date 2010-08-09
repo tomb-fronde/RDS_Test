@@ -15,7 +15,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     {
         // TJB RPCR_017 July-2010
         // Re-written to list all current-period allowances as a grid
-        // and allow inserts, uopdates and deletes on un-paid allowances.
+        // and allow inserts, updates and deletes on un-paid allowances.
         // Add 'authorised' flag to database record
         // See WAddAllowance0 for previous version.
         #region Define
@@ -48,9 +48,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_allowance.DataObject = new DAddAllowance();
             //dw_allowance.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_allowance.DataObject.BorderStyle = BorderStyle.None;
-
             //dw_allowance.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_allowance_constructor);
-
             idw_allowance = dw_allowance;
         }
 
@@ -205,6 +203,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             il_altKey = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("alt_key"));
             il_caRow = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("allowance_row"));
             ls_title = lvn_Criteria.of_getcriteria("contract_title") as string;
+            string ls_optype = lvn_Criteria.of_getcriteria("optype") as string;
             this.Title.Text = ls_title;
 
             // Get the Effective Date for this contract.
@@ -217,7 +216,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             
             // Insert a new record at the beginning of the list
             //idw_allowance.DataObject.AddItem<AddAllowance>(new AddAllowance());
-            idw_allowance.DataObject.InsertItem<AddAllowance>(0, new AddAllowance());
+            if (ls_optype == "Insert")
+            {
+                idw_allowance.DataObject.InsertItem<AddAllowance>(0, new AddAllowance());
+            }
 
             // NOTE: 'newRow' is the row number of the added row.  If the row is added 
             // elsewhere (eg at the end of the list), newRow must be changed.
@@ -246,7 +248,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if ( dtPaidToDate != null )
                     ((DAddAllowance)(idw_allowance.DataObject)).SetGridRowReadOnly(nRow, true);
             }
-
+            set_approvability();
+        /*
             // Check to see if this user is allowed to approve allowances
             string grouplist = "Payroll, System Administrators";
             bool ismemberofgroup = StaticVariables.gnv_app.inv_Security_Manager.inv_User.of_ismemberof_list(grouplist);
@@ -254,7 +257,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", false);
             else
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-
+        */
             // Set the focus on the new record (which has been added as the last row)
             ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(newRow);
             
@@ -273,6 +276,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((WContract2001)StaticVariables.window).idw_allowances.Reset();
             ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[]{il_contract});
             StaticVariables.window = null;
+        }
+
+        private void set_approvability()
+        {
+            // Check to see if this user is allowed to approve allowances
+            // If not, set the 'Approved' column read-only
+            string grouplist = "Payroll, System Administrators";
+            bool ismemberofgroup = StaticVariables.gnv_app.inv_Security_Manager.inv_User.of_ismemberof_list(grouplist);
+            if (ismemberofgroup)
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", false);
+            else
+                ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
         }
 
         public virtual int wf_validate(int pRow, out string pErrmsg)
@@ -534,6 +549,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 idw_allowance.DataObject.DeleteItemAt(nRow);
                 //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
+                // TJB Release 7.1.3 testing  Aug-2010: added
+                //     Found to be needed - read-only status lost when a row deleted.
+                set_approvability();
             }
         }
     }
