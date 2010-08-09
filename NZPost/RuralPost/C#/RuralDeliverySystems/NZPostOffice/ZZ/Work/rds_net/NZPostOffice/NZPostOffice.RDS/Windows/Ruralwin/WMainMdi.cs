@@ -35,15 +35,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // TJB  Aug2009
             // Changed content of Toolstrip StatusLabel4 to show purpose of app
             this.Text = "Rural Delivery System";
-            //this.toolStripStatusLabel4.Text = "DEV Version";
-            //this.toolStripStatusLabel4.Text = "Test Version";
+            this.toolStripStatusLabel4.Text = "Test Version";
+            this.toolStripStatusLabel4.Text = "DEV Version";
             this.toolStripStatusLabel4.Text = "Production Version";
             // TJB  Dec-2009
             // Changed the 'Environment' value to the RDS version number
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.3.0";
-            this.toolStripStatusLabel6.Text = "23-Jul-2010 4:20pm";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.3.1";
+            this.toolStripStatusLabel6.Text = "9-Aug-2010 3:20pm";
         }
 
         public virtual void reset_clock()
@@ -60,14 +60,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             return base.closequery();
             // long nMessageReturn
-            // if messagebox ( this.title, "Do you really want to exit now?",question!,yesno!) = 2 then
+            // if messagebox(this.title, "Do you really want to exit now?",question!,yesno!) = 2 then
             // 	nMessageReturn = 1
             // else
             // 	g_system.CloseDown = True
             // end if
             // 
             //  Stop the DDE Server
-            // StopServerDDE ( w_main_mdi, "RURAL32","System")
+            // StopServerDDE(w_main_mdi, "RURAL32","System")
             // //
             // Message.ReturnValue = nMessageReturn
         }
