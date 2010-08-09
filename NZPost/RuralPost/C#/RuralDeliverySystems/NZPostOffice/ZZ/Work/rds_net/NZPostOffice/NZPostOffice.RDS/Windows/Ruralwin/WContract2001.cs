@@ -250,6 +250,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //dw_contract_allowances.UpdateStart = new UserEventDelegate(dw_contract_allowances_updatestart);
             dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate);
 
+            // TJB  Release 7.1.3 fixups Aug 2010: Added
+            dw_contract_allowances.PfcModify = new UserEventDelegate(dw_contract_allowances_pfc_modify);
+
             dw_artical_counts.Constructor += new UserEventDelegate(dw_artical_counts_constructor);
             dw_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_artical_counts_pfc_preinsertrow);
             dw_artical_counts.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
@@ -1275,7 +1278,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int of_set_custlist_data()
         {
             //  TWC - 10/09/2003 
-            //  Populate with the date in the contract table for cust_list_printed and cust_list_updated
+            //  Populate with the date in the contract table for cust_list_printed 
+            //  and cust_list_updated
             // 
             //  TJB  SR4596
             //  This appears to be an unimplemented change Tin Chan 
@@ -1284,7 +1288,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  [Note: Related to SR4657]
             DateTime? ld_cust_printed;
             DateTime? ld_cust_updated;
-            /*select cust_list_printed into :ld_cust_printed from contract where contract_no = :il_Contract_no using SQLCA;*/
+            //select cust_list_printed into :ld_cust_printed 
+            //  from contract 
+            // where contract_no = :il_Contract_no 
+            // using SQLCA;*/
             ld_cust_printed = RDSDataService.GetContractCustListPrinted(il_Contract_no);
             if (!((ld_cust_printed == null)))
             {
@@ -1294,7 +1301,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 this.em_custlist_printed.Text = "00/00/0000";
             }
-            /*select cust_list_updated into :ld_cust_updated from contract where contract_no = :il_Contract_no using SQLCA;*/
+            //select cust_list_updated into :ld_cust_updated 
+            //  from contract 
+            // where contract_no = :il_Contract_no 
+            // using SQLCA;*/
             ld_cust_updated = RDSDataService.GetContractCustListUpdated(il_Contract_no);
             if (!((ld_cust_updated == null)))
             {
@@ -1315,13 +1325,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int SQLCode = 0;
             string SQLErrText = string.Empty;
             //  TJB  SR4657  June05
-            //  Enable update  ( uncomment) do update
-            /*UPDATE contract set cust_list_updated = :ld_custlist_updated where contract_no = :il_contract_no using SQLCA;*/
+            //  Enable update (uncomment) do update
+            //UPDATE contract 
+            //   set cust_list_updated = :ld_custlist_updated 
+            // where contract_no = :il_contract_no using SQLCA;
             RDSDataService.UpdateContractCustListUpdated(ld_custlist_updated, il_Contract_no, ref SQLCode, ref SQLErrText);
             if (SQLCode != 0)
             {
                 //?rollback;
-                MessageBox.Show("There was a problem updating the Customer List Updated date", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("There was a problem updating the Customer List Updated date"
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -1347,19 +1361,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else
             {
                 ib_terminated = true;
-                idw_contract.GetControlByName("con_date_terminated").BackColor = System.Drawing.SystemColors.Control;//idw_contract.(7)DataControl["con_date_terminated"].BackColor =\'76585128\'");
+                idw_contract.GetControlByName("con_date_terminated").BackColor = System.Drawing.SystemColors.Control;
+                //idw_contract.(7)DataControl["con_date_terminated"].BackColor =\'76585128\'");
                 //?idw_contract.Modify("con_date_terminated.Border=\'0\'");
-                idw_contract.GetControlByName("con_date_terminated").Enabled = false;//idw_contract.Modify("con_date_terminated.Protect=\'1\'");
+                idw_contract.GetControlByName("con_date_terminated").Enabled = false;
+                //idw_contract.Modify("con_date_terminated.Protect=\'1\'");
                 //?idw_contract.Modify("con_date_terminated.Pointer=\'Arrow!\'");
                 DateTime tod;
                 tod = DateTime.Today;
                 int? ln;
                 ln = al_con_no;
-                /*INSERT INTO contract_cust_transfer   (  from_contract_no, to_contract_no, transfer_date )  VALUES  (  :lContractNo, :ln, :tod );*/
+                //INSERT INTO contract_cust_transfer 
+                //      (from_contract_no, to_contract_no, transfer_date)
+                //VALUES
+                //      ( :lContractNo, :ln, :tod );
                 RDSDataService.InsertContractCustTransfer(lContractNo, ln, tod, ref SQLCode, ref SQLErrText);
                 if (SQLCode < -(1))
                 {
-                    MessageBox.Show(SQLErrText, "Failure logging transfers", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(SQLErrText
+                                   , "Failure logging transfers"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             return 1;
@@ -1375,7 +1396,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_msg = new NRdsMsg();
             if (idw_allowances.RowCount != 0)
             {
-                if (al_row != -1/*0*/)
+                if (al_row != -1)
                 {
                     //?if ((w_allowance_breakdown == null))
                     //{
@@ -1424,7 +1445,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if ((id_custlist_updated == null))
             {
-                id_custlist_updated = new DateTime(1900, 1, 1);// System.Convert.ToDateTime(0);
+                id_custlist_updated = new DateTime(1900, 1, 1);
+                // System.Convert.ToDateTime(0);
             }
             if (id_custlist_updated != ld_check_update)
             {
@@ -1440,7 +1462,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  SR4659  July 2005
             int li_tc_id;
-            /*select first ( tc_id) into :li_tc_id from address where contract_no = :ai_contract_no;*/
+            //select first(tc_id) into :li_tc_id from address 
+            // where contract_no = :ai_contract_no;
             li_tc_id = RDSDataService.GetAddressTcIdFirst(ai_contract_no);
             return li_tc_id;
         }
@@ -1449,7 +1472,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  SR4659  July 2005
             int li_postcode_id;
-            /*SELECT max ( pc.post_code_id) INTO :li_postcode_id FROM post_code pc, towncity tc WHERE tc.tc_id = :ai_tc_id AND pc.post_mail_town = tc.tc_name;*/
+            //SELECT max(pc.post_code_id) INTO :li_postcode_id 
+            //  FROM post_code pc, towncity tc 
+            // WHERE tc.tc_id = :ai_tc_id 
+            //   AND pc.post_mail_town = tc.tc_name;
             li_postcode_id = RDSDataService.GetPostCodePostCodeIdMax(ai_tc_id);
             return li_postcode_id;
         }
@@ -1458,7 +1484,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  SR4659  July 2005
             string ls_tmp_rdno;
-            /*SELECT first address.adr_rd_no INTO :ls_tmp_rdno FROM address WHERE tc_id = :al_tcid AND post_code_id = :al_pcid;*/
+            //SELECT first address.adr_rd_no INTO :ls_tmp_rdno FROM address 
+            // WHERE tc_id = :al_tcid AND post_code_id = :al_pcid;
             ls_tmp_rdno = RDSDataService.GetAddressAdrRdNoFirst1(al_tcid, al_pcid);
             return ls_tmp_rdno;
         }
@@ -1483,7 +1510,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_dels;
             int? ll_cmbid;
             ll_rows = idw_cmb.RowCount;
-            ll_dels = idw_cmb.DataObject.DeletedCount;//ll_dels = idw_cmb.DeletedCount();
+            ll_dels = idw_cmb.DataObject.DeletedCount;
+            //ll_dels = idw_cmb.DeletedCount();
             if (ll_rows == 1)
             {
                 ll_cmbid = idw_cmb.GetItem<CmbAddressList>(0).CmbId;
@@ -1563,9 +1591,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 sReturn = "rg_code";
             }
-            else if (StaticFunctions.f_nempty(idw_contract.GetItem<Contract>(arow).ConBaseOffice) && !(StaticVariables.gnv_app.of_isempty(idw_contract.GetItem<Contract>(arow).ConBaseOfficeName)))
+            else if (StaticFunctions.f_nempty(idw_contract.GetItem<Contract>(arow).ConBaseOffice) 
+                 && !(StaticVariables.gnv_app.of_isempty(idw_contract.GetItem<Contract>(arow).ConBaseOfficeName)))
             {
-                MessageBox.Show("The base office entered does not exist on the database", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The base office entered does not exist on the database"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sReturn = "con_base_office_name";
             }
             else if (idw_contract.uf_not_entered(arow, "ConBaseOfficeName", "base office"))
@@ -1574,33 +1605,43 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (StaticFunctions.f_nempty(idw_contract.GetItem<Contract>(arow).ConLodgementOffice) && !(StaticVariables.gnv_app.of_isempty(idw_contract.GetItem<Contract>(arow).ConLodgementOfficeName)))
             {
-                MessageBox.Show("The lodgment office entered does not exist on the database", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The lodgment office entered does not exist on the database"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sReturn = "con_lodgement_office_name";
             }
             else if ((idw_contract.GetItem<Contract>(arow).ConBaseOffice == null))
             {
-                MessageBox.Show("The base office entered does not exist on the database", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The base office entered does not exist on the database"
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sReturn = "con_base_office_name";
             }
             else if (idw_contract.uf_not_entered(arow, "CtKey", "def. contract type"))
             {
                 sReturn = "ct_key";
             }
-            else if (sManRDRef == "Y" && StaticVariables.gnv_app.of_isempty(idw_contract.GetItem<Contract>(arow).ConRdRefText))
+            else if (sManRDRef == "Y" 
+                 && StaticVariables.gnv_app.of_isempty(idw_contract.GetItem<Contract>(arow).ConRdRefText))
             {
-                MessageBox.Show("The rd reference text is mandatory for this type of base contract.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("The rd reference text is mandatory for this type of base contract."
+                               , this.Text
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 sReturn = "con_rd_ref_text";
             }
             else if (!((idw_contract.GetItem<Contract>(arow).ConDateTerminated == null)))
             {
                 lContractNo = idw_contract.GetItem<Contract>(arow).ContractNo.GetValueOrDefault();
                 // count addresses for the contract
-                /*SELECT Count ( *) INTO   :lCustCount FROM   address WHERE  contract_no = :lContractNo;*/
+                //SELECT Count(*) INTO :lCustCount FROM address 
+                // WHERE contract_no = :lContractNo;
                 lCustCount = RDSDataService.GetAddressCount(lContractNo, ref SQLCode, ref SQLErrText);
                 // Any errors? 
                 if (SQLCode != 0)
                 {
-                    MessageBox.Show("Unable to obtain customer details for this contract", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Unable to obtain customer details for this contract"
+                                   , "Database Error" 
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
                 else
                 {
@@ -1644,14 +1685,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else if (idw_contract.GetItem<Contract>(arow).RgCode != idw_contract.GetItem<Contract>(arow).GetInitialValue<int?>("RgCode")) 
             {
                 lRGCode = idw_contract.GetItem<Contract>(arow).RgCode.GetValueOrDefault();
-                /* select rr_frozen_indicator into :sFrozenInd 
-                 *   from renewal_rate 
-                 *  where rg_code = :lRGCode 
-                 *    and rr_rates_effective_date 
-                 *             = (select max(rr_rates_effective_date) 
-                 *                  from renewal_rate 
-                 *                 where rg_code = :lRGCode);
-                 */
+                // select rr_frozen_indicator into :sFrozenInd 
+                //   from renewal_rate 
+                //  where rg_code = :lRGCode 
+                //    and rr_rates_effective_date 
+                //             = (select max(rr_rates_effective_date) 
+                //                  from renewal_rate 
+                //                 where rg_code = :lRGCode);
                 sFrozenInd = RDSDataService.GetRenewalRateRrFrozenIndicator(lRGCode);
                 if (sFrozenInd != "Y")
                 {
@@ -1670,18 +1710,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     sContractType = "Contract: " + lContractType.ToString();
                     il_Contract_no = StaticVariables.gnv_app.of_get_nextcontract(lContractType);
                     idw_contract.GetItem<Contract>(arow).ContractNo = il_Contract_no;
-                    sTitle = "Contract:  ( " + idw_contract.GetItem<Contract>(arow).ContractNo.GetValueOrDefault().ToString() + ") " + idw_contract.GetItem<Contract>(arow).ConTitle;
+                    sTitle = "Contract: (" + idw_contract.GetItem<Contract>(arow).ContractNo.GetValueOrDefault().ToString() + ") " + idw_contract.GetItem<Contract>(arow).ConTitle;
                     this.Text = sTitle;
                     if (!string.IsNullOrEmpty(this.Text))
                     {
-                        this.Text = this.Text.Replace("\r\n", "");
+                        this.Text = this.Text.Replace("\n", "");
                     }
-                    idw_contract.GetControlByName("ct_key").Enabled = false;//idw_contract.Modify("ct_key.dddw.useasborder=no ct_key.border=0 ct_key.background.color=76585128 ct_key.protect=1");
+                    idw_contract.GetControlByName("ct_key").Enabled = false;
+                    //idw_contract.Modify("ct_key.dddw.useasborder=no ct_key.border=0 ct_key.background.color=76585128 ct_key.protect=1");
                     idw_contract.Left = idw_contract.Left;
                 }
                 else
                 {
-                    sTitle = "Contract:  ( " + idw_contract.GetItem<Contract>(arow).ContractNo.GetValueOrDefault().ToString() + ") " + idw_contract.GetItem<Contract>(arow).ConTitle;
+                    sTitle = "Contract: (" + idw_contract.GetItem<Contract>(arow).ContractNo.GetValueOrDefault().ToString() + ") " + idw_contract.GetItem<Contract>(arow).ConTitle;
                     this.Text = sTitle;
                     if (!string.IsNullOrEmpty(this.Text))
                     {
@@ -1746,8 +1787,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             dw_contract_address.of_setautoinsert(false);
             dw_contract_address.of_SetUpdateable(false);
-            // This.Post of_Set_DeletePriv ( FALSE)
-            // This.Post of_Set_CreatePriv ( FALSE)
+            // This.Post of_Set_DeletePriv(FALSE)
+            // This.Post of_Set_CreatePriv(FALSE)
             dw_contract_address.of_SetRowSelect(true);
             dw_contract.of_SetStyle(0);// dw_contract_address.inv_rowselect.of_SetStyle(0);
             idw_addresses = dw_contract_address;
@@ -1785,17 +1826,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (sstat != "Pending")
             {
-                MessageBox.Show("You can only delete a pending renewal", "Delete Row", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You can only delete a pending renewal"
+                               , "Delete Row"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
             else
             {
                 if (dw_renewals.RowCount == 1)
                 {
-                    MessageBox.Show("Delete not allowed because this is the only renewal for the contract", "Delete Row", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Delete not allowed because this is the only renewal for the contract"
+                                   , "Delete Row"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return -(1);
                 }
-                if (MessageBox.Show("Are you REALLY sure you want to delete this renewal?", "Delete Row", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) //if (MessageBox("Delete Row", "Are you REALLY sure you want to delete this renewal?", question!, yesno!) == 2) 
+                if (MessageBox.Show("Are you REALLY sure you want to delete this renewal?"
+                                   , "Delete Row"
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                    == DialogResult.No)
                 {
                     return -(1);
                 }
@@ -1804,8 +1852,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     Cursor.Current = Cursors.WaitCursor;
                     lcontract = dw_renewals.GetItem<Renewals>(dw_renewals.GetSelectedRow(0)).ContractNo.GetValueOrDefault();
                     lsequence = dw_renewals.GetItem<Renewals>(dw_renewals.GetSelectedRow(0)).ContractSeqNumber.GetValueOrDefault();
-                    //  TWC 04/07/2003 - call 4532 - ensure the artical count doesn't get deleted on cascade
-                    /*UPDATE artical_count set contract_seq_number = null where contract_no = :lcontract and contract_seq_number = :lsequence;*/
+                    //  TWC 04/07/2003 - call 4532 - ensure the artical count doesn't get deleted 
+                    //                   on cascade
+                    //UPDATE artical_count set contract_seq_number = null 
+                    // where contract_no = :lcontract 
+                    //   and contract_seq_number = :lsequence;
                     RDSDataService.UpdateArticalCountContractSeqNumber(lcontract, lsequence, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
@@ -1826,7 +1877,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         return -(1);
                     }
                     //  force the article_count tab to retrieve again
-                    idw_article_count.Retrieve(new object[] { lcontract });
+                    idw_article_count.Retrieve(new object[]{lcontract});
                 }
             }
             return 1;
@@ -1841,7 +1892,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_route_frequency_ue_enabledistance()
         {
             int ll_count;
-            /*select count ( *) into   :ll_count from   contract, contract_renewals where  contract.contract_no = :il_Contract_no and	contract.contract_no = contract_renewals.contract_no and  ( contract.con_active_sequence is null or  contract.con_active_sequence < contract_renewals.contract_seq_number);*/
+            //select count(*) into :ll_count from contract, contract_renewals 
+            // where contract.contract_no = :il_Contract_no 
+            //   and contract.contract_no = contract_renewals.contract_no 
+            //   and (contract.con_active_sequence is null 
+            //        or contract.con_active_sequence < contract_renewals.contract_seq_number);
             ll_count = RDSDataService.GetContractCount(il_Contract_no);
             if (ll_count != 1)
             {
@@ -2027,6 +2082,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
+        // TJB Release 7.1.3 fixups Aug-2010
+        // Added dw_contract_allowances_pfc_modify and changed how 
+        // WAddAllowance is called.  This (dw_contract_allowances_pfc_preinsertrow1)
+        // is the original, replaced with openAddAllowance
+      /*
         public virtual void dw_contract_allowances_pfc_preinsertrow()
         {
             NCriteria lnv_Criteria;
@@ -2041,6 +2101,48 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
             lnv_Criteria.of_addcriteria("alt_key", dw_contract_allowances.GetItem<ContractAllowancesV2>(dw_contract_allowances.GetRow()).AltKey);
             lnv_Criteria.of_addcriteria("allowance_row", dw_contract_allowances.GetRow());
+            lnv_Criteria.of_addcriteria("optype", "Insert");
+            lnv_msg.of_addcriteria(lnv_Criteria);
+
+            // TJB  RPCR_017 July-2010
+            // Changed WAddAllowance significantly
+            // (See WAddAllowance0 for previous version)
+            StaticMessage.PowerObjectParm = lnv_msg;
+            StaticVariables.window = this;
+            WAddAllowance w_add_allowance = new WAddAllowance();
+
+            w_add_allowance.MdiParent = StaticVariables.MainMDI;
+            w_add_allowance.Show();
+            // This.retrieve(il_Contract_no)
+            // No row inserted
+            return;
+        }
+      */
+        public virtual void dw_contract_allowances_pfc_preinsertrow()
+        {
+            openAddAllowance("Insert");
+        }
+
+        public virtual void dw_contract_allowances_pfc_modify()
+        {
+            openAddAllowance("Update");
+        }
+
+        public virtual void openAddAllowance(string sOptype)
+        {
+            NCriteria lnv_Criteria;
+            NRdsMsg lnv_msg;
+
+            lnv_Criteria = new NCriteria();
+            lnv_msg = new NRdsMsg();
+
+            Cursor.Current = Cursors.WaitCursor;
+            lnv_Criteria.of_addcriteria("contract_no", il_Contract_no);
+            lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
+            lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
+            lnv_Criteria.of_addcriteria("alt_key", dw_contract_allowances.GetItem<ContractAllowancesV2>(dw_contract_allowances.GetRow()).AltKey);
+            lnv_Criteria.of_addcriteria("allowance_row", dw_contract_allowances.GetRow());
+            lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
 
             // TJB  RPCR_017 July-2010
@@ -2092,7 +2194,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_fixed_assets_updatestart()
         {
-            return;//return 0;
+            return;
         }
 
         public virtual int dw_fixed_assets_pfc_validation()
@@ -2111,9 +2213,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_cmbs_constructor()
         {
-            //  TJB  SR4659  July 2005
+            // TJB  SR4659  July 2005
             idw_cmb = dw_cmbs;
-            //  uf_settag ( "CMBs")
+            // uf_settag("CMBs")
         }
 
         public virtual void dw_cmbs_pfc_preinsertrow()
@@ -2129,7 +2231,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             NRdsMsg lnv_msg;
             //  Check to see if any rows have been marked as deleted.
             //  If there are, ask whether the user wants to do the deletion.
-            //  The deletion will be lost after the insert  ( it refreshes 
+            //  The deletion will be lost after the insert (it refreshes 
             //  the display from the database to include the new CMBs).
             ll_del = idw_cmb.DataObject.DeletedCount;
             if (ll_del > 0)
@@ -2146,7 +2248,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ls_temp1 = "There are " + ll_del.ToString() + " rows ";
                     ls_temp2 = "them";
                 }
-                if (MessageBox.Show(ls_temp1 + " marked for deletion.\r" + "Delete " + ls_temp2 + " now?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes) //if (MessageBox("Warning", ls_temp1 + " marked for deletion.\r" + "Delete " + ls_temp2 + " now?", question!, yesno!, 2) == 1) 
+                if (MessageBox.Show(ls_temp1 + " marked for deletion.\n" 
+                                   + "Delete " + ls_temp2 + " now?"
+                                   , "Warning"
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                   , MessageBoxDefaultButton.Button2) 
+                    == DialogResult.Yes)
                 {
                     //!idw_cmb.Update();
                     idw_cmb.Save();
@@ -2188,7 +2295,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             WCmbAddressDetail w_cmb_address_detail = new WCmbAddressDetail();
             w_cmb_address_detail.MdiParent = StaticVariables.MainMDI;
             w_cmb_address_detail.Show();
-            //idw_cmb.Retrieve(new object[] { il_Contract_no });
+            //idw_cmb.Retrieve(new object[]{il_Contract_no });
             return;//return 0;
         }
 
@@ -2199,7 +2306,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  Release 6.8.9 fixup  Nov 2005
             //  Changed to use wf_set_cmb_privs and u_rds_dw.uf_setToolbar
             //  Long ll_del
-            //  ll_del  = idw_cmb.deletedCount ( )
+            //  ll_del  = idw_cmb.deletedCount()
             wf_set_cmb_privs();
 
             //?idw_cmb.uf_settoolbar();
@@ -2220,7 +2327,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                MessageBox.Show("Please select a row to delete", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please select a row to delete"
+                               , ""
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return FAILURE;
             }
         }
@@ -2232,14 +2341,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public void tab_contract_GotFocus(object sender, EventArgs e)
         {
             string str = tab_contract.TabPages[tab_contract.SelectedIndex].Text.ToLower().Trim();
-
             if (str == "allowances")
             {
-                dw_contract_allowances.URdsDw_GetFocus(null, null);//idw_post_tax_deductions.TriggerEvent("getfocus");
+                idw_allowances.showUpdateToolButton = true;
+                dw_contract_allowances.URdsDw_GetFocus(null, null);
+                idw_allowances.showUpdateToolButton = false;
             }
             if (str == "cmbs")//(tab_contract.SelectedIndex + 1 == 11)
             {
-                idw_cmb.Retrieve(new object[] { il_Contract_no });
+                idw_cmb.Retrieve(new object[]{il_Contract_no });
                 dw_cmbs_getfocus(null, null);
             }
         }
@@ -2252,6 +2362,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 return;
             }
+
             DialogResult ll_Ret;
             int ll_ret;
             int ll_Row;
@@ -2278,12 +2389,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (il_Contract_no == -(1))
             {
                 tab_contract.SelectTab(oldindex);
-                MessageBox.Show("The current contract has to be saved before you can change tabs.", "New Contract", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;//return 1;
+                MessageBox.Show("The current contract has to be saved before you can change tabs."
+                               , "New Contract"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
             // Check for any changes to idw_contract
             idw_contract.AcceptText();
-            if (idw_contract.DataObject.DeletedCount > 0 || idw_contract.ModifiedCount() > 0) //if (idw_contract.DeletedCount() > 0 || idw_contract.ModifiedCount() > 0)
+            if (idw_contract.DataObject.DeletedCount > 0 || idw_contract.ModifiedCount() > 0)
             {
                 ll_Ret = MessageBox.Show("Do you want to update database?"
                                          , "Update"
@@ -2291,22 +2404,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_Row = idw_contract.GetRow();
                 if (ll_Ret == DialogResult.Yes)
                 {
-                    ll_ret = idw_contract.Save(); //ll_Ret = parent.pfc_save();
+                    ll_ret = idw_contract.Save();
                     if (ll_ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
                 {
                     idw_contract.Reset();
                     //  TJB  SR4679  July 2006
-                    //  Bug fix  ( nothing to do with SR4679, just found and fixed at the same time)
+                    //  Bug fix (nothing to do with SR4679, just found and fixed at the same time)
                     //  The other tabs refer to the contract details to get the contract
                     //  title.  If the save is declined, the reset leaves the contract 
                     //  details empty and the other tabs fail with an invalid column/row 
-                    //  message when they access row 1  ( after reset the rowcount is 0).
-                    //  Thus we need to retrieve the contract details again  ( to get the 
+                    //  message when they access row 1 (after reset the rowcount is 0).
+                    //  Thus we need to retrieve the contract details again (to get the 
                     //  unmodified details).
                     idw_contract.Retrieve(new object[] { il_Contract_no });
                 }
@@ -2315,14 +2428,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_frequencies.AcceptText();
             if (idw_frequencies.DataObject.DeletedCount > 0 || idw_frequencies.ModifiedCount() > 0)
             {
-                ll_Ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ll_Ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update Frequencies"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_frequencies.GetRow();
                 if (ll_Ret == DialogResult.Yes)
                 {
-                    ll_ret = idw_frequencies.Save();//ll_Ret = parent.pfc_save();
+                    ll_ret = idw_frequencies.Save();
                     if (ll_ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -2334,14 +2449,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_types.AcceptText();
             if (idw_types.DataObject.DeletedCount > 0 || idw_types.ModifiedCount() > 0)
             {
-                ll_Ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ll_Ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update Contract Types"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_types.GetRow();
                 if (ll_Ret == DialogResult.Yes)
                 {
-                    ll_ret = idw_types.Save();//ll_Ret = parent.pfc_save();
+                    ll_ret = idw_types.Save();
                     if (ll_ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -2353,14 +2470,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_allowances.AcceptText();
             if (idw_allowances.DataObject.DeletedCount > 0 || idw_allowances.ModifiedCount() > 0)
             {
-                ll_Ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);// == DialogResult.Yes ? 1 : 2;//MessageBox("Update", "Do you want to update database?", question!, yesno!);
+                ll_Ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update Allowances"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_allowances.GetRow();
                 if (ll_Ret == DialogResult.Yes)
                 {
-                    ll_ret = idw_allowances.Save(); //ll_Ret = parent.pfc_save();
+                    ll_ret = idw_allowances.Save(); 
                     if (ll_ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -2372,14 +2491,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_fixed_assets.AcceptText();
             if (idw_fixed_assets.DataObject.DeletedCount > 0 || idw_fixed_assets.ModifiedCount() > 0)
             {
-                ll_Ret = MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                ll_Ret = MessageBox.Show("Do you want to update database?"
+                                        , "Update Fuxed Assets"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_fixed_assets.GetRow();
                 if (ll_Ret == DialogResult.Yes)
                 {
-                    ll_ret = idw_fixed_assets.Save(); //ll_Ret = parent.pfc_save();
+                    ll_ret = idw_fixed_assets.Save();
                     if (ll_ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -2402,10 +2523,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
 
             //  TJB  SR4659  July 2005
-            //  Added references to CMB datawindow  ( index 11)
+            //  Added references to CMB datawindow (index 11)
             // -----------------------------------
             //  TJB  Release 6.8.9 fixup  Nov 2005
-            //  Added calls to uf_setToolbar ( ) to fix problem with
+            //  Added calls to uf_setToolbar() to fix problem with
             //  toolbar not updating correctly.
             int ll_Active;
             int ll_count;
@@ -2416,20 +2537,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lm_menu = this.m_sheet;
 
             Cursor.Current = Cursors.WaitCursor;
-            this.SuspendLayout();//SetRedraw(false);
+            this.SuspendLayout();
             //  TJB  SR4657  June05
             //  Changed detection of changed custlist_updated field
             // 
             //  Check that we save custlist data
             if (of_custlist_changed())
             {
-                if (MessageBox.Show("Do you wish to save the new customer list information?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Do you wish to save the new customer list information?"
+                                   , "Question"
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                   == DialogResult.Yes)
                 {
                     of_update_custlist();
                 }
                 else
                 {
-                    //  revert the date back to the saved date
+                    // Revert the date back to the saved date
                     if (id_custlist_updated.GetValueOrDefault() == DateTime.MinValue)
                     {
                         em_custlist_updated.Text = "01/01/1900";
@@ -2453,7 +2577,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            int TestExpr = tab_contract.SelectedIndex + 1;//newindex;
+            //int TestExpr = tab_contract.SelectedIndex + 1;//newindex;
             string str = tab_contract.TabPages[tab_contract.SelectedIndex].Text.ToLower().Trim();
 
             if (str == "contract")
@@ -2558,14 +2682,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (str == "allowances")
             {
+                idw_allowances.showUpdateToolButton = true;
                 idw_allowances.URdsDw_GetFocus(null, null);
+                idw_allowances.showUpdateToolButton = false;
 
                 if (idw_allowances.RowCount == 0)
                 {
                     idw_allowances.Retrieve(new object[]{il_Contract_no});
                 }
-                //?idw_allowances.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;//idw_allowances.DataControl["st_contract"].Text = "\'" + idw_contract.GetItemString(1, "con_title") + '\'');
-                //?idw_allowances.GetControlByName("st_access").Text = "Y";//idw_allowances.DataControl["st_access"].Text = "\'Y\'";
+                //?idw_allowances.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
+                //idw_allowances.DataControl["st_contract"].Text = "\'" + idw_contract.GetItemString(1, "con_title") + '\'');
+                //?idw_allowances.GetControlByName("st_access").Text = "Y";
+                //idw_allowances.DataControl["st_access"].Text = "\'Y\'";
+
                 idw_allowances.uf_settoolbar();
             }
             else if (str == "article count")
@@ -2623,7 +2752,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_contract.URdsDw_Clicked(sender, e);
             string sObjectAtPointer;
             string sOutlet;
-            sObjectAtPointer = ((Button)sender).Name;//dw_contract.DataObject.ActiveControl.Name;//sObjectAtPointer = dw_contract.GetObjectAtPointer();
+            sObjectAtPointer = ((Button)sender).Name;
+            //dw_contract.DataObject.ActiveControl.Name;
+            //sObjectAtPointer = dw_contract.GetObjectAtPointer();
             if ((sObjectAtPointer.Length <= 9 ? sObjectAtPointer : sObjectAtPointer.Substring(0, 9)) == "bo_button")
             {
                 of_get_outlet("base", "bo");
