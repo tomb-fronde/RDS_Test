@@ -10,7 +10,8 @@
 
 namespace NZPostOffice.Shared.Properties {
     using System;
-    
+    // TJB Release 7.1.3 Fixups
+    // Added Modify Bitmap for [new] m_modify toolbar button
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -332,15 +333,18 @@ namespace NZPostOffice.Shared.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        public static System.Drawing.Bitmap Insert {
-            get {
+
+        public static System.Drawing.Bitmap Insert
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("Insert", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        public static System.Drawing.Bitmap insertrow {
+
+        public static System.Drawing.Bitmap insertrow
+        {
             get {
                 object obj = ResourceManager.GetObject("insertrow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -395,8 +399,18 @@ namespace NZPostOffice.Shared.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
-        
-        public static System.Drawing.Bitmap NEW {
+
+        public static System.Drawing.Bitmap Modify
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Modify", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        public static System.Drawing.Bitmap NEW
+        {
             get {
                 object obj = ResourceManager.GetObject("NEW", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
