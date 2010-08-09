@@ -16,6 +16,8 @@ namespace NZPostOffice.RDS.Menus
 
     class MRdsDw : NZPostOffice.Shared.VisualComponents.MDw
     {
+        // TJB  Release 7.1.3 fixups Aug 2010
+        // Added m_modify and m_modify_clicked
 
         private URdsDw udw;
 
@@ -86,6 +88,11 @@ namespace NZPostOffice.RDS.Menus
             // 
             m_insert.Visible = false;
             m_insert.Text = "&Insert Row";
+            // 
+            // m_modify
+            // 
+            m_modify.Visible = false;
+            m_modify.Text = "&Update Rows";
             // 
             // m_addrow
             // 
@@ -159,6 +166,12 @@ namespace NZPostOffice.RDS.Menus
         {
 
             udw.PfcInsertRow();
+        }
+
+        public override void m_modify_clicked(object sender, EventArgs e)
+        {
+
+            udw.PfcModify();
         }
 
         public override void m_delete_clicked(object sender, EventArgs e)

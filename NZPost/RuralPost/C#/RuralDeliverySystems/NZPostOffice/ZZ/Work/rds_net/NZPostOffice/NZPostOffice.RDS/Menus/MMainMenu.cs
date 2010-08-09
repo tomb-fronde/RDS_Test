@@ -17,12 +17,17 @@ namespace NZPostOffice.RDS.Menus
 
     public class MMainMenu : MFrame
     {
+        // TJB  Release 7.1.3 fixups Aug 2010
+        // Added m_modify, _m_modify, of_set_modify and m_modify_clicked
+
         #region Menu Define
         public ToolStripMenuItem m_printersetup;
 
         public ToolStripMenuItem m_printzoom;
 
         public ToolStripMenuItem m_insertrow;
+
+        public ToolStripMenuItem m_modify;
 
         public ToolStripMenuItem m_deleterow;
 
@@ -175,6 +180,8 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripButton _m_insertrow;
 
+        public ToolStripButton _m_modify;
+
         public ToolStripButton _m_deleterow;
 
         public ToolStripButton _m_updatedatabase;
@@ -276,6 +283,15 @@ namespace NZPostOffice.RDS.Menus
             m_insertrow.Click += new EventHandler(m_insertrow_clicked);
             m_edit.DropDownItems.Add(m_insertrow);
 
+            //
+            //m_modify
+            //
+            m_modify = new ToolStripMenuItem();
+            m_modify.Tag = "ComponentPrivilege=M;";
+            m_modify.Text = "Update";
+            m_modify.ShortcutKeys = Keys.Control | Keys.U;
+            m_modify.Click += new EventHandler(m_modify_clicked);
+            m_edit.DropDownItems.Add(m_modify);
 
             //
             //m_deleterow
@@ -297,7 +313,6 @@ namespace NZPostOffice.RDS.Menus
             m_updatedatabase.Click += new EventHandler(m_updatedatabase_clicked);
             m_edit.DropDownItems.Add(m_updatedatabase);
 
-
             #endregion
 
             #region m_ruraldelivery
@@ -313,7 +328,6 @@ namespace NZPostOffice.RDS.Menus
             m_ruraldelivery.Tag = "ComponentName=Owner Driver;ComponentName=Contracts;ComponentName=Add Article Count;ComponentName=Rates/What-if;ComponentName=Extensions;ComponentName=Renewal Process;ComponentName=Set Scaling Factors;";
 
             MenuStrip.Items.Add(m_ruraldelivery);
-
 
             m_contractors = new ToolStripMenuItem();
             m_contracts = new ToolStripMenuItem();
@@ -1092,11 +1106,22 @@ namespace NZPostOffice.RDS.Menus
             _m_insertrow.Visible = false;
             _m_insertrow.Image = global::NZPostOffice.Shared.Properties.Resources.Insert;
             _m_insertrow.ImageTransparentColor = System.Drawing.Color.White;
-
             //?_m_insertrow.MergeAction = MergeAction.Replace;
             _m_insertrow.ToolTipText = "Insert";
             _m_insertrow.Click += new EventHandler(m_insertrow_clicked);
             ToolStrip.Items.Add(_m_insertrow);
+
+            //
+            //_m_modify
+            //
+            _m_modify = new ToolStripButton("Update", null, null, "_m_modify");
+            _m_modify.Visible = false;
+            _m_modify.Image = global::NZPostOffice.Shared.Properties.Resources.Modify;
+            _m_modify.ImageTransparentColor = System.Drawing.Color.White;
+            //?_m_modify.MergeAction = MergeAction.Replace;
+            _m_modify.ToolTipText = "Update";
+            _m_modify.Click += new EventHandler(m_modify_clicked);
+            ToolStrip.Items.Add(_m_modify);
 
             //
             //_m_deleterow
@@ -1207,6 +1232,21 @@ namespace NZPostOffice.RDS.Menus
             return 1;
         }
 
+        public virtual int of_set_insertmodify()
+        {
+            // Messagebox ( 'menu','yo insertmodify!')
+
+            m_edit.Enabled = true;
+            m_edit.Visible = true;
+            m_insertrow.Enabled = true;
+            m_insertrow.Visible = true;
+            _m_insertrow.Visible = true;
+            m_modify.Enabled = true;
+            m_modify.Visible = true;
+            _m_modify.Visible = true;
+            return 1;
+        }
+
         public virtual int of_set_deleterow()
         {
             // Messagebox ( 'menu','yo delete!')
@@ -1240,6 +1280,9 @@ namespace NZPostOffice.RDS.Menus
             this.m_insertrow.Enabled = false;
             this.m_insertrow.Visible = false;
             _m_insertrow.Visible = false; //this.m_insertrow.ToolbaritemVisible = false;
+            this.m_modify.Enabled = false;
+            this.m_modify.Visible = false;
+            _m_modify.Visible = false; //this.m_modify.ToolbaritemVisible = false;
             this.m_updatedatabase.Enabled = false;
             this.m_updatedatabase.Visible = false;
             _m_updatedatabase.Visible = false;//this.m_updatedatabase.ToolbaritemVisible = false;
@@ -1268,6 +1311,12 @@ namespace NZPostOffice.RDS.Menus
         {
             //?of_sendmessage("Pfc_insertrow");
             ((URdsDw)StaticVariables.URdsDwName).PfcInsertRow();
+        }
+
+        public virtual void m_modify_clicked(object sender, EventArgs e)
+        {
+            //?of_sendmessage("Pfc_update");
+            ((URdsDw)StaticVariables.URdsDwName).PfcModify();
         }
 
         public virtual void m_deleterow_clicked(object sender, EventArgs e)
