@@ -22,6 +22,10 @@ namespace NZPostOffice.RDS.Controls
 
     public class URdsDw : UDw
     {
+        // TJB  Release 7.1.3 fixups Aug 2010
+        // Added of_set_insertmodify and showUpdateToolButton
+        // to add Update button (m_modify) when working with Allowancws
+
         #region event delegate
 
         //added by wjtang for  the delegate
@@ -36,6 +40,9 @@ namespace NZPostOffice.RDS.Controls
         //Insert 
         public UserEventDelegate1 PfcPreInsertRow;
         public UserEventDelegate PfcInsertRow;
+
+        // TJB  Release 7.1.3 fixups Aug 2010: Added
+        public UserEventDelegate PfcModify;
 
         public UserEventDelegate PfcPreRmbMenu;
         public UserEventDelegate PfcSelectall;
@@ -78,6 +85,10 @@ namespace NZPostOffice.RDS.Controls
             //Insert
             PfcPreInsertRow = new UserEventDelegate1(pfc_preinsertrow);
             PfcInsertRow = new UserEventDelegate(pfc_insertrow);
+
+            // TJB  Release 7.1.3 fixups Aug 2010: Added
+            //Modify 
+            PfcModify = new UserEventDelegate(pfc_modify);
 
             //Delete
             PfcPreDeleteRow = new UserEventDelegate1(pfc_predeleterow);
@@ -154,6 +165,15 @@ namespace NZPostOffice.RDS.Controls
             if (PfcInsertRow != null)
             {
                 PfcInsertRow();
+            }
+        }
+
+        // TJB  Release 7.1.3 fixups Aug 2010: Added
+        public void OnPfcModify()
+        {
+            if (PfcModify != null)
+            {
+                PfcModify();
             }
         }
 
@@ -1292,11 +1312,17 @@ namespace NZPostOffice.RDS.Controls
         {
             if (PfcPreInsertRow != null && PfcPreInsertRow() == 1)
             {
-                int ll_Row = this.GetRow();                
+                int ll_Row = this.GetRow();
                 ll_Row = this.InsertRow(ll_Row);
                 this.DataObject.SetCurrent(ll_Row);
                 //?this.of_filter();
             }
+        }
+
+        protected virtual void pfc_modify()
+        {
+            int ll_Row = this.GetRow();
+            this.DataObject.SetCurrent(ll_Row);
         }
 
         protected virtual void pfc_deletetrow()
@@ -1376,7 +1402,9 @@ namespace NZPostOffice.RDS.Controls
             // Turn off rmb menu items
 
             lm_Dw.m_insert.Enabled = false; 
-            lm_Dw.m_insert.Visible = false; 
+            lm_Dw.m_insert.Visible = false;
+            lm_Dw.m_modify.Enabled = false;
+            lm_Dw.m_modify.Visible = false;
             lm_Dw.m_delete.Enabled = false; 
             lm_Dw.m_delete.Visible = false;  
             lm_Dw.m_savechangestodatabase.Enabled = false; 
@@ -1444,6 +1472,8 @@ namespace NZPostOffice.RDS.Controls
              */
         }
 
+        public bool showUpdateToolButton = false;
+
         public virtual void URdsDw_GetFocus(object sender, EventArgs e)
         {
             MSheet lm_SheetMenu = null;
@@ -1494,6 +1524,8 @@ namespace NZPostOffice.RDS.Controls
 
                 lm_Dw.m_insert.Enabled = false;
                 lm_Dw.m_insert.Visible = false;
+                lm_Dw.m_modify.Enabled = false;
+                lm_Dw.m_modify.Visible = false;
                 lm_Dw.m_delete.Enabled = false;
                 lm_Dw.m_delete.Visible = false;
 
@@ -1561,6 +1593,8 @@ namespace NZPostOffice.RDS.Controls
             // Turn off rmb menu items
             lm_Dw.m_insert.Enabled = false;
             lm_Dw.m_insert.Visible = false;
+            lm_Dw.m_modify.Enabled = false;
+            lm_Dw.m_modify.Visible = false;
             lm_Dw.m_delete.Enabled = false;
             lm_Dw.m_delete.Visible = false;
 
@@ -1572,8 +1606,23 @@ namespace NZPostOffice.RDS.Controls
             {
                 if (this.of_get_createpriv())
                 {
+                    // TJB  Release 7.1.3 fixups Aug 2010
+                    // Added of_set_insertmodify and showUpdateToolButton
+                    // to add Update button (m_modify).
+                    // Currently only used when working with AddAllowances
                     StaticVariables.URdsDwName = this;
-                    lm_SheetMenu.of_set_insertrow();
+                    if (!showUpdateToolButton)
+                    {
+                        lm_SheetMenu.of_set_insertrow();
+                    }
+                    else
+                    {
+                        // This turns on the toolbar button
+                        lm_SheetMenu.of_set_insertmodify();
+                        // These turn on the dropdown menu item
+                        lm_Dw.m_modify.Enabled = true;
+                        lm_Dw.m_modify.Visible = true;
+                    }
 
                     lm_Dw.m_insert.Enabled = true; // lm_Dw.m_table.m_Insert.enabled = true;
                     lm_Dw.m_insert.Visible = true; // lm_Dw.m_table.m_Insert.visible = true;
