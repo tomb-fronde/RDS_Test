@@ -973,9 +973,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Odps\DwNationalDetail.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwNationalDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Odps\DwReportCriteria.resx">
+      <DependentUpon>DwReportCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDDatadict.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
