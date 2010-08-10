@@ -32,7 +32,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.2.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.3.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -128,9 +128,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\Ruralwin2\WEclExceptionReportTest.resx">
+    <EmbeddedResource Include="Windows\Ruralwin2\WEclExceptionReport.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>WEclExceptionReportTest.cs</DependentUpon>
+      <DependentUpon>WEclExceptionReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralbase\WSystemAbout.resx">
       <SubType>Designer</SubType>
@@ -171,6 +171,14 @@
     <EmbeddedResource Include="Windows\Ruralwin\UTabAddressSearch.resx">
       <SubType>Designer</SubType>
       <DependentUpon>UTabAddressSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddAllowance0.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddAllowance0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddAllowance.resx">
+      <DependentUpon>WAddAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WAddArticleCounts.resx">
       <SubType>Designer</SubType>
@@ -227,22 +235,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Windows\Ruralrpt\WEclDataImportExceptionReport.cs">
+    <Compile Include="Windows\Ruralwin2\WEclExceptionReport.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralrpt\WEclDataImportExceptionReport.Designer.cs">
-      <DependentUpon>WEclDataImportExceptionReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Ruralwin2\WEclExceptionReportTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\Ruralwin2\WEclExceptionReportTest.Designer.cs">
-      <DependentUpon>WEclExceptionReportTest.cs</DependentUpon>
+    <Compile Include="Windows\Ruralwin2\WEclExceptionReport.Designer.cs">
+      <DependentUpon>WEclExceptionReport.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\Ruralwin2\WECLDataImport.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WAddAllowance.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Struct\StPrintPreview.cs" />
@@ -779,7 +784,7 @@
     <Compile Include="Windows\Ruralwin\WAddressSearchSelect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralwin\WAddAllowance.cs">
+    <Compile Include="Windows\Ruralwin\WAddAllowance0.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WAddFixedAsset.cs">
