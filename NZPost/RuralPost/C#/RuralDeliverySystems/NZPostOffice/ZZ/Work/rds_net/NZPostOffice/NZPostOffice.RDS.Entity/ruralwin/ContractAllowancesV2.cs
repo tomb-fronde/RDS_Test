@@ -165,20 +165,27 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContractNo", inContractNo);
 					
-                    cm.CommandText= " SELECT  contract_allowance.contract_no,"+
-                        "contract_type.contract_type,allowance_type.alt_description,"+
-                        "sum(contract_allowance.ca_annual_amount) as compute_0004,allowance_type.alt_key "+     
-                        "FROM rd.contract_allowance,rd.allowance_type,rd.types_for_contract,rd.contract_type "+
-                        "WHERE ( allowance_type.alt_key = contract_allowance.alt_key ) and "+
-                        "( contract_allowance.contract_no = types_for_contract.contract_no ) and  "+
-                        "( contract_type.ct_key = types_for_contract.ct_key ) and  "+
-                        "((contract_allowance.contract_no = @inContractNo )) "+
-                        " GROUP BY contract_allowance.contract_no,contract_type.contract_type,"+
-                        "allowance_type.alt_description,allowance_type.alt_key  "+
-                        "ORDER BY contract_allowance.contract_no ASC,"+
-                        "contract_type.contract_type ASC,"+
-                        "allowance_type.alt_description   ASC  ";
-
+                    cm.CommandText= " SELECT contract_allowance.contract_no"
+                                        + ", contract_type.contract_type" 
+                                        + ", allowance_type.alt_description"
+                                        + ", sum(contract_allowance.ca_annual_amount) as compute_0004" 
+                                        + ", allowance_type.alt_key "
+                                     + "FROM rd.contract_allowance" 
+                                        + ", rd.allowance_type" 
+                                        + ", rd.types_for_contract" 
+                                        + ", rd.contract_type "
+                                    + "WHERE allowance_type.alt_key = contract_allowance.alt_key " 
+                                      + "and contract_allowance.contract_no = types_for_contract.contract_no " 
+                                      + "and contract_type.ct_key = types_for_contract.ct_key " 
+                                      + "and contract_allowance.contract_no = @inContractNo "
+                                    + "GROUP BY contract_allowance.contract_no " 
+                                        + ", contract_type.contract_type"
+                                        + ", allowance_type.alt_description" 
+                                        + ", allowance_type.alt_key "
+                                    + "ORDER BY contract_allowance.contract_no ASC " 
+                                           + ", contract_type.contract_type    ASC "
+                                           + ", allowance_type.alt_description ASC"
+                                    ;
 
 					List<ContractAllowancesV2> _list = new List<ContractAllowancesV2>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
