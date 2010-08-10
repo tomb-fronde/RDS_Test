@@ -15,6 +15,7 @@
     </SccAuxPath>
     <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
     <ApplicationIcon>SAFE02.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,8 +26,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationVersion>7.1.1.0</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationVersion>7.1.3.0</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -194,6 +194,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\OdpsInvoice\WInvoice.resx">
+      <DependentUpon>WInvoice.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\OdpsInvoice\WInvoiceSearch.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WInvoiceSearch.cs</DependentUpon>
@@ -208,6 +212,10 @@
     <EmbeddedResource Include="Windows\Odps\WAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Odps\WExportCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WExportCriteria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Odps\WNationalMaintenance.resx">
       <SubType>Designer</SubType>
