@@ -373,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Logo_slim.jpg" />
+    <Content Include="Resources\modify.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

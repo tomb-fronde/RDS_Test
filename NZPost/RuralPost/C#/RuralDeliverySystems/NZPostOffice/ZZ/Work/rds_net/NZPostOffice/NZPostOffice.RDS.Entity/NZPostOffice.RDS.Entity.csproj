@@ -48,7 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
     <Compile Include="Ruraldw\EclDataImport.cs" />
-    <Compile Include="Ruraldw\EclDataImportErrors.cs" />
     <Compile Include="Ruraldw\EclDataImportExeptionReport.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustomerDownloadSearch.cs" />
@@ -340,6 +339,7 @@
     <Compile Include="Ruralwin2\DsVehicleOverrideRate.cs" />
     <Compile Include="Ruralwin2\WhatifCalculatorReport2005.cs" />
     <Compile Include="Ruralwin2\WhatifCalulator2005.cs" />
+    <Compile Include="ruralwin\AddAllowance0.cs" />
     <Compile Include="ruralwin\AddAllowance.cs" />
     <Compile Include="ruralwin\AddrSequenceInd.cs" />
     <Compile Include="ruralwin\AllowanceBreakdown.cs" />

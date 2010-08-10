@@ -162,14 +162,20 @@
     <Compile Include="Report\DetailedCustomerListingDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Report\EclDataImportExeptionReportDataSet.cs">
+    <Compile Include="Report\EclErrDataset.cs">
+      <DependentUpon>EclErrDataset.xsd</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Report\REclDataImportExeptionTest.cs">
+    <Compile Include="Report\EclErrDataset.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>REclDataImportExeptionTest.rpt</DependentUpon>
+      <DependentUpon>EclErrDataset.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Report\REclDataImportExeption.cs">
       <SubType>Component</SubType>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>REclDataImportExeption.rpt</DependentUpon>
     </Compile>
     <Compile Include="Report\MailCarriedSingleContractDataSet.cs">
       <SubType>Component</SubType>
@@ -314,12 +320,6 @@
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Report\REDEclDataImportExeptionReport.cs">
-      <SubType>Component</SubType>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>REDEclDataImportExeptionReport.rpt</DependentUpon>
     </Compile>
     <Compile Include="Report\REDMailmergeCustDownloadData.cs">
       <DependentUpon>REDMailmergeCustDownloadData.rpt</DependentUpon>
@@ -952,23 +952,11 @@
     <Compile Include="Ruraldw\DEclDataImport.designer.cs">
       <DependentUpon>DEclDataImport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ruraldw\DEclDataImportExeptionReport.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruraldw\DEclDataImportExeptionReport.designer.cs">
-      <DependentUpon>DEclDataImportExeptionReport.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ruraldw\DMailCarriedFormTest.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Ruraldw\DMailCarriedFormTest.Designer.cs">
       <DependentUpon>DMailCarriedFormTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ruraldw\DContractVehicleTest.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruraldw\DContractVehicleTest.Designer.cs">
-      <DependentUpon>DContractVehicleTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DRenewalArticalCountsTest.cs">
       <SubType>UserControl</SubType>
@@ -2710,8 +2698,14 @@
     <Compile Include="Ruralwin\DAddAllowance.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ruralwin\DAddAllowance.Designer.cs">
+    <Compile Include="Ruralwin\DAddAllowance.designer.cs">
       <DependentUpon>DAddAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DAddAllowance0.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DAddAllowance0.Designer.cs">
+      <DependentUpon>DAddAllowance0.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruralwin\DAddrSequenceInd.cs">
       <SubType>UserControl</SubType>
@@ -2834,9 +2828,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Report\REclDataImportExeptionTest.rpt">
+    <EmbeddedResource Include="Report\REclDataImportExeption.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>REclDataImportExeptionTest.cs</LastGenOutput>
+      <LastGenOutput>REclDataImportExeption.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDCustCount.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -2873,10 +2867,6 @@
     <EmbeddedResource Include="Report\REDDetailedCustomerListing.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REDDetailedCustomerListing.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\REDEclDataImportExeptionReport.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>REDEclDataImportExeptionReport.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDMailmergeCustDownloadData.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -3197,6 +3187,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DBenchmarkCalcCriteria.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractAllowances.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractAllowances.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractArticalCountForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractArticalCountForm.cs</DependentUpon>
@@ -3208,6 +3202,10 @@
     <EmbeddedResource Include="Ruraldw\DContractorFull.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractorFull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractorInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractorInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractVehicle.resx">
       <SubType>Designer</SubType>
@@ -3302,6 +3300,22 @@
       <SubType>Designer</SubType>
       <DependentUpon>DWhatifCalculatorReport2005.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DAddAllowance.resx">
+      <DependentUpon>DAddAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DAddAllowance0.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAddAllowance0.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DAllowanceBreakdown.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAllowanceBreakdown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DContractAllowancesV2.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractAllowancesV2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
@@ -3314,6 +3328,17 @@
     <None Include="Resources\star_empty.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Report\EclErrDataset.xsc">
+      <DependentUpon>EclErrDataset.xsd</DependentUpon>
+    </None>
+    <None Include="Report\EclErrDataset.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EclErrDataset.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Report\EclErrDataset.xss">
+      <DependentUpon>EclErrDataset.xsd</DependentUpon>
+    </None>
     <None Include="Resources\star_filled.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

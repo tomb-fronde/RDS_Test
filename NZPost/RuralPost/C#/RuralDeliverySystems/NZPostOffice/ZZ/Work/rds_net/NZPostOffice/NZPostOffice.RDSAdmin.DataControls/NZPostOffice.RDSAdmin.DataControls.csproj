@@ -112,6 +112,18 @@
     <Compile Include="DddwUserRegion.designer.cs">
       <DependentUpon>DddwUserRegion.cs</DependentUpon>
     </Compile>
+    <Compile Include="DEclContactMapping.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DEclContactMapping.Designer.cs">
+      <DependentUpon>DEclContactMapping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DEclQualityMappings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DEclQualityMappings.Designer.cs">
+      <DependentUpon>DEclQualityMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="DFixedAssetType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -335,6 +347,14 @@
       <DependentUpon>DwUserRegion.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DEclContactMapping.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DEclContactMapping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DEclQualityMappings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DEclQualityMappings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DOutletForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DOutletForm.cs</DependentUpon>

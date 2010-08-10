@@ -85,6 +85,8 @@
     <Compile Include="DwUserRegion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EclContractMapping.cs" />
+    <Compile Include="EclQualityMappings.cs" />
     <Compile Include="FixedAssetType.cs" />
     <Compile Include="FuelType.cs" />
     <Compile Include="MailCategory.cs" />
