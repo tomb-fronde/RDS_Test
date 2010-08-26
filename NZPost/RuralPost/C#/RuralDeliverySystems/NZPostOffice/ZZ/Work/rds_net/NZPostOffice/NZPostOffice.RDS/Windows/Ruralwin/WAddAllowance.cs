@@ -18,6 +18,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // and allow inserts, updates and deletes on un-paid allowances.
         // Add 'authorised' flag to database record
         // See WAddAllowance0 for previous version.
+        //
+        // TJB 26-Aug-2010  Bug fix
+        // See pfc_postopen.
         #region Define
         //public dw_allowance idw_allowance;
         public URdsDw idw_allowance;
@@ -213,21 +216,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             idw_allowance.DataObject.Reset();
             ((DAddAllowance)idw_allowance.DataObject).Retrieve(il_contract, dtEffDate);
-            
-            // Insert a new record at the beginning of the list
-            //idw_allowance.DataObject.AddItem<AddAllowance>(new AddAllowance());
+
+            // TJB 26-Aug-2010 Bug fix
+            // Was setting default values outside 'Insert' condition and when called with 'Update' 
+            // this eitherr changed values on the first existing record or caused an error when 
+            // there were no existing records.
+            // Moved the default-setting into the 'insert' section and added else block setting 
+            // newRow to -1 to signal there is no new record.
             if (ls_optype == "Insert")
             {
-                idw_allowance.DataObject.InsertItem<AddAllowance>(0, new AddAllowance());
+                // Insert a new record at the beginning of the list
+                //idw_allowance.DataObject.AddItem<AddAllowance>(new AddAllowance());
+                newRow = 0;
+                idw_allowance.DataObject.InsertItem<AddAllowance>(newRow, new AddAllowance());
+                // NOTE: 'newRow' is the row number of the added row.  If the row is added 
+                // elsewhere (eg at the end of the list), newRow must be changed.
+                // Set default values on the new row
+                idw_allowance.GetItem<AddAllowance>(newRow).ContractTitle = ls_title;
+                idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
+                idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
             }
-
-            // NOTE: 'newRow' is the row number of the added row.  If the row is added 
-            // elsewhere (eg at the end of the list), newRow must be changed.
-            newRow = 0;
-            // Set default values on the new row
-            idw_allowance.GetItem<AddAllowance>(newRow).ContractTitle = ls_title;
-            idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
-            idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
+            else
+            {
+                newRow = -1;
+            }
             // Calculate the total of the AnnualPayments
             dTotalAmt = 0.0M;
             nRows = idw_allowance.RowCount;
