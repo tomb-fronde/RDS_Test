@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB RPI_011 6-Sept-2010
+    // Changed CustMoveInDate.Get to remove the time from the DateTime value
+    // to fix a problem displaying the move_in_date on the WCustomer form.
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -466,8 +470,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             get
             {
+                // TJB RPI_011 6-Sept-2010
+                // If a datetime value has a single-digit day number and a time > midnight
+                // and is displayed in a 00/00/0000 mask, the leading zero is removed and 
+                // the date displays incorrectly.  If the time is exactly midnight, the 
+                // date displays correctly (with a leading zero).
+                // The change below returns only the date part (with the time set to midnight) 
+                // so the move-in-time displays correctly.  Only the date is shown, so the time
+                // doesn't matter.
                 CanReadProperty("CustMoveInDate", true);
-                return _cust_move_in_date;
+                //return _cust_move_in_date;
+                DateTime dt1;
+                dt1 = _cust_move_in_date == null ? DateTime.MinValue.Date : ((DateTime)_cust_move_in_date).Date;
+                return dt1;
             }
             set
             {
