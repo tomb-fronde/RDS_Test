@@ -13,21 +13,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WAddAllowance : WAncestorWindow
     {
+        // TJB 16-Sep-2010 Bug fix
+        // If there are no rows to save, don't attempt to.
+        // See cb_save_clicked.
+        //
+        // TJB 26-Aug-2010  Bug fix
+        // Setting default values in existing records. See pfc_postopen.
+        //
         // TJB RPCR_017 July-2010
         // Re-written to list all current-period allowances as a grid
         // and allow inserts, updates and deletes on un-paid allowances.
         // Add 'authorised' flag to database record
         // See WAddAllowance0 for previous version.
         //
-        // TJB 26-Aug-2010  Bug fix
-        // See pfc_postopen.
         #region Define
         //public dw_allowance idw_allowance;
         public URdsDw idw_allowance;
 
         public int il_contract;
         public int il_contract_seq;
-        public int newRow;
+        public int newRow = -1;
 
         public int il_altKey;
         public int il_caRow;
@@ -88,6 +93,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_allowance.Name = "dw_allowance";
             this.dw_allowance.Size = new System.Drawing.Size(600, 180);
             this.dw_allowance.TabIndex = 1;
+            this.dw_allowance.ItemChanged += new System.EventHandler(this.dw_allowance_ItemChanged);
             // 
             // cb_save
             // 
@@ -141,7 +147,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_delete.UseVisualStyleBackColor = true;
             this.cb_delete.Click += new System.EventHandler(this.cb_delete_Click);
             // 
-            // WAddAllowance3
+            // WAddAllowance
             // 
             this.AcceptButton = this.cb_save;
             this.BackColor = System.Drawing.SystemColors.Control;
@@ -185,11 +191,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void pfc_postopen()
         {
-            base.pfc_postopen();
             int nRow, nRows;
             string ls_title;
-            decimal dTotalAmt = 0.0M;
-            decimal? dThisAmt = 0.0M;
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
 
@@ -197,6 +200,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DateTime dtToday = DateTime.Today.Date;
             DateTime? dtPaidToDate, tmpDate;
 
+            base.pfc_postopen();
             this.of_set_componentname("Allowance");
 
             lnv_msg = (NRdsMsg)StaticMessage.PowerObjectParm;
@@ -223,6 +227,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // there were no existing records.
             // Moved the default-setting into the 'insert' section and added else block setting 
             // newRow to -1 to signal there is no new record.
+            newRow = -1;
             if (ls_optype == "Insert")
             {
                 // Insert a new record at the beginning of the list
@@ -236,24 +241,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
                 idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
             }
-            else
-            {
-                newRow = -1;
-            }
+
             // Calculate the total of the AnnualPayments
-            dTotalAmt = 0.0M;
-            nRows = idw_allowance.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
-            {
-                dThisAmt = idw_allowance.GetItem<AddAllowance>(nRow).AnnualAmount;
-                if (dThisAmt != null)
-                    dTotalAmt += (decimal)dThisAmt;
-            }
-            // Display the total
-            this.Total.Text = dTotalAmt.ToString("###,###.00");
+            calc_allowance_total();
 
             // Check to see if the allowance has been paid already; 
             // if so mark the row read-only.
+            nRows = idw_allowance.RowCount;
             for (nRow = 0; nRow < nRows; nRow++)
             {
                 dtPaidToDate = idw_allowance.GetItem<AddAllowance>(nRow).PaidToDate;
@@ -270,8 +264,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
         */
-            // Set the focus on the new record (which has been added as the last row)
-            ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(newRow);
+            // Set the focus on the new record (which has been added (usually as the first row))
+            // If there are no rows (the user selected 'update' when there were no current rows)
+            // there's no current row to set.  If this was an update, newRows will be -1; set the
+            // current row to 0.
+            if (nRows > 0)
+            {
+                nRow = (newRow >= 0) ? newRow : 0;
+                ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(nRow);
+            }
             
             //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
         }
@@ -452,7 +453,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             is_errmsg = "";
             startRow = 0;
 
-            // Check to see if the ne row has been filled in.
+            // Check to see if the new row has been filled in.
             // If not, ask the user whether to keep it or not.
             if ( newRow >= 0 )
             {
@@ -485,9 +486,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     startRow = 1;
                 }
             }
-            // If the user didn't want to create a new record
-            // the new record will have been deleted.  Check the
-            // rest of the rows.
+            // If the user didn't want to create a new record the new record will 
+            // have been deleted.  Check the rest of the rows.
             // If the user had started filling in the new row, check it too
             nRows = idw_allowance.RowCount;
             for (nRow = startRow; nRow < nRows; nRow++)
@@ -519,23 +519,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 newRow = -1;
                 //idw_allowance.DataObject.BindingSource.CurrencyManager.Refresh();
             }
-            idw_allowance.Save();
-            nRow = 0;
-            if (check_for_save_error(out nRow))
+            // TJB 16-Sep-2010 Bug fix
+            // If there are no rows to save, don't attempt to.
+            nRows = idw_allowance.RowCount;
+            if (nRows > 0)
             {
-                // If there was an insert error (SQLCode == -2) and its
-                // on the new record, assuem the user didn't want to insert anything
-                // and may have simply changed an existing record (and the update was
-                // successful).  This error wasn't reported to the user in check_for_save_error
-                // but may be reported here (just in case the user intended to insert 
-                // something).
-                int nSQLCode = idw_allowance.GetItem<AddAllowance>(nRow).SQLCode;
-                if ( !(nSQLCode == -2 && nRow == newRow))
-                //{
-                //}
-                //else
+                idw_allowance.Save();
+                nRow = 0;
+                if (check_for_save_error(out nRow))
                 {
-                    return;
+                    // If there was an insert error (SQLCode == -2) and its
+                    // on the new record, assume the user didn't want to insert anything
+                    // and may have simply changed an existing record (and the update was
+                    // successful).  This error wasn't reported to the user in check_for_save_error
+                    // but may be reported here (just in case the user intended to insert 
+                    // something).
+                    int nSQLCode = idw_allowance.GetItem<AddAllowance>(nRow).SQLCode;
+                    if (!(nSQLCode == -2 && nRow == newRow))
+                    //{
+                    //}
+                    //else
+                    {
+                        return;
+                    }
                 }
             }
             this.Close();
@@ -564,7 +570,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // TJB Release 7.1.3 testing  Aug-2010: added
                 //     Found to be needed - read-only status lost when a row deleted.
                 set_approvability();
+                calc_allowance_total();
             }
+        }
+
+        private void dw_allowance_ItemChanged(object sender, EventArgs e)
+        {
+            string column = dw_allowance.GetColumnName();
+            if (column == "AnnualAmount")
+            {
+                calc_allowance_total();
+            }
+        }
+
+        private void calc_allowance_total()
+        {
+            int nRow, nRows;
+            decimal dTotalAmt = 0.0M;
+            decimal? dThisAmt = 0.0M;
+
+            // Re-calculate the total of the AnnualPayments
+            dTotalAmt = 0.0M;
+            nRows = idw_allowance.RowCount;
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                dThisAmt = idw_allowance.GetItem<AddAllowance>(nRow).AnnualAmount;
+                if (dThisAmt != null)
+                    dTotalAmt += (decimal)dThisAmt;
+            }
+
+            // Display the total
+            this.Total.Text = dTotalAmt.ToString("###,###.00");
         }
     }
 }
