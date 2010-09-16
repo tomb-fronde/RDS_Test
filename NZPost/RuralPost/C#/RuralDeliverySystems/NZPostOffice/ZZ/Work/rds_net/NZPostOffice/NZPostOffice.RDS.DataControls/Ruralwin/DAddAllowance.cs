@@ -13,6 +13,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
 	public partial class DAddAllowance : Metex.Windows.DataUserControl
 	{
+        // TJB 16-Sept-2010: Added
+        // Update total amount when an item amount is changed.
+        // See grid_CellValueChanged
+
         // TJB RPCR_017 July-2010
         // Significantly re-written
         // Displays all current period records in a gris, rather than
@@ -32,6 +36,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             	InitializeDropdown();
             }
             base.OnHandleCreated(e);
+            this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
     	}
 
 		private void InitializeDropdown()
@@ -79,6 +84,36 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     this.grid.Columns[i].ReadOnly = pValue;
                     break;
                 }
+        }
+
+        // TJB 16-Sept-2010: Added
+        // When the user changes the value in the amount column,
+        // Recalculate the column total and update it on the form.
+        private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            int column;
+            string column_name;
+
+            column = e.ColumnIndex;
+            column_name = this.grid.Columns[column].Name;
+            if (column_name == "ca_annual_amount")
+            {
+                int row, nRows;
+                decimal? value = 0.0M;
+                decimal sumThisAmt = 0.0M;
+
+                // Recalculate the column total
+                nRows = this.grid.RowCount;
+                for (row = 0; row < nRows; row++)
+                {
+                    value = (decimal?)this.grid[column, row].Value;
+                    sumThisAmt += (value == null) ? 0.0M : (decimal)value;
+                }
+                // Update the total on the form.
+                // The grid is inside a panel inside the form, 
+                // thus we have to go two layers out to get to the form.
+                this.Parent.Parent.Controls["Total"].Text = sumThisAmt.ToString();
+            }
         }
     }
 }
