@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,15 +10,15 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    public partial class DContractVehicle : Metex.Windows.DataUserControl
+    public partial class DContractVehicleTest : Metex.Windows.DataUserControl
     {
         private bool[] safety_filled = new bool[6];
         private Button[] star = new Button[6];
 
-        public DContractVehicle()
+        public DContractVehicleTest()
         {
             InitializeComponent();
-            //InitializeDropdown();
+
             Consumption.DataBindings[0].FormatString = "###.0";
 
             // TJB  Dec-2009:  Test using stars to display Vehicle Safety Rating
@@ -33,11 +32,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
             initialize_stars();
 
-            Star_tooltip.SetToolTip(Safety1, "Very dodgy");
-            Star_tooltip.SetToolTip(Safety2, "Dodgy");
-            Star_tooltip.SetToolTip(Safety3, "OK");
-            Star_tooltip.SetToolTip(Safety4, "Safe");
-            Star_tooltip.SetToolTip(Safety5, "Very safe");
+            InitializeDropdown();
         }
 
         // TJB  Dec-2009:  Safety-stars prototype
@@ -118,6 +113,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                     }
             //string sStars = star_n.ToString();
             //SafetyValue.Text = sStars;
+            string sStars = this.Parent.Name;
+            string sT = sStars;
+
         }
         // TJB  Dec-2009:  END: Test using stars to display Vehicle Safety Rating
 
@@ -133,16 +131,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public void setConsumptionReadonly(bool pValue)
         {
             this.Consumption.ReadOnly = pValue;
-        }
-
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            if (!DesignMode)
-            {
-                InitializeDropdown();
-            }
-            
-            base.OnHandleCreated(e);
         }
 
         private void InitializeDropdown()
@@ -180,11 +168,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
             return RetrieveCore<ContractVehicle>(new List<ContractVehicle>
                 (ContractVehicle.GetAllContractVehicle(contract_no, contract_seq_number)));
-        }
-
-        private void Star1_tooltip_Popup(object sender, PopupEventArgs e)
-        {
-
         }
     }
 }

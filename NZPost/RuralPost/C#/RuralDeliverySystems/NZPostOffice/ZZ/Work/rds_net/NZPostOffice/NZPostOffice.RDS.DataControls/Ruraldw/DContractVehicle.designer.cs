@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    partial class DContractVehicle
+    partial class DContractVehicleTest
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,7 +31,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.st_active = new System.Windows.Forms.Label();
             this.st_sysadmin = new System.Windows.Forms.Label();
             this.st_title = new System.Windows.Forms.Label();
@@ -84,7 +83,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety3 = new System.Windows.Forms.Button();
             this.Safety4 = new System.Windows.Forms.Button();
             this.Safety5 = new System.Windows.Forms.Button();
-            this.Star_tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.Emissions_t = new System.Windows.Forms.Label();
             this.Emissions = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.Consumption_t = new System.Windows.Forms.Label();
@@ -368,6 +366,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // v_purchased_date
             // 
             this.v_purchased_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VPurchasedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.v_purchased_date.EditMask = null;
             this.v_purchased_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.v_purchased_date.Location = new System.Drawing.Point(422, 47);
             this.v_purchased_date.Mask = "00/00/0000";
@@ -394,7 +393,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.t_6.Location = new System.Drawing.Point(196, 274);
             this.t_6.Name = "t_6";
-            this.t_6.Size = new System.Drawing.Size(44, 21);
+            this.t_6.Size = new System.Drawing.Size(44, 13);
             this.t_6.TabIndex = 0;
             this.t_6.Text = "Status";
             this.t_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -513,6 +512,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // v_vehicle_speedo_date
             // 
             this.v_vehicle_speedo_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VVehicleSpeedoDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.v_vehicle_speedo_date.EditMask = null;
             this.v_vehicle_speedo_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.v_vehicle_speedo_date.Location = new System.Drawing.Point(423, 217);
             this.v_vehicle_speedo_date.Mask = "00/00/0000";
@@ -595,6 +595,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(60, 17);
             this.radioButton1.TabIndex = 11;
+            this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Manual";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
@@ -606,6 +607,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(72, 17);
             this.radioButton2.TabIndex = 12;
+            this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Automatic";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
@@ -673,10 +675,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Safety5.TabIndex = 0;
             this.Safety5.UseVisualStyleBackColor = true;
             // 
-            // Star_tooltip
-            // 
-            this.Star_tooltip.Popup += new System.Windows.Forms.PopupEventHandler(this.Star1_tooltip_Popup);
-            // 
             // Emissions_t
             // 
             this.Emissions_t.AutoSize = true;
@@ -717,10 +715,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Consumption.Location = new System.Drawing.Point(125, 260);
             this.Consumption.Name = "Consumption";
             this.Consumption.PromptChar = ' ';
+            this.Consumption.ReadOnly = true;
             this.Consumption.Size = new System.Drawing.Size(62, 20);
             this.Consumption.TabIndex = 14;
-            this.Consumption.Value = "";
-            this.Consumption.ReadOnly = true;
+            this.Consumption.Text = "0";
+            this.Consumption.Value = "0";
             // 
             // SafetyValue_t
             // 
@@ -742,7 +741,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.SafetyValue.TabIndex = 0;
             this.SafetyValue.Visible = false;
             // 
-            // DContractVehicle
+            // DContractVehicleTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -804,7 +803,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.t_salvage);
             this.Controls.Add(this.v_purchase_value);
             this.Controls.Add(this.v_salvage_value);
-            this.Name = "DContractVehicle";
+            this.Name = "DContractVehicleTest";
             this.Size = new System.Drawing.Size(534, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -868,18 +867,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private NumericalMaskedTextBox v_salvage_value;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
+// TJB 17-Sep-2010 Add start
         private Label Safety_t;
         private Button Safety1;
         private Button Safety2;
         private Button Safety3;
         private Button Safety4;
         private Button Safety5;
-        private ToolTip Star_tooltip;
         private Label Emissions_t;
         private NumericalMaskedTextBox Emissions;
         private Label Consumption_t;
         private NumericalMaskedTextBox Consumption;
         private Label SafetyValue_t;
         private TextBox SafetyValue;
+// TJB 17-Sep-2010 Add end
     }
 }
