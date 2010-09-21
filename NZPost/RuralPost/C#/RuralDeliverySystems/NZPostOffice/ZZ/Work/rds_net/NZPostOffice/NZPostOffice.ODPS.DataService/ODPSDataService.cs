@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB RPCR_020 Sept-2010
+    // Added 'Contract <no>' to ded_reference
+
     [Serializable()]
     public class ODPSDataService : CommandEntity<ODPSDataService>
     {
@@ -18,7 +21,10 @@ namespace NZPostOffice.ODPS.DataService
         private string dataObject;
         public string DataObject
         {
-            get { return dataObject; }
+            get 
+            { 
+                return dataObject; 
+            }
         }
 
         private int _sqlcode = -1;
@@ -51,14 +57,20 @@ namespace NZPostOffice.ODPS.DataService
         private int _rowCount = 0;
         public int RowCount
         {
-            get { return _rowCount; }
+            get 
+            { 
+                return _rowCount; 
+            }
 
         }
 
         private int _count = 0;
         public int Count
         {
-            get { return _count; }
+            get 
+            { 
+                return _count; 
+            }
         }
 
         private DateTime ld_invoice_date;
@@ -108,10 +120,10 @@ namespace NZPostOffice.ODPS.DataService
         private decimal dc_hashtotal;
         public decimal DcHashtotal
         {
-         get
-         {
-             return dc_hashtotal;
-         }
+            get
+            {
+                return dc_hashtotal;
+            }
         }
 
         public ShellImport shellImport;
@@ -128,7 +140,10 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select up_password into :OldPass from rd.used_password where up_code = :u_usercode and up_password = :sNewPassword 
+        /// select up_password into :OldPass 
+        ///   from rd.used_password 
+        ///  where up_code = :u_usercode 
+        ///    and up_password = :sNewPassword 
         /// </summary>
         public static String SelectUpPassword(string up_code, string up_password)
         {
@@ -143,7 +158,8 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// insert into rd.used_password ( up_code,up_password) values ( :g_security.u_usercode,:sOldPassword)
+        /// insert into rd.used_password(up_code,up_password) 
+        /// values(:g_security.u_usercode,:sOldPassword)
         /// </summary>
         public static int InsertUpPassword(string up_code, string up_password)
         {
@@ -161,7 +177,8 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// insert into odps.t_shell_import (contract_no,contractor,total_deduction) values (:ls_contract_no,:ls_contractor,:dc_total_deduction)
+        /// insert into odps.t_shell_import (contract_no,contractor,total_deduction) 
+        /// values (:ls_contract_no,:ls_contractor,:dc_total_deduction)
         /// </summary>
         public static ODPSDataService InsertTShellImport(string ls_contract_no, string ls_contractor, Decimal? dc_total_deduction)
         {
@@ -170,7 +187,9 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count(distinct(contract_no)), sum(total_deduction) into :ls_total_contracts, :ls_import_total from odps.t_shell_import
+        /// select count(distinct(contract_no)), sum(total_deduction) 
+        ///   into :ls_total_contracts, :ls_import_total 
+        ///   from odps.t_shell_import
         /// </summary>
         public static ODPSDataService SelectTShellImport()
         {
@@ -188,7 +207,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select max ( invoice_date) from odps.payment
+        /// select max(invoice_date) from odps.payment
         /// </summary>
         public static ODPSDataService GetMaxPayment()
         {
@@ -197,7 +216,8 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey) into :lreturn from sys.dummy
+        /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey) 
+        ///   into :lreturn from sys.dummy
         /// </summary>
         public static ODPSDataService GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey)
         {
@@ -206,7 +226,10 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count(*) into :li_exists from rd.contractor_renewals where contractor_supplier_no = :ll_supplier and contract_no = :ll_contract
+        /// select count(*) into :li_exists 
+        ///   from rd.contractor_renewals 
+        ///  where contractor_supplier_no = :ll_supplier 
+        ///    and contract_no = :ll_contract
         /// </summary>
         public static ODPSDataService SelectCountContractorRenewals(int ll_supplier, int ll_contract)
         {
@@ -233,7 +256,10 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT count(*), sum(ded_fixed_amount) INTO :li_imported, :dc_hashtotal FROM odps.post_tax_deductions WHERE ded_reference like :ls_select
+        /// SELECT count(*), sum(ded_fixed_amount) 
+        ///   INTO :li_imported, :dc_hashtotal 
+        ///   FROM odps.post_tax_deductions 
+        ///  WHERE ded_reference like :ls_select
         /// </summary>
         public static ODPSDataService SelectPostTaxDeductions(string ls_select)
         {
@@ -242,7 +268,9 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count(*) into :ll_import from odps.post_tax_deductions where ded_description like :ls_temp
+        /// select count(*) into :ll_import 
+        ///   from odps.post_tax_deductions 
+        ///  where ded_description like :ls_temp
         /// </summary>
         public static ODPSDataService SelectPostTaxDeductions2(string ls_temp)
         {
@@ -326,7 +354,9 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select count(*), sum(curr_chg) into :ll_rowcount, :dc_hashtotal from odps.t_telecom_import
+        /// select count(*), sum(curr_chg) 
+        ///   into :ll_rowcount, :dc_hashtotal 
+        /// from odps.t_telecom_import
         /// </summary>
         public static ODPSDataService SelectTelecomImport()
         {
@@ -395,7 +425,9 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT	ui_id0 INTO	:ll_ui_id FROM rd.rds_user_id WHERE ui_userid = :ls_ui_userid
+        /// SELECT	ui_id0 INTO	:ll_ui_id 
+        ///   FROM rd.rds_user_id 
+        ///  WHERE ui_userid = :ls_ui_userid
         /// </summary>
         public static ODPSDataService SelectRdsUserId(String ui_userid)
         {
@@ -404,7 +436,10 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// SELECT	up_password INTO :OldPass FROM rd.used_password WHERE ui_id = :ll_ui_id AND	up_password = :sNewPassword
+        /// SELECT up_password INTO :OldPass 
+        ///   FROM rd.used_password 
+        ///  WHERE ui_id = :ll_ui_id 
+        ///    AND up_password = :sNewPassword
         /// </summary>
         public static ODPSDataService SelectUsedPassword(Int32 ui_id, String up_password)
         {
@@ -413,7 +448,11 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// UPDATE	rd.rds_user_id SET ui_password = :sNewPassword,ui_password_expiry = :dExpiry,ui_grace_logins = 4 WHERE		ui_userid = :ls_ui_userid
+        /// UPDATE rd.rds_user_id 
+        ///    SET ui_password = :sNewPassword
+        ///      , ui_password_expiry = :dExpiry
+        ///      , ui_grace_logins = 4 
+        ///  WHERE ui_userid = :ls_ui_userid
         /// </summary>
         public static ODPSDataService UpdateRdsUserId(String ui_password, DateTime ui_password_expiry, String ui_userid)
         {
@@ -422,7 +461,8 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// INSERT INTO	rd.used_password (ui_id,up_password) VALUES (:ll_ui_id,:sOldPassword)
+        /// INSERT INTO	rd.used_password (ui_id,up_password) 
+        /// VALUES (:ll_ui_id, :sOldPassword)
         /// </summary>
         public static ODPSDataService InserIntoUsedPassword(Int32 ui_id, String up_password)
         {
@@ -488,8 +528,9 @@ namespace NZPostOffice.ODPS.DataService
                     string upPassword = "";
 
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "select up_password from rd.used_password " +
-                        " where up_code = :u_usercode and up_password = :sNewPassword ";
+                    cm.CommandText = "select up_password from rd.used_password "
+                                   + " where up_code = :u_usercode " 
+                                   + "   and up_password = :sNewPassword ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "u_usercode", up_code);
                     pList.Add(cm, "sNewPassword", up_password);
@@ -527,8 +568,8 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into rd.used_password (up_code,up_password) " +
-                        " values (:u_usercode,:sOldPassword) ";
+                    cm.CommandText = "insert into rd.used_password (up_code,up_password) "
+                                   + "values (:u_usercode,:sOldPassword) ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "u_usercode", up_code);
                     pList.Add(cm, "sOldPassword", up_password);
@@ -652,6 +693,8 @@ namespace NZPostOffice.ODPS.DataService
         [ServerMethod]
         private void _InsertPostTaxAdjustments()
         {
+            // TJB RPCR_020 Sept-2010
+            // Added 'Contract <no>' to ded_reference
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -679,7 +722,7 @@ namespace NZPostOffice.ODPS.DataService
                        " 'Shell Deduction Month' + ' ' + convert (varchar,Month(getdate()-30))," +
                        " 1," +
                        " 6," +
-                       " 'Shell Deductions imported on ' + convert(varchar(10), getdate(), 20)," +//! need format: yyyy-mm-dd
+                       " 'Shell Deductions Contract '+cast(contract_no as varchar)+' imported on ' + convert(varchar(10), getdate(), 20)," +//! need format: yyyy-mm-dd
                        " 'M'," +
                        " null," +
                        " null," +
