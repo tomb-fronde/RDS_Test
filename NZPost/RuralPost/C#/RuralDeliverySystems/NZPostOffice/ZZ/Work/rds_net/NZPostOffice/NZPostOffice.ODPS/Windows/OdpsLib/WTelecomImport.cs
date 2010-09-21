@@ -16,14 +16,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
     public partial class WTelecomImport : WMaster
     {
-        #region Define
         public string is_docname = String.Empty;
         public bool ib_loaded = false;
         public int ii_errcount;
         public int il_supplier;
         public int il_contract;
-
-        #endregion
 
         public WTelecomImport()
         {
@@ -35,12 +32,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
 
         public override void close()
         {
-            base.close();// this.Close();
+            base.close();
         }
 
         public override int closequery()
         {
-            //close(this);
             return base.closequery();
         }
 
@@ -57,7 +53,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             //  TJB  Feb 2005  SR4648
             //  Function reads in the rows of the Telecom data
             //  to the dw_import datawindow.  The file is in CVS format 
-            //   ( so the builtin importfile function can't be used).
+            //  (so the builtin importfile function can't be used).
             //  The field interpretation and datawindow-updating 
             //  are specific to this file/datawindow.
             int li_rowcount;
@@ -88,22 +84,28 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             //li_infile = FileOpen(as_infile, linemode!, read!, shared!);
             //if (li_infile < 0) 
             //{
-            //    MessageBox.Show ( "Failed to open input file \r" + "      " + as_infile, "Error" );
+            //    MessageBox.Show("Failed to open input file \r" + "      " + as_infile, "Error" );
             //    return li_infile;
             //}
             if (!File.Exists(as_infile))
             {
-                MessageBox.Show("Failed to open input file \r" + "      " + as_infile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Failed to open input file \n" 
+                               + "      " + as_infile
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return -1;
             }
             //  Read in the lines, parse into fields, and copy the field info
-            //  into the datawindow.  Report and count any errors encountered.
+            //  into the datawindow. Report and count any errors encountered.
             using (StreamReader sr = File.OpenText(as_infile))
             {
                 while ((ls_line = sr.ReadLine()) != null)
                 {
                     ls_char = ls_line.Substring(0, 1);
-                    if (ls_char == "#" || ls_char == ";" || ls_char == "-" || ls_char == "/")
+                    if (ls_char == "#" 
+                        || ls_char == ";" 
+                        || ls_char == "-" 
+                        || ls_char == "/")
                     {
                         continue;
                     }
@@ -131,7 +133,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                     li_row = dw_import.RowCount;
                     if (li_row < 0)
                     {
-                        MessageBox.Show("Error adding row to datawindow \r" + "at input row " + li_rowcount.ToString() + "  ( " + ls_field[5] + ")  ", "Net Error");
+                        MessageBox.Show("Error adding row to datawindow \n" 
+                                       + "at input row " + li_rowcount.ToString() + " (" + ls_field[5] + ")  "
+                                       , "Net Error");
                         ii_errcount++;
                     }
                     else
@@ -157,74 +161,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                     }
                     if (v.Length > ll_columns_per_record)
                     {
-                        MessageBox.Show("Line " + li_rowcount.ToString() + " has an incorrect number of fields:  \r\r" + ls_line, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Line " + li_rowcount.ToString() + " has an incorrect number of fields:  \n\n" + ls_line
+                                       , "Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         ii_errcount++;
                     }
                 }
                 sr.Close();
             }
-            //ll_len = FileRead(li_infile, ls_line);
-            //while (ll_len >= 0) 
-            //{
-            //    ls_char =  TextUtil.Left(ls_line, 1);
-            //    if (ll_len == 0 || ls_char == '#' || ls_char == ';' || ls_char == '-' || ls_char == '/') {
-            //        ll_len = FileRead(li_infile, ls_line);
-            //        continue;
-            //    }
-            //    li_rowcount++;
-            //    i = 1;
-            //    k = 0;
-            //    j = TextUtil.Pos (ls_line, ',', i);
-            //    while (j > 0) 
-            //    {
-            //        k++;
-            //        if (j > i)
-            //        {
-            //            ls_field[k] = Trim(Mid(ls_line, i, j - i));
-            //        }
-            //        else
-            //        {
-            //            ls_field[k] = ' ';
-            //        }
-            //        i = j + 1;
-            //        j = TextUtil.Pos (ls_line, ',', i);
-            //    }
-            //    k++;
-            //    if (i <= ll_len)
-            //    {
-            //        ls_field[k] = Trim(Mid(ls_line, i, ll_len - i + 1));
-            //    }
-            //    else 
-            //    {
-            //        ls_field[k] = ' ';
-            //    }
-            //    li_row = dw_import.insertrow(0);
-            //    if (li_row < 0)
-            //    {
-            //        MessageBox.Show ( "Error adding row to datawindow \r" + "at input row " + String(li_rowcount) + "  ( " + ls_field[5] + ")  ", "Powerbuilder Error" );
-            //        ii_errcount++;
-            //    }
-            //    else 
-            //    {
-            //        dw_import.setItem(li_row, "bill_month", ls_field[1]);
-            //        dw_import.setItem(li_row, "bill_cycle", System.Conver.ToInt32 ( ls_field[2] ));
-            //        dw_import.setItem(li_row, "cust_no", Metex.Common.Convert.ToInt32(ls_field[3]));
-            //        dw_import.setItem(li_row, "account_no", Metex.Common.Convert.ToInt32(ls_field[4]));
-            //        dw_import.setItem(li_row, "account_name", ls_field[5]);
-            //        dw_import.setItem(li_row, "open_bal", Real(ls_field[6]));
-            //        dw_import.setItem(li_row, "payments", Real(ls_field[7]));
-            //        dw_import.setItem(li_row, "adj_tran", Real(ls_field[8]));
-            //        dw_import.setItem(li_row, "bal_bf", Real(ls_field[9]));
-            //        dw_import.setItem(li_row, "curr_chg", Real(ls_field[10]));
-            //        dw_import.setItem(li_row, "total_due", Real(ls_field[11]));
-            //    }
-            //    if (!(k == ll_columns_per_record)) 
-            //    {
-            //        MessageBox.Show ( "Line " + String(li_rowcount) + " has an incorrect number of fields:  \r\r" + ls_line, "Error" );
-            //        ii_errcount++;
-            //    }
-            //    ll_len = FileRead(li_infile, ls_line);
-            //}
             return li_rowcount;
         }
 
@@ -234,7 +178,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             //  Validate the account_name field.  Look for format errors,
             //  and check validity of supplier_no/contract_no relationship.
             // 
-            //  Return codes  ( reported by calling routine)
+            //  Return codes (reported by calling routine)
             //    0	OK
             //    1	Format error in field
             //    2	SQL error checking supplier_no/contract_no
@@ -252,33 +196,13 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             int li_exists;
             il_supplier = 0;
             il_contract = 0;
-            ll_len = as_accountname.Length;//.Len();
+            ll_len = as_accountname.Length;
             //  Parse the account name
             //  Format is SSSS_CCCC_NNNN
             //  where SSSS = supplier number
             //        CCCC = contract number
             //    and NNNN = the first 4 characters of the contractor's surname
             //  Return 1 if the format is incorrect
-            //i = 1;
-            //j = TextUtil.Pos (as_accountname, '_', i);
-            //if (j < i) 
-            //{
-            //    return 1;
-            //}
-            //ll_supplier = Metex.Common.Convert.ToInt32(Mid(as_accountname, i, j - i));
-            //i = j + 1;
-            //j = TextUtil.Pos (as_accountname, '_', i);
-            //if (j < i) 
-            //{
-            //    return 1;
-            //}
-            //ll_contract = Metex.Common.Convert.ToInt32(Mid(as_accountname, i, j - i));
-            //i = j + 1;
-            //if (ll_len <= i)
-            //{
-            //    return 1;
-            //}
-            //ls_surname =  TextUtil.Mid (as_accountname, i, ll_len - i + 1);
             string[] val = as_accountname.Split('_');
             if (val.Length == 0)
             {
@@ -299,13 +223,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                     ls_surname = val[2];
                 }
             }
-            //  Check to see whether the contractor has the contract
-            //   ( or ever had).
-            //select count ( *) into :li_exists
-            //from rd.contractor_renewals
-            //where contractor_supplier_no = :ll_supplier
-            //and contract_no = :ll_contract
-            //using SQLCA;
+            //  Check to see whether the contractor has the contract (or ever had).
+            //   select count(*) into :li_exists
+            //     from rd.contractor_renewals
+            //    where contractor_supplier_no = :ll_supplier
+            //      and contract_no = :ll_contract
+            //
             //if (StaticVariables.sqlca.SQLCode != 0) {
             //    return 2;
             //}
@@ -366,9 +289,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             DateTime ld_billMonth;
             string ls_this_month;
             string ls_this_year;
+
             if (sle_filename.Text == "")
             {
-                MessageBox.Show("Select a file you wish to import  ( in the Browse box)\r" + "then press Read.", "Import");
+                MessageBox.Show("Select a file you wish to import (in the Browse box)\n" 
+                               + "then press Read."
+                               , "Import");
                 return;
             }
             Cursor.Current = Cursors.WaitCursor;
@@ -386,75 +312,79 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             ls_monthname[9] = "Oct";
             ls_monthname[10] = "Nov";
             ls_monthname[11] = "Dec";
+
             //  TJB  SR4675  July 2006
             //  Determine this month's year and month to use as a default
             ls_bill_month = DateTime.Today.ToString("yyyy-MM-dd");
-            //li_i = System.Conver.ToInt32 (  TextUtil.Mid (ls_bill_month, 6, TextUtil.Pos (ls_bill_month, '-', 6 ) - 6));
             li_i = DateTime.Now.Month;
             ls_this_month = ls_monthname[li_i - 1];
-            //ls_this_year =  TextUtil.Mid (ls_bill_month, 1, 4);
             ls_this_year = DateTime.Now.Year.ToString();
-            //  ll_import = dw_import.importfile ( sle_filename.text,1)
+
+            // ll_import = dw_import.importfile(sle_filename.text,1)
             ll_rowcount = uf_importfile(sle_filename.Text, 1);
             if (ll_rowcount < 0)
             {
-                MessageBox.Show("Read from " + sle_filename.Text + " failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;// -1;
+                MessageBox.Show("Read from " + sle_filename.Text + " failed."
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
             }
-            //  Check to see if the file has already been imported  ( assume that
+            //  Check to see if the file has already been imported (assume that
             //  if the first record has been imported, the rest have been too).
             ii_errcount = 0;
             ll_row = 0;
-            //ls_bill_month = dw_import.getitemstring(ll_row, 1);
 
             ls_bill_month = dw_import.GetItem<TelecomImport>(ll_row).BillMonth;
 
             DateTime tempDT;
-            //if (IsDate(ls_bill_month))
             if (DateTime.TryParse(ls_bill_month, out tempDT))
             {
-                //ld_billMonth = tempDT;//System.Convert.ToDateTime ( ls_bill_month );
-                //ls_bill_month = tempDT.ToString("yyyy-mm-dd");//String(ld_billMonth, "yyyy-mm-dd");
-                li_i = tempDT.Month;//System.Conver.ToInt32 (  TextUtil.Mid (ls_bill_month, 6, TextUtil.Pos (ls_bill_month, '-', 6 ) - 6));
-                ls_bill_month = ls_monthname[li_i - 1] + " " + tempDT.Year.ToString();//TextUtil.Mid (ls_bill_month, 1, 4);
+                li_i = tempDT.Month;
+                ls_bill_month = ls_monthname[li_i - 1] + " " + tempDT.Year.ToString();
             }
             else
             {
-                MessageBox.Show("Bad date format on row " + (ll_row + 1).ToString(), "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Bad date format on row " + (ll_row + 1).ToString()
+                               , "Validation Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ii_errcount++;
             }
             if (ii_errcount == 0)
             {
                 ls_temp = "Telecom Deduction Month " + ls_bill_month;
-                //select count ( *) into :ll_import from odps.post_tax_deductions where ded_description like :ls_temp using sqlca;
+                // select count(*) into :ll_import 
+                //   from odps.post_tax_deductions 
+                //  where ded_description like :ls_temp using sqlca;
                 ODPSDataService serv = ODPSDataService.SelectPostTaxDeductions2(ls_temp);
                 ll_import = serv.RowCount;
                 if (serv.SQLCode != 0)
                 {
-                    MessageBox.Show(serv.SQLErrText + "\r\r" + "Error checking for previous import", "SQL Error " + serv.SQLErrText, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? ROLLBACK;
-                    return;// -(1);
+                    MessageBox.Show("Error checking for previous import \n\n"
+                                   + serv.SQLErrText
+                                   , "SQL Error "
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
                 }
                 if (ll_import > 0)
                 {
-                    MessageBox.Show("This file appears to have already been imported.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? ROLLBACK;
-                    return;// -(1);
+                    MessageBox.Show("This file appears to have already been imported."
+                                   , "Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
                 }
-                //  Prepare the t_telecom_import table for upload
-                //delete from odps.t_telecom_import
-                //using sqlca;
+                // Prepare the t_telecom_import table for upload
+                //  delete from odps.t_telecom_import
                 serv = ODPSDataService.DeleteTelecomImport();
-                //if (StaticVariables.sqlca.SQLCode != 0) 
                 if (serv.SQLCode != 0)
                 {
-                    MessageBox.Show(serv.SQLErrText + "\r\r" + "Delete from t_telecom_import failed.", "SQL Error " + serv.SQLErrText, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? ROLLBACK;
-                    return;// -(1);
+                    MessageBox.Show("Delete from t_telecom_import failed."
+                                   + serv.SQLErrText + "\n\n"
+                                   , "SQL Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
                 }
-                //? commit;
                 //  Validate the data and upload the data into the t_telecom_import table
-                ll_row = 0;// 1;
+                ll_row = 0;
                 while (ll_rowcount > ll_row)
                 {
                     ls_bill_month = dw_import.GetItem<TelecomImport>(ll_row).BillMonth;
@@ -489,38 +419,38 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                         {
                             ls_message = "Undefined";
                         }
-                        MessageBox.Show("Account name " + ls_account_name + " on row " + ll_row.ToString() + "\r\r" + "Error code " + li_ok.ToString() + "  ( " + ls_message + ")  ", "Validation Error");
+                        MessageBox.Show("Account name " + ls_account_name + " on row " + ll_row.ToString() + "\n\n" 
+                                       + "Error code " + li_ok.ToString() + " (" + ls_message + ")"
+                                       , "Validation Error");
                         ii_errcount++;
                     }
-                    //if (IsDate(ls_bill_month))
-                    //{
-                    //    ld_billMonth = System.Convert.ToDateTime ( ls_bill_month );
+                    //if (IsDate(ls_bill_month)) {
+                    //    ld_billMonth = System.Convert.ToDateTime(ls_bill_month );
                     //    ls_bill_month = String(ld_billMonth, "yyyy-mm-dd");
-                    //    li_i = System.Conver.ToInt32 (  TextUtil.Mid (ls_bill_month, 6, TextUtil.Pos (ls_bill_month, '-', 6 ) - 6));
-                    //    ls_bill_month = ls_monthname[li_i] + ' ' +  TextUtil.Mid (ls_bill_month, 1, 4);
+                    //    li_i = System.Conver.ToInt32(TextUtil.Mid(ls_bill_month, 6, TextUtil.Pos(ls_bill_month, '-', 6 ) - 6));
+                    //    ls_bill_month = ls_monthname[li_i] + ' ' +  TextUtil.Mid(ls_bill_month, 1, 4);
                     //}
-                    //else 
-                    //{
-                    //    MessageBox.Show ( "Bad date format on row " + String(ll_row, "Validation Error" );
+                    //else {
+                    //    MessageBox.Show("Bad date format on row " + String(ll_row, "Validation Error" );
                     //    ls_bill_month = ls_this_month + ' ' + ls_this_year;
                     //    ii_errcount++;
                     //}
                     if (DateTime.TryParse(ls_bill_month, out tempDT))
                     {
-                        //ld_billMonth = tempDT;//System.Convert.ToDateTime ( ls_bill_month );
-                        //ls_bill_month = tempDT.ToString("yyyy-mm-dd");//String(ld_billMonth, "yyyy-mm-dd");
-                        li_i = tempDT.Month;//System.Conver.ToInt32 (  TextUtil.Mid (ls_bill_month, 6, TextUtil.Pos (ls_bill_month, '-', 6 ) - 6));
-                        ls_bill_month = ls_monthname[li_i - 1] + " " + tempDT.Year.ToString();//TextUtil.Mid (ls_bill_month, 1, 4);
+                        li_i = tempDT.Month;
+                        ls_bill_month = ls_monthname[li_i - 1] + " " + tempDT.Year.ToString();
                     }
                     else
                     {
-                        MessageBox.Show("Bad date format on row " + ll_row.ToString(), "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Bad date format on row " + ll_row.ToString()
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         ii_errcount++;
                     }
 
-                    /*?insert into odps.t_telecom_import (bill_month, bill_cycle, customer_no, account_no, account_name, open_bal, payments, adj_tran, bal_bf, curr_chg, total_due, supplier_no, contract_no )
-                    values ( :ls_bill_month, :li_bill_cycle, :ll_customer_no, :ll_account_no, :ls_account_name, :dc_open_bal, :dc_payments,   :dc_adj_tran, 	 :dc_bal_bf, 
-                    :dc_curr_chg,:dc_total_due,:il_supplier, :il_contract ) using sqlca;*/
+                    //insert into odps.t_telecom_import(bill_month, bill_cycle, customer_no, account_no, account_name, open_bal, payments, adj_tran, bal_bf, curr_chg, total_due, supplier_no, contract_no )
+                    //values(:ls_bill_month, :li_bill_cycle, :ll_customer_no, :ll_account_no, :ls_account_name, :dc_open_bal, :dc_payments,   :dc_adj_tran, 	 :dc_bal_bf, 
+                    //:dc_curr_chg,:dc_total_due,:il_supplier, :il_contract )
 
                     serv = ODPSDataService.InsertTelecomImport(
                         ls_bill_month,
@@ -539,36 +469,45 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
 
                     if (serv.SQLCode != 0)
                     {
-                        MessageBox.Show(serv.SQLErrText + "\r\r" + "Error inserting row " + ll_row.ToString() + "  ( " + ls_account_name + ",SQL Error " + serv.SQLErrText + " into t_telecom_import table");//, stopsign!);
-                        //? ROLLBACK;
-                        return;//-(1);
+                        MessageBox.Show("Error inserting row " + ll_row.ToString() 
+                                           + " (" + ls_account_name + ")" 
+                                           + " into t_telecom_import table \n\n"
+                                       + serv.SQLErrText
+                                       ,"SQL Error");
+                        return;
                     }
                     ll_row++;
                 }
-                //? commit;
-                //  Collect and present summary info about what has been done
-                //select count ( *), sum ( curr_chg) into :ll_rowcount, :dc_hashtotal from odps.t_telecom_import using sqlca;
+                // Collect and present summary info about what has been done
+                //   select count(*), sum(curr_chg) into :ll_rowcount, :dc_hashtotal 
+                //     from odps.t_telecom_import;
                 serv = ODPSDataService.SelectTelecomImport();
                 if (serv.SQLCode != 0)
                 {
-                    MessageBox.Show(serv.SQLErrText + "\r\r" + "Error obtaining summary totals from t_telecom_import table", "SQL Error " + serv.SQLErrText, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? ROLLBACK;
-                    return;// -(1);
+                    MessageBox.Show("Error obtaining summary totals from t_telecom_import table \n\n"
+                                   + serv.SQLErrText
+                                   , "SQL Error"
+                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
                 }
                 ll_rowcount = serv.telecomImport.LlRowCount;
                 dc_hashtotal = serv.telecomImport.DcHashtotal;
-                //? commit;
-                ls_message = "\rRows read:  " + ll_rowcount.ToString() + "\r" + "Errors encountered: " + ii_errcount.ToString() + "\r" + "Sum ( Current charges) = " + dc_hashtotal.ToString() + "\r\r";
+                ls_message = "\nRows read:  " + ll_rowcount.ToString() + "\n" 
+                                + "Errors encountered: " + ii_errcount.ToString() + "\n" 
+                                + "Sum(Current charges) = " + dc_hashtotal.ToString() + "\n\n";
             }
             if (ii_errcount == 0)
             {
-                ls_message += "Press Import to import this data into the database   \r" + "or Close to cancel this import.\r";
+                ls_message += "Press Import to import this data into the database   \n" 
+                                + "or Close to cancel this import.\n";
             }
             else
             {
-                ls_message += "Please correct the errors before importing the data.  \r";
+                ls_message += "Please correct the errors before importing the data.  \n";
             }
-            MessageBox.Show(ls_message, "Summary", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(ls_message
+                            , "Summary"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
             //  Set the flag to say the load step has been done
             //  TJB  SR4674  July 2004
             //  Enable the Import button only if there are no errors
@@ -598,81 +537,52 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             System.Decimal dc_hashtotal = 0;
             if (!ib_loaded)
             {
-                MessageBox.Show("Select a file you wish to import  ( in the Browse box)\r" + "then press Read.", "Warning");
+                MessageBox.Show("Select a file you wish to import (in the Browse box)\n" 
+                                + "then press Read."
+                                , "Warning");
                 return;
             }
             if (ii_errcount > 0)
             {
-                li_ok = MessageBox.Show("Warning", ii_errcount.ToString() + " errors were encountered in the import file  \r" + "Are you sure you want to import the data?\r", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);//, question!, yesno!, 2);
+                li_ok = MessageBox.Show(ii_errcount.ToString() + " errors were encountered in the import file  \n" 
+                                        + "Are you sure you want to import the data? \n"
+                                        , "Warning" 
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                        , MessageBoxDefaultButton.Button2);
+
                 if (!(li_ok == DialogResult.Yes))
                 {
                     return;
                 }
             }
-            //  Insert Telecom data into post_tax_adjustments
-            //SELECT string ( today ( )) INTO :ls_today FROM dummy USING SQLCA;
+            // Insert Telecom data into post_tax_adjustments
+            //    SELECT string(today()) INTO :ls_today FROM dummy
             ODPSDataService service = ODPSDataService.SelectDateDummy();
             ls_today = service.DataObject;
             if (service.SQLCode != 0)
             {
-                MessageBox.Show(service.SQLErrText + "\r\r" + "Error obtaining today\'s date.\r" + "- Import aborted!", "SQL Error " + service.SQLErrText, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                //?ROLLBACK
-                return;// -1;
+                MessageBox.Show("Error obtaining today\'s date.\n"
+                                + "- Import aborted! \n\n"
+                                + service.SQLErrText
+                                , "SQL Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
             }
-
-            //INSERT INTO odps.post_tax_deductions  
-            // (  ded_id,   
-            //ded_description,   
-            //ded_priority,   
-            //pct_id,   
-            //ded_reference,   
-            //ded_type_period,   
-            //ded_percent_gross,   
-            //ded_percent_net,   
-            //ded_percent_start_balance,   
-            //ded_fixed_amount,   
-            //ded_min_threshold_gross,   
-            //ded_max_threshold_net_pct,   
-            //ded_default_minimum,   
-            //ded_start_balance,   
-            //ded_end_balance,   
-            //contractor_supplier_no,   
-            //ded_pay_highest_value )
-            //SELECT
-            //null,
-            //'Telecom Deduction Month '+bill_month,
-            //1,   				
-            //6,    				
-            //'Telecom Deduction Contract '+contract_no.ToString()+' imported on '+:ls_today,
-            //'M',   
-            //null, 
-            //null, 
-            //null, 
-            //sum ( curr_chg),
-            //null,    	
-            //null,      	
-            //sum ( curr_chg), 
-            //sum ( curr_chg), 
-            //sum ( curr_chg),
-            //supplier_no,
-            //0
-            //FROM odps.t_telecom_import
-            //GROUP BY bill_month, contract_no, supplier_no
-            //USING SQLCA;
-            //if (StaticVariables.sqlca.SQLCode != 0) {
-            //    MessageBox.Show ( app.sqlca.SQLErrText + "\r\r" + "Error inserting into post_tax_deductions.\r" + "- Import aborted!","SQL Error " + String(app.sqlca.SQLCode), MessageBoxButtons.OK, MessageBoxIcon.Stop );
-            //?               ROLLBACK;
-            //    return -(1);
-            //}
-            //COMMIT;
             service = ODPSDataService.InsertPostTaxDeductions(ls_today);
             if (service.SQLCode != 0)
             {
-                MessageBox.Show(service.SQLErrText + "\r\r" + "Error inserting into post_tax_deductions.\r" + "- Import aborted!", "SQL Error " + service.SQLErrText, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;// -1;
+                MessageBox.Show("Error inserting into post_tax_deductions.\n"
+                                + "- Import aborted! \n\n"
+                                + service.SQLErrText 
+                                , "SQL Error "
+                                , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
             }
             ls_select = "Telecom Deduction % imported on " + ls_today;
-            //SELECT count(*), sum ( ded_fixed_amount) INTO :li_imported, :dc_hashtotal FROM odps.post_tax_deductions WHERE ded_reference like :ls_select USING SQLCA;
+            //SELECT count(*), sum(ded_fixed_amount) 
+            //  INTO :li_imported, :dc_hashtotal 
+            //  FROM odps.post_tax_deductions 
+            // WHERE ded_reference like :ls_select
 
             service = ODPSDataService.SelectPostTaxDeductions(ls_select);
             
@@ -681,19 +591,23 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
 
             if (service.SQLCode != 0)
             {
-                MessageBox.Show(service.SQLErrText + "\r\r" + "Error obtaining insert count.\r" + " ( " + ls_select + ",SQL Error " + service.SQLErrText);
+                MessageBox.Show("Error obtaining insert count. \n" 
+                                + "(" + ls_select + ") \n\n"
+                                + service.SQLErrText
+                                ,"SQL Error");
                 li_imported = -1;
             }
-            //  Setpointer ( arrow!)
-            //if (IsNull(dc_hashtotal))
-            //{
+            // Setpointer(arrow!)
+            //  if (IsNull(dc_hashtotal)) {
             //    dc_hashtotal = 0;
-            //}
-            MessageBox.Show("Import complete                          \r\r" + "    " + li_imported.ToString() + " rows imported \r" + "   $" + dc_hashtotal.ToString() + " total value.", "");
-            //COMMIT;
+            //  }
+            MessageBox.Show("Import complete                          \n\n" 
+                            + "    " + li_imported.ToString() + " rows imported \n" 
+                            + "   $" + dc_hashtotal.ToString() + " total value."
+                            , "");
             ib_loaded = false;
-            //  TJB  SR4674  July 2004
-            //  Disable the Import button when file has been read
+            // TJB  SR4674  July 2004
+            // Disable the Import button when file has been read
             cb_import.Enabled = false;
         }
 
@@ -706,7 +620,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
 
         public virtual void cb_browse_clicked(object sender, EventArgs e)
         {
-            //  TJB  Feb 2005  SR4648
+            // TJB  Feb 2005  SR4648
             //  Gets the name of a file to import
             //  Resets the import status
             string ls_named;
@@ -714,14 +628,14 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             dw_import.Reset();
             ib_loaded = false;
             //li_value = GetFileOpenName("Select File", is_docname, ls_named,
-            //    "csv", "CSV Files  ( *.CSV),*.CSV, " + "DBF Files  ( *.DBF),*.DBF, " + "TXT Files  ( *.TXT),*.TXT");
+            //    "csv", "CSV Files (*.CSV),*.CSV, " + "DBF Files (*.DBF),*.DBF, " + "TXT Files (*.TXT),*.TXT");
             //sle_filename.text = is_docname;
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "Select File";
             dialog.AddExtension = true;
             dialog.DefaultExt = "csv";
-            dialog.Filter = "CSV Files  ( *.CSV)|*.CSV|DBF Files  ( *.DBF)|*.DBF|TXT Files  ( *.TXT)|*.TXT";
+            dialog.Filter = "CSV Files (*.CSV)|*.CSV|DBF Files (*.DBF)|*.DBF|TXT Files (*.TXT)|*.TXT";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 is_docname = dialog.FileName;
