@@ -20,6 +20,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             InitializeComponent();
 
             Consumption.DataBindings[0].FormatString = "###.0";
+            this.v_purchase_value.DataBindings[0].FormatString = "$###,##0";
+            this.v_salvage_value.DataBindings[0].FormatString = "$###,##0";
+            this.contract_vehical_start_kms.DataBindings[0].FormatString = "###,##0";
+            this.v_vehicle_speedo_kms.DataBindings[0].FormatString = "###,##0";
+            this.v_remaining_economic_life.DataBindings[0].FormatString = "###,##0";
 
             // TJB  Dec-2009:  Test using stars to display Vehicle Safety Rating
             //  - For testing, use vehicle year to determine the number of stars

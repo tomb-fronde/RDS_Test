@@ -525,7 +525,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // v_vehicle_speedo_kms
             // 
             this.v_vehicle_speedo_kms.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VVehicleSpeedoKms", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.v_vehicle_speedo_kms.EditMask = "###,###";
+            this.v_vehicle_speedo_kms.EditMask = "###,##0";
             this.v_vehicle_speedo_kms.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.v_vehicle_speedo_kms.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.v_vehicle_speedo_kms.Location = new System.Drawing.Point(422, 241);
@@ -538,7 +538,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // contract_vehical_start_kms
             // 
             this.contract_vehical_start_kms.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "StartKms", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.contract_vehical_start_kms.EditMask = "#,###,##0";
+            this.contract_vehical_start_kms.EditMask = "###,##0";
             this.contract_vehical_start_kms.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.contract_vehical_start_kms.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.contract_vehical_start_kms.Location = new System.Drawing.Point(422, 97);
