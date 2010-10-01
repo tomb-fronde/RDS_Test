@@ -138,12 +138,16 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-                    cm.CommandText = " SELECT  standard_frequency.sf_description ,"
-                        + " route_frequency.rf_delivery_days ,"
-                        + " route_frequency.rf_distance"
+                    cm.CommandText = 
+                        " SELECT standard_frequency.sf_description ,"
+                        + "      route_frequency.rf_delivery_days ,"
+                        + "      route_frequency.rf_distance "
                         + " FROM standard_frequency ,"
-                        + " route_frequency"
-                        + " WHERE ( standard_frequency.sf_key = route_frequency.sf_key ) and          ( ( route_frequency.contract_no = :contract_no ) and          ( route_frequency.rf_active = 'Y' ) and          ( route_frequency.rf_distance > 0 ) )";
+                        + "      route_frequency "
+                        + "WHERE standard_frequency.sf_key = route_frequency.sf_key " 
+                        + "  AND route_frequency.contract_no = :contract_no " 
+                        + "  AND route_frequency.rf_active = 'Y' " 
+                        + "  AND route_frequency.rf_distance > 0 ";
 
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "contract_no", contract_no);
