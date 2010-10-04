@@ -70,8 +70,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             DataTable table = new NZPostOffice.RDS.DataControls.Report.BenchmarkReport2010DataSet(this.bindingSource.DataSource);
             this.report.SetDataSource(table);
 
-            DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet(new BenchmarkReportFrequencies());
-            this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
+            // TJB Oct-2010: Removed BenchmakrReportFrequencies subreport from Benchmark Report
+            //DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet(new BenchmarkReportFrequencies());
+            //this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
 
 		}
 		#endregion

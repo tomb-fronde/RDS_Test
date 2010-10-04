@@ -63,7 +63,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error retreiving report main data \n"
+                MessageBox.Show("Error retreiving report data \n"
                                 + e.Message
                                 , "DataControls.Ruralrpt.RBenchmarkReport2010");
             }
@@ -71,6 +71,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 //! if( isnull(denddate), relativedate(dstartdate,364), denddate) 
             if (source.Count > 0)
             {
+                // TJB Oct-2010:  ++++ Note ++++
+                // Based on trying to get the original report's Frequencies subreport 
+                // to populate based on each report's data, the code below is likely 
+                // misbehave.  Changes made here appear to be made for each individual
+                // report, but when displayed/printed only the changes for the last
+                // report of the set are effected for all reports in the set.  In the 
+                // code below, that means that the total value and separator line are
+                // positioned according to the number of piece rate suppliers for the
+                // last contract of the group, and the end date is that for the last 
+                // of the group not the contract's end date.
+                //
+                // +++++++++++++++++++++++++++++
                 // TJB  RD7_0005 Aug 2008:
                 //     If not all Piece Rate Suppliers are included, slide the total up
                 //     under the ones that are.  Since Crystal Reports doesn't appear to
@@ -176,31 +188,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 // Finally, if there's no start date either, leave the displayed end date blank
             }
 /*
+            // TJB Oct-2010: Removed BenchmarkReportFrequencies subreport from Benchmark Report
+            // Below originally attempted to populate subreport (table2)
             // Populate the Frequencies sub-report
             try
             {
                 //DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet
                 //                                       (BenchmarkReportFrequencies.GetAllBenchmarkReportFrequencies(inContract));
-                //string sFreqDesc1 = (string)table2.Rows[0][0];
-                //string sFreqDays1 = (string)table2.Rows[0][1];
-                //decimal dFreqDist1 = (decimal)table2.Rows[0][2];
-                //string sFreqDist1 = dFreqDist1.ToString("###.##");
-                string sFreqDesc1 = source[0].SFreqDesc1;
-                string sFreqDays1 = source[0].SFreqDays1;
-                string sFreqDesc2 = source[0].SFreqDesc2;
-                string sFreqDays2 = source[0].SFreqDays2;
-                (this.report.ReportDefinition.ReportObjects["sFreqDesc1"] as
-                                    CrystalDecisions.CrystalReports.Engine.TextObject).Text = sFreqDesc2;
-                (this.report.ReportDefinition.ReportObjects["sFreqDays1"] as
-                                    CrystalDecisions.CrystalReports.Engine.TextObject).Text = sFreqDays2;
-                (this.report.ReportDefinition.ReportObjects["sFreqDesc1"] as
-                                    CrystalDecisions.CrystalReports.Engine.TextObject).Text = sFreqDesc1;
-                (this.report.ReportDefinition.ReportObjects["sFreqDays1"] as
-                                    CrystalDecisions.CrystalReports.Engine.TextObject).Text = sFreqDays1;
-                //(this.report.ReportDefinition.ReportObjects["sFreqDist1"] as
-                //                    CrystalDecisions.CrystalReports.Engine.TextObject).Text = sFreqDist1;
-
-
                 //    this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
             }
             catch (Exception e)
