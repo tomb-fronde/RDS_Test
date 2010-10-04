@@ -102,9 +102,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 
                 if (source[0].PrsSupplier3 == null)
                 {
-                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
-                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
 
                     int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost21"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
@@ -113,15 +113,15 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
 
                     // Hide the lower lines
-                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else if (source[0].PrsSupplier4 == null)
                 {
-                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
-                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
 
                     int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost31"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
@@ -130,15 +130,15 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
 
                     // Hide the other lines
-                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else if (source[0].PrsSupplier5 == null)
                 {
-                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
+                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
 
                     int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost41"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
@@ -147,20 +147,20 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
 
                     // Hide the other lines
-                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else
                 {
-                    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
+                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
+                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
+                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
 
                     // Hide the other lines
-                    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
+                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
 
                 // Determine the report's end date
