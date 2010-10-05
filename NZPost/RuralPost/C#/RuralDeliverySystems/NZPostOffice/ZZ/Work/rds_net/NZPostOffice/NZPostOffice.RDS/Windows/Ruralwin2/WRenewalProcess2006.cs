@@ -18,6 +18,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
+        // TJB Oct-2010: Changed benchmark report to BenchmarkReport2010 (was 2006)
+
         private const string DEFAULT_ASSEMBLY = "NZPostOffice.RDS.DataControls";
         private const string DEFAULT_VERSION = "1.0.0.0";
 
@@ -118,7 +120,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_criteria1.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_listings.DataObject = new DListContractsForProcessing2001();
             dw_listings.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_bm_report.DataObject = new RBenchmarkReport2006();
+            //dw_bm_report.DataObject = new RBenchmarkReport2006();
+            dw_bm_report.DataObject = new RBenchmarkReport2010();
             // TJB  RD7_0051  Oct2009
             // Changed to make report resizeable
             //dw_bm_report.DataObject.BorderStyle = BorderStyle.Fixed3D;
@@ -862,7 +865,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             // TJB  RD7_0051 Oct2009
             //dw_benchmark_report.DataObject.Reset();
-            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+            //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Reset();
             // count rows for progress bar
             ll_Cnt = of_getnumselectedrows();
             lRow = dw_listing.GetSelectedRow(0);
@@ -875,9 +879,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
+            Cursor.Current = Cursors.WaitCursor;
+
             // TJB  RD7_0051 Oct2009
             //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
-            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
+            //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).ClearSource();
             
             while (lRow >= 0)
             {
@@ -896,13 +903,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (SQLCode != 0)
                 {
                     MessageBox.Show(SQLErrText 
-                                    ,"Database error (w_renewal_process2006.cb_bm.clicked)" 
+                                    ,"Database error (WRenewalProcess2006.cb_bm.clicked)" 
                                     ,MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 }
                 // TJB  RD7_0051 Oct2009
                 //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence);
-                ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
+                //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
+                ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Retrieve(lContract, lSequence);
                 StaticVariables.gnv_app.of_showstatus(ref w_status, ll_Ctr, ll_Cnt, "Generating benchmark report ...");
                 lRow = dw_listing.GetSelectedRow(lRow + 1);
             }
@@ -933,7 +941,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             bPrintBenchmark = true;
             // TJB  RD7_0051 Oct2009
             //dw_benchmark_report.DataObject.Reset();
-            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+            //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Reset();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Reset();
 
             // count rows for progress bar
             ll_Cnt = of_getnumselectedrows();
@@ -946,10 +955,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
+            Cursor.Current = Cursors.WaitCursor;
+
             // TJB  Aug-2008:  Added from cb_bm_clicked
             // TJB  RD7_0051 Oct2009
             //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
-            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
+            //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).ClearSource();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).ClearSource();
 
             while (lRow >= 0)
             {
@@ -964,7 +976,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         // TJB  RD7_0051 Oct2009
                         //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Retrieve(lContract, lSequence - 1);
-                        ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence - 1);
+                        //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence - 1);
+                        ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Retrieve(lContract, lSequence - 1);
                     }
                 }
                 lRow = dw_listing.GetSelectedRow(lRow + 1);
@@ -1336,7 +1349,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             // TJB  RD7_0051 Oct2009
             //((RBenchmarkReport2006)dw_benchmark_report.DataObject).Print();
-            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Print();
+            //((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Print();
+            ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Print();
         }
 
         #endregion
