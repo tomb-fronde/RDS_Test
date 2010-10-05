@@ -15,6 +15,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public partial class WExtentions2001 : WAncestorWindow
     {
+        // TJB Oct-2010: Changed benchmark report to BenchmarkReport2010 (was 2006)
+
         #region Define
 
         public int iltravellingspeed = 50;
@@ -37,7 +39,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_contract.DataObject = new DContractNoEntry2001();
             this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
+            this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010();
             //this.dw_bm.DataObject.BorderStyle = BorderStyle.None;
 
             this.dw_ext.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_constructor);
@@ -391,7 +393,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                    , MessageBoxIcon.Question) 
                          == DialogResult.Yes)
                 {
-                    ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006)dw_benchmark_report).Retrieve(lContract, lSequence);
+                    ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Retrieve(lContract, lSequence);
                     dw_benchmark_report.Visible = true;
                     // 	cb_search.Visible=false
                     // 	dw_contract.Visible=false
