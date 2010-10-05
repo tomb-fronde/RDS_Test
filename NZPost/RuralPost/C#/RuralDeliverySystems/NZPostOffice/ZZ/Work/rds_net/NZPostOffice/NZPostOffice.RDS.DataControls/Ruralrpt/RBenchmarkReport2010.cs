@@ -13,6 +13,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
 	public partial class RBenchmarkReport2010 : Metex.Windows.DataUserControl
 	{
+        // TJB Oct 2010
+        // Updated version of RBenchmarkReport2006
+        // Removed Frequencies subreport and some processing of end date and Piecerate
+        // display.  Dataset and database query names changed to ...2010.  Main change 
+        // is that the stored proc used for obtaining data is changed to sp_GetBenchmarkRpt2010
+        // which includes data for up to 5 frequencies per contract.
 		public RBenchmarkReport2010()
 		{
             InitializeComponent();
@@ -97,70 +103,34 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 //           to "noline"s (can't even change the line's visibility!) except
                 //           for the one we want to see.
                 //
+                // TJB Oct-2010
+                // Changed how the line is provided: Added as a top "border" on the total field.
+                // Removed line hiding code (see RBenchmarkReport2006 for the 'old' way).
+                //
                 //     The code assumes there will always be two suppliers ...
                 //     It also assumes any "missing" suppliers will always be the last ones ...
                 
+                int ll_top;
                 if (source[0].PrsSupplier3 == null)
                 {
-                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
-                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
-
-                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost21"] as
+                    ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost21"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
-
                     (this.report.ReportDefinition.ReportObjects["prtotal1"] as
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
-
-                    // Hide the lower lines
-                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else if (source[0].PrsSupplier4 == null)
                 {
-                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
-                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
-
-                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost31"] as
+                    ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost31"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
-
                     (this.report.ReportDefinition.ReportObjects["prtotal1"] as
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
-
-                    // Hide the other lines
-                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
                 else if (source[0].PrsSupplier5 == null)
                 {
-                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                //    LineObject line51 = (LineObject)this.report.ReportDefinition.ReportObjects["Line51"];
-
-                    int ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost41"] as
+                    ll_top = (this.report.ReportDefinition.ReportObjects["PrsCost41"] as
                                     CrystalDecisions.CrystalReports.Engine.FieldObject).Top + 375;
-
                     (this.report.ReportDefinition.ReportObjects["prtotal1"] as
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
-
-                    // Hide the other lines
-                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line51.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                }
-                else
-                {
-                //    LineObject line21 = (LineObject)this.report.ReportDefinition.ReportObjects["Line21"];
-                //    LineObject line31 = (LineObject)this.report.ReportDefinition.ReportObjects["Line31"];
-                //    LineObject line41 = (LineObject)this.report.ReportDefinition.ReportObjects["Line41"];
-
-                    // Hide the other lines
-                //    line21.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line31.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
-                //    line41.LineStyle = CrystalDecisions.Shared.LineStyle.NoLine;
                 }
 
                 // Determine the report's end date
@@ -168,42 +138,44 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 // TJB  RD7_0005 Aug 2008:  Changed to use either the EndDate or ExpiryDate
                 // If EndDate is null, use ExpiryDate, otherwise EndDate
 
-                if (source[0].Denddate.HasValue)
-                {
-                    (this.report.ReportDefinition.ReportObjects["EndDate"] as
-                        CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Denddate);
-                }
-                else if (source[0].Dexpirydate.HasValue)
-                {
-                    (this.report.ReportDefinition.ReportObjects["EndDate"] as
-                        CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Dexpirydate);
-                }
-                // If neither an end date nor expiry date is specified, use the start date + 364 days
-                else if (source[0].Dstartdate.HasValue)
-                {
-                    (this.report.ReportDefinition.ReportObjects["EndDate"] as
-                        CrystalDecisions.CrystalReports.Engine.TextObject).Text
-                                 = string.Format("{0:dd-MMM-yyyy}", source[0].Dstartdate.GetValueOrDefault().AddDays(364));
-                }
-                // Finally, if there's no start date either, leave the displayed end date blank
+                // TJB Oct-2010
+                // Use computed field in report to determine end date
+                // if (source[0].Denddate.HasValue)
+                // {
+                //     (this.report.ReportDefinition.ReportObjects["EndDate"] as
+                //         CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Denddate) + "E";
+                // }
+                // else if (source[0].Dexpirydate.HasValue)
+                // {
+                //     (this.report.ReportDefinition.ReportObjects["EndDate"] as
+                //         CrystalDecisions.CrystalReports.Engine.TextObject).Text = string.Format("{0:dd-MMM-yyyy}", source[0].Dexpirydate)+ "X";
+                // }
+                // // If neither an end date nor expiry date is specified, use the start date + 364 days
+                // else if (source[0].Dstartdate.HasValue)
+                // {
+                //     (this.report.ReportDefinition.ReportObjects["EndDate"] as
+                //         CrystalDecisions.CrystalReports.Engine.TextObject).Text
+                //                  = string.Format("{0:dd-MMM-yyyy}", source[0].Dstartdate.GetValueOrDefault().AddDays(364))+ "S";
+                // }
             }
-/*
-            // TJB Oct-2010: Removed BenchmarkReportFrequencies subreport from Benchmark Report
-            // Below originally attempted to populate subreport (table2)
-            // Populate the Frequencies sub-report
-            try
-            {
-                //DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet
-                //                                       (BenchmarkReportFrequencies.GetAllBenchmarkReportFrequencies(inContract));
-                //    this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error setting up frequencies sub-report \n"
-                                + e.Message
-                                , "DataControls.Ruralrpt.RBenchmarkReport2010");
-            }
-*/
+
+            // TJB Oct-2010: Removed BenchmarkReportFrequencies subreport
+            // Below originally attempted to populate subreport via (table2).  
+            // This worked OK for a single report but when there were multiple reports,
+            // all the subreports were populated with the last report's Frequencies.
+            // try
+            // {
+            //     //DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet
+            //     //                                       (BenchmarkReportFrequencies.GetAllBenchmarkReportFrequencies(inContract));
+            //     //    this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
+            // }
+            // catch (Exception e)
+            // {
+            //     MessageBox.Show("Error setting up frequencies sub-report \n"
+            //                     + e.Message
+            //                     , "DataControls.Ruralrpt.RBenchmarkReport2010");
+            // }
+
             this.viewer.RefreshReport();
             return ret;
 		}
