@@ -8,6 +8,8 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB Oct-2010 Changed prcedure name and added frequency info
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -101,7 +103,7 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
     
     [System.Serializable()]
 
-	public class XBenchmarkReport2010 : Entity<XBenchmarkReport2010>
+	public class BenchmarkReport2010 : Entity<BenchmarkReport2010>
 	{
 		#region Business Methods
 		[DBField()]
@@ -1927,12 +1929,12 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 		#endregion
 
 		#region Factory Methods
-		public static XBenchmarkReport2010 NewBenchmarkReport2010( int? inContract, int? inSequence )
+		public static BenchmarkReport2010 NewBenchmarkReport2010( int? inContract, int? inSequence )
 		{
 			return Create(inContract, inSequence);
 		}
 
-		public static XBenchmarkReport2010[] GetAllBenchmarkReport2010( int? inContract, int? inSequence )
+		public static BenchmarkReport2010[] GetAllBenchmarkReport2010( int? inContract, int? inSequence )
 		{
 			return Fetch(inContract, inSequence).list;
 		}
@@ -1948,20 +1950,22 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 				{
 					cm.CommandType = CommandType.StoredProcedure;
                     // TJB Sept-2010 Changed prcedure name
+                    // New proc includes frequency information (description, days and distance)
+                    // for up to 5 frequencies per contract.
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2006";
                     cm.CommandText = "rd.sp_GetBenchmarkRpt2010";
                     ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContract", inContract);
 					pList.Add(cm, "inSequence", inSequence);
 
-					List<XBenchmarkReport2010> _list = new List<XBenchmarkReport2010>();
+					List<BenchmarkReport2010> _list = new List<BenchmarkReport2010>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
                         try 
                         {
                             while (dr.Read())
                             {
-                                XBenchmarkReport2010 instance = new XBenchmarkReport2010();
+                                BenchmarkReport2010 instance = new BenchmarkReport2010();
                                 instance._contract_no = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_seq_number = GetValueFromReader<int?>(dr, 1);
                                 instance._con_title = GetValueFromReader<string>(dr, 2);
