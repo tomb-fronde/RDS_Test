@@ -10,8 +10,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WFullArticalCountForm : WArticalCountForm
     {
+        // TJB RPI_014 Oct-2010: (see cb_assign_to_pending_clicked)
+        // Deferred 'assign_to_pending' function to cb+ok_clicked in WArticalCountForm
+        // Fixed crash bug caused by incorrect index used.
+
         #region Define
 
+        // TJB RPI_014 Oct-2010: Added
         public int ilRenewal = 0;
 
         /// Required designer variable.
@@ -19,7 +24,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_scaling_factor;
 
-        public Button cb_assign_to_renewal;
+        // TJB RPI_014 Oct-2010: Changed name from "...renewal" to "...pending"
+        public Button cb_assign_to_pending;
 
         #endregion
 
@@ -32,37 +38,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             base.pfc_postopen();
             int lRenewal = 0;
-            int? lContract;
+            int? lContract = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
             if (dw_artical_count.DataObject.GetItem<ContractArticalCountForm>(0).GetInitialValue<int?>("contract_seq_number") == null)
             {
                 lContract = dw_artical_count.GetItem<ContractArticalCountForm>(0).ContractNo;
-                /*select contract_renewals.contract_seq_number
-                         into :lRenewal from contract key join contract_renewals
-                         where contract.contract_no = :lContract
-                         and  ( contract_renewals.contract_seq_number =  ( contract.con_active_sequence + 1)
-                         or  ( contract.con_active_sequence is null 
-                         and contract_renewals.contract_seq_number = 1));*/
+                //select contract_renewals.contract_seq_number
+                //  into :lRenewal 
+                //  from contract key join contract_renewals
+                // where contract.contract_no = :lContract
+                //   and (contract_renewals.contract_seq_number = (contract.con_active_sequence + 1)
+                //        or (contract.con_active_sequence is null 
+                //            and contract_renewals.contract_seq_number = 1))
                 lRenewal = RDSDataService.GetContractSeqNumber(lContract, ref SQLCode);
                 if (SQLCode == 0)
                 {
                     ilRenewal = lRenewal;
                     if (dw_artical_count.GetItem<ContractArticalCountForm>(0).AcScaleFactor == null)
-                    {
-                        cb_assign_to_renewal.Enabled = false;
-                    }
+                        cb_assign_to_pending.Enabled = false;
                 }
                 else
-                {
-                    cb_assign_to_renewal.Enabled = false;
-                }
+                    cb_assign_to_pending.Enabled = false;
             }
             else
-            {
-                cb_assign_to_renewal.Enabled = false;
-            }
+                cb_assign_to_pending.Enabled = false;
 
             //added by jlwang
             dw_artical_count.DataObject.BindingSource.CurrencyManager.Refresh();
@@ -80,9 +81,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             this.SuspendLayout();
             this.cb_scaling_factor = new Button();
-            this.cb_assign_to_renewal = new Button();
+            this.cb_assign_to_pending = new Button();
             Controls.Add(cb_scaling_factor);
-            Controls.Add(cb_assign_to_renewal);
+            Controls.Add(cb_assign_to_pending);
             this.Height = 190;
             this.Width = 550;
             this.MinimizeBox = false;
@@ -101,10 +102,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_cancel.Left = 424;
             cb_cancel.Top = 130;
             // 
-            // cb_1
+            // cb_scaling
             // 
-            cb_1.Tag = "ComponentName=Disabled;";
-            cb_1.Left = 60;
+            cb_scaling.Tag = "ComponentName=Disabled;";
+            cb_scaling.Left = 60;
             // 
             // cb_scaling_factor
             // 
@@ -118,17 +119,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_scaling_factor.Size = new System.Drawing.Size(109, 22);
             cb_scaling_factor.Click += new EventHandler(cb_scaling_factor_clicked);
             // 
-            // cb_assign_to_renewal
+            // cb_assign_to_pending
             // 
-            cb_assign_to_renewal.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_assign_to_renewal.Text = "Assign To Pending";
-            cb_assign_to_renewal.Tag = "ComponentName=Assign Article Count;";
-            cb_assign_to_renewal.Enabled = false;
-            cb_assign_to_renewal.Visible = false;
-            cb_assign_to_renewal.TabIndex = 5;
-            cb_assign_to_renewal.Location = new System.Drawing.Point(123, 130);
-            cb_assign_to_renewal.Size = new System.Drawing.Size(106, 22);
-            cb_assign_to_renewal.Click += new EventHandler(cb_assign_to_renewal_clicked);
+            cb_assign_to_pending.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_assign_to_pending.Text = "Assign To Pending";
+            cb_assign_to_pending.Tag = "ComponentName=Assign Article Count;";
+            cb_assign_to_pending.Enabled = false;
+            cb_assign_to_pending.Visible = false;
+            cb_assign_to_pending.TabIndex = 5;
+            cb_assign_to_pending.Location = new System.Drawing.Point(123, 130);
+            cb_assign_to_pending.Size = new System.Drawing.Size(106, 22);
+            cb_assign_to_pending.Click += new EventHandler(cb_assign_to_pending_clicked);
             this.ResumeLayout();
         }
 
@@ -171,20 +172,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (dScale > 0)
             {
                 // dw_artical_count.GetItem<ContractArticalCountForm>(0).AcScaleFactor = 0;
-                //dw_Artical_Count.SetItem(1, "ac_scale_factor", dScale)
+                // dw_Artical_Count.SetItem(1, "ac_scale_factor", dScale)
                 dw_artical_count.GetItem<ContractArticalCountForm>(0).AcScaleFactor = Convert.ToDecimal(dScale);
                 if (ilRenewal > 0)
                 {
-                    cb_assign_to_renewal.Enabled = true;
+                    cb_assign_to_pending.Enabled = true;
                 }
             }
             else
             {
-                cb_assign_to_renewal.Enabled = false;
+                cb_assign_to_pending.Enabled = false;
             }
         }
 
-        public virtual void cb_assign_to_renewal_clicked(object sender, EventArgs e)
+        public virtual void cb_assign_to_pending_clicked(object sender, EventArgs e)
         {
             // CR 4182
             int? lContract;
@@ -193,42 +194,77 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string SQLErrText = string.Empty;
 
             lContract = dw_artical_count.GetItem<ContractArticalCountForm>(0).ContractNo;
-            /*SELECT count ( artical_count.contract_no  )
-                    INTO :lCount FROM artical_count WHERE ( artical_count.contract_no = :lContract ) AND ( artical_count.contract_seq_number = :ilRenewal )   ;*/
+
+            // SELECT count(artical_count.contract_no)
+            //  WHERE artical_count.contract_no = lContract
+            //    AND artical_count.contract_seq_number = ilRenewal
             lCount = RDSDataService.GetArticalCountCount2(lContract, ilRenewal);
             if (lCount > 0)
             {
-                if (MessageBox.Show("Assign to Pending", "Warning: Article count already allocated for this contract. Do you wish to change" + "?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                // TJB RPI_014 Oct-2010: Changed order of strings
+                // (question was in title bar)
+                if (MessageBox.Show("Warning: Article count already allocated for this contract. \n" 
+                                    + "Do you wish to change?"
+                                    ,"Assign to Pending"
+                                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                    , MessageBoxDefaultButton.Button2) 
+                    == DialogResult.Yes)
                 {
                     // PowerBuilder 'Choose Case' statement converted into 'if' statement
-                    DialogResult TestExpr = MessageBox.Show("Assign to Pending", "Do you want to replace ALL existing assignments?\r\nClick Yes to REPLACE ALL, No " + "to ADD TO EXISTING, Cancel to abort", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+                    // TJB RPI_014 Oct-2010: Changed order of strings
+                    // (question was in title bar)
+                    DialogResult TestExpr;
+                    bAssignToPending = false;
+                    TestExpr = MessageBox.Show("Do you want to replace ALL existing assignments?\n\n" 
+                                              + "Click Yes to REPLACE ALL, No to ADD TO EXISTING, \n" 
+                                              + "or Cancel to abort."
+                                              , "Assign to Pending"
+                                              , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                              , MessageBoxDefaultButton.Button3);
                     if (TestExpr == DialogResult.Yes)
                     {
-                        // 'UnAssign' the old one ( s)
-                        /*UPDATE artical_count set contract_seq_number = null where ( artical_count.contract_no = :lContract ) AND (artical_count.contract_seq_number = :ilRenewal )   ;*/
-                        RDSDataService.UpdateArticalCountContractSeqNumber(lContract, ilRenewal, ref SQLCode, ref SQLErrText);
-                        dw_artical_count.SetValue(1, "contract_seq_number", ilRenewal);
+                        bAssignToPending = true;
+                        // TJB RPI_014 Oct-2010: Moved this to cb_ok_clicked in WArticalCountForm
+                        // Set flag to defer clearing the renewal until the user clicks the 'OK'
+                        // 
+                        // 'UnAssign' the old one(s)
+                        //UPDATE artical_count 
+                        //   SET contract_seq_number = null 
+                        // WHERE artical_count.contract_no = :lContract
+                        //   AND artical_count.contract_seq_number = :ilRenewal 
+                        //RDSDataService.ClearArticalCountContractSeqNumber(lContract, ilRenewal, ref SQLCode, ref SQLErrText);
+                        //if (SQLCode != 0)
+                        //{
+                        //    MessageBox.Show("Error clearing previous article count renewal \n\n"
+                        //                   + SQLErrText
+                        //                   , "SQL Error"
+                        //                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    return;
+                        //}
+
+                        // TJB RPI_014 Oct-2010: Changed index from 1 to 0
+                        dw_artical_count.SetValue(0, "contract_seq_number", ilRenewal);
                     }
-                    else if (TestExpr == DialogResult.No)
+                    else if (TestExpr == DialogResult.No)    // ADD!
                     {
-                        // ADD!
-                        dw_artical_count.SetValue(1, "contract_seq_number", ilRenewal);
+                        // TJB RPI_014 Oct-2010: Changed index from 1 to 0
+                        dw_artical_count.SetValue(0, "contract_seq_number", ilRenewal);
                     }
                     else
                     {
                         // nothin!
                     }
                 }
-                // END CR
+                // END CR 4182
             }
             else
             {
                 // original
                 dw_artical_count.SetValue(0, "contract_seq_number", ilRenewal);
             }
-            dw_artical_count.Left = dw_artical_count.Left;
-            cb_assign_to_renewal.Enabled = false;
+            cb_assign_to_pending.Enabled = false;
         }
+
         #endregion
     }
 }
