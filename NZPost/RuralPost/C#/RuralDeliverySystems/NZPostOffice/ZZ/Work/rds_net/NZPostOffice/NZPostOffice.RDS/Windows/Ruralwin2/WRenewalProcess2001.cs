@@ -16,6 +16,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WRenewalProcess2001 : WAncestorWindow
     {
+        // TJB Oct-2010
+        // Cosmetic changes.
+        // Changed some MessageBox arguments (eg messages in title bar)
+
         #region Define
         private const string DEFAULT_ASSEMBLY = "NZPostOffice.RDS.DataControls";
         private const string DEFAULT_VERSION = "1.0.0.0";
@@ -366,7 +370,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public override void pfc_postopen()
         {
             base.pfc_postopen();
-            // dw_Criteria.Modify ( "region_id.initial='" + string ( gnv_App.of_Get_Securitymanager ( ).of_Get_User ( ).of_Get_RegionId ( )) + "'")
+            // dw_Criteria.Modify("region_id.initial='" + string(gnv_App.of_Get_Securitymanager().of_Get_User().of_Get_RegionId()) + "'")
             dw_criteria.InsertRow(0);
             //?dw_listing.SetRowFocusIndicator(focusrect!);
             //?dw_benchmark_report.Modify("datawindow.print.preview=yes");
@@ -554,7 +558,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_Row = dw_listings.GetSelectedRow(0);
             if (ll_Row == 0)
             {
-                MessageBox.Show("Please search for a contract before trying to open one.", "Contract Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please search for a contract before trying to open one."
+                               , "Contract Search"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             ll_ContractNo = dw_listings.GetItem<ListContractsForProcessing2001>(ll_Row).ContractNo;
@@ -563,46 +569,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lnv_Criteria.of_addcriteria("contract_no", ll_ContractNo);
             lnv_msg.of_addcriteria(lnv_Criteria);
             Cursor.Current = Cursors.WaitCursor;
-            ls_Title = "Contract:  ( " + ll_ContractNo.ToString() + ") " + dw_listings.GetValue(dw_listings.GetSelectedRow(0), "con_title");
+            ls_Title = "Contract: (" + ll_ContractNo.ToString() + ") " 
+                       + dw_listings.GetValue(dw_listings.GetSelectedRow(0), "con_title");
             if (StaticVariables.gnv_app.of_findwindow(ls_Title, "w_contract2001") == null)
             {
                 //OpenSheetWithParm(lw_contract2001, lnv_msg, w_main_mdi, 0, original!);
                 StaticMessage.PowerObjectParm = lnv_msg;
                 OpenSheet<WContract2001>(StaticVariables.MainMDI);
             }
-            // window wSheet
-            // w_contract wContract
-            // string sTitle
-            // long  lContract
-            // 
-            // IF row=0 then
-            // 	return
-            // end if
-            // 
-            // lContract = dw_listing.GetItemNumber ( dw_listing.GetRow ( ), "contract_no")
-            // sTitle = "Contract:  ( " + lContract.ToString() + ") " + dw_listing.GetItemString ( dw_listing.GetRow ( ), "con_title")
-            // 
-            // wSheet = w_main_mdi.GetFirstSheet ( )
-            // DO while isvalid (  wSheet )
-            // 	if wSheet.title = sTitle then
-            // 		wContract = wSheet
-            // 		exit
-            // 	end if
-            // 	wSheet = w_main_mdi.GetNextSheet ( wSheet)
-            // LOOP
-            // 
-            // setpointer ( hourglass!)
-            // opensheetwithparm ( wContract, lContract, w_main_mdi, 0, original!)
         }
 
         public virtual void cb_create_pending_clicked(object sender, EventArgs e)
         {
             //Not parsed PB function body
 
-            if (MessageBox.Show("Create Pendings", "Do you really want to create pendings?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.No)
+            if (MessageBox.Show("Do you really want to create pendings?"
+                               , "Create Pendings"
+                               , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                               , MessageBoxDefaultButton.Button1)
+                == DialogResult.No)
+            {
                 return;
+            }
 
-            //?SetPointer ( HourGlass!);
+            //?SetPointer(HourGlass!);
             int       lRow;
             int?      lContract, lSequence;
             String    saddr;
@@ -617,24 +607,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             List<int?> dummylist = new List<int?>();
 
-            //reset contents
+            // Reset contents
             lcontractlist = dummylist;
             lrenewallist  = dummylist;
 
-            //count rows for progress bar
+            // Count rows for progress bar
             ll_Cnt = of_getnumselectedrows();
             l_ctr  = 0;
             lRow   = dw_listing.GetSelectedRow(0);
             while (lRow > 0)
             {
                 ll_Ctr++;
-                //?StaticVariables.gnv_app.of_ShowStatus ( ll_Ctr,ll_Cnt,"Generating pendings...");
+                //?StaticVariables.gnv_app.of_ShowStatus(ll_Ctr,ll_Cnt,"Generating pendings...");
                 lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
-                // SELECT "contract"."con_date_terminated" NTO :dtermdate FROM "contract" WHERE "contract"."contract_no" =  :lContract ;
+                // SELECT con_date_terminated FROM contract 
+                //  WHERE contract_no =  :lContract
                 dtermdate = RDSDataService.GetConDateTerminatedFromContract(lContract, ref SQLCode, ref SQLErrText);
                 if (SQLCode == -1)
                 {
-                    MessageBox.Show(SQLErrText, "Date terminated selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(SQLErrText 
+                                   , "Date terminated selection"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 if ((dtermdate == null) && dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).Rowstatus == "Active")
@@ -646,8 +639,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                      *        contract_renewals.con_relief_driver_home_phone  
                      *  INTO :sname, :saddr, :sphone  
                      *  FROM contract_renewals 
-                     * WHERE ( contract_renewals.contract_no = :lcontract ) AND  
-                     *       ( contract_renewals.contract_seq_number = :lsequence ) ;*/
+                     * WHERE contract_renewals.contract_no = :lcontract 
+                     *   AND contract_renewals.contract_seq_number = :lsequence */
 
                     List<ContractRenewalsItem> list = new List<ContractRenewalsItem>();
                     RDSDataService dataService = RDSDataService.GetContractRenewalsList(lContract, lSequence, ref SQLCode, ref SQLErrText);
@@ -658,17 +651,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                     if (SQLCode == -1)
                     {
-                        MessageBox.Show(SQLErrText, "Relief driver selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(SQLErrText
+                                       , "Relief driver selection"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     };
                     lSequence++;
                     /* insert into contract_renewals 
                      *    (contract_no, contract_seq_number, con_relief_driver_name, con_relief_driver_address, con_relief_driver_home_phone)
                      * values
-                     *    ( :lContract, :lSequence, :sname, :saddr, :sphone);*/
+                     *    (:lContract, :lSequence, :sname, :saddr, :sphone);*/
                     RDSDataService.InsertIntoContractRenewals(lContract, lSequence, sname, saddr, sphone, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
-                        MessageBox.Show("Database Error~r" + SQLErrText, "Contarct renewals insertion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Database Error\n" 
+                                       + SQLErrText
+                                       , "Contarct renewals insertion"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //?rollback;
                         //? StaticVariables.gnv_app.of_HideStatus ( );
                         return;
@@ -689,14 +687,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //?commit;
             if (lcontractlist.Count > 0)
             {
-                //openwithparm ( w_assign_article_counts_bulk2001,of_GetParent ( ));
+                //openwithparm(w_assign_article_counts_bulk2001,of_GetParent());
                 StaticMessage.PowerObjectParm = this.of_getparent();
                 WAssignArticleCountsBulk2001 w_assign_article_counts_bulk2001 = new WAssignArticleCountsBulk2001();
                 w_assign_article_counts_bulk2001.ShowDialog();
             }
             if (StaticMessage.DoubleParm == 1)
             {
-                if (MessageBox.Show("", "Do you want the system to produce benchmark reports for the selected contract ( s)?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want the system to produce benchmark reports for the selected contract(s)?"
+                                   , ""
+                                   , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                   == DialogResult.Yes)
                 {
                     cb_bm_clicked(this, null);
                 }
@@ -738,7 +739,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (SQLCode != 0)
                 {
                     MessageBox.Show(SQLErrText, 
-                                    "Database error (w_renewal_process2001.cb_bm.clicked)", 
+                                    "Database error (cb_bm.clicked)", 
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 }
@@ -806,7 +807,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lContract;
             int? lSequence;
             bool bBulkUpdate = false;
-            if (MessageBox.Show("", "Do you want the system to update the payment values \r\nto the benchmark values f" + "or the selected contract?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            if (MessageBox.Show("Do you want the system to update the payment values \n" 
+                                + "to the benchmark values for the selected contract?"
+                               , ""
+                               , MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
@@ -962,19 +966,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             lContract = dw_criteria.GetItem<RenewalProcessCriteria>(0).ContractNo;
             if (StaticFunctions.f_nempty(lRenewal) && StaticFunctions.f_nempty(lContract))
             {
-                MessageBox.Show("A renewal group or a contract has to be selected prior to performing a search on " + "the database", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("A renewal group or a contract has to be selected \n" 
+                               + "prior to performing a search on the database."
+                               , ""
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 bCheckRows = false;
             }
             else if (!(StaticFunctions.f_nempty(lRenewal)))
             {
-                /*select nvr_frozen_indicator into :sIndicator
-                  from non_vehicle_rate 
-                  where rg_code = :lRenewal and nvr_rates_effective_date = ( select max(nvr_rates_effective_date)
-                    from non_vehicle_rate where rg_code = :lRenewal);*/
+                /* select nvr_frozen_indicator into :sIndicator
+                 *   from non_vehicle_rate 
+                 *  where rg_code = :lRenewal 
+                 *    and nvr_rates_effective_date = 
+                 *                (select max(nvr_rates_effective_date)
+                 *                   from non_vehicle_rate 
+                 *                  where rg_code = :lRenewal) */
                 RDSDataService.GetNvrForzenIndicatorFormNonVehicle(lRenewal);
                 if (sIndicator != "Y")
                 {
-                    MessageBox.Show("The current renewal group cannot be selected because its renewal rates have not b" + "een frozen", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The current renewal group cannot be selected because " 
+                                   + "its renewal rates have not been frozen."
+                                   , ""
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     bCheckRows = false;
                 }
                 else
@@ -990,7 +1003,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (dw_listing.RowCount == 0)
                 {
-                    MessageBox.Show("The search was not successful", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("The search was not successful"
+                                   , ""
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else if (!(StaticFunctions.f_nempty(lContract)))
                 {
