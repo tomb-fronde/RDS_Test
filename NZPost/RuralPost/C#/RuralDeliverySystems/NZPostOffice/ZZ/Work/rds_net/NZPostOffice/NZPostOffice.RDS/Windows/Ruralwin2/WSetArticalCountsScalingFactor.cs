@@ -12,6 +12,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WSetArticalCountsScalingFactor : WMaster
     {
+        // TJB RPCR_014  Oct-2010
+        // Fixed bug in handling of read-only/read-write setting
+        // (see pfc_postopen)
+
         #region Define
 
         private System.ComponentModel.IContainer components = null;
@@ -113,11 +117,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             base.pfc_preopen();
             this.of_set_componentname("View Factor");
             //?this.of_setupdateable(false);
-            // IF NOT gnv_app.of_get_securitymanager ( ).of_get_componentPrivilege ( "ComponentName=Set Scaling Factors;", 'M') THEN
-            // //	if gnv_App.of_Get_Parameters ( ).StringParm = "ReadOnly" then
-            // 			dw_Scale.Modify ( "#1.border=0 #1.background.color=" + string ( gnv_App.of_GetColorCode ( "GREY")) + " #1.Pointer='Arrow!'")
+            // IF NOT gnv_app.of_get_securitymanager().of_get_componentPrivilege("ComponentName=Set Scaling Factors;",'M') THEN
+            // //	if gnv_App.of_Get_Parameters().StringParm = "ReadOnly" then
+            // 			dw_Scale.Modify("#1.border=0 #1.background.color=" + string(gnv_App.of_GetColorCode("GREY")) + " #1.Pointer='Arrow!'")
             // 		end if
-            // 	dw_Scale.SetTabOrder ( 1,0)
+            // 	dw_Scale.SetTabOrder(1,0)
             // end if
         }
 
@@ -134,10 +138,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB SR4592 28-July-2004
             //  This was commented out; uncommented seems to fix the problem
 
-            if (!(dw_scale.of_get_modifypriv()))
-            {
-                dw_scale.of_protectcolumns();
-            }
+            // TJB RPCR_014 Oct-2010: Changed
+            // Called from WFullArticalCountForm with Stringparm = 'READONLY" in some cases
+            // Use that to enable/disable modification of the scaling factor
+            // NOTE: of_protectcolumns didn't work.
+
+            string sReadOnly = StaticVariables.gnv_app.of_get_parameters().stringparm;
+            if (sReadOnly == "ReadOnly")
+                (dw_scale.DataObject).Enabled = false;
+
+            //Boolean bHasModifyPriv = dw_scale.of_get_modifypriv();
+            //if (!(dw_scale.of_get_modifypriv()))
+            //    dw_scale.of_protectcolumns();
         }
 
         public virtual void dw_scale_constructor()
