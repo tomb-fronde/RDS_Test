@@ -91,17 +91,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public int il_Region;
 
-        public bool ibEditingCustList;
-
         public int ilClickedRow;
-
-        public int ilCustHandle;
-
-        public bool ibAddArt;
-
-        public int ilArtHandle;
-
-        public bool ibAudit;
 
         public string is_con_rd_ref = String.Empty;
 
@@ -432,7 +422,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             base.pfc_save();
             //  TJB  SR4657  June05
-            //  Fixed detection of changed updated date  ( it failed 
+            //  Fixed detection of changed updated date (it failed 
             //    if the original was NULL and the user closed the 
             //    window without moving out of the field first).
             int li_reply;
@@ -440,7 +430,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //?of_validate();
             if (of_custlist_changed())
             {
-                li_reply = (MessageBox.Show("Do you wish to save the new customer list updated date?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? 1 : 2);//MessageBox("Question", "Do you wish to save the new customer list updated date?", question!, yesno!);
+                li_reply = (MessageBox.Show("Do you wish to save the new customer list updated date?"
+                                           , "Question"
+                                           , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                            == DialogResult.Yes ? 1 : 2);
                 if (li_reply == 1)
                 {
                     of_update_custlist();
@@ -551,7 +544,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             tab_contract.Controls.Add(tabpage_fixed_assets);
             tab_contract.Controls.Add(tabpage_cmb);
             tab_contract.GotFocus += new EventHandler(tab_contract_GotFocus);
-            tab_contract.SelectedIndex = 0;//tab_contract.selectedtab = 1;
+            tab_contract.SelectedIndex = 0;
             tab_contract.Multiline = true;
             tab_contract.BackColor = System.Drawing.SystemColors.ButtonFace;
             tab_contract.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
@@ -1852,28 +1845,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     Cursor.Current = Cursors.WaitCursor;
                     lcontract = dw_renewals.GetItem<Renewals>(dw_renewals.GetSelectedRow(0)).ContractNo.GetValueOrDefault();
                     lsequence = dw_renewals.GetItem<Renewals>(dw_renewals.GetSelectedRow(0)).ContractSeqNumber.GetValueOrDefault();
-                    //  TWC 04/07/2003 - call 4532 - ensure the artical count doesn't get deleted 
-                    //                   on cascade
+                    //  TWC 04/07/2003 - call 4532 - ensure the artical count doesn't get deleted on cascade
                     //UPDATE artical_count set contract_seq_number = null 
-                    // where contract_no = :lcontract 
-                    //   and contract_seq_number = :lsequence;
-                    RDSDataService.UpdateArticalCountContractSeqNumber(lcontract, lsequence, ref SQLCode, ref SQLErrText);
+                    // where contract_no = lcontract and contract_seq_number = lsequence;
+                    RDSDataService.ClearArticalCountContractSeqNumber(lcontract, lsequence, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
-                        MessageBox.Show(SQLErrText, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("SQL Error clearing artical_count contract sequence number \n\n"
+                                       + SQLErrText
+                                       , "Delete Row"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
-                    /*delete from contract_renewals where contract_no=:lcontract and contract_seq_number=:lsequence;*/
+                    // delete from contract_renewals 
+                    //  where contract_no=lcontract and contract_seq_number=lsequence;
                     RDSDataService.DeleteContractRenewals(lcontract, lsequence, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
-                        MessageBox.Show(SQLErrText, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return -(1);
-                    }
-                    //?commit;
-                    if (SQLCode != 0)
-                    {
-                        MessageBox.Show(SQLErrText, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("SQL error deleting contract renewal \n\n"
+                                       + SQLErrText
+                                       , "Delete Row"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return -(1);
                     }
                     //  force the article_count tab to retrieve again
@@ -2145,6 +2137,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
 
+            // TJB Oct-2010
+            // If the user attempts to add allowances to a new contract before it has 
+            // been made active, there will be no 'con_active_seq' and WAddAllowance
+            // will crash when it attempts to find the effective date for the contract.
+            // This code allows allowances to be added to the pending contract.
+            // Mark (Rural Post) declined using this in favour of a rule for operators 
+            // to NOT attempt to add allowances until the new contract has become active.
+            // if (il_con_active_seq < 1 )
+            //    lnv_Criteria.of_addcriteria("con_active_seq", 1);
+            
             // TJB  RPCR_017 July-2010
             // Changed WAddAllowance significantly
             // (See WAddAllowance0 for previous version)
@@ -2703,7 +2705,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 if (idw_article_count.RowCount == 0)
                 {
-                    idw_article_count.Retrieve(new object[]{il_Contract_no});
+                    idw_article_count.Retrieve(new object[] { il_Contract_no });
                 }
                 idw_article_count.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 idw_article_count.uf_settoolbar();
@@ -3144,17 +3146,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_artical_counts_doubleclicked(object sender, EventArgs e)
         {
             dw_artical_counts.URdsDw_DoubleClick(sender, e);
-            WAddArticleCounts wNewArt;
             if (dw_artical_counts.RowCount > 0)
             {
                 Cursor.Current = Cursors.WaitCursor;
+
                 if (!((dw_artical_counts.GetItem<ContractArticalCounts>(1).AcStartWeekPeriod.GetValueOrDefault().Date == null)))
                 {
                     //OpenWithParm(w_full_artical_count_form, dw_artical_counts);
-                    StaticMessage.PowerObjectParm = ((URdsDw)this.GetContainerControl().ActiveControl).DataObject;// dw_artical_counts;//.DataObject.BindingSource.CurrencyManager.  ; 
+                    StaticMessage.PowerObjectParm = ((URdsDw)this.GetContainerControl().ActiveControl).DataObject;
                     WFullArticalCountForm w_full_artical_count_form = new WFullArticalCountForm();
                     w_full_artical_count_form.ShowDialog();
-                    //add by mkwang
+
                     for (int i = 0; i < dw_artical_counts.DataObject.RowCount; i++)
                     {
                         ((DContractArticalCountsTest)(((TableLayoutPanel)dw_artical_counts.GetControlByName("tbPanel")).Controls[i])).BindingSource.CurrencyManager.Refresh();
@@ -3162,19 +3164,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    ibAddArt = true;
                     //OpenSheet(wNewArt, w_main_mdi, 0, original!);
-                    wNewArt = new WAddArticleCounts();
+                    WAddArticleCounts wNewArt = new WAddArticleCounts();
                     wNewArt.MdiParent = StaticVariables.MainMDI;
                     wNewArt.Show();
-                    //?ilArtHandle = Handle(wNewArt);
                 }
             }
         }
 
         public virtual void dw_artical_counts_losefocus(object sender, EventArgs e)
         {
-            // force update so that the article count on the renewal window is accurate
+            // Force update so that the article count on the renewal window is accurate
             //! dw_artical_counts.Update();
             dw_artical_counts.Save();
             //?Commit;
