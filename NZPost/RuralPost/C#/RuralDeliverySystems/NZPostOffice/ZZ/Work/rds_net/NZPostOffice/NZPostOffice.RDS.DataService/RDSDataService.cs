@@ -13,6 +13,14 @@ using Metex.Core.Security;
 //************************************************************************************************
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB RPCR_014  Oct-2010
+    // Renamed UpdateArticalCountContractSeqNumber as ClearArticalCountContractSeqNumber
+    //     and _ UpdateArticalCountContractSeqNumber as _ClearArticalCountContractSeqNumber
+    // Added new UpdateArticalCountContractSeqNumber and _UpdateArticalCountContractSeqNumber
+    // Renamed _UpdateArticalCountContractSeqNumber21 as _UpdateArticalCountContractSeqNumber2
+    // Renamed _UpdateArticalCountContractSeqNumber2 as _UpdateArticalCountContractSeqNumber3
+    // Removed unused _UpdateArticalCountContractSeqNumber3
+    //
     // TJB RPCR_001 July-2010
     // Added lSafety, lEmissions, and nConsumption to InsertVehicle and UpdateVehicle
     // Added sqlCode, sqlErrText parameters for error handling
@@ -1046,13 +1054,28 @@ namespace NZPostOffice.RDS.DataService
             return obj.dtVal; ;
         }
 
+        // TJB RPCR_014  Oct-2010: Renamed (was UpdateArticalCountContractSeqNumber)
         ///<summary>
         /// UPDATE artical_count set contract_seq_number = null 
         ///  where contract_no = @lContract and contract_seq_number	= @lrenewal;
-        /// </summary>
-        public static bool UpdateArticalCountContractSeqNumber(int? lContract, int? lrenewal, ref int sqlCode, ref string sqlErrText)
+        ///</summary>
+        public static bool ClearArticalCountContractSeqNumber(int? lContract, int? lrenewal, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber", lContract, lrenewal);
+            RDSDataService obj = Execute("_ClearArticalCountContractSeqNumber", lContract, lrenewal);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        // TJB RPCR_014  Oct-2010: New
+        ///<summary>
+        /// UPDATE artical_count set contract_seq_number = @lrenewal 
+        ///  where contract_no = @lContract and contract_seq_number	is null and ;
+        ///</summary>
+        public static bool UpdateArticalCountContractSeqNumber(int? lContract, int? lrenewal, DateTime? dtStartWeek, Decimal? dScaleFactor
+                                                              , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber", lContract, lrenewal, dtStartWeek, dScaleFactor);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.ret;
@@ -1154,7 +1177,9 @@ namespace NZPostOffice.RDS.DataService
         }
 
         ///<summary>
-        /// UPDATE contract_renewals set con_volume_at_renewal = @lVolAtRen where contract_no = @lContract and contract_seq_number = @lrenewal;
+        /// UPDATE contract_renewals 
+        ///    set con_volume_at_renewal = @lVolAtRen 
+        ///  where contract_no = @lContract and contract_seq_number = @lrenewal;
         /// </summary>
         public static void UpdateContractRenewalsConVolumeAtRenewal(int? lVolAtRen, int? lContract, int? lrenewal, ref int sqlCode, ref string sqlErrText)
         {
@@ -1164,7 +1189,11 @@ namespace NZPostOffice.RDS.DataService
         }
 
         ///<summary>
-        /// UPDATE artical_count set contract_seq_number = @lrenewal where contract_no = @lContract and	 contract_seq_number is null and artical_count.ac_start_week_period > @ldt_YearAgo
+        /// UPDATE artical_count 
+        ///    set contract_seq_number = @lrenewal 
+        ///  where contract_no = @lContract 
+        ///    and contract_seq_number is null 
+        ///    and ac_start_week_period > @ldt_YearAgo
         /// </summary>
         public static void UpdateArticalCountContractSeqNumber1(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, ref int sqlCode, ref string sqlErrText)
         {
@@ -1174,13 +1203,40 @@ namespace NZPostOffice.RDS.DataService
         }
 
         ///<summary>
-        /// UPDATE artical_count set contract_seq_number=@lrenewal where contract_no=@lContract and ( contract_seq_number is null or contract_seq_number=@lrenewal) and ac_start_week_period = ( select max(ac_start_week_period) from artical_count as a2 where  a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) and  ac_start_week_period > @ldt_YearAgo);
+        /// UPDATE artical_count 
+        ///    set contract_seq_number=@lrenewal 
+        ///  where contract_no=@lContract 
+        ///    and (contract_seq_number is null or contract_seq_number=@lrenewal) 
+        ///    and ac_start_week_period = 
+        ///                  (select max(ac_start_week_period) from artical_count as a2 
+        ///                    where a2.contract_no = @lContract 
+        ///                      and (contract_seq_number is null or contract_seq_number = @lrenewal) 
+        ///                      and ac_start_week_period > @ldt_YearAgo);
         /// </summary>
         public static void UpdateArticalCountContractSeqNumber2(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber21", lrenewal, lContract, ldt_YearAgo);
+            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber2", lrenewal, lContract, ldt_YearAgo);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
+        }
+
+        ///<summary>
+        /// UPDATE artical_count 
+        ///    set contract_seq_number = @lrenewal 
+        ///  where contract_no = @lContract 
+        ///    and (contract_seq_number is null or contract_seq_number = @lrenewal) 
+        ///    and ac_start_week_period = 
+        ///                 (select max(ac_start_week_period) from artical_count as a2 
+        ///                   where a2.contract_no = @lContract 
+        ///                     and (contract_seq_number is null or contract_seq_number = @lrenewal) 
+        ///                     and ac_start_week_period > @ldt_YearAgo 
+        ///                     and ac_start_week_period < @ldt_LastCountDate);
+        /// </summary>
+        public static void UpdateArticalCountContractSeqNumber3(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, DateTime? ldt_LastCountDate, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber3", lrenewal, lContract, ldt_YearAgo, ldt_LastCountDate);
+            sqlCode = obj._sqlcode;
+            sqlErrText = obj._sqlerrtext;
         }
 
         /// <summary> 
@@ -1227,16 +1283,6 @@ namespace NZPostOffice.RDS.DataService
         {
             RDSDataService obj = Execute("_GetVehicleTypeList");
             return obj;
-        }
-
-        ///<summary>
-        /// UPDATE artical_count set contract_seq_number=@lrenewal where contract_no=@lContract and ( contract_seq_number is null  or contract_seq_number=@lrenewal) and ac_start_week_period =  ( select max(ac_start_week_period) from artical_count as a2 where  a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) and  ac_start_week_period > @ldt_YearAgo and  ac_start_week_period @ldt_LastCountDate);
-        /// </summary>
-        public static void UpdateArticalCountContractSeqNumber3(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, DateTime? ldt_LastCountDate, ref int sqlCode, ref string sqlErrText)
-        {
-            RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber2", lrenewal, lContract, ldt_YearAgo, ldt_LastCountDate);
-            sqlCode = obj._sqlcode;
-            sqlErrText = obj._sqlerrtext;
         }
 
         /// <summary> 
@@ -1808,8 +1854,8 @@ namespace NZPostOffice.RDS.DataService
                                             , int? lYear, string sRegistration, int? lCCRate, string sUserCharge
                                             , DateTime? dPurchase, int? lPurchase, string sLeased, int? lMonth
                                             , string sTransmission, int? ll_VSKey, int? ll_remaining_economic_life
-                                            , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage, int? lSafety
-                                            , int? lEmissions, Decimal? nConsumption
+                                            , int? lSpeedoKms, DateTime? dSpeedoDate, int? ll_salvage
+                                            , int? lSafety, int? lEmissions, Decimal? nConsumption
                                             , ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_InsertIntoVehicle", lvehicleNumber, lVTKey, lFTKey, sMake, sModel, lYear
@@ -8149,19 +8195,64 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB RPCR_014  Oct-2010: Changed
+        // Renamed from _UpdateArticalCountContractSeqNumber to make its function clearer
+        // (see WArticalCountForm)
         [ServerMethod]
-        private void _UpdateArticalCountContractSeqNumber(int? lContract, int? lrenewal)
+        private void _ClearArticalCountContractSeqNumber(int? lContract, int? lrenewal)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number = null " +
-                        "where contract_no = @lContract and contract_seq_number = @lrenewal";
+                    cm.CommandText = "UPDATE rd.artical_count "
+                                    + "  set contract_seq_number = null " 
+                                    + "where contract_no = @lContract " 
+                                    + "  and contract_seq_number = @lrenewal";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lrenewal", lrenewal);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB RPCR_014  Oct-2010: New
+        // Added to update the database when adding article counts to pending contracts
+        // (see WArticalCountForm)
+        [ServerMethod]
+        private void _UpdateArticalCountContractSeqNumber(int? lContract, int? lRenewal, DateTime? dtStartWeek, Decimal? dScaleFactor)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "UPDATE rd.artical_count " 
+                                    + "  set contract_seq_number = @lRenewal " 
+                                    + "    , ac_scale_factor = @dScaleFactor "
+                                    + "where contract_no = @lContract "
+                                    + "  and (contract_seq_number is null or contract_seq_number = @lRenewal) "
+                                    + "  and ac_start_week_period = @dtStartWeek";
+                    
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "lContract", lContract);
+                    pList.Add(cm, "lRenewal", lRenewal);
+                    pList.Add(cm, "dtStartWeek", dtStartWeek);
+                    pList.Add(cm, "dScaleFactor", dScaleFactor);
                     _sqlcode = -1;
                     try
                     {
@@ -8429,8 +8520,9 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rd.contract_renewals set con_volume_at_renewal = @lVolAtRen " 
-                                     + "where contract_no = @lContract and contract_seq_number = @lrenewal";
+                    cm.CommandText = "UPDATE rd.contract_renewals " 
+                                   + "   set con_volume_at_renewal = @lVolAtRen " 
+                                   + " where contract_no = @lContract and contract_seq_number = @lrenewal";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lVolAtRen", lVolAtRen);
                     pList.Add(cm, "lContract", lContract);
@@ -8459,10 +8551,10 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     cm.CommandText = "UPDATE rd.artical_count " 
-                                     +  "set contract_seq_number = @lrenewal " 
-                                     + "where contract_no = @lContract and " 
-                                     +       "contract_seq_number is null and " 
-                                     +       "artical_count.ac_start_week_period > @ldt_YearAgo";
+                                    + "  set contract_seq_number = @lrenewal " 
+                                    + "where contract_no = @lContract " 
+                                    + "  and contract_seq_number is null " 
+                                    + "  and ac_start_week_period > @ldt_YearAgo";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lrenewal", lrenewal);
                     pList.Add(cm, "lContract", lContract);
@@ -8483,20 +8575,67 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _UpdateArticalCountContractSeqNumber21(int? lrenewal, int? lContract, DateTime? ldt_YearAgo)
+        private void _UpdateArticalCountContractSeqNumber2(int? lrenewal, int? lContract, DateTime? ldt_YearAgo)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number=@lrenewal " +
-                        "where contract_no=@lContract and (contract_seq_number is null or contract_seq_number=@lrenewal) " +
-                        "and ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 where a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) and  ac_start_week_period > @ldt_YearAgo)";
+                    cm.CommandText = "UPDATE rd.artical_count " 
+                                     + " set contract_seq_number=@lrenewal " 
+                                     +"where contract_no=@lContract " 
+                                     + " and (contract_seq_number is null or contract_seq_number=@lrenewal) " 
+                                     + " and ac_start_week_period = " 
+                                                     + "(select max(ac_start_week_period) " 
+                                                       + " from rd.artical_count as a2 " 
+                                                       + "where a2.contract_no = @lContract " 
+                                                       + "  and (contract_seq_number is null " 
+                                                       + "       or contract_seq_number = @lrenewal) " 
+                                                       + "  and ac_start_week_period > @ldt_YearAgo)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lrenewal", lrenewal);
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "ldt_YearAgo", ldt_YearAgo);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _UpdateArticalCountContractSeqNumber3(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, DateTime? ldt_LastCountDate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "UPDATE rd.artical_count " 
+                                    + "  set contract_seq_number=@lrenewal " 
+                                    + "where contract_no = @lContract " 
+                                    + "  and (contract_seq_number is null or contract_seq_number=@lrenewal) " 
+                                    + "  and ac_start_week_period = " 
+                                               + "(select max(ac_start_week_period) from rd.artical_count as a2 " 
+                                                 + "where a2.contract_no = @lContract " 
+                                                 + "  and (contract_seq_number is null or contract_seq_number = @lrenewal) " 
+                                                 + "  and ac_start_week_period > @ldt_YearAgo " 
+                                                 + "  and ac_start_week_period < @ldt_LastCountDate)";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "lrenewal", lrenewal);
+                    pList.Add(cm, "lContract", lContract);
+                    pList.Add(cm, "ldt_YearAgo", ldt_YearAgo);
+                    pList.Add(cm, "ldt_LastCountDate", ldt_LastCountDate);
+
                     _sqlcode = -1;
                     try
                     {
@@ -8521,10 +8660,11 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select max(ac_start_week_period) from rd.artical_count as a2 " +
-                        "where a2.contract_no = @lContract and  " +
-                        "(contract_seq_number is null or contract_seq_number = @lrenewal) and " +
-                        "ac_start_week_period > @ldt_YearAgo";
+                    cm.CommandText = "select max(ac_start_week_period) " 
+                                    + " from rd.artical_count as a2 " 
+                                    + "where a2.contract_no = @lContract " 
+                                    + "  and (contract_seq_number is null or contract_seq_number = @lrenewal) " 
+                                    + "  and ac_start_week_period > @ldt_YearAgo";
 
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lrenewal", lrenewal);
@@ -8651,39 +8791,6 @@ namespace NZPostOffice.RDS.DataService
                             vt._vt_key = dr.GetInt32(0);
                             vt._vt_description = dr.GetString(1);
                         }
-                    }
-                }
-            }
-        }
-
-        [ServerMethod]
-        private void _UpdateArticalCountContractSeqNumber3(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, DateTime? ldt_LastCountDate)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rd.artical_count set contract_seq_number=@lrenewal " +
-                        "where contract_no=@lContract and (contract_seq_number is null or contract_seq_number=@lrenewal) " +
-                        "and ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 where a2.contract_no = @lContract and ( contract_seq_number is null or contract_seq_number = @lrenewal) " +
-                        "and  ac_start_week_period > @ldt_YearAgo and  ac_start_week_period < @ldt_LastCountDate)";
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "lrenewal", lrenewal);
-                    pList.Add(cm, "lContract", lContract);
-                    pList.Add(cm, "ldt_YearAgo", ldt_YearAgo);
-                    pList.Add(cm, "ldt_LastCountDate", ldt_LastCountDate);
-
-                    _sqlcode = -1;
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                        _sqlcode = 0;
-                    }
-                    catch (Exception e)
-                    {
-                        _sqlcode = -1;
-                        _sqlerrtext = e.Message;
                     }
                 }
             }
@@ -9202,46 +9309,6 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _UpdateArticalCountContractSeqNumber2(int? lrenewal, int? lContract, DateTime? ldt_YearAgo, DateTime? ldt_LastCountDate)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    cm.CommandType = CommandType.Text;
-                    cm.CommandText = " UPDATE rd.artical_count set contract_seq_number=@lrenewal  " +
-                                     " where contract_no=@lContract and " +
-                                     " (contract_seq_number is null  or contract_seq_number=@lrenewal) and " +
-                                     " ac_start_week_period = (select max(ac_start_week_period) from rd.artical_count as a2 " +
-                                                               "where  a2.contract_no = @lContract and " + 
-                                                                      "(contract_seq_number is null or contract_seq_number = @lrenewal) and " + 
-                                                                      "ac_start_week_period > @ldt_YearAgo and " + 
-                                                                      "ac_start_week_period @ldt_LastCountDate)";
-
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "lrenewal", lrenewal);
-                    pList.Add(cm, "lContract", lContract);
-                    pList.Add(cm, "ldt_YearAgo", ldt_YearAgo);
-                    pList.Add(cm, "ldt_LastCountDate", ldt_LastCountDate);
-
-                    _sqlcode = -1;
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                        ret = true;
-                        _sqlcode = 0;
-                    }
-                    catch (Exception e)
-                    {
-                        ret = false;
-                        _sqlcode = -1;
-                        _sqlerrtext = e.Message;
-                    }
-                }
-            }
-        }
-
-        [ServerMethod]
         private void _GetLlNumDispatchesInfo(int lContract, int lSequence)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -9256,11 +9323,11 @@ namespace NZPostOffice.RDS.DataService
                                        " , rd.contract_renewals " +
                                        " , rd.mail_carried " +
                                     " where contract.contract_no = @lContract " +
-                                      " and contract.con_base_office=outlet.outlet_id " +
-                                      " and (contract.contract_no=contract_renewals.contract_no " +
-                                      " and contract_renewals.contract_seq_number= @lSequence) " +
-                                      " and (contract.contract_no=mail_carried.contract_no " +
-                                      " and mail_carried.mc_disbanded_date is null)";
+                                      " and contract.con_base_office = outlet.outlet_id " +
+                                      " and contract.contract_no = contract_renewals.contract_no " +
+                                      " and contract_renewals.contract_seq_number = @lSequence " +
+                                      " and contract.contract_no = mail_carried.contract_no " +
+                                      " and mail_carried.mc_disbanded_date is null";
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lSequence", lSequence);
                     try
