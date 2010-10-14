@@ -67,7 +67,6 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //.DataObject = (DataUserControl)StaticVariables.gnv_app.of_get_parameters().dwparm;
             //dwResults.DataObject = (DataUserControl)StaticVariables.gnv_app.of_get_parameters().dwparm;
 
-            //jlwang:
             if (StaticFunctions.migrateName(ls_reportname) == "RSchedulebSingleContract")
                 dw_report.DataObject = new RSchedulebSingleContract();
             else if (StaticFunctions.migrateName(ls_reportname) == "RMailCarriedSingleContract")
@@ -81,7 +80,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             {
                 if (dwResults.GetValue<int>(lRow, "contract_no") == 0)
                 {
-                    //  All contracts
+                    // All contracts
                     lRowCount = dwResults.RowCount;
                     lSingleCounter = 0;
                     for (lRow = 0; lRow < lRowCount; lRow++)
@@ -94,18 +93,18 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                         if (ls_reportname == "r_mail_carried_single_contract")
                         {
                             /* select count ( mail_carried.mc_dispatch_carried)
-                             into :ll_num_dispatches
-                             from contract
-                             , outlet
-                             , contract_renewals
-                             , mail_carried
-                             where contract.contract_no = :lContract
-                             and contract.con_base_office=outlet.outlet_id
-                             and  ( contract.contract_no=contract_renewals.contract_no
-                             and contract_renewals.contract_seq_number=:lSequence)
-                             and  ( contract.contract_no=mail_carried.contract_no
-                             and mail_carried.mc_disbanded_date is null)
-                             using sqlca;*/
+                             *   into :ll_num_dispatches
+                             *   from contract
+                             *      , outlet
+                             *      , contract_renewals
+                             *      , mail_carried
+                             *  where contract.contract_no = :lContract
+                             *    and contract.con_base_office=outlet.outlet_id
+                             *    and contract.contract_no=contract_renewals.contract_no
+                             *    and contract_renewals.contract_seq_number=:lSequence
+                             *    and contract.contract_no=mail_carried.contract_no
+                             *    and mail_carried.mc_disbanded_date is null
+                             */
                             ll_num_dispatches = RDSDataService.GetLlNumDispatchesInfo(lContract, lSequence, ref SQLCode, ref SQLErrText);
                             if (SQLCode != 0)
                             {
@@ -126,13 +125,13 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                         }
                         else
                         {
-                            //  generate the report the 'original' way.
+                            // generate the report the 'original' way.
                             lb_doreport = true;
                         }
                         if (lContract > 0 && lb_doreport == true)
                         {
                             // dw_report.Retrieve(lContract, lSequence);
-                            dw_report.Retrieve(new object[] { lContract, lSequence });
+                            dw_report.Retrieve(new object[] {lContract, lSequence });
                         }
                         // Exit when aborted
                         if (ib_Abort)
