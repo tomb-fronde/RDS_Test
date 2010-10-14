@@ -77,7 +77,8 @@ namespace NZPostOffice.RDS.Controls
                 {
                     (c as URdsDw).FireConstructor = true;
                 }
-                else if (c is TabControl || c is TabPage || c is TableLayoutPanel)//"c is TableLayoutPanel" added by hhuang 31/07/07,for the dw's constructor in multi-panel
+                //"c is TableLayoutPanel" added by hhuang 31/07/07, for the dw's constructor in multi-panel
+                else if (c is TabControl || c is TabPage || c is TableLayoutPanel)
                 {
                     InvokeDwConstructor(c);
                 }
@@ -86,7 +87,7 @@ namespace NZPostOffice.RDS.Controls
 
         public override void show()
         {
-            // Purpose: 	Set up security services
+            // Purpose:	Set up security services
             // Author: 	Rex Bustria
             if (this.of_set_security() == SUCCESS)
             {
@@ -114,11 +115,12 @@ namespace NZPostOffice.RDS.Controls
             {
                 if (c is URdsDw)
                 {
-                    if (
-                            (c as URdsDw).DataObject != null && //pp! added check for null DataObject as it threw exception if null
-                            (
-                                (((URdsDw)c).ModifiedCount() > 0 || ((URdsDw)c).DataObject.DeletedCount > 0) && ((URdsDw)c).of_GetUpdateable()
-                            )
+                    //pp! added check for null DataObject as it threw exception if null
+                    if ( (c as URdsDw).DataObject != null  
+                          && ( ( ((URdsDw)c).ModifiedCount() > 0 
+                                 || ((URdsDw)c).DataObject.DeletedCount > 0 ) 
+                               && ((URdsDw)c).of_GetUpdateable()
+                             )
                         )
                     {
                         int li_rc = ((URdsDw)c).PfcValidation();
@@ -136,7 +138,11 @@ namespace NZPostOffice.RDS.Controls
                             //}
                             //else
                             //{
-                            iDialog = MessageBox.Show("The information entered does not pass validation and " + "must be corrected before changes can be saved.\r\n\r\n" + "Close without saving changes?", StaticVariables.MainMDI.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                            iDialog = MessageBox.Show("The information entered does not pass validation \n" 
+                                                     + "and must be corrected before changes can be saved.\n\n" 
+                                                     + "Close without saving changes?"
+                                                     , StaticVariables.MainMDI.Text
+                                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                             //}
                             if (iDialog == DialogResult.Yes)
                             {
@@ -151,11 +157,14 @@ namespace NZPostOffice.RDS.Controls
                         }
                         else
                         {
-                            iDialog = MessageBox.Show("Do you want to save changes?", StaticVariables.MainMDI.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                            iDialog = MessageBox.Show("Do you want to save changes?"
+                                                     , StaticVariables.MainMDI.Text
+                                                     , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                             if (iDialog == DialogResult.Yes)
                             {
                                 ((URdsDw)c).Save();
-                                i_check = 0;//in PB, 0  Allow the window to be closed   1  Prevent the window from closing
+                                //in PB, 0 = Allow the window to be closed;  1 = Prevent the window from closing
+                                i_check = 0;
                                 break;
                             }
                             else if (iDialog == DialogResult.No)
