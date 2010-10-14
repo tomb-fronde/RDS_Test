@@ -526,19 +526,18 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual int Save()
         {
-            int thisNewCount;
-            int thisModifiedCount;
-            thisNewCount = this.NewCount();
-            thisModifiedCount = this.ModifiedCount();
+            int thisNewCount = this.NewCount();
+            int thisModifiedCount = this.ModifiedCount();
+            int thisDeletedCount = this.DataObject.DeletedCount;
             // if (this.NewCount() > 0 || this.ModifiedCount() > 0)
 /*
             if (this.DataObject.DeletedCount==0 || this.NewCount() >0 ||
                 (this.DataObject.DeletedCount >0 && this.ModifiedCount()>0) ||
                 (this.DataObject.DeletedCount >0 && this.NewCount()>0))
 */
-            if (this.DataObject.DeletedCount == 0 || thisNewCount > 0 ||
-                (this.DataObject.DeletedCount > 0 && thisModifiedCount > 0) ||
-                (this.DataObject.DeletedCount > 0 && thisNewCount > 0))
+            if (thisDeletedCount == 0 || thisNewCount > 0 ||
+                (thisDeletedCount > 0 && thisModifiedCount > 0) ||
+                (thisDeletedCount > 0 && thisNewCount > 0))
             {
                 this.ProcessDialogKey(Keys.Tab ); //added by jlwang:for fix the focus bug
                 this.URdsDw_GetFocus(null, null); //added by jlwang for fix tab key change the focus
