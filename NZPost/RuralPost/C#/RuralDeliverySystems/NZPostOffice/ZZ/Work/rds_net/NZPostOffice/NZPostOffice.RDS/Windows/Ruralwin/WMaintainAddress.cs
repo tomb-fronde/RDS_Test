@@ -16,6 +16,9 @@ using System.Drawing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPI_010 Oct-2010
+    // Added code to disable the open button if there are no customers at the address.
+    // Added in pfc_postopen and after new and move_out buttons clicked.
     public partial class WMaintainAddress : WAncestorWindow
     {
         #region Define
@@ -383,7 +386,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  warning message if the user doesn't have the right privilege 
                 //   ( Customer:Modify)
                 ((DataGridView)idw_details.DataObject.Controls["grid"]).Columns["primary_ind"].ReadOnly = false;
-                cb_open.Enabled = true;
+                // TJB RPI_010 Oct-2010
+                // If there are no customers, leave the open button disabled
+                if ( idw_details.RowCount > 0 )
+                    cb_open.Enabled = true;
                 //  The user must have CUSTOMER:Create privilege in order
                 //  to create new customers
                 if (is_cust_perms.IndexOf('C') >= 0)
@@ -6905,17 +6911,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_transfer_clicked(object sender, EventArgs e)
         {
+            // TJB RPI_010 Oct-2010
+            // After a transfer, the dw_details.Rowcount has no value as the 
+            // window that was open when the transfer was initiated is being 
+            // closed.  Thus there's no reason to bother deciding whether to 
+            // enable the open button or not, and trying to do so generates 
+            // an exception.
             dw_details_ue_click_transfer();
         }
 
         public virtual void cb_remove_clicked(object sender, EventArgs e)
         {
             dw_details_ue_click_remove();
+            // TJB RPI_010 Oct-2010
+            // Added test - disable open button if no customers
+            if (dw_details.RowCount > 0)
+                cb_open.Enabled = true;
+            else
+                cb_open.Enabled = false;
         }
 
         public virtual void cb_new_clicked(object sender, EventArgs e)
         {
             dw_details_ue_click_new();
+            // TJB RPI_010 Oct-2010
+            // Added test - disable open button if no customers
+            // (this may be redundant since we've just added one, 
+            // but it also enables the open button if it was disabled)
+            if (dw_details.RowCount > 0)
+                cb_open.Enabled = true;
+            else
+                cb_open.Enabled = false;
         }
 
         public virtual void cb_save_clicked(object sender, EventArgs e)
