@@ -17,8 +17,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WAddressSearch : WAncestorWindow
     {
-        // TJB 14-Sep-2010  RPI_010
-        // Disabled 'Open' button when no customers at an address
         #region Define
         private NRoad inv_road;
 
@@ -416,17 +414,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 cb_open.Enabled = false;
         }
 
-        // TJB 14-Sep-2010  RPI_010 - Added
-        public virtual void of_enable_open()
-        {
-            int row = idw_results.GetRow();
-            int? nCustID = idw_results.GetItem<SearchAddressResultsV2b>(row).CustId;
-            if (nCustID == null)
-                this.cb_open.Enabled = false;
-            else
-                this.cb_open.Enabled = true;
-        }
-
         public virtual void dw_results_ue_process_duplication()
         {
             string ls_prime_contact;
@@ -554,14 +541,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_results.Focus();
                 idw_results.SelectRow(1, true);
 
-                //cb_open.Enabled = true;
+                cb_open.Enabled = true;
                 if (cb_open.Visible)
                 {
                     this.cb_open.TabIndex = 5;
                     this.cb_select.TabIndex = 0;
                     this.AcceptButton = cb_open;
-                    // TJB 14-Sep-2010  RPI_010 - Added
-                    of_enable_open();
                 }
                 else
                 {
@@ -738,12 +723,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_open_clicked(object sender, EventArgs e)
         {
-            // TJB 14-Sep-2010  RPI_010 - Added test
-            if (this.cb_open.Enabled)
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                this.ue_click_open();
-            }
+            Cursor.Current = Cursors.WaitCursor;
+            this.ue_click_open();
         }
 
         public virtual void cb_new_clicked(object sender, EventArgs e)
@@ -781,13 +762,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                // TJB 14-Sep-2010  RPI_010 - Added of_enable_open and test
-                of_enable_open();
-                if (this.cb_open.Enabled)
-                {
-                    Cursor.Current = Cursors.WaitCursor;
-                    this.ue_click_open();
-                }
+                this.ue_click_open();
             }
         }
 
@@ -797,11 +772,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string sObjectAtPointer;
             string sDeliveryDays;
             int ll_contract_id;
-            int row = idw_results.GetRow();
-
-            // TJB 14-Sep-2010  RPI_010 - Added
-            of_enable_open();
-
+            int row = dw_results.GetRow();
             //sObjectAtPointer = dw_results.GetObjectAtPointer();
             sObjectAtPointer = dw_results.DataObject.GetColumnName(); 
              //if (Left(sObjectAtPointer, 9) == "indicator")
