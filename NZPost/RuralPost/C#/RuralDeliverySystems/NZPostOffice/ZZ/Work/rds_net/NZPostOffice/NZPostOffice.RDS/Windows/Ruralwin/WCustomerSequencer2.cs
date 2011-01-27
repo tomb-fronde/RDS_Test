@@ -15,7 +15,12 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    public partial class WCustomerSequencer2 : WAncestorWindow
+    // TJB Sequencing review  Jan-2011:  Adapted from WCustomerSequencer
+    //     Modified selection and sequencing algorithm.
+    //     Added 'arror' buttons and 'Sequence at end' and 'Reverse sequence' buttons.
+    //     Manages sequences for whole contract (not by frequency within contract)
+    //     Called from Address tab in Contract details window.
+    public partial class WCustomerSequencer : WAncestorWindow
     {
         #region Define
         public int? il_contract_no;
@@ -57,7 +62,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public List<int> unseqSelected = new List<int>();
         #endregion
 
-        public WCustomerSequencer2()
+        public WCustomerSequencer()
         {
             this.InitializeComponent();
 
@@ -68,26 +73,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_seq.DataObject = new DSeqAddresses2();
             dw_seq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_seq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_seq_constructor);
-            //((DSeqAddresses2)dw_seq.DataObject).CellClick += new EventHandler(dw_seq_clicked);
-            ((DSeqAddresses2)dw_seq.DataObject).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_seq_MouseDown);
+            //((DSeqAddresses2)dw_seq.DataObject).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_seq_MouseDown);
             ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).Click += new EventHandler(dw_seq_Click);
-            //-this.dw_seq.DragEnter += new System.Windows.Forms.DragEventHandler(this.dw_seq_DragEnter);
-            //-this.dw_seq.DragDrop += new System.Windows.Forms.DragEventHandler(this.dw_seq_DragDrop);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).CellMouseUp += new DataGridViewCellMouseEventHandler(dw_seq_CellMouseUp);
 
             this.dw_unseq.DataObject = new DUnseqAddresses2();
             dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_unseq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_unseq_constructor);
-            //((DUnseqAddresses2)dw_unseq.DataObject).CellClick += new EventHandler(dw_unseq_clicked);
-            //+((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).MouseDown += new MouseEventHandler(unseq_MouseDown);
-            ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_unseq_CellMouseDown);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).MouseDown += new MouseEventHandler(dw_unseq_MouseDown);
-            //((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).Click += new EventHandler(dw_unseq_Click);
+            //((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_unseq_CellMouseDown);
             ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).Click += new EventHandler(dw_unseq_clicked);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CellMouseUp += new DataGridViewCellMouseEventHandler(dw_unseq_CellMouseUp);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).MouseUp += new MouseEventHandler(dw_unseq_MouseUp);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CellMouseClick += new DataGridViewCellMouseEventHandler(dw_unseq_CellMouseClick);
-            //-((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).MouseClick += new MouseEventHandler(dw_unseq_MouseClick);
 
             this.cb_seq_arrow.Click += new System.EventHandler(this.cb_seq_arrow_Click);
             this.cb_unseq_arrow.Click += new System.EventHandler(this.cb_unseq_arrow_Click);
@@ -95,22 +88,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_sequence.Click += new System.EventHandler(this.cb_sequence_Click);
             this.cb_unsequence.Click += new System.EventHandler(this.cb_unsequence_Click);
             this.cb_addseq.Click += new System.EventHandler(this.cb_addseq_Click);
+            this.cb_reverse.Click += new System.EventHandler(this.cb_reverse_Click);
 
             this.cb_up_arrow.Click += new System.EventHandler(this.cb_up_arrow_Click);
             this.cb_down_arrow.Click += new System.EventHandler(this.cb_down_arrow_Click);
-
             this.cb_stripmaker.Click += new System.EventHandler(this.cb_stripmaker_clicked);
-
-//            this.nextseq.TextChanged += new System.EventHandler(this.nextseq_TextChanged);
-            this.nextseq.Enabled = false;
-            this.nextseq.Visible = false;
-            this.nextseq_t.Enabled = false;
-            this.nextseq_t.Visible = false;
-
-            // TJB Test drag-drop
-            //dw_unseq.MouseDown += new MouseEventHandler(dw_unseq_MouseDown);
-            //dw_seq.DragEnter += new DragEventHandler(dw_seq_DragEnter);
-            //dw_seq.DragDrop += new DragEventHandler(dw_seq_DragDrop);
         }
 
         public override void pfc_preopen()
@@ -168,8 +150,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int  ll_rc;
             int? ll_rc1;
             int? ll_ind;
-            int? ll_seq1;
-            int? ll_seq2;
             int  ll_rowcount;
             int? ll_sequence_no;
             int? ll_address_id;
@@ -290,7 +270,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_unseq.URdsDw_GetFocus(null, null);
             dw_seq.URdsDw_GetFocus(null, null);
             is_userid = StaticVariables.LoginId;
-//            nextseq.Text = (il_sequence + 1).ToString();
         }
 
         public virtual void pfc_validation(object[] apo_control)
@@ -359,7 +338,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // ////////////////////////////////////////////////////////////////////////////
             int ll_length;
             StreamReader li_file;
-            int li_rc;
             int ll_pos;
             int ll_first;
             int ll_last;
@@ -442,7 +420,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // ////////////////////////////////////////////////////////////////////////////
             bool lb_sectionfound = false;
             StreamReader li_file = null;
-            int li_rc = 0;
             int li_keys = 0;
             int ll_pos;
             int ll_first;
@@ -588,7 +565,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             int? lSeq;
             int  nextSeq;
-            int? lNull;
 
             if (al_row >= 0)
             {
@@ -616,14 +592,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         }
                     }
                     nextSeq = (int)lSeq + 1;
-//                    if (il_sequence == nextSeq)
-//                    {
-//                        il_sequence--;
-//                        nextseq.Text = (il_sequence + 1).ToString();
-//                    }
-                    //lNull = null;
-                    //dw_unseq.GetItem<UnseqAddresses2>(al_row).Sequence = lNull;
-                    //dw_unseq.ResumeLayout(false);
                 }
             }
         }
@@ -683,34 +651,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DataGridViewSelectedRowCollection rowsSelected
                          = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
             int n1 = rowsSelected.Count;
-            Console.WriteLine("dw_unseq_Click: MouseDown rows selected = " + n1.ToString());
 
             if (dw_unseq.RowCount == 0)
             {
                 return;
             }
-            //this.dw_unseq.SuspendLayout();
-            //+foreach (DataGridViewRow var in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).Rows)
-            //+{
-            //+    var.Selected = false;
-            //+}
-            //((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CurrentRow.Selected = false;
-         /*
-            foreach (DataGridViewRow var in rowsSelected)
-            {
-                var.Selected = !(var.Selected);
-            }
-         */
-            //+((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CurrentRow.Selected 
-            //+            = !(((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CurrentRow.Selected);
-
-            //+this.dw_unseq.ResumeLayout(false);
-         //   this.dw_unseq.ResumeLayout(true);
         }
 
         public virtual void dw_unseq_clicked(object sender, EventArgs e)
         {
-            Console.WriteLine("dw_unseq_clicked");
             int row;
 
             if (dw_unseq.RowCount == 0)
@@ -730,9 +679,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         //wf_removesequence(row);
                         int seq = (int)dw_unseq.GetItem<UnseqAddresses2>(row).Sequence;
                         dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = null;
-                        Console.WriteLine("dw_unseq_clicked: Remove sequence "
-                                            + "- Index " + row.ToString()
-                                            + ", Seq " + seq.ToString());
                     }
                 }
             }
@@ -747,13 +693,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         il_sequence++;
                         dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = il_sequence;
                         dw_unseq.AcceptText();
-                        Console.WriteLine("dw_unseq_clicked: Add sequence "
-                                            + "- Index " + row.ToString()
-                                            + ", Seq " + il_sequence.ToString());
                     }
                 }
             }
-//            nextseq.Text = (il_sequence + 1).ToString();
             row = dw_unseq.GetRow();
 
             if (this.dw_unseq.GetSelectedRow(0) < 0)
@@ -761,65 +703,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 cb_seq_arrow.Enabled = false;
                 cb_sequence.Enabled = false;
                 cb_addseq.Enabled = false;
+                cb_reverse.Enabled = false;
             }
             else
             {
                 cb_seq_arrow.Enabled = true;
                 cb_sequence.Enabled = true;
                 cb_addseq.Enabled = true;
+                cb_reverse.Enabled = true;
             }
             this.dw_unseq.ResumeLayout(true);
             (dw_unseq.DataObject.Controls[0] as DataEntityGrid).Refresh();
             return;
         }
 
-        public virtual void dw_unseq_clicked1(object sender, EventArgs e)
-        {
-            Console.WriteLine("dw_unseq_clicked");
-            int unseq_row;
-
-            bool result;
-
-            if (dw_unseq.RowCount == 0)
-            {
-                return;
-            }
-            unseq_row = dw_unseq.GetRow();
-            result = !(dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[unseq_row].Selected;
-
-            if (unseq_row >= 0)
-            {
-                if (result)
-                {
-                    wf_removesequence(unseq_row);
-                }
-                else
-                {
-                    il_sequence++;
-                    dw_unseq.GetItem<UnseqAddresses2>(unseq_row).Sequence = il_sequence;
-                    dw_unseq.AcceptText();
-//                    nextseq.Text = (il_sequence + 1).ToString();
-                }
-            }
-
-            if (this.dw_unseq.GetSelectedRow(0) < 0)
-            {
-                cb_seq_arrow.Enabled = false;
-                cb_sequence.Enabled = false;
-                cb_addseq.Enabled = false;
-            }
-            else
-            {
-                cb_seq_arrow.Enabled = true;
-                cb_sequence.Enabled = true;
-                cb_addseq.Enabled = true;
-            }
-            return;
-        }
-
         public void dw_seq_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("dw_seq_Click");
             dw_seq_clicked(sender, e);
         }
 
@@ -827,7 +726,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             dw_seq.URdsDw_Clicked(sender, e);
             int nRows = ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).SelectedRows.Count;
-            Console.WriteLine("dw_seq_clicked: Selected rows = " + nRows.ToString());
 
             //if (dw_seq.GetRow() < 0)
             if (nRows <= 0)
@@ -844,87 +742,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 cb_unseq_arrow.Enabled = true;
                 cb_unsequence.Enabled = true;
             }
-
-            //!dw_seq.SelectAllRows(false);
-            //foreach (int i in seqSelected)
-            //{
-            //    dw_seq.SelectRow(i, true);    
-            //!}
-
-            int nSeq, seq_row;
-            seq_row = dw_seq.GetSelectedRow(0);
-            if (seq_row < 0)
-                seq_row = dw_seq.GetRow();
-
-            if (seq_row >= 0)
-            {
-//                nSeq = dw_seq.GetItem<SeqAddresses2>(seq_row).SequenceNo;
-//                il_sequence = nSeq - 1;
-//                nextseq.Text = (il_sequence + 1).ToString();
-            }
-        }
-
-        public void dw_seq_MouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            int nRows;
-            nRows = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows.Count;
-            Console.WriteLine("dw_seq_MouseDown: " + nRows.ToString() + " rows selected");
-        }
-
-        public void dw_unseq_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            DataGridViewSelectedRowCollection nSelected = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
-            int n = nSelected.Count;
-            int m = e.RowIndex;
-            Console.WriteLine("dw_unseq_CellMouseDown: row selected = "+m.ToString()+", Number selected = " + n.ToString());
-/*            
-            int nRows;
-            string sRows;
-            string sEffectDone = "";
-            DragDropEffects ddEffect, ddEffectDone;
-            ddEffect = DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Scroll;
-
-            nRows = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows.Count;
-            sRows = nRows.ToString();
-            Console.WriteLine("dw_unseq_CellMouseDown: Selected rows = " + sRows);
-
-            if (nRows >= 0)
-            {
-                sEffectDone = "Not recognised";
-                Console.WriteLine("dw_unseq_CellMouseDown: DoDragDrop");
-                ddEffectDone = dw_unseq.DoDragDrop(sRows, ddEffect);
-                if (ddEffectDone == DragDropEffects.Move) sEffectDone = "Move";
-                if (ddEffectDone == DragDropEffects.Copy) sEffectDone = "Copy";
-                if (ddEffectDone == DragDropEffects.Scroll) sEffectDone = "Scroll";
-                Console.WriteLine("dw_unseq_CellMouseDown: Effect performed = " + sEffectDone);
-            }
- */
-        }
-
-        public void dw_unseq_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            int row = e.RowIndex;
-            Console.WriteLine("dw_unseq_CellMouseUp: Row = " + row.ToString());
-        }
-
-        public void dw_unseq_MouseUp(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("dw_unseq_MouseUp");
-        }
-        public void dw_seq_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            int row = e.RowIndex;
-            Console.WriteLine("dw_seq_CellMouseUp: Row = " + row.ToString());
-        }
-
-        public void dw_unseq_MouseClick(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("dw_unseq_MouseClick");
-        }
-
-        public void dw_unseq_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            Console.WriteLine("dw_seq_CellMouseClick");
         }
 
         public virtual void cb_seq_clicked(object sender, EventArgs e, bool add_sw)
@@ -1045,151 +862,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_seq_arrow.Enabled = false;
             cb_sequence.Enabled = false;
             cb_addseq.Enabled = false;
+            cb_reverse.Enabled = false;
             cb_unseq_arrow.Enabled = false;
             cb_unsequence.Enabled = false;
             cb_up_arrow.Enabled = false;
             cb_down_arrow.Enabled = false;
 
             il_sequence = 0;
-//            nextseq.Text = (il_sequence + 1).ToString();
-        }
-
-        public virtual void cb_seq_clicked_v1(object sender, EventArgs e, bool add_sw)
-        {
-            //? base.clicked();
-            int? ll_unseqrowcount;
-            int? ll_seq;
-            int ll_rc;
-            int? ll_rowloop;
-            Cursor.Current = Cursors.WaitCursor;
-            this.SuspendLayout();
-            dw_unseq.AcceptText();
-            // Filter out unseq
-            dw_unseq.DataObject.FilterString = "sequence > 0";
-            //dw_unseq.DataObject.Filter<UnseqAddresses2>();
-            //dw_unseq.DataObject.FilterOnce<UnseqAddresses2>(dw_unseq_filter);
-            //dw_unseq.DataObject.SortString = "sequence A";
-            //dw_unseq.DataObject.Sort<UnseqAddresses2>();
-            ll_unseqrowcount = dw_unseq.RowCount;
-            int ll_row = 0;
-            int ll_selectedrow = dw_unseq.GetSelectedRow(0);
-            int ll = dw_seq.GetSelectedRow(0);
-
-            int l_count = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows.Count;
-
-            //! sort the sequence numbers first so that we insert numbers from the smallest to biggest
-            List<int> DeleteIndexes = new List<int>();
-            List<int> unsequencedItems = new List<int>();
-            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
-            {
-                unsequencedItems.Add(this.dw_unseq.GetValue<int?>(row.Index, "Sequence").GetValueOrDefault());
-            }
-            unsequencedItems.Sort();
-
-            if (add_sw)
-            {
-                int newseq = dw_seq.RowCount;
-                foreach (int sortedSequenceNumber in unsequencedItems)
-                {
-                    foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
-                    {
-                        int i = this.dw_unseq.GetValue<int?>(row.Index, "Sequence").GetValueOrDefault();
-                        if (i == sortedSequenceNumber)
-                        {
-                            if (i > 0)
-                            {
-                                dw_seq.InsertItem<SeqAddresses2>(newseq);
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNumAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrUnit = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrUnit;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).ContractNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).ContractNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Customer = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Customer;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadName = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadName;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadNameId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadNameId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).SeqNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).SeqNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Sequence = (newseq + 1);
-                                newseq++;
-                                //!dw_unseq.DataObject.DeleteItemAt(row.Index);
-                                DeleteIndexes.Add(row.Index);
-                            }
-                        }
-                    }
-                }
-                dw_seq.SetCurrent(newseq - 1);
-            }
-            else
-            {
-                foreach (int sortedSequenceNumber in unsequencedItems)
-                {
-                    foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
-                    {
-                        int i = this.dw_unseq.GetValue<int?>(row.Index, "Sequence").GetValueOrDefault();
-                        if (i == sortedSequenceNumber)
-                        {
-                            if (i > 0)
-                            {
-                                if (i > dw_seq.RowCount)
-                                {
-                                    i = dw_seq.RowCount + 1;
-                                }
-                                dw_seq.InsertItem<SeqAddresses2>(i - 1);
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrId;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNo;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNum;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNumAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).AdrUnit = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrUnit;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).ContractNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).ContractNo;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).Customer = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Customer;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).RoadName = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadName;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).RoadNameId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadNameId;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).SeqNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).SeqNum;
-                                dw_seq.GetItem<SeqAddresses2>(i - 1).Sequence = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Sequence;
-                                //!dw_unseq.DataObject.DeleteItemAt(row.Index);
-                                DeleteIndexes.Add(row.Index);
-                            }
-                        }
-                    }
-                }
-            }
-            //! delete after all inserts are finished
-            int offset = 0;
-            DeleteIndexes.Sort();//! sort in order to use offset correctly
-            foreach (int iDelete in DeleteIndexes)
-            {
-                if (dw_unseq.DataObject.RowCount > (iDelete - offset))
-                {
-                    dw_unseq.DataObject.DeleteItemAt(iDelete - offset);
-                    offset++;
-                }
-            }
-
-            il_sequence = 0;
-//            nextseq.Text = (il_sequence + 1).ToString();
-            //dw_unseq.DataObject.FilterString = "";
-            //dw_unseq.DataObject.FilterOnce<UnseqAddresses2>(EmptyFilter);
-            //  TJB  SR4461  Dec 2004
-            //  Change definition of adr_no_numeric to strip flat number
-            //         ( computed field in datawindow)
-            //  Change sort order to include adr_no_alpha and customer
-            //  Made sort order change in data window too
-            dw_unseq.DataObject.SortString = "road_name A, adr_no_numeric A, adr_alpha A, adr_unit A, customer A";
-            dw_unseq.DataObject.Sort<UnseqAddresses2>();
-
-            dw_unseq.SelectRow(0, false);
-            if (ll == -1)
-                dw_seq.SelectRow(0, false);
-            this.ResumeLayout(false);
-            cb_seq_arrow.Enabled = false;
-            cb_sequence.Enabled = false;
-            cb_addseq.Enabled = false;
-
-            dw_seq.SelectRow(0, false);
-            il_sequence = 0;
-//            nextseq.Text = (il_sequence + 1).ToString();
         }
 
         public virtual void cb_unseq_clicked(object sender, EventArgs e)
@@ -1208,7 +887,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             foreach (int ll_selectedrow1 in selRows)
             {
                 dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).Sequence = null;
-                //?dw_seq.DataObject.RowCopy<SeqAddresses2>(ll_selectedrow, ll_selectedrow, dw_unseq.DataObject/*, dw_unseq.RowCount + 1*/);
                 dw_unseq.InsertItem<UnseqAddresses2>(newrow);
                 dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrAlpha = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrAlpha;
                 dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrId = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrId;
@@ -1246,6 +924,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_seq_arrow.Enabled = false;
             cb_sequence.Enabled = false;
             cb_addseq.Enabled = false;
+            cb_reverse.Enabled = false;
             cb_unseq_arrow.Enabled = false;
             cb_unsequence.Enabled = false;
             cb_up_arrow.Enabled = false;
@@ -1254,7 +933,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_unseq.Refresh();
 
             il_sequence = 0;
-//            nextseq.Text = (il_sequence + 1).ToString();
         }
 
         private void dump_unseq()
@@ -1296,7 +974,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
-            int? ll_ind;
             DialogResult ans = DialogResult.None;
             //  TJB SR4691  Aug 2006
             //  Added save of validation indicator (in pfc_save)
@@ -1370,7 +1047,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
-            int? ll_ind;
             DialogResult ans;
             bool lb_route_saved;
             //  TJB SR4691  Aug 2006
@@ -1443,12 +1119,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_written;
             int ll_errors;
             int? ll_roadnameid;
-            string ls_roadno;
             string ls_roadname;
             string ls_oldroadname;
-            string ls_customer;
-            string ls_roadalpha;
-            string ls_roadnoalpha;
             string ls_contract_title = "";
             string ls_delivery_office = "";
             string ls_message;
@@ -1485,7 +1157,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("No rows found in route??"
                                 , "Error"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; //? return 0;
+                return; 
             }
 
             if (StaticFunctions.IsDirty(dw_seq) || StaticFunctions.IsDirty(dw_unseq))
@@ -1493,7 +1165,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("Please save route before creating the Stripmaker files."
                                 , "Warning"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return; //? return 0;
+                return; 
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -1883,64 +1555,55 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             ll_written = 0;
             ll_errors = 0;
+            string sAdrNo = "";
+            string sAdrUnit = "";
+            string sAdrAlpha = "";
+            string sCustomer = "";
             string sCustName = "";
+            string sCustSurnameCompany = "";
+            string sCustInitials = "";
             string sCustCaseName = "";
+            int? nRoadNameID = 0;
             int? nCustSlotAllocation = 0;
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
-                ls_roadno = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrNum;
-                ls_roadalpha = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrAlpha;
-                ls_roadnoalpha = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrNumAlpha;
-                ls_roadname = dw_seq.GetItem<SeqAddresses2>(ll_row).RoadName;
-                sCustName = dw_seq.GetItem<SeqAddresses2>(ll_row).Customer;
-                ll_roadnameid = dw_seq.GetItem<SeqAddresses2>(ll_row).RoadNameId;
+                sAdrNo = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrNo;
+                sAdrUnit = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrUnit;
+                sAdrAlpha = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrAlpha;
+                nRoadNameID = dw_seq.GetItem<SeqAddresses2>(ll_row).RoadNameId;
+                sCustSurnameCompany = dw_seq.GetItem<SeqAddresses2>(ll_row).CustSurnameCompany;
+                sCustInitials = dw_seq.GetItem<SeqAddresses2>(ll_row).CustInitials;
                 sCustCaseName = dw_seq.GetItem<SeqAddresses2>(ll_row).CustCaseName;
                 nCustSlotAllocation= dw_seq.GetItem<SeqAddresses2>(ll_row).CustSlotAllocation;
 
-                if (ls_roadno == null)
-                {
-                    ls_roadno = "";
-                }
-                if (ls_roadalpha == null)
-                {
-                    ls_roadalpha = "";
-                }
-                if (ls_roadnoalpha == null)
-                {
-                    ls_roadnoalpha = "";
-                }
-                if (ls_roadname == null)
-                {
-                    ls_roadname = "";
-                }
-                ls_customer = sCustCaseName;
-                if (sCustCaseName == null || sCustCaseName.Length == 0)
-                {
-                    if (sCustName == null || sCustName.Length <= 0)
-                        ls_customer = " ";
-                    else
-                        ls_customer = sCustName;
-                }
-                if (ll_roadnameid == null)
-                {
-                    ll_roadnameid = -(1);
-                }
-                if (nCustSlotAllocation == null)
-                {
-                    nCustSlotAllocation = 2;
-                }
+                sAdrNo = (sAdrNo == null) ? "" : sAdrNo;
+                sAdrUnit = (sAdrUnit == null) ? "" : sAdrUnit;
+                sAdrAlpha = (sAdrAlpha == null) ? "" : sAdrAlpha;
+                sCustInitials = (sCustInitials == null) ? "" : sCustInitials;
+                sCustCaseName = (sCustCaseName == null) ? "" : sCustCaseName;
+                sCustSurnameCompany = (sCustSurnameCompany == null) ? "" : sCustSurnameCompany;
+                sCustName = (sCustInitials.Length > 0) ? sCustSurnameCompany + ", " + sCustInitials.Substring(0, 1) : sCustSurnameCompany;
+                nRoadNameID = (nRoadNameID == null) ? nRoadNameID = -(1) : nRoadNameID;
+                nCustSlotAllocation = (nCustSlotAllocation == null) ? nCustSlotAllocation = 2 : nCustSlotAllocation;
+
+                // For the customer name, use the case name; 
+                //     if no case name use the customer name; 
+                //     if still nothing, use a blank (not an empty string)
+                sCustomer =  (sCustCaseName.Length > 0)
+                                    ? sCustCaseName
+                                    : (sCustName.Length > 0) ? sCustName : " ";
 
                 //  Add quotes around the customer name
-                ls_customer = '\"' + ls_customer + '\"';
+                sCustomer = '\"' + sCustomer + '\"';
                 li_file.WriteLine(  (ll_row + 1).ToString() + ","           // Record number
-                                    + ll_roadnameid + ","                   // Street ID
+                                    + nRoadNameID.ToString() + ","          // Street ID
                                     + ","                                   // Building
-                                    + ls_customer + ","                     // Customer/Case name
+                                    + sCustomer + ","                       // Customer/Case name
                                     + ","                                   // Floor
                                     + ","                                   // Suite
-                                    + ls_roadno + ","                       // House number
-                                    + ","                                   // Flat number
-                                    + ls_roadalpha + ","                    // Address alpha
+                                    + sAdrNo + ","                          // House number
+                                    + sAdrUnit + ","                        // Flat number
+                                    + sAdrAlpha + ","                       // Address alpha
                                     + nCustSlotAllocation.ToString() + ","  // Slots
                                     + (ll_row + 1).ToString()               // Slot order
                                  );
@@ -1993,203 +1656,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
         }
-
-        public void unseq_MouseDown(object sender, MouseEventArgs e)
-        {
-            DataGridViewSelectedRowCollection rowsSelected;
-
-            rowsSelected = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
-            int n = rowsSelected.Count;
-            Console.WriteLine("unseq_MouseDown: rows selected = " + n.ToString());
-        }
-
-        private void dw_unseq_MouseDown(object sender, MouseEventArgs e)
-        {
-            DataGridViewSelectedRowCollection nSelected = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
-            int n = nSelected.Count;
-            Console.WriteLine("dw_unseq_MouseDown: rows selected = " + n.ToString());
-/*
-            int nRows;
-            string sRows;
-            string sEffectDone = "";
-            DragDropEffects ddEffect, ddEffectDone;
-            ddEffect = DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Scroll;
-
-            nRows = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows.Count;
-            sRows = nRows.ToString();
-            Console.WriteLine("dw_unseq_MouseDown: Selected rows = " + sRows);
-        
-            if (nRows >= 0)
-            {
-                sEffectDone = "Not recognised";
-                Console.WriteLine("dw_unseq_MouseDown: DoDragDrop");
-                ddEffectDone = dw_unseq.DoDragDrop(sRows, ddEffect);
-                if (ddEffectDone == DragDropEffects.Move) sEffectDone = "Move";
-                if (ddEffectDone == DragDropEffects.Copy) sEffectDone = "Copy";
-                if (ddEffectDone == DragDropEffects.Scroll) sEffectDone = "Scroll";
-                Console.WriteLine("dw_unseq_MouseDown: Effect performed = " + sEffectDone);
-            }
-*/
-        }
-
-        enum KeyPushed
-        {
-            // Corresponds to DragEventArgs.KeyState values
-            LeftMouse = 1,
-            RightMouse = 2,
-            ShiftKey = 4,
-            CtrlKey = 8,
-            MiddleMouse = 16,
-            AltKey = 32
-        }
-
-        private void dw_seq_DragDrop1(object sender, DragEventArgs e)
-        {
-            //throw new Exception("The method or operation is not implemented.");
-            int nUnseqRow, nSeqRow;
-            KeyPushed key;
-            string msg = "", sRow = "", sEffect = "";
-
-            nUnseqRow = dw_unseq.GetSelectedRow(0);
-            nSeqRow = dw_seq.GetSelectedRow(0);
-            key = (KeyPushed)e.KeyState;
-            if (e.Data.GetDataPresent(typeof(string)))
-            {
-                msg = msg + "String data present \n";
-                sRow = (string) e.Data.GetData(DataFormats.Text);
-                if ((key & KeyPushed.LeftMouse) == KeyPushed.LeftMouse)
-                    msg = msg + "Left mouse button pushed \n";
-                if ((key & KeyPushed.RightMouse) == KeyPushed.RightMouse)
-                    msg = msg + "Right mouse button pushed \n";
-                if ((key & KeyPushed.MiddleMouse) == KeyPushed.MiddleMouse)
-                    msg = msg + "Middle mouse button pushed \n";
-                if ((key & KeyPushed.CtrlKey) == KeyPushed.CtrlKey)
-                    msg = msg + "Control key pushed \n";
-                if ((key & KeyPushed.ShiftKey) == KeyPushed.ShiftKey)
-                    msg = msg + "Shift key pushed \n";
-                if ((key & KeyPushed.AltKey) == KeyPushed.AltKey)
-                    msg = msg + "Alt key pushed \n";
-                e.Effect = DragDropEffects.Copy;
-                sEffect = "Copy";
-            }
-            else
-            {
-                msg = msg + "No data present (or wrong type)?";
-                e.Effect = DragDropEffects.None;
-                sEffect = "None";
-            }
-            MessageBox.Show(msg + "\n\n" 
-                            + "Selected Unseq row = " + nUnseqRow.ToString() + "\n"
-                            + "Selected Seq row = " + nSeqRow.ToString() + "\n"
-                            + "Dragged row = " + sRow + "\n\n"
-                            + "Returned effect:" + sEffect
-                            , "dw_seq_DragDrop");
-        }
-
-
         #endregion
 
         private void cb_unseq_arrow_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("cb_unseq_arrow_Click");
             cb_unseq_clicked(sender, e);
         }
 
         private void cb_unsequence_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("cb_unsequence_Click");
             cb_unseq_clicked(sender, e);
         }
 
         private void cb_seq_arrow_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("cb_seq_arrow_Click");
             cb_seq_clicked(sender, e, false);
         }
 
         private void cb_sequence_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("cb_sequence_Click");
             cb_seq_clicked(sender, e, false);
         }
 
         private void cb_addseq_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("cb_addseq_Click");
             cb_seq_clicked(sender, e, true);
 
-        }
-
-//        private void nextseq_TextChanged(object sender, EventArgs e)
-//        {
-//            int newseq = 1;
-//            if (! int.TryParse(nextseq.Text, out newseq))
-//            {
-//                MessageBox.Show("Bad sequence number", "Warning");
-//                newseq = 1;
-//            }
-//            il_sequence = newseq - 1;
-//            nextseq.Text = newseq.ToString();
-//        }
-
-        private string decode_keypush(KeyPushed key)
-        {
-            string sKey = "";
-
-            if ((key & KeyPushed.LeftMouse) == KeyPushed.LeftMouse)
-                sKey = sKey + "LeftMouse, ";
-            if ((key & KeyPushed.RightMouse) == KeyPushed.RightMouse)
-                sKey = sKey + "RightMouse,";
-            if ((key & KeyPushed.MiddleMouse) == KeyPushed.MiddleMouse)
-                sKey = sKey + "MiddleMouse,";
-            if ((key & KeyPushed.CtrlKey) == KeyPushed.CtrlKey)
-                sKey = sKey + "ControlKey,";
-            if ((key & KeyPushed.ShiftKey) == KeyPushed.ShiftKey)
-                sKey = sKey + "ShiftKey,";
-            if ((key & KeyPushed.AltKey) == KeyPushed.AltKey)
-                sKey = sKey + "AltKey,";
-
-            return sKey;
-        }
-
-        private void dw_seq_DragEnter(object sender, DragEventArgs e)
-        {
-            int nSelectedItems;
-            KeyPushed kp = (KeyPushed)e.KeyState;
-            string sKeyPushed = decode_keypush(kp);
-            string selectedItemsList;
-
-            Console.WriteLine("dw_seq DragEnter: Key = " + kp.ToString() + " (" + sKeyPushed + ")");
-
-            string sAllowed = "";
-            if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
-                sAllowed = "Copy";
-            if ((e.AllowedEffect & DragDropEffects.Move) == DragDropEffects.Move)
-                if (sAllowed == "")
-                    sAllowed = "Move";
-                else
-                    sAllowed += ", Move";
-            Console.WriteLine("dw_seq DragEnter: Allowed events = " + sAllowed);
-
-            if (e.Data.GetDataPresent(typeof(string)))
-            {
-                selectedItemsList = (string)e.Data.GetData(DataFormats.Text);
-                Console.WriteLine("dw_seq DragEnter: SelectedItemsList = " + selectedItemsList);
-
-                if ((kp & KeyPushed.LeftMouse) == KeyPushed.LeftMouse)
-                {
-                    e.Effect = DragDropEffects.Move;
-                    Console.WriteLine("dw_seq DragEnter: Move");
-                }
-            }
-        }
-        private void dw_seq_DragDrop(object sender, DragEventArgs e)
-        {
-            int x = e.X;
-            int y = e.Y;
-            DataGridViewSelectedRowCollection nSelected = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
-            int n = nSelected.Count;
-            Console.WriteLine("dw_seq_DragDrop: "+n.ToString()+" selected rows at (" + x.ToString() + "," + y.ToString() + ")");
         }
 
         private void cb_up_arrow_Click(object sender, EventArgs e)
@@ -2218,11 +1710,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 nThisSeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
                 nPrevSeq = dw_seq.GetItem<SeqAddresses2>(nPrevRow).Sequence;
                 nThisSeq = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
-
-//                MessageBox.Show("ThisRow = " + nThisRow.ToString() + "\n"
-//                                + "ThisSeqNum = " + nThisSeqNum.ToString() + "\n"
-//                                + "ThisSequence = " + nThisSeq.ToString() + "\n"
-//                                , "cb_up_arrow_Click");
 
                 thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrAlpha;
                 thisItem.AdrId = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrId;
@@ -2276,7 +1763,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             il_sequence = dw_seq.GetSelectedRow(0);
             il_sequence = (il_sequence < 0) ? 0 : il_sequence;
-//            nextseq.Text = (il_sequence + 1).ToString();
         }
 
         private void cb_down_arrow_Click(object sender, EventArgs e)
@@ -2306,12 +1792,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 nThisSeq = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
                 nThisSeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
-
-//                MessageBox.Show("ThisRow = " + nThisRow.ToString() + "\n"
-//                                + "ThisSeq = " + nThisSeq.ToString() + "\n"
-//                                + "ThisSeqNum = " + nThisSeqNum.ToString() + "\n"
-//                                + "NextRow = " + nNextRow.ToString() + "\n"
-//                                , "cb_down_arrow_Click");
 
                 thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrAlpha;
                 thisItem.AdrId = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrId;
@@ -2363,9 +1843,73 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
 
             il_sequence = dw_seq.GetSelectedRow(0);
-//            il_sequence = (il_sequence < 0) ? movedRows[0] - 1 : il_sequence;
             il_sequence = (il_sequence < 0) ? 0 : il_sequence;
-//            nextseq.Text = (il_sequence + 1).ToString();
+        }
+
+        public struct unseqItem
+        {
+            public int Seq;
+            public int Row;
+
+            public unseqItem(int _seq, int _row)
+            {
+                this.Seq = _seq;
+                this.Row = _row;
+            }
+        }
+
+        public class unseqSorter : IComparer<unseqItem>
+        {
+            // This sorts the unseqItem list into descending order of Seq values
+            public int Compare(unseqItem obj1, unseqItem obj2)
+            {
+                return obj2.Seq.CompareTo(obj1.Seq);
+            }
+        }
+
+        private void cb_reverse_Click(object sender, EventArgs e)
+        {
+            
+//            dw_unseq.DataObject.FilterString = "sequence > 0";
+
+            int newseq = 1;
+            int oldseq = 1;
+            int oldrow = 1;
+
+            //If there's only one row (or none), there's no point reversing the order
+            int nRows = (((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows).Count;
+            if ( nRows < 2 )
+            {
+                return;
+            }
+
+            // Build a list of the addresses that have been assigned sequence numbers
+            // Use the unseqItem structure to keep the sequence number and the row each is on
+            List<unseqItem> unsequencedItems = new List<unseqItem>();
+            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
+            {
+                oldrow = row.Index;
+                oldseq = this.dw_unseq.GetValue<int?>(row.Index, "Sequence").GetValueOrDefault(); 
+                unsequencedItems.Add(new unseqItem(oldseq, oldrow));
+            }
+            // Sort the list into descending sequence number order
+            unsequencedItems.Sort(new unseqSorter());
+
+            // Assign new sequence numbers to the rows
+            nRows = unsequencedItems.Count;
+            newseq = 1;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                oldrow = unsequencedItems[nRow].Row;
+                dw_unseq.GetItem<UnseqAddresses2>(oldrow).Sequence = newseq;
+                newseq++;
+            }
+
+            // Update the unsequenced panel
+            (dw_unseq.DataObject.Controls[0] as DataEntityGrid).Refresh();
+
+            // Set the 'next sequence' number
+            il_sequence = newseq - 1;
         }
     }
 }
