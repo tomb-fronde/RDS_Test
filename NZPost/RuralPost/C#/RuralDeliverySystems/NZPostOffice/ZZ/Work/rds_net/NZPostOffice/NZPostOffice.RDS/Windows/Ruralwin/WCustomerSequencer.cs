@@ -15,7 +15,7 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    public partial class WCustomerSequencer : WAncestorWindow
+    public partial class WCustomerSequencer3 : WAncestorWindow
     {
         #region Define
         public int? il_contract_no;
@@ -59,7 +59,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public List<int> unseqSelected = new List<int>();
         #endregion
 
-        public WCustomerSequencer()
+        public WCustomerSequencer3()
         {
             this.InitializeComponent();
             this.dw_unseq.DataObject = new DUnseqAddresses();
@@ -84,6 +84,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_addr_sequence_ind.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_addr_sequence_ind_constructor);
             ((DAddrSequenceInd)dw_addr_sequence_ind.DataObject).CheckedChanged += new EventHandler(dw_addr_sequence_ind_itemchanged);
             //jlwang:end
+            // TJB Test drag-drop
+            dw_unseq.MouseDown += new MouseEventHandler(dw_unseq_MouseDown);
+            dw_seq.DragEnter += new DragEventHandler(dw_seq_DragEnter);
+            dw_seq.DragDrop += new DragEventHandler(dw_seq_DragDrop);
         }
 
         public override void pfc_preopen()
@@ -1649,6 +1653,132 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_addr_sequence_ind.GetItem<AddrSequenceInd>(row).RfValidUser = is_userid;
             }
         }
+
+        // TJB  Drag-drop test  Oct-2010
+        private void dw_unseq_MouseDown(object sender, MouseEventArgs e)
+        {
+            //throw new Exception("The method or operation is not implemented.");
+            int nRow;
+            string sRow;
+            string sEffectDone = "";
+            DragDropEffects ddEffect, ddEffectDone;
+            ddEffect = DragDropEffects.Move | DragDropEffects.Copy | DragDropEffects.Scroll;
+
+            nRow = dw_unseq.GetSelectedRow(0);
+            MessageBox.Show("Selected row = " + nRow.ToString()
+                            , "dw_unseq_MouseDown");
+            if (nRow >= 0)
+            {
+                sEffectDone = "Not recognised";
+                sRow = nRow.ToString();
+                ddEffectDone = dw_seq.DoDragDrop(sRow, ddEffect);
+                if (ddEffectDone == DragDropEffects.Move) sEffectDone = "Move";
+                if (ddEffectDone == DragDropEffects.Copy) sEffectDone = "Copy";
+                if (ddEffectDone == DragDropEffects.Scroll) sEffectDone = "Scroll";
+                MessageBox.Show("Effect performed = " + sEffectDone
+                                , "dw_unseq_MouseDown");
+            }
+
+        }
+
+        enum KeyPushed
+        {
+            // Corresponds to DragEventArgs.KeyState values
+            LeftMouse = 1,
+            RightMouse = 2,
+            ShiftKey = 4,
+            CtrlKey = 8,
+            MiddleMouse = 16,
+            AltKey = 32
+        }
+
+        private void dw_seq_DragEnter(object sender, DragEventArgs e)
+        {
+            //throw new Exception("The method or operation is not implemented.");
+            int nUnseqRow, nSeqRow;
+            KeyPushed key;
+            string msg = "", sRow = "", sEffect = "";
+
+            nUnseqRow = dw_unseq.GetSelectedRow(0);
+            nSeqRow = dw_seq.GetSelectedRow(0);
+            key = (KeyPushed)e.KeyState;
+            if (e.Data.GetDataPresent(typeof(string)))
+            {
+                msg = msg + "String data present \n";
+                sRow = (string) e.Data.GetData(DataFormats.Text);
+                if ((key & KeyPushed.LeftMouse) == KeyPushed.LeftMouse)
+                    msg = msg + "Left mouse button pushed \n";
+                if ((key & KeyPushed.RightMouse) == KeyPushed.RightMouse)
+                    msg = msg + "Right mouse button pushed \n";
+                if ((key & KeyPushed.MiddleMouse) == KeyPushed.MiddleMouse)
+                    msg = msg + "Middle mouse button pushed \n";
+                if ((key & KeyPushed.CtrlKey) == KeyPushed.CtrlKey)
+                    msg = msg + "Control key pushed \n";
+                if ((key & KeyPushed.ShiftKey) == KeyPushed.ShiftKey)
+                    msg = msg + "Shift key pushed \n";
+                if ((key & KeyPushed.AltKey) == KeyPushed.AltKey)
+                    msg = msg + "Alt key pushed \n";
+                e.Effect = DragDropEffects.Move;
+                sEffect = "Move";
+            }
+            else
+            {
+                msg = msg + "No data present (or wrong type)?";
+                e.Effect = DragDropEffects.None;
+                sEffect = "None";
+            }
+            MessageBox.Show(msg + "\n\n" 
+                            + "Selected Unseq row = " + nUnseqRow.ToString() + "\n"
+                            + "Selected Seq row = " + nSeqRow.ToString() + "\n"
+                            + "Dragged row = " + sRow + "\n\n"
+                            + "Returned effect:" + sEffect
+                            , "dw_seq_DragEnter");
+        }
+
+        private void dw_seq_DragDrop(object sender, DragEventArgs e)
+        {
+            //throw new Exception("The method or operation is not implemented.");
+            int nUnseqRow, nSeqRow;
+            KeyPushed key;
+            string msg = "", sRow = "", sEffect = "";
+
+            nUnseqRow = dw_unseq.GetSelectedRow(0);
+            nSeqRow = dw_seq.GetSelectedRow(0);
+            key = (KeyPushed)e.KeyState;
+            if (e.Data.GetDataPresent(typeof(string)))
+            {
+                msg = msg + "String data present \n";
+                sRow = (string) e.Data.GetData(DataFormats.Text);
+                if ((key & KeyPushed.LeftMouse) == KeyPushed.LeftMouse)
+                    msg = msg + "Left mouse button pushed \n";
+                if ((key & KeyPushed.RightMouse) == KeyPushed.RightMouse)
+                    msg = msg + "Right mouse button pushed \n";
+                if ((key & KeyPushed.MiddleMouse) == KeyPushed.MiddleMouse)
+                    msg = msg + "Middle mouse button pushed \n";
+                if ((key & KeyPushed.CtrlKey) == KeyPushed.CtrlKey)
+                    msg = msg + "Control key pushed \n";
+                if ((key & KeyPushed.ShiftKey) == KeyPushed.ShiftKey)
+                    msg = msg + "Shift key pushed \n";
+                if ((key & KeyPushed.AltKey) == KeyPushed.AltKey)
+                    msg = msg + "Alt key pushed \n";
+                e.Effect = DragDropEffects.Copy;
+                sEffect = "Copy";
+            }
+            else
+            {
+                msg = msg + "No data present (or wrong type)?";
+                e.Effect = DragDropEffects.None;
+                sEffect = "None";
+            }
+            MessageBox.Show(msg + "\n\n" 
+                            + "Selected Unseq row = " + nUnseqRow.ToString() + "\n"
+                            + "Selected Seq row = " + nSeqRow.ToString() + "\n"
+                            + "Dragged row = " + sRow + "\n\n"
+                            + "Returned effect:" + sEffect
+                            , "dw_seq_DragDrop");
+        }
+
+
         #endregion
     }
 }

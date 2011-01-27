@@ -11,7 +11,7 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    partial class WCustomerSequencer
+    partial class WCustomerSequencer3
     {
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
