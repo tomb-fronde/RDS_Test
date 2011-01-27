@@ -33,7 +33,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("cust_dpid", "_cust_dpid", "rds_customer")]
     [System.Serializable()]
 
-    public class CustomerDetails : Entity<CustomerDetails>
+    public class CustomerDetails3 : Entity<CustomerDetails3>
     {
         #region Business Methods
         [DBField()]
@@ -501,12 +501,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #endregion
 
         #region Factory Methods
-        public static CustomerDetails NewCustomerDetails(int? al_cust_id)
+        public static CustomerDetails3 NewCustomerDetails(int? al_cust_id)
         {
             return Create(al_cust_id);
         }
 
-        public static CustomerDetails[] GetAllCustomerDetails(int? al_cust_id)
+        public static CustomerDetails3[] GetAllCustomerDetails(int? al_cust_id)
         {
             return Fetch(al_cust_id).list;
         }
@@ -545,12 +545,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         "0 as cust_dpid  " +
                         "FROM rds_customer  " +
                         "WHERE rds_customer.cust_id = @al_cust_id    ";
-                    List<CustomerDetails> _list = new List<CustomerDetails>();
+                    List<CustomerDetails3> _list = new List<CustomerDetails3>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
                         while (dr.Read())
                         {
-                            CustomerDetails instance = new CustomerDetails();
+                            CustomerDetails3 instance = new CustomerDetails3();
                             instance._cust_id = GetValueFromReader<Int32?>(dr, 0);
                             instance._cust_title = GetValueFromReader<String>(dr, 1);
                             instance._cust_surname_company = GetValueFromReader<String>(dr, 2);
