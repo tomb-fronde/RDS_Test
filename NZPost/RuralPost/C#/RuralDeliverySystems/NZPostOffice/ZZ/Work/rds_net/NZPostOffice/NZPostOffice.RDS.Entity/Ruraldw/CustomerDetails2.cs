@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Sequencing Review  Jan-2011
+    // Added cust_case_name and cust_slot_allocation elements
+    //
     // TJB RPI_011 6-Sept-2010
     // Changed CustMoveInDate.Get to remove the time from the DateTime value
     // to fix a problem displaying the move_in_date on the WCustomer form.
@@ -34,13 +37,18 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("cust_catagory", "_cust_catagory", "LEFT")]
     [MapInfo("cust_last_amended_user", "_cust_last_amended_user", "rds_customer")]
     [MapInfo("cust_last_amended_date", "_cust_last_amended_date", "rds_customer")]
+    [MapInfo("cust_case_name", "_cust_case_name", "rds_customer")]
+    [MapInfo("cust_slot_allocation", "_cust_slot_allocation", "rds_customer")]
     [MapInfo("dp_id", "_cust_dpid", "customer_address_moves")]
     [MapInfo("move_in_date", "_cust_move_in_date", "customer_address_moves")]
     [System.Serializable()]
 
-    public class CustomerDetails2 : Entity<CustomerDetails2>
+    public class CustomerDetails : Entity<CustomerDetails>
     {
         #region Business Methods
+        private int _sqlcode = -1;
+        private string _sqlerrtext = "";
+
         [DBField()]
         private int? _cust_id;
 
@@ -87,7 +95,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _cust_care_of;
 
         [DBField()]
-        private int? _cust_adpost_quantity=1;
+        private int? _cust_adpost_quantity = 1;
 
         [DBField()]
         private string _cust_catagory;
@@ -104,6 +112,27 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private DateTime? _cust_move_in_date;
 
+        [DBField()]
+        private string _cust_case_name;
+
+        [DBField()]
+        private int? _cust_slot_allocation=2;
+
+        public virtual int SQLCode
+        {
+            get
+            {
+                return _sqlcode;
+            }
+        }
+
+       public virtual string SQLErrText
+        {
+            get
+            {
+                return _sqlerrtext;
+            }
+        }
 
         public virtual int? CustId
         {
@@ -533,6 +562,44 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual string CustCaseName
+        {
+            get
+            {
+                CanReadProperty("CustCaseName", true);
+                return _cust_case_name;
+            }
+            set
+            {
+                CanWriteProperty("CustCaseName", true);
+                if (_cust_case_name != value)
+                {
+//                    _cust_case_name = (string)value.Substring(0, 25);
+                    _cust_case_name = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CustSlotAllocation
+        {
+            get
+            {
+                CanReadProperty("CustSlotAllocation", true);
+                return _cust_slot_allocation;
+            }
+            set
+            {
+                CanWriteProperty("CustSlotAllocation", true);
+                if (_cust_slot_allocation != value)
+                {
+                    _cust_slot_allocation = value;
+                    _cust_slot_allocation = (_cust_slot_allocation < 2) ? 2 : _cust_slot_allocation;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return string.Format("{0}", _cust_id);
@@ -540,12 +607,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #endregion
 
         #region Factory Methods
-        public static CustomerDetails2 NewCustomerDetails2(int? al_cust_id)
+        public static CustomerDetails NewCustomerDetails2(int? al_cust_id)
         {
             return Create(al_cust_id);
         }
 
-        public static CustomerDetails2[] GetAllCustomerDetails2(int? al_cust_id)
+        public static CustomerDetails[] GetAllCustomerDetails2(int? al_cust_id)
         {
             return Fetch(al_cust_id).list;
         }
@@ -560,41 +627,43 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = @"SELECT rds_customer.cust_id, "
-                                     +      @"rds_customer.cust_title, "
-                                     +      @"rds_customer.cust_surname_company, "
-                                     +      @"rds_customer.cust_initials, "
-                                     +      @"rds_customer.cust_phone_day, "
-                                     +      @"rds_customer.cust_phone_night, "
-                                     +      @"rds_customer.cust_dir_listing_ind, "
-                                     +      @"rds_customer.cust_dir_listing_text, "
-                                     +      @"rds_customer.cust_business, "
-                                     +      @"rds_customer.cust_rural_resident, "
-                                     +      @"rds_customer.cust_rural_farmer, "
-                                     +      @"rds_customer.cust_date_commenced, "
-                                     +      @"rds_customer.cust_phone_mobile, "
-                                     +      @"rds_customer.master_cust_id, "
-                                     +      @"rds_customer.cust_care_of, "
-                                     +      @"rds_customer.cust_adpost_quantity, "
-                                     +      @"(case when rds_customer.cust_business = 'Y' THEN 'BS' ELSE case when rds_customer.cust_rural_resident = 'Y' THEN 'RR' ELSE case when rds_customer.cust_rural_farmer = 'Y' THEN 'RF' END END END ) as cust_catagory, "
-                                     +      @"rds_customer.cust_last_amended_user, "
-                                     +      @"rds_customer.cust_last_amended_date, "
-                                     +      @"customer_address_moves.dp_id, "
-                                     +      @"customer_address_moves.move_in_date "
-                                     + @"FROM {oj rds_customer LEFT OUTER JOIN customer_address_moves "
-                                     +                       @"ON customer_address_moves.cust_id = rds_customer.cust_id} "
-                                     + @"WHERE rds_customer.cust_id = @al_cust_id "
-                                     +   @"AND customer_address_moves.move_out_date is NULL";
+                    cm.CommandText = "SELECT rds_customer.cust_id, "
+                                     +      "rds_customer.cust_title, "
+                                     +      "rds_customer.cust_surname_company, "
+                                     +      "rds_customer.cust_initials, "
+                                     +      "rds_customer.cust_phone_day, "
+                                     +      "rds_customer.cust_phone_night, "
+                                     +      "rds_customer.cust_dir_listing_ind, "
+                                     +      "rds_customer.cust_dir_listing_text, "
+                                     +      "rds_customer.cust_business, "
+                                     +      "rds_customer.cust_rural_resident, "
+                                     +      "rds_customer.cust_rural_farmer, "
+                                     +      "rds_customer.cust_date_commenced, "
+                                     +      "rds_customer.cust_phone_mobile, "
+                                     +      "rds_customer.master_cust_id, "
+                                     +      "rds_customer.cust_care_of, "
+                                     +      "rds_customer.cust_adpost_quantity, "
+                                     +      "(case when rds_customer.cust_business = 'Y' THEN 'BS' ELSE case when rds_customer.cust_rural_resident = 'Y' THEN 'RR' ELSE case when rds_customer.cust_rural_farmer = 'Y' THEN 'RF' END END END ) as cust_catagory, "
+                                     +      "rds_customer.cust_last_amended_user, "
+                                     +      "rds_customer.cust_last_amended_date, "
+                                     +      "customer_address_moves.dp_id, "
+                                     +      "customer_address_moves.move_in_date, "
+                                     +      "rds_customer.cust_case_name, "
+                                     +      "rds_customer.cust_slot_allocation "
+                                     + "FROM {oj rds_customer LEFT OUTER JOIN customer_address_moves "
+                                     +                       "ON customer_address_moves.cust_id = rds_customer.cust_id} "
+                                     + "WHERE rds_customer.cust_id = @al_cust_id "
+                                     +   "AND customer_address_moves.move_out_date is NULL";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_cust_id", al_cust_id);
 
-                    List<CustomerDetails2> _list = new List<CustomerDetails2>();
+                    List<CustomerDetails> _list = new List<CustomerDetails>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
                         while (dr.Read())
                         {
-                            CustomerDetails2 instance = new CustomerDetails2();
+                            CustomerDetails instance = new CustomerDetails();
 
                             instance._cust_id = GetValueFromReader<Int32?>(dr, 0);
                             instance._cust_title = GetValueFromReader<String>(dr, 1);
@@ -621,6 +690,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
                             instance._cust_dpid = GetValueFromReader<Int32?>(dr, 19);
                             instance._cust_move_in_date = GetValueFromReader<DateTime?>(dr, 20);
+
+                            instance._cust_case_name = GetValueFromReader<String>(dr, 21);
+                            instance._cust_slot_allocation = GetValueFromReader<Int32?>(dr, 22);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
@@ -652,6 +724,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
                 catch (Exception e)
                 {
+                    _sqlerrtext = e.Message;
+                    _sqlcode = -1;
                 }
                 // reinitialize original key/value list
                 StoreInitialValues();
@@ -684,8 +758,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "cust_id", GetInitialValue("_cust_id"));
-                    cm.CommandText = "DELETE FROM rds_customer WHERE " +
-                    "rds_customer.cust_id = @cust_id ";
+                    cm.CommandText = "DELETE FROM rds_customer " 
+                                    + "WHERE rds_customer.cust_id = @cust_id ";
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
