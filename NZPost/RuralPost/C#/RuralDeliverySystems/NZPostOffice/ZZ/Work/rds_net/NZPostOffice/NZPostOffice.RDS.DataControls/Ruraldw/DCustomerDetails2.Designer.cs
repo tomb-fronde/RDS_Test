@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    partial class DCustomerDetails2
+    partial class DCustomerDetails
     {
         /// <summary> 
         /// Required designer variable.
@@ -98,6 +98,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_dir_listing_ind_2 = new System.Windows.Forms.RadioButton();
             this.move_in_date_t = new System.Windows.Forms.Label();
             this.move_in_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
+            this.cust_case_name_t = new System.Windows.Forms.Label();
+            this.cust_case_name = new System.Windows.Forms.TextBox();
+            this.cust_slot_allocation_t = new System.Windows.Forms.Label();
+            this.cust_slot_allocation = new System.Windows.Forms.TextBox();
+            this.case_name_max_size = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -320,6 +325,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // cust_date_commenced
             // 
             this.cust_date_commenced.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustDateCommenced", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cust_date_commenced.EditMask = "";
             this.cust_date_commenced.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cust_date_commenced.Location = new System.Drawing.Point(107, 25);
             this.cust_date_commenced.Mask = "00/00/0000";
@@ -449,6 +455,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.move_in_date.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.move_in_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustMoveInDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.move_in_date.EditMask = "";
             this.move_in_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.move_in_date.ForeColor = System.Drawing.SystemColors.WindowText;
             this.move_in_date.Location = new System.Drawing.Point(296, 29);
@@ -461,10 +468,65 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.move_in_date.Text = "00000000";
             this.move_in_date.Value = null;
             // 
+            // cust_case_name_t
+            // 
+            this.cust_case_name_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_case_name_t.Location = new System.Drawing.Point(9, 238);
+            this.cust_case_name_t.Name = "cust_case_name_t";
+            this.cust_case_name_t.Size = new System.Drawing.Size(94, 13);
+            this.cust_case_name_t.TabIndex = 144;
+            this.cust_case_name_t.Text = "Case Name";
+            this.cust_case_name_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cust_case_name
+            // 
+            this.cust_case_name.BackColor = System.Drawing.SystemColors.Window;
+            this.cust_case_name.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustCaseName", true));
+            this.cust_case_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_case_name.Location = new System.Drawing.Point(107, 241);
+            this.cust_case_name.MaxLength = 25;
+            this.cust_case_name.Name = "cust_case_name";
+            this.cust_case_name.Size = new System.Drawing.Size(153, 20);
+            this.cust_case_name.TabIndex = 145;
+            // 
+            // cust_slot_allocation_t
+            // 
+            this.cust_slot_allocation_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_slot_allocation_t.Location = new System.Drawing.Point(275, 235);
+            this.cust_slot_allocation_t.Name = "cust_slot_allocation_t";
+            this.cust_slot_allocation_t.Size = new System.Drawing.Size(57, 29);
+            this.cust_slot_allocation_t.TabIndex = 146;
+            this.cust_slot_allocation_t.Text = "Slot Allocation";
+            this.cust_slot_allocation_t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cust_slot_allocation
+            // 
+            this.cust_slot_allocation.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustSlotAllocation", true));
+            this.cust_slot_allocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cust_slot_allocation.Location = new System.Drawing.Point(334, 241);
+            this.cust_slot_allocation.Name = "cust_slot_allocation";
+            this.cust_slot_allocation.Size = new System.Drawing.Size(29, 20);
+            this.cust_slot_allocation.TabIndex = 147;
+            // 
+            // case_name_max_size
+            // 
+            this.case_name_max_size.AutoSize = true;
+            this.case_name_max_size.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.case_name_max_size.Location = new System.Drawing.Point(15, 251);
+            this.case_name_max_size.Name = "case_name_max_size";
+            this.case_name_max_size.Size = new System.Drawing.Size(88, 12);
+            this.case_name_max_size.TabIndex = 148;
+            this.case_name_max_size.Text = "(Max 25 characters)";
+            // 
             // DCustomerDetails2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.case_name_max_size);
+            this.Controls.Add(this.cust_slot_allocation_t);
+            this.Controls.Add(this.cust_slot_allocation);
+            this.Controls.Add(this.cust_case_name_t);
+            this.Controls.Add(this.cust_case_name);
             this.Controls.Add(this.move_in_date);
             this.Controls.Add(this.move_in_date_t);
             this.Controls.Add(this.cust_id);
@@ -498,7 +560,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.cust_rural_resident);
             this.Controls.Add(this.cust_rural_farmer);
             this.Name = "DCustomerDetails2";
-            this.Size = new System.Drawing.Size(452, 300);
+            this.Size = new System.Drawing.Size(374, 284);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -509,6 +571,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
         private Label move_in_date_t;
         private NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox move_in_date;
+        private Label cust_case_name_t;
+        private TextBox cust_case_name;
+        private Label cust_slot_allocation_t;
+        private TextBox cust_slot_allocation;
+        private Label case_name_max_size;
 
     }
 }

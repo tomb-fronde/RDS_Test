@@ -12,9 +12,12 @@ using NZPostOffice.RDS.DataControls.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    public partial class DCustomerDetails2 : Metex.Windows.DataUserControl
+    public partial class DCustomerDetails : Metex.Windows.DataUserControl
 	{
-		public DCustomerDetails2()
+        // TJB  Sequencing review  Jan-2011
+        // Added Case name and Slot allocation fields
+
+		public DCustomerDetails()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
