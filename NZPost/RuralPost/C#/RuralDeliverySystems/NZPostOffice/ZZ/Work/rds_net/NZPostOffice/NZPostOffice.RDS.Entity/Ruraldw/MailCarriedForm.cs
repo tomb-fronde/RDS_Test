@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Oct_2010
+    // Added mc_sequence_no to identify record in UpdateEntity method
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -415,6 +418,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void UpdateEntity()
         {
+            // TJB  Oct_2010
+            // Added mc_sequence_no to identify record to update
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
@@ -422,11 +427,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "mail_carried", ref pList))
                 {
-                    cm.CommandText += " where contract_no = @inContract and sf_key = @inSFKey and rf_delivery_days = @inDeliveryDays ";
+                    cm.CommandText += " where contract_no = @inContract " 
+                                      + " and sf_key = @inSFKey " 
+                                      + " and rf_delivery_days = @inDeliveryDays "
+                                      + " and mc_sequence_no = @inSequenceNo ";
 
                     pList.Add(cm, "inContract", GetInitialValue("_contract_no"));
                     pList.Add(cm, "inSFKey", GetInitialValue("_sf_key"));
                     pList.Add(cm, "inDeliveryDays", GetInitialValue("_rf_delivery_days"));
+                    pList.Add(cm, "inSequenceNo", GetInitialValue("_mc_sequence_no"));
                     DBHelper.ExecuteNonQuery(cm, pList);
                 }
                 // reinitialize original key/value list
