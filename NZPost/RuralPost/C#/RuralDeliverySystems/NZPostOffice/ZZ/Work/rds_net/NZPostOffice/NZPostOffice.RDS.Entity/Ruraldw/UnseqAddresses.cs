@@ -9,6 +9,9 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
     // TJB  Jan-2011  Sequencing review
+    // Modified GetAllUnseqAddresses, FetchEntity
+    // Remove reference to address_frequency_sequence table
+    // Add seq_num from address table
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -332,6 +335,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod]
         private void FetchEntity(int? al_contract_no)
         {
+            // TJB  Jan-2011  Sequencing review
+            // Remove reference to address_frequency_sequence table
+            // Add seq_num from address table
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
