@@ -15,6 +15,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public partial class WCustomer : WMaster
     {
+        // TJB  Jan-2011  Sequencing Review
+        // Resized screen to make room
+        // Added Case name and Slot allocation fields (see DCustomerDetails)
+
         #region Define
         public USt st_label;
 
@@ -88,7 +92,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
 
-            dw_generic.DataObject = new DCustomerDetails2();
+            dw_generic.DataObject = new DCustomerDetails();
             this.dw_recipients2.DataObject = new DRecipient();
             dw_occupations.DataObject = new DCustomerOccupation();
             dw_interests.DataObject = new DCustomerInterest();
@@ -98,11 +102,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_occupations.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_interests.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
-            ((CheckBox)(((DCustomerDetails2)dw_generic.DataObject).GetControlByName("cust_business"))).CheckedChanged +=
+            ((CheckBox)(((DCustomerDetails)dw_generic.DataObject).GetControlByName("cust_business"))).CheckedChanged +=
                 new EventHandler(dw_generic_ValidateCheckBoxes);
-            ((CheckBox)(((DCustomerDetails2)dw_generic.DataObject).GetControlByName("cust_rural_resident"))).CheckedChanged +=
+            ((CheckBox)(((DCustomerDetails)dw_generic.DataObject).GetControlByName("cust_rural_resident"))).CheckedChanged +=
                 new EventHandler(dw_generic_ValidateCheckBoxes);
-            ((CheckBox)(((DCustomerDetails2)dw_generic.DataObject).GetControlByName("cust_rural_farmer"))).CheckedChanged +=
+            ((CheckBox)(((DCustomerDetails)dw_generic.DataObject).GetControlByName("cust_rural_farmer"))).CheckedChanged +=
                 new EventHandler(dw_generic_ValidateCheckBoxes);
 
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -115,8 +119,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.PfcValidation += new UserEventDelegate1(dw_generic_pfc_validation);
             dw_generic.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_generic_pfc_postupdate);
             dw_generic.PfcPreUpdate += new UserEventDelegate1(dw_generic_pfc_preupdate);
-            //dw_generic.GotFocus += new EventHandler(dw_generic_GotFocus);
-            //dw_generic.LostFocus += new EventHandler(dw_generic_LostFocus);
 
             // TJB RD7_0042 jan-2010: Changed
             // Changed to use Itemfocuschanged event to trigger
@@ -203,19 +205,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  Display the DPID
                 // *	idw_customer.setItem(ll_row,'cust_dpid',il_cust_dpid)
                 // Set Title
-                ls_form_title = "Customer: (" + il_customer.ToString() + ") " + dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials)))
+                ls_form_title = "Customer: (" + il_customer.ToString() + ") " + dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
+                if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails>(ll_row).CustInitials)))
                 {
-                    ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
+                    ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails>(ll_row).CustInitials;
                 }
                 this.Text = ls_form_title;
                 //  TWC - check that this is a primary customer - if not disable category boxes.
-                ll_master = dw_generic.GetItem<CustomerDetails2>(ll_row).MasterCustId;
+                ll_master = dw_generic.GetItem<CustomerDetails>(ll_row).MasterCustId;
                 //  TJB  NPAD2  Jan 06
                 //  Save the original customer name so we can tell if its changed
-                is_old_surname  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                is_old_initials = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                is_old_title    = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                is_old_surname  = dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
+                is_old_initials = dw_generic.GetItem<CustomerDetails>(ll_row).CustInitials;
+                is_old_title    = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
                 // TJB  RD7_0042 Jan-2010: Changed
                 //      Fixed bug: values trimmed before checking for null
                 is_old_surname  = (is_old_surname == null) ? "" : is_old_surname.Trim();
@@ -228,7 +230,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ib_new = true;
                 
                 ll_row = dw_generic.RowCount;
-                dw_generic.InsertItem<CustomerDetails2>(ll_row);
+                dw_generic.InsertItem<CustomerDetails>(ll_row);
                 ls_form_title = "Customer: <New Customer>";
                 this.Text = ls_form_title;
 
@@ -239,11 +241,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 is_old_title = "";
                 // Allocate a cust_id
                 il_customer = StaticFunctions.GetNextSequence("Customer");
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
+                dw_generic.GetItem<CustomerDetails>(ll_row).CustId = il_customer;
                 // TJB  RD7_CR002  Feb-2010: Changed
                 // Changed to set only the date, not date + time
-                //dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
+                //dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
                 dw_generic.DataObject.BindingSource.CurrencyManager.Refresh();
                 // 	idw_customer.setitem(ll_row,"cust_dir_listing_ind","Y")
                 // 	idw_customer.setitem(ll_row,"cust_business","N")
@@ -321,7 +323,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 change = true;
             }
-            ls_phone = dw_generic.GetItem<CustomerDetails2>(ll_row).CustPhoneDay;
+            ls_phone = dw_generic.GetItem<CustomerDetails>(ll_row).CustPhoneDay;
             if (!(ls_phone == null))
             {
                 if (ls_phone.Length >= 2 && ls_phone.Substring(0, 2) == "02")
@@ -333,7 +335,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((MaskedTextBox)dw_generic.GetControlByName("cust_phone_day")).Mask = "(##) ###-######";//!"(##) ### ######";
                 }
             }
-            ls_phone = dw_generic.GetItem<CustomerDetails2>(ll_row).CustPhoneNight;
+            ls_phone = dw_generic.GetItem<CustomerDetails>(ll_row).CustPhoneNight;
             if (!(ls_phone == null))
             {
                 if (ls_phone.Length >= 2 && ls_phone.Substring(0, 2) == "02")
@@ -347,12 +349,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (change == false )
             {
-                dw_generic.GetItem<CustomerDetails2>(ll_row).MarkClean();
+                dw_generic.GetItem<CustomerDetails>(ll_row).MarkClean();
             }
-            ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+            ls_CustTitle = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
             ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
-            ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = ls_CustTitle;
-            ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = ls_CustTitle;
+            ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.Text = ls_CustTitle;
+            ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = ls_CustTitle;
 
             //  Clear any update flags that may have been applied to fields
             //  - the system thinks it may have to (and asks for permission 
@@ -368,7 +370,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // details in the customer window
 
             //! in case of non primary recipient remove 3 tab pages consecutively 
-            if (dw_generic.GetItem<CustomerDetails2>(0).MasterCustId > 0)
+            if (dw_generic.GetItem<CustomerDetails>(0).MasterCustId > 0)
                 {
                 //!tabpage_2.Enabled = false;                
                 //!tabpage_2.Visible = false;                
@@ -433,25 +435,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     sReturn = "cust_mailing_address_road";
                 }
-                else if (dw_generic.GetItem<CustomerDetails2>(0).IsNew && dw_generic.GetItem<CustomerDetails2>(0).IsDirty)
+                else if (dw_generic.GetItem<CustomerDetails>(0).IsNew && dw_generic.GetItem<CustomerDetails>(0).IsDirty)
                 {
                     il_customer = StaticFunctions.GetNextSequence("customer");
-                    dw_generic.GetItem<CustomerDetails2>(0).CustId = il_customer;
+                    dw_generic.GetItem<CustomerDetails>(0).CustId = il_customer;
                     sTitle = "Customer: (" + il_customer.ToString() + ") "
-                              + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
+                              + dw_generic.GetItem<CustomerDetails>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails>(0).CustInitials)))
                     {
-                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
+                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails>(0).CustInitials;
                     }
                     this.Text = sTitle;
                 }
                 else if (sReturn == "")
                 {
                     sTitle = "Customer: (" + il_customer.ToString() + ") "
-                              + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
+                              + dw_generic.GetItem<CustomerDetails>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails>(0).CustInitials)))
                     {
-                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
+                        sTitle = sTitle + ", " + dw_generic.GetItem<CustomerDetails>(0).CustInitials;
                     }
                     this.Text = sTitle;
                 }
@@ -474,7 +476,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ll_row = dw_generic.GetRow();
                 il_customer = StaticFunctions.GetNextSequence("customer");
-                li_rc = 0; dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
+                li_rc = 0; dw_generic.GetItem<CustomerDetails>(ll_row).CustId = il_customer;
             }
             return li_rc;
         }
@@ -494,8 +496,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_userid;
             ll_row = dw_generic.GetRow();
             ls_userid = StaticVariables.LoginId;
-            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
-            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
+            dw_generic.GetItem<CustomerDetails>(ll_row).CustLastAmendedUser = ls_userid;
+            dw_generic.GetItem<CustomerDetails>(ll_row).CustLastAmendedDate = System.DateTime.Today;
             li_rc = 1; dw_generic.Save();
             return li_rc;
         }
@@ -539,44 +541,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             bool lb_name_changed;
             ls_null = null;
             ll_row = dw_generic.GetRow();
-            if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced == null)
+            if (dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced == null)
             {
                 // TJB  RD7_CR002  Feb-2010: Changed
                 // Changed to set only the date, not date + time
-                //dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today;
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
+                //dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced = System.DateTime.Today;
+                dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced = System.DateTime.Today.Date;
             }
             //  If this is a new customer, it will be a new master.
             if (ib_new)
             {
                 //  Set defaults where not defined by the user
-                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustBusiness == null)
+                if (dw_generic.GetItem<CustomerDetails>(ll_row).CustBusiness == null)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustBusiness = false;
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustBusiness = false;
                 }
-                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralResident == null)
+                if (dw_generic.GetItem<CustomerDetails>(ll_row).CustRuralResident == null)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralResident = false;
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustRuralResident = false;
                 }
-                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer == null)
+                if (dw_generic.GetItem<CustomerDetails>(ll_row).CustRuralFarmer == null)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustRuralFarmer = true;
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustRuralFarmer = true;
                 }
-                if (dw_generic.GetItem<CustomerDetails2>(ll_row).CustDirListingInd == null)
+                if (dw_generic.GetItem<CustomerDetails>(ll_row).CustDirListingInd == null)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustDirListingInd = "Y";
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustDirListingInd = "Y";
                 }
             }
             //  Update the last_amended values
             ls_userid = StaticVariables.LoginId;
-            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedUser = ls_userid;
-            dw_generic.GetItem<CustomerDetails2>(ll_row).CustLastAmendedDate = System.DateTime.Today;
+            dw_generic.GetItem<CustomerDetails>(ll_row).CustLastAmendedUser = ls_userid;
+            dw_generic.GetItem<CustomerDetails>(ll_row).CustLastAmendedDate = System.DateTime.Today;
             ll_rc = 1; 
             dw_generic.Save();
             if (!(ll_rc == 1))
             {
                 //  If there's a problem, tell the user about it
-                ll_cust = dw_generic.GetItem<CustomerDetails2>(ll_row).CustId;
+                ll_cust = dw_generic.GetItem<CustomerDetails>(ll_row).CustId;
                 if (ll_cust == null)
                     ds_cust = "null";
                 else
@@ -598,9 +600,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  TJB  NPAD  Jan 2006
                 //  Check to see if the customer's name was changed
                 ll_row = dw_generic.GetRow();
-                ls_surname  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                ls_initials = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                ls_title    = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_surname  = dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
+                ls_initials = dw_generic.GetItem<CustomerDetails>(ll_row).CustInitials;
+                ls_title    = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
                 ls_surname  = (ls_surname == null)  ? "" : ls_surname.Trim();
                 ls_initials = (ls_initials == null) ? "" : ls_initials.Trim();
                 ls_title    = (ls_title == null)    ? "" : ls_title.Trim();
@@ -703,8 +705,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ll_rc = 1;
                 //  Get the new customer's ID and insert the new record
                 ll_row = dw_generic.GetRow();
-                ll_cust = dw_generic.GetItem<CustomerDetails2>(ll_row).CustId;
-                ll_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_cust = dw_generic.GetItem<CustomerDetails>(ll_row).CustId;
+                ll_dpid = dw_generic.GetItem<CustomerDetails>(ll_row).CustDpid;
                 /* insert into customer_address_moves
                     ( adr_id, cust_id, dp_id, move_in_date, 
                       move_out_date, move_out_source, move_out_user )
@@ -874,7 +876,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //        title, so this test must come after it.
             ll_rc = 0;
             ll_row = dw_generic.GetRow();
-            ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+            ls_CustTitle = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
             ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
 
             if (!uf_validate_cust_title(ls_CustTitle))
@@ -884,7 +886,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(2);
             }
-            ls_surname = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+            ls_surname = dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
             if (ls_surname == null || ls_surname == "")
             {
                 MessageBox.Show("A customer must have a name.\n "
@@ -906,7 +908,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  customer_address_moves table.
                 //  (NOTE: it may be null either before or after)
                 ll_row = dw_generic.GetRow();
-                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails>(ll_row).CustDpid;
                 ll_tmp_dpid  = (ll_tmp_dpid == null)  ? 0 : ll_tmp_dpid;
                 il_cust_dpid = (il_cust_dpid == null) ? 0 : il_cust_dpid;
                 if (!(ll_tmp_dpid == il_cust_dpid))
@@ -921,12 +923,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((bool)ib_npad_enabled && ll_rc == 1 && il_rdcontractselect == 1)
             {
                 ll_row = dw_generic.GetRow();
-                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDpid;
+                ll_tmp_dpid = dw_generic.GetItem<CustomerDetails>(ll_row).CustDpid;
                 if (!(ll_tmp_dpid == null) && ll_tmp_dpid > 0)
                 {
-                    ls_surname   = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
-                    ls_initials  = dw_generic.GetItem<CustomerDetails2>(ll_row).CustInitials;
-                    ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                    ls_surname   = dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
+                    ls_initials  = dw_generic.GetItem<CustomerDetails>(ll_row).CustInitials;
+                    ls_CustTitle = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
                     ls_surname   = (ls_surname == null) ? "" : ls_surname.Trim();
                     ls_initials  = (ls_initials == null) ? "" : ls_initials.Trim();
                     ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
@@ -1047,7 +1049,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // END IF
             //  set the kiwimail variable
 
-            ii_original_kiwi = dw_generic.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity;
+            ii_original_kiwi = dw_generic.GetItem<CustomerDetails>(al_row).CustAdpostQuantity;
             if (ii_original_kiwi == null)
             {
                 ii_original_kiwi = 0;
@@ -1062,7 +1064,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             // Get a reference to the customer title list
             List<DddwCustTitle> CustTitleList
-                = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.DataSource
+                = ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.DataSource
                                as List<DddwCustTitle>;
 
             // Normalise the customer title to search for
@@ -1092,7 +1094,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             column_lower = as_colname.ToLower();
             if (column_lower == "cust_phone_day")
             {
-                ls_phone = dw_generic.GetItem<CustomerDetails2>(al_row).CustPhoneDay;
+                ls_phone = dw_generic.GetItem<CustomerDetails>(al_row).CustPhoneDay;
                 if (!(ls_phone == null))
                 {
                     if (ls_phone.Substring(0, 2) == "02")
@@ -1107,7 +1109,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (column_lower == "cust_phone_night")
             {
-                ls_phone = dw_generic.GetItem<CustomerDetails2>(al_row).CustPhoneNight;
+                ls_phone = dw_generic.GetItem<CustomerDetails>(al_row).CustPhoneNight;
                 if (!(ls_phone == null))
                 {
                     if (ls_phone.Substring(0, 2) == "02")
@@ -1124,7 +1126,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 //  Code to validate the kiwimail field
                 //  get the value of kiwimail :
-                ll_kiwi = dw_generic.GetItem<CustomerDetails2>(0).CustAdpostQuantity;
+                ll_kiwi = dw_generic.GetItem<CustomerDetails>(0).CustAdpostQuantity;
                 if (ll_kiwi == null)
                 {
                     ll_kiwi = 0;
@@ -1146,7 +1148,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     if (ll_response != DialogResult.Yes)
                     {
-                        dw_generic.GetItem<CustomerDetails2>(al_row).CustAdpostQuantity = ii_original_kiwi;
+                        dw_generic.GetItem<CustomerDetails>(al_row).CustAdpostQuantity = ii_original_kiwi;
                         //  Set focus back to the cust_adpost_quantity
                         dw_generic.GetControlByName("cust_adpost_quantity").TabIndex = 5;
                         dw_generic.Retrieve(new object[] { il_customer });
@@ -1225,7 +1227,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             
             dw_generic.AcceptText();
             ll_row = dw_generic.GetRow();
-            CustomerDetails2 currentRecord = dw_generic.DataObject.Current as CustomerDetails2;
+            CustomerDetails currentRecord = dw_generic.DataObject.Current as CustomerDetails;
 
             if (column == "cust_title")
             {
@@ -1235,9 +1237,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // Lots of commented-out code removed for clarity.
 
                 // ls_CustTitle is the data record value while dddw_CustTitle is the dropdown value
-                ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_CustTitle = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
                 ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
-                dddw_CustTitle = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text;
+                dddw_CustTitle = ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.Text;
                 dddw_CustTitle = (dddw_CustTitle == null) ? "" : dddw_CustTitle.Trim();
 
                 // Validate the entered customer title (the user can type in anything
@@ -1258,9 +1260,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // If the customer's title has changed (in the dddw), change it in the record
                 if (!(ls_CustTitle == dddw_CustTitle))
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle = dddw_CustTitle;
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle = dddw_CustTitle;
                     //((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = dddw_CustTitle;
-                    ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
+                    ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
                 }
             }
             else  // Its a non-customer title column that has changed
@@ -1279,7 +1281,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.AcceptText();
 
             // Validate Data
-            ld_cust_date_commenced = dw_generic.GetItem<CustomerDetails2>(ll_row).CustDateCommenced;
+            ld_cust_date_commenced = dw_generic.GetItem<CustomerDetails>(ll_row).CustDateCommenced;
             if (ld_cust_date_commenced == null 
                 || ld_cust_date_commenced == DateTime.MinValue  /*System.Convert.ToDateTime("00/00/0000")*/)
             {
@@ -1288,7 +1290,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -(1);
             }
-            ls_cust_surname_company = dw_generic.GetItem<CustomerDetails2>(ll_row).CustSurnameCompany;
+            ls_cust_surname_company = dw_generic.GetItem<CustomerDetails>(ll_row).CustSurnameCompany;
             if (ls_cust_surname_company == null || ls_cust_surname_company == "")
             {
                 MessageBox.Show("A Surname/Company must be specified."
@@ -1308,7 +1310,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ll_row = dw_generic.GetRow();
                 il_customer = StaticFunctions.GetNextSequence("customer");
-                dw_generic.GetItem<CustomerDetails2>(ll_row).CustId = il_customer;
+                dw_generic.GetItem<CustomerDetails>(ll_row).CustId = il_customer;
             }
             return 1;// ancestorreturnvalue;
         }
@@ -1322,10 +1324,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (il_customer > 0)
                 {
                     ls_form_title = "Customer: (" + il_customer.ToString() + ") " 
-                             + dw_generic.GetItem<CustomerDetails2>(0).CustSurnameCompany;
-                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails2>(0).CustInitials)))
+                             + dw_generic.GetItem<CustomerDetails>(0).CustSurnameCompany;
+                    if (!(StaticFunctions.f_isempty(dw_generic.GetItem<CustomerDetails>(0).CustInitials)))
                     {
-                        ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails2>(0).CustInitials;
+                        ls_form_title = ls_form_title + ", " + dw_generic.GetItem<CustomerDetails>(0).CustInitials;
                     }
                     this.Text = ls_form_title;
                 }
@@ -1804,29 +1806,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //! assigning checked/unchecked value dirsctly on property otherwise property is not updated
             if (((Control)sender).Name == "cust_business")
             {
-                dw_generic.GetItem<CustomerDetails2>(0).CustBusiness = ((CheckBox)sender).Checked;
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(0).CustBusiness)
+                dw_generic.GetItem<CustomerDetails>(0).CustBusiness = ((CheckBox)sender).Checked;
+                if ((bool)dw_generic.GetItem<CustomerDetails>(0).CustBusiness)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(0).CustRuralFarmer = false;
-                    dw_generic.GetItem<CustomerDetails2>(0).CustRuralResident = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustRuralFarmer = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustRuralResident = false;
                 }
             }
             else if (((Control)sender).Name == "cust_rural_farmer")
             {
-                dw_generic.GetItem<CustomerDetails2>(0).CustRuralFarmer = ((CheckBox)sender).Checked;
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(0).CustRuralFarmer)
+                dw_generic.GetItem<CustomerDetails>(0).CustRuralFarmer = ((CheckBox)sender).Checked;
+                if ((bool)dw_generic.GetItem<CustomerDetails>(0).CustRuralFarmer)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(0).CustBusiness = false;
-                    dw_generic.GetItem<CustomerDetails2>(0).CustRuralResident = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustBusiness = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustRuralResident = false;
                 }
             }
             else if (((Control)sender).Name == "cust_rural_resident")
             {
-                dw_generic.GetItem<CustomerDetails2>(0).CustRuralResident = ((CheckBox)sender).Checked;
-                if ((bool)dw_generic.GetItem<CustomerDetails2>(0).CustRuralResident)
+                dw_generic.GetItem<CustomerDetails>(0).CustRuralResident = ((CheckBox)sender).Checked;
+                if ((bool)dw_generic.GetItem<CustomerDetails>(0).CustRuralResident)
                 {
-                    dw_generic.GetItem<CustomerDetails2>(0).CustBusiness = false;
-                    dw_generic.GetItem<CustomerDetails2>(0).CustRuralFarmer = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustBusiness = false;
+                    dw_generic.GetItem<CustomerDetails>(0).CustRuralFarmer = false;
                 }
             }
 
@@ -1896,15 +1898,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //    If different, save the dddw value as the data record value
                 //    ... it will be verified below
                 ll_row = dw_generic.GetRow();
-                ls_CustTitle = dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle;
+                ls_CustTitle = dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle;
                 ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
-                string dddw_CustTitle = ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text;
+                string dddw_CustTitle = ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.Text;
                 dddw_CustTitle = (dddw_CustTitle == null) ? "" : dddw_CustTitle.Trim();
                 if (!(ls_CustTitle == dddw_CustTitle))
                 {
-                    dw_generic.GetItem<CustomerDetails2>(ll_row).CustTitle = dddw_CustTitle;
+                    dw_generic.GetItem<CustomerDetails>(ll_row).CustTitle = dddw_CustTitle;
                     //((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.Text = dddw_CustTitle;
-                    ((DCustomerDetails2)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
+                    ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = dddw_CustTitle;
                     // Flag that the customer title has been changed
                     ll_customers_modified = ll_row;
                 }
