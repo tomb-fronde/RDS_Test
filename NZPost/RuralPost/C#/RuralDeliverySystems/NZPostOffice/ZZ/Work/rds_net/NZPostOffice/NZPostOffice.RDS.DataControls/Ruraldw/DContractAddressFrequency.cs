@@ -12,7 +12,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     public partial class DContractAddressFrequency : Metex.Windows.DataUserControl
 	{
-        // TJB  Sequencing review  Jan-2011: New
+        // TJB  Jan-2011  Sequencing review: New
         // Lists all frequencies associated with a contract, with selection 
         // checkboxes for those associated with a specified address.  Updates 
         // address_frequency table when changes made.
