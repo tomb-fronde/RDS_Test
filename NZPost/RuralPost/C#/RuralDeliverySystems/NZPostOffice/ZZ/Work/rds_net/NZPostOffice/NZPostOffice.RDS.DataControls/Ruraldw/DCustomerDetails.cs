@@ -14,7 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     public partial class DCustomerDetails : Metex.Windows.DataUserControl
 	{
-        // TJB  Sequencing review  Jan-2011
+        // TJB  Jan-2011  Sequencing review
         // Added Case name and Slot allocation fields
 
 		public DCustomerDetails()
@@ -64,7 +64,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
 		public int Retrieve( int? al_cust_id )
         {
-            return RetrieveCore<CustomerDetails2>(new List<CustomerDetails2>(CustomerDetails2.GetAllCustomerDetails2(al_cust_id)));
+            return RetrieveCore<CustomerDetails>(new List<CustomerDetails>(CustomerDetails.GetAllCustomerDetails2(al_cust_id)));
 		}
 
 	}

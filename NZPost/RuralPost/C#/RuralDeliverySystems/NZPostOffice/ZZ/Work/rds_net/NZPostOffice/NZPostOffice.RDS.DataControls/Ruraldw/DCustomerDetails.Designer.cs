@@ -108,7 +108,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // bindingSource
             // 
-            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.CustomerDetails2);
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.CustomerDetails);
             // 
             // cust_surname_company_t
             // 
