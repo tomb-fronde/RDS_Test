@@ -15,6 +15,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WFrequencies2001 : WAncestorWindow
     {
+        // TJB  Jan-2011  Sequencing Review
+        // Removed 'Sequence addresses' button
+
+        // TJB Oct-2010: Mail carried issues
+        // Changed to test only time part of uplift/set down times 
+        // (see dw_mail_carried_pfc_validation)
+
         #region Define
         private WFrequencies2001 iw_this;
 
@@ -50,28 +57,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private System.ComponentModel.IContainer components = null;
 
         public TabControl tab_frequencies;
-
-        public TabPage tabpage_extensions;
+        private TabPage tabpage_extensions;
 
         public URdsDw dw_extensions;
-
-        public TabPage tabpage_description;
+        private TabPage tabpage_description;
 
         public URdsDw dw_frequency_description;
-
-        public TabPage tabpage_mail_carried;
+        private TabPage tabpage_mail_carried;
 
         public URdsDw dw_mail_carried;
-
-        public TabPage tabpage_annotation;
+        private TabPage tabpage_annotation;
 
         public TextBox mle_annotation;
 
         public URdsDw dw_annotation;
 
         public URdsDw dw_header;
-
-        public UCb cb_seq;
 
         #endregion
 
@@ -123,181 +124,175 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_frequencies = new System.Windows.Forms.TabControl();
+            this.tabpage_extensions = new System.Windows.Forms.TabPage();
+            this.dw_extensions = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_description = new System.Windows.Forms.TabPage();
+            this.dw_frequency_description = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_mail_carried = new System.Windows.Forms.TabPage();
+            this.dw_mail_carried = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_annotation = new System.Windows.Forms.TabPage();
+            this.mle_annotation = new System.Windows.Forms.TextBox();
+            this.dw_annotation = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_header = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_frequencies.SuspendLayout();
+            this.tabpage_extensions.SuspendLayout();
+            this.tabpage_description.SuspendLayout();
+            this.tabpage_mail_carried.SuspendLayout();
+            this.tabpage_annotation.SuspendLayout();
             this.SuspendLayout();
-            this.tab_frequencies = new TabControl();
-
-            dw_header = new URdsDw();
-            //!this.dw_header.DataObject = new DFrequencyTitle();
-            this.cb_seq = new UCb();
-
-            Controls.Add(dw_header);
-            Controls.Add(tab_frequencies);
-            Controls.Add(cb_seq);
-            this.MaximizeBox = false;
-            this.Size = new System.Drawing.Size(583, 410);
             // 
             // st_label
             // 
-            st_label.Text = "w_frequencies2001";
-            st_label.Location = new System.Drawing.Point(5, 359);
+            this.st_label.Location = new System.Drawing.Point(5, 359);
+            this.st_label.Text = "w_frequencies2001";
             // 
             // tab_frequencies
             // 
-            TabPage tabpage_extensions = new TabPage();
-            TabPage tabpage_description = new TabPage();
-            TabPage tabpage_mail_carried = new TabPage();
-            TabPage tabpage_annotation = new TabPage();
-            tab_frequencies.Controls.Add(tabpage_extensions);
-            tab_frequencies.Controls.Add(tabpage_description);
-            tab_frequencies.Controls.Add(tabpage_mail_carried);
-            tab_frequencies.Controls.Add(tabpage_annotation);
-            tab_frequencies.SelectedIndex = 0;
-            tab_frequencies.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_frequencies.TabIndex = 1;
-            tab_frequencies.Location = new System.Drawing.Point(3, 6);
-            tab_frequencies.Size = new System.Drawing.Size(557, 340);
-            tab_frequencies.SelectedIndexChanged += new EventHandler(tab_frequencies_selectionchanging);
-            tab_frequencies.SelectedIndexChanged += new EventHandler(tab_frequencies_selectionchanged);
+            this.tab_frequencies.Controls.Add(this.tabpage_extensions);
+            this.tab_frequencies.Controls.Add(this.tabpage_description);
+            this.tab_frequencies.Controls.Add(this.tabpage_mail_carried);
+            this.tab_frequencies.Controls.Add(this.tabpage_annotation);
+            this.tab_frequencies.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_frequencies.Location = new System.Drawing.Point(3, 6);
+            this.tab_frequencies.Name = "tab_frequencies";
+            this.tab_frequencies.SelectedIndex = 0;
+            this.tab_frequencies.Size = new System.Drawing.Size(557, 340);
+            this.tab_frequencies.TabIndex = 1;
+            this.tab_frequencies.SelectedIndexChanged += new System.EventHandler(this.tab_frequencies_selectionchanged);
             // 
             // tabpage_extensions
             // 
-            dw_extensions = new URdsDw();
-            //!dw_extensions.DataObject = new DFrequenceDistances();
-            tabpage_extensions.Controls.Add(dw_extensions);
-            tabpage_extensions.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_extensions.Text = "Extensions";
-            tabpage_extensions.Size = new System.Drawing.Size(549, 311);
-            tabpage_extensions.Top = 25;
-            tabpage_extensions.Left = 3;
-            tabpage_extensions.Visible = false;
-            tabpage_extensions.Tag = "ComponentName=Frequency;";
+            this.tabpage_extensions.Controls.Add(this.dw_extensions);
+            this.tabpage_extensions.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_extensions.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_extensions.Name = "tabpage_extensions";
+            this.tabpage_extensions.Size = new System.Drawing.Size(549, 314);
+            this.tabpage_extensions.TabIndex = 0;
+            this.tabpage_extensions.Tag = "ComponentName=Frequency;";
+            this.tabpage_extensions.Text = "Extensions";
+            this.tabpage_extensions.Visible = false;
             // 
             // dw_extensions
             // 
-            dw_extensions.TabIndex = 3;
-            dw_extensions.Location = new System.Drawing.Point(5, 68);
-            //?dw_extensions.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_extensions.Size = new System.Drawing.Size(538, 240);
-            dw_extensions.RowFocusChanged += new EventHandler(dw_extensions_rowfocuschanged);
-            dw_extensions.GotFocus += new EventHandler(dw_extensions_getfocus);
-            //dw_extensions.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_extensions_constructor); 
-            //((DFrequenceDistances)dw_extensions.DataObject).CellDoubleClick += new EventHandler(dw_extensions_doubleclicked);
+            this.dw_extensions.DataObject = null;
+            this.dw_extensions.FireConstructor = false;
+            this.dw_extensions.Location = new System.Drawing.Point(5, 68);
+            this.dw_extensions.Name = "dw_extensions";
+            this.dw_extensions.Size = new System.Drawing.Size(538, 240);
+            this.dw_extensions.TabIndex = 3;
+            this.dw_extensions.RowFocusChanged += new System.EventHandler(this.dw_extensions_rowfocuschanged);
+            this.dw_extensions.GotFocus += new System.EventHandler(this.dw_extensions_getfocus);
             // 
             // tabpage_description
             // 
-            dw_frequency_description = new URdsDw();
-//!            dw_frequency_description.DataObject = new DFreqDescription();
-            tabpage_description.Controls.Add(dw_frequency_description);
-            tabpage_description.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_description.Text = "Description";
-            tabpage_description.Top = 25;
-            tabpage_description.Left = 3;
-            tabpage_description.Size = new System.Drawing.Size(549, 311);
-            tabpage_description.Visible = false;
-            tabpage_description.Tag = "ComponentName=Frequency Description;";
-
+            this.tabpage_description.Controls.Add(this.dw_frequency_description);
+            this.tabpage_description.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_description.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_description.Name = "tabpage_description";
+            this.tabpage_description.Size = new System.Drawing.Size(549, 314);
+            this.tabpage_description.TabIndex = 1;
+            this.tabpage_description.Tag = "ComponentName=Frequency Description;";
+            this.tabpage_description.Text = "Description";
+            this.tabpage_description.Visible = false;
             // 
             // dw_frequency_description
             // 
-            dw_frequency_description.TabIndex = 2;
-            dw_frequency_description.Location = new System.Drawing.Point(5, 70);
-//!            dw_frequency_description.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_frequency_description.Size = new System.Drawing.Size(540, 239);
-            dw_frequency_description.ItemChanged += new EventHandler(dw_frequency_description_itemchanged);
-            dw_frequency_description.LostFocus += new EventHandler(dw_frequency_description_losefocus);
-
-            //((DFreqDescription)dw_frequency_description.DataObject).CellClick += new EventHandler(dw_frequency_description_clicked);
-            //dw_frequency_description.DataObject.RetrieveEnd += new EventHandler(dw_frequency_description_retrieveend);
-            //dw_frequency_description.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_constructor);
-            //dw_frequency_description.PfcDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_pfc_deleterow);
-            //dw_frequency_description.PfcInsertRow = new NZPostOffice.RDS.Controls.UserEventDelegate(dw_frequency_description_pfc_insertrow);
-            //dw_frequency_description.PfcPreInsertRow += new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_frequency_description_pfc_preinsertrow);
-            //dw_frequency_description.PfcPreUpdate += new UserEventDelegate1(dw_frequency_description_pfc_preupdate);
-            //dw_frequency_description.PfcValidation += new UserEventDelegate1(dw_frequency_description_pfc_validation);
-
+            this.dw_frequency_description.DataObject = null;
+            this.dw_frequency_description.FireConstructor = false;
+            this.dw_frequency_description.Location = new System.Drawing.Point(5, 70);
+            this.dw_frequency_description.Name = "dw_frequency_description";
+            this.dw_frequency_description.Size = new System.Drawing.Size(540, 239);
+            this.dw_frequency_description.TabIndex = 2;
+            this.dw_frequency_description.ItemChanged += new System.EventHandler(this.dw_frequency_description_itemchanged);
+            this.dw_frequency_description.LostFocus += new System.EventHandler(this.dw_frequency_description_losefocus);
             // 
             // tabpage_mail_carried
             // 
-            // Gegerated from create event for tabpage_mail_carried
-            dw_mail_carried = new URdsDw();
-            //!dw_mail_carried.DataObject = new DMailCarriedForm();
-            //dw_mail_carried.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_mail_carried.Controls.Add(dw_mail_carried);
-            tabpage_mail_carried.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_mail_carried.Text = "Mail Carried";
-            tabpage_mail_carried.Top = 25;
-            tabpage_mail_carried.Left = 3;
-            tabpage_mail_carried.Size = new System.Drawing.Size(549, 330);
-            tabpage_mail_carried.Visible = false;
-            tabpage_mail_carried.Tag = "ComponentName=Mail Carried;";
-
+            this.tabpage_mail_carried.Controls.Add(this.dw_mail_carried);
+            this.tabpage_mail_carried.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_mail_carried.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_mail_carried.Name = "tabpage_mail_carried";
+            this.tabpage_mail_carried.Size = new System.Drawing.Size(549, 314);
+            this.tabpage_mail_carried.TabIndex = 2;
+            this.tabpage_mail_carried.Tag = "ComponentName=Mail Carried;";
+            this.tabpage_mail_carried.Text = "Mail Carried";
+            this.tabpage_mail_carried.Visible = false;
             // 
             // dw_mail_carried
             // 
-            dw_mail_carried.TabIndex = 2;
-            dw_mail_carried.Location = new System.Drawing.Point(5, 70);
-            dw_mail_carried.Size = new System.Drawing.Size(540, 235);            
-            dw_mail_carried.ItemChanged += new EventHandler(dw_mail_carried_itemchanged);
-            //?dw_mail_carried.ItemFocusChanged += new Metex.PBLib.Type.DataWindowEventHandler(dw_mail_carried_itemfocuschanged);
-            dw_mail_carried.LostFocus += new EventHandler(dw_mail_carried_losefocus);
-            //dw_mail_carried.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_mail_carried_constructor);
-            //dw_mail_carried.PfcPreUpdate += new UserEventDelegate1(dw_mail_carried_pfc_preupdate);
-            //dw_mail_carried.PfcValidation += new UserEventDelegate1(dw_mail_carried_pfc_validation);
-
+            this.dw_mail_carried.DataObject = null;
+            this.dw_mail_carried.FireConstructor = false;
+            this.dw_mail_carried.Location = new System.Drawing.Point(5, 70);
+            this.dw_mail_carried.Name = "dw_mail_carried";
+            this.dw_mail_carried.Size = new System.Drawing.Size(540, 235);
+            this.dw_mail_carried.TabIndex = 2;
+            this.dw_mail_carried.ItemChanged += new System.EventHandler(this.dw_mail_carried_itemchanged);
+            this.dw_mail_carried.LostFocus += new System.EventHandler(this.dw_mail_carried_losefocus);
             // 
             // tabpage_annotation
             // 
-            mle_annotation = new TextBox();
-            dw_annotation = new URdsDw();
-            //!dw_annotation.DataObject = new DFrequencyAnnotation();
-            tabpage_annotation.Controls.Add(mle_annotation);
-            tabpage_annotation.Controls.Add(dw_annotation);
-            tabpage_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_annotation.Text = "Annotation";
-            tabpage_annotation.Top = 25;
-            tabpage_annotation.Left = 3;
-            tabpage_annotation.Size = new System.Drawing.Size(549, 311);
-            tabpage_annotation.Visible = false;
-            tabpage_annotation.Tag = "ComponentName=Frequency;";
-
+            this.tabpage_annotation.Controls.Add(this.mle_annotation);
+            this.tabpage_annotation.Controls.Add(this.dw_annotation);
+            this.tabpage_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_annotation.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_annotation.Name = "tabpage_annotation";
+            this.tabpage_annotation.Size = new System.Drawing.Size(549, 314);
+            this.tabpage_annotation.TabIndex = 3;
+            this.tabpage_annotation.Tag = "ComponentName=Frequency;";
+            this.tabpage_annotation.Text = "Annotation";
+            this.tabpage_annotation.Visible = false;
             // 
             // mle_annotation
             // 
-            mle_annotation.Multiline = true;
-            mle_annotation.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            mle_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
-            mle_annotation.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            mle_annotation.TabIndex = 3;
-            mle_annotation.Location = new System.Drawing.Point(8, 89);
-            mle_annotation.Size = new System.Drawing.Size(529, 208);
-            mle_annotation.TextChanged += new EventHandler(mle_annotation_modified);
+            this.mle_annotation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.mle_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.mle_annotation.Location = new System.Drawing.Point(8, 89);
+            this.mle_annotation.Multiline = true;
+            this.mle_annotation.Name = "mle_annotation";
+            this.mle_annotation.Size = new System.Drawing.Size(529, 208);
+            this.mle_annotation.TabIndex = 3;
+            this.mle_annotation.TextChanged += new System.EventHandler(this.mle_annotation_modified);
             // 
             // dw_annotation
             // 
-            //!dw_annotation.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_annotation.TabIndex = 2;
-            dw_annotation.Location = new System.Drawing.Point(8, 65);
-            dw_annotation.Size = new System.Drawing.Size(529, 24);
-            dw_annotation.Tag = "ComponentName=Annotation;";
-            dw_annotation.LostFocus += new EventHandler(dw_annotation_losefocus);
-            //dw_annotation.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_annotation_constructor);
+            this.dw_annotation.DataObject = null;
+            this.dw_annotation.FireConstructor = false;
+            this.dw_annotation.Location = new System.Drawing.Point(8, 65);
+            this.dw_annotation.Name = "dw_annotation";
+            this.dw_annotation.Size = new System.Drawing.Size(529, 24);
+            this.dw_annotation.TabIndex = 2;
+            this.dw_annotation.Tag = "ComponentName=Annotation;";
+            this.dw_annotation.LostFocus += new System.EventHandler(this.dw_annotation_losefocus);
             // 
             // dw_header
             // 
-            //!dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_header.TabIndex = 3;
-            dw_header.Location = new System.Drawing.Point(20, 30);
-            dw_header.Size = new System.Drawing.Size(519, 60);
-            //dw_header.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_header_constructor);
+            this.dw_header.DataObject = null;
+            this.dw_header.FireConstructor = false;
+            this.dw_header.Location = new System.Drawing.Point(20, 30);
+            this.dw_header.Name = "dw_header";
+            this.dw_header.Size = new System.Drawing.Size(519, 60);
+            this.dw_header.TabIndex = 3;
             // 
-            // cb_seq
+            // WFrequencies2001
             // 
-            cb_seq.Text = "Address Sequencer";
-            cb_seq.TabIndex = 2;
-            cb_seq.Location = new System.Drawing.Point(449, 353);
-            cb_seq.Size = new System.Drawing.Size(114, 24);
-            cb_seq.Click += new EventHandler(cb_seq_clicked);
-            this.ResumeLayout();
+            this.ClientSize = new System.Drawing.Size(575, 376);
+            this.Controls.Add(this.dw_header);
+            this.Controls.Add(this.tab_frequencies);
+            this.MaximizeBox = false;
+            this.Name = "WFrequencies2001";
+            this.Controls.SetChildIndex(this.tab_frequencies, 0);
+            this.Controls.SetChildIndex(this.dw_header, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_frequencies.ResumeLayout(false);
+            this.tabpage_extensions.ResumeLayout(false);
+            this.tabpage_description.ResumeLayout(false);
+            this.tabpage_mail_carried.ResumeLayout(false);
+            this.tabpage_annotation.ResumeLayout(false);
+            this.tabpage_annotation.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>
@@ -989,6 +984,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             int lMaxSeq;
             int ll_Row;
+
             for (ll_Row = 0; ll_Row < dw_mail_carried.RowCount; ll_Row++)
             {
                 if (dw_mail_carried.uf_not_entered(ll_Row, "mc_dispatch_carried", "dispatch carried"))
@@ -1031,7 +1027,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     dw_mail_carried.isErrorColumn = "mc_set_down_time";
                     return -(1);
                 }
-                else if (dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McSetDownTime/*.TimeOfDay*/ <= dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McUpliftTime/*.TimeOfDay*/ && !dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).NextDay/* == "N"*/)
+                // TJB Oct-2010
+                // Changed to test only time part of uplift/set down times
+                //else if ( dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McSetDownTime
+                //              <= dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McUpliftTime
+                //        && !dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).NextDay/* == "N"*/)
+                else if ( ((DateTime)dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McSetDownTime).TimeOfDay
+                              <= ((DateTime)dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).McUpliftTime).TimeOfDay
+                        && !dw_mail_carried.GetItem<MailCarriedForm>(ll_Row).NextDay/* == "N"*/)
                 {
                     MessageBox.Show("The set down time must be greater then the uplift time."
                                    , "Warning"
@@ -1571,8 +1574,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lOutletCode = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
+            string sColumnName = dw_mail_carried.GetColumnName();
 
-            if (dw_mail_carried.GetColumnName().Length > 9 && dw_mail_carried.GetColumnName().Substring(3) == "_picklist")
+            //if (dw_mail_carried.GetColumnName().Length > 9 && dw_mail_carried.GetColumnName().Substring(3) == "_picklist")
+            if (sColumnName.Length > 9 && sColumnName.Substring(3) == "_picklist")
             {
                 if (dw_mail_carried.GetColumnName().Substring(3) == "_picklist")
                 {
@@ -1675,19 +1680,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_annotation.DataObject.AcceptText();
         }
 
-        protected virtual void cb_seq_clicked(object sender, EventArgs e)
-        {
-            NParameters lnv_Parameters;
-            Cursor.Current = Cursors.WaitCursor;
-            lnv_Parameters = new NParameters();
-            lnv_Parameters.longparm = il_contract;
-            lnv_Parameters.integerparm = il_sf_key;
-            lnv_Parameters.stringparm = is_delivery_days;
-            lnv_Parameters.anyparm = dw_header;
-            //OpenSheetWithParm(w_customer_sequencer, lnv_Parameters, w_main_mdi, 0, original!);
-            StaticMessage.PowerObjectParm = lnv_Parameters;
-            WCustomerSequencer w_customer_sequencer = OpenSheet<WCustomerSequencer>(StaticVariables.MainMDI);
-        }
         #endregion
     }
 }
