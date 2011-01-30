@@ -15,7 +15,7 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    // TJB Sequencing review  Jan-2011:  Adapted from WCustomerSequencer
+    // TJB  Jan-2011  Sequencing review
     //     Modified selection and sequencing algorithm.
     //     Added 'arror' buttons and 'Sequence at end' and 'Reverse sequence' buttons.
     //     Manages sequences for whole contract (not by frequency within contract)
@@ -70,13 +70,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_addr_sequence_ind.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_addr_sequence_ind_constructor);
             ((DAddrSequenceInd)dw_addr_sequence_ind.DataObject).CheckedChanged += new EventHandler(dw_addr_sequence_ind_itemchanged);
 
-            this.dw_seq.DataObject = new DSeqAddresses2();
+            this.dw_seq.DataObject = new DSeqAddresses();
             dw_seq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_seq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_seq_constructor);
-            //((DSeqAddresses2)dw_seq.DataObject).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_seq_MouseDown);
+            //((DSeqAddresses)dw_seq.DataObject).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_seq_MouseDown);
             ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).Click += new EventHandler(dw_seq_Click);
 
-            this.dw_unseq.DataObject = new DUnseqAddresses2();
+            this.dw_unseq.DataObject = new DUnseqAddresses();
             dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_unseq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_unseq_constructor);
             //((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_unseq_CellMouseDown);
@@ -134,8 +134,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // TJB  SR4691  Aug 2006
             // dw_addr_sequence_ind added
             //!idw_seq.Retrieve(new object[]{il_contract_no, il_sf_key, is_delivery_days });
-            ((DSeqAddresses2)idw_seq.DataObject).Retrieve(il_contract_no);
-            ((DUnseqAddresses2)idw_unseq.DataObject).Retrieve(il_contract_no);
+            ((DSeqAddresses)idw_seq.DataObject).Retrieve(il_contract_no);
+            ((DUnseqAddresses)idw_unseq.DataObject).Retrieve(il_contract_no);
             idw_seq.SelectRow(0, false);
             idw_unseq.SelectRow(0, false);
             ((DAddrSequenceInd)idw_addr_sequence_ind.DataObject).Retrieve(il_contract_no, null, "");
@@ -198,8 +198,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
                     {
-                        ll_sequence_no = dw_seq.GetItem<SeqAddresses2>(ll_row).SequenceNo;
-                        ll_address_id = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrId;
+                        ll_sequence_no = dw_seq.GetItem<SeqAddresses>(ll_row).SequenceNo;
+                        ll_address_id = dw_seq.GetItem<SeqAddresses>(ll_row).AdrId;
                         //* update address
                         //*    set seq_num = :ll_sequence_no
                         //*  where adr_id = :ll_address_id
@@ -569,11 +569,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (al_row >= 0)
             {
                 // Find the sequence number of the row being unsequenced
-                lSeq = dw_unseq.GetItem<UnseqAddresses2>(al_row).Sequence;
+                lSeq = dw_unseq.GetItem<UnseqAddresses>(al_row).Sequence;
                 if (!(StaticFunctions.f_nempty(lSeq)))
                 {
                     // Clear this row's sequence number
-                    dw_unseq.GetItem<UnseqAddresses2>(al_row).Sequence = null;
+                    dw_unseq.GetItem<UnseqAddresses>(al_row).Sequence = null;
                     //dw_unseq.SuspendLayout();
                     // While the sequence number is less than the new new one ...
                     while (lSeq <= il_sequence)
@@ -583,9 +583,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         for (int row = 0; row < dw_unseq.RowCount; row++)
                         {
                             // If found, drop out of scan with the lRow flag set
-                            if (dw_unseq.GetItem<UnseqAddresses2>(row).Sequence == nextSeq)
+                            if (dw_unseq.GetItem<UnseqAddresses>(row).Sequence == nextSeq)
                             {
-                                dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = lSeq;
+                                dw_unseq.GetItem<UnseqAddresses>(row).Sequence = lSeq;
                                 lSeq++;
                                 break;
                             }
@@ -635,7 +635,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_addr_sequence_ind = dw_addr_sequence_ind;
         }
 
-        private Boolean dw_unseq_filter(UnseqAddresses2 item)
+        private Boolean dw_unseq_filter(UnseqAddresses item)
         {
             if (item.Sequence > 0)
             {
@@ -674,11 +674,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 if (!(dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[row].Selected)
                 {
-                    if (dw_unseq.GetItem<UnseqAddresses2>(row).Sequence != null)
+                    if (dw_unseq.GetItem<UnseqAddresses>(row).Sequence != null)
                     {
                         //wf_removesequence(row);
-                        int seq = (int)dw_unseq.GetItem<UnseqAddresses2>(row).Sequence;
-                        dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = null;
+                        int seq = (int)dw_unseq.GetItem<UnseqAddresses>(row).Sequence;
+                        dw_unseq.GetItem<UnseqAddresses>(row).Sequence = null;
                     }
                 }
             }
@@ -688,10 +688,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 if ((dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[row].Selected)
                 {
-                    if (dw_unseq.GetItem<UnseqAddresses2>(row).Sequence == null)
+                    if (dw_unseq.GetItem<UnseqAddresses>(row).Sequence == null)
                     {
                         il_sequence++;
-                        dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = il_sequence;
+                        dw_unseq.GetItem<UnseqAddresses>(row).Sequence = il_sequence;
                         dw_unseq.AcceptText();
                     }
                 }
@@ -775,19 +775,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             if (i > 0)
                             {
-                                dw_seq.InsertItem<SeqAddresses2>(newseq);
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNumAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrUnit = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrUnit;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).ContractNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).ContractNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Customer = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Customer;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadName = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadName;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadNameId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadNameId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).SeqNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).SeqNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Sequence = (newseq + 1);
+                                dw_seq.InsertItem<SeqAddresses>(newseq);
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrAlpha = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrAlpha;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrId = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrId;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNo = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNo;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNum = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNum;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNumAlpha;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrUnit = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrUnit;
+                                dw_seq.GetItem<SeqAddresses>(newseq).ContractNo = dw_unseq.GetItem<UnseqAddresses>(row.Index).ContractNo;
+                                dw_seq.GetItem<SeqAddresses>(newseq).Customer = dw_unseq.GetItem<UnseqAddresses>(row.Index).Customer;
+                                dw_seq.GetItem<SeqAddresses>(newseq).RoadName = dw_unseq.GetItem<UnseqAddresses>(row.Index).RoadName;
+                                dw_seq.GetItem<SeqAddresses>(newseq).RoadNameId = dw_unseq.GetItem<UnseqAddresses>(row.Index).RoadNameId;
+                                dw_seq.GetItem<SeqAddresses>(newseq).SeqNum = dw_unseq.GetItem<UnseqAddresses>(row.Index).SeqNum;
+                                dw_seq.GetItem<SeqAddresses>(newseq).Sequence = (newseq + 1);
                                 newseq++;
                                 //!dw_unseq.DataObject.DeleteItemAt(row.Index);
                                 deleteIndexes.Add(row.Index);
@@ -813,19 +813,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             {
                                 newseq = (newseq > dw_seq.RowCount) ? dw_seq.RowCount : newseq;
 
-                                dw_seq.InsertItem<SeqAddresses2>(newseq);
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrNumAlpha;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).AdrUnit = dw_unseq.GetItem<UnseqAddresses2>(row.Index).AdrUnit;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).ContractNo = dw_unseq.GetItem<UnseqAddresses2>(row.Index).ContractNo;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Customer = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Customer;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadName = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadName;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).RoadNameId = dw_unseq.GetItem<UnseqAddresses2>(row.Index).RoadNameId;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).SeqNum = dw_unseq.GetItem<UnseqAddresses2>(row.Index).SeqNum;
-                                dw_seq.GetItem<SeqAddresses2>(newseq).Sequence = dw_unseq.GetItem<UnseqAddresses2>(row.Index).Sequence;
+                                dw_seq.InsertItem<SeqAddresses>(newseq);
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrAlpha = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrAlpha;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrId = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrId;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNo = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNo;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNum = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNum;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrNumAlpha = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrNumAlpha;
+                                dw_seq.GetItem<SeqAddresses>(newseq).AdrUnit = dw_unseq.GetItem<UnseqAddresses>(row.Index).AdrUnit;
+                                dw_seq.GetItem<SeqAddresses>(newseq).ContractNo = dw_unseq.GetItem<UnseqAddresses>(row.Index).ContractNo;
+                                dw_seq.GetItem<SeqAddresses>(newseq).Customer = dw_unseq.GetItem<UnseqAddresses>(row.Index).Customer;
+                                dw_seq.GetItem<SeqAddresses>(newseq).RoadName = dw_unseq.GetItem<UnseqAddresses>(row.Index).RoadName;
+                                dw_seq.GetItem<SeqAddresses>(newseq).RoadNameId = dw_unseq.GetItem<UnseqAddresses>(row.Index).RoadNameId;
+                                dw_seq.GetItem<SeqAddresses>(newseq).SeqNum = dw_unseq.GetItem<UnseqAddresses>(row.Index).SeqNum;
+                                dw_seq.GetItem<SeqAddresses>(newseq).Sequence = dw_unseq.GetItem<UnseqAddresses>(row.Index).Sequence;
                                 newseq++;
                                 deleteIndexes.Add(row.Index);
                             }
@@ -852,7 +852,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Change sort order to include adr_no_alpha and customer
             //  Made sort order change in data window too
             dw_unseq.DataObject.SortString = "road_name A, adr_no_numeric A, adr_alpha A, adr_unit A, customer A";
-            dw_unseq.DataObject.Sort<UnseqAddresses2>();
+            dw_unseq.DataObject.Sort<UnseqAddresses>();
 
             this.ResumeLayout(false);
 
@@ -886,20 +886,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int newrow = dw_unseq.RowCount;
             foreach (int ll_selectedrow1 in selRows)
             {
-                dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).Sequence = null;
-                dw_unseq.InsertItem<UnseqAddresses2>(newrow);
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrAlpha = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrAlpha;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrId = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrId;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrNo = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrNo;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrNum = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrNum;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrNumAlpha = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrNumAlpha;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).AdrUnit = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).AdrUnit;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).ContractNo = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).ContractNo;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).Customer = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).Customer;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).RoadName = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).RoadName;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).RoadNameId = dw_seq.GetItem<SeqAddresses2>(ll_selectedrow1).RoadNameId;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).SeqNum = null;
-                dw_unseq.GetItem<UnseqAddresses2>(newrow).Sequence = null;
+                dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).Sequence = null;
+                dw_unseq.InsertItem<UnseqAddresses>(newrow);
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrAlpha = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrAlpha;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrId = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrId;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrNo = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrNo;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrNum = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrNum;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrNumAlpha;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).AdrUnit = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).AdrUnit;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).ContractNo = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).ContractNo;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).Customer = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).Customer;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).RoadName = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).RoadName;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).RoadNameId = dw_seq.GetItem<SeqAddresses>(ll_selectedrow1).RoadNameId;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).SeqNum = null;
+                dw_unseq.GetItem<UnseqAddresses>(newrow).Sequence = null;
                 newrow++;
 
                 dw_seq.DeleteItemAt(ll_selectedrow1);
@@ -909,14 +909,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Remove and sequence numbers on the unsequenced addresses
             for (int row = 0; row < dw_unseq.RowCount; row++)
             {
-                dw_unseq.GetItem<UnseqAddresses2>(row).Sequence = null;
+                dw_unseq.GetItem<UnseqAddresses>(row).Sequence = null;
             }
 
             //  TJB  SR4461  Dec 2004
             //  Disabled setting unseq datawindow sort order: use whatever
             //  order is defined (set in datawindow and reset by cb_seq).
             //  dw_unseq.SetSort('adr_no_numeric')
-            dw_unseq.DataObject.Sort<UnseqAddresses2>();
+            dw_unseq.DataObject.Sort<UnseqAddresses>();
 
             dw_unseq.SelectRow(0, false);
             dw_seq.SelectRow(0, false);
@@ -945,8 +945,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             rows = dw_unseq.RowCount;
             for (int row = 0; row < rows; row++ )
             {
-                seqnum = dw_unseq.GetItem<UnseqAddresses2>(row).SeqNum;
-                sequence = dw_unseq.GetItem<UnseqAddresses2>(row).Sequence;
+                seqnum = dw_unseq.GetItem<UnseqAddresses>(row).SeqNum;
+                sequence = dw_unseq.GetItem<UnseqAddresses>(row).Sequence;
                 if (seqnum == null)
                     s_seqnum = "null";
                 else
@@ -965,8 +965,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 msg += row.ToString("###") + ",  " 
                        + "N = " + s_seqnum + ",  "
                        + "S = " + s_sequence + ",  "
-                       + dw_unseq.GetItem<UnseqAddresses2>(row).AdrNum  + " "
-                       + dw_unseq.GetItem<UnseqAddresses2>(row).RoadName
+                       + dw_unseq.GetItem<UnseqAddresses>(row).AdrNum  + " "
+                       + dw_unseq.GetItem<UnseqAddresses>(row).RoadName
                        + "\n";
             }
             MessageBox.Show(msg, "Unseq");
@@ -1457,7 +1457,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Sort the datawindow into street name order so we can easily 
             //  pick the unique names and assign round ID numbers to them.
             dw_seq.DataObject.SortString = "road_name A";
-            dw_seq.DataObject.Sort<SeqAddresses2>();
+            dw_seq.DataObject.Sort<SeqAddresses>();
             if (false)
             {
                 MessageBox.Show("Failed to set address road name sort order.\n\n" 
@@ -1487,14 +1487,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             li_colour = -1;
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
-                ls_roadname = dw_seq.GetItem<SeqAddresses2>(ll_row).RoadName;
+                ls_roadname = dw_seq.GetItem<SeqAddresses>(ll_row).RoadName;
                 if (ls_roadname == null)
                 {
                     ls_roadname = "";
                 }
                 if (ls_oldroadname == ls_roadname)
                 {
-                    dw_seq.GetItem<SeqAddresses2>(ll_row).RoadNameId = ll_roadnameid;
+                    dw_seq.GetItem<SeqAddresses>(ll_row).RoadNameId = ll_roadnameid;
                 }
                 else
                 {
@@ -1507,7 +1507,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     ls_oldroadname = ls_roadname;
                     ll_roadnameid = ll_roadnameid + 1;
-                    dw_seq.GetItem<SeqAddresses2>(ll_row).RoadNameId = ll_roadnameid;
+                    dw_seq.GetItem<SeqAddresses>(ll_row).RoadNameId = ll_roadnameid;
                     ll_rc = 1; li_file.WriteLine(ll_roadnameid.ToString() + ',' + '\"' + ls_roadname + "\"," + ',' + ls_colourvalues[li_colour] + ',' + ls_font + ',' + ls_street_size + ',' + ls_delivery_size);
                     if (ll_rc > 0)
                         ll_written++;
@@ -1534,7 +1534,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return;//? return -(1);
             }
             dw_seq.DataObject.SortString = "seq_num A";
-            dw_seq.DataObject.Sort<SeqAddresses2>();
+            dw_seq.DataObject.Sort<SeqAddresses>();
             if (false)
             {
                 MessageBox.Show("Failed to set delivery sequence sort order\n\n" 
@@ -1567,14 +1567,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? nCustSlotAllocation = 0;
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
-                sAdrNo = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrNo;
-                sAdrUnit = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrUnit;
-                sAdrAlpha = dw_seq.GetItem<SeqAddresses2>(ll_row).AdrAlpha;
-                nRoadNameID = dw_seq.GetItem<SeqAddresses2>(ll_row).RoadNameId;
-                sCustSurnameCompany = dw_seq.GetItem<SeqAddresses2>(ll_row).CustSurnameCompany;
-                sCustInitials = dw_seq.GetItem<SeqAddresses2>(ll_row).CustInitials;
-                sCustCaseName = dw_seq.GetItem<SeqAddresses2>(ll_row).CustCaseName;
-                nCustSlotAllocation= dw_seq.GetItem<SeqAddresses2>(ll_row).CustSlotAllocation;
+                sAdrNo = dw_seq.GetItem<SeqAddresses>(ll_row).AdrNo;
+                sAdrUnit = dw_seq.GetItem<SeqAddresses>(ll_row).AdrUnit;
+                sAdrAlpha = dw_seq.GetItem<SeqAddresses>(ll_row).AdrAlpha;
+                nRoadNameID = dw_seq.GetItem<SeqAddresses>(ll_row).RoadNameId;
+                sCustSurnameCompany = dw_seq.GetItem<SeqAddresses>(ll_row).CustSurnameCompany;
+                sCustInitials = dw_seq.GetItem<SeqAddresses>(ll_row).CustInitials;
+                sCustCaseName = dw_seq.GetItem<SeqAddresses>(ll_row).CustCaseName;
+                nCustSlotAllocation= dw_seq.GetItem<SeqAddresses>(ll_row).CustSlotAllocation;
 
                 sAdrNo = (sAdrNo == null) ? "" : sAdrNo;
                 sAdrUnit = (sAdrUnit == null) ? "" : sAdrUnit;
@@ -1690,7 +1690,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? nPrevSeq = 0, nThisSeq = 0;
             int? nPrevSeqNum = 0, nThisSeqNum = 0;
 
-            SeqAddresses2 thisItem = new SeqAddresses2();
+            SeqAddresses thisItem = new SeqAddresses();
 
             int nRows = dw_seq.RowCount;
             List<int> selRows = new List<int>();
@@ -1706,39 +1706,39 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 nPrevRow = nThisRow - 1;
 
-                nPrevSeqNum = dw_seq.GetItem<SeqAddresses2>(nPrevRow).SeqNum;
-                nThisSeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
-                nPrevSeq = dw_seq.GetItem<SeqAddresses2>(nPrevRow).Sequence;
-                nThisSeq = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
+                nPrevSeqNum = dw_seq.GetItem<SeqAddresses>(nPrevRow).SeqNum;
+                nThisSeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
+                nPrevSeq = dw_seq.GetItem<SeqAddresses>(nPrevRow).Sequence;
+                nThisSeq = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
 
-                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrAlpha;
-                thisItem.AdrId = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrId;
-                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNo;
-                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNum;
-                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNumAlpha;
-                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrUnit;
-                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses2>(nThisRow).ContractNo;
-                thisItem.Customer = dw_seq.GetItem<SeqAddresses2>(nThisRow).Customer;
-                thisItem.RoadName = dw_seq.GetItem<SeqAddresses2>(nThisRow).RoadName;
-                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses2>(nThisRow).RoadNameId;
-                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
-                thisItem.Sequence = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
+                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrAlpha;
+                thisItem.AdrId = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
+                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNo;
+                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNum;
+                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNumAlpha;
+                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrUnit;
+                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses>(nThisRow).ContractNo;
+                thisItem.Customer = dw_seq.GetItem<SeqAddresses>(nThisRow).Customer;
+                thisItem.RoadName = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadName;
+                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadNameId;
+                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
+                thisItem.Sequence = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
 
                 dw_seq.DeleteItemAt(nThisRow);
-                dw_seq.InsertItem<SeqAddresses2>(nPrevRow);
+                dw_seq.InsertItem<SeqAddresses>(nPrevRow);
 
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrAlpha = thisItem.AdrAlpha;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrId = thisItem.AdrId;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrNo = thisItem.AdrNo;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrNum = thisItem.AdrNum;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrNumAlpha = thisItem.AdrNumAlpha;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).AdrUnit = thisItem.AdrUnit;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).ContractNo = thisItem.ContractNo;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).Customer = thisItem.Customer;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).RoadName = thisItem.RoadName;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).RoadNameId = thisItem.RoadNameId;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).SeqNum = thisItem.SeqNum;
-                dw_seq.GetItem<SeqAddresses2>(nPrevRow).Sequence = thisItem.Sequence;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrAlpha = thisItem.AdrAlpha;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrId = thisItem.AdrId;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNo = thisItem.AdrNo;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNum = thisItem.AdrNum;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNumAlpha = thisItem.AdrNumAlpha;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrUnit = thisItem.AdrUnit;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).ContractNo = thisItem.ContractNo;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).Customer = thisItem.Customer;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).RoadName = thisItem.RoadName;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).RoadNameId = thisItem.RoadNameId;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).SeqNum = thisItem.SeqNum;
+                dw_seq.GetItem<SeqAddresses>(nPrevRow).Sequence = thisItem.Sequence;
             }
 
             dw_seq.Refresh();
@@ -1771,7 +1771,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? nThisSeq = 0;
             int? nThisSeqNum = 0;
 
-            SeqAddresses2 thisItem = new SeqAddresses2();
+            SeqAddresses thisItem = new SeqAddresses();
 
             int nRows = dw_seq.RowCount;
             List<int> selRows = new List<int>();
@@ -1790,37 +1790,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 nNextRow = nThisRow + 1;
                 movedRows.Add(nNextRow+1);
 
-                nThisSeq = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
-                nThisSeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
+                nThisSeq = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
+                nThisSeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
 
-                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrAlpha;
-                thisItem.AdrId = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrId;
-                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNo;
-                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNum;
-                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrNumAlpha;
-                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses2>(nThisRow).AdrUnit;
-                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses2>(nThisRow).ContractNo;
-                thisItem.Customer = dw_seq.GetItem<SeqAddresses2>(nThisRow).Customer;
-                thisItem.RoadName = dw_seq.GetItem<SeqAddresses2>(nThisRow).RoadName;
-                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses2>(nThisRow).RoadNameId;
-                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses2>(nThisRow).SeqNum;
-                thisItem.Sequence = dw_seq.GetItem<SeqAddresses2>(nThisRow).Sequence;
+                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrAlpha;
+                thisItem.AdrId = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
+                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNo;
+                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNum;
+                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNumAlpha;
+                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrUnit;
+                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses>(nThisRow).ContractNo;
+                thisItem.Customer = dw_seq.GetItem<SeqAddresses>(nThisRow).Customer;
+                thisItem.RoadName = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadName;
+                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadNameId;
+                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
+                thisItem.Sequence = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
 
                 dw_seq.DeleteItemAt(nThisRow);
-                dw_seq.InsertItem<SeqAddresses2>(nNextRow);
+                dw_seq.InsertItem<SeqAddresses>(nNextRow);
 
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrAlpha = thisItem.AdrAlpha;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrId = thisItem.AdrId;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrNo = thisItem.AdrNo;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrNum = thisItem.AdrNum;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrNumAlpha = thisItem.AdrNumAlpha;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).AdrUnit = thisItem.AdrUnit;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).ContractNo = thisItem.ContractNo;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).Customer = thisItem.Customer;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).RoadName = thisItem.RoadName;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).RoadNameId = thisItem.RoadNameId;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).SeqNum = thisItem.SeqNum;
-                dw_seq.GetItem<SeqAddresses2>(nNextRow).Sequence = thisItem.Sequence;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrAlpha = thisItem.AdrAlpha;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrId = thisItem.AdrId;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNo = thisItem.AdrNo;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNum = thisItem.AdrNum;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNumAlpha = thisItem.AdrNumAlpha;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrUnit = thisItem.AdrUnit;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).ContractNo = thisItem.ContractNo;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).Customer = thisItem.Customer;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).RoadName = thisItem.RoadName;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).RoadNameId = thisItem.RoadNameId;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).SeqNum = thisItem.SeqNum;
+                dw_seq.GetItem<SeqAddresses>(nNextRow).Sequence = thisItem.Sequence;
             }
             dw_seq.Refresh();
             dw_seq.SelectRow(0, false);
@@ -1901,7 +1901,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (int nRow = 0; nRow < nRows; nRow++)
             {
                 oldrow = unsequencedItems[nRow].Row;
-                dw_unseq.GetItem<UnseqAddresses2>(oldrow).Sequence = newseq;
+                dw_unseq.GetItem<UnseqAddresses>(oldrow).Sequence = newseq;
                 newseq++;
             }
 
