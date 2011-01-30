@@ -16,6 +16,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WRenewal2001 : WAncestorWindow
     {
+        // TJB RPI_015 Oct-2010 
+        // Changed evaluation of ConProcessingHoursPerWeek 
+        // (see wf_checkaccepted)
+        //
         // TJB RPCR_01 July-2010
         // Added most functions to DContractVehicle with support here
         // Added error handling to vehicle insert & update
@@ -849,6 +853,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lContract;
             int? lSequence;
             int lCount = 0;
+
             if (idw_renewal.GetItem<Renewal>(0).ConStartDate == null)
             {
                 sColumn = "con_start_date";
@@ -869,7 +874,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , this.Text
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek))
+            // TJB RPI_015 Oct-2010: Changed evaluation wf_checkaccepted
+            // The f_nempty function converts the value to an integer, with rounding, and returns TRUE
+            // if the value is 0.  This rounds values down if they are less than 0.5, causing valid 
+            // processing hours to be rejected.  
+            //else if (StaticFunctions.f_nempty(idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek))
+            else if ( idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek == null
+                || idw_renewal.GetItem<Renewal>(0).ConProcessingHoursPerWeek == 0.0M )
             {
                 MessageBox.Show("This renewal cannot be accepted because the processing hours per week have not been defined yet."
                                , this.Text
