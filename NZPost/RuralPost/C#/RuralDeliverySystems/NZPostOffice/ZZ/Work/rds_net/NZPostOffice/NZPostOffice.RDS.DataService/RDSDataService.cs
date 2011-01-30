@@ -16,7 +16,10 @@ namespace NZPostOffice.RDS.DataService
     // TJB   Jan-2011  Sequencing Review
     // Added UpdateAddressSeq, _UpdateAddressSeq, ClearAddressSeq, _ClearAddressSeq, FgetFrequency and _FgetFrequency
     // Obsoleted: InsertAddressFreqSeq, _InsertAddressFreqSeq, DeleteFromAddressFreqSeq and _DeleteFromAddressFreqSeq (not yet deleted)
-
+    //
+    // TJB  Jan-2011  RPI_027
+    // Changed ldt_movein parameter type from int? to DateTime?
+    //
     // TJB RPCR_014  Oct-2010
     // Renamed UpdateArticalCountContractSeqNumber as ClearArticalCountContractSeqNumber
     //     and _ UpdateArticalCountContractSeqNumber as _ClearArticalCountContractSeqNumber
@@ -598,28 +601,28 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_GetContractInfoByNo", il_contract_no);
             return obj;
         }
-        // TJB Jan-2010  Sequencing Review: No longer used
+        // TJB Jan-2011  Sequencing Review: No longer used
         public static RDSDataService InsertAddressFreqSeq(int? il_sf_key, int? ll_sequence_no, int? il_contract_no, int? ll_address_id, string is_delivery_days)
         {
             RDSDataService obj = Execute("_InsertAddressFreqSeq", il_sf_key, ll_sequence_no, il_contract_no, ll_address_id, is_delivery_days);
             return obj;
         }
 
-        // TJB Jan-2010  Sequencing Review: No longer used
+        // TJB Jan-2011  Sequencing Review: No longer used
         public static RDSDataService DeleteFromAddressFreqSeq(int? il_sf_key, int? il_contract_no, string is_delivery_days)
         {
             RDSDataService obj = Execute("_DeleteFromAddressFreqSeq", il_sf_key, il_contract_no, is_delivery_days);
             return obj;
         }
 
-        // TJB Jan-2010  Sequencing Review: New
+        // TJB Jan-2011  Sequencing Review: New
         public static RDSDataService UpdateAddressSeq(int? seq_no, int? adr_id)
         {
             RDSDataService obj = Execute("_UpdateAddressSeq", seq_no, adr_id);
             return obj;
         }
 
-        // TJB Jan-2010  Sequencing Review: New
+        // TJB Jan-2011  Sequencing Review: New
         public static RDSDataService ClearAddressSeq(int? contract_no)
         {
             RDSDataService obj = Execute("_ClearAddressSeq", contract_no);
@@ -4516,7 +4519,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  RPI_027  Jan-2011
+        // TJB  Jan-2011  RPI_027
         // Changed ldt_movein parameter type from int? to DateTime?
         [ServerMethod]
         private void _InsertCustomerAddressMoves(int? il_addrid, int? ll_custid, DateTime? ldt_movein)
@@ -5322,7 +5325,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Jan-2010  Sequencing Review: No longer used
+        // TJB  Jan-2011  Sequencing Review: No longer used
         [ServerMethod]
         private void _InsertAddressFreqSeq(int? il_sf_key, int? ll_sequence_no, int? il_contract_no, int? ll_address_id, string is_delivery_days)
         {
@@ -5356,7 +5359,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Jan-2010  Sequencing Review: No longer used
+        // TJB  Jan-2011  Sequencing Review: No longer used
         [ServerMethod]
         private void _DeleteFromAddressFreqSeq(int? il_sf_key, int? il_contract_no, string is_delivery_days)
         {
@@ -5391,7 +5394,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Jan-2010  Sequencing Review: New
+        // TJB  Jan-2011  Sequencing Review: New
         [ServerMethod]
         private void _UpdateAddressSeq(int? seq_no, int? adr_id)
         {
@@ -5423,7 +5426,7 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Jan-2010  Sequencing Review: New
+        // TJB  Jan-2011  Sequencing Review: New
         [ServerMethod]
         private void _ClearAddressSeq(int? contract_no)
         {
