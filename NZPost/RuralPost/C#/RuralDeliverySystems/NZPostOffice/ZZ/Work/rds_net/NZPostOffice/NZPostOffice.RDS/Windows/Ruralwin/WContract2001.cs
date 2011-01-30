@@ -4,6 +4,7 @@ using NZPostOffice.RDS.Controls;
 using NZPostOffice.RDS.Menus;
 using NZPostOffice.RDS.DataService;
 using NZPostOffice.Shared;
+using NZPostOffice.Shared.Managers;
 using System.Collections.Generic;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.DataControls.Ruraldw;
@@ -19,12 +20,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContract2001 : WAncestorWindow
     {
+        // TJB Sequencing Review  Jan-2011
+        // Add cb_seq button to address tab, and cb_seq_clicked event handler
+        // - calls address sequencer
+        //
+        // TJB 13-Oct-2010: unimplemented fix for unhandled exception
+        // when attempting to add allowances to an unactivated new contract
+        // (see openAddAllowance)
+        //
         // TJB RPCR_017 July-2010
         // Changed WAddAllowance significantly.  Obsolete version now WAddAllowance0.cs.
         // Added lookup of copntract effective date and pass to WAddAllowance.
 
         #region Define
+
         public int il_Contract_no;
+
         public int il_con_active_seq;
 
         public int il_count;
@@ -157,6 +168,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public TabPage tabpage_cmb;
 
+        private Button SeqAddresses;
+
         public URdsDw dw_cmbs;
 
         #endregion
@@ -198,24 +211,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_piece_rates.DataObject = new DContractPieceRates();
             dw_piece_rates.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            //jlwang:moved from InitializeComponent
+            //Moved from InitializeComponent
             dw_contract.Constructor += new UserEventDelegate(dw_contract_constructor);
             dw_contract.URdsDwItemFocuschanged += new EventDelegate(dw_contract_itemfocuschanged);
             dw_contract.PfcPostUpdate += new UserEventDelegate(dw_contract_pfc_postupdate);
-            dw_contract.WinValidate += new UserEventDelegate2(of_validate); //added by jlwangd
+            dw_contract.WinValidate += new UserEventDelegate2(of_validate);
             dw_contract.DataObject.RetrieveEnd += new EventHandler(dw_contract_retrieveend);
             ((Button)(dw_contract.GetControlByName("bo_button"))).Click += new EventHandler(dw_contract_clicked);
             ((Button)(dw_contract.GetControlByName("lo_button"))).Click += new EventHandler(dw_contract_clicked);
 
             dw_contract_address.Constructor += new UserEventDelegate(dw_contract_address_constructor);
             dw_contract_address.PfcPreInsertRow += new UserEventDelegate1(dw_contract_address_pfc_preinsertrow);
-            dw_contract_address.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_contract_address.WinValidate += new UserEventDelegate2(of_validate);
             ((DAddressList)dw_contract_address.DataObject).CellDoubleClick += new EventHandler(dw_contract_address_doubleclicked);
+            SeqAddresses.Click += new System.EventHandler(this.cb_seq_clicked);
 
             dw_renewals.Constructor += new UserEventDelegate(dw_renewals_constructor);
             dw_renewals.PfcPreInsertRow += new UserEventDelegate1(dw_renewals_pfc_preinsertrow);
             dw_renewals.PfcPreDeleteRow += new UserEventDelegate1(dw_renewals_pfc_predeleterow);
-            dw_renewals.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_renewals.WinValidate += new UserEventDelegate2(of_validate);
             ((DRenewals)dw_renewals.DataObject).CellClick += new EventHandler(dw_renewals_clicked);
             ((DRenewals)dw_renewals.DataObject).CellDoubleClick += new EventHandler(dw_renewals_doubleclicked);
 
@@ -231,13 +245,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_types.Constructor += new UserEventDelegate(dw_types_constructor);
             dw_types.PfcValidation += new UserEventDelegate1(dw_types_pfc_validation);
-            dw_types.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_types.WinValidate += new UserEventDelegate2(of_validate);
 
             dw_contract_allowances.Constructor += new UserEventDelegate(dw_contract_allowances_constructor);
             ((DContractAllowancesV2)dw_contract_allowances.DataObject).CellDoubleClick += new EventHandler(dw_contract_allowances_doubleclicked);
             dw_contract_allowances.PfcInsertRow = new UserEventDelegate(dw_contract_allowances_pfc_preinsertrow);
             dw_contract_allowances.PfcPreUpdate += new UserEventDelegate1(dw_contract_allowances_pfc_preupdate);
-            //dw_contract_allowances.UpdateStart = new UserEventDelegate(dw_contract_allowances_updatestart);
             dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate);
 
             // TJB  Release 7.1.3 fixups Aug 2010: Added
@@ -245,31 +258,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_artical_counts.Constructor += new UserEventDelegate(dw_artical_counts_constructor);
             dw_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_artical_counts_pfc_preinsertrow);
-            dw_artical_counts.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_artical_counts.WinValidate += new UserEventDelegate2(of_validate);
 
             dw_piece_rates.Constructor += new UserEventDelegate(dw_piece_rates_constructor);
-            dw_piece_rates.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_piece_rates.WinValidate += new UserEventDelegate2(of_validate);
             ((DContractPieceRates)dw_piece_rates.DataObject).CellDoubleClick += new EventHandler(dw_piece_rates_doubleclicked);
             ((DContractPieceRates)dw_piece_rates.DataObject).CellClick += new EventHandler(dw_piece_rates_clicked);
+
             dw_fixed_assets.Constructor += new UserEventDelegate(dw_fixed_assets_constructor);
-            //Metex.Windows.DataUserControl idw_fixed_assets;
-            //idw_fixed_assets = new DContractFixedAssetsTest();
-            //((DContractFixedAssetsTest)idw_fixed_assets).TextBoxLostFocus += new EventHandler(this.idw_fixed_assets_itemchanged);
             ((DContractFixedAssets)dw_fixed_assets.DataObject).TextBoxLostFocus += new EventHandler(dw_fixed_assets_ItemChanged);
             dw_fixed_assets.PfcValidation += new UserEventDelegate1(dw_fixed_assets_pfc_validation);
-            //dw_fixed_assets.UpdateStart = new UserEventDelegate(dw_fixed_assets_updatestart);
-            dw_fixed_assets.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_fixed_assets.WinValidate += new UserEventDelegate2(of_validate);
             dw_fixed_assets.UpdateEnd += new UserEventDelegate(dw_fix_winpfcsave);
+
             dw_cmbs.Constructor += new UserEventDelegate(dw_cmbs_constructor);
             ((DCmbAddressList)dw_cmbs.DataObject).CellDoubleClick += new EventHandler(dw_cmbs_doubleclicked);
             dw_cmbs.PfcDeleteRow += new UserEventDelegate(dw_cmbs_pfc_deleterow);
             dw_cmbs.PfcInsertRow = new UserEventDelegate(dw_cmbs_pfc_preinsertrow);
             dw_cmbs.PfcPreDeleteRow += new UserEventDelegate1(dw_cmbs_pfc_predeleterow);
-            dw_cmbs.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            dw_cmbs.WinValidate += new UserEventDelegate2(of_validate);
             ((DCmbAddressList)dw_cmbs.DataObject).CellClick += new EventHandler(dw_cmbs_clicked);
-            //jlwang:end
-
-            //?dw_artical_counts_constructor();
         }
 
         #region Form Events & Methods
@@ -503,441 +511,422 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_contract = new System.Windows.Forms.TabControl();
+            this.tabpage_contract = new System.Windows.Forms.TabPage();
+            this.dw_contract = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_customers = new System.Windows.Forms.TabPage();
+            this.SeqAddresses = new System.Windows.Forms.Button();
+            this.dw_contract_address = new NZPostOffice.RDS.Controls.URdsDw();
+            this.st_custlist_print = new System.Windows.Forms.Label();
+            this.st_custlist_updated = new System.Windows.Forms.Label();
+            this.em_custlist_printed = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
+            this.em_custlist_updated = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
+            this.tabpage_renewals = new System.Windows.Forms.TabPage();
+            this.dw_renewals = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_frequencies = new System.Windows.Forms.TabPage();
+            this.dw_route_frequency = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_route_audit = new System.Windows.Forms.TabPage();
+            this.dw_route_audit = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_types = new System.Windows.Forms.TabPage();
+            this.dw_types = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_allowances = new System.Windows.Forms.TabPage();
+            this.dw_contract_allowances = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_article_count = new System.Windows.Forms.TabPage();
+            this.dw_artical_counts = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_piece_rates = new System.Windows.Forms.TabPage();
+            this.dw_piece_rates = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_fixed_assets = new System.Windows.Forms.TabPage();
+            this.dw_fixed_assets = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_cmb = new System.Windows.Forms.TabPage();
+            this.dw_cmbs = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_contract.SuspendLayout();
+            this.tabpage_contract.SuspendLayout();
+            this.tabpage_customers.SuspendLayout();
+            this.tabpage_renewals.SuspendLayout();
+            this.tabpage_frequencies.SuspendLayout();
+            this.tabpage_route_audit.SuspendLayout();
+            this.tabpage_types.SuspendLayout();
+            this.tabpage_allowances.SuspendLayout();
+            this.tabpage_article_count.SuspendLayout();
+            this.tabpage_piece_rates.SuspendLayout();
+            this.tabpage_fixed_assets.SuspendLayout();
+            this.tabpage_cmb.SuspendLayout();
             this.SuspendLayout();
-            this.tab_contract = new TabControl();
-            Controls.Add(tab_contract);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.Location = new System.Drawing.Point(1, 6);
-            this.Size = new System.Drawing.Size(573, 400);
-
             // 
             // st_label
             // 
-            st_label.Text = "w_contract2001";
-            st_label.Location = new System.Drawing.Point(3, 352);
-
+            this.st_label.Location = new System.Drawing.Point(3, 352);
+            this.st_label.Text = "w_contract2001";
             // 
             // tab_contract
             // 
-            tabpage_contract = new TabPage();
-            tabpage_customers = new TabPage();
-            tabpage_renewals = new TabPage();
-            tabpage_frequencies = new TabPage();
-            tabpage_route_audit = new TabPage();
-            tabpage_types = new TabPage();
-            tabpage_allowances = new TabPage();
-            tabpage_article_count = new TabPage();
-            tabpage_piece_rates = new TabPage();
-            tabpage_fixed_assets = new TabPage();
-            tabpage_cmb = new TabPage();
-
-            tab_contract.Controls.Add(tabpage_contract);
-            tab_contract.Controls.Add(tabpage_customers);
-            tab_contract.Controls.Add(tabpage_renewals);
-            tab_contract.Controls.Add(tabpage_frequencies);
-            tab_contract.Controls.Add(tabpage_route_audit);
-            tab_contract.Controls.Add(tabpage_types);
-            tab_contract.Controls.Add(tabpage_allowances);
-            tab_contract.Controls.Add(tabpage_article_count);
-            tab_contract.Controls.Add(tabpage_piece_rates);
-            tab_contract.Controls.Add(tabpage_fixed_assets);
-            tab_contract.Controls.Add(tabpage_cmb);
-            tab_contract.GotFocus += new EventHandler(tab_contract_GotFocus);
-            tab_contract.SelectedIndex = 0;
-            tab_contract.Multiline = true;
-            tab_contract.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tab_contract.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_contract.TabIndex = 1;
-            tab_contract.Height = 344;
-            tab_contract.Width = 558;
-            tab_contract.Top = 4;
-            tab_contract.Left = 3;
-            tab_contract.Tag = "ComponentName=Contract;";
-            tab_contract.SizeMode = TabSizeMode.FillToRight;
-            tab_contract.SelectedIndexChanged += new EventHandler(tab_contract_selectionchanging);
-            tab_contract.SelectedIndexChanged += new EventHandler(tab_contract_selectionchanged);
+            this.tab_contract.Controls.Add(this.tabpage_contract);
+            this.tab_contract.Controls.Add(this.tabpage_customers);
+            this.tab_contract.Controls.Add(this.tabpage_renewals);
+            this.tab_contract.Controls.Add(this.tabpage_frequencies);
+            this.tab_contract.Controls.Add(this.tabpage_route_audit);
+            this.tab_contract.Controls.Add(this.tabpage_types);
+            this.tab_contract.Controls.Add(this.tabpage_allowances);
+            this.tab_contract.Controls.Add(this.tabpage_article_count);
+            this.tab_contract.Controls.Add(this.tabpage_piece_rates);
+            this.tab_contract.Controls.Add(this.tabpage_fixed_assets);
+            this.tab_contract.Controls.Add(this.tabpage_cmb);
+            this.tab_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_contract.Location = new System.Drawing.Point(3, 4);
+            this.tab_contract.Multiline = true;
+            this.tab_contract.Name = "tab_contract";
+            this.tab_contract.SelectedIndex = 0;
+            this.tab_contract.Size = new System.Drawing.Size(558, 344);
+            this.tab_contract.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tab_contract.TabIndex = 1;
+            this.tab_contract.Tag = "ComponentName=Contract;";
+            this.tab_contract.GotFocus += new System.EventHandler(this.tab_contract_GotFocus);
+            this.tab_contract.SelectedIndexChanged += new System.EventHandler(this.tab_contract_selectionchanged);
             // 
             // tabpage_contract
             // 
-            dw_contract = new URdsDw();
-            //!dw_contract.DataObject = new DContract();
-            tabpage_contract.Controls.Add(dw_contract);
-            tabpage_contract.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_contract.Text = "Contract";
-            tabpage_contract.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_contract.Size = new System.Drawing.Size(550, 315);
-            tabpage_contract.Top = 25;
-            tabpage_contract.Left = 3;
-            tabpage_contract.Visible = false;
-            tabpage_contract.Tag = "ComponentName=Contract;";
+            this.tabpage_contract.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_contract.Controls.Add(this.dw_contract);
+            this.tabpage_contract.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_contract.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_contract.Name = "tabpage_contract";
+            this.tabpage_contract.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_contract.TabIndex = 0;
+            this.tabpage_contract.Tag = "ComponentName=Contract;";
+            this.tabpage_contract.Text = "Contract";
+            this.tabpage_contract.Visible = false;
             // 
             // dw_contract
             // 
-            //!dw_contract.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_contract.VerticalScroll.Visible = false;
-            dw_contract.TabIndex = 2;
-            dw_contract.Top = 1;
-            dw_contract.Dock = DockStyle.Fill;
-            dw_contract.Size = new System.Drawing.Size(521, 288);
-
-            dw_contract.GotFocus += new EventHandler(dw_contract_getfocus);
-            dw_contract.LostFocus += new EventHandler(dw_contract_losefocus);
-            //?dw_contract.ItemChanged += new EventHandler(dw_contract_itemchanged);
-
-            //dw_contract.Constructor += new UserEventDelegate(dw_contract_constructor);
-            //dw_contract.URdsDwItemFocuschanged += new EventDelegate(dw_contract_itemfocuschanged);
-            //dw_contract.PfcPostUpdate += new UserEventDelegate(dw_contract_pfc_postupdate);
-            //dw_contract.WinValidate += new UserEventDelegate2(of_validate); //added by jlwangd
-            //dw_contract.DataObject.RetrieveEnd += new EventHandler(dw_contract_retrieveend);
-            //((Button)(dw_contract.GetControlByName("bo_button"))).Click += new EventHandler(dw_contract_clicked);
-            //((Button)(dw_contract.GetControlByName("lo_button"))).Click += new EventHandler(dw_contract_clicked);
-
+            this.dw_contract.DataObject = null;
+            this.dw_contract.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dw_contract.FireConstructor = false;
+            this.dw_contract.Location = new System.Drawing.Point(0, 0);
+            this.dw_contract.Name = "dw_contract";
+            this.dw_contract.Size = new System.Drawing.Size(550, 300);
+            this.dw_contract.TabIndex = 2;
+            this.dw_contract.GotFocus += new System.EventHandler(this.dw_contract_getfocus);
+            this.dw_contract.LostFocus += new System.EventHandler(this.dw_contract_losefocus);
             // 
             // tabpage_customers
             // 
-            dw_contract_address = new URdsDw();
-            //!dw_contract_address.DataObject = new DAddressList();
-            //!dw_contract_address.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            st_custlist_print = new Label();
-            st_custlist_updated = new Label();
-            em_custlist_printed = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();// MaskedTextBox();
-            em_custlist_updated = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();// MaskedTextBox();
-            tabpage_customers.Controls.Add(dw_contract_address);
-            tabpage_customers.Controls.Add(st_custlist_print);
-            tabpage_customers.Controls.Add(st_custlist_updated);
-            tabpage_customers.Controls.Add(em_custlist_printed);
-            tabpage_customers.Controls.Add(em_custlist_updated);
-            tabpage_customers.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_customers.Text = "Addresses";
-            tabpage_customers.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_customers.Size = new System.Drawing.Size(550, 315);
-            tabpage_customers.Top = 25;
-            tabpage_customers.Left = 3;
-            tabpage_customers.Visible = false;
-            tabpage_customers.Tag = "ComponentName=Address;";
+            this.tabpage_customers.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_customers.Controls.Add(this.SeqAddresses);
+            this.tabpage_customers.Controls.Add(this.dw_contract_address);
+            this.tabpage_customers.Controls.Add(this.st_custlist_print);
+            this.tabpage_customers.Controls.Add(this.st_custlist_updated);
+            this.tabpage_customers.Controls.Add(this.em_custlist_printed);
+            this.tabpage_customers.Controls.Add(this.em_custlist_updated);
+            this.tabpage_customers.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_customers.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_customers.Name = "tabpage_customers";
+            this.tabpage_customers.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_customers.TabIndex = 1;
+            this.tabpage_customers.Tag = "ComponentName=Address;";
+            this.tabpage_customers.Text = "Addresses";
+            this.tabpage_customers.Visible = false;
+            // 
+            // SeqAddresses3
+            // 
+            this.SeqAddresses.Location = new System.Drawing.Point(429, 273);
+            this.SeqAddresses.Name = "SeqAddresses3";
+            this.SeqAddresses.Size = new System.Drawing.Size(116, 23);
+            this.SeqAddresses.TabIndex = 5;
+            this.SeqAddresses.Text = "Sequence Addresses";
+            this.SeqAddresses.UseVisualStyleBackColor = true;
             // 
             // dw_contract_address
             // 
-            dw_contract_address.TabIndex = 1;
-            dw_contract_address.Size = new System.Drawing.Size(539, 240);
-            dw_contract_address.Location = new System.Drawing.Point(3, 7);
-
-            //((DAddressList)dw_contract_address.DataObject).CellDoubleClick += new EventHandler(dw_contract_address_doubleclicked);
-            //dw_contract_address.Constructor += new UserEventDelegate(dw_contract_address_constructor);
-            //dw_contract_address.PfcPreInsertRow += new UserEventDelegate1(dw_contract_address_pfc_preinsertrow);
-            //dw_contract_address.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
-
+            this.dw_contract_address.DataObject = null;
+            this.dw_contract_address.FireConstructor = false;
+            this.dw_contract_address.Location = new System.Drawing.Point(3, 7);
+            this.dw_contract_address.Name = "dw_contract_address";
+            this.dw_contract_address.Size = new System.Drawing.Size(539, 240);
+            this.dw_contract_address.TabIndex = 1;
             // 
             // st_custlist_print
             // 
-            st_custlist_print.TabStop = false;
-            st_custlist_print.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            st_custlist_print.Text = "Customer list last printed";
-            st_custlist_print.ForeColor = System.Drawing.SystemColors.WindowText;
-            st_custlist_print.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Bold);
-            st_custlist_print.Location = new System.Drawing.Point(10, 258);
-            st_custlist_print.Size = new System.Drawing.Size(149, 19);
+            this.st_custlist_print.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_custlist_print.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.st_custlist_print.Location = new System.Drawing.Point(10, 252);
+            this.st_custlist_print.Name = "st_custlist_print";
+            this.st_custlist_print.Size = new System.Drawing.Size(149, 19);
+            this.st_custlist_print.TabIndex = 2;
+            this.st_custlist_print.Text = "Customer list last printed";
+            this.st_custlist_print.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // st_custlist_updated
             // 
-            st_custlist_updated.TabStop = false;
-            st_custlist_updated.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            st_custlist_updated.Text = "Customer list last updated";
-            st_custlist_updated.ForeColor = System.Drawing.SystemColors.WindowText;
-            st_custlist_updated.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Bold);
-            st_custlist_updated.Location = new System.Drawing.Point(267, 258);
-            st_custlist_updated.Size = new System.Drawing.Size(165, 19);
+            this.st_custlist_updated.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_custlist_updated.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.st_custlist_updated.Location = new System.Drawing.Point(5, 276);
+            this.st_custlist_updated.Name = "st_custlist_updated";
+            this.st_custlist_updated.Size = new System.Drawing.Size(165, 19);
+            this.st_custlist_updated.TabIndex = 3;
+            this.st_custlist_updated.Text = "Customer list last updated";
+            this.st_custlist_updated.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // em_custlist_printed
             // 
-            em_custlist_printed.Mask = "00/00/0000";
-            em_custlist_printed.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            em_custlist_printed.TextAlign = HorizontalAlignment.Center;
-            em_custlist_printed.Enabled = false;
-            em_custlist_printed.ForeColor = System.Drawing.SystemColors.WindowText;
-            em_custlist_printed.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            em_custlist_printed.TabIndex = 3;
-            em_custlist_printed.Location = new System.Drawing.Point(178, 258);
-            em_custlist_printed.Size = new System.Drawing.Size(66, 20);
-            //em_custlist_printed.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            //em_custlist_printed.PromptChar = '0';
-            //em_custlist_printed.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            //em_custlist_printed.ValidatingType = typeof(System.DateTime?);
+            this.em_custlist_printed.EditMask = "";
+            this.em_custlist_printed.Enabled = false;
+            this.em_custlist_printed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.em_custlist_printed.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.em_custlist_printed.Location = new System.Drawing.Point(178, 252);
+            this.em_custlist_printed.Mask = "00/00/0000";
+            this.em_custlist_printed.Name = "em_custlist_printed";
+            this.em_custlist_printed.Size = new System.Drawing.Size(66, 20);
+            this.em_custlist_printed.TabIndex = 3;
+            this.em_custlist_printed.Text = "00000000";
+            this.em_custlist_printed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.em_custlist_printed.Value = null;
             // 
             // em_custlist_updated
             // 
-            em_custlist_updated.Mask = "00/00/0000";
-            em_custlist_updated.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            em_custlist_updated.TextAlign = HorizontalAlignment.Center;
-            em_custlist_updated.ForeColor = System.Drawing.SystemColors.WindowText;
-            em_custlist_updated.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            em_custlist_updated.TabIndex = 4;
-            em_custlist_updated.Location = new System.Drawing.Point(440, 258);
-            em_custlist_updated.Size = new System.Drawing.Size(66, 20);
-            em_custlist_updated.TextChanged += new EventHandler(em_custlist_updated_modified);
-            //this.em_custlist_updated.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            //this.em_custlist_updated.PromptChar = '0';
-            //this.em_custlist_updated.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            //this.em_custlist_updated.ValidatingType = typeof(System.DateTime?);
+            this.em_custlist_updated.EditMask = "";
+            this.em_custlist_updated.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.em_custlist_updated.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.em_custlist_updated.Location = new System.Drawing.Point(178, 276);
+            this.em_custlist_updated.Mask = "00/00/0000";
+            this.em_custlist_updated.Name = "em_custlist_updated";
+            this.em_custlist_updated.Size = new System.Drawing.Size(66, 20);
+            this.em_custlist_updated.TabIndex = 4;
+            this.em_custlist_updated.Text = "00000000";
+            this.em_custlist_updated.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.em_custlist_updated.Value = null;
+            this.em_custlist_updated.TextChanged += new System.EventHandler(this.em_custlist_updated_modified);
             // 
             // tabpage_renewals
             // 
-            dw_renewals = new URdsDw();
-            //!dw_renewals.DataObject = new DRenewals();
-            //!dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_renewals.Controls.Add(dw_renewals);
-            tabpage_renewals.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_renewals.Text = "Renewals";
-            tabpage_renewals.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_renewals.Size = new System.Drawing.Size(550, 315);
-            tabpage_renewals.Top = 25;
-            tabpage_renewals.Left = 3;
-            tabpage_renewals.Visible = false;
-            tabpage_renewals.Tag = "ComponentName=Renewal;";
+            this.tabpage_renewals.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_renewals.Controls.Add(this.dw_renewals);
+            this.tabpage_renewals.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_renewals.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_renewals.Name = "tabpage_renewals";
+            this.tabpage_renewals.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_renewals.TabIndex = 2;
+            this.tabpage_renewals.Tag = "ComponentName=Renewal;";
+            this.tabpage_renewals.Text = "Renewals";
+            this.tabpage_renewals.Visible = false;
             // 
             // dw_renewals
             // 
-            dw_renewals.TabIndex = 1;
-            dw_renewals.Location = new System.Drawing.Point(3, 7);
-            dw_renewals.Size = new System.Drawing.Size(542, 276);
-
-            //dw_renewals.Constructor += new UserEventDelegate(dw_renewals_constructor);
-            //((DRenewals)dw_renewals.DataObject).CellClick += new EventHandler(dw_renewals_clicked);
-            //((DRenewals)dw_renewals.DataObject).CellDoubleClick += new EventHandler(dw_renewals_doubleclicked);
-            //dw_renewals.PfcPreInsertRow += new UserEventDelegate1(dw_renewals_pfc_preinsertrow);
-            //dw_renewals.PfcPreDeleteRow += new UserEventDelegate1(dw_renewals_pfc_predeleterow);
-            //dw_renewals.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            this.dw_renewals.DataObject = null;
+            this.dw_renewals.FireConstructor = false;
+            this.dw_renewals.Location = new System.Drawing.Point(3, 7);
+            this.dw_renewals.Name = "dw_renewals";
+            this.dw_renewals.Size = new System.Drawing.Size(542, 276);
+            this.dw_renewals.TabIndex = 1;
             // 
             // tabpage_frequencies
             // 
-            dw_route_frequency = new URdsDw();
-//!            dw_route_frequency.DataObject = new DRouteFrequency();
-//!            dw_route_frequency.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_frequencies.Controls.Add(dw_route_frequency);
-            tabpage_frequencies.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_frequencies.Text = "Frequencies";
-            tabpage_frequencies.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_frequencies.Size = new System.Drawing.Size(550, 315);
-            tabpage_frequencies.Top = 25;
-            tabpage_frequencies.Left = 3;
-            tabpage_frequencies.Visible = false;
-            tabpage_frequencies.Tag = "ComponentName=Frequency;";
+            this.tabpage_frequencies.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_frequencies.Controls.Add(this.dw_route_frequency);
+            this.tabpage_frequencies.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_frequencies.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_frequencies.Name = "tabpage_frequencies";
+            this.tabpage_frequencies.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_frequencies.TabIndex = 3;
+            this.tabpage_frequencies.Tag = "ComponentName=Frequency;";
+            this.tabpage_frequencies.Text = "Frequencies";
+            this.tabpage_frequencies.Visible = false;
             // 
             // dw_route_frequency
             // 
-            dw_route_frequency.TabIndex = 1;
-            dw_route_frequency.Location = new System.Drawing.Point(5, 7);
-            dw_route_frequency.Size = new System.Drawing.Size(539, 274);
-            dw_route_frequency.GotFocus += new EventHandler(dw_route_frequency_getfocus);
-
-            //dw_route_frequency.Constructor += new UserEventDelegate(dw_route_frequency_constructor);
-            //((DRouteFrequency)dw_route_frequency.DataObject).CellDoubleClick += new EventHandler(dw_route_frequency_doubleclicked);
-            //((DRouteFrequency)dw_route_frequency.DataObject).CellClick += new EventHandler(dw_route_frequency_clicked);
-            //dw_route_frequency.PfcValidation += new UserEventDelegate1(dw_route_frequency_pfc_validation);// UserEventDelegate(dw_route_frequency_pfc_validation);
-
+            this.dw_route_frequency.DataObject = null;
+            this.dw_route_frequency.FireConstructor = false;
+            this.dw_route_frequency.Location = new System.Drawing.Point(5, 7);
+            this.dw_route_frequency.Name = "dw_route_frequency";
+            this.dw_route_frequency.Size = new System.Drawing.Size(539, 274);
+            this.dw_route_frequency.TabIndex = 1;
+            this.dw_route_frequency.GotFocus += new System.EventHandler(this.dw_route_frequency_getfocus);
             // 
             // tabpage_route_audit
             // 
-            dw_route_audit = new URdsDw();
-            //!dw_route_audit.DataObject = new DRouteAuditListing();
-            //!dw_route_audit.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_route_audit.Controls.Add(dw_route_audit);
-            tabpage_route_audit.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_route_audit.Text = "Route Audit";
-            tabpage_route_audit.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_route_audit.Size = new System.Drawing.Size(550, 315);
-            tabpage_route_audit.Top = 25;
-            tabpage_route_audit.Left = 3;
-            tabpage_route_audit.Visible = false;
-            tabpage_route_audit.Tag = "ComponentName=Route Audit;";
-
+            this.tabpage_route_audit.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_route_audit.Controls.Add(this.dw_route_audit);
+            this.tabpage_route_audit.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_route_audit.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_route_audit.Name = "tabpage_route_audit";
+            this.tabpage_route_audit.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_route_audit.TabIndex = 4;
+            this.tabpage_route_audit.Tag = "ComponentName=Route Audit;";
+            this.tabpage_route_audit.Text = "Route Audit";
+            this.tabpage_route_audit.Visible = false;
             // 
             // dw_route_audit
             // 
-            dw_route_audit.TabIndex = 1;
-            dw_route_audit.Location = new System.Drawing.Point(5, 7);
-            dw_route_audit.Size = new System.Drawing.Size(539, 274);
-
-            //dw_route_audit.Constructor += new UserEventDelegate(dw_route_audit_constructor);
-            //((DRouteAuditListing)dw_route_audit.DataObject).CellDoubleClick += new EventHandler(dw_route_audit_doubleclicked);
-            //((DRouteAuditListing)dw_route_audit.DataObject).CellClick += new EventHandler(dw_route_audit_clicked);
-            //dw_route_audit.PfcInsertRow += new UserEventDelegate(dw_route_audit_pfc_preinsertrow);
-
+            this.dw_route_audit.DataObject = null;
+            this.dw_route_audit.FireConstructor = false;
+            this.dw_route_audit.Location = new System.Drawing.Point(5, 7);
+            this.dw_route_audit.Name = "dw_route_audit";
+            this.dw_route_audit.Size = new System.Drawing.Size(539, 274);
+            this.dw_route_audit.TabIndex = 1;
             // 
             // tabpage_types
             // 
-            dw_types = new URdsDw();
-//!            dw_types.DataObject = new DTypesForContract();
-//!            dw_types.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_types.Controls.Add(dw_types);
-            tabpage_types.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_types.Text = "Types";
-            tabpage_types.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_types.Size = new System.Drawing.Size(550, 315);
-            tabpage_types.Top = 25;
-            tabpage_types.Left = 3;
-            tabpage_types.Visible = false;
-            tabpage_types.Tag = "ComponentName=Contract Type;";
-
+            this.tabpage_types.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_types.Controls.Add(this.dw_types);
+            this.tabpage_types.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_types.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_types.Name = "tabpage_types";
+            this.tabpage_types.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_types.TabIndex = 5;
+            this.tabpage_types.Tag = "ComponentName=Contract Type;";
+            this.tabpage_types.Text = "Types";
+            this.tabpage_types.Visible = false;
             // 
             // dw_types
             // 
-            dw_types.TabIndex = 1;
-            dw_types.Location = new System.Drawing.Point(5, 7);
-            dw_types.Size = new System.Drawing.Size(539, 274);
-
-            //dw_types.Constructor += new UserEventDelegate(dw_types_constructor);
-            //dw_types.PfcValidation += new UserEventDelegate1(dw_types_pfc_validation);// UserEventDelegate(dw_types_pfc_validation);
-            //dw_types.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
-
+            this.dw_types.DataObject = null;
+            this.dw_types.FireConstructor = false;
+            this.dw_types.Location = new System.Drawing.Point(5, 7);
+            this.dw_types.Name = "dw_types";
+            this.dw_types.Size = new System.Drawing.Size(539, 274);
+            this.dw_types.TabIndex = 1;
             // 
             // tabpage_allowances
             // 
-            dw_contract_allowances = new URdsDw();
-            //!dw_contract_allowances.DataObject = new DContractAllowancesV2();
-            tabpage_allowances.Controls.Add(dw_contract_allowances);
-            tabpage_allowances.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_allowances.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_allowances.Text = "Allowances";
-            tabpage_allowances.BackColor = System.Drawing.SystemColors.ButtonFace;
-
-            tabpage_allowances.Size = new System.Drawing.Size(550, 315);
-            tabpage_allowances.Top = 25;
-            tabpage_allowances.Left = 3;
-            tabpage_allowances.Visible = false;
-            tabpage_allowances.Tag = "ComponentName=Allowance;";
+            this.tabpage_allowances.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_allowances.Controls.Add(this.dw_contract_allowances);
+            this.tabpage_allowances.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_allowances.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_allowances.Name = "tabpage_allowances";
+            this.tabpage_allowances.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_allowances.TabIndex = 6;
+            this.tabpage_allowances.Tag = "ComponentName=Allowance;";
+            this.tabpage_allowances.Text = "Allowances";
+            this.tabpage_allowances.Visible = false;
             // 
             // dw_contract_allowances
             // 
-            //!dw_contract_allowances.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_contract_allowances.AutoScroll = true;
-            dw_contract_allowances.TabIndex = 1;
-            dw_contract_allowances.Location = new System.Drawing.Point(5, 7);
-            dw_contract_allowances.Size = new System.Drawing.Size(539, 274);
-
-            //dw_contract_allowances.Constructor += new UserEventDelegate(dw_contract_allowances_constructor);
-            //((DContractAllowancesV2)dw_contract_allowances.DataObject).CellDoubleClick += new EventHandler(dw_contract_allowances_doubleclicked);
-            //dw_contract_allowances.PfcInsertRow = new UserEventDelegate(dw_contract_allowances_pfc_preinsertrow);
-            //dw_contract_allowances.PfcPreUpdate += new UserEventDelegate1(dw_contract_allowances_pfc_preupdate);// UserEventDelegate(dw_contract_allowances_pfc_preupdate);
-            //dw_contract_allowances.UpdateStart = new UserEventDelegate(dw_contract_allowances_updatestart);
-            //dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
-
+            this.dw_contract_allowances.AutoScroll = true;
+            this.dw_contract_allowances.DataObject = null;
+            this.dw_contract_allowances.FireConstructor = false;
+            this.dw_contract_allowances.Location = new System.Drawing.Point(5, 7);
+            this.dw_contract_allowances.Name = "dw_contract_allowances";
+            this.dw_contract_allowances.Size = new System.Drawing.Size(539, 274);
+            this.dw_contract_allowances.TabIndex = 1;
             // 
             // tabpage_article_count
             // 
-            dw_artical_counts = new URdsDw();
-            //!dw_artical_counts.DataObject = new DContractArticalCounts();
-            //!dw_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_article_count.Controls.Add(dw_artical_counts);
-            tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_article_count.Text = "Article Count";
-            tabpage_article_count.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_article_count.Size = new System.Drawing.Size(550, 315);
-            tabpage_article_count.Top = 25;
-            tabpage_article_count.Left = 3;
-            tabpage_article_count.Visible = false;
-            tabpage_article_count.Tag = "ComponentName=Article Count;";
+            this.tabpage_article_count.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_article_count.Controls.Add(this.dw_artical_counts);
+            this.tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_article_count.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_article_count.Name = "tabpage_article_count";
+            this.tabpage_article_count.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_article_count.TabIndex = 7;
+            this.tabpage_article_count.Tag = "ComponentName=Article Count;";
+            this.tabpage_article_count.Text = "Article Count";
+            this.tabpage_article_count.Visible = false;
             // 
             // dw_artical_counts
             // 
-            dw_artical_counts.TabIndex = 1;
-            dw_artical_counts.Location = new System.Drawing.Point(5, 7);
-            dw_artical_counts.Size = new System.Drawing.Size(540, 290);
-            dw_artical_counts.Click += new EventHandler(dw_artical_counts_clicked);
-            dw_artical_counts.DoubleClick += new EventHandler(dw_artical_counts_doubleclicked);
-            dw_artical_counts.LostFocus += new EventHandler(dw_artical_counts_losefocus);
-
+            this.dw_artical_counts.DataObject = null;
+            this.dw_artical_counts.FireConstructor = false;
+            this.dw_artical_counts.Location = new System.Drawing.Point(5, 7);
+            this.dw_artical_counts.Name = "dw_artical_counts";
+            this.dw_artical_counts.Size = new System.Drawing.Size(540, 290);
+            this.dw_artical_counts.TabIndex = 1;
+            this.dw_artical_counts.DoubleClick += new System.EventHandler(this.dw_artical_counts_doubleclicked);
+            this.dw_artical_counts.Click += new System.EventHandler(this.dw_artical_counts_clicked);
+            this.dw_artical_counts.LostFocus += new System.EventHandler(this.dw_artical_counts_losefocus);
             // 
             // tabpage_piece_rates
             // 
-            dw_piece_rates = new URdsDw();
-//!            dw_piece_rates.DataObject = new DContractPieceRates();
-//!            dw_piece_rates.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_piece_rates.Controls.Add(dw_piece_rates);
-            tabpage_piece_rates.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_piece_rates.Text = "Piece Rates";
-            tabpage_piece_rates.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_piece_rates.Size = new System.Drawing.Size(550, 315);
-            tabpage_piece_rates.Top = 25;
-            tabpage_piece_rates.Left = 3;
-            tabpage_piece_rates.Visible = false;
-            tabpage_piece_rates.Tag = "ComponentName=Piece Rate;";
+            this.tabpage_piece_rates.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_piece_rates.Controls.Add(this.dw_piece_rates);
+            this.tabpage_piece_rates.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_piece_rates.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_piece_rates.Name = "tabpage_piece_rates";
+            this.tabpage_piece_rates.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_piece_rates.TabIndex = 8;
+            this.tabpage_piece_rates.Tag = "ComponentName=Piece Rate;";
+            this.tabpage_piece_rates.Text = "Piece Rates";
+            this.tabpage_piece_rates.Visible = false;
             // 
             // dw_piece_rates
             // 
-            dw_piece_rates.TabIndex = 1;
-            dw_piece_rates.Location = new System.Drawing.Point(5, 7);
-            dw_piece_rates.Size = new System.Drawing.Size(539, 274);
-
-            //dw_piece_rates.Constructor += new UserEventDelegate(dw_piece_rates_constructor);
-            //((DContractPieceRates)dw_piece_rates.DataObject).CellDoubleClick += new EventHandler(dw_piece_rates_doubleclicked);
-            //((DContractPieceRates)dw_piece_rates.DataObject).CellClick += new EventHandler(dw_piece_rates_clicked);
-            //dw_piece_rates.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
+            this.dw_piece_rates.DataObject = null;
+            this.dw_piece_rates.FireConstructor = false;
+            this.dw_piece_rates.Location = new System.Drawing.Point(5, 7);
+            this.dw_piece_rates.Name = "dw_piece_rates";
+            this.dw_piece_rates.Size = new System.Drawing.Size(539, 274);
+            this.dw_piece_rates.TabIndex = 1;
             // 
             // tabpage_fixed_assets
             // 
-            dw_fixed_assets = new URdsDw();
-            //!dw_fixed_assets.DataObject = new DContractFixedAssets();
-            //!dw_fixed_assets.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_fixed_assets.Controls.Add(dw_fixed_assets);
-            tabpage_fixed_assets.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_fixed_assets.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_fixed_assets.Text = "Fixed Assets";
-
-            tabpage_fixed_assets.Height = 315;
-            tabpage_fixed_assets.Top = 25;
-            tabpage_fixed_assets.Left = 3;
-            tabpage_fixed_assets.Visible = false;
-            tabpage_fixed_assets.Tag = "ComponentName=Fixed Asset;";
-
-            //dw_fixed_assets.UpdateEnd += new UserEventDelegate(dw_fix_winpfcsave);
-
+            this.tabpage_fixed_assets.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_fixed_assets.Controls.Add(this.dw_fixed_assets);
+            this.tabpage_fixed_assets.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_fixed_assets.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_fixed_assets.Name = "tabpage_fixed_assets";
+            this.tabpage_fixed_assets.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_fixed_assets.TabIndex = 9;
+            this.tabpage_fixed_assets.Tag = "ComponentName=Fixed Asset;";
+            this.tabpage_fixed_assets.Text = "Fixed Assets";
+            this.tabpage_fixed_assets.Visible = false;
             // 
             // dw_fixed_assets
             // 
-            dw_fixed_assets.TabIndex = 1;
-            dw_fixed_assets.Location = new System.Drawing.Point(5, 7);
-            dw_fixed_assets.Size = new System.Drawing.Size(539, 274);
-            //?dw_fixed_assets.ItemChanged += new EventHandler(dw_fixed_assets_itemchanged);
-
-            //dw_fixed_assets.Constructor += new UserEventDelegate(dw_fixed_assets_constructor);
-            //dw_fixed_assets.PfcValidation += new UserEventDelegate1(dw_fixed_assets_pfc_validation);// UserEventDelegate(dw_fixed_assets_pfc_validation);
-            //dw_fixed_assets.UpdateStart = new UserEventDelegate(dw_fixed_assets_updatestart);
-            //dw_fixed_assets.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
-
+            this.dw_fixed_assets.DataObject = null;
+            this.dw_fixed_assets.FireConstructor = false;
+            this.dw_fixed_assets.Location = new System.Drawing.Point(5, 7);
+            this.dw_fixed_assets.Name = "dw_fixed_assets";
+            this.dw_fixed_assets.Size = new System.Drawing.Size(539, 274);
+            this.dw_fixed_assets.TabIndex = 1;
             // 
             // tabpage_cmb
             // 
-            dw_cmbs = new URdsDw();
-            //!dw_cmbs.DataObject = new DCmbAddressList();
-            //!dw_cmbs.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            tabpage_cmb.Controls.Add(dw_cmbs);
-            tabpage_cmb.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_cmb.Text = "CMBs";
-            tabpage_cmb.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_cmb.Size = new System.Drawing.Size(550, 315);
-            tabpage_cmb.Top = 25;
-            tabpage_cmb.Left = 3;
-            tabpage_cmb.Visible = false;
-            tabpage_cmb.Tag = "ComponentName=Contract;";
+            this.tabpage_cmb.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_cmb.Controls.Add(this.dw_cmbs);
+            this.tabpage_cmb.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_cmb.Location = new System.Drawing.Point(4, 40);
+            this.tabpage_cmb.Name = "tabpage_cmb";
+            this.tabpage_cmb.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_cmb.TabIndex = 10;
+            this.tabpage_cmb.Tag = "ComponentName=Contract;";
+            this.tabpage_cmb.Text = "CMBs";
+            this.tabpage_cmb.Visible = false;
             // 
             // dw_cmbs
             // 
-            dw_cmbs.Text = "CMBs";
-            dw_cmbs.TabIndex = 1;
-            dw_cmbs.Location = new System.Drawing.Point(8, 8);
-            dw_cmbs.Size = new System.Drawing.Size(529, 280);
-            dw_cmbs.GotFocus += new EventHandler(dw_cmbs_getfocus);
+            this.dw_cmbs.DataObject = null;
+            this.dw_cmbs.FireConstructor = false;
+            this.dw_cmbs.Location = new System.Drawing.Point(8, 8);
+            this.dw_cmbs.Name = "dw_cmbs";
+            this.dw_cmbs.Size = new System.Drawing.Size(529, 280);
+            this.dw_cmbs.TabIndex = 1;
+            this.dw_cmbs.Text = "CMBs";
+            this.dw_cmbs.GotFocus += new System.EventHandler(this.dw_cmbs_getfocus);
+            // 
+            // WContract2001
+            // 
+            this.ClientSize = new System.Drawing.Size(567, 368);
+            this.Controls.Add(this.tab_contract);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Location = new System.Drawing.Point(1, 6);
+            this.MaximizeBox = false;
+            this.Name = "WContract2001";
+            this.Controls.SetChildIndex(this.tab_contract, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_contract.ResumeLayout(false);
+            this.tabpage_contract.ResumeLayout(false);
+            this.tabpage_customers.ResumeLayout(false);
+            this.tabpage_customers.PerformLayout();
+            this.tabpage_renewals.ResumeLayout(false);
+            this.tabpage_frequencies.ResumeLayout(false);
+            this.tabpage_route_audit.ResumeLayout(false);
+            this.tabpage_types.ResumeLayout(false);
+            this.tabpage_allowances.ResumeLayout(false);
+            this.tabpage_article_count.ResumeLayout(false);
+            this.tabpage_piece_rates.ResumeLayout(false);
+            this.tabpage_fixed_assets.ResumeLayout(false);
+            this.tabpage_cmb.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            //dw_cmbs.Constructor += new UserEventDelegate(dw_cmbs_constructor);
-            //((DCmbAddressList)dw_cmbs.DataObject).CellDoubleClick += new EventHandler(dw_cmbs_doubleclicked);
-            //((DCmbAddressList)dw_cmbs.DataObject).CellClick += new EventHandler(dw_cmbs_clicked);
-            //dw_cmbs.PfcDeleteRow += new UserEventDelegate(dw_cmbs_pfc_deleterow);
-            //dw_cmbs.PfcInsertRow = new UserEventDelegate(dw_cmbs_pfc_preinsertrow);
-            //dw_cmbs.PfcPreDeleteRow += new UserEventDelegate1(dw_cmbs_pfc_predeleterow);
-            //dw_cmbs.WinValidate += new UserEventDelegate2(of_validate); //added by jlwang
-            this.ResumeLayout();
         }
 
         /// <summary>
@@ -3346,19 +3335,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             dw_cmbs.URdsDw_Clicked(sender, e);
             int row = idw_cmb.GetRow();
-            //if (row >= 0)
-            //{
-            //    if (idw_cmb.IsSelected(row))
-            //    {
-            //        idw_cmb.SelectRow(row + 1, false);
-            //    }
-            //    else
-            //    {
-            //        idw_cmb.SelectRow(row + 1, true);
-            //    }
-            //}
         }
 
+        private void cb_seq_clicked(object sender, EventArgs e)
+        {   // TJB  Sequencing Review  Jan-2011
+            // Added cb_seq button to Address tab, and cb_seq_clicked event
+
+            NParameters lnv_Parameters;
+            Cursor.Current = Cursors.WaitCursor;
+            lnv_Parameters = new NParameters();
+            lnv_Parameters.longparm = il_Contract_no;
+            lnv_Parameters.integerparm = 1;         // Dummy value; was il_sf_key from WFrequencies2001
+            lnv_Parameters.stringparm = "YYYYYYN";  // Dummy value; was is_delivery_days from WFrequencies2001;
+            StaticMessage.PowerObjectParm = lnv_Parameters;
+            WCustomerSequencer w_customer_sequencer = OpenSheet<WCustomerSequencer>(StaticVariables.MainMDI);
+        }
         #endregion
     }
 }
