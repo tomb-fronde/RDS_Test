@@ -49,146 +49,188 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.dw_header = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_selectfreq = new System.Windows.Forms.Button();
+            this.dw_details = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_open = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_transfer = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_remove = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_new = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.gb_details = new NZPostOffice.Shared.VisualComponents.UGb();
+            this.cb_save = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_close = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.dw_movement = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_restore = new System.Windows.Forms.Button();
+            this.dw_header.SuspendLayout();
             this.SuspendLayout();
-            this.dw_header = new URdsDw();
-            this.dw_details = new URdsDw();
-            this.cb_open = new UCb();
-            this.cb_transfer = new UCb();
-            this.cb_remove = new UCb();
-            this.cb_new = new UCb();
-            this.gb_details = new UGb();
-            this.cb_save = new UCb();
-            this.cb_close = new UCb();
-            this.dw_movement = new URdsDw();
-            this.cb_restore = new Button();
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Text = "Address";
-            this.ClientSize = new System.Drawing.Size(677, 440);
+            // 
+            // st_label
+            // 
+            this.st_label.Location = new System.Drawing.Point(5, 410);
+            this.st_label.Size = new System.Drawing.Size(150, 23);
+            this.st_label.Text = "w_maintain_address";
             // 
             // dw_header
             // 
-            //? dw_header.vscrollbar = false;
-            //!dw_header.DataObject = new DAddressDetails();
-            //!dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_header.TabIndex = 1;
-            this.dw_header.Size = new Size(650, 200);
-            this.dw_header.Location = new Point(5, 5);
- 
-            dw_header.EditChanged +=new EventHandler(dw_header_editchanged);
-            dw_header.Click  += new EventHandler(dw_header_Click); //added for focus the dw
-
-            //dw_header.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_header_constructor);
-            //((PictureBox)dw_header.GetControlByName("contract_button")).Click += new EventHandler(dw_header_clicked);
-            //((DataEntityCombo)dw_header.GetControlByName("tc_id")).SelectedValueChanged += new EventHandler(dw_header_itemchanged);
-            //((TextBox)dw_header.GetControlByName("road_name")).Leave += new EventHandler(dw_header_itemchanged);
-
-
+            this.dw_header.Controls.Add(this.cb_selectfreq);
+            this.dw_header.DataObject = null;
+            this.dw_header.FireConstructor = false;
+            this.dw_header.Location = new System.Drawing.Point(5, 5);
+            this.dw_header.Name = "dw_header";
+            this.dw_header.Size = new System.Drawing.Size(650, 200);
+            this.dw_header.TabIndex = 1;
+            this.dw_header.EditChanged += new System.EventHandler(this.dw_header_editchanged);
+            this.dw_header.Click += new System.EventHandler(this.dw_header_Click);
+            // 
+            // cb_selectfreq
+            // 
+            this.cb_selectfreq.Location = new System.Drawing.Point(466, 114);
+            this.cb_selectfreq.Name = "cb_selectfreq";
+            this.cb_selectfreq.Size = new System.Drawing.Size(108, 23);
+            this.cb_selectfreq.TabIndex = 9;
+            this.cb_selectfreq.Text = "Select Freqencies";
+            this.cb_selectfreq.UseVisualStyleBackColor = true;
+            this.cb_selectfreq.Click += new System.EventHandler(this.cb_selectfreq_Click);
             // 
             // dw_details
             // 
-            //!dw_details.DataObject = new DAddressOccupants();
-            dw_details.TabIndex = 2;
-            this.dw_details.Location = new Point(16, 225);
-            this.dw_details.Size = new Size(457, 168);
-            this.dw_details.Click +=new EventHandler(dw_details_clicked);
+            this.dw_details.DataObject = null;
+            this.dw_details.FireConstructor = false;
+            this.dw_details.Location = new System.Drawing.Point(16, 225);
+            this.dw_details.Name = "dw_details";
+            this.dw_details.Size = new System.Drawing.Size(457, 168);
+            this.dw_details.TabIndex = 2;
+            this.dw_details.Click += new System.EventHandler(this.dw_details_clicked);
             // 
             // cb_open
             // 
-            cb_open.Text = "&Open";
-            cb_open.Enabled = false;
-            cb_open.TabIndex = 3;
-            this.cb_open.Location = new Point(480, 240);
-            cb_open.Tag = "ComponentName=Customer;ComponentPrivilege=R;ComponentPrivilege=M;";
-            cb_open.Click += new EventHandler(cb_open_clicked);
+            this.cb_open.Enabled = false;
+            this.cb_open.Location = new System.Drawing.Point(480, 240);
+            this.cb_open.Name = "cb_open";
+            this.cb_open.Size = new System.Drawing.Size(75, 23);
+            this.cb_open.TabIndex = 3;
+            this.cb_open.Tag = "ComponentName=Customer;ComponentPrivilege=R;ComponentPrivilege=M;";
+            this.cb_open.Text = "&Open";
+            this.cb_open.Click += new System.EventHandler(this.cb_open_clicked);
             // 
             // cb_transfer
             // 
-            cb_transfer.Text = "&Transfer";
-            cb_transfer.Enabled = false;
-            cb_transfer.TabIndex = 6;
-            this.cb_transfer.Location = new Point(480, 323);
-            cb_transfer.Tag = "ComponentName=Address;ComponentPrivilege=M;";
-            cb_transfer.Click += new EventHandler(cb_transfer_clicked);
+            this.cb_transfer.Enabled = false;
+            this.cb_transfer.Location = new System.Drawing.Point(480, 323);
+            this.cb_transfer.Name = "cb_transfer";
+            this.cb_transfer.Size = new System.Drawing.Size(75, 23);
+            this.cb_transfer.TabIndex = 6;
+            this.cb_transfer.Tag = "ComponentName=Address;ComponentPrivilege=M;";
+            this.cb_transfer.Text = "&Transfer";
+            this.cb_transfer.Click += new System.EventHandler(this.cb_transfer_clicked);
             // 
             // cb_remove
             // 
-            cb_remove.Text = "&Move Out";
-            cb_remove.Enabled = false;
-            cb_remove.TabIndex = 5;
-            this.cb_remove.Location = new Point(480, 295);
-            cb_remove.Tag = "ComponentName=Address;ComponentPrivilege=M;";
-            cb_remove.Click += new EventHandler(cb_remove_clicked);
+            this.cb_remove.Enabled = false;
+            this.cb_remove.Location = new System.Drawing.Point(480, 295);
+            this.cb_remove.Name = "cb_remove";
+            this.cb_remove.Size = new System.Drawing.Size(75, 23);
+            this.cb_remove.TabIndex = 5;
+            this.cb_remove.Tag = "ComponentName=Address;ComponentPrivilege=M;";
+            this.cb_remove.Text = "&Move Out";
+            this.cb_remove.Click += new System.EventHandler(this.cb_remove_clicked);
             // 
             // cb_new
             // 
-            cb_new.Text = "&New";
-            cb_new.Enabled = false;
-            cb_new.TabIndex = 4;
-            this.cb_new.Location = new Point(480, 267);
-            cb_new.Tag = "ComponentName=Customer;ComponentPrivilege=C;";
-            cb_new.Click += new EventHandler(cb_new_clicked);
+            this.cb_new.Enabled = false;
+            this.cb_new.Location = new System.Drawing.Point(480, 267);
+            this.cb_new.Name = "cb_new";
+            this.cb_new.Size = new System.Drawing.Size(75, 23);
+            this.cb_new.TabIndex = 4;
+            this.cb_new.Tag = "ComponentName=Customer;ComponentPrivilege=C;";
+            this.cb_new.Text = "&New";
+            this.cb_new.Click += new System.EventHandler(this.cb_new_clicked);
             // 
             // gb_details
             // 
-            gb_details.Text = "Customers / Occupants";
-            gb_details.TabIndex = 0;
-            this.gb_details.Size = new Size(560,190);
-            this.gb_details.Location = new Point(8, 210);
+            this.gb_details.Location = new System.Drawing.Point(8, 210);
+            this.gb_details.Name = "gb_details";
+            this.gb_details.Size = new System.Drawing.Size(560, 190);
+            this.gb_details.TabIndex = 0;
+            this.gb_details.TabStop = false;
+            this.gb_details.Text = "Customers / Occupants";
             // 
             // cb_save
             // 
-            this.AcceptButton = cb_save;
-            cb_save.Text = "Save";
-            cb_save.TabIndex = 7;
-            this.cb_save.Location = new Point(408, 410);
-            cb_save.Click += new EventHandler(cb_save_clicked);
+            this.cb_save.Location = new System.Drawing.Point(408, 410);
+            this.cb_save.Name = "cb_save";
+            this.cb_save.Size = new System.Drawing.Size(75, 23);
+            this.cb_save.TabIndex = 7;
+            this.cb_save.Text = "Save";
+            this.cb_save.Click += new System.EventHandler(this.cb_save_clicked);
             // 
             // cb_close
             // 
-            this.CancelButton = cb_close;
-            cb_close.Text = "Close";
-            cb_close.TabIndex = 8;
-            this.cb_close.Location = new Point(490, 410);
-            cb_close.Click += new EventHandler(cb_close_clicked);
+            this.cb_close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_close.Location = new System.Drawing.Point(490, 410);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(75, 23);
+            this.cb_close.TabIndex = 8;
+            this.cb_close.Text = "Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
             // 
             // dw_movement
             // 
-            //!dw_movement.DataObject = new DAddressOccupantsMovement();
-            dw_movement.TabIndex = 0;
-            this.dw_movement.Location = new Point(196, 517);
-            dw_movement.Visible = false;
-            dw_movement.Tag = "ComponentName=Hidden;";
+            this.dw_movement.DataObject = null;
+            this.dw_movement.FireConstructor = false;
+            this.dw_movement.Location = new System.Drawing.Point(196, 517);
+            this.dw_movement.Name = "dw_movement";
+            this.dw_movement.Size = new System.Drawing.Size(162, 139);
+            this.dw_movement.TabIndex = 0;
+            this.dw_movement.Tag = "ComponentName=Hidden;";
+            this.dw_movement.Visible = false;
             // 
             // cb_restore
             // 
-            cb_restore.Text = "Restore Custs";
-            this.cb_restore.Location = new Point(170, 410);  
-            this.cb_restore.Size = new Size(85, 23);
-            cb_restore.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_restore.TabIndex = 8;
-            cb_restore.Click += new EventHandler(cb_restore_clicked);
+            this.cb_restore.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_restore.Location = new System.Drawing.Point(170, 410);
+            this.cb_restore.Name = "cb_restore";
+            this.cb_restore.Size = new System.Drawing.Size(85, 23);
+            this.cb_restore.TabIndex = 8;
+            this.cb_restore.Text = "Restore Custs";
+            this.cb_restore.Click += new System.EventHandler(this.cb_restore_clicked);
+            // 
+            // WMaintainAddress
+            // 
+            this.AcceptButton = this.cb_save;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_close;
+            this.ClientSize = new System.Drawing.Size(677, 440);
+            this.Controls.Add(this.dw_header);
+            this.Controls.Add(this.dw_details);
+            this.Controls.Add(this.cb_open);
+            this.Controls.Add(this.cb_transfer);
+            this.Controls.Add(this.cb_remove);
+            this.Controls.Add(this.cb_new);
+            this.Controls.Add(this.gb_details);
+            this.Controls.Add(this.cb_save);
+            this.Controls.Add(this.cb_close);
+            this.Controls.Add(this.dw_movement);
+            this.Controls.Add(this.cb_restore);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Name = "WMaintainAddress";
+            this.Text = "Address";
+            this.Controls.SetChildIndex(this.cb_restore, 0);
+            this.Controls.SetChildIndex(this.dw_movement, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
+            this.Controls.SetChildIndex(this.cb_save, 0);
+            this.Controls.SetChildIndex(this.gb_details, 0);
+            this.Controls.SetChildIndex(this.cb_new, 0);
+            this.Controls.SetChildIndex(this.cb_remove, 0);
+            this.Controls.SetChildIndex(this.cb_transfer, 0);
+            this.Controls.SetChildIndex(this.cb_open, 0);
+            this.Controls.SetChildIndex(this.dw_details, 0);
+            this.Controls.SetChildIndex(this.dw_header, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.dw_header.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            //
-            // st_label;
-            //
-            this.st_label.Location = new Point(5, 410);
-            this.st_label.Size = new Size(150, 23);
-            this.st_label.Text = "w_maintain_address";
-
-            Controls.Add(dw_header);
-            Controls.Add(dw_details);
-            Controls.Add(cb_open);
-            Controls.Add(cb_transfer);
-            Controls.Add(cb_remove);
-            Controls.Add(cb_new);
-            Controls.Add(gb_details);
-            Controls.Add(cb_save);
-            Controls.Add(cb_close);
-            Controls.Add(dw_movement);
-            Controls.Add(cb_restore);
-            this.ResumeLayout();
         }
    
         private void dw_header_Click(object sender, EventArgs e) //added by jlwang
@@ -229,5 +271,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             base.Dispose(disposing);
         }
         #endregion
+
+        private Button cb_selectfreq;
     }
 }
