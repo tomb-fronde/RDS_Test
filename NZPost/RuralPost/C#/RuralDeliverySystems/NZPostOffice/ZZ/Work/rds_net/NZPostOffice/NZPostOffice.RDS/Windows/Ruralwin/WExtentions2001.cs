@@ -15,7 +15,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public partial class WExtentions2001 : WAncestorWindow
     {
-        // TJB Oct-2010: Changed benchmark report to BenchmarkReport2010 (was 2006)
+        // TJB Oct-2010: 
+        // Changed benchmark report to BenchmarkReport2010 (was 2006)
 
         #region Define
 
