@@ -151,8 +151,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             //! ItemChanged of dw_detail return wrong columnName - "grid"
             ((DAddressOccupants)(dw_details.DataObject)).Grid.CellValidated += new DataGridViewCellEventHandler(Grid_CellValidated);
-            ((DAddressOccupants)(dw_details.DataObject)).Grid.CellValueChanged +=
-                new DataGridViewCellEventHandler(this.dw_details_itemchanged);
+            ((DAddressOccupants)(dw_details.DataObject)).Grid.CellValueChanged 
+                           += new DataGridViewCellEventHandler(this.dw_details_itemchanged);
         }
 
         public override void pfc_preopen()
@@ -3498,8 +3498,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //                      from the database.
                 lds_cust = new URdsDw();
                 lds_cust.DataObject = new DCustomerRecipients();
-                lds_cust.Retrieve(new object[] { ll_cust_id });
-                idw_movement.Retrieve(new object[] { il_adr_id });
+                lds_cust.Retrieve(new object[]{ll_cust_id });
+                idw_movement.Retrieve(new object[]{il_adr_id });
                 ldt_timestamp = StaticVariables.gnv_app.of_gettimestamp();
                 //  Loop thru all customers and check for any additions first
                 for (ll_x = 0; ll_x < lds_cust.RowCount; ll_x++)
@@ -5538,7 +5538,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //  TJB  SR4656  May 2005
                 //  ... and inherit the master customer's category 
                 //      and Kiwimail count (adpost quantity).
-                dw_details.GetItem<AddressOccupants>(row).MasterCustId = ll_null;
+                dw_details.GetItem<AddressOccupants>(row).MasterCustId = null;
                 dwChild = new DDddwPrimContactsForAnAddress();
                 dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)(((Metex.Windows.DataEntityGrid)(dw_details.GetControlByName("grid"))).Columns["master_cust_id"])).DataSource;
 
@@ -5571,10 +5571,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                //  TJB  NPAD2  Jan 2006
-                //  If this is an unnumbered address, there can only be 
-                //  one master.  Make the original master a recipient of 
-                //  the new master.
+                // TJB  NPAD2  Jan 2006
+                // If this is an unnumbered address, there can only be one master.  
+                // Make the original master a recipient of the new master.
                 if (ib_unnumbered)
                 {
                     dw_details.GetItem<AddressOccupants>(ll_master_row).MasterCustId = ll_null;
@@ -5612,15 +5611,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         lb_update_address = true;
                     }
                 }
-                // -------------------------------------------------------------
             }
             else
             {
                 //  have been more than one other).
-                //  Set its master_cust_id to the first of the available  
-                //  other masters.
+                //  Set its master_cust_id to the first of the available other masters.
                 //  NOTE: This can only happen for numbered addresses.
                 ll_this_cust_id = dw_details.GetItem<AddressOccupants>(row).CustId;
+/*
                 dwChild = new DDddwPrimContactsForAnAddress();
                 dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)(((Metex.Windows.DataEntityGrid)(dw_details.GetControlByName("grid"))).Columns["master_cust_id"])).DataSource;
                 ll_found = FindDwChild(dwChild, ll_this_cust_id);
@@ -5628,7 +5626,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     dwChild.RowsDiscard(ll_found, ll_found);
                 }
+                int nRows = dwChild.RowCount;
+                int t = nRows;
                 ll_new_master_id = dwChild.GetValue<int?>(0, "cust_id");
+*/
+                ll_new_master_id = getFirstMaster();
                 //  TJB  SR4656  May 2005
                 //  ... and set the old master customer's category and Kiwimail 
                 //      count (adpost quantity) to NULL.
@@ -5706,6 +5708,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Refresh the display
             this.of_refresh_occupants(row);
             return;
+        }
+
+        private int? getFirstMaster()
+        {
+            int? thisPrimaryInd = 0;
+            int? thisCustId = null;
+
+            for (int nRow = 0; nRow < dw_details.RowCount; nRow++)
+            {
+                thisPrimaryInd = dw_details.GetItem<AddressOccupants>(nRow).PrimaryInd;
+                thisPrimaryInd = (thisPrimaryInd == null) ? 0 : thisPrimaryInd;
+                if (thisPrimaryInd == 1)
+                {
+                    thisCustId = dw_details.GetItem<AddressOccupants>(nRow).CustId;
+                    break;
+                }
+            }
+            return thisCustId;
         }
 
         private int FindDwChild(DataUserControl dw, int? cust_id)
@@ -6272,35 +6292,36 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_userid;
             DataUserControl dwChild;
             ll_null = null;
-            int row = dw_details.GetRow();
+
+            int changedRow = dw_details.GetRow();
 
             string column = ((DAddressOccupants)(dw_details.DataObject)).Grid.CurrentColumnName;
 
-            object value = dw_details.GetValue(row, column);
+            object value = dw_details.GetValue(changedRow, column);
             string data = value != null ? value.ToString() : null;
 
             //  TJB  NPAD2  Jan 2006
-            if (((DAddressOccupants)(dw_details.DataObject)).Grid.CurrentColumnName == "primary_ind")
+            if ( column == "primary_ind")
             {
                 if (!(is_cust_perms.IndexOf('M') >= 0))
                 {
                     MessageBox.Show("You must have at customer modify privilege to change the primary customer."
-                        , "Validation Error"
-                        , MessageBoxButtons.OK
-                        , MessageBoxIcon.Exclamation);
+                                    , "Validation Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Exclamation);
                     return; //? return 2;
                 }
                 if (data == "0")
                 {
-                    // 			1 Turn indicator on
-                    //  If turning the indicator off and this is the only primary 
-                    //  customer left on the list, do not allow them to uncheck it
-                    //!ll_found = 0;
+                    // 0 - Turn indicator off
+                    // If turning the indicator off and this is the only primary 
+                    // customer left on the list, do not allow them to uncheck it
                     ll_found = -1;
                     for (int i = 0; i < dw_details.RowCount; i++)
                     {
-                        AddressOccupants record = dw_details.GetItem<AddressOccupants>(i);
-                        if (!record.MasterCustId.HasValue)
+                        //AddressOccupants record = dw_details.GetItem<AddressOccupants>(i);
+                        //if (!record.MasterCustId.HasValue)
+                        if (!dw_details.GetItem<AddressOccupants>(i).MasterCustId.HasValue)
                         {
                             ll_found = i;
                             break;
@@ -6318,8 +6339,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             for (int i = ll_found + 1; i < dw_details.RowCount; i++)
                             {
-                                AddressOccupants record = dw_details.GetItem<AddressOccupants>(i);
-                                if (!record.MasterCustId.HasValue)
+                                //AddressOccupants record = dw_details.GetItem<AddressOccupants>(i);
+                                //if (!record.MasterCustId.HasValue)
+                                if (!dw_details.GetItem<AddressOccupants>(i).MasterCustId.HasValue)
                                 {
                                     ll_found2 = i;
                                     break;
@@ -6333,12 +6355,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         else
                         {
                             //  This is the only primary contact
-                            dw_details.GetItem<AddressOccupants>(row).PrimaryInd = Convert.ToInt32(dw_details.GetItem<AddressOccupants>(row).PrimaryInd) == 1 ? 0 : 1;
+                            dw_details.GetItem<AddressOccupants>(changedRow).PrimaryInd = Convert.ToInt32(dw_details.GetItem<AddressOccupants>(changedRow).PrimaryInd) == 1 ? 0 : 1;
                             dw_details.DataObject.BindingSource.CurrencyManager.Refresh();
                             MessageBox.Show("You must have at least one primary contact associated with an address."
-                                , "Validation Error"
-                                , MessageBoxButtons.OK
-                                , MessageBoxIcon.Exclamation);
+                                            , "Validation Error"
+                                            , MessageBoxButtons.OK
+                                            , MessageBoxIcon.Exclamation);
                             return; //? return 2;
                         }
                     }
@@ -6349,17 +6371,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
                 //  If turning the indicator on, ue_PostItemChanged deals with it.
-                BeginInvoke(new CallUePostchanged(dw_details_ue_postitemchanged), new object[] { row, column, data });// dw_details_ue_postitemchanged(row, column, data);// add by mkwang
+                BeginInvoke(new CallUePostchanged(dw_details_ue_postitemchanged), new object[] { changedRow, column, data });// dw_details_ue_postitemchanged(changedRow, column, data);// add by mkwang
 
             }
-            else if (((DAddressOccupants)(dw_details.DataObject)).Grid.CurrentColumnName == "master_cust_id")
+            else if (column == "master_cust_id")
             {
                 //  TJB  SR4559  18-Mar-2005
                 //  Changing the primary customer indicator, update the rds_customer table 
                 //  with the user making the change and the date of the change.
                 ls_userid = StaticVariables.LoginId;
-                dw_details.GetItem<AddressOccupants>(row).CustLastAmendedUser = ls_userid;
-                dw_details.GetItem<AddressOccupants>(row).CustLastAmendedDate = System.DateTime.Today;
+                dw_details.GetItem<AddressOccupants>(changedRow).CustLastAmendedUser = ls_userid;
+                dw_details.GetItem<AddressOccupants>(changedRow).CustLastAmendedDate = System.DateTime.Today;
                 dw_details.Save();//this.pfc_save();
             }
         }
