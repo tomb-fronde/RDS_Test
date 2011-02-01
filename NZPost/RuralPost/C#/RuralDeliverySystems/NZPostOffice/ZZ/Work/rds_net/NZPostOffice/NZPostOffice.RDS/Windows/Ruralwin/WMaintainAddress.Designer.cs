@@ -17,6 +17,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     partial class WMaintainAddress
     {
+        // TJB  Jan-2011 Sequencing Review
+
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
 
