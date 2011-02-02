@@ -2,14 +2,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
 	partial class DCustomerInterests
 	{
+        // TJB  Feb-2011  RPCR_023: New
+        // Implements list of interests with checkboxes for selections
+        // (not to be confused with DCustomerInterest!)
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn  ct_rd_ref_mandatory;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  ct_next_contract;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  contract_type;
-
 	
 		protected override void Dispose(bool disposing)
 		{
@@ -32,92 +32,82 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		#region Component Designer generated code
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-			grid = new Metex.Windows.DataEntityGrid();
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
-			this.SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.grid = new Metex.Windows.DataEntityGrid();
+            this.ciSelectedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.interestDescriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bindingSource
+            // 
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.CustomerInterests);
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
+            // 
+            // grid
+            // 
+            this.grid.AllowUserToAddRows = false;
+            this.grid.AllowUserToDeleteRows = false;
+            this.grid.AllowUserToResizeRows = false;
+            this.grid.AutoGenerateColumns = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid.ColumnHeadersHeight = 28;
+            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ciSelectedDataGridViewTextBoxColumn,
+            this.interestDescriptionDataGridViewTextBoxColumn});
+            this.grid.DataSource = this.bindingSource;
+            this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.grid.Location = new System.Drawing.Point(0, 0);
+            this.grid.Name = "grid";
+            this.grid.RowHeadersVisible = false;
+            this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grid.Size = new System.Drawing.Size(405, 179);
+            this.grid.TabIndex = 0;
+            // 
+            // ciSelectedDataGridViewTextBoxColumn
+            // 
+            this.ciSelectedDataGridViewTextBoxColumn.DataPropertyName = "CiSelected";
+            this.ciSelectedDataGridViewTextBoxColumn.FalseValue = "0";
+            this.ciSelectedDataGridViewTextBoxColumn.HeaderText = "Selected";
+            this.ciSelectedDataGridViewTextBoxColumn.Name = "ciSelectedDataGridViewTextBoxColumn";
+            this.ciSelectedDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ciSelectedDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ciSelectedDataGridViewTextBoxColumn.TrueValue = "1";
+            this.ciSelectedDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // interestDescriptionDataGridViewTextBoxColumn
+            // 
+            this.interestDescriptionDataGridViewTextBoxColumn.DataPropertyName = "InterestDescription";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.interestDescriptionDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.interestDescriptionDataGridViewTextBoxColumn.HeaderText = "Interest";
+            this.interestDescriptionDataGridViewTextBoxColumn.Name = "interestDescriptionDataGridViewTextBoxColumn";
+            this.interestDescriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.interestDescriptionDataGridViewTextBoxColumn.Width = 312;
+            // 
+            // DCustomerInterests
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
+            this.Controls.Add(this.grid);
+            this.Name = "DCustomerInterests";
+            this.Size = new System.Drawing.Size(405, 179);
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+            this.ResumeLayout(false);
 
-			// 
-			// bindingSource
-			//
-			this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.CustomerInterests);
-			this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
-			// 
-			// grid
-			// 
-			this.grid.AllowUserToAddRows = false;
-			this.grid.AllowUserToResizeRows = false;
-			this.grid.AutoGenerateColumns = false;
-			this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-			this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F);
-			this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.grid.ColumnHeadersHeight = 28;
-			this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-			this.grid.DataSource = this.bindingSource;
-			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-			this.grid.Location = new System.Drawing.Point(0, 0);
-			this.grid.MultiSelect = true;
-			this.grid.Name = "grid";
-			this.grid.RowHeadersVisible = false;
-			this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.grid.Size = new System.Drawing.Size(638, 252);
-			this.grid.TabIndex = 0;
-			//
-			// contract_type
-			//
-			contract_type= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.contract_type.DataPropertyName = "ContractType";
-			this.contract_type.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.contract_type.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1090519039);
-			this.contract_type.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-			this.contract_type.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-			this.contract_type.HeaderText = "Contract Types";
-			this.contract_type.Name = "contract_type";
-			this.contract_type.Width = 205;
-			this.grid.Columns.Add(contract_type);
-			//
-			// ct_next_contract
-			//
-			ct_next_contract= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ct_next_contract.DataPropertyName = "CtNextContract";
-			this.ct_next_contract.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.ct_next_contract.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(553648127);
-			this.ct_next_contract.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-			this.ct_next_contract.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-			this.ct_next_contract.HeaderText = "Next Contract";
-			this.ct_next_contract.Name = "ct_next_contract";
-			this.ct_next_contract.Width = 84;
-			this.ct_next_contract.ReadOnly = true;
-			this.grid.Columns.Add(ct_next_contract);
-			//
-			// ct_rd_ref_mandatory
-			//
-			ct_rd_ref_mandatory = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.ct_rd_ref_mandatory.DataPropertyName = "CtRdRefMandatory";
-			this.ct_rd_ref_mandatory.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.ct_rd_ref_mandatory.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
-			this.ct_rd_ref_mandatory.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-			this.ct_rd_ref_mandatory.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(553648127);
-			this.ct_rd_ref_mandatory.DefaultCellStyle.NullValue = false;
-			this.ct_rd_ref_mandatory.HeaderText = "RD Text Mandatory";
-			this.ct_rd_ref_mandatory.Name = "ct_rd_ref_mandatory";
-			this.ct_rd_ref_mandatory.TrueValue = "Y";
-			this.ct_rd_ref_mandatory.FalseValue = "N";
-			this.ct_rd_ref_mandatory.Width = 122;
-			this.grid.Columns.Add(ct_rd_ref_mandatory);
-
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-			this.ResumeLayout(false); this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Size = new System.Drawing.Size(638, 252);
-			this.BackColor = System.Drawing.ColorTranslator.FromWin32(80269524);
-			this.Controls.Add(grid);
 		}
 		#endregion
 
@@ -131,6 +121,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 					grid.Rows[args.NewIndex].Cells["ct_next_contract"].ReadOnly = false;
 				}
 			}
-		}
+        }
+
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ciSelectedDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn interestDescriptionDataGridViewTextBoxColumn;
 	}
 }

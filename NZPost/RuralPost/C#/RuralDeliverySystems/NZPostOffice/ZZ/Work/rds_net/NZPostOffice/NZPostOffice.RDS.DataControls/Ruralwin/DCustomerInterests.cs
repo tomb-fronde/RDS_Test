@@ -12,15 +12,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     public partial class DCustomerInterests : Metex.Windows.DataUserControl
 	{
+        // TJB  Feb-2011  RPCR_023: New
+        // Implements list of interests with checkboxes for selections
+        // (not to be confused with DCustomerInterest!)
+
 		public DCustomerInterests()
 		{
 			InitializeComponent();
-			this.SortString = "contract_type A";
+//			this.SortString = "contract_type A";
 		}
 
-		public override int Retrieve(  )
+		public int Retrieve(int? in_cust_id)
 		{
-			int ret = RetrieveCore<CustomerInterests>(new List<CustomerInterests>(CustomerInterests.GetAllContractType()));
+            int ret = RetrieveCore<CustomerInterests>(new List<CustomerInterests>(CustomerInterests.GetAllCustomerInterests(in_cust_id)));
 			if (this.SortString != "")
 				this.Sort<CustomerInterests>();
 			return ret;
