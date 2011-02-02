@@ -4,7 +4,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 	{
         // TJB  Feb-2011  RPCR_023: New
         // Implements list of occupations with checkboxes for selections
-        // (not to be confused with Occupation!)
+        // (not to be confused with DCustomerOccupation!)
 
 		/// <summary>
 		/// Required designer variable.
