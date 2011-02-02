@@ -15,6 +15,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public partial class WCustomer : WMaster
     {
+        // TJB  Feb-2011  RPCR_023
+        // Changed Occupations and Interests datawindows 
+        //    from DCustomerOccupation to DCustomerOccupations
+        //     and DCustomerInterest   to DCustomerInterests
+        // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
+        // and cb_clearOccupations buttons and their click events
+
         // TJB  Jan-2011  Sequencing Review
         // Resized screen to make room
         // Added Case name and Slot allocation fields (see DCustomerDetails)
@@ -94,8 +101,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_generic.DataObject = new DCustomerDetails();
             this.dw_recipients2.DataObject = new DRecipient();
-            dw_occupations.DataObject = new DCustomerOccupation();
-            dw_interests.DataObject = new DCustomerInterest();
+            dw_occupations.DataObject = new DCustomerOccupations();
+            dw_interests.DataObject = new DCustomerInterests();
 
             dw_generic.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_recipients2.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -138,6 +145,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_interests.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_interests_constructor);
             dw_interests.PfcPreUpdate += new UserEventDelegate1(dw_interests_pfc_preupdate);
             dw_interests.PfcValidation += new UserEventDelegate1(dw_interests_pfc_validation);
+
+            // TJB  Feb-2011  RPCR_023
+            // Added buttons and their click events
+            this.cb_allInterests.Click += new System.EventHandler(this.cb_allInterests_Click);
+            this.cb_clearInterests.Click += new System.EventHandler(this.cb_clearInterests_Click);
+            this.cb_allOccupations.Click += new System.EventHandler(this.cb_allOccupations_Click);
+            this.cb_clearOccupations.Click += new System.EventHandler(this.cb_clearOccupations_Click);
 
             this.ShowInTaskbar = false;
         }
@@ -1490,9 +1504,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rowcount = dw_occupations.RowCount;
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
-                if (dw_occupations.GetItem<CustomerOccupation>(ll_row).CustId == null)
+                if (dw_occupations.GetItem<CustomerOccupations>(ll_row).CustId == null)
                 {
-                    dw_occupations.GetItem<CustomerOccupation>(ll_row).CustId = il_customer;
+                    dw_occupations.GetItem<CustomerOccupations>(ll_row).CustId = il_customer;
                 }
             }
             dw_occupations.AcceptText();
@@ -1508,7 +1522,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rowcount = dw_occupations.RowCount;
             for (ll_row = ll_rowcount - 1; ll_row >= 0; ll_row -= 1)
             {
-                ll_occupation_id = dw_occupations.GetItem<CustomerOccupation>(ll_row).OccupationId;
+                ll_occupation_id = dw_occupations.GetItem<CustomerOccupations>(ll_row).OccupationId;
                 //  if occupation id is null, user hasn't selected an entry.
                 //  delete that row from the list
                 if (ll_occupation_id == null)
@@ -1521,7 +1535,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ll_found = dw_occupations.Find("occupation_id", ll_occupation_id);
                     if (ll_found == ll_row)
                         ll_found = -1;
-                    //if (dw_occupations.GetItem<CustomerOccupation>(ll_row).OccupationId == ll_occupation_id)
+                    //if (dw_occupations.GetItem<CustomerOccupations>(ll_row).OccupationId == ll_occupation_id)
                     //    ll_found = ll_row;
                     if (ll_found >= 0)
                     {
@@ -1561,9 +1575,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rowcount = dw_interests.RowCount;
             for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
             {
-                if (dw_interests.GetItem<CustomerInterest>(ll_row).CustId == null)
+                if (dw_interests.GetItem<CustomerInterests>(ll_row).CustId == null)
                 {
-                    dw_interests.GetItem<CustomerInterest>(ll_row).CustId = il_customer;
+                    dw_interests.GetItem<CustomerInterests>(ll_row).CustId = il_customer;
                 }
             }
             dw_interests.AcceptText();
@@ -1579,7 +1593,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_rowcount = dw_interests.RowCount;
             for (ll_row = ll_rowcount - 1; ll_row >= 0; ll_row -= 1)
             {
-                ll_interest_id = dw_interests.GetItem<CustomerInterest>(ll_row).InterestId;
+                ll_interest_id = dw_interests.GetItem<CustomerInterests>(ll_row).InterestId;
                 //  if interset id is null, user hasn't selected an entry.
                 //  delete that row from the list
                 if (ll_interest_id == null)
@@ -1593,7 +1607,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     if (ll_found == ll_row)
                         ll_found = -1;
 
-                    //if (dw_interests.GetItem<CustomerInterest>(ll_row).InterestId == ll_interest_id)
+                    //if (dw_interests.GetItem<CustomerInterests>(ll_row).InterestId == ll_interest_id)
                     //    ll_found = ll_row;
                     if (ll_found >= 0)
                     {
@@ -2045,5 +2059,61 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #endregion
+
+        private void cb_allInterests_Click(object sender, EventArgs e)
+        {
+            int nRows = dw_interests.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                if (dw_interests.GetItem<CustomerInterests>(nRow).CiSelected == 0)
+                {
+                    dw_interests.GetItem<CustomerInterests>(nRow).CiSelected = 1;
+                }
+            }
+            dw_interests.AcceptText();
+            dw_interests.DataObject.BindingSource.CurrencyManager.Refresh();
+        }
+
+        private void cb_clearInterests_Click(object sender, EventArgs e)
+        {
+            int nRows = dw_interests.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                if (dw_interests.GetItem<CustomerInterests>(nRow).CiSelected == 1)
+                {
+                    dw_interests.GetItem<CustomerInterests>(nRow).CiSelected = 0;
+                }
+            }
+            dw_interests.AcceptText();
+            dw_interests.DataObject.BindingSource.CurrencyManager.Refresh();
+        }
+
+        private void cb_allOccupations_Click(object sender, EventArgs e)
+        {
+            int nRows = dw_occupations.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                if (dw_occupations.GetItem<CustomerOccupations>(nRow).CoSelected == 0)
+                {
+                    dw_occupations.GetItem<CustomerOccupations>(nRow).CoSelected = 1;
+                }
+            }
+            dw_occupations.AcceptText();
+            dw_occupations.DataObject.BindingSource.CurrencyManager.Refresh();
+        }
+
+        private void cb_clearOccupations_Click(object sender, EventArgs e)
+        {
+            int nRows = dw_occupations.RowCount;
+            for (int nRow = 0; nRow < nRows; nRow++)
+            {
+                if (dw_occupations.GetItem<CustomerOccupations>(nRow).CoSelected == 1)
+                {
+                    dw_occupations.GetItem<CustomerOccupations>(nRow).CoSelected = 0;
+                }
+            }
+            dw_occupations.AcceptText();
+            dw_occupations.DataObject.BindingSource.CurrencyManager.Refresh();
+        }
     }
 }

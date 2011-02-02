@@ -14,6 +14,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     partial class WCustomer
     {
+        // TJB  Feb-2011  RPCR_023
+        // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
+        // and cb_clearOccupations buttons.
+
         #region Define
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
@@ -67,9 +71,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_4 = new System.Windows.Forms.TabPage();
             this.dw_occupations = new NZPostOffice.RDS.Controls.URdsDw();
             this.gb_occupations = new System.Windows.Forms.GroupBox();
+            this.cb_clearOccupations = new System.Windows.Forms.Button();
+            this.cb_allOccupations = new System.Windows.Forms.Button();
             this.tabpage_5 = new System.Windows.Forms.TabPage();
             this.dw_interests = new NZPostOffice.RDS.Controls.URdsDw();
             this.gb_interests = new System.Windows.Forms.GroupBox();
+            this.cb_clearInterests = new System.Windows.Forms.Button();
+            this.cb_allInterests = new System.Windows.Forms.Button();
             this.st_label = new NZPostOffice.Shared.VisualComponents.USt();
             this.cb_save = new NZPostOffice.Shared.VisualComponents.UCb();
             this.cb_close = new NZPostOffice.Shared.VisualComponents.UCb();
@@ -77,7 +85,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_1.SuspendLayout();
             this.tabpage_2.SuspendLayout();
             this.tabpage_4.SuspendLayout();
+            this.gb_occupations.SuspendLayout();
             this.tabpage_5.SuspendLayout();
+            this.gb_interests.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab_1
@@ -181,12 +191,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_occupations.FireConstructor = false;
             this.dw_occupations.Location = new System.Drawing.Point(10, 24);
             this.dw_occupations.Name = "dw_occupations";
-            this.dw_occupations.Size = new System.Drawing.Size(382, 280);
+            this.dw_occupations.Size = new System.Drawing.Size(382, 252);
             this.dw_occupations.TabIndex = 0;
             // 
             // gb_occupations
             // 
             this.gb_occupations.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_occupations.Controls.Add(this.cb_clearOccupations);
+            this.gb_occupations.Controls.Add(this.cb_allOccupations);
             this.gb_occupations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.gb_occupations.ForeColor = System.Drawing.SystemColors.WindowText;
             this.gb_occupations.Location = new System.Drawing.Point(3, 6);
@@ -195,6 +207,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.gb_occupations.TabIndex = 1;
             this.gb_occupations.TabStop = false;
             this.gb_occupations.Text = "Occupations";
+            // 
+            // cb_clearOccupations
+            // 
+            this.cb_clearOccupations.Location = new System.Drawing.Point(230, 278);
+            this.cb_clearOccupations.Name = "cb_clearOccupations";
+            this.cb_clearOccupations.Size = new System.Drawing.Size(75, 23);
+            this.cb_clearOccupations.TabIndex = 1;
+            this.cb_clearOccupations.Text = "Clear All";
+            this.cb_clearOccupations.UseVisualStyleBackColor = true;
+            // 
+            // cb_allOccupations
+            // 
+            this.cb_allOccupations.Location = new System.Drawing.Point(309, 278);
+            this.cb_allOccupations.Name = "cb_allOccupations";
+            this.cb_allOccupations.Size = new System.Drawing.Size(75, 23);
+            this.cb_allOccupations.TabIndex = 0;
+            this.cb_allOccupations.Text = "Select all";
+            this.cb_allOccupations.UseVisualStyleBackColor = true;
             // 
             // tabpage_5
             // 
@@ -215,11 +245,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_interests.FireConstructor = false;
             this.dw_interests.Location = new System.Drawing.Point(10, 24);
             this.dw_interests.Name = "dw_interests";
-            this.dw_interests.Size = new System.Drawing.Size(382, 281);
+            this.dw_interests.Size = new System.Drawing.Size(382, 252);
             this.dw_interests.TabIndex = 0;
             // 
             // gb_interests
             // 
+            this.gb_interests.Controls.Add(this.cb_clearInterests);
+            this.gb_interests.Controls.Add(this.cb_allInterests);
             this.gb_interests.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.gb_interests.ForeColor = System.Drawing.SystemColors.WindowText;
             this.gb_interests.Location = new System.Drawing.Point(3, 6);
@@ -228,6 +260,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.gb_interests.TabIndex = 1;
             this.gb_interests.TabStop = false;
             this.gb_interests.Text = "Interests";
+            // 
+            // cb_clearInterests
+            // 
+            this.cb_clearInterests.Location = new System.Drawing.Point(230, 278);
+            this.cb_clearInterests.Name = "cb_clearInterests";
+            this.cb_clearInterests.Size = new System.Drawing.Size(75, 23);
+            this.cb_clearInterests.TabIndex = 1;
+            this.cb_clearInterests.Text = "Clear All";
+            this.cb_clearInterests.UseVisualStyleBackColor = true;
+            // 
+            // cb_allInterests
+            // 
+            this.cb_allInterests.Location = new System.Drawing.Point(309, 278);
+            this.cb_allInterests.Name = "cb_allInterests";
+            this.cb_allInterests.Size = new System.Drawing.Size(75, 23);
+            this.cb_allInterests.TabIndex = 0;
+            this.cb_allInterests.Text = "Select All";
+            this.cb_allInterests.UseVisualStyleBackColor = true;
             // 
             // st_label
             // 
@@ -280,7 +330,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_1.ResumeLayout(false);
             this.tabpage_2.ResumeLayout(false);
             this.tabpage_4.ResumeLayout(false);
+            this.gb_occupations.ResumeLayout(false);
             this.tabpage_5.ResumeLayout(false);
+            this.gb_interests.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -302,6 +354,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #endregion
+
+        private Button cb_allInterests;
+        private Button cb_clearInterests;
+        private Button cb_clearOccupations;
+        private Button cb_allOccupations;
 
     }
 }
