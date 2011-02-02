@@ -8,127 +8,150 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
-    // TJB  RPCR_023  Jan-2011: New
+    // TJB  Feb-2011  RPCR_023  :New
 
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
-	[MapInfo("ct_key", "_ct_key", "contract_type", true)]
-	[MapInfo("contract_type", "_contract_type", "contract_type")]
-	[MapInfo("ct_next_contract", "_ct_next_contract", "contract_type")]
-	[MapInfo("ct_rd_ref_mandatory", "_ct_rd_ref_mandatory", "contract_type")]
+	[MapInfo("ci_selected", "_ci_selected", "customer_interest")]
+    [MapInfo("cust_id", "_cust_id", "customer_interest")]
+    [MapInfo("interest_id", "_interest_id", "customer_interest")]
+    [MapInfo("interest_description", "_interest_description", "customer_interest")]
 	[System.Serializable()]
 
 	public class CustomerInterests : Entity<CustomerInterests>
 	{
-		#region Business Methods
+        private int _sqlerrcode = 0;
+        private string _sqlerrtext = "";
+
+        public int SQLErrCode
+        {
+            get
+            {
+                return _sqlerrcode;
+            }
+        }
+
+        public string SQLErrText
+        {
+            get
+            {
+                return _sqlerrtext;
+            }
+        }
+
+        private int? _ci_selected_initialValue = 0;
+
+        #region Business Methods
 		[DBField()]
-		private int?  _ct_key;
+		private int? _ci_selected = 0;
+
+        [DBField()]
+        private int? _cust_id;
+
+        [DBField()]
+        private int? _interest_id;
 
 		[DBField()]
-		private string  _contract_type;
+		private string  _interest_description;
 
-		[DBField()]
-		private int?  _ct_next_contract;
-
-		[DBField()]
-		private string  _ct_rd_ref_mandatory;
-
-
-		public virtual int? CtKey
+		public virtual int? CiSelected
 		{
 			get
 			{
 				CanReadProperty(true);
-				return _ct_key;
+				return _ci_selected;
 			}
 			set
 			{
 				CanWriteProperty(true);
-				if ( _ct_key != value )
+				if ( _ci_selected != value )
 				{
-					_ct_key = value;
+					_ci_selected = value;
 					PropertyHasChanged();
 				}
 			}
 		}
 
-		public virtual string ContractType
+        public virtual int? CustId
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _cust_id;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_cust_id != value)
+                {
+                    _cust_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? InterestId
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _interest_id;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_interest_id != value)
+                {
+                    _interest_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+		public virtual string InterestDescription
 		{
 			get
 			{
 				CanReadProperty(true);
-				return _contract_type;
+                return _interest_description;
 			}
 			set
 			{
 				CanWriteProperty(true);
-				if ( _contract_type != value )
+				if ( _interest_description != value )
 				{
-					_contract_type = value;
+					_interest_description = value;
 					PropertyHasChanged();
 				}
 			}
 		}
 
-		public virtual int? CtNextContract
-		{
-			get
-			{
-				CanReadProperty(true);
-				return _ct_next_contract;
-			}
-			set
-			{
-				CanWriteProperty(true);
-				if ( _ct_next_contract != value )
-				{
-					_ct_next_contract = value;
-					PropertyHasChanged();
-				}
-			}
-		}
 
-		public virtual string CtRdRefMandatory
-		{
-			get
-			{
-				CanReadProperty(true);
-				return _ct_rd_ref_mandatory;
-			}
-			set
-			{
-				CanWriteProperty(true);
-				if ( _ct_rd_ref_mandatory != value )
-				{
-					_ct_rd_ref_mandatory = value;
-					PropertyHasChanged();
-				}
-			}
-		}
-		private CustomerInterests[] dataList;
+        private CustomerInterests[] list;
 
 		protected override object GetIdValue()
 		{
-			return string.Format( "{0}", _ct_key );
+			return string.Format( "{0}", _interest_id );
 		}
 		#endregion
 
 		#region Factory Methods
-		public static CustomerInterests NewContractType(int? ct_key)
+        public static CustomerInterests NewCustomerInterest(int? in_cust_id, int? in_interest_id)
 		{
-			return Create(ct_key);
+			return Create(in_cust_id, in_interest_id);
 		}
 
-		public static CustomerInterests[] GetAllContractType()
+        public static CustomerInterests[] GetAllCustomerInterests(int? in_cust_id)
 		{
-			return Fetch().dataList;
+			return Fetch(in_cust_id).list;
+			//return Fetch(in_cust_id).datalist;
 		}
 		#endregion
 
 		#region Data Access
 		[ServerMethod]
-		private void FetchEntity(  )
+		private void FetchEntity(int? in_cust_id)
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
 			{
@@ -136,21 +159,52 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-					GenerateSelectCommandText(cm, "contract_type");
+					cm.CommandText = "select 1 as selected, i.interest_id, i.interest_description"
+                                   + "  from interest i join customer_interest ci "
+                                   + "                   on i.interest_id = ci.interest_id "
+                                   + "                  and ci.cust_id = @in_cust_id "
+                                   + "UNION "
+                                   + "select 0 as selected, i1.interest_id, i1.interest_description "
+                                   + "  from interest i1 "
+                                   + " where i1.interest_id not in " 
+                                   + "            (select i2.interest_id "
+                                   + "               from interest i2 join customer_interest ci "
+                                   + "                                on i2.interest_id = ci.interest_id "
+                                   + "              where i2.interest_id = i1.interest_id "
+                                   + "                and ci.cust_id = @in_cust_id) "
+                                   + "order by selected desc, interest_id ";
 
-					List<CustomerInterests> list = new List<CustomerInterests>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							CustomerInterests instance = new CustomerInterests();
-							instance.StoreFieldValues(dr, "contract_type");
-							instance.MarkOld();
-							list.Add(instance);
-						}
-						dataList = new CustomerInterests[list.Count];
-						list.CopyTo(dataList);
-					}
+					pList.Add(cm,"in_cust_id", in_cust_id);
+
+                    List<CustomerInterests> _list = new List<CustomerInterests>();
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                CustomerInterests instance = new CustomerInterests();
+
+                                instance._ci_selected = GetValueFromReader<Int32?>(dr, 0);
+                                instance._ci_selected_initialValue = instance._ci_selected;
+                                instance._interest_id = GetValueFromReader<Int32?>(dr, 1);
+                                instance._interest_description = GetValueFromReader<String>(dr, 2);
+                                instance._cust_id = in_cust_id;
+
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
+                            //dataList = new CustomerInterests[list.Count];
+                            //_list.CopyTo(dataList);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
 				}
 			}
 		}
@@ -162,16 +216,39 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-				ParameterCollection pList = new ParameterCollection();
-				if (GenerateUpdateCommandText(cm, "contract_type", ref pList))
-				{
-					cm.CommandText += " WHERE  contract_type.ct_key = @ct_key ";
 
-					pList.Add(cm, "ct_key", GetInitialValue("_ct_key"));
-					DBHelper.ExecuteNonQuery(cm, pList);
-				}
-				// reinitialize original key/value list
-				StoreInitialValues();
+                bool ok = false;
+                if ( _ci_selected_initialValue == 1 && _ci_selected == 0 )
+                {
+                    cm.CommandText = "delete from customer_interest "
+                                   + " where cust_id = @cust_id and interest_id = @interest_id";
+                    ok = true;
+                }
+                else if ( _ci_selected_initialValue == 0 && _ci_selected == 1)
+                {
+                    cm.CommandText = "insert into customer_interest "
+                                   + "  ( cust_id, interest_id )"
+                                   + " values ( @cust_id, @interest_id )";
+                    ok = true;
+                }
+
+                if ( ! ok )
+                    return;
+
+                ParameterCollection pList = new ParameterCollection();
+                pList.Add(cm, "cust_id", _cust_id);
+                pList.Add(cm, "interest_id", _interest_id);
+
+                try
+                {
+                    DBHelper.ExecuteNonQuery(cm, pList);
+				    StoreInitialValues();
+                }
+                catch ( Exception e )
+                {
+                    _sqlerrcode = -1;
+                    _sqlerrtext = e.Message;
+                }
 			}
 		}
 		[ServerMethod()]
@@ -211,9 +288,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		#endregion
 
 		[ServerMethod()]
-		private void CreateEntity( int? ct_key )
+        private void CreateEntity(int? in_cust_id, int? in_interest_id)
 		{
-			_ct_key = ct_key;
+            _cust_id = in_cust_id;
+            _interest_id = in_interest_id;
 		}
 	}
 }
