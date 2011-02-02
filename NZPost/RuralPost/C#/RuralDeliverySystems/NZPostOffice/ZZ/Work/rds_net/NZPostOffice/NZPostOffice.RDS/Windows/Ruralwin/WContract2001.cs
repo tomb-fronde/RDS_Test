@@ -20,7 +20,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContract2001 : WAncestorWindow
     {
-        // TJB Sequencing Review  Jan-2011
+        // TJB  Feb-2011 Special request
+        // "Removed" Cust list last updated/printed fields from display
+        // (Actually disabled and made not visible)
+        //
+        // TJB  Jan-2011  Sequencing Review
         // Add cb_seq button to address tab, and cb_seq_clicked event handler
         // - calls address sequencer
         //
@@ -626,10 +630,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_customers.Text = "Addresses";
             this.tabpage_customers.Visible = false;
             // 
-            // SeqAddresses3
+            // SeqAddresses
             // 
             this.SeqAddresses.Location = new System.Drawing.Point(429, 273);
-            this.SeqAddresses.Name = "SeqAddresses3";
+            this.SeqAddresses.Name = "SeqAddresses";
             this.SeqAddresses.Size = new System.Drawing.Size(116, 23);
             this.SeqAddresses.TabIndex = 5;
             this.SeqAddresses.Text = "Sequence Addresses";
@@ -641,7 +645,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_contract_address.FireConstructor = false;
             this.dw_contract_address.Location = new System.Drawing.Point(3, 7);
             this.dw_contract_address.Name = "dw_contract_address";
-            this.dw_contract_address.Size = new System.Drawing.Size(539, 240);
+            this.dw_contract_address.Size = new System.Drawing.Size(539, 263);
             this.dw_contract_address.TabIndex = 1;
             // 
             // st_custlist_print
@@ -654,6 +658,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.st_custlist_print.TabIndex = 2;
             this.st_custlist_print.Text = "Customer list last printed";
             this.st_custlist_print.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.st_custlist_print.Visible = false;
             // 
             // st_custlist_updated
             // 
@@ -665,6 +670,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.st_custlist_updated.TabIndex = 3;
             this.st_custlist_updated.Text = "Customer list last updated";
             this.st_custlist_updated.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.st_custlist_updated.Visible = false;
             // 
             // em_custlist_printed
             // 
@@ -680,10 +686,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.em_custlist_printed.Text = "00000000";
             this.em_custlist_printed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.em_custlist_printed.Value = null;
+            this.em_custlist_printed.Visible = false;
             // 
             // em_custlist_updated
             // 
             this.em_custlist_updated.EditMask = "";
+            this.em_custlist_updated.Enabled = false;
             this.em_custlist_updated.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.em_custlist_updated.ForeColor = System.Drawing.SystemColors.WindowText;
             this.em_custlist_updated.Location = new System.Drawing.Point(178, 276);
@@ -694,6 +702,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.em_custlist_updated.Text = "00000000";
             this.em_custlist_updated.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.em_custlist_updated.Value = null;
+            this.em_custlist_updated.Visible = false;
             this.em_custlist_updated.TextChanged += new System.EventHandler(this.em_custlist_updated_modified);
             // 
             // tabpage_renewals
