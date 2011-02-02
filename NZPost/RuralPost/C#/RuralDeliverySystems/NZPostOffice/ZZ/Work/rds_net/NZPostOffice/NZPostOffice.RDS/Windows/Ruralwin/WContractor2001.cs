@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContractor2001 : WAncestorWindow
     {
+        // TJB  Jan 2011  RPI_026
+        // Fix email address validation bug (of_validate)
+
         #region Define
         public URdsDw idw_owner_driver;
 
@@ -549,9 +552,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //!if (!((ls_email_address == null)) && !(ls_email_address == ""))
             if (!string.IsNullOrEmpty(ls_email_address) && !string.IsNullOrEmpty(ls_email_address.Trim()))
             {
-                if (!(ls_email_address.IndexOfAny("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$".ToCharArray()) > 0))//if not match(ls_email_address,'^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]+$') then
+                // TJB  RPI_026  Jan 2011
+                //if (!(ls_email_address.IndexOfAny("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$".ToCharArray()) > 0))//if not match(ls_email_address,'^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]+$') then
+                if (!Regex.IsMatch(ls_email_address, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
                 {
-                    MessageBox.Show("Incorrect format for email address.\n" + "Format should be name@address with no spaces" + "\n\n" + ls_email_address, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Incorrect format for email address.\n" 
+                                    + "Format should be name@address with no spaces\n\n" 
+                                    + ls_email_address
+                                    , "Validation Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     sReturn = "c_email_address";
                 }
             }
