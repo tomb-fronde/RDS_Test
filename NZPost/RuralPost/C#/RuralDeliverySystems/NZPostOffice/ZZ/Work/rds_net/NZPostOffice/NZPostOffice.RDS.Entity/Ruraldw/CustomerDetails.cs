@@ -8,12 +8,17 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    //-------------------------------------------------------------------------------------
+    // TJB Feb-2011 bugfix
+    // Changed GetAllCustomerDetails2 to GetAllCustomerDetails
+    //
     // TJB Sequencing Review  Jan-2011
     // Added cust_case_name and cust_slot_allocation elements
     //
     // TJB RPI_011 6-Sept-2010
     // Changed CustMoveInDate.Get to remove the time from the DateTime value
     // to fix a problem displaying the move_in_date on the WCustomer form.
+    //-------------------------------------------------------------------------------------
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -495,7 +500,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         }
 
         public virtual DateTime? CustMoveInDate
-        //public virtual string CustMoveInDate
         {
             get
             {
@@ -607,12 +611,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #endregion
 
         #region Factory Methods
-        public static CustomerDetails NewCustomerDetails2(int? al_cust_id)
+        public static CustomerDetails NewCustomerDetails(int? al_cust_id)
         {
             return Create(al_cust_id);
         }
 
-        public static CustomerDetails[] GetAllCustomerDetails2(int? al_cust_id)
+        public static CustomerDetails[] GetAllCustomerDetails(int? al_cust_id)
         {
             return Fetch(al_cust_id).list;
         }
