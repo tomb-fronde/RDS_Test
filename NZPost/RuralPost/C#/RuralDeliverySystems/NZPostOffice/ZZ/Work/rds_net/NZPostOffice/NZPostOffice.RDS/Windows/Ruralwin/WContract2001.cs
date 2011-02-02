@@ -3325,7 +3325,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // ---------------------------------------------------
             //  TJB  Release 6.8.9 fixup  Nov 2005
             //  Changed to use wf_set_cmb_privs and u_rds_dw.uf_setToolbar
-            Console.WriteLine("{0}½øÀ´ dw_cmbs_getfocus", System.DateTime.Now);
             dw_cmbs.URdsDw_GetFocus(sender, e);
             wf_set_cmb_privs();
             idw_cmb.uf_settoolbar();
