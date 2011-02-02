@@ -17,6 +17,10 @@ using System.Drawing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Feb-2011  Bug fix
+    // Replaced code accidentally removed in of_refresh_occupants
+    // that meant Primary customer names not appearing.
+    //
     // TJB  Jan-2011  Sequencer Review
     // Added support for assigning frequencies to addresses
     // Added cb_select_freq button and cb_select_freq_clicked event.
@@ -578,8 +582,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_master_cust_row;
             ll_rows = 0;
             idw_details.SuspendLayout();
-            
-            idw_details.Retrieve(new object[]{il_adr_id.GetValueOrDefault()});
+
+            #region added by ylwang
+            List<NZPostOffice.RDS.Entity.Ruraldw.DddwPrimContactsForAnAddress> bindingSource = new List<DddwPrimContactsForAnAddress>();
+            NZPostOffice.RDS.Entity.Ruraldw.DddwPrimContactsForAnAddress[] anAddressArray = DddwPrimContactsForAnAddress.GetAllDddwPrimContactsForAnAddress(il_adr_id);
+            foreach (NZPostOffice.RDS.Entity.Ruraldw.DddwPrimContactsForAnAddress anAddress in anAddressArray)
+            {
+                bindingSource.Add(anAddress);
+            }
+            ((Metex.Windows.DataGridViewEntityComboColumn)((Metex.Windows.DataEntityGrid)idw_details.DataObject.GetControlByName("grid")).Columns["master_cust_id"]).DataSource = bindingSource;
+            #endregion
+
+            idw_details.Retrieve(new object[] { il_adr_id.GetValueOrDefault() });
             idw_movement.Retrieve(new object[]{il_adr_id.GetValueOrDefault()});
             idw_details.DataObject.SortString = "master_cust_id, cust_id";
             idw_details.DataObject.Sort<AddressOccupants>();
