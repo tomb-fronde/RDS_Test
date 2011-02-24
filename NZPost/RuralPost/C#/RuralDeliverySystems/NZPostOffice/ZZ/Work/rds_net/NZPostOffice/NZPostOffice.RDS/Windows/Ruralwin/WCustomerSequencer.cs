@@ -15,6 +15,11 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Feb-2011 Release 7.1.5 fixups
+    //     Fixed a couple of bugs in how filenames and directories were handled
+    //     in cb_stripmaker_clicked().
+    //     Added GetParentPath()
+
     // TJB  Jan-2011  Sequencing review
     //     Modified selection and sequencing algorithm.
     //     Added 'arror' buttons and 'Sequence at end' and 'Reverse sequence' buttons.
@@ -1129,8 +1134,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_filename;
             string ls_file;
             StreamWriter li_file = null;
-            string ls_inidir;
-            string ls_inifilename;
             List<string> ls_inikeys = new List<string>();
             List<string> ls_inivalues = new List<string>();
             string ls_inikey;
@@ -1176,10 +1179,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // ---------------------------------------------------
             //  Default ini file name and directory
 
-            ls_inidir = StaticFunctions.GetCurrentDirectory();
-            ls_inifilename = "stripmaker.ini";
             is_inifile = StaticVariables.gnv_app.of_getstripmakerini();
-
             if (!(File.Exists(is_inifile)))
             {
                 MessageBox.Show("Stripmaker ini file not found at " + is_inifile + "\n\n" 
@@ -1192,22 +1192,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dlg.Filter = "All Files(*.*)|*.*";
                 ll_dr = dlg.ShowDialog();
                 is_inifile = dlg.FileName;
-                ls_inifilename = dlg.FileName;
                 if (ll_dr == DialogResult.Cancel)
                 {
-                    return; //? return 0;
+                    return;
                 }
                 else if ((int)ll_dr < 0)
                 {
                     MessageBox.Show("Error selecting inifile name"
                                     , "Error"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;//? return -1;
+                    return;
                 }
                 //  Save the filename so we don't need to ask next time
                 StaticVariables.gnv_app.of_setstripmakerini(is_inifile);
                 //  Make sure we haven't changed the working directory
-                //? ChangeDirectory(StaticVariables.gnv_app.of_getstartupdir());
             }
             // ---------------------------------------------------
             //  Find out where to put the stripmaker files 
@@ -1221,36 +1219,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 MessageBox.Show("Default stripmaker files directory not found in ini file."
                                , "Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ls_savedir = StaticFunctions.GetCurrentDirectory();
+                // TJB Feb-2011 Release 7.1.5 fixups
+                // Return the parent of the current directory
+                // (expected to be C:\Program Files\Rural Post)
+                //ls_savedir = StaticFunctions.GetCurrentDirectory();
+                ls_savedir = GetParentPath(StaticFunctions.GetCurrentDirectory());
             }
-            else if (!(File.Exists(ls_savedir)))
+            // TJB Feb-2011 Release 7.1.5 fixups
+            // Changed test from "File.Exists" to "Directory.Exists"
+            else if (!(Directory.Exists(ls_savedir)))
             {
-                MessageBox.Show("Default stripmaker files directory not found:" + ls_savedir + "\n\n" 
+                MessageBox.Show("Default stripmaker files directory not found: " + ls_savedir + "\n\n" 
                 		        + "Please select another."
                 		        , "Warning"
                 		        , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ls_savedir = StaticFunctions.GetCurrentDirectory();
+                // TJB Feb-2011 Release 7.1.5 fixups
+                // Return the parent of the current directory
+                // (expected to be C:\Program Files\Rural Post)
+                //ls_savedir = StaticFunctions.GetCurrentDirectory();
+                ls_savedir = GetParentPath(StaticFunctions.GetCurrentDirectory());
             }
-            ls_filenamedir = ls_savedir + ls_filename;
             SaveFileDialog dlg2 = new SaveFileDialog();
             dlg2.Title = "Save Stripmaker route files to ...";
-            dlg2.InitialDirectory = ls_filenamedir;
+            // TJB Feb-2011 Release 7.1.5 fixups
+            // Changed InitialDirectory to the directory name (was directory + filename)
+            dlg2.InitialDirectory = ls_savedir;
             dlg2.FileName = ls_filename;
             ll_dr = dlg2.ShowDialog();
             ls_filenamedir = dlg2.FileName;
             if (ll_dr == DialogResult.Cancel)
             {
-                return; //? return 0;
+                return;
             }
             else if ((int)ll_dr < 0)
             {
                 MessageBox.Show("Error selecting save file name"
                                , "Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;//? return -(1);
+                return;
             }
             //  Make sure we don't change the working directory
-            //? ChangeDirectory(StaticVariables.gnv_app.of_getstartupdir());
             //  Strip any file extension included
             ll_rc = ls_filename.LastIndexOf('.');
             if (ll_rc > 0)
@@ -1284,7 +1292,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("No Stripmaker files have been generated"
                                    , "Information"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return; //? return 0;
+                    return;
                 }
             }
             //  Delete any existing stripmaker files
@@ -1301,7 +1309,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                 + "(No Stripmaker files have been generated)"
                                 , "Error"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;//? return -(1);
+                return;
             }
             //  Get contract information for header file
             // select contract.con_title, outlet.o_name 
@@ -1323,10 +1331,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                 + "(No Stripmaker files have been generated)"
                                 , "SQL error " + dataService.SQLCode
                                 , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                //? rollback;
-                return;//? return -(1);
+                return;
             }
-            //? commit;
             //  Open the header file
             ls_file = is_filedir + is_headerfile;
             try
@@ -1386,7 +1392,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                 , "Error"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
-                return;//? return -(1);
+                return;
             }
             //  Get street file parameters from the street section 
             //  in the ini file
@@ -1451,8 +1457,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 		, "Error"
                 		, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 li_colours = 0;
-                ls_colournames.Add("Default");//[li_colours] = "Default";
-                ls_colourvalues.Add("255,0");//[li_colours] = "255,0";
+                ls_colournames.Add("Default");
+                ls_colourvalues.Add("255,0");
             }
             //  Sort the datawindow into street name order so we can easily 
             //  pick the unique names and assign round ID numbers to them.
@@ -1465,7 +1471,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 		, "Error"
                 		, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
-                return;//? return -(1);
+                return;
             }
             else if (false)
             {
@@ -1474,7 +1480,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 		, "Error"
                 		, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
-                return;//? return -(1);
+                return;
             }
             //  Step through the datawindow looking for the road name to
             //  change.  When it does, generate a street file entry and 
@@ -1531,7 +1537,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 		, "Error"
                 		, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
-                return;//? return -(1);
+                return;
             }
             dw_seq.DataObject.SortString = "seq_num A";
             dw_seq.DataObject.Sort<SeqAddresses>();
@@ -1542,7 +1548,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 		, "Error"
                 		, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 lf_cleanup();
-                return;//? return -(1);
+                return;
             }
             else if (false)
             {
@@ -1629,7 +1635,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  about saving changes after sorting the data.
             dw_seq.ResetUpdate();
             dw_unseq.ResetUpdate();
-            return; //? return 0;
+            return;
         }
 
         public virtual void dw_addr_sequence_ind_itemchanged(object sender, EventArgs e)
@@ -1867,11 +1873,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
+        private string GetParentPath(string thisPath)
+        {
+            // TJB Feb-2011 Release 7.1.5 fixups: New
+            // Assume receiving a Windows path with a format like
+            //    C:\\Program Files\\Rural Post\\RDS.NET\\
+            // Return the parent folder (C:\\Program Files\\Rural Post\\)
+            int prevIndex, nextIndex;
+            int len = thisPath.Length;
+            // If we haven't been passed something to parse, return it
+            // (what else are you going to do?)
+            if (len < 1)
+                return thisPath;
+            // Scan through the path looking for back-slashes (doubled in the string)
+            // prevIndex is the index of the previous occurrence of the slashes,
+            // nextIndex is the index of the current occurrence of the slashes
+            prevIndex = 0;
+            nextIndex = thisPath.IndexOf("\\");
+            // The scan stops when the current index is at the end of the path
+            // or not found (the path doesn't end in "\\").
+            while ( ((nextIndex + 1) < len) || (nextIndex < 1) )
+            {
+                prevIndex = nextIndex;
+                nextIndex = thisPath.IndexOf("\\", (prevIndex + 1));
+            }
+            // If no slashes were found, return the original path
+            if (prevIndex <= 0)
+                return thisPath;
+            // Otherwise, return the path up to the next-to-last slashes 
+            // (including the slashes)
+            return thisPath.Substring(0, (prevIndex + 1));
+        }
         private void cb_reverse_Click(object sender, EventArgs e)
         {
-            
 //            dw_unseq.DataObject.FilterString = "sequence > 0";
-
             int newseq = 1;
             int oldseq = 1;
             int oldrow = 1;
