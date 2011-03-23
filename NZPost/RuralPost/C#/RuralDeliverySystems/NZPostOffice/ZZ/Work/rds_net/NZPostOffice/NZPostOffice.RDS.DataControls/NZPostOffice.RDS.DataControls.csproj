@@ -75,6 +75,9 @@
     <Compile Include="Report\BenchmarkReport2006DataSet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report\BenchmarkReport2010DataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report\BenchmarkReportFrequenciesDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -449,6 +452,12 @@
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\RERBenchmarkReport2010.cs">
+      <SubType>Component</SubType>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RERBenchmarkReport2010.rpt</DependentUpon>
     </Compile>
     <Compile Include="Report\RERBenchmarkReportFrequencies.cs">
       <DependentUpon>RERBenchmarkReportFrequencies.rpt</DependentUpon>
@@ -899,6 +908,12 @@
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ruraldw\DContractAddressFrequency.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DContractAddressFrequency.designer.cs">
+      <DependentUpon>DContractAddressFrequency.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruraldw\DContractArticalCountsTest.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -945,6 +960,12 @@
     </Compile>
     <Compile Include="Ruraldw\DContractorDs.Designer.cs">
       <DependentUpon>DContractorDs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DContractVehicleTest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DContractVehicleTest.Designer.cs">
+      <DependentUpon>DContractVehicleTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DEclDataImport.cs">
       <SubType>UserControl</SubType>
@@ -1257,6 +1278,12 @@
     </Compile>
     <Compile Include="Ruralrpt\RBenchmarkReport2006.Designer.cs">
       <DependentUpon>RBenchmarkReport2006.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralrpt\RBenchmarkReport2010.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralrpt\RBenchmarkReport2010.Designer.cs">
+      <DependentUpon>RBenchmarkReport2010.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruralrpt\RBenchmarkReportFrequencies.cs">
       <SubType>UserControl</SubType>
@@ -1876,14 +1903,8 @@
     <Compile Include="Ruraldw\DCustomerDetails.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ruraldw\DCustomerDetails.designer.cs">
+    <Compile Include="Ruraldw\DCustomerDetails.Designer.cs">
       <DependentUpon>DCustomerDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ruraldw\DCustomerDetails2.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruraldw\DCustomerDetails2.Designer.cs">
-      <DependentUpon>DCustomerDetails2.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DCustomerInterest.cs">
       <SubType>UserControl</SubType>
@@ -2749,6 +2770,18 @@
     <Compile Include="Ruralwin\DContractTown.Designer.cs">
       <DependentUpon>DContractTown.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruralwin\DCustomerInterests.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DCustomerInterests.Designer.cs">
+      <DependentUpon>DCustomerInterests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DCustomerOccupations.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DCustomerOccupations.Designer.cs">
+      <DependentUpon>DCustomerOccupations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralwin\DDddwContractMailtown.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2935,6 +2968,10 @@
     <EmbeddedResource Include="Report\RERBenchmarkReport2006.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RERBenchmarkReport2006.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RERBenchmarkReport2010.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RERBenchmarkReport2010.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\RERBenchmarkReportFrequencies.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -3175,6 +3212,14 @@
     <EmbeddedResource Include="Ruraldw\DAddressDetails.resx">
       <DependentUpon>DAddressDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DAddressList.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAddressList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DAddressOccupants.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAddressOccupants.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DAddressSearchPrimContact.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DAddressSearchPrimContact.cs</DependentUpon>
@@ -3211,9 +3256,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>DContractVehicle.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ruraldw\DCustomerDetails2.resx">
+    <EmbeddedResource Include="Ruraldw\DCustomerDetails.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>DCustomerDetails2.cs</DependentUpon>
+      <DependentUpon>DCustomerDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DEclDataImport.resx">
       <SubType>Designer</SubType>
@@ -3315,6 +3360,14 @@
     <EmbeddedResource Include="Ruralwin\DContractAllowancesV2.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractAllowancesV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DCustomerInterests.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCustomerInterests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DCustomerOccupations.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCustomerOccupations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

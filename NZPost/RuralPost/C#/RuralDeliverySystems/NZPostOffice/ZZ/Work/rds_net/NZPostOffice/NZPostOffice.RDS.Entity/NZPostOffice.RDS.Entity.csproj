@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
+    <Compile Include="Ruraldw\ContractAddressFrequency.cs" />
+    <Compile Include="Ruraldw\CustomerInterests.cs" />
+    <Compile Include="Ruraldw\CustomerOccupations.cs" />
     <Compile Include="Ruraldw\EclDataImport.cs" />
     <Compile Include="Ruraldw\EclDataImportExeptionReport.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustDownloadData.cs" />
@@ -55,6 +58,7 @@
     <Compile Include="Ruralmailmerge\MailmergeOdDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeOwnerdriverDownloadSearch.cs" />
     <Compile Include="Ruralmailmerge\SelectProcurements.cs" />
+    <Compile Include="Ruralrpt\RBenchmarkReport2010.cs" />
     <Compile Include="Ruralrpt\CustCountcriteria.cs" />
     <Compile Include="Ruralrpt\CustCountExport.cs" />
     <Compile Include="Ruralrpt\CustCountUnconfirmed.cs" />
@@ -204,8 +208,8 @@
     <Compile Include="Ruraldw\ContractSearch.cs" />
     <Compile Include="Ruraldw\ContractVehicalForm.cs" />
     <Compile Include="Ruraldw\ContractVehicle.cs" />
+    <Compile Include="Ruraldw\CustomerDetails_old.cs" />
     <Compile Include="Ruraldw\CustomerDetails.cs" />
-    <Compile Include="Ruraldw\CustomerDetails2.cs" />
     <Compile Include="Ruraldw\CustomerInterest.cs" />
     <Compile Include="Ruraldw\CustomerMailCategory.cs" />
     <Compile Include="Ruraldw\CustomerMailCategoryall.cs" />

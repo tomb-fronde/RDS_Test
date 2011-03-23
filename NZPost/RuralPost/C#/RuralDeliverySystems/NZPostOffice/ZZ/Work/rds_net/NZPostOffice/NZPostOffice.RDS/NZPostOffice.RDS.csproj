@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.3.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.5.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -158,6 +158,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WECLDataImport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WFrequencies2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WFrequencies2001.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WRenewal2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WRenewal2001.cs</DependentUpon>
@@ -206,9 +210,21 @@
       <SubType>Designer</SubType>
       <DependentUpon>WCustomer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WCustomerSequencer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WCustomerSequencer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WMainMdi.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WMainMdi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WMaintainAddress.resx">
+      <DependentUpon>WMaintainAddress.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WRestoreCusts.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WRestoreCusts.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -246,11 +262,20 @@
     <Compile Include="Windows\Ruralwin2\WECLDataImport.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Windows\Ruralwin2\WMaintainFrequency.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WAddAllowance.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerSequencer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WCustomerSequencer.Designer.cs">
+      <DependentUpon>WCustomerSequencer.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\Struct\StPrintPreview.cs" />
     <Compile Include="Windows\Struct\StSearch.cs" />
@@ -752,12 +777,6 @@
     </Compile>
     <Compile Include="Windows\Ruralwin\WCustomer.Designer.cs">
       <DependentUpon>WCustomer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Ruralwin\WCustomerSequencer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\Ruralwin\WCustomerSequencer.Designer.cs">
-      <DependentUpon>WCustomerSequencer.cs</DependentUpon>
     </Compile>
     <Compile Include="Windows\Ruralwin\WCustomerTransfer.cs">
       <SubType>Form</SubType>
