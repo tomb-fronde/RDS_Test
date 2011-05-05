@@ -133,12 +133,21 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
-				if (GenerateInsertCommandText(cm, "outlet_type", pList))
-				{
-					DBHelper.ExecuteNonQuery(cm, pList);
-				}
-				StoreInitialValues();
+				ParameterCollection pList = new ParameterCollection();
+                try
+                {
+                    if (GenerateInsertCommandText(cm, "outlet_type", pList))
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    StoreInitialValues();
+                }
+                catch (Exception e)
+                {
+                    string t1, t2;
+                    t1 = e.Message;
+                    t2 = t1;
+                }
 			}
 		}
 		[ServerMethod()]
