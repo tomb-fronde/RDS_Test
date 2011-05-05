@@ -8,13 +8,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB  RPCR_022  May-2011
+    // Added OAddress, _o_address
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("c_surname_company", "_c_surname_company", "")]
 	[MapInfo("c_first_names", "_c_first_names", "")]
-	[MapInfo("c_address", "_c_address", "")]
-	[MapInfo("c_phone_day", "_c_phone_day", "")]
+    [MapInfo("c_address", "_c_address", "")]
+    [MapInfo("c_phone_day", "_c_phone_day", "")]
 	[MapInfo("con_relief_driver_name", "_con_relief_driver_name", "")]
 	[MapInfo("con_relief_driver_address", "_con_relief_driver_address", "")]
 	[MapInfo("con_relief_driver_home_phone", "_con_relief_driver_home_phone", "")]
@@ -34,7 +37,8 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 	[MapInfo("c_mobile2", "_contractor_c_mobile2", "")]
 	[MapInfo("c_prime_contact", "_c_prime_contact", "")]
 	[MapInfo("rg_code", "_rg_code", "")]
-	[System.Serializable()]
+    [MapInfo("o_address", "_o_address", "")]
+    [System.Serializable()]
 
 	public class ScheduleaSingleContract : Entity<ScheduleaSingleContract>
 	{
@@ -107,6 +111,9 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 
 		[DBField()]
 		private int?  _rg_code;
+
+        [DBField()]
+        private string _o_address;
 
 
 		public virtual string CSurnameCompany
@@ -523,6 +530,24 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 			}
 		}
 
+        public virtual string OAddress
+        {
+            get
+            {
+                CanReadProperty("OAddress", true);
+                return _o_address;
+            }
+            set
+            {
+                CanWriteProperty("OAddress", true);
+                if (_o_address != value)
+                {
+                    _o_address = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual string Compute1
         {
             get
@@ -711,7 +736,8 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                             instance._contractor_c_mobile2 = GetValueFromReader<string>(dr,20);
                             instance._c_prime_contact = GetValueFromReader<int?>(dr,21);
                             instance._rg_code = GetValueFromReader<int?>(dr,22);
-							instance.MarkOld();
+                            instance._o_address = GetValueFromReader<string>(dr, 23);
+                            instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
 						}
