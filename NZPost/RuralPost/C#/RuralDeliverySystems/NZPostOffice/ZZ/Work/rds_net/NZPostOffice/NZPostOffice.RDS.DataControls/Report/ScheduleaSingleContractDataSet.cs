@@ -5,7 +5,8 @@ using System.Data;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 namespace NZPostOffice.RDS.DataControls.Report
 {
-
+    // TJB  RPCR_022  May-2011
+    // Added OAddress
     public class RScheduleaSingleContract
     {
         public string CSurnameCompany
@@ -169,6 +170,13 @@ namespace NZPostOffice.RDS.DataControls.Report
                 return 0;
             }
         }
+        public string OAddress
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
         public string Compute1
         {
             get
@@ -268,6 +276,8 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn RgCode = new DataColumn("RgCode", typeof(int));
 
+        public DataColumn OAddress = new DataColumn("OAddress", typeof(string));
+
         public DataColumn Compute1 = new DataColumn("Compute1", typeof(string));
 
         public DataColumn Compute2 = new DataColumn("Compute2", typeof(string));
@@ -286,7 +296,7 @@ namespace NZPostOffice.RDS.DataControls.Report
         public ScheduleaSingleContractDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				CSurnameCompany,CFirstNames,CAddress,CPhoneDay,ConReliefDriverName,ConReliefDriverAddress,ConReliefDriverHomePhone,ConStartDate,OName,ContractNo,ConTitle,Lodgement,Usah,ContractSeqNumber,CInitials,CTitle,RgnRcmManager,CPhoneNight,CMobile,CEmailAddress,ContractorCMobile2,CPrimeContact,RgCode,Compute1,Compute2,Compute3,Compute4,Compute5,Compute6,Compute7
+				CSurnameCompany,CFirstNames,CAddress,CPhoneDay,ConReliefDriverName,ConReliefDriverAddress,ConReliefDriverHomePhone,ConStartDate,OName,ContractNo,ConTitle,Lodgement,Usah,ContractSeqNumber,CInitials,CTitle,RgnRcmManager,CPhoneNight,CMobile,CEmailAddress,ContractorCMobile2,CPrimeContact,RgCode,OAddress,Compute1,Compute2,Compute3,Compute4,Compute5,Compute6,Compute7
 				});
             ConStartDate.AllowDBNull = true;
             ContractNo.AllowDBNull = true;
@@ -332,6 +342,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["ContractorCMobile2"] = GetFieldValue(data.ContractorCMobile2);
             row["CPrimeContact"] = GetFieldValue(data.CPrimeContact);
             row["RgCode"] = GetFieldValue(data.RgCode);
+            row["OAddress"] = GetFieldValue(data.OAddress);
             row["Compute1"] = GetFieldValue(data.Compute1);
             row["Compute2"] = GetFieldValue(data.Compute2);
             row["Compute3"] = GetFieldValue(data.Compute3);
