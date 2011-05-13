@@ -176,7 +176,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_pl_insurance = new System.Windows.Forms.CheckBox();
             this.ra_insurance_sighted = new System.Windows.Forms.CheckBox();
             this.ra_new_vehicle = new System.Windows.Forms.CheckBox();
-            this.ra_vehicle_price = new NumericalMaskedTextBox();
+            this.ra_vehicle_price = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.ra_vehicle_purchased = new System.Windows.Forms.MaskedTextBox();
             this.ra_mv_comments = new System.Windows.Forms.RichTextBox();
             this.ra_no_circular_drops = new System.Windows.Forms.MaskedTextBox();
@@ -208,7 +208,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_4 = new System.Windows.Forms.Label();
             this.t_5 = new System.Windows.Forms.Label();
             this.t_6 = new System.Windows.Forms.Label();
-            this.compute_3 = new NumericalMaskedTextBox();
+            this.compute_3 = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.t_7 = new System.Windows.Forms.Label();
             this.t_8 = new System.Windows.Forms.Label();
             this.t_9 = new System.Windows.Forms.Label();
@@ -265,7 +265,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_58 = new System.Windows.Forms.Label();
             this.t_59 = new System.Windows.Forms.Label();
             this.t_60 = new System.Windows.Forms.Label();
-            this.compute_4 = new NumericalMaskedTextBox();
+            this.compute_4 = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -321,7 +321,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton25 = new System.Windows.Forms.RadioButton();
             this.radioButton24 = new System.Windows.Forms.RadioButton();
             this.st_contract = new System.Windows.Forms.Label();
-            components = new System.ComponentModel.Container();
+            this.Fuel_Consumption_h = new System.Windows.Forms.Label();
+            this.ra_fuel_used_t = new System.Windows.Forms.Label();
+            this.ra_fuel_distance_t = new System.Windows.Forms.Label();
+            this.ra_fuel_consumption_t = new System.Windows.Forms.Label();
+            this.ra_fuel_used = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.ra_fuel_distance = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.ra_fuel_consumption = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -339,17 +345,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.RouteAuditDe);
-            // 
-            // st_contract
-            // 
-            this.st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_contract.ForeColor = System.Drawing.Color.Black;
-            this.st_contract.Location = new System.Drawing.Point(0, 0);
-            this.st_contract.Name = "st_contract";
-            this.st_contract.Size = new System.Drawing.Size(407, 19);
-            this.st_contract.TabIndex = 0;
-            this.st_contract.Text = "Contract: 5000 - This is the description for contract 5000";
-            this.st_contract.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // ra_volume
             // 
@@ -362,7 +358,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_volume.Size = new System.Drawing.Size(60, 20);
             this.ra_volume.TabIndex = 40;
             this.ra_volume.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            
             // 
             // ra_date_of_check_t
             // 
@@ -400,51 +395,44 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_date_of_check
             // 
             this.ra_date_of_check.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaDateOfCheck", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_date_of_check.Font = new System.Drawing.Font("MS Sans Serif", 8);
+            this.ra_date_of_check.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_date_of_check.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_date_of_check.Location = new System.Drawing.Point(147, 22);
             this.ra_date_of_check.Mask = "00/00/0000";
-            this.ra_date_of_check.PromptChar = '0';
-            this.ra_date_of_check.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ra_date_of_check.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ra_date_of_check.Name = "ra_date_of_check";
+            this.ra_date_of_check.PromptChar = '0';
             this.ra_date_of_check.Size = new System.Drawing.Size(86, 20);
             this.ra_date_of_check.TabIndex = 10;
             this.ra_date_of_check.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_date_of_check.DataBindings[0].FormatString = "dd/MM/yyyy";            
+            this.ra_date_of_check.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ra_date_of_check.ValidatingType = typeof(System.DateTime);
             // 
             // ra_time_finished_sort
             // 
             this.ra_time_finished_sort.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaTimeFinishedSort", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_time_finished_sort.Font = new System.Drawing.Font("MS Sans Serif", 8);
+            this.ra_time_finished_sort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_time_finished_sort.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_finished_sort.Location = new System.Drawing.Point(147, 71);
             this.ra_time_finished_sort.Mask = "00:00";
-            this.ra_time_finished_sort.PromptChar = '0';
             this.ra_time_finished_sort.Name = "ra_time_finished_sort";
-            this.ra_time_finished_sort.Size = new System.Drawing.Size(35, 20);
+            this.ra_time_finished_sort.PromptChar = '0';
+            this.ra_time_finished_sort.Size = new System.Drawing.Size(131, 20);
             this.ra_time_finished_sort.TabIndex = 20;
             this.ra_time_finished_sort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_time_finished_sort.DataBindings[0].FormatString = "HH:mm";
-            this.ra_time_finished_sort.ValidatingType = typeof(System.DateTime);
-            this.ra_time_finished_sort.DataBindings[0].DataSourceNullValue = null;
-            this.ra_time_finished_sort.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_finished_sort.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // ra_time_started_sort
             // 
             this.ra_time_started_sort.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaTimeStartedSort", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_time_started_sort.Font = new System.Drawing.Font("MS Sans Serif", 8);
+            this.ra_time_started_sort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_time_started_sort.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_started_sort.Location = new System.Drawing.Point(147, 91);
             this.ra_time_started_sort.Mask = "00:00";
-            this.ra_time_started_sort.PromptChar = '0';
             this.ra_time_started_sort.Name = "ra_time_started_sort";
-            this.ra_time_started_sort.Size = new System.Drawing.Size(35, 20);
+            this.ra_time_started_sort.PromptChar = '0';
+            this.ra_time_started_sort.Size = new System.Drawing.Size(131, 20);
             this.ra_time_started_sort.TabIndex = 30;
             this.ra_time_started_sort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_time_started_sort.DataBindings[0].FormatString = "HH:mm";
-            this.ra_time_started_sort.ValidatingType = typeof(System.DateTime);
-            this.ra_time_started_sort.DataBindings[0].DataSourceNullValue = null;
-            this.ra_time_started_sort.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_started_sort.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // ra_time_returned_t
@@ -452,7 +440,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_time_returned_t.BackColor = System.Drawing.Color.Transparent;
             this.ra_time_returned_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_time_returned_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_time_returned_t.Location = new System.Drawing.Point(43, 192);
+            this.ra_time_returned_t.Location = new System.Drawing.Point(43, 189);
             this.ra_time_returned_t.Name = "ra_time_returned_t";
             this.ra_time_returned_t.Size = new System.Drawing.Size(97, 18);
             this.ra_time_returned_t.TabIndex = 44;
@@ -462,26 +450,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_time_returned
             // 
             this.ra_time_returned.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaTimeReturned", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_time_returned.Font = new System.Drawing.Font("MS Sans Serif", 8);
+            this.ra_time_returned.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_time_returned.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_returned.Location = new System.Drawing.Point(147, 189);
             this.ra_time_returned.Mask = "00:00";
-            this.ra_time_returned.PromptChar = '0';
             this.ra_time_returned.Name = "ra_time_returned";
+            this.ra_time_returned.PromptChar = '0';
             this.ra_time_returned.Size = new System.Drawing.Size(35, 20);
             this.ra_time_returned.TabIndex = 50;
             this.ra_time_returned.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_time_returned.DataBindings[0].FormatString = "HH:mm";
-            this.ra_time_returned.ValidatingType = typeof(System.DateTime);
             this.ra_time_returned.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ra_time_returned.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-
+            this.ra_time_returned.ValidatingType = typeof(System.DateTime);
             // 
             // ra_finish_odometer_t
             // 
             this.ra_finish_odometer_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_finish_odometer_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_finish_odometer_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_finish_odometer_t.Location = new System.Drawing.Point(255, 193);
+            this.ra_finish_odometer_t.Location = new System.Drawing.Point(239, 192);
             this.ra_finish_odometer_t.Name = "ra_finish_odometer_t";
             this.ra_finish_odometer_t.Size = new System.Drawing.Size(98, 13);
             this.ra_finish_odometer_t.TabIndex = 51;
@@ -491,18 +477,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_finish_odometer
             // 
             this.ra_finish_odometer.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaFinishOdometer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_finish_odometer.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.ra_finish_odometer.Location = new System.Drawing.Point(358, 186);
+            this.ra_finish_odometer.EditMask = "######.0";
+            this.ra_finish_odometer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_finish_odometer.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_finish_odometer.Location = new System.Drawing.Point(342, 189);
             this.ra_finish_odometer.Name = "ra_finish_odometer";
+            this.ra_finish_odometer.PromptChar = ' ';
             this.ra_finish_odometer.Size = new System.Drawing.Size(52, 20);
             this.ra_finish_odometer.TabIndex = 90;
+            this.ra_finish_odometer.Text = ".0";
             this.ra_finish_odometer.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ra_finish_odometer.EditMask = "######.0";
-            this.ra_finish_odometer.InsertKeyMode = InsertKeyMode.Overwrite;
-            this.ra_finish_odometer.DataBindings[0].FormatString = "######.0";
-            this.ra_finish_odometer.PromptChar = ' ';
-            //this.ra_finish_odometer.ValidatingType = typeof(decimal);            
-
+            this.ra_finish_odometer.Value = ".0";
             // 
             // ra_time_departed_t
             // 
@@ -519,25 +504,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_time_departed
             // 
             this.ra_time_departed.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaTimeDeparted", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_time_departed.Font = new System.Drawing.Font("MS Sans Serif", 8);
+            this.ra_time_departed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_time_departed.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_departed.Location = new System.Drawing.Point(147, 208);
             this.ra_time_departed.Mask = "00:00";
-            this.ra_time_departed.PromptChar = '0';
             this.ra_time_departed.Name = "ra_time_departed";
+            this.ra_time_departed.PromptChar = '0';
             this.ra_time_departed.Size = new System.Drawing.Size(35, 20);
             this.ra_time_departed.TabIndex = 60;
             this.ra_time_departed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_time_departed.DataBindings[0].FormatString = "HH:mm";
-            this.ra_time_departed.ValidatingType = typeof(System.DateTime);
-            this.ra_time_departed.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_time_departed.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_time_departed.ValidatingType = typeof(System.DateTime);
             // 
             // ra_start_odometer_t
             // 
             this.ra_start_odometer_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_start_odometer_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_start_odometer_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_start_odometer_t.Location = new System.Drawing.Point(260, 208);
+            this.ra_start_odometer_t.Location = new System.Drawing.Point(244, 209);
             this.ra_start_odometer_t.Name = "ra_start_odometer_t";
             this.ra_start_odometer_t.Size = new System.Drawing.Size(93, 16);
             this.ra_start_odometer_t.TabIndex = 92;
@@ -547,23 +531,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_start_odometer
             // 
             this.ra_start_odometer.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaStartOdometer", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_start_odometer.DataBindings[0].FormatString = "######.0";
-            this.ra_start_odometer.PromptChar = ' ';
             this.ra_start_odometer.EditMask = "######.0";
-            this.ra_start_odometer.InsertKeyMode = InsertKeyMode.Overwrite;
-            this.ra_start_odometer.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.ra_start_odometer.Location = new System.Drawing.Point(358, 205);
+            this.ra_start_odometer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_start_odometer.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_start_odometer.Location = new System.Drawing.Point(342, 208);
             this.ra_start_odometer.Name = "ra_start_odometer";
+            this.ra_start_odometer.PromptChar = ' ';
             this.ra_start_odometer.Size = new System.Drawing.Size(52, 20);
             this.ra_start_odometer.TabIndex = 100;
+            this.ra_start_odometer.Text = ".0";
             this.ra_start_odometer.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_start_odometer.Value = ".0";
             // 
             // ra_total_hours_t
             // 
             this.ra_total_hours_t.BackColor = System.Drawing.Color.Transparent;
             this.ra_total_hours_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_total_hours_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_total_hours_t.Location = new System.Drawing.Point(64, 230);
+            this.ra_total_hours_t.Location = new System.Drawing.Point(64, 229);
             this.ra_total_hours_t.Name = "ra_total_hours_t";
             this.ra_total_hours_t.Size = new System.Drawing.Size(76, 15);
             this.ra_total_hours_t.TabIndex = 101;
@@ -574,26 +559,25 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_total_hours.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ra_total_hours.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaTotalHours", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_total_hours.Enabled = false;
             this.ra_total_hours.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_total_hours.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_total_hours.Location = new System.Drawing.Point(147, 230);
             this.ra_total_hours.Mask = "00:00";
             this.ra_total_hours.Name = "ra_total_hours";
-            this.ra_total_hours.Enabled = false;// ReadOnly = true;
+            this.ra_total_hours.PromptChar = '0';
             this.ra_total_hours.Size = new System.Drawing.Size(35, 13);
             this.ra_total_hours.TabIndex = 102;
             this.ra_total_hours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_total_hours.DataBindings[0].FormatString = "HH:mm";
-            this.ra_total_hours.ValidatingType = typeof(System.DateTime);
-            this.ra_total_hours.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_total_hours.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ra_total_hours.PromptChar = '0';
+            this.ra_total_hours.ValidatingType = typeof(System.DateTime);
             // 
             // ra_total_distance_t
             // 
             this.ra_total_distance_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_total_distance_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_total_distance_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_total_distance_t.Location = new System.Drawing.Point(264, 233);
+            this.ra_total_distance_t.Location = new System.Drawing.Point(248, 230);
             this.ra_total_distance_t.Name = "ra_total_distance_t";
             this.ra_total_distance_t.Size = new System.Drawing.Size(90, 13);
             this.ra_total_distance_t.TabIndex = 103;
@@ -615,17 +599,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_meal_breaks.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaMealBreaks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_meal_breaks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_meal_breaks.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_meal_breaks.Location = new System.Drawing.Point(147, 248);
             this.ra_meal_breaks.Mask = "00:00";
-            this.ra_meal_breaks.PromptChar = '0';
             this.ra_meal_breaks.Name = "ra_meal_breaks";
+            this.ra_meal_breaks.PromptChar = '0';
             this.ra_meal_breaks.Size = new System.Drawing.Size(35, 20);
             this.ra_meal_breaks.TabIndex = 70;
             this.ra_meal_breaks.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_meal_breaks.DataBindings[0].FormatString = "HH:mm";
-            this.ra_meal_breaks.ValidatingType = typeof(System.DateTime);
-            this.ra_meal_breaks.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_meal_breaks.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_meal_breaks.ValidatingType = typeof(System.DateTime);
             // 
             // ra_extra_time_t
             // 
@@ -643,26 +626,25 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_extra_time.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaExtraTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_extra_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_extra_time.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_extra_time.Location = new System.Drawing.Point(147, 268);
             this.ra_extra_time.Mask = "00:00";
-            this.ra_extra_time.PromptChar = '0';
             this.ra_extra_time.Name = "ra_extra_time";
+            this.ra_extra_time.PromptChar = '0';
             this.ra_extra_time.Size = new System.Drawing.Size(35, 20);
             this.ra_extra_time.TabIndex = 80;
             this.ra_extra_time.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_extra_time.DataBindings[0].FormatString = "HH:mm";
-            this.ra_extra_time.ValidatingType = typeof(System.DateTime);
-            this.ra_extra_time.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_extra_time.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_extra_time.ValidatingType = typeof(System.DateTime);
             // 
             // ra_extra_distance_t
             // 
             this.ra_extra_distance_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_extra_distance_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_extra_distance_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_extra_distance_t.Location = new System.Drawing.Point(218, 268);
+            this.ra_extra_distance_t.Location = new System.Drawing.Point(216, 268);
             this.ra_extra_distance_t.Name = "ra_extra_distance_t";
-            this.ra_extra_distance_t.Size = new System.Drawing.Size(135, 13);
+            this.ra_extra_distance_t.Size = new System.Drawing.Size(121, 13);
             this.ra_extra_distance_t.TabIndex = 106;
             this.ra_extra_distance_t.Text = "Less \'Extra\' Distances";
             this.ra_extra_distance_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -670,16 +652,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_extra_distance
             // 
             this.ra_extra_distance.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaExtraDistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_extra_distance.DataBindings[0].FormatString = "###.0";
-            this.ra_extra_distance.PromptChar = ' ';
             this.ra_extra_distance.EditMask = "###.0";
-            this.ra_extra_distance.InsertKeyMode = InsertKeyMode.Overwrite;
             this.ra_extra_distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_extra_distance.Location = new System.Drawing.Point(358, 268);
+            this.ra_extra_distance.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_extra_distance.Location = new System.Drawing.Point(342, 268);
             this.ra_extra_distance.Name = "ra_extra_distance";
+            this.ra_extra_distance.PromptChar = ' ';
             this.ra_extra_distance.Size = new System.Drawing.Size(52, 20);
             this.ra_extra_distance.TabIndex = 110;
+            this.ra_extra_distance.Text = ".0";
             this.ra_extra_distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_extra_distance.Value = ".0";
             // 
             // ra_final_hours_t
             // 
@@ -697,26 +680,25 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_final_hours.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ra_final_hours.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaFinalHours", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_final_hours.Enabled = false;
             this.ra_final_hours.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_final_hours.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_final_hours.Location = new System.Drawing.Point(147, 288);
             this.ra_final_hours.Mask = "00:00";
             this.ra_final_hours.Name = "ra_final_hours";
-            this.ra_final_hours.Enabled = false;// ReadOnly = true;
+            this.ra_final_hours.PromptChar = '0';
             this.ra_final_hours.Size = new System.Drawing.Size(35, 13);
             this.ra_final_hours.TabIndex = 112;
             this.ra_final_hours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_final_hours.DataBindings[0].FormatString = "HH:mm";
-            this.ra_final_hours.ValidatingType = typeof(System.DateTime);
-            this.ra_final_hours.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_final_hours.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ra_final_hours.PromptChar = '0';
+            this.ra_final_hours.ValidatingType = typeof(System.DateTime);
             // 
             // ra_final_distance_t
             // 
             this.ra_final_distance_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_final_distance_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.ra_final_distance_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_final_distance_t.Location = new System.Drawing.Point(240, 288);
+            this.ra_final_distance_t.Location = new System.Drawing.Point(224, 288);
             this.ra_final_distance_t.Name = "ra_final_distance_t";
             this.ra_final_distance_t.Size = new System.Drawing.Size(113, 13);
             this.ra_final_distance_t.TabIndex = 113;
@@ -739,24 +721,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_othr_gds_before.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaOthrGdsBefore", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_othr_gds_before.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_othr_gds_before.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_before.Location = new System.Drawing.Point(147, 324);
             this.ra_othr_gds_before.Mask = "00:00";
-            this.ra_othr_gds_before.PromptChar = '0';
             this.ra_othr_gds_before.Name = "ra_othr_gds_before";
+            this.ra_othr_gds_before.PromptChar = '0';
             this.ra_othr_gds_before.Size = new System.Drawing.Size(35, 20);
             this.ra_othr_gds_before.TabIndex = 120;
             this.ra_othr_gds_before.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_othr_gds_before.DataBindings[0].FormatString = "HH:mm";
-            this.ra_othr_gds_before.ValidatingType = typeof(System.DateTime);
-            this.ra_othr_gds_before.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_before.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_othr_gds_before.ValidatingType = typeof(System.DateTime);
             // 
             // ra_pr_before_t
             // 
             this.ra_pr_before_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_pr_before_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_pr_before_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_pr_before_t.Location = new System.Drawing.Point(259, 326);
+            this.ra_pr_before_t.Location = new System.Drawing.Point(243, 326);
             this.ra_pr_before_t.Name = "ra_pr_before_t";
             this.ra_pr_before_t.Size = new System.Drawing.Size(94, 13);
             this.ra_pr_before_t.TabIndex = 121;
@@ -767,17 +748,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_pr_before.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaPrBefore", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_pr_before.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_pr_before.Location = new System.Drawing.Point(358, 326);
+            this.ra_pr_before.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_pr_before.Location = new System.Drawing.Point(342, 326);
             this.ra_pr_before.Mask = "00:00";
-            this.ra_pr_before.PromptChar = '0';
             this.ra_pr_before.Name = "ra_pr_before";
+            this.ra_pr_before.PromptChar = '0';
             this.ra_pr_before.Size = new System.Drawing.Size(35, 20);
             this.ra_pr_before.TabIndex = 150;
             this.ra_pr_before.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_pr_before.DataBindings[0].FormatString = "HH:mm";
-            this.ra_pr_before.ValidatingType = typeof(System.DateTime);
-            this.ra_pr_before.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_pr_before.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_pr_before.ValidatingType = typeof(System.DateTime);
             // 
             // ra_othr_gds_during_t
             // 
@@ -795,24 +775,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_othr_gds_during.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaOthrGdsDuring", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_othr_gds_during.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_othr_gds_during.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_during.Location = new System.Drawing.Point(147, 344);
             this.ra_othr_gds_during.Mask = "00:00";
-            this.ra_othr_gds_during.PromptChar = '0';
             this.ra_othr_gds_during.Name = "ra_othr_gds_during";
+            this.ra_othr_gds_during.PromptChar = '0';
             this.ra_othr_gds_during.Size = new System.Drawing.Size(35, 20);
             this.ra_othr_gds_during.TabIndex = 130;
             this.ra_othr_gds_during.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_othr_gds_during.DataBindings[0].FormatString = "HH:mm";
-            this.ra_othr_gds_during.ValidatingType = typeof(System.DateTime);
-            this.ra_othr_gds_during.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_during.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_othr_gds_during.ValidatingType = typeof(System.DateTime);
             // 
             // ra_pr_during_t
             // 
             this.ra_pr_during_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_pr_during_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_pr_during_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_pr_during_t.Location = new System.Drawing.Point(259, 344);
+            this.ra_pr_during_t.Location = new System.Drawing.Point(243, 344);
             this.ra_pr_during_t.Name = "ra_pr_during_t";
             this.ra_pr_during_t.Size = new System.Drawing.Size(94, 13);
             this.ra_pr_during_t.TabIndex = 152;
@@ -823,17 +802,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_pr_during.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaPrDuring", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_pr_during.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_pr_during.Location = new System.Drawing.Point(358, 345);
+            this.ra_pr_during.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_pr_during.Location = new System.Drawing.Point(342, 345);
             this.ra_pr_during.Mask = "00:00";
-            this.ra_pr_during.PromptChar = '0';
             this.ra_pr_during.Name = "ra_pr_during";
+            this.ra_pr_during.PromptChar = '0';
             this.ra_pr_during.Size = new System.Drawing.Size(35, 20);
             this.ra_pr_during.TabIndex = 160;
             this.ra_pr_during.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_pr_during.DataBindings[0].FormatString = "HH:mm";
-            this.ra_pr_during.ValidatingType = typeof(System.DateTime);
-            this.ra_pr_during.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_pr_during.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_pr_during.ValidatingType = typeof(System.DateTime);
             // 
             // ra_othr_gds_after_t
             // 
@@ -850,24 +828,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_othr_gds_after.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaOthrGdsAfter", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_othr_gds_after.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_othr_gds_after.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_after.Location = new System.Drawing.Point(147, 363);
             this.ra_othr_gds_after.Mask = "00:00";
-            this.ra_othr_gds_after.PromptChar = '0';
             this.ra_othr_gds_after.Name = "ra_othr_gds_after";
+            this.ra_othr_gds_after.PromptChar = '0';
             this.ra_othr_gds_after.Size = new System.Drawing.Size(35, 20);
             this.ra_othr_gds_after.TabIndex = 140;
             this.ra_othr_gds_after.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_othr_gds_after.DataBindings[0].FormatString = "HH:mm";
-            this.ra_othr_gds_after.ValidatingType = typeof(System.DateTime);
-            this.ra_othr_gds_after.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_othr_gds_after.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_othr_gds_after.ValidatingType = typeof(System.DateTime);
             // 
             // ra_pr_after_t
             // 
             this.ra_pr_after_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ra_pr_after_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_pr_after_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_pr_after_t.Location = new System.Drawing.Point(264, 362);
+            this.ra_pr_after_t.Location = new System.Drawing.Point(248, 362);
             this.ra_pr_after_t.Name = "ra_pr_after_t";
             this.ra_pr_after_t.Size = new System.Drawing.Size(90, 13);
             this.ra_pr_after_t.TabIndex = 162;
@@ -878,17 +855,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_pr_after.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaPrAfter", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_pr_after.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_pr_after.Location = new System.Drawing.Point(358, 365);
+            this.ra_pr_after.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_pr_after.Location = new System.Drawing.Point(342, 365);
             this.ra_pr_after.Mask = "00:00";
-            this.ra_pr_after.PromptChar = '0';
             this.ra_pr_after.Name = "ra_pr_after";
+            this.ra_pr_after.PromptChar = '0';
             this.ra_pr_after.Size = new System.Drawing.Size(35, 20);
             this.ra_pr_after.TabIndex = 170;
             this.ra_pr_after.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_pr_after.DataBindings[0].FormatString = "HH:mm";
-            this.ra_pr_after.ValidatingType = typeof(System.DateTime);
-            this.ra_pr_after.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_pr_after.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_pr_after.ValidatingType = typeof(System.DateTime);
             // 
             // ra_frequency_t
             // 
@@ -917,7 +893,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_contractor_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_contractor_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_contractor_t.Location = new System.Drawing.Point(62, 420);
+            this.ra_contractor_t.Location = new System.Drawing.Point(62, 422);
             this.ra_contractor_t.Name = "ra_contractor_t";
             this.ra_contractor_t.Size = new System.Drawing.Size(85, 13);
             this.ra_contractor_t.TabIndex = 181;
@@ -939,7 +915,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_employee_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_employee_t.ForeColor = System.Drawing.Color.Black;
-            this.ra_employee_t.Location = new System.Drawing.Point(69, 438);
+            this.ra_employee_t.Location = new System.Drawing.Point(69, 442);
             this.ra_employee_t.Name = "ra_employee_t";
             this.ra_employee_t.Size = new System.Drawing.Size(78, 13);
             this.ra_employee_t.TabIndex = 191;
@@ -984,7 +960,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_year.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaYear", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_year.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_year.Location = new System.Drawing.Point(479, 478);
+            this.ra_year.Location = new System.Drawing.Point(479, 477);
             this.ra_year.Name = "ra_year";
             this.ra_year.Size = new System.Drawing.Size(39, 20);
             this.ra_year.TabIndex = 230;
@@ -995,10 +971,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_registration_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaRegistrationNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_registration_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_registration_no.Location = new System.Drawing.Point(141, 496);
-            this.ra_registration_no.Name = "ra_registration_no";
-            //this.ra_registration_no.Mask = "??????????";
-            //this.ra_registration_no.PromptChar = ' ';
             this.ra_registration_no.MaxLength = 10;
+            this.ra_registration_no.Name = "ra_registration_no";
             this.ra_registration_no.Size = new System.Drawing.Size(69, 20);
             this.ra_registration_no.TabIndex = 240;
             // 
@@ -1017,7 +991,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_cc_rating.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaCcRating", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_cc_rating.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_cc_rating.Location = new System.Drawing.Point(479, 498);
+            this.ra_cc_rating.Location = new System.Drawing.Point(479, 496);
             this.ra_cc_rating.Name = "ra_cc_rating";
             this.ra_cc_rating.Size = new System.Drawing.Size(39, 20);
             this.ra_cc_rating.TabIndex = 260;
@@ -1048,27 +1022,26 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_rec_replace
             // 
             this.ra_rec_replace.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaRecReplace", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_rec_replace.Location = new System.Drawing.Point(141, 535);
             this.ra_rec_replace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_rec_replace.Name = "ra_rec_replace";
+            this.ra_rec_replace.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_rec_replace.Location = new System.Drawing.Point(141, 535);
             this.ra_rec_replace.Mask = "00/00/00";
+            this.ra_rec_replace.Name = "ra_rec_replace";
             this.ra_rec_replace.PromptChar = '0';
             this.ra_rec_replace.Size = new System.Drawing.Size(54, 20);
             this.ra_rec_replace.TabIndex = 280;
             this.ra_rec_replace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_rec_replace.DataBindings[0].FormatString = "dd/MM/yy";
-            this.ra_rec_replace.ValidatingType = typeof(System.DateTime);
-            this.ra_rec_replace.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_rec_replace.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_rec_replace.ValidatingType = typeof(System.DateTime);
             // 
             // ra_gds_service
             // 
             this.ra_gds_service.BackColor = System.Drawing.Color.Transparent;
             this.ra_gds_service.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ra_gds_service.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaGdsService"));
+            this.ra_gds_service.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaGdsService", true));
             this.ra_gds_service.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_gds_service.ForeColor = System.Drawing.Color.Black;
-            this.ra_gds_service.Location = new System.Drawing.Point(73, 553);
+            this.ra_gds_service.Location = new System.Drawing.Point(73, 559);
             this.ra_gds_service.Name = "ra_gds_service";
             this.ra_gds_service.Size = new System.Drawing.Size(118, 16);
             this.ra_gds_service.TabIndex = 300;
@@ -1096,7 +1069,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_gds_service_sighted.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaGdsServiceSighted", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_gds_service_sighted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_gds_service_sighted.ForeColor = System.Drawing.Color.Black;
-            this.ra_gds_service_sighted.Location = new System.Drawing.Point(73, 570);
+            this.ra_gds_service_sighted.Location = new System.Drawing.Point(73, 576);
             this.ra_gds_service_sighted.Name = "ra_gds_service_sighted";
             this.ra_gds_service_sighted.Size = new System.Drawing.Size(118, 16);
             this.ra_gds_service_sighted.TabIndex = 310;
@@ -1110,7 +1083,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_cr_insurance.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaCrInsurance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_cr_insurance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_cr_insurance.ForeColor = System.Drawing.Color.Black;
-            this.ra_cr_insurance.Location = new System.Drawing.Point(414, 570);
+            this.ra_cr_insurance.Location = new System.Drawing.Point(414, 569);
             this.ra_cr_insurance.Name = "ra_cr_insurance";
             this.ra_cr_insurance.Size = new System.Drawing.Size(107, 16);
             this.ra_cr_insurance.TabIndex = 330;
@@ -1124,7 +1097,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_pl_insurance.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaPlInsurance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_pl_insurance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_pl_insurance.ForeColor = System.Drawing.Color.Black;
-            this.ra_pl_insurance.Location = new System.Drawing.Point(414, 587);
+            this.ra_pl_insurance.Location = new System.Drawing.Point(414, 585);
             this.ra_pl_insurance.Name = "ra_pl_insurance";
             this.ra_pl_insurance.Size = new System.Drawing.Size(107, 20);
             this.ra_pl_insurance.TabIndex = 340;
@@ -1138,7 +1111,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_insurance_sighted.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaInsuranceSighted", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_insurance_sighted.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ra_insurance_sighted.ForeColor = System.Drawing.Color.Black;
-            this.ra_insurance_sighted.Location = new System.Drawing.Point(414, 604);
+            this.ra_insurance_sighted.Location = new System.Drawing.Point(414, 605);
             this.ra_insurance_sighted.Name = "ra_insurance_sighted";
             this.ra_insurance_sighted.Size = new System.Drawing.Size(107, 19);
             this.ra_insurance_sighted.TabIndex = 350;
@@ -1162,29 +1135,28 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_vehicle_price
             // 
             this.ra_vehicle_price.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaVehiclePrice", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_vehicle_price.EditMask = "###,###";
+            this.ra_vehicle_price.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_vehicle_price.Location = new System.Drawing.Point(198, 641);
             this.ra_vehicle_price.Name = "ra_vehicle_price";
+            this.ra_vehicle_price.PromptChar = ' ';
             this.ra_vehicle_price.Size = new System.Drawing.Size(45, 20);
             this.ra_vehicle_price.TabIndex = 370;
             this.ra_vehicle_price.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ra_vehicle_price.EditMask = "###,###";
-            this.ra_vehicle_price.PromptChar = ' ';
-            this.ra_vehicle_price.DataBindings[0].FormatString = "###,###";
-            this.ra_vehicle_price.InsertKeyMode = InsertKeyMode.Overwrite;
+            this.ra_vehicle_price.Value = "";
             // 
             // ra_vehicle_purchased
             // 
             this.ra_vehicle_purchased.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaVehiclePurchased", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_vehicle_purchased.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_vehicle_purchased.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_vehicle_purchased.Location = new System.Drawing.Point(357, 640);
+            this.ra_vehicle_purchased.Mask = "00/00/00";
             this.ra_vehicle_purchased.Name = "ra_vehicle_purchased";
+            this.ra_vehicle_purchased.PromptChar = '0';
             this.ra_vehicle_purchased.Size = new System.Drawing.Size(54, 20);
             this.ra_vehicle_purchased.TabIndex = 380;
             this.ra_vehicle_purchased.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ra_vehicle_purchased.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ra_vehicle_purchased.Mask = "00/00/00";
-            this.ra_vehicle_purchased.PromptChar = '0';
-            this.ra_vehicle_purchased.DataBindings[0].FormatString = "dd/MM/yy";
-            this.ra_vehicle_purchased.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_vehicle_purchased.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // ra_mv_comments
@@ -1203,17 +1175,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_no_circular_drops.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaNoCircularDrops", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_no_circular_drops.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_no_circular_drops.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_no_circular_drops.Location = new System.Drawing.Point(355, 739);
-            this.ra_no_circular_drops.Name = "ra_no_circular_drops";
             this.ra_no_circular_drops.Mask = "###";
-            this.ra_no_circular_drops.DataBindings[0].FormatString = "###";
-            this.ra_no_circular_drops.InsertKeyMode = InsertKeyMode.Overwrite;
-            this.ra_no_circular_drops.DataBindings[0].DataSourceNullValue = null;
-            this.ra_no_circular_drops.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            this.ra_no_circular_drops.Name = "ra_no_circular_drops";
             this.ra_no_circular_drops.PromptChar = ' ';
             this.ra_no_circular_drops.Size = new System.Drawing.Size(21, 20);
             this.ra_no_circular_drops.TabIndex = 420;
             this.ra_no_circular_drops.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_no_circular_drops.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             // 
             // ra_cp_comments
             // 
@@ -1372,7 +1342,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_length_sealed.Name = "ra_length_sealed";
             this.ra_length_sealed.Size = new System.Drawing.Size(49, 20);
             this.ra_length_sealed.TabIndex = 580;
-            this.ra_length_sealed.DataBindings[0].FormatString = "#.0";
             this.ra_length_sealed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ra_lenth_unsealed
@@ -1385,7 +1354,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_lenth_unsealed.Name = "ra_lenth_unsealed";
             this.ra_lenth_unsealed.Size = new System.Drawing.Size(49, 20);
             this.ra_lenth_unsealed.TabIndex = 590;
-            this.ra_lenth_unsealed.DataBindings[0].FormatString = "#.0";
             this.ra_lenth_unsealed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ra_road_conditions
@@ -1442,7 +1410,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_1.Location = new System.Drawing.Point(69, 49);
             this.t_1.Name = "t_1";
-            this.t_1.Size = new System.Drawing.Size(61, 13);
+            this.t_1.Size = new System.Drawing.Size(62, 15);
             this.t_1.TabIndex = 791;
             this.t_1.Text = "Sort Time";
             // 
@@ -1452,7 +1420,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_2.Location = new System.Drawing.Point(73, 113);
             this.t_2.Name = "t_2";
-            this.t_2.Size = new System.Drawing.Size(64, 13);
+            this.t_2.Size = new System.Drawing.Size(64, 15);
             this.t_2.TabIndex = 792;
             this.t_2.Text = "Time Taken";
             // 
@@ -1472,7 +1440,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_3.Location = new System.Drawing.Point(63, 134);
             this.t_3.Name = "t_3";
-            this.t_3.Size = new System.Drawing.Size(76, 13);
+            this.t_3.Size = new System.Drawing.Size(77, 15);
             this.t_3.TabIndex = 794;
             this.t_3.Text = "Volume Sorted";
             // 
@@ -1486,7 +1454,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_1.Size = new System.Drawing.Size(60, 20);
             this.compute_1.TabIndex = 795;
             this.compute_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.compute_1.DataBindings[0].FormatString = "#####";
             // 
             // t_4
             // 
@@ -1494,7 +1461,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_4.Location = new System.Drawing.Point(44, 150);
             this.t_4.Name = "t_4";
-            this.t_4.Size = new System.Drawing.Size(96, 13);
+            this.t_4.Size = new System.Drawing.Size(99, 15);
             this.t_4.TabIndex = 796;
             this.t_4.Text = "Sort Rate per Hour";
             // 
@@ -1504,7 +1471,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_5.Location = new System.Drawing.Point(35, 175);
             this.t_5.Name = "t_5";
-            this.t_5.Size = new System.Drawing.Size(102, 13);
+            this.t_5.Size = new System.Drawing.Size(104, 15);
             this.t_5.TabIndex = 797;
             this.t_5.Text = "Time on Delivery";
             // 
@@ -1512,9 +1479,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_6.AutoSize = true;
             this.t_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_6.Location = new System.Drawing.Point(240, 175);
+            this.t_6.Location = new System.Drawing.Point(224, 175);
             this.t_6.Name = "t_6";
-            this.t_6.Size = new System.Drawing.Size(112, 13);
+            this.t_6.Size = new System.Drawing.Size(114, 15);
             this.t_6.TabIndex = 798;
             this.t_6.Text = "Odometer Reading";
             // 
@@ -1522,18 +1489,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.compute_3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.compute_3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Compute3", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.compute_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.compute_3.Location = new System.Drawing.Point(358, 233);
-            this.compute_3.Name = "compute_3";
             this.compute_3.EditMask = "#######";
-            this.compute_3.DataBindings[0].FormatString = "#####0.0";
-            this.compute_3.InsertKeyMode = InsertKeyMode.Overwrite;
-            this.compute_3.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            this.compute_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.compute_3.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.compute_3.Location = new System.Drawing.Point(342, 230);
+            this.compute_3.Name = "compute_3";
             this.compute_3.PromptChar = ' ';
             this.compute_3.ReadOnly = true;
             this.compute_3.Size = new System.Drawing.Size(52, 13);
             this.compute_3.TabIndex = 799;
             this.compute_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.compute_3.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.compute_3.Value = "";
             // 
             // t_7
             // 
@@ -1541,7 +1508,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_7.Location = new System.Drawing.Point(49, 309);
             this.t_7.Name = "t_7";
-            this.t_7.Size = new System.Drawing.Size(78, 13);
+            this.t_7.Size = new System.Drawing.Size(82, 15);
             this.t_7.TabIndex = 800;
             this.t_7.Text = "Other Goods";
             // 
@@ -1549,9 +1516,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_8.AutoSize = true;
             this.t_8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_8.Location = new System.Drawing.Point(265, 309);
+            this.t_8.Location = new System.Drawing.Point(249, 309);
             this.t_8.Name = "t_8";
-            this.t_8.Size = new System.Drawing.Size(76, 13);
+            this.t_8.Size = new System.Drawing.Size(77, 15);
             this.t_8.TabIndex = 801;
             this.t_8.Text = "Piece Rates";
             // 
@@ -1559,11 +1526,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_9.AutoSize = true;
             this.t_9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_9.Location = new System.Drawing.Point(353, 310);
+            this.t_9.Location = new System.Drawing.Point(337, 310);
             this.t_9.Name = "t_9";
-            this.t_9.Size = new System.Drawing.Size(84, 13);
+            this.t_9.Size = new System.Drawing.Size(92, 15);
             this.t_9.TabIndex = 802;
-            this.t_9.Text = "(Courier/adPost)";
+            this.t_9.Text = "(Courier/Circular)";
             // 
             // t_10
             // 
@@ -1571,7 +1538,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_10.Location = new System.Drawing.Point(40, 384);
             this.t_10.Name = "t_10";
-            this.t_10.Size = new System.Drawing.Size(108, 13);
+            this.t_10.Size = new System.Drawing.Size(110, 15);
             this.t_10.TabIndex = 803;
             this.t_10.Text = "Details of Service";
             // 
@@ -1581,7 +1548,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_11.Location = new System.Drawing.Point(40, 461);
             this.t_11.Name = "t_11";
-            this.t_11.Size = new System.Drawing.Size(151, 13);
+            this.t_11.Size = new System.Drawing.Size(152, 15);
             this.t_11.TabIndex = 804;
             this.t_11.Text = "Transport Mode/ Licence";
             // 
@@ -1589,9 +1556,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_12.AutoSize = true;
             this.t_12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_12.Location = new System.Drawing.Point(56, 479);
+            this.t_12.Location = new System.Drawing.Point(65, 479);
             this.t_12.Name = "t_12";
-            this.t_12.Size = new System.Drawing.Size(72, 13);
+            this.t_12.Size = new System.Drawing.Size(72, 15);
             this.t_12.TabIndex = 805;
             this.t_12.Text = "Vehicle Make";
             // 
@@ -1599,9 +1566,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_15.AutoSize = true;
             this.t_15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_15.Location = new System.Drawing.Point(20, 496);
+            this.t_15.Location = new System.Drawing.Point(31, 498);
             this.t_15.Name = "t_15";
-            this.t_15.Size = new System.Drawing.Size(103, 13);
+            this.t_15.Size = new System.Drawing.Size(106, 15);
             this.t_15.TabIndex = 806;
             this.t_15.Text = "Registration Number";
             // 
@@ -1609,9 +1576,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_18.AutoSize = true;
             this.t_18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_18.Location = new System.Drawing.Point(80, 514);
+            this.t_18.Location = new System.Drawing.Point(85, 518);
             this.t_18.Name = "t_18";
-            this.t_18.Size = new System.Drawing.Size(51, 13);
+            this.t_18.Size = new System.Drawing.Size(52, 15);
             this.t_18.TabIndex = 807;
             this.t_18.Text = "Condition";
             // 
@@ -1619,9 +1586,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_20.AutoSize = true;
             this.t_20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_20.Location = new System.Drawing.Point(28, 534);
+            this.t_20.Location = new System.Drawing.Point(41, 534);
             this.t_20.Name = "t_20";
-            this.t_20.Size = new System.Drawing.Size(96, 13);
+            this.t_20.Size = new System.Drawing.Size(96, 15);
             this.t_20.TabIndex = 808;
             this.t_20.Text = "Rec. Replacement";
             // 
@@ -1629,9 +1596,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_13.AutoSize = true;
             this.t_13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_13.Location = new System.Drawing.Point(260, 481);
+            this.t_13.Location = new System.Drawing.Point(262, 480);
             this.t_13.Name = "t_13";
-            this.t_13.Size = new System.Drawing.Size(36, 13);
+            this.t_13.Size = new System.Drawing.Size(36, 15);
             this.t_13.TabIndex = 809;
             this.t_13.Text = "Model";
             // 
@@ -1639,9 +1606,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_16.AutoSize = true;
             this.t_16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_16.Location = new System.Drawing.Point(271, 497);
+            this.t_16.Location = new System.Drawing.Point(270, 499);
             this.t_16.Name = "t_16";
-            this.t_16.Size = new System.Drawing.Size(27, 13);
+            this.t_16.Size = new System.Drawing.Size(28, 15);
             this.t_16.TabIndex = 810;
             this.t_16.Text = "Fuel";
             // 
@@ -1649,9 +1616,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_19.AutoSize = true;
             this.t_19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_19.Location = new System.Drawing.Point(264, 514);
+            this.t_19.Location = new System.Drawing.Point(262, 517);
             this.t_19.Name = "t_19";
-            this.t_19.Size = new System.Drawing.Size(33, 13);
+            this.t_19.Size = new System.Drawing.Size(36, 15);
             this.t_19.TabIndex = 811;
             this.t_19.Text = "Tyres";
             // 
@@ -1659,9 +1626,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_14.AutoSize = true;
             this.t_14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_14.Location = new System.Drawing.Point(442, 481);
+            this.t_14.Location = new System.Drawing.Point(445, 479);
             this.t_14.Name = "t_14";
-            this.t_14.Size = new System.Drawing.Size(29, 13);
+            this.t_14.Size = new System.Drawing.Size(30, 15);
             this.t_14.TabIndex = 812;
             this.t_14.Text = "Year";
             // 
@@ -1669,9 +1636,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_17.AutoSize = true;
             this.t_17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_17.Location = new System.Drawing.Point(418, 499);
+            this.t_17.Location = new System.Drawing.Point(422, 498);
             this.t_17.Name = "t_17";
-            this.t_17.Size = new System.Drawing.Size(53, 13);
+            this.t_17.Size = new System.Drawing.Size(53, 15);
             this.t_17.TabIndex = 813;
             this.t_17.Text = "cc Rating";
             // 
@@ -1679,9 +1646,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_21.AutoSize = true;
             this.t_21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_21.Location = new System.Drawing.Point(345, 555);
+            this.t_21.Location = new System.Drawing.Point(345, 552);
             this.t_21.Name = "t_21";
-            this.t_21.Size = new System.Drawing.Size(57, 13);
+            this.t_21.Size = new System.Drawing.Size(59, 15);
             this.t_21.TabIndex = 814;
             this.t_21.Text = "Insurance:";
             // 
@@ -1691,7 +1658,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_22.Location = new System.Drawing.Point(105, 643);
             this.t_22.Name = "t_22";
-            this.t_22.Size = new System.Drawing.Size(79, 13);
+            this.t_22.Size = new System.Drawing.Size(82, 15);
             this.t_22.TabIndex = 815;
             this.t_22.Text = "Purchase Price";
             // 
@@ -1701,7 +1668,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_23.Location = new System.Drawing.Point(251, 643);
             this.t_23.Name = "t_23";
-            this.t_23.Size = new System.Drawing.Size(90, 13);
+            this.t_23.Size = new System.Drawing.Size(92, 15);
             this.t_23.TabIndex = 816;
             this.t_23.Text = "Date of Purchase";
             // 
@@ -1711,7 +1678,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_24.Location = new System.Drawing.Point(19, 661);
             this.t_24.Name = "t_24";
-            this.t_24.Size = new System.Drawing.Size(81, 13);
+            this.t_24.Size = new System.Drawing.Size(81, 15);
             this.t_24.TabIndex = 817;
             this.t_24.Text = "Mail Handled";
             // 
@@ -1721,7 +1688,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_25.Location = new System.Drawing.Point(35, 678);
             this.t_25.Name = "t_25";
-            this.t_25.Size = new System.Drawing.Size(67, 13);
+            this.t_25.Size = new System.Drawing.Size(67, 15);
             this.t_25.TabIndex = 818;
             this.t_25.Text = "Mail Volume:";
             // 
@@ -1729,11 +1696,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_26.AutoSize = true;
             this.t_26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_26.Location = new System.Drawing.Point(230, 678);
+            this.t_26.Location = new System.Drawing.Point(207, 678);
             this.t_26.Name = "t_26";
-            this.t_26.Size = new System.Drawing.Size(47, 13);
+            this.t_26.Size = new System.Drawing.Size(71, 15);
             this.t_26.TabIndex = 819;
-            this.t_26.Text = "Kiwimail:";
+            this.t_26.Text = "ReachMedia:";
             // 
             // t_27
             // 
@@ -1741,7 +1708,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_27.Location = new System.Drawing.Point(385, 677);
             this.t_27.Name = "t_27";
-            this.t_27.Size = new System.Drawing.Size(64, 13);
+            this.t_27.Size = new System.Drawing.Size(68, 15);
             this.t_27.TabIndex = 820;
             this.t_27.Text = "CourierPost:";
             // 
@@ -1751,19 +1718,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_28.Location = new System.Drawing.Point(224, 739);
             this.t_28.Name = "t_28";
-            this.t_28.Size = new System.Drawing.Size(103, 13);
+            this.t_28.Size = new System.Drawing.Size(108, 15);
             this.t_28.TabIndex = 821;
             this.t_28.Text = "No. of Circular drops";
             // 
             // t_29
             // 
             this.t_29.AutoSize = true;
+            this.t_29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_29.Location = new System.Drawing.Point(26, 802);
             this.t_29.Name = "t_29";
             this.t_29.Size = new System.Drawing.Size(194, 13);
             this.t_29.TabIndex = 822;
             this.t_29.Text = "Delivery Points: On day of check";
-            this.t_29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             // 
             // t_30
             // 
@@ -1771,7 +1738,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_30.Location = new System.Drawing.Point(73, 820);
             this.t_30.Name = "t_30";
-            this.t_30.Size = new System.Drawing.Size(133, 13);
+            this.t_30.Size = new System.Drawing.Size(138, 15);
             this.t_30.TabIndex = 823;
             this.t_30.Text = "No. of Registed Customers";
             // 
@@ -1781,7 +1748,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_31.Location = new System.Drawing.Point(73, 840);
             this.t_31.Name = "t_31";
-            this.t_31.Size = new System.Drawing.Size(290, 13);
+            this.t_31.Size = new System.Drawing.Size(299, 15);
             this.t_31.TabIndex = 824;
             this.t_31.Text = "No. of Registed Customers to whom core products delivered";
             // 
@@ -1791,7 +1758,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_32.Location = new System.Drawing.Point(73, 859);
             this.t_32.Name = "t_32";
-            this.t_32.Size = new System.Drawing.Size(142, 13);
+            this.t_32.Size = new System.Drawing.Size(148, 15);
             this.t_32.TabIndex = 825;
             this.t_32.Text = "Other customers delivered to";
             // 
@@ -1801,7 +1768,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_33.Location = new System.Drawing.Point(73, 878);
             this.t_33.Name = "t_33";
-            this.t_33.Size = new System.Drawing.Size(112, 13);
+            this.t_33.Size = new System.Drawing.Size(115, 15);
             this.t_33.TabIndex = 826;
             this.t_33.Text = "No Rural Private Bags";
             // 
@@ -1811,7 +1778,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_34.Location = new System.Drawing.Point(73, 897);
             this.t_34.Name = "t_34";
-            this.t_34.Size = new System.Drawing.Size(87, 13);
+            this.t_34.Size = new System.Drawing.Size(89, 15);
             this.t_34.TabIndex = 827;
             this.t_34.Text = "No. Private Bags";
             // 
@@ -1821,7 +1788,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_35.Location = new System.Drawing.Point(73, 915);
             this.t_35.Name = "t_35";
-            this.t_35.Size = new System.Drawing.Size(66, 13);
+            this.t_35.Size = new System.Drawing.Size(69, 15);
             this.t_35.TabIndex = 828;
             this.t_35.Text = "Closed Mails";
             // 
@@ -1831,7 +1798,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_36.Location = new System.Drawing.Point(73, 933);
             this.t_36.Name = "t_36";
-            this.t_36.Size = new System.Drawing.Size(61, 13);
+            this.t_36.Size = new System.Drawing.Size(63, 15);
             this.t_36.TabIndex = 829;
             this.t_36.Text = "Post Shops";
             // 
@@ -1841,7 +1808,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_37.Location = new System.Drawing.Point(73, 953);
             this.t_37.Name = "t_37";
-            this.t_37.Size = new System.Drawing.Size(67, 13);
+            this.t_37.Size = new System.Drawing.Size(71, 15);
             this.t_37.TabIndex = 830;
             this.t_37.Text = "Post Centres";
             // 
@@ -1851,7 +1818,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_38.Location = new System.Drawing.Point(73, 973);
             this.t_38.Name = "t_38";
-            this.t_38.Size = new System.Drawing.Size(90, 13);
+            this.t_38.Size = new System.Drawing.Size(93, 15);
             this.t_38.TabIndex = 831;
             this.t_38.Text = "No. of CMB nests";
             // 
@@ -1861,19 +1828,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_39.Location = new System.Drawing.Point(73, 995);
             this.t_39.Name = "t_39";
-            this.t_39.Size = new System.Drawing.Size(82, 13);
+            this.t_39.Size = new System.Drawing.Size(85, 15);
             this.t_39.TabIndex = 832;
             this.t_39.Text = "No. CMB Boxes";
             // 
             // t_40
             // 
             this.t_40.AutoSize = true;
+            this.t_40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_40.Location = new System.Drawing.Point(73, 1015);
             this.t_40.Name = "t_40";
-            this.t_40.Size = new System.Drawing.Size(248, 13);
+            this.t_40.Size = new System.Drawing.Size(254, 15);
             this.t_40.TabIndex = 833;
             this.t_40.Text = "Total number of Rural Post Delivery Points";
-            this.t_40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             // 
             // compute_5
             // 
@@ -1889,12 +1856,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // t_41
             // 
             this.t_41.AutoSize = true;
+            this.t_41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_41.Location = new System.Drawing.Point(28, 1028);
             this.t_41.Name = "t_41";
-            this.t_41.Size = new System.Drawing.Size(101, 13);
+            this.t_41.Size = new System.Drawing.Size(104, 15);
             this.t_41.TabIndex = 835;
             this.t_41.Text = "Sorting Facilities";
-            this.t_41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             // 
             // t_42
             // 
@@ -1902,7 +1869,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_42.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_42.Location = new System.Drawing.Point(52, 1044);
             this.t_42.Name = "t_42";
-            this.t_42.Size = new System.Drawing.Size(60, 26);
+            this.t_42.Size = new System.Drawing.Size(62, 30);
             this.t_42.TabIndex = 836;
             this.t_42.Text = "Description\r\nAccom\r\n";
             // 
@@ -1912,7 +1879,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_43.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_43.Location = new System.Drawing.Point(51, 1088);
             this.t_43.Name = "t_43";
-            this.t_43.Size = new System.Drawing.Size(53, 13);
+            this.t_43.Size = new System.Drawing.Size(56, 15);
             this.t_43.TabIndex = 837;
             this.t_43.Text = "Sort Case";
             // 
@@ -1922,7 +1889,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_44.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_44.Location = new System.Drawing.Point(51, 1109);
             this.t_44.Name = "t_44";
-            this.t_44.Size = new System.Drawing.Size(56, 13);
+            this.t_44.Size = new System.Drawing.Size(58, 15);
             this.t_44.TabIndex = 838;
             this.t_44.Text = "Comments";
             // 
@@ -1932,7 +1899,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_45.Location = new System.Drawing.Point(28, 1162);
             this.t_45.Name = "t_45";
-            this.t_45.Size = new System.Drawing.Size(100, 13);
+            this.t_45.Size = new System.Drawing.Size(102, 15);
             this.t_45.TabIndex = 839;
             this.t_45.Text = "Road Conditions";
             // 
@@ -1942,7 +1909,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_46.Location = new System.Drawing.Point(53, 1175);
             this.t_46.Name = "t_46";
-            this.t_46.Size = new System.Drawing.Size(144, 13);
+            this.t_46.Size = new System.Drawing.Size(144, 15);
             this.t_46.TabIndex = 840;
             this.t_46.Text = "Total Length of Sealed Road";
             // 
@@ -1952,7 +1919,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_47.Location = new System.Drawing.Point(53, 1193);
             this.t_47.Name = "t_47";
-            this.t_47.Size = new System.Drawing.Size(156, 13);
+            this.t_47.Size = new System.Drawing.Size(157, 15);
             this.t_47.TabIndex = 841;
             this.t_47.Text = "Total Length of Unsealed Road";
             // 
@@ -1962,7 +1929,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_48.Location = new System.Drawing.Point(53, 1209);
             this.t_48.Name = "t_48";
-            this.t_48.Size = new System.Drawing.Size(138, 13);
+            this.t_48.Size = new System.Drawing.Size(141, 15);
             this.t_48.TabIndex = 842;
             this.t_48.Text = "Total KMs on Day of Check";
             // 
@@ -1984,15 +1951,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_49.Location = new System.Drawing.Point(54, 1226);
             this.t_49.Name = "t_49";
-            this.t_49.Size = new System.Drawing.Size(56, 13);
+            this.t_49.Size = new System.Drawing.Size(58, 15);
             this.t_49.TabIndex = 844;
             this.t_49.Text = "Comments";
             // 
             // t_50
             // 
             this.t_50.AutoSize = true;
+            this.t_50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_50.Location = new System.Drawing.Point(28, 1276);
-            this.t_50.Font = new Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_50.Name = "t_50";
             this.t_50.Size = new System.Drawing.Size(149, 13);
             this.t_50.TabIndex = 845;
@@ -2004,19 +1971,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_51.Location = new System.Drawing.Point(53, 1292);
             this.t_51.Name = "t_51";
-            this.t_51.Size = new System.Drawing.Size(68, 39);
+            this.t_51.Size = new System.Drawing.Size(69, 45);
             this.t_51.TabIndex = 846;
             this.t_51.Text = "Description\r\nof\r\nImprovement";
             // 
             // t_52
             // 
             this.t_52.AutoSize = true;
+            this.t_52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_52.Location = new System.Drawing.Point(28, 1346);
             this.t_52.Name = "t_52";
             this.t_52.Size = new System.Drawing.Size(123, 13);
             this.t_52.TabIndex = 847;
             this.t_52.Text = "Review of Timetable";
-            this.t_52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             // 
             // t_53
             // 
@@ -2024,7 +1991,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_53.Location = new System.Drawing.Point(54, 1361);
             this.t_53.Name = "t_53";
-            this.t_53.Size = new System.Drawing.Size(267, 13);
+            this.t_53.Size = new System.Drawing.Size(268, 15);
             this.t_53.TabIndex = 848;
             this.t_53.Text = "Was commencement time in accordance with timetable";
             // 
@@ -2034,7 +2001,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_54.Location = new System.Drawing.Point(51, 1377);
             this.t_54.Name = "t_54";
-            this.t_54.Size = new System.Drawing.Size(44, 26);
+            this.t_54.Size = new System.Drawing.Size(45, 30);
             this.t_54.TabIndex = 849;
             this.t_54.Text = "Reason\r\nif Not";
             // 
@@ -2044,19 +2011,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_55.Location = new System.Drawing.Point(53, 1432);
             this.t_55.Name = "t_55";
-            this.t_55.Size = new System.Drawing.Size(171, 13);
+            this.t_55.Size = new System.Drawing.Size(172, 15);
             this.t_55.TabIndex = 850;
             this.t_55.Text = "Does the timetable need amending";
             // 
             // t_56
             // 
             this.t_56.AutoSize = true;
+            this.t_56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_56.Location = new System.Drawing.Point(29, 1447);
             this.t_56.Name = "t_56";
             this.t_56.Size = new System.Drawing.Size(170, 13);
             this.t_56.TabIndex = 851;
             this.t_56.Text = "Review of Route Description";
-            this.t_56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             // 
             // t_57
             // 
@@ -2064,7 +2031,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_57.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_57.Location = new System.Drawing.Point(49, 1466);
             this.t_57.Name = "t_57";
-            this.t_57.Size = new System.Drawing.Size(310, 13);
+            this.t_57.Size = new System.Drawing.Size(317, 15);
             this.t_57.TabIndex = 852;
             this.t_57.Text = "Was delivery undertaken with accordance with route description";
             // 
@@ -2074,7 +2041,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_58.Location = new System.Drawing.Point(50, 1493);
             this.t_58.Name = "t_58";
-            this.t_58.Size = new System.Drawing.Size(44, 26);
+            this.t_58.Size = new System.Drawing.Size(45, 30);
             this.t_58.TabIndex = 853;
             this.t_58.Text = "Reason\r\nif Not";
             // 
@@ -2084,7 +2051,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_59.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_59.Location = new System.Drawing.Point(47, 1548);
             this.t_59.Name = "t_59";
-            this.t_59.Size = new System.Drawing.Size(204, 13);
+            this.t_59.Size = new System.Drawing.Size(209, 15);
             this.t_59.TabIndex = 854;
             this.t_59.Text = "Were any deviations made during delivery";
             // 
@@ -2094,7 +2061,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_60.Location = new System.Drawing.Point(45, 1568);
             this.t_60.Name = "t_60";
-            this.t_60.Size = new System.Drawing.Size(217, 13);
+            this.t_60.Size = new System.Drawing.Size(224, 15);
             this.t_60.TabIndex = 855;
             this.t_60.Text = "If yes, are these included in route description";
             // 
@@ -2102,30 +2069,29 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.compute_4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.compute_4.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Compute4", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.compute_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.compute_4.Location = new System.Drawing.Point(358, 290);
-            this.compute_4.Name = "compute_4";
             this.compute_4.EditMask = "#####0.0";
-            this.compute_4.DataBindings[0].FormatString = "#####0.0";
-            this.compute_4.InsertKeyMode = InsertKeyMode.Overwrite;
-            this.compute_4.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            this.compute_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.compute_4.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.compute_4.Location = new System.Drawing.Point(342, 290);
+            this.compute_4.Name = "compute_4";
             this.compute_4.PromptChar = ' ';
             this.compute_4.ReadOnly = true;
             this.compute_4.Size = new System.Drawing.Size(53, 13);
             this.compute_4.TabIndex = 866;
+            this.compute_4.Text = "0.0";
             this.compute_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.compute_4.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.compute_4.Value = "0.0";
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.radioButton3);
             this.panel1.Controls.Add(this.radioButton2);
             this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Location = new System.Drawing.Point(108, 667);
+            this.panel1.Location = new System.Drawing.Point(104, 667);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(87, 66);
             this.panel1.TabIndex = 867;
-            //this.panel1.BorderStyle = BorderStyle.None;
-            this.panel1.TabStop = false;
             // 
             // radioButton3
             // 
@@ -2133,9 +2099,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton3.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton3.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaMailVolume3", true));
             this.radioButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton3.Location = new System.Drawing.Point(10, 45);
+            this.radioButton3.Location = new System.Drawing.Point(6, 45);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(65, 17);
+            this.radioButton3.Size = new System.Drawing.Size(66, 19);
             this.radioButton3.TabIndex = 2;
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "Average";
@@ -2147,10 +2113,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton2.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaMailVolume2", true));
             this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton2.Location = new System.Drawing.Point(27, 28);
+            this.radioButton2.Location = new System.Drawing.Point(24, 28);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.radioButton2.Size = new System.Drawing.Size(48, 17);
+            this.radioButton2.Size = new System.Drawing.Size(48, 19);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Light";
@@ -2162,9 +2128,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton1.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaMailVolume1", true));
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton1.Location = new System.Drawing.Point(19, 11);
+            this.radioButton1.Location = new System.Drawing.Point(15, 11);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(56, 17);
+            this.radioButton1.Size = new System.Drawing.Size(57, 19);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Heavy";
@@ -2175,12 +2141,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel2.Controls.Add(this.radioButton6);
             this.panel2.Controls.Add(this.radioButton5);
             this.panel2.Controls.Add(this.radioButton4);
-            this.panel2.Location = new System.Drawing.Point(277, 667);
+            this.panel2.Location = new System.Drawing.Point(281, 667);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(86, 66);
             this.panel2.TabIndex = 868;
-//!            this.panel2.BorderStyle = BorderStyle.None;
-            this.panel2.TabStop = false;
             // 
             // radioButton6
             // 
@@ -2188,9 +2152,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton6.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton6.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaAdpostVolume3", true));
             this.radioButton6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton6.Location = new System.Drawing.Point(8, 45);
+            this.radioButton6.Location = new System.Drawing.Point(5, 45);
             this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(65, 17);
+            this.radioButton6.Size = new System.Drawing.Size(66, 19);
             this.radioButton6.TabIndex = 2;
             this.radioButton6.TabStop = true;
             this.radioButton6.Text = "Average";
@@ -2202,9 +2166,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton5.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton5.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaAdpostVolume2", true));
             this.radioButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton5.Location = new System.Drawing.Point(25, 28);
+            this.radioButton5.Location = new System.Drawing.Point(23, 28);
             this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(48, 17);
+            this.radioButton5.Size = new System.Drawing.Size(48, 19);
             this.radioButton5.TabIndex = 1;
             this.radioButton5.TabStop = true;
             this.radioButton5.Text = "Light";
@@ -2216,9 +2180,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton4.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton4.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaAdpostVolume1", true));
             this.radioButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton4.Location = new System.Drawing.Point(17, 11);
+            this.radioButton4.Location = new System.Drawing.Point(14, 11);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(56, 17);
+            this.radioButton4.Size = new System.Drawing.Size(57, 19);
             this.radioButton4.TabIndex = 0;
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "Heavy";
@@ -2231,10 +2195,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel3.Controls.Add(this.radioButton7);
             this.panel3.Location = new System.Drawing.Point(455, 667);
             this.panel3.Name = "panel3";
-//!            this.panel3.BorderStyle = BorderStyle.None;
             this.panel3.Size = new System.Drawing.Size(85, 66);
             this.panel3.TabIndex = 869;
-            this.panel3.TabStop = false;
             // 
             // radioButton9
             // 
@@ -2242,9 +2204,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton9.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton9.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaCourierpostVolume3", true));
             this.radioButton9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton9.Location = new System.Drawing.Point(9, 43);
+            this.radioButton9.Location = new System.Drawing.Point(5, 45);
             this.radioButton9.Name = "radioButton9";
-            this.radioButton9.Size = new System.Drawing.Size(65, 17);
+            this.radioButton9.Size = new System.Drawing.Size(66, 19);
             this.radioButton9.TabIndex = 2;
             this.radioButton9.TabStop = true;
             this.radioButton9.Text = "Average";
@@ -2256,9 +2218,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton8.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton8.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaCourierpostVolume2", true));
             this.radioButton8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton8.Location = new System.Drawing.Point(26, 28);
+            this.radioButton8.Location = new System.Drawing.Point(23, 28);
             this.radioButton8.Name = "radioButton8";
-            this.radioButton8.Size = new System.Drawing.Size(48, 17);
+            this.radioButton8.Size = new System.Drawing.Size(48, 19);
             this.radioButton8.TabIndex = 1;
             this.radioButton8.TabStop = true;
             this.radioButton8.Text = "Light";
@@ -2270,9 +2232,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton7.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.radioButton7.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaCourierpostVolume1", true));
             this.radioButton7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.radioButton7.Location = new System.Drawing.Point(18, 10);
+            this.radioButton7.Location = new System.Drawing.Point(14, 10);
             this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(56, 17);
+            this.radioButton7.Size = new System.Drawing.Size(57, 19);
             this.radioButton7.TabIndex = 0;
             this.radioButton7.TabStop = true;
             this.radioButton7.Text = "Heavy";
@@ -2284,10 +2246,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel4.Controls.Add(this.radioButton10);
             this.panel4.Location = new System.Drawing.Point(329, 1346);
             this.panel4.Name = "panel4";
-//!            this.panel4.BorderStyle = BorderStyle.None;
             this.panel4.Size = new System.Drawing.Size(112, 28);
             this.panel4.TabIndex = 870;
-            this.panel4.TabStop = false;
             // 
             // radioButton11
             // 
@@ -2297,7 +2257,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton11.Location = new System.Drawing.Point(64, 9);
             this.radioButton11.Name = "radioButton11";
-            this.radioButton11.Size = new System.Drawing.Size(39, 17);
+            this.radioButton11.Size = new System.Drawing.Size(39, 19);
             this.radioButton11.TabIndex = 1;
             this.radioButton11.TabStop = true;
             this.radioButton11.Text = "No";
@@ -2311,7 +2271,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton10.Location = new System.Drawing.Point(6, 9);
             this.radioButton10.Name = "radioButton10";
-            this.radioButton10.Size = new System.Drawing.Size(43, 17);
+            this.radioButton10.Size = new System.Drawing.Size(44, 19);
             this.radioButton10.TabIndex = 0;
             this.radioButton10.TabStop = true;
             this.radioButton10.Text = "Yes";
@@ -2323,10 +2283,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel5.Controls.Add(this.radioButton12);
             this.panel5.Location = new System.Drawing.Point(333, 1424);
             this.panel5.Name = "panel5";
-//!            this.panel5.BorderStyle = BorderStyle.None;
             this.panel5.Size = new System.Drawing.Size(112, 28);
             this.panel5.TabIndex = 871;
-            this.panel5.TabStop = false;
             // 
             // radioButton13
             // 
@@ -2336,7 +2294,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton13.Location = new System.Drawing.Point(64, 9);
             this.radioButton13.Name = "radioButton13";
-            this.radioButton13.Size = new System.Drawing.Size(39, 17);
+            this.radioButton13.Size = new System.Drawing.Size(39, 19);
             this.radioButton13.TabIndex = 1;
             this.radioButton13.TabStop = true;
             this.radioButton13.Text = "No";
@@ -2350,7 +2308,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton12.Location = new System.Drawing.Point(6, 9);
             this.radioButton12.Name = "radioButton12";
-            this.radioButton12.Size = new System.Drawing.Size(43, 17);
+            this.radioButton12.Size = new System.Drawing.Size(44, 19);
             this.radioButton12.TabIndex = 0;
             this.radioButton12.TabStop = true;
             this.radioButton12.Text = "Yes";
@@ -2363,10 +2321,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel6.Location = new System.Drawing.Point(390, 1456);
             this.panel6.Name = "panel6";
-//!            this.panel6.BorderStyle = BorderStyle.None;
             this.panel6.Size = new System.Drawing.Size(116, 33);
             this.panel6.TabIndex = 872;
-            this.panel6.TabStop = false;
             // 
             // radioButton15
             // 
@@ -2375,7 +2331,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton15.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaRouteOk2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton15.Location = new System.Drawing.Point(65, 10);
             this.radioButton15.Name = "radioButton15";
-            this.radioButton15.Size = new System.Drawing.Size(39, 17);
+            this.radioButton15.Size = new System.Drawing.Size(39, 19);
             this.radioButton15.TabIndex = 1;
             this.radioButton15.TabStop = true;
             this.radioButton15.Text = "No";
@@ -2388,7 +2344,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton14.Location = new System.Drawing.Point(6, 10);
             this.radioButton14.Name = "radioButton14";
             this.radioButton14.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.radioButton14.Size = new System.Drawing.Size(43, 17);
+            this.radioButton14.Size = new System.Drawing.Size(44, 19);
             this.radioButton14.TabIndex = 0;
             this.radioButton14.TabStop = true;
             this.radioButton14.Text = "Yes";
@@ -2402,7 +2358,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton16.Location = new System.Drawing.Point(6, 8);
             this.radioButton16.Name = "radioButton16";
-            this.radioButton16.Size = new System.Drawing.Size(43, 17);
+            this.radioButton16.Size = new System.Drawing.Size(44, 19);
             this.radioButton16.TabIndex = 0;
             this.radioButton16.TabStop = true;
             this.radioButton16.Text = "Yes";
@@ -2416,7 +2372,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton17.Location = new System.Drawing.Point(72, 8);
             this.radioButton17.Name = "radioButton17";
-            this.radioButton17.Size = new System.Drawing.Size(39, 17);
+            this.radioButton17.Size = new System.Drawing.Size(39, 19);
             this.radioButton17.TabIndex = 1;
             this.radioButton17.TabStop = true;
             this.radioButton17.Text = "No";
@@ -2428,25 +2384,22 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel7.Controls.Add(this.radioButton16);
             this.panel7.Location = new System.Drawing.Point(268, 1539);
             this.panel7.Name = "panel7";
-//!            this.panel7.BorderStyle = BorderStyle.None;
             this.panel7.Size = new System.Drawing.Size(122, 27);
             this.panel7.TabIndex = 873;
-            this.panel7.TabStop = false;
             // 
             // ra_safty_practices_resolved_date
             // 
             this.ra_safty_practices_resolved_date.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaSaftyPracticesResolvedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_safty_practices_resolved_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_safty_practices_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_practices_resolved_date.Location = new System.Drawing.Point(116, 2066);
             this.ra_safty_practices_resolved_date.Mask = "00/00/00";
-            this.ra_safty_practices_resolved_date.PromptChar = '0';
             this.ra_safty_practices_resolved_date.Name = "ra_safty_practices_resolved_date";
+            this.ra_safty_practices_resolved_date.PromptChar = '0';
             this.ra_safty_practices_resolved_date.Size = new System.Drawing.Size(58, 20);
             this.ra_safty_practices_resolved_date.TabIndex = 790;
-            this.ra_safty_practices_resolved_date.ValidatingType = typeof(System.DateTime);
-            this.ra_safty_practices_resolved_date.DataBindings[0].FormatString = "dd/MM/yy";
-            this.ra_safty_practices_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_practices_resolved_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_safty_practices_resolved_date.ValidatingType = typeof(System.DateTime);
             // 
             // ra_safty_practices_actions
             // 
@@ -2464,16 +2417,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.ra_safty_plan_completed_date.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaSaftyPlanCompletedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_safty_plan_completed_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_safty_plan_completed_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_plan_completed_date.Location = new System.Drawing.Point(124, 1920);
             this.ra_safty_plan_completed_date.Mask = "00/00/00";
-            this.ra_safty_plan_completed_date.PromptChar = '0';
             this.ra_safty_plan_completed_date.Name = "ra_safty_plan_completed_date";
+            this.ra_safty_plan_completed_date.PromptChar = '0';
             this.ra_safty_plan_completed_date.Size = new System.Drawing.Size(58, 20);
             this.ra_safty_plan_completed_date.TabIndex = 760;
-            this.ra_safty_plan_completed_date.ValidatingType = typeof(System.DateTime);
-            this.ra_safty_plan_completed_date.DataBindings[0].FormatString = "dd/MM/yy";
-            this.ra_safty_plan_completed_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_plan_completed_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_safty_plan_completed_date.ValidatingType = typeof(System.DateTime);
             // 
             // ra_safty_plan_actions
             // 
@@ -2490,17 +2442,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ra_safty_access_resolved_date
             // 
             this.ra_safty_access_resolved_date.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaSaftyAccessResolvedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ra_safty_access_resolved_date.Location = new System.Drawing.Point(515, 1755);
             this.ra_safty_access_resolved_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ra_safty_access_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_safty_access_resolved_date.Location = new System.Drawing.Point(515, 1755);
+            this.ra_safty_access_resolved_date.Mask = "00/00/00";
             this.ra_safty_access_resolved_date.Name = "ra_safty_access_resolved_date";
+            this.ra_safty_access_resolved_date.PromptChar = '0';
             this.ra_safty_access_resolved_date.Size = new System.Drawing.Size(58, 20);
             this.ra_safty_access_resolved_date.TabIndex = 730;
-            this.ra_safty_access_resolved_date.Mask = "00/00/00";
-            this.ra_safty_access_resolved_date.PromptChar = '0';
-            this.ra_safty_access_resolved_date.ValidatingType = typeof(System.DateTime);
-            this.ra_safty_access_resolved_date.DataBindings[0].FormatString = "dd/MM/yy";
-            this.ra_safty_access_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_access_resolved_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.ra_safty_access_resolved_date.ValidatingType = typeof(System.DateTime);
             // 
             // ra_saftey_access_actions
             // 
@@ -2544,7 +2495,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_61.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_61.Location = new System.Drawing.Point(46, 1601);
             this.t_61.Name = "t_61";
-            this.t_61.Size = new System.Drawing.Size(44, 26);
+            this.t_61.Size = new System.Drawing.Size(45, 30);
             this.t_61.TabIndex = 856;
             this.t_61.Text = "Reason\r\nif Not";
             // 
@@ -2554,19 +2505,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_62.Location = new System.Drawing.Point(43, 1654);
             this.t_62.Name = "t_62";
-            this.t_62.Size = new System.Drawing.Size(189, 13);
+            this.t_62.Size = new System.Drawing.Size(193, 15);
             this.t_62.TabIndex = 857;
             this.t_62.Text = "Does route description need amending";
             // 
             // t_63
             // 
             this.t_63.AutoSize = true;
+            this.t_63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.t_63.Location = new System.Drawing.Point(28, 1669);
             this.t_63.Name = "t_63";
             this.t_63.Size = new System.Drawing.Size(181, 13);
             this.t_63.TabIndex = 858;
             this.t_63.Text = "Review of Mailboxes and Sites";
-            this.t_63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             // 
             // t_64
             // 
@@ -2574,7 +2525,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_64.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_64.Location = new System.Drawing.Point(46, 1683);
             this.t_64.Name = "t_64";
-            this.t_64.Size = new System.Drawing.Size(305, 13);
+            this.t_64.Size = new System.Drawing.Size(320, 15);
             this.t_64.TabIndex = 859;
             this.t_64.Text = "List addresses where improvement required for access or safety";
             // 
@@ -2584,7 +2535,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_65.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_65.Location = new System.Drawing.Point(49, 1755);
             this.t_65.Name = "t_65";
-            this.t_65.Size = new System.Drawing.Size(67, 26);
+            this.t_65.Size = new System.Drawing.Size(67, 30);
             this.t_65.TabIndex = 860;
             this.t_65.Text = "Action taken\r\n to resolve";
             // 
@@ -2594,7 +2545,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_66.Location = new System.Drawing.Point(427, 1755);
             this.t_66.Name = "t_66";
-            this.t_66.Size = new System.Drawing.Size(82, 26);
+            this.t_66.Size = new System.Drawing.Size(85, 30);
             this.t_66.TabIndex = 861;
             this.t_66.Text = "Date access or \r\nsafety resolved";
             // 
@@ -2604,7 +2555,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_67.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_67.Location = new System.Drawing.Point(44, 1811);
             this.t_67.Name = "t_67";
-            this.t_67.Size = new System.Drawing.Size(236, 13);
+            this.t_67.Size = new System.Drawing.Size(242, 15);
             this.t_67.TabIndex = 862;
             this.t_67.Text = "Does Owner Driver have Health and Safety Plan";
             // 
@@ -2614,7 +2565,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_68.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_68.Location = new System.Drawing.Point(43, 1923);
             this.t_68.Name = "t_68";
-            this.t_68.Size = new System.Drawing.Size(82, 13);
+            this.t_68.Size = new System.Drawing.Size(82, 15);
             this.t_68.TabIndex = 863;
             this.t_68.Text = "Date completed";
             // 
@@ -2624,7 +2575,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_69.Location = new System.Drawing.Point(44, 1943);
             this.t_69.Name = "t_69";
-            this.t_69.Size = new System.Drawing.Size(259, 13);
+            this.t_69.Size = new System.Drawing.Size(270, 15);
             this.t_69.TabIndex = 864;
             this.t_69.Text = "Does Owner Driver operate using safe work practices";
             // 
@@ -2634,7 +2585,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.t_70.Location = new System.Drawing.Point(43, 2070);
             this.t_70.Name = "t_70";
-            this.t_70.Size = new System.Drawing.Size(73, 13);
+            this.t_70.Size = new System.Drawing.Size(75, 15);
             this.t_70.TabIndex = 865;
             this.t_70.Text = "Date resolved";
             // 
@@ -2645,7 +2596,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton18.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaDeviationInDesc1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton18.Location = new System.Drawing.Point(6, 10);
             this.radioButton18.Name = "radioButton18";
-            this.radioButton18.Size = new System.Drawing.Size(43, 17);
+            this.radioButton18.Size = new System.Drawing.Size(44, 19);
             this.radioButton18.TabIndex = 0;
             this.radioButton18.TabStop = true;
             this.radioButton18.Text = "Yes";
@@ -2658,7 +2609,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton19.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaDeviationInDesc2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton19.Location = new System.Drawing.Point(72, 10);
             this.radioButton19.Name = "radioButton19";
-            this.radioButton19.Size = new System.Drawing.Size(39, 17);
+            this.radioButton19.Size = new System.Drawing.Size(39, 19);
             this.radioButton19.TabIndex = 1;
             this.radioButton19.TabStop = true;
             this.radioButton19.Text = "No";
@@ -2671,10 +2622,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel8.Location = new System.Drawing.Point(268, 1563);
             this.panel8.Name = "panel8";
-//!            this.panel8.BorderStyle = BorderStyle.None;
             this.panel8.Size = new System.Drawing.Size(122, 33);
             this.panel8.TabIndex = 874;
-            this.panel8.TabStop = false;
             // 
             // panel9
             // 
@@ -2682,10 +2631,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel9.Controls.Add(this.radioButton20);
             this.panel9.Location = new System.Drawing.Point(268, 1650);
             this.panel9.Name = "panel9";
-//!            this.panel9.BorderStyle = BorderStyle.None;
             this.panel9.Size = new System.Drawing.Size(122, 30);
             this.panel9.TabIndex = 875;
-            this.panel9.TabStop = false;
             // 
             // radioButton21
             // 
@@ -2695,7 +2642,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton21.Location = new System.Drawing.Point(72, 7);
             this.radioButton21.Name = "radioButton21";
-            this.radioButton21.Size = new System.Drawing.Size(39, 17);
+            this.radioButton21.Size = new System.Drawing.Size(39, 19);
             this.radioButton21.TabIndex = 1;
             this.radioButton21.TabStop = true;
             this.radioButton21.Text = "No";
@@ -2709,7 +2656,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.radioButton20.Location = new System.Drawing.Point(6, 7);
             this.radioButton20.Name = "radioButton20";
-            this.radioButton20.Size = new System.Drawing.Size(43, 17);
+            this.radioButton20.Size = new System.Drawing.Size(44, 19);
             this.radioButton20.TabIndex = 0;
             this.radioButton20.TabStop = true;
             this.radioButton20.Text = "Yes";
@@ -2722,10 +2669,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel10.Location = new System.Drawing.Point(49, 1827);
             this.panel10.Name = "panel10";
-//!            this.panel10.BorderStyle = BorderStyle.None;
             this.panel10.Size = new System.Drawing.Size(167, 48);
             this.panel10.TabIndex = 876;
-            this.panel10.TabStop = false;
             // 
             // radioButton23
             // 
@@ -2733,7 +2678,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton23.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaSaftyPlanCompleted2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton23.Location = new System.Drawing.Point(7, 28);
             this.radioButton23.Name = "radioButton23";
-            this.radioButton23.Size = new System.Drawing.Size(148, 17);
+            this.radioButton23.Size = new System.Drawing.Size(151, 19);
             this.radioButton23.TabIndex = 1;
             this.radioButton23.TabStop = true;
             this.radioButton23.Text = "No - Detail action required";
@@ -2745,7 +2690,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton22.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaSaftyPlanCompleted1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton22.Location = new System.Drawing.Point(7, 9);
             this.radioButton22.Name = "radioButton22";
-            this.radioButton22.Size = new System.Drawing.Size(121, 17);
+            this.radioButton22.Size = new System.Drawing.Size(126, 19);
             this.radioButton22.TabIndex = 0;
             this.radioButton22.TabStop = true;
             this.radioButton22.Text = "Yes (Copy attached)";
@@ -2758,11 +2703,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.panel11.Location = new System.Drawing.Point(48, 1957);
             this.panel11.Name = "panel11";
-//!            this.panel11.BorderStyle = BorderStyle.None;
             this.panel11.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.panel11.Size = new System.Drawing.Size(269, 48);
             this.panel11.TabIndex = 877;
-            this.panel11.TabStop = false;
             // 
             // radioButton25
             // 
@@ -2771,7 +2714,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton25.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaSaftyPracticesExists2", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton25.Location = new System.Drawing.Point(8, 27);
             this.radioButton25.Name = "radioButton25";
-            this.radioButton25.Size = new System.Drawing.Size(245, 17);
+            this.radioButton25.Size = new System.Drawing.Size(252, 19);
             this.radioButton25.TabIndex = 1;
             this.radioButton25.TabStop = true;
             this.radioButton25.Text = "No - Detail issue and action required to resolve";
@@ -2784,18 +2727,127 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.radioButton24.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RaSaftyPracticesExists1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.radioButton24.Location = new System.Drawing.Point(8, 8);
             this.radioButton24.Name = "radioButton24";
-            this.radioButton24.Size = new System.Drawing.Size(76, 17);
+            this.radioButton24.Size = new System.Drawing.Size(82, 19);
             this.radioButton24.TabIndex = 0;
             this.radioButton24.TabStop = true;
             this.radioButton24.Text = "Yes (Initial) ";
             this.radioButton24.UseVisualStyleBackColor = true;
             // 
+            // st_contract
+            // 
+            this.st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_contract.ForeColor = System.Drawing.Color.Black;
+            this.st_contract.Location = new System.Drawing.Point(0, 0);
+            this.st_contract.Name = "st_contract";
+            this.st_contract.Size = new System.Drawing.Size(407, 19);
+            this.st_contract.TabIndex = 0;
+            this.st_contract.Text = "Contract: 5000 - This is the description for contract 5000";
+            this.st_contract.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Fuel_Consumption_h
+            // 
+            this.Fuel_Consumption_h.AutoSize = true;
+            this.Fuel_Consumption_h.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Fuel_Consumption_h.Location = new System.Drawing.Point(410, 175);
+            this.Fuel_Consumption_h.Name = "Fuel_Consumption_h";
+            this.Fuel_Consumption_h.Size = new System.Drawing.Size(107, 13);
+            this.Fuel_Consumption_h.TabIndex = 878;
+            this.Fuel_Consumption_h.Text = "Fuel Consumption";
+            // 
+            // ra_fuel_used_t
+            // 
+            this.ra_fuel_used_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ra_fuel_used_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_used_t.ForeColor = System.Drawing.Color.Black;
+            this.ra_fuel_used_t.Location = new System.Drawing.Point(416, 192);
+            this.ra_fuel_used_t.Name = "ra_fuel_used_t";
+            this.ra_fuel_used_t.Size = new System.Drawing.Size(98, 13);
+            this.ra_fuel_used_t.TabIndex = 885;
+            this.ra_fuel_used_t.Text = "Fuel Used";
+            this.ra_fuel_used_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ra_fuel_distance_t
+            // 
+            this.ra_fuel_distance_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ra_fuel_distance_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_distance_t.ForeColor = System.Drawing.Color.Black;
+            this.ra_fuel_distance_t.Location = new System.Drawing.Point(416, 210);
+            this.ra_fuel_distance_t.Name = "ra_fuel_distance_t";
+            this.ra_fuel_distance_t.Size = new System.Drawing.Size(98, 13);
+            this.ra_fuel_distance_t.TabIndex = 886;
+            this.ra_fuel_distance_t.Text = "Fuel Distance";
+            this.ra_fuel_distance_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ra_fuel_consumption_t
+            // 
+            this.ra_fuel_consumption_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ra_fuel_consumption_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_consumption_t.ForeColor = System.Drawing.Color.Black;
+            this.ra_fuel_consumption_t.Location = new System.Drawing.Point(416, 230);
+            this.ra_fuel_consumption_t.Name = "ra_fuel_consumption_t";
+            this.ra_fuel_consumption_t.Size = new System.Drawing.Size(98, 13);
+            this.ra_fuel_consumption_t.TabIndex = 887;
+            this.ra_fuel_consumption_t.Text = "Fuel Consumption";
+            this.ra_fuel_consumption_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ra_fuel_used
+            // 
+            this.ra_fuel_used.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaFuelUsed", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_fuel_used.EditMask = "######.0";
+            this.ra_fuel_used.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_used.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_fuel_used.Location = new System.Drawing.Point(520, 189);
+            this.ra_fuel_used.Name = "ra_fuel_used";
+            this.ra_fuel_used.PromptChar = ' ';
+            this.ra_fuel_used.Size = new System.Drawing.Size(52, 20);
+            this.ra_fuel_used.TabIndex = 888;
+            this.ra_fuel_used.Text = ".0";
+            this.ra_fuel_used.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_fuel_used.Value = ".0";
+            // 
+            // ra_fuel_distance
+            // 
+            this.ra_fuel_distance.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaFueldistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_fuel_distance.EditMask = "######.0";
+            this.ra_fuel_distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_distance.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_fuel_distance.Location = new System.Drawing.Point(520, 208);
+            this.ra_fuel_distance.Name = "ra_fuel_distance";
+            this.ra_fuel_distance.PromptChar = ' ';
+            this.ra_fuel_distance.Size = new System.Drawing.Size(52, 20);
+            this.ra_fuel_distance.TabIndex = 889;
+            this.ra_fuel_distance.Text = ".0";
+            this.ra_fuel_distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_fuel_distance.Value = ".0";
+            // 
+            // ra_fuel_consumption
+            // 
+            this.ra_fuel_consumption.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RaFuelConsumption", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ra_fuel_consumption.EditMask = "######.0";
+            this.ra_fuel_consumption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ra_fuel_consumption.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.ra_fuel_consumption.Location = new System.Drawing.Point(520, 226);
+            this.ra_fuel_consumption.Name = "ra_fuel_consumption";
+            this.ra_fuel_consumption.PromptChar = ' ';
+            this.ra_fuel_consumption.Size = new System.Drawing.Size(52, 20);
+            this.ra_fuel_consumption.TabIndex = 890;
+            this.ra_fuel_consumption.Text = ".0";
+            this.ra_fuel_consumption.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ra_fuel_consumption.Value = ".0";
+            // 
             // DRouteAuditDe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.ra_fuel_consumption);
+            this.Controls.Add(this.ra_fuel_distance);
+            this.Controls.Add(this.ra_fuel_used);
+            this.Controls.Add(this.ra_fuel_consumption_t);
+            this.Controls.Add(this.ra_fuel_distance_t);
+            this.Controls.Add(this.ra_fuel_used_t);
+            this.Controls.Add(this.Fuel_Consumption_h);
             this.Controls.Add(this.panel11);
             this.Controls.Add(this.panel10);
             this.Controls.Add(this.panel9);
@@ -2979,11 +3031,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.ra_safty_practices_resolved_date);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.Name = "DRouteAuditDe";
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Size = new System.Drawing.Size(596, 682);
+            this.Size = new System.Drawing.Size(581, 648);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
-            this.ResumeLayout(false);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -3008,7 +3057,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.panel11.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
+
 		}
 
         void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
@@ -3138,5 +3187,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private Panel panel11;
         private RadioButton radioButton24;
         private RadioButton radioButton25;
+        private Label Fuel_Consumption_h;
+        private Label ra_fuel_used_t;
+        private Label ra_fuel_distance_t;
+        private Label ra_fuel_consumption_t;
+        private NumericalMaskedTextBox ra_fuel_used;
+        private NumericalMaskedTextBox ra_fuel_distance;
+        private NumericalMaskedTextBox ra_fuel_consumption;
 	}
 }
