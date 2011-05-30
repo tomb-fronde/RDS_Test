@@ -1003,6 +1003,12 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn RaSaftyPracticesActions = new DataColumn("RaSaftyPracticesActions", typeof(string));
 
+        public DataColumn RaFuelUsed = new DataColumn("RaFuelUsed", typeof(decimal));
+
+        public DataColumn RaFuelDistance = new DataColumn("RaFuelDistance", typeof(decimal));
+
+        public DataColumn RaFuelConsumption = new DataColumn("RaFuelConsumption", typeof(decimal));
+
         public DataColumn Compute1 = new DataColumn("Compute1", typeof(double));
 
         public DataColumn Compute2 = new DataColumn("Compute2", typeof(string));
@@ -1069,7 +1075,7 @@ namespace NZPostOffice.RDS.DataControls.Report
         public RouteAuditDeDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				ContractNo,RaDateOfCheck,RaTimeStartedSort,RaTimeFinishedSort,RaTimeReturned,RaTimeDeparted,RaTotalHours,RaMealBreaks,RaExtraTime,RaFinalHours,RaFinishOdometer,RaStartOdometer,RaExtraDistance,RaOthrGdsBefore,RaOthrGdsDuring,RaOthrGdsAfter,RaPrBefore,RaPrDuring,RaPrAfter,RaTotalDistance,RaFinalDistance,RaFrequency,RaContractor,RaEmployee,RaVehicleMake,RaVehicleModel,RaYear,RaRegistrationNo,RaFuel,RaCcRating,RaCondition,RaRecReplace,RaTyreSize,RaGdsService,RaGdsServiceSighted,RaMvInsurance,RaCrInsurance,RaPlInsurance,RaInsuranceSighted,RaNewVehicle,RaVehiclePrice,RaVehiclePurchased,RaMailVolume,RaMvComments,RaAdpostVolume,RaNoCircularDrops,RaCourierpostVolume,RaCpComments,RaNoRegCusts,RaNoRegCustsCoreProds,RaOtherCusts,RaRuralPrivateBags,RaPrivateBags,RaClosedMails,RaPostShops,RaPostCentres,RaNoCmbs,RaNoCmbCusts,RaTotalDelPoints,RaSortingFacilities,RaSortingCase,RaSortingComments,RaLengthSealed,RaLenthUnsealed,RaTotalLength,RaRoadConditions,RaSuggestedImprovements,RaCommencementOk,RaCommencementReason,RaTimetableChange,RaRouteOk,RaRouteReason,RaDeviations,RaDeviationInDesc,RaDeviationReason,RaDescriptionUotdated,RaVolume,RaSaftyAccessAddresses,RaSaftyAccessResolvedDate,RaSafteyAccessActions,RaSaftyPlanCompleted,RaSaftyPlanCompletedDate,RaSaftyPlanActions,RaSaftyPracticesExists,RaSaftyPracticesResolvedDate,RaSaftyPracticesActions,Compute1,Compute2,Compute3,Compute4,Compute5,Compute6,RaMailVolume1,RaMailVolume2,RaMailVolume3,RaAdpostVolume1,RaAdpostVolume2,RaAdpostVolume3,RaCourierpostVolume1,RaCourierpostVolume2,RaCourierpostVolume3,RaCommencementOk1,RaCommencementOk2,RaTimetableChange1,RaTimetableChange2,RaRouteOk1,RaRouteOk2,RaDeviations1,RaDeviations2,RaDeviationInDesc1,RaDeviationInDesc2,RaDescriptionUotdated1,RaDescriptionUotdated2,RaSaftyPlanCompleted1,RaSaftyPlanCompleted2,RaSaftyPracticesExists1,RaSaftyPracticesExists2
+				ContractNo,RaDateOfCheck,RaTimeStartedSort,RaTimeFinishedSort,RaTimeReturned,RaTimeDeparted,RaTotalHours,RaMealBreaks,RaExtraTime,RaFinalHours,RaFinishOdometer,RaStartOdometer,RaExtraDistance,RaOthrGdsBefore,RaOthrGdsDuring,RaOthrGdsAfter,RaPrBefore,RaPrDuring,RaPrAfter,RaTotalDistance,RaFinalDistance,RaFrequency,RaContractor,RaEmployee,RaVehicleMake,RaVehicleModel,RaYear,RaRegistrationNo,RaFuel,RaCcRating,RaCondition,RaRecReplace,RaTyreSize,RaGdsService,RaGdsServiceSighted,RaMvInsurance,RaCrInsurance,RaPlInsurance,RaInsuranceSighted,RaNewVehicle,RaVehiclePrice,RaVehiclePurchased,RaMailVolume,RaMvComments,RaAdpostVolume,RaNoCircularDrops,RaCourierpostVolume,RaCpComments,RaNoRegCusts,RaNoRegCustsCoreProds,RaOtherCusts,RaRuralPrivateBags,RaPrivateBags,RaClosedMails,RaPostShops,RaPostCentres,RaNoCmbs,RaNoCmbCusts,RaTotalDelPoints,RaSortingFacilities,RaSortingCase,RaSortingComments,RaLengthSealed,RaLenthUnsealed,RaTotalLength,RaRoadConditions,RaSuggestedImprovements,RaCommencementOk,RaCommencementReason,RaTimetableChange,RaRouteOk,RaRouteReason,RaDeviations,RaDeviationInDesc,RaDeviationReason,RaDescriptionUotdated,RaVolume,RaSaftyAccessAddresses,RaSaftyAccessResolvedDate,RaSafteyAccessActions,RaSaftyPlanCompleted,RaSaftyPlanCompletedDate,RaSaftyPlanActions,RaSaftyPracticesExists,RaSaftyPracticesResolvedDate,RaSaftyPracticesActions,Compute1,Compute2,Compute3,Compute4,Compute5,Compute6,RaMailVolume1,RaMailVolume2,RaMailVolume3,RaAdpostVolume1,RaAdpostVolume2,RaAdpostVolume3,RaCourierpostVolume1,RaCourierpostVolume2,RaCourierpostVolume3,RaCommencementOk1,RaCommencementOk2,RaTimetableChange1,RaTimetableChange2,RaRouteOk1,RaRouteOk2,RaDeviations1,RaDeviations2,RaDeviationInDesc1,RaDeviationInDesc2,RaDescriptionUotdated1,RaDescriptionUotdated2,RaSaftyPlanCompleted1,RaSaftyPlanCompleted2,RaSaftyPracticesExists1,RaSaftyPracticesExists2,RaFuelUsed,RaFuelDistance,RaFuelConsumption
 				});
             ContractNo.AllowDBNull = true;
             RaDateOfCheck.AllowDBNull = true;
@@ -1116,12 +1122,14 @@ namespace NZPostOffice.RDS.DataControls.Report
             RaSaftyAccessResolvedDate.AllowDBNull = true;
             RaSaftyPlanCompletedDate.AllowDBNull = true;
             RaSaftyPracticesResolvedDate.AllowDBNull = true;
+            RaFuelUsed.AllowDBNull = true;
+            RaFuelDistance.AllowDBNull = true;
+            RaFuelConsumption.AllowDBNull = true;
             Compute1.AllowDBNull = true;
             Compute3.AllowDBNull = true;
             Compute4.AllowDBNull = true;
             Compute5.AllowDBNull = true;
             Compute6.AllowDBNull = true;
-
         }
 
         public RouteAuditDeDataSet(object dataSource)
@@ -1229,6 +1237,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["Compute4"] = GetFieldValue(data.Compute4);
             row["Compute5"] = GetFieldValue(data.Compute5);
             row["Compute6"] = GetFieldValue(data.Compute6);
+            row["Compute7"] = GetFieldValue(data.Compute7);
             row["RaMailVolume1"] = GetFieldValue(data.RaMailVolume1);
             row["RaMailVolume2"] = GetFieldValue(data.RaMailVolume2);
             row["RaMailVolume3"] = GetFieldValue(data.RaMailVolume3);
@@ -1254,6 +1263,9 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["RaSaftyPlanCompleted2"] = GetFieldValue(data.RaSaftyPlanCompleted2);
             row["RaSaftyPracticesExists1"] = GetFieldValue(data.RaSaftyPracticesExists1);
             row["RaSaftyPracticesExists2"] = GetFieldValue(data.RaSaftyPracticesExists2);
+            row["RaFuelUsed"] = GetFieldValue(data.RaFuelUsed);
+            row["RaFuelDistance"] = GetFieldValue(data.RaFuelDistance);
+            row["RaFuelConsumption"] = GetFieldValue(data.RaFuelConsumption);
             return row;
         }
     }

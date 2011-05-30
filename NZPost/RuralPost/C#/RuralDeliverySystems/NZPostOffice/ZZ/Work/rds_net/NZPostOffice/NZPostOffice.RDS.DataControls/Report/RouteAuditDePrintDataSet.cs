@@ -5,6 +5,8 @@ using System.Data;
 using NZPostOffice.RDS.Entity.Ruraldw;
 namespace NZPostOffice.RDS.DataControls.Report
 {
+    //  TJB  RPCR_027  May-2011
+    // Added RaFuelUsed, RaFuelDistance, RaFuelConsumption
 
     public class RRouteAuditDePrint
     {
@@ -603,6 +605,27 @@ namespace NZPostOffice.RDS.DataControls.Report
                 return string.Empty;
             }
         }
+        public decimal RaFuelUsed
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public decimal RaFuelDistance
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public decimal RaFuelConsumption
+        {
+            get
+            {
+                return 0;
+            }
+        }
         public decimal Compute1
         {
             get
@@ -805,6 +828,12 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn RaSaftyPracticesActions = new DataColumn("RaSaftyPracticesActions", typeof(string));
 
+        public DataColumn RaFuelUsed = new DataColumn("RaFuelUsed", typeof(decimal));
+
+        public DataColumn RaFuelDistance = new DataColumn("RaFuelDistance", typeof(decimal));
+
+        public DataColumn RaFuelConsumption = new DataColumn("RaFuelConsumption", typeof(decimal));
+
         public DataColumn Compute1 = new DataColumn("Compute1", typeof(decimal));
 
         public DataColumn Compute2 = new DataColumn("Compute2", typeof(decimal));
@@ -817,7 +846,7 @@ namespace NZPostOffice.RDS.DataControls.Report
         public RouteAuditDePrintDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				ContractNo,RaDateOfCheck,RaTimeStartedSort,RaTimeFinishedSort,RaTimeReturned,RaTimeDeparted,RaTotalHours,RaMealBreaks,RaExtraTime,RaFinalHours,RaFinishOdometer,RaStartOdometer,RaExtraDistance,RaOthrGdsBefore,RaOthrGdsDuring,RaOthrGdsAfter,RaPrBefore,RaPrDuring,RaPrAfter,RaTotalDistance,RaFinalDistance,RaFrequency,RaContractor,RaEmployee,RaVehicleMake,RaVehicleModel,RaYear,RaRegistrationNo,RaFuel,RaCcRating,RaCondition,RaRecReplace,RaTyreSize,RaGdsService,RaGdsServiceSighted,RaMvInsurance,RaCrInsurance,RaPlInsurance,RaInsuranceSighted,RaNewVehicle,RaVehiclePrice,RaVehiclePurchased,RaMailVolume,RaMvComments,RaAdpostVolume,RaNoCircularDrops,RaCourierpostVolume,RaCpComments,RaNoRegCusts,RaNoRegCustsCoreProds,RaOtherCusts,RaRuralPrivateBags,RaPrivateBags,RaClosedMails,RaPostShops,RaPostCentres,RaNoCmbs,RaNoCmbCusts,RaTotalDelPoints,RaSortingFacilities,RaSortingCase,RaSortingComments,RaLengthSealed,RaLenthUnsealed,RaTotalLength,RaRoadConditions,RaSuggestedImprovements,RaCommencementOk,RaCommencementReason,RaTimetableChange,RaRouteOk,RaRouteReason,RaDeviations,RaDeviationInDesc,RaDeviationReason,RaDescriptionUotdated,RaSaftyAccessAddresses,RaSaftyAccessResolvedDate,RaSafteyAccessActions,RaSaftyPlanCompleted,RaSaftyPlanCompletedDate,RaSaftyPlanActions,RaSaftyPracticesExists,RaSaftyPracticesResolvedDate,RaSaftyPracticesActions,Compute1,Compute2,Compute3,Compute4
+				ContractNo,RaDateOfCheck,RaTimeStartedSort,RaTimeFinishedSort,RaTimeReturned,RaTimeDeparted,RaTotalHours,RaMealBreaks,RaExtraTime,RaFinalHours,RaFinishOdometer,RaStartOdometer,RaExtraDistance,RaOthrGdsBefore,RaOthrGdsDuring,RaOthrGdsAfter,RaPrBefore,RaPrDuring,RaPrAfter,RaTotalDistance,RaFinalDistance,RaFrequency,RaContractor,RaEmployee,RaVehicleMake,RaVehicleModel,RaYear,RaRegistrationNo,RaFuel,RaCcRating,RaCondition,RaRecReplace,RaTyreSize,RaGdsService,RaGdsServiceSighted,RaMvInsurance,RaCrInsurance,RaPlInsurance,RaInsuranceSighted,RaNewVehicle,RaVehiclePrice,RaVehiclePurchased,RaMailVolume,RaMvComments,RaAdpostVolume,RaNoCircularDrops,RaCourierpostVolume,RaCpComments,RaNoRegCusts,RaNoRegCustsCoreProds,RaOtherCusts,RaRuralPrivateBags,RaPrivateBags,RaClosedMails,RaPostShops,RaPostCentres,RaNoCmbs,RaNoCmbCusts,RaTotalDelPoints,RaSortingFacilities,RaSortingCase,RaSortingComments,RaLengthSealed,RaLenthUnsealed,RaTotalLength,RaRoadConditions,RaSuggestedImprovements,RaCommencementOk,RaCommencementReason,RaTimetableChange,RaRouteOk,RaRouteReason,RaDeviations,RaDeviationInDesc,RaDeviationReason,RaDescriptionUotdated,RaSaftyAccessAddresses,RaSaftyAccessResolvedDate,RaSafteyAccessActions,RaSaftyPlanCompleted,RaSaftyPlanCompletedDate,RaSaftyPlanActions,RaSaftyPracticesExists,RaSaftyPracticesResolvedDate,RaSaftyPracticesActions,RaFuelUsed,RaFuelDistance,RaFuelConsumption,Compute1,Compute2,Compute3,Compute4
 				});
             ContractNo.AllowDBNull = true;
             RaDateOfCheck.AllowDBNull = true;
@@ -863,6 +892,9 @@ namespace NZPostOffice.RDS.DataControls.Report
             RaSaftyAccessResolvedDate.AllowDBNull = true;
             RaSaftyPlanCompletedDate.AllowDBNull = true;
             RaSaftyPracticesResolvedDate.AllowDBNull = true;
+            RaFuelUsed.AllowDBNull = true;
+            RaFuelDistance.AllowDBNull = true;
+            RaFuelConsumption.AllowDBNull = true;
             Compute1.AllowDBNull = true;
             Compute2.AllowDBNull = true;
             Compute3.AllowDBNull = true;
@@ -968,6 +1000,9 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["RaSaftyPracticesExists"] = GetFieldValue(data.RaSaftyPracticesExists);
             row["RaSaftyPracticesResolvedDate"] = GetFieldValue(data.RaSaftyPracticesResolvedDate);
             row["RaSaftyPracticesActions"] = GetFieldValue(data.RaSaftyPracticesActions);
+            row["RaFuelUsed"] = GetFieldValue(data.RaFuelUsed);
+            row["RaFuelDistance"] = GetFieldValue(data.RaFuelDistance);
+            row["RaFuelConsumption"] = GetFieldValue(data.RaFuelConsumption);
             row["Compute1"] = GetFieldValue(data.Compute1);
             row["Compute2"] = GetFieldValue(data.Compute2);
             row["Compute3"] = GetFieldValue(data.Compute3);

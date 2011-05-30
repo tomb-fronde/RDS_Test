@@ -96,7 +96,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 	[MapInfo("ra_safty_practices_exists", "_ra_safty_practices_exists", "route_audit")]
 	[MapInfo("ra_safty_practices_resolved_date", "_ra_safty_practices_resolved_date", "route_audit")]
 	[MapInfo("ra_safty_practices_actions", "_ra_safty_practices_actions", "route_audit")]
-	[System.Serializable()]
+    [MapInfo("ra_fuel_used", "_ra_fuel_used", "route_audit")]
+    [MapInfo("ra_fuel_distance", "_ra_fuel_distance", "route_audit")]
+    [MapInfo("ra_fuel_consumption", "_ra_fuel_consumption", "route_audit")]
+    [System.Serializable()]
 
 	public class RouteAuditDePrint : Entity<RouteAuditDePrint>
 	{
@@ -355,6 +358,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
 		[DBField()]
 		private string  _ra_safty_practices_actions;
+
+        [DBField()]
+        private decimal? _ra_fuel_used;
+
+        [DBField()]
+        private decimal? _ra_fuel_distance;
+
+        [DBField()]
+        private decimal? _ra_fuel_consumption;
 
 
 		public virtual int? ContractNo
@@ -1887,6 +1899,60 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			}
 		}
 
+        public virtual decimal? RaFuelUsed
+        {
+            get
+            {
+                CanReadProperty("RaFuelUsed", true);
+                return _ra_fuel_used;
+            }
+            set
+            {
+                CanWriteProperty("RaFuelUsed", true);
+                if (_ra_fuel_used != value)
+                {
+                    _ra_fuel_used = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? RaFuelDistance
+        {
+            get
+            {
+                CanReadProperty("RaFuelDistance", true);
+                return _ra_fuel_distance;
+            }
+            set
+            {
+                CanWriteProperty("RaFuelDistance", true);
+                if (_ra_fuel_distance != value)
+                {
+                    _ra_fuel_distance = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? RaFuelConsumption
+        {
+            get
+            {
+                CanReadProperty("RaFuelConsumption", true);
+                return _ra_fuel_consumption;
+            }
+            set
+            {
+                CanWriteProperty("RaFuelConsumption", true);
+                if (_ra_fuel_consumption != value)
+                {
+                    _ra_fuel_consumption = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual decimal? Compute1
         {
             get
@@ -1950,125 +2016,173 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT route_audit.contract_no,  route_audit.ra_date_of_check,  route_audit.ra_time_started_sort,  route_audit.ra_time_finished_sort,  route_audit.ra_time_returned,  route_audit.ra_time_departed,  route_audit.ra_total_hours,  route_audit.ra_meal_breaks,  route_audit.ra_extra_time,  route_audit.ra_final_hours,  route_audit.ra_finish_odometer,  route_audit.ra_start_odometer,  route_audit.ra_extra_distance,  route_audit.ra_othr_gds_before,  route_audit.ra_othr_gds_during,  route_audit.ra_othr_gds_after,  route_audit.ra_pr_before,  route_audit.ra_pr_during,  route_audit.ra_pr_after,  route_audit.ra_total_distance,  route_audit.ra_final_distance,  route_audit.ra_frequency,  route_audit.ra_contractor,  route_audit.ra_employee,  route_audit.ra_vehicle_make,  route_audit.ra_vehicle_model,  route_audit.ra_year,  route_audit.ra_registration_no,  route_audit.ra_fuel,  route_audit.ra_cc_rating,  route_audit.ra_condition,  route_audit.ra_rec_replace,  route_audit.ra_tyre_size,  route_audit.ra_gds_service,  route_audit.ra_gds_service_sighted,  route_audit.ra_mv_insurance,  route_audit.ra_cr_insurance,  route_audit.ra_pl_insurance,  route_audit.ra_insurance_sighted,  route_audit.ra_new_vehicle,  route_audit.ra_vehicle_price,  route_audit.ra_vehicle_purchased,  route_audit.ra_mail_volume,  route_audit.ra_mv_comments,  route_audit.ra_adpost_volume,  route_audit.ra_no_circular_drops,  route_audit.ra_courierpost_volume,  route_audit.ra_cp_comments,  route_audit.ra_no_reg_custs,  route_audit.ra_no_reg_custs_core_prods,  route_audit.ra_other_custs,  route_audit.ra_rural_private_bags,  route_audit.ra_private_bags,  route_audit.ra_closed_mails,  route_audit.ra_post_shops,  route_audit.ra_post_centres,  route_audit.ra_no_cmbs,  route_audit.ra_no_cmb_custs,  route_audit.ra_total_del_points,  route_audit.ra_sorting_facilities,  route_audit.ra_sorting_case,  route_audit.ra_sorting_comments,  route_audit.ra_length_sealed,  route_audit.ra_lenth_unsealed,  route_audit.ra_total_length,  route_audit.ra_road_conditions,  route_audit.ra_suggested_improvements,  route_audit.ra_commencement_ok,  route_audit.ra_commencement_reason,  route_audit.ra_timetable_change,  route_audit.ra_route_ok,  route_audit.ra_route_reason,  route_audit.ra_deviations,  route_audit.ra_deviation_in_desc,  route_audit.ra_deviation_reason,  route_audit.ra_description_uotdated  ,  route_audit.ra_safty_access_addresses,  route_audit.ra_safty_access_resolved_date,  route_audit.ra_saftey_access_actions,  route_audit.ra_safty_plan_completed,  route_audit.ra_safty_plan_completed_date,  route_audit.ra_safty_plan_actions,  route_audit.ra_safty_practices_exists,  route_audit.ra_safty_practices_resolved_date,  route_audit.ra_safty_practices_actions  FROM route_audit  WHERE ( route_audit.contract_no = @contract ) AND  ( route_audit.ra_date_of_check = @auditdate )  ";
-					ParameterCollection pList = new ParameterCollection();
+                    //cm.CommandText = "SELECT route_audit.contract_no,  route_audit.ra_date_of_check,  route_audit.ra_time_started_sort,  route_audit.ra_time_finished_sort,  route_audit.ra_time_returned,  route_audit.ra_time_departed,  route_audit.ra_total_hours,  route_audit.ra_meal_breaks,  route_audit.ra_extra_time,  route_audit.ra_final_hours,  route_audit.ra_finish_odometer,  route_audit.ra_start_odometer,  route_audit.ra_extra_distance,  route_audit.ra_othr_gds_before,  route_audit.ra_othr_gds_during,  route_audit.ra_othr_gds_after,  route_audit.ra_pr_before,  route_audit.ra_pr_during,  route_audit.ra_pr_after,  route_audit.ra_total_distance,  route_audit.ra_final_distance,  route_audit.ra_frequency,  route_audit.ra_contractor,  route_audit.ra_employee,  route_audit.ra_vehicle_make,  route_audit.ra_vehicle_model,  route_audit.ra_year,  route_audit.ra_registration_no,  route_audit.ra_fuel,  route_audit.ra_cc_rating,  route_audit.ra_condition,  route_audit.ra_rec_replace,  route_audit.ra_tyre_size,  route_audit.ra_gds_service,  route_audit.ra_gds_service_sighted,  route_audit.ra_mv_insurance,  route_audit.ra_cr_insurance,  route_audit.ra_pl_insurance,  route_audit.ra_insurance_sighted,  route_audit.ra_new_vehicle,  route_audit.ra_vehicle_price,  route_audit.ra_vehicle_purchased,  route_audit.ra_mail_volume,  route_audit.ra_mv_comments,  route_audit.ra_adpost_volume,  route_audit.ra_no_circular_drops,  route_audit.ra_courierpost_volume,  route_audit.ra_cp_comments,  route_audit.ra_no_reg_custs,  route_audit.ra_no_reg_custs_core_prods,  route_audit.ra_other_custs,  route_audit.ra_rural_private_bags,  route_audit.ra_private_bags,  route_audit.ra_closed_mails,  route_audit.ra_post_shops,  route_audit.ra_post_centres,  route_audit.ra_no_cmbs,  route_audit.ra_no_cmb_custs,  route_audit.ra_total_del_points,  route_audit.ra_sorting_facilities,  route_audit.ra_sorting_case,  route_audit.ra_sorting_comments,  route_audit.ra_length_sealed,  route_audit.ra_lenth_unsealed,  route_audit.ra_total_length,  route_audit.ra_road_conditions,  route_audit.ra_suggested_improvements,  route_audit.ra_commencement_ok,  route_audit.ra_commencement_reason,  route_audit.ra_timetable_change,  route_audit.ra_route_ok,  route_audit.ra_route_reason,  route_audit.ra_deviations,  route_audit.ra_deviation_in_desc,  route_audit.ra_deviation_reason,  route_audit.ra_description_uotdated  ,  route_audit.ra_safty_access_addresses,  route_audit.ra_safty_access_resolved_date,  route_audit.ra_saftey_access_actions,  route_audit.ra_safty_plan_completed,  route_audit.ra_safty_plan_completed_date,  route_audit.ra_safty_plan_actions,  route_audit.ra_safty_practices_exists,  route_audit.ra_safty_practices_resolved_date,  route_audit.ra_safty_practices_actions  FROM route_audit  WHERE ( route_audit.contract_no = @contract ) AND  ( route_audit.ra_date_of_check = @auditdate )  ";
+                    cm.CommandText = "SELECT route_audit.contract_no, route_audit.ra_date_of_check, route_audit.ra_time_started_sort "
+                                        + ", route_audit.ra_time_finished_sort, route_audit.ra_time_returned, route_audit.ra_time_departed "
+                                        + ", route_audit.ra_total_hours, route_audit.ra_meal_breaks, route_audit.ra_extra_time "
+                                        + ", route_audit.ra_final_hours, route_audit.ra_finish_odometer, route_audit.ra_start_odometer "
+                                        + ", route_audit.ra_extra_distance, route_audit.ra_othr_gds_before, route_audit.ra_othr_gds_during "
+                                        + ", route_audit.ra_othr_gds_after, route_audit.ra_pr_before, route_audit.ra_pr_during "
+                                        + ", route_audit.ra_pr_after, route_audit.ra_total_distance, route_audit.ra_final_distance "
+                                        + ", route_audit.ra_frequency, route_audit.ra_contractor, route_audit.ra_employee "
+                                        + ", route_audit.ra_vehicle_make, route_audit.ra_vehicle_model, route_audit.ra_year "
+                                        + ", route_audit.ra_registration_no, route_audit.ra_fuel, route_audit.ra_cc_rating "
+                                        + ", route_audit.ra_condition, route_audit.ra_rec_replace, route_audit.ra_tyre_size "
+                                        + ", route_audit.ra_gds_service, route_audit.ra_gds_service_sighted, route_audit.ra_mv_insurance "
+                                        + ", route_audit.ra_cr_insurance, route_audit.ra_pl_insurance, route_audit.ra_insurance_sighted "
+                                        + ", route_audit.ra_new_vehicle, route_audit.ra_vehicle_price, route_audit.ra_vehicle_purchased "
+                                        + ", route_audit.ra_mail_volume, route_audit.ra_mv_comments, route_audit.ra_adpost_volume "
+                                        + ", route_audit.ra_no_circular_drops, route_audit.ra_courierpost_volume, route_audit.ra_cp_comments "
+                                        + ", route_audit.ra_no_reg_custs, route_audit.ra_no_reg_custs_core_prods, route_audit.ra_other_custs "
+                                        + ", route_audit.ra_rural_private_bags, route_audit.ra_private_bags, route_audit.ra_closed_mails "
+                                        + ", route_audit.ra_post_shops, route_audit.ra_post_centres, route_audit.ra_no_cmbs "
+                                        + ", route_audit.ra_no_cmb_custs, route_audit.ra_total_del_points, route_audit.ra_sorting_facilities "
+                                        + ", route_audit.ra_sorting_case, route_audit.ra_sorting_comments, route_audit.ra_length_sealed "
+                                        + ", route_audit.ra_lenth_unsealed, route_audit.ra_total_length, route_audit.ra_road_conditions "
+                                        + ", route_audit.ra_suggested_improvements, route_audit.ra_commencement_ok, route_audit.ra_commencement_reason "
+                                        + ", route_audit.ra_timetable_change, route_audit.ra_route_ok, route_audit.ra_route_reason "
+                                        + ", route_audit.ra_deviations, route_audit.ra_deviation_in_desc, route_audit.ra_deviation_reason "
+                                        + ", route_audit.ra_description_uotdated, route_audit.ra_safty_access_addresses "
+                                        + ", route_audit.ra_safty_access_resolved_date, route_audit.ra_saftey_access_actions, route_audit.ra_safty_plan_completed "
+                                        + ", route_audit.ra_safty_plan_completed_date, route_audit.ra_safty_plan_actions, route_audit.ra_safty_practices_exists "
+                                        + ", route_audit.ra_safty_practices_resolved_date, route_audit.ra_safty_practices_actions "
+                                        + ", route_audit.ra_fuel_used, route_audit.ra_fuel_distance, route_audit.ra_fuel_consumption "
+                                    + " FROM route_audit "
+                                    + "WHERE route_audit.contract_no = @contract "
+                                    + "  AND route_audit.ra_date_of_check = @auditdate ";
+
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "contract", contract);
 					pList.Add(cm, "auditdate", auditdate);
 
-					List<RouteAuditDePrint> _list = new List<RouteAuditDePrint>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							RouteAuditDePrint instance = new RouteAuditDePrint();
+                    try
+                    {
+                        List<RouteAuditDePrint> _list = new List<RouteAuditDePrint>();
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                RouteAuditDePrint instance = new RouteAuditDePrint();
 
-                            instance._contract_no = GetValueFromReader<Int32?>(dr,0);
-                            instance._ra_date_of_check = GetValueFromReader<DateTime?>(dr,1);
-                            instance._ra_time_started_sort = GetValueFromReader<DateTime>(dr,2);
-                            instance._ra_time_finished_sort = GetValueFromReader<DateTime>(dr,3);
-                            instance._ra_time_returned = GetValueFromReader<DateTime>(dr,4);
+                                instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
+                                instance._ra_date_of_check = GetValueFromReader<DateTime?>(dr, 1);
+                                instance._ra_time_started_sort = GetValueFromReader<DateTime>(dr, 2);
+                                instance._ra_time_finished_sort = GetValueFromReader<DateTime>(dr, 3);
+                                instance._ra_time_returned = GetValueFromReader<DateTime>(dr, 4);
 
-                            instance._ra_time_departed = GetValueFromReader<DateTime>(dr,5);
-                            instance._ra_total_hours = GetValueFromReader<DateTime>(dr,6);
-                            instance._ra_meal_breaks = GetValueFromReader<DateTime>(dr,7);
-                            instance._ra_extra_time = GetValueFromReader<DateTime>(dr,8);
-                            instance._ra_final_hours = GetValueFromReader<DateTime>(dr,9);
+                                instance._ra_time_departed = GetValueFromReader<DateTime>(dr, 5);
+                                instance._ra_total_hours = GetValueFromReader<DateTime>(dr, 6);
+                                instance._ra_meal_breaks = GetValueFromReader<DateTime>(dr, 7);
+                                instance._ra_extra_time = GetValueFromReader<DateTime>(dr, 8);
+                                instance._ra_final_hours = GetValueFromReader<DateTime>(dr, 9);
 
-                            instance._ra_finish_odometer = GetValueFromReader<Decimal?>(dr,10);
-                            instance._ra_start_odometer = GetValueFromReader<Decimal?>(dr,11);
-                            instance._ra_extra_distance = GetValueFromReader<Decimal?>(dr,12);
-                            instance._ra_othr_gds_before = GetValueFromReader<DateTime>(dr,13);
-                            instance._ra_othr_gds_during = GetValueFromReader<DateTime>(dr,14);
+                                instance._ra_finish_odometer = GetValueFromReader<Decimal?>(dr, 10);
+                                instance._ra_start_odometer = GetValueFromReader<Decimal?>(dr, 11);
+                                instance._ra_extra_distance = GetValueFromReader<Decimal?>(dr, 12);
+                                instance._ra_othr_gds_before = GetValueFromReader<DateTime>(dr, 13);
+                                instance._ra_othr_gds_during = GetValueFromReader<DateTime>(dr, 14);
 
-                            instance._ra_othr_gds_after = GetValueFromReader<DateTime>(dr,15);
-                            instance._ra_pr_before = GetValueFromReader<DateTime>(dr,16);
-                            instance._ra_pr_during = GetValueFromReader<DateTime>(dr,17);
-                            instance._ra_pr_after = GetValueFromReader<DateTime>(dr,18);
-                            instance._ra_total_distance = GetValueFromReader<Decimal?>(dr,19);
+                                instance._ra_othr_gds_after = GetValueFromReader<DateTime>(dr, 15);
+                                instance._ra_pr_before = GetValueFromReader<DateTime>(dr, 16);
+                                instance._ra_pr_during = GetValueFromReader<DateTime>(dr, 17);
+                                instance._ra_pr_after = GetValueFromReader<DateTime>(dr, 18);
+                                instance._ra_total_distance = GetValueFromReader<Decimal?>(dr, 19);
 
-                            instance._ra_final_distance = GetValueFromReader<Decimal?>(dr,20);
-                            instance._ra_frequency = GetValueFromReader<String>(dr,21);
-                            instance._ra_contractor = GetValueFromReader<String>(dr,22);
-                            instance._ra_employee = GetValueFromReader<String>(dr,23);
-                            instance._ra_vehicle_make = GetValueFromReader<String>(dr,24);
+                                instance._ra_final_distance = GetValueFromReader<Decimal?>(dr, 20);
+                                instance._ra_frequency = GetValueFromReader<String>(dr, 21);
+                                instance._ra_contractor = GetValueFromReader<String>(dr, 22);
+                                instance._ra_employee = GetValueFromReader<String>(dr, 23);
+                                instance._ra_vehicle_make = GetValueFromReader<String>(dr, 24);
 
-                            instance._ra_vehicle_model = GetValueFromReader<String>(dr,25);
-                            instance._ra_year = GetValueFromReader<Int32?>(dr,26);
-                            instance._ra_registration_no = GetValueFromReader<String>(dr,27);
-                            instance._ra_fuel = GetValueFromReader<String>(dr,28);
-                            instance._ra_cc_rating = GetValueFromReader<Int32?>(dr,29);
+                                instance._ra_vehicle_model = GetValueFromReader<String>(dr, 25);
+                                instance._ra_year = GetValueFromReader<Int32?>(dr, 26);
+                                instance._ra_registration_no = GetValueFromReader<String>(dr, 27);
+                                instance._ra_fuel = GetValueFromReader<String>(dr, 28);
+                                instance._ra_cc_rating = GetValueFromReader<Int32?>(dr, 29);
 
-                            instance._ra_condition = GetValueFromReader<String>(dr,30);
-                            instance._ra_rec_replace = GetValueFromReader<DateTime?>(dr,31);
-                            instance._ra_tyre_size = GetValueFromReader<String>(dr,32);
-                            instance._ra_gds_service = GetValueFromReader<String>(dr,33);
-                            instance._ra_gds_service_sighted = GetValueFromReader<String>(dr,34);
+                                instance._ra_condition = GetValueFromReader<String>(dr, 30);
+                                instance._ra_rec_replace = GetValueFromReader<DateTime?>(dr, 31);
+                                instance._ra_tyre_size = GetValueFromReader<String>(dr, 32);
+                                instance._ra_gds_service = GetValueFromReader<String>(dr, 33);
+                                instance._ra_gds_service_sighted = GetValueFromReader<String>(dr, 34);
 
-                            instance._ra_mv_insurance = GetValueFromReader<String>(dr,35);
-                            instance._ra_cr_insurance = GetValueFromReader<String>(dr,36);
-                            instance._ra_pl_insurance = GetValueFromReader<String>(dr,37);
-                            instance._ra_insurance_sighted = GetValueFromReader<String>(dr,38);
-                            instance._ra_new_vehicle = GetValueFromReader<String>(dr,39);
+                                instance._ra_mv_insurance = GetValueFromReader<String>(dr, 35);
+                                instance._ra_cr_insurance = GetValueFromReader<String>(dr, 36);
+                                instance._ra_pl_insurance = GetValueFromReader<String>(dr, 37);
+                                instance._ra_insurance_sighted = GetValueFromReader<String>(dr, 38);
+                                instance._ra_new_vehicle = GetValueFromReader<String>(dr, 39);
 
-                            instance._ra_vehicle_price = GetValueFromReader<Int32?>(dr,40);
-                            instance._ra_vehicle_purchased = GetValueFromReader<DateTime?>(dr,41);
-                            instance._ra_mail_volume = GetValueFromReader<String>(dr,42);
-                            instance._ra_mv_comments = GetValueFromReader<String>(dr,43);
-                            instance._ra_adpost_volume = GetValueFromReader<String>(dr,44);
+                                instance._ra_vehicle_price = GetValueFromReader<Int32?>(dr, 40);
+                                instance._ra_vehicle_purchased = GetValueFromReader<DateTime?>(dr, 41);
+                                instance._ra_mail_volume = GetValueFromReader<String>(dr, 42);
+                                instance._ra_mv_comments = GetValueFromReader<String>(dr, 43);
+                                instance._ra_adpost_volume = GetValueFromReader<String>(dr, 44);
 
-                            instance._ra_no_circular_drops = GetValueFromReader<Int32?>(dr,45);
-                            instance._ra_courierpost_volume = GetValueFromReader<String>(dr,46);
-                            instance._ra_cp_comments = GetValueFromReader<String>(dr,47);
-                            instance._ra_no_reg_custs = GetValueFromReader<Int32?>(dr,48);
-                            instance._ra_no_reg_custs_core_prods = GetValueFromReader<Int32?>(dr,49);
+                                instance._ra_no_circular_drops = GetValueFromReader<Int32?>(dr, 45);
+                                instance._ra_courierpost_volume = GetValueFromReader<String>(dr, 46);
+                                instance._ra_cp_comments = GetValueFromReader<String>(dr, 47);
+                                instance._ra_no_reg_custs = GetValueFromReader<Int32?>(dr, 48);
+                                instance._ra_no_reg_custs_core_prods = GetValueFromReader<Int32?>(dr, 49);
 
-                            instance._ra_other_custs = GetValueFromReader<Int32?>(dr,50);
-                            instance._ra_rural_private_bags = GetValueFromReader<Int32?>(dr,51);
-                            instance._ra_private_bags = GetValueFromReader<Int32?>(dr,52);
-                            instance._ra_closed_mails = GetValueFromReader<Int32?>(dr,53);
-                            instance._ra_post_shops = GetValueFromReader<Int32?>(dr,54);
+                                instance._ra_other_custs = GetValueFromReader<Int32?>(dr, 50);
+                                instance._ra_rural_private_bags = GetValueFromReader<Int32?>(dr, 51);
+                                instance._ra_private_bags = GetValueFromReader<Int32?>(dr, 52);
+                                instance._ra_closed_mails = GetValueFromReader<Int32?>(dr, 53);
+                                instance._ra_post_shops = GetValueFromReader<Int32?>(dr, 54);
 
-                            instance._ra_post_centres = GetValueFromReader<Int32?>(dr,55);
-                            instance._ra_no_cmbs = GetValueFromReader<Int32?>(dr,56);
-                            instance._ra_no_cmb_custs = GetValueFromReader<Int32?>(dr,57);
-                            instance._ra_total_del_points = GetValueFromReader<Int32?>(dr,58);
-                            instance._ra_sorting_facilities = GetValueFromReader<String>(dr,59);
-	
-                            instance._ra_sorting_case = GetValueFromReader<String>(dr,60);
-                            instance._ra_sorting_comments = GetValueFromReader<String>(dr,61);
-                            instance._ra_length_sealed = GetValueFromReader<Decimal?>(dr,62);
-                            instance._ra_lenth_unsealed = GetValueFromReader<Decimal?>(dr,63);
-                            instance._ra_total_length = GetValueFromReader<Decimal?>(dr,64);
+                                instance._ra_post_centres = GetValueFromReader<Int32?>(dr, 55);
+                                instance._ra_no_cmbs = GetValueFromReader<Int32?>(dr, 56);
+                                instance._ra_no_cmb_custs = GetValueFromReader<Int32?>(dr, 57);
+                                instance._ra_total_del_points = GetValueFromReader<Int32?>(dr, 58);
+                                instance._ra_sorting_facilities = GetValueFromReader<String>(dr, 59);
 
-                            instance._ra_road_conditions = GetValueFromReader<String>(dr,65);
-                            instance._ra_suggested_improvements = GetValueFromReader<String>(dr,66);
-                            instance._ra_commencement_ok = GetValueFromReader<String>(dr,67);
-                            instance._ra_commencement_reason = GetValueFromReader<String>(dr,68);
-                            instance._ra_timetable_change = GetValueFromReader<String>(dr,69);
+                                instance._ra_sorting_case = GetValueFromReader<String>(dr, 60);
+                                instance._ra_sorting_comments = GetValueFromReader<String>(dr, 61);
+                                instance._ra_length_sealed = GetValueFromReader<Decimal?>(dr, 62);
+                                instance._ra_lenth_unsealed = GetValueFromReader<Decimal?>(dr, 63);
+                                instance._ra_total_length = GetValueFromReader<Decimal?>(dr, 64);
 
-                            instance._ra_route_ok = GetValueFromReader<String>(dr,70);
-                            instance._ra_route_reason = GetValueFromReader<String>(dr,71);
-                            instance._ra_deviations = GetValueFromReader<String>(dr,72);
-                            instance._ra_deviation_in_desc = GetValueFromReader<String>(dr,73);
-                            instance._ra_deviation_reason = GetValueFromReader<String>(dr,74);
+                                instance._ra_road_conditions = GetValueFromReader<String>(dr, 65);
+                                instance._ra_suggested_improvements = GetValueFromReader<String>(dr, 66);
+                                instance._ra_commencement_ok = GetValueFromReader<String>(dr, 67);
+                                instance._ra_commencement_reason = GetValueFromReader<String>(dr, 68);
+                                instance._ra_timetable_change = GetValueFromReader<String>(dr, 69);
 
-                            instance._ra_description_uotdated = GetValueFromReader<String>(dr,75);
-                            instance._ra_safty_access_addresses = GetValueFromReader<String>(dr,76);
-                            instance._ra_safty_access_resolved_date = GetValueFromReader<DateTime?>(dr,77);
-                            instance._ra_saftey_access_actions = GetValueFromReader<String>(dr,78);
-                            instance._ra_safty_plan_completed = GetValueFromReader<String>(dr,79);
+                                instance._ra_route_ok = GetValueFromReader<String>(dr, 70);
+                                instance._ra_route_reason = GetValueFromReader<String>(dr, 71);
+                                instance._ra_deviations = GetValueFromReader<String>(dr, 72);
+                                instance._ra_deviation_in_desc = GetValueFromReader<String>(dr, 73);
+                                instance._ra_deviation_reason = GetValueFromReader<String>(dr, 74);
 
-                            instance._ra_safty_plan_completed_date = GetValueFromReader<DateTime?>(dr,80);
-                            instance._ra_safty_plan_actions = GetValueFromReader<String>(dr,81);
-                            instance._ra_safty_practices_exists = GetValueFromReader<String>(dr,82);
-                            instance._ra_safty_practices_resolved_date = GetValueFromReader<DateTime?>(dr,83);
-                            instance._ra_safty_practices_actions = GetValueFromReader<String>(dr,84);
-							instance.MarkOld();
-                            instance.StoreInitialValues();
-							_list.Add(instance);
-						}
-						list = _list.ToArray();
-					}
+                                instance._ra_description_uotdated = GetValueFromReader<String>(dr, 75);
+                                instance._ra_safty_access_addresses = GetValueFromReader<String>(dr, 76);
+                                instance._ra_safty_access_resolved_date = GetValueFromReader<DateTime?>(dr, 77);
+                                instance._ra_saftey_access_actions = GetValueFromReader<String>(dr, 78);
+                                instance._ra_safty_plan_completed = GetValueFromReader<String>(dr, 79);
+
+                                instance._ra_safty_plan_completed_date = GetValueFromReader<DateTime?>(dr, 80);
+                                instance._ra_safty_plan_actions = GetValueFromReader<String>(dr, 81);
+                                instance._ra_safty_practices_exists = GetValueFromReader<String>(dr, 82);
+                                instance._ra_safty_practices_resolved_date = GetValueFromReader<DateTime?>(dr, 83);
+                                instance._ra_safty_practices_actions = GetValueFromReader<String>(dr, 84);
+
+                                instance._ra_fuel_used = GetValueFromReader<Decimal?>(dr, 85);
+                                instance._ra_fuel_distance = GetValueFromReader<Decimal?>(dr, 86);
+                                instance._ra_fuel_consumption = GetValueFromReader<Decimal?>(dr, 87);
+
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        string t1, t2;
+                        t1 = e.Message;
+                        t2 = t1;
+                    }
 				}
 			}
 		}
@@ -2080,15 +2194,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "route_audit", ref pList))
 				{
-					cm.CommandText += " WHERE  route_audit.contract_no = @contract_no AND " + 
-						"route_audit.ra_date_of_check = @ra_date_of_check ";
+					cm.CommandText += " WHERE route_audit.contract_no = @contract_no "
+						             + "  AND route_audit.ra_date_of_check = @ra_date_of_check ";
 
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm, "ra_date_of_check", GetInitialValue("_ra_date_of_check"));
-					DBHelper.ExecuteNonQuery(cm, pList);
+
+                    DBHelper.ExecuteNonQuery(cm, pList);
 				}
 				// reinitialize original key/value list
 				StoreInitialValues();
@@ -2101,7 +2216,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateInsertCommandText(cm, "route_audit", pList))
 				{
 					DBHelper.ExecuteNonQuery(cm, pList);
@@ -2119,13 +2234,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "DELETE FROM route_audit "
+                                    + "WHERE route_audit.contract_no = @contract_no "
+                                    + "  AND route_audit.ra_date_of_check = @ra_date_of_check";
+
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm,"ra_date_of_check", GetInitialValue("_ra_date_of_check"));
-						cm.CommandText = "DELETE FROM route_audit WHERE " +
-						"route_audit.contract_no = @contract_no AND " + 
-						"route_audit.ra_date_of_check = @ra_date_of_check ";
-					DBHelper.ExecuteNonQuery(cm, pList);
+
+                    DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
 			}
