@@ -76,41 +76,19 @@ namespace NZPostOffice.Shared.VisualComponents
             }
 
             // may move the following out into LogicUnitWLogon.Preopen()...
-            lblApplicationName.Text = LogonAttribs.appName;// "Rural Delivery System Administration";
+            lblApplicationName.Text = LogonAttribs.appName;
 
             if (LogonAttribs != null)
             {
                 // grab information from logonAttribs...
                 tbUserID.Text = LogonAttribs.userID;
-                //?tbPassword.Text = LogonAttribs.password;
-
-                // set location of logo image file...
-                /*?
-                if (LogonAttribs.logo.Length > 0)
-                    pbLogo.ImageLocation = LogonAttribs.logo;
-                else
-                    pbLogo.Visible = false;
-                */
                 // set Application Name...
                 //? if (LogonAttribs.appName.Length > 0)
                 lblApplicationName.Text = LogonAttribs.appName;
                 lblApplicationVersion.Text = LogonAttribs.version;
-
                 if (lblApplicationName.Text == "Owner-Driver Payment System")
                     this.Icon = global::NZPostOffice.Shared.Properties.Resources.SAFE02;
-
-                // set Copyright info...
-                //?lblCopyright.Text = LogonAttribs.copyright;
-                //?loginAttempts = LogonAttribs.logonAttempts;
             }
-
-            // get Version info from App.Config...
-            //version = ConfigurationSettings.AppSettings["Version"].ToString();
-
-            //buildDate = ConfigurationSettings.AppSettings["BuildDate"].ToString();
-            //lblApplicationVersion.Text = "Version " + version + " Built on (" + buildDate + ")";
-            //? lblApplicationVersion.Text = LogonAttribs.version;
-            //?dbName = ConfigurationManager.AppSettings["DBName"].ToString();
 
             // set initial control focus...
             if (tbUserID.Text.Length > 0)
