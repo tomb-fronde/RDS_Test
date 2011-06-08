@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NZPostOffice.Shared")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Metex Inc.")]
+[assembly: AssemblyCompany("Fronde Systems Group")]
 [assembly: AssemblyProduct("NZPostOffice.Shared")]
-[assembly: AssemblyCopyright("Copyright © Metex Inc. 2007")]
+[assembly: AssemblyCopyright("Copyright©2011 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
