@@ -10,6 +10,8 @@ namespace NZPostOffice.Shared
 {
     public class StaticFunctions
     {
+        // TJB RPCR_027 May-2011: New: MarkDwClean
+        //
         // TJB RPCR_017 July-2010: New
         // Added variant methods to check a selected row instead of the whole control
         //     IsDirty(Metex.Windows.DataUserControl dw, int pRow)
@@ -36,7 +38,6 @@ namespace NZPostOffice.Shared
             }
             return (s);
         }
-
 
         /// <summary>
         /// make first letter upcase
@@ -66,25 +67,26 @@ namespace NZPostOffice.Shared
             else 
             {
                 /*select next_value
-                into :nNextValue
-                from id_codes
-                where sequence_name = :sequencename ;
+                 *  into :nNextValue
+                 *  from id_codes
+                 * where sequence_name = :sequencename ;
                  */
                 int sqlcode = -1;
                 nNextValue = LoginService.GetIdCodes(sequencename,ref sqlcode);
                 if (sqlcode != 0) 
                 {
                     /*insert into id_codes
-                     ( sequence_name, next_value)
-                    values  ( :sequencename, 2) ;*/
+                     *      (sequence_name, next_value)
+                     *values (:sequencename, 2) ;*/
                     LoginService.InsertIdCodes(sequencename);
                     nReturn = 1;
                 }
                 else 
                 {
                     nReturn = nNextValue;
-                    /*UPDATE id_codes set next_value = :nNextValue + 1
-                    where sequence_name = :sequencename ;*/
+                    /*UPDATE id_codes 
+                     *   set next_value = :nNextValue + 1
+                     * where sequence_name = :sequencename ;*/
                     LoginService.UpdateIdCodes(nNextValue, sequencename);
                 }
             }
@@ -257,7 +259,7 @@ namespace NZPostOffice.Shared
             //OPEN counter_cursor
             //FETCH counter_cursor INTO :lCount ;
             //CLOSE counter_cursor
-            sSqlStatement = "select count ( *) from " + aTables + " where " + aWhere;
+            sSqlStatement = "select count(*) from " + aTables + " where " + aWhere;
             lCount = LoginService.ExecuteSqlString(sSqlStatement);
             return lCount;
         }
@@ -435,6 +437,26 @@ namespace NZPostOffice.Shared
                 }
             }
             return false;
+        }
+
+        // TJB RPCR_027 May-2011: New
+        // Added to mark a datawindow clean
+        public static void MarkDwClean(Metex.Windows.DataUserControlContainer dw_container)
+        {
+            MarkDwClean(dw_container.DataObject);
+        }
+
+        public static void MarkDwClean(Metex.Windows.DataUserControl dw)
+        {
+            if (dw != null)
+            {
+                int nRow, nRows;
+                nRows = dw.RowCount;
+                for ( nRow = 0; nRow < nRows; nRow++) {
+                    Metex.Core.EntityBase BE = dw.GetItem<Metex.Core.EntityBase>(nRow);
+                    BE.MarkClean();
+                }
+            }
         }
 
         public static bool IsModified(Metex.Windows.DataUserControl dw)
