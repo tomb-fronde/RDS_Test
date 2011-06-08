@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NZPostOffice.RDS.Entity")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ccf")]
+[assembly: AssemblyCompany("Rural Post")]
 [assembly: AssemblyProduct("NZPostOffice.RDS.Entity")]
-[assembly: AssemblyCopyright("Copyright © ccf 2007")]
+[assembly: AssemblyCopyright("Copyright © 2011 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
