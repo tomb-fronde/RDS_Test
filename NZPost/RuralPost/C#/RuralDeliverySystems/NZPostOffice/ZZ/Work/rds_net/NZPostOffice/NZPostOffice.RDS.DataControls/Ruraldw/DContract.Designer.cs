@@ -6,6 +6,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  9-June-2011
+    // Changed dropDown width from 180 to 240 so most of the 
+    // description can be seen.
+
     partial class DContract
     {
         /// <summary> 
@@ -124,7 +128,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.pbu_id.Value = null;
             this.pbu_id.ValueMember = "PbuId";
             this.pbu_id.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.pbu_id.DropDownWidth = 180;
+            this.pbu_id.DropDownWidth = 240;
             this.pbu_id.SelectedIndexChanged += new System.EventHandler(pbu_id_SelectedIndexChanged);//add by ybfan
             this.pbu_id.Click += new System.EventHandler(pbu_id_Click);
             this.pbu_id.LostFocus += new System.EventHandler(pbu_id_LostFocus);
@@ -583,7 +587,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_id.TabIndex = 160;
             this.ac_id.Value = null;
             this.ac_id.ValueMember = "AcId";
-            this.ac_id.DropDownWidth = 180;
+            this.ac_id.DropDownWidth = 240;
             this.ac_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ac_id.SelectedIndexChanged += new System.EventHandler(ac_id_SelectedIndexChanged);
             this.ac_id.Click += new System.EventHandler(ac_id_Click);
