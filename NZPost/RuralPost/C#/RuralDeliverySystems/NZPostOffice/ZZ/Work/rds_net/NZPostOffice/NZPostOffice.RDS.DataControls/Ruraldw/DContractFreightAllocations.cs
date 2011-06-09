@@ -98,6 +98,5 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
             this.AcceptText();
         }
-
     }
 }

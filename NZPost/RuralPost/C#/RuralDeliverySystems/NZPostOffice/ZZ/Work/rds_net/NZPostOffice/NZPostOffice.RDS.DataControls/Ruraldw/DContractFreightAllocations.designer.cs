@@ -58,8 +58,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.pct3 = new System.Windows.Forms.Label();
             this.totmsg = new System.Windows.Forms.TextBox();
             this.allocations_t = new System.Windows.Forms.Label();
+            this.top_separator_line = new System.Windows.Forms.Label();
+            this.bottom_separator_line_1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.active_indicator_t = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,14 +108,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // active_ind
             // 
-            this.active_ind.AutoSize = true;
             this.active_ind.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "FrActiveInd", true));
             this.active_ind.Location = new System.Drawing.Point(44, 26);
             this.active_ind.Name = "active_ind";
-            this.active_ind.Size = new System.Drawing.Size(100, 17);
+            this.active_ind.Size = new System.Drawing.Size(15, 17);
             this.active_ind.TabIndex = 0;
-            this.active_ind.Text = "Active Indicator";
-            this.active_ind.UseVisualStyleBackColor = true;
+            this.active_ind.UseVisualStyleBackColor = false;
             // 
             // pct4
             // 
@@ -260,31 +260,51 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.allocations_t.TabIndex = 181;
             this.allocations_t.Text = "Allocation %";
             // 
+            // top_separator_line
+            // 
+            this.top_separator_line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.top_separator_line.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.top_separator_line.Location = new System.Drawing.Point(291, 138);
+            this.top_separator_line.Name = "top_separator_line";
+            this.top_separator_line.Size = new System.Drawing.Size(41, 2);
+            this.top_separator_line.TabIndex = 182;
+            this.top_separator_line.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // bottom_separator_line_1
+            // 
+            this.bottom_separator_line_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.bottom_separator_line_1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bottom_separator_line_1.Location = new System.Drawing.Point(291, 165);
+            this.bottom_separator_line_1.Name = "bottom_separator_line_1";
+            this.bottom_separator_line_1.Size = new System.Drawing.Size(41, 2);
+            this.bottom_separator_line_1.TabIndex = 183;
+            this.bottom_separator_line_1.Text = "======";
+            this.bottom_separator_line_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // label1
             // 
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(274, 134);
+            this.label1.Location = new System.Drawing.Point(291, 169);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 13);
-            this.label1.TabIndex = 182;
-            this.label1.Text = "------";
+            this.label1.Size = new System.Drawing.Size(41, 2);
+            this.label1.TabIndex = 184;
+            this.label1.Text = "======";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // active_indicator_t
             // 
-            this.label2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(281, 156);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 183;
-            this.label2.Text = "======";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.active_indicator_t.Location = new System.Drawing.Point(60, 26);
+            this.active_indicator_t.Name = "active_indicator_t";
+            this.active_indicator_t.Size = new System.Drawing.Size(100, 15);
+            this.active_indicator_t.TabIndex = 185;
+            this.active_indicator_t.Text = "Active Indicator";
             // 
             // DContractFreightAllocations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.top_separator_line);
             this.Controls.Add(this.allocations_t);
             this.Controls.Add(this.totmsg);
             this.Controls.Add(this.pct3);
@@ -301,7 +321,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.active_ind);
             this.Controls.Add(this.pbu_code_t);
             this.Controls.Add(this.pbu_id);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.bottom_separator_line_1);
+            this.Controls.Add(this.active_indicator_t);
             this.Name = "DContractFreightAllocations";
             this.Size = new System.Drawing.Size(650, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
@@ -378,7 +400,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label pct3;
         private System.Windows.Forms.TextBox totmsg;
         private System.Windows.Forms.Label allocations_t;
+        private System.Windows.Forms.Label top_separator_line;
+        private System.Windows.Forms.Label bottom_separator_line_1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label active_indicator_t;
     }
 }
