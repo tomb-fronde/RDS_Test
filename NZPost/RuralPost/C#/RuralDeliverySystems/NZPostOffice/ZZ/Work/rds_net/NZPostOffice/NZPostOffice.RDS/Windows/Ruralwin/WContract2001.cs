@@ -1272,7 +1272,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (idw_freight_allocations.RowCount < 0)
                 return true;
+
             int nRow = idw_freight_allocations.GetRow();
+
+            // If the active indicator is not set, there's no need to validate.
+            int? nActiveInd = idw_freight_allocations.GetItem<FreightAllocations>(nRow).FrActiveInd;
+            if ((nActiveInd == null) || (nActiveInd == 0))
+                return true;
+
             int? nContract = idw_freight_allocations.GetItem<FreightAllocations>(nRow).ContractNo;
             if (nContract == null || (int)nContract != il_Contract_no)
             {
