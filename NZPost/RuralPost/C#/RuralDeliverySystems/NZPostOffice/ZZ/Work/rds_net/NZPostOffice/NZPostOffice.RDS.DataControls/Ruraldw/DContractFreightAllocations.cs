@@ -13,6 +13,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     // TJB  RPCR_025  8-June-2011: New
     // See also  RDS/Windows/Ruralwin/WContract2001
     //      and  Entity/Ruraldw/FreightAllocations
+    // TJB 9-June-2011: Changed layout to more-closely match spec
 
     public partial class DContractFreightAllocations : Metex.Windows.DataUserControl
     {
