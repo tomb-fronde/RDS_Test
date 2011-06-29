@@ -41,7 +41,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             int rowCount = RetrieveCore<SeqAddresses>(new List<SeqAddresses>
                             (SeqAddresses.GetAllSeqAddresses(al_contract_no)));
             if (rowCount > 0)
-                this.SortString = "seq_num A";
+                this.SortString = "seq_num A, customer A";
             this.Sort<SeqAddresses>();
             return rowCount;
         }

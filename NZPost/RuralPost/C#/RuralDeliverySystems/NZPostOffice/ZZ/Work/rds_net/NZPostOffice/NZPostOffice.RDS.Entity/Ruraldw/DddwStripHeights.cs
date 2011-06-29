@@ -121,7 +121,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "select sh_id, sh_height, sh_default "
                                    + "  from rd.strip_height "
-                                   + " order by sh_default desc, sh_height";
+                                   + " order by sh_id";
 
                     List<DddwStripHeight> _list = new List<DddwStripHeight>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

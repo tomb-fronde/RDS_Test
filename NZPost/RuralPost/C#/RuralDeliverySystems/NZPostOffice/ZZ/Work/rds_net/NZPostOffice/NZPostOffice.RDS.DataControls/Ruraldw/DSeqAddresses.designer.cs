@@ -30,11 +30,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
-            this.sequence_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SeqNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.adr_num_alpha = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.road_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.customer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sequence_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -58,14 +60,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.grid.ColumnHeadersHeight = 28;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.sequence_no,
+            this.SeqNum,
             this.adr_num_alpha,
             this.road_name,
-            this.customer});
+            this.customer,
+            this.sequence_no});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -77,17 +81,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.TabIndex = 0;
             // 
-            // sequence_no
+            // SeqNum
             // 
-            this.sequence_no.DataPropertyName = "SequenceNo";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            this.sequence_no.DefaultCellStyle = dataGridViewCellStyle2;
-            this.sequence_no.HeaderText = "Seq";
-            this.sequence_no.Name = "sequence_no";
-            this.sequence_no.Width = 28;
+            this.SeqNum.DataPropertyName = "SeqNum";
+            this.SeqNum.DefaultCellStyle = dataGridViewCellStyle2;
+            this.SeqNum.HeaderText = "Seq";
+            this.SeqNum.Name = "SeqNum";
+            this.SeqNum.Width = 28;
             // 
             // adr_num_alpha
             // 
@@ -128,6 +128,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.customer.ReadOnly = true;
             this.customer.Width = 224;
             // 
+            // sequence_no
+            // 
+            this.sequence_no.DataPropertyName = "SequenceNo";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            this.sequence_no.DefaultCellStyle = dataGridViewCellStyle6;
+            this.sequence_no.HeaderText = "Seq#";
+            this.sequence_no.Name = "sequence_no";
+            this.sequence_no.Width = 28;
+            // 
             // DSeqAddresses
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,10 +166,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         }
         #endregion
 
-        private System.Windows.Forms.DataGridViewTextBoxColumn sequence_no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SeqNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn adr_num_alpha;
         private System.Windows.Forms.DataGridViewTextBoxColumn road_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn customer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sequence_no;
+
+
+
+
+
+
 
     }
 }
