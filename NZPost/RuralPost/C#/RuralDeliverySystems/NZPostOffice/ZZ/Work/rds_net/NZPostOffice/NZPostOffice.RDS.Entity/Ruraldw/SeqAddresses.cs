@@ -21,11 +21,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("adr_alpha", "_adr_alpha", "address")]
     [MapInfo("adr_num_alpha", "_adr_num_alpha", "address")]
     [MapInfo("road_name", "_road_name", "address")]
-    [MapInfo("customer", "_customer", "address")]
+    [MapInfo("customer", "_customer", "")]
     [MapInfo("cust_surname_company", "_cust_surname_company", "address")]
     [MapInfo("cust_initials", "_cust_initials", "address")]
     [MapInfo("seq_num", "_seq_num", "address")]
-    [MapInfo("sequence", "_sequence", "address")]
+    [MapInfo("sequence", "_sequence","")]
     [MapInfo("road_name_id", "_road_name_id", "address")]
     [MapInfo("adr_unit", "_adr_unit", "address")]
     [MapInfo("adr_no", "_adr_no", "address")]
@@ -516,6 +516,72 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         }
                         list = _list.ToArray();
                     }
+                }
+            }
+        }
+
+        [ServerMethod()]
+        private void UpdateEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                int? t1 = _adr_id;
+                int? t2 = t1;
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+                if (GenerateUpdateCommandText(cm, "address", ref pList))
+                {
+                    cm.CommandText += " WHERE  address.contract_no = @adr_id ";
+
+                    pList.Add(cm, "adr_id", GetInitialValue("_adr_id"));
+//                    DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                // reinitialize original key/value list
+                StoreInitialValues();
+                MarkOld();
+            }
+        }
+
+        [ServerMethod()]
+        private void InsertEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                int? t1 = _adr_id;
+                int? t2 = t1;
+
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+                if (GenerateInsertCommandText(cm, "address", pList))
+                {
+//                    DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                StoreInitialValues();
+            }
+        }
+        [ServerMethod()]
+        private void DeleteEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                int? t1 = _adr_id;
+                int? t2 = t1;
+                using (DbTransaction tr = cn.BeginTransaction())
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.Transaction = tr;
+
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "adr_id", GetInitialValue("_adr_id"));
+
+                    cm.CommandText = "DELETE FROM address "
+                                    + "WHERE address.contract_no = @adr_id ";
+
+//                    DBHelper.ExecuteNonQuery(cm, pList);
+                    tr.Commit();
                 }
             }
         }
