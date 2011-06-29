@@ -33,22 +33,31 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.fa_fixed_asset_no_t = new System.Windows.Forms.Label();
             this.fat_id_t = new System.Windows.Forms.Label();
             this.fa_owner_t = new System.Windows.Forms.Label();
-            this.fa_fixed_asset_no = new System.Windows.Forms.TextBox();
+            this.fa_fixed_asset_num = new System.Windows.Forms.TextBox();
             this.fa_owner = new System.Windows.Forms.TextBox();
             this.fa_purchase_date_t = new System.Windows.Forms.Label();
             this.fa_purchase_price_t = new System.Windows.Forms.Label();
             this.fat_id = new Metex.Windows.DataEntityCombo();
             this.n_24415962 = new Metex.Windows.DataEntityCombo();
-            this.fa_purchase_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();// System.Windows.Forms.MaskedTextBox();
+            this.fa_purchase_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.fa_purchase_price = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.l_2 = new System.Windows.Forms.Panel();
+            this.contract_no_t = new System.Windows.Forms.Label();
+            this.contract_no = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractFixedAssets);
-            this.bindingSource.ListChanged +=new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
+            // 
+            // n_39995586
+            // 
+            this.n_39995586.Location = new System.Drawing.Point(0, 0);
+            this.n_39995586.Name = "n_39995586";
+            this.n_39995586.Size = new System.Drawing.Size(100, 23);
+            this.n_39995586.TabIndex = 0;
             // 
             // fa_fixed_asset_no_t
             // 
@@ -80,20 +89,21 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.fa_owner_t.Text = "Owner";
             this.fa_owner_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // fa_fixed_asset_no
+            // fa_fixed_asset_num
             // 
-            this.fa_fixed_asset_no.BackColor = System.Drawing.Color.Aqua;
-            this.fa_fixed_asset_no.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.fa_fixed_asset_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "FaFixedAssetNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.fa_fixed_asset_no.Enabled = true;
-            this.fa_fixed_asset_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.fa_fixed_asset_no.Location = new System.Drawing.Point(92, 2);
-            this.fa_fixed_asset_no.MaxLength = 10;
-            this.fa_fixed_asset_no.Name = "fa_fixed_asset_no";
-            this.fa_fixed_asset_no.Size = new System.Drawing.Size(80, 20);
-            this.fa_fixed_asset_no.TabIndex = 10;
-            this.fa_fixed_asset_no.ReadOnly = true;
-            this.fa_fixed_asset_no.Validating += new System.ComponentModel.CancelEventHandler(TextBox_Validating);
+            this.fa_fixed_asset_num.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.fa_fixed_asset_num.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fa_fixed_asset_num.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.fa_fixed_asset_num.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "FaFixedAssetNum", true));
+            this.fa_fixed_asset_num.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.fa_fixed_asset_num.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.fa_fixed_asset_num.Location = new System.Drawing.Point(92, 2);
+            this.fa_fixed_asset_num.MaxLength = 10;
+            this.fa_fixed_asset_num.Name = "fa_fixed_asset_num";
+            this.fa_fixed_asset_num.ReadOnly = true;
+            this.fa_fixed_asset_num.Size = new System.Drawing.Size(80, 20);
+            this.fa_fixed_asset_num.TabIndex = 10;
+            this.fa_fixed_asset_num.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
             // 
             // fa_owner
             // 
@@ -131,6 +141,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.fat_id.BackColor = System.Drawing.Color.Aqua;
             this.fat_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "FatId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.fat_id.DisplayMember = "FatDescription";
+            this.fat_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fat_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.fat_id.Location = new System.Drawing.Point(92, 27);
             this.fat_id.Name = "fat_id";
@@ -138,13 +149,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.fat_id.TabIndex = 20;
             this.fat_id.Value = null;
             this.fat_id.ValueMember = "FatId";
-            this.fat_id.DataBindings[0].DataSourceNullValue = null;
-            this.fat_id.DataBindings[0].NullValue = null;
-            this.fat_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fat_id.SelectedIndexChanged += new System.EventHandler(fat_id_SelectedIndexChanged);
-             //
-             //n_24415962
-             //
+            this.fat_id.SelectedIndexChanged += new System.EventHandler(this.fat_id_SelectedIndexChanged);
+            // 
+            // n_24415962
+            // 
             this.n_24415962.AutoRetrieve = true;
             this.n_24415962.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "FatId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.n_24415962.DisplayMember = "FatDescription";
@@ -159,63 +167,78 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // fa_purchase_date
             // 
             this.fa_purchase_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "FaPurchaseDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.fa_purchase_date.EditMask = "";
             this.fa_purchase_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.fa_purchase_date.Location = new System.Drawing.Point(406, 5);
             this.fa_purchase_date.Mask = "00/00/0000";
             this.fa_purchase_date.Name = "fa_purchase_date";
             this.fa_purchase_date.Size = new System.Drawing.Size(72, 20);
             this.fa_purchase_date.TabIndex = 50;
+            this.fa_purchase_date.Text = "00000000";
             this.fa_purchase_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.fa_purchase_date.ValidatingType = typeof(System.DateTime);
-            //this.fa_purchase_date.PromptChar = '0';
-            this.fa_purchase_date.DataBindings[0].FormatString = "dd/MM/yyyy";
-            //this.fa_purchase_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            //this.fa_purchase_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            //this.fa_purchase_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.fa_purchase_date.Value = null;
             // 
             // fa_purchase_price
             // 
             this.fa_purchase_price.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "FaPurchasePrice", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.fa_purchase_price.DataBindings[0].FormatString = "###,###.00";
-            this.fa_purchase_price.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.fa_purchase_price.Location = new System.Drawing.Point(406, 29);
             this.fa_purchase_price.EditMask = "###,###.00";
+            this.fa_purchase_price.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.fa_purchase_price.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.fa_purchase_price.Location = new System.Drawing.Point(406, 29);
             this.fa_purchase_price.Name = "fa_purchase_price";
+            this.fa_purchase_price.PromptChar = ' ';
             this.fa_purchase_price.Size = new System.Drawing.Size(72, 20);
             this.fa_purchase_price.TabIndex = 60;
+            this.fa_purchase_price.Text = ".00";
             this.fa_purchase_price.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.fa_purchase_price.PromptChar = ' ';
-            //this.fa_purchase_price.ValidatingType = typeof(System.Int32);
-            this.fa_purchase_price.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.fa_purchase_price.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.fa_purchase_price.Value = ".00";
             // 
             // l_2
             // 
+            this.l_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.l_2.Location = new System.Drawing.Point(7, 77);
             this.l_2.Name = "l_2";
-            this.l_2.Size = new System.Drawing.Size(547, 1);
+            this.l_2.Size = new System.Drawing.Size(480, 1);
             this.l_2.TabIndex = 62;
-            this.l_2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
-            // DContractFixedAssets
+            // contract_no_t
+            // 
+            this.contract_no_t.Location = new System.Drawing.Point(317, 55);
+            this.contract_no_t.Name = "contract_no_t";
+            this.contract_no_t.Size = new System.Drawing.Size(82, 13);
+            this.contract_no_t.TabIndex = 63;
+            this.contract_no_t.Text = "Contract No";
+            this.contract_no_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // contract_no
+            // 
+            this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractNo", true));
+            this.contract_no.Location = new System.Drawing.Point(406, 51);
+            this.contract_no.Name = "contract_no";
+            this.contract_no.Size = new System.Drawing.Size(72, 20);
+            this.contract_no.TabIndex = 64;
+            // 
+            // DContractFixedAssetsTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.contract_no);
+            this.Controls.Add(this.contract_no_t);
             this.Controls.Add(this.l_2);
             this.Controls.Add(this.fa_fixed_asset_no_t);
             this.Controls.Add(this.fat_id_t);
             this.Controls.Add(this.fa_owner_t);
-            this.Controls.Add(this.fa_fixed_asset_no);
+            this.Controls.Add(this.fa_fixed_asset_num);
             this.Controls.Add(this.fa_owner);
             this.Controls.Add(this.fa_purchase_date_t);
             this.Controls.Add(this.fa_purchase_price_t);
-            
             this.Controls.Add(this.fat_id);
-            //?this.Controls.Add(this.n_24415962);
             this.Controls.Add(this.fa_purchase_date);
             this.Controls.Add(this.fa_purchase_price);
-            this.Name = "DContractFixedAssets";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Name = "DContractFixedAssetsTest";
+            this.Size = new System.Drawing.Size(493, 87);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -238,11 +261,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             {
                 if (((ContractFixedAssets)(bindingSource.List[e.NewIndex])).IsNew)
                 {
-                    fa_fixed_asset_no.ReadOnly = false;
+                    fa_fixed_asset_num.ReadOnly = false;
                 }
                 else
                 {
-                    fa_fixed_asset_no.ReadOnly = true;
+                    fa_fixed_asset_num.ReadOnly = true;
                 }
             }
         }
@@ -253,7 +276,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label fa_fixed_asset_no_t;
         private System.Windows.Forms.Label fat_id_t;
         private System.Windows.Forms.Label fa_owner_t;
-        private System.Windows.Forms.TextBox fa_fixed_asset_no;
+        private System.Windows.Forms.TextBox fa_fixed_asset_num;
         private System.Windows.Forms.TextBox fa_owner;
         private System.Windows.Forms.Label fa_purchase_date_t;
         private System.Windows.Forms.Label fa_purchase_price_t;
@@ -262,5 +285,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox fa_purchase_date;// System.Windows.Forms.MaskedTextBox fa_purchase_date;
         private NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox fa_purchase_price;
         private System.Windows.Forms.Panel l_2;
+        private System.Windows.Forms.Label contract_no_t;
+        private System.Windows.Forms.TextBox contract_no;
     }
 }

@@ -31,45 +31,51 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
+            this.n_39995586 = new System.Windows.Forms.Label();
+            this.tbPanel = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractFixedAssets);
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // n_39995586
             // 
-            this.n_39995586 = new Label();
-            this.n_39995586.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
-            this.n_39995586.Location = new System.Drawing.Point(4, 4);
+            this.n_39995586.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.n_39995586.Location = new System.Drawing.Point(4, 10);
             this.n_39995586.Name = "n_39995586";
             this.n_39995586.Size = new System.Drawing.Size(125, 13);
             this.n_39995586.TabIndex = 0;
             this.n_39995586.Text = "Fixed Asset Register";
             this.n_39995586.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
-            tbPanel = new TableLayoutPanel();
+            // 
+            // tbPanel
+            // 
             this.tbPanel.AutoScroll = true;
             this.tbPanel.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tbPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.None;
             this.tbPanel.ColumnCount = 1;
             this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tbPanel.Location = new System.Drawing.Point(0, 20);
-            this.tbPanel.Name = "tableLayoutPanel1";
+            this.tbPanel.Location = new System.Drawing.Point(0, 30);
+            this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 1;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tbPanel.Size = new System.Drawing.Size(539, 274);
-            this.Controls.Add(n_39995586);
-            this.Controls.Add(tbPanel);
-            this.Size = new System.Drawing.Size(650, 300);
+            this.tbPanel.Size = new System.Drawing.Size(524, 267);
+            this.tbPanel.TabIndex = 1;
+            // 
+            // DContractFixedAssets
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.Controls.Add(this.n_39995586);
+            this.Controls.Add(this.tbPanel);
+            this.Name = "DContractFixedAssets";
+            this.Size = new System.Drawing.Size(532, 300);
+            this.SizeChanged += new System.EventHandler(this.DContractFixedAssets_SizeChanged);
+            this.RetrieveStart += new Metex.Windows.RetrieveEventHandler(this.DContractFixedAssets_RetrieveStart);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
-            //this.RetrieveEnd += new System.EventHandler(DContractFixedAssetsTest_RetrieveEnd);
-            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
-            this.SizeChanged += new System.EventHandler(DContractFixedAssets_SizeChanged);
-            this.RetrieveStart += new Metex.Windows.RetrieveEventHandler(DContractFixedAssets_RetrieveStart);
+
         }
 
         void DContractFixedAssets_RetrieveStart(object sender, Metex.Windows.RetrieveEventArgs e)
