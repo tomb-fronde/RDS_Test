@@ -71,6 +71,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
 
+            this.Closing += new System.ComponentModel.CancelEventHandler(this_form_closing);
+
             this.dw_addr_sequence_ind.DataObject = new DAddrSequenceInd();
             dw_addr_sequence_ind.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_addr_sequence_ind_constructor);
             ((DAddrSequenceInd)dw_addr_sequence_ind.DataObject).CheckedChanged += new EventHandler(dw_addr_sequence_ind_itemchanged);
@@ -80,7 +82,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_seq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_seq_constructor);
             //((DSeqAddresses)dw_seq.DataObject).CellMouseDown += new DataGridViewCellMouseEventHandler(dw_seq_MouseDown);
             ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).Click += new EventHandler(dw_seq_Click);
-
+            
             this.dw_unseq.DataObject = new DUnseqAddresses();
             dw_unseq.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_unseq.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_unseq_constructor);
@@ -98,6 +100,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_up_arrow.Click += new System.EventHandler(this.cb_up_arrow_Click);
             this.cb_down_arrow.Click += new System.EventHandler(this.cb_down_arrow_Click);
             this.cb_stripmaker.Click += new System.EventHandler(this.cb_stripmaker_clicked);
+        }
+
+        public void this_form_closing(Object s, System.ComponentModel.CancelEventArgs e)
+        {
+        /*
+            int nSeqModified = dw_seq.ModifiedCount();
+            int nUnseqModified = dw_unseq.ModifiedCount();
+            int nIndModified = dw_addr_sequence_ind.ModifiedCount();
+            MessageBox.Show("Form Closing \n"
+                            + "nSeqModified = " + nSeqModified.ToString() + "\n"
+                            + "nUnseqModified = " + nUnseqModified.ToString() + "\n"
+                            + "nIndModified = " + nIndModified.ToString() + "\n"
+                            , "this_form_closing");
+        */
+            dw_seq.ResetUpdate();
+            dw_unseq.ResetUpdate();
+            dw_addr_sequence_ind.ResetUpdate();
+            
+            return;
+        }
+
+        public override void close()
+        {
+            base.close();
         }
 
         public override void pfc_preopen()
@@ -148,16 +174,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override int pfc_save()
         {
+            int ll_rc = SUCCESS;
+            int? ll_rc1;
+            int? ll_ind;
+            int nRow;
+            int nRows;
+            int? nSeqNum;
+            int nAdrId;
+            RDSDataService dataService;
+
             //  PBY 03/09/2002 SR#4417 
             //  moved the save processing from cb_save.click to here to allow
             //  save to kick in if user closes the window by pressing the "x" icon 
-            int  ll_row;
-            int  ll_rc;
-            int? ll_rc1;
-            int? ll_ind;
-            int  ll_rowcount;
-            int? ll_sequence_no;
-            int? ll_address_id;
             //  TJB  SR4691  Aug 2006
             //  Add condition on saving of sequence
             //  - do only if changed (previously assumed any change was 
@@ -175,13 +203,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  SR4691 fixup
             //  Added dw_unseq.modifiedCount to fix failure to save
             //  unsequenced addresses  ( but this process is deathly slow!).
+/*
             if (StaticFunctions.IsDirty(dw_seq) || StaticFunctions.IsDirty(dw_unseq))
             {
+
                 // Remove all sequenced for that contract
                 //* update address set seq_num = null 
                 //*  where contract_no = :il_contract_no  
-                //RDSDataService dataService = RDSDataService.DeleteFromAddressFreqSeq(il_sf_key, il_contract_no, is_delivery_days);
-                RDSDataService dataService = RDSDataService.ClearAddressSeq(il_contract_no);
+                dataService = RDSDataService.ClearAddressSeq(il_contract_no);
                 if (dataService.SQLCode != 0)
                 {
                     MessageBox.Show("Unable to delete old route sequence.\n\n" 
@@ -197,29 +226,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     ll_rc = SUCCESS;
                 }
-
-                ll_rowcount = dw_seq.RowCount;
-                if (ll_rc == SUCCESS && ll_rowcount > 0)
+*/
+            if (StaticFunctions.IsDirty(dw_seq))
+            {
+                nRows = dw_seq.RowCount;
+                if (ll_rc == SUCCESS && nRows > 0)
                 {
-                    for (ll_row = 0; ll_row < ll_rowcount; ll_row++)
+                    for (nRow = 0; nRow < nRows; nRow++)
                     {
-                        ll_sequence_no = dw_seq.GetItem<SeqAddresses>(ll_row).SequenceNo;
-                        ll_address_id = dw_seq.GetItem<SeqAddresses>(ll_row).AdrId;
+                        nSeqNum = dw_seq.GetItem<SeqAddresses>(nRow).SeqNum;
+                        nAdrId = (int)dw_seq.GetItem<SeqAddresses>(nRow).AdrId;
                         //* update address
-                        //*    set seq_num = :ll_sequence_no
-                        //*  where adr_id = :ll_address_id
+                        //*    set seq_num = :nSeqNum
+                        //*  where adr_id = :nAdrId
                         //dataService = RDSDataService.InsertAddressFreqSeq(il_sf_key, ll_sequence_no, il_contract_no, ll_address_id, is_delivery_days);
-                        dataService = RDSDataService.UpdateAddressSeq(ll_sequence_no, ll_address_id);
+                        dataService = RDSDataService.UpdateAddressSeq(nSeqNum, nAdrId);
                         if (dataService.SQLCode != 0)
                         {
-                            MessageBox.Show("Unable to insert new route sequence.  \n\n" 
-                            		    + "Error Code: " + dataService.SQLCode + "\n" 
-                            		    + "Error Text: " + dataService.SQLErrText
+                            MessageBox.Show("Unable to update new route sequence.  \n\n"
+                                        + "Error Code: " + dataService.SQLCode + "\n"
+                                        + "Error Text: " + dataService.SQLErrText
                                         + "Parameters: \n"
-                                        + "   adr_id = " + ll_address_id.ToString() + "\n"
-                                        + "   seq_no = " + ll_sequence_no.ToString()
+                                        + "   adr_id = " + nAdrId.ToString() + "\n"
+                                        + "   seq_no = " + nSeqNum.ToString()
                                         , "Database Error"
-                            		    , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //? RollBack;
                             ll_rc = FAILURE;
                             break;
@@ -231,6 +262,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
+            if (StaticFunctions.IsDirty(dw_unseq))
+            {
+                nSeqNum = null;
+                nRows = dw_unseq.RowCount;
+                if (ll_rc == SUCCESS && nRows > 0)
+                {
+                    for (nRow = 0; nRow < nRows; nRow++)
+                    {
+                        nAdrId = (int)dw_unseq.GetItem<UnseqAddresses>(nRow).AdrId;
+                        //* update address
+                        //*    set seq_num = null
+                        //*  where adr_id = :nAdrId
+                        dataService = RDSDataService.UpdateAddressSeq(nSeqNum, nAdrId);
+                        if (dataService.SQLCode != 0)
+                        {
+                            MessageBox.Show("Unable to update unsequenced addresses.  \n\n"
+                                        + "Error Code: " + dataService.SQLCode + "\n"
+                                        + "Error Text: " + dataService.SQLErrText
+                                        + "Parameters: \n"
+                                        + "   adr_id = " + nAdrId.ToString() + "\n"
+                                        , "Database Error"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //? RollBack;
+                            ll_rc = FAILURE;
+                            break;
+                        }
+                    }
+                    if (ll_rc == SUCCESS)
+                    {
+                        //? COMMIT;
+                    }
+                }
+            }
+/*            }  */
+
             // 
             //  TJB  SR4691
             //  If the validation indicator has been changed and the sequence 
@@ -665,43 +731,75 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_unseq_clicked(object sender, EventArgs e)
         {
-            int row;
+            int nAdrId, nRow, nRows, rowIndex;
+            // dUnSeqSelectedRows:  Index is rowIndex; value is AdrId.
+            // (The AdrId can appear multiple times while the rowIndex is unique;
+            //  thus nAdrId cannot be used as the dictionary's index)
+            Dictionary<int, int> dUnSeqSelectedRows = new Dictionary<int, int>();
 
-            if (dw_unseq.RowCount == 0)
+            nRows = dw_unseq.RowCount;
+            if (nRows == 0)
             {
                 return;
             }
             this.dw_unseq.SuspendLayout();
 
+            //dw_seq.URdsDw_Clicked(sender, e);
+
+            // Find unselected rows where the SeqNum for at least one row
+            // has been selected.  Select the others (ie treat all addresses 
+            // with the same seq_num as a group (this occurs when an address
+            // has more than one primary customer).
+            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
+            {
+                rowIndex = row.Index;
+                nAdrId = this.dw_unseq.GetValue<int?>(rowIndex, "AdrId").GetValueOrDefault();
+                dUnSeqSelectedRows.Add(rowIndex, nAdrId);
+            }
+
+            // Scan the address list looking for rows whose SeqNum have been selected in 
+            // some row but not in this row.
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                nAdrId = this.dw_unseq.GetValue<int?>(nRow, "AdrId").GetValueOrDefault();
+
+                // If the row's SeqNum has been selected, but not this row, select it.
+                if (dUnSeqSelectedRows.ContainsValue(nAdrId)
+                    && (!dUnSeqSelectedRows.ContainsKey(nRow)))
+                {
+                    ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid")))[0, nRow].Selected = true;
+                }
+            }
+
             // See if any previously-sequenced rows have been de-selected
             // If so, unsequence them.
-            for (row = 0; row < dw_unseq.RowCount; row++)
+            for (nRow = 0; nRow < nRows; nRow++)
             {
-                if (!(dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[row].Selected)
+                if (!(dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[nRow].Selected)
                 {
-                    if (dw_unseq.GetItem<UnseqAddresses>(row).Sequence != null)
+                    int? seq = dw_unseq.GetItem<UnseqAddresses>(nRow).Sequence;
+                    //if (dw_unseq.GetItem<UnseqAddresses>(nRow).Sequence != null)
+                    if (seq != null)
                     {
-                        //wf_removesequence(row);
-                        int seq = (int)dw_unseq.GetItem<UnseqAddresses>(row).Sequence;
-                        dw_unseq.GetItem<UnseqAddresses>(row).Sequence = null;
+                        dw_unseq.GetItem<UnseqAddresses>(nRow).Sequence = null;
                     }
                 }
             }
 
             // Add sequence numbers to the selected rows that don't have any
-            for (row = 0; row < dw_unseq.RowCount; row++)
+            for (nRow = 0; nRow < nRows; nRow++)
             {
-                if ((dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[row].Selected)
+                if ((dw_unseq.DataObject.Controls[0] as DataEntityGrid).Rows[nRow].Selected)
                 {
-                    if (dw_unseq.GetItem<UnseqAddresses>(row).Sequence == null)
+                    if (dw_unseq.GetItem<UnseqAddresses>(nRow).Sequence == null)
                     {
                         il_sequence++;
-                        dw_unseq.GetItem<UnseqAddresses>(row).Sequence = il_sequence;
+                        dw_unseq.GetItem<UnseqAddresses>(nRow).Sequence = il_sequence;
                         dw_unseq.AcceptText();
                     }
                 }
             }
-            row = dw_unseq.GetRow();
+            nRow = dw_unseq.GetRow();
 
             if (this.dw_unseq.GetSelectedRow(0) < 0)
             {
@@ -729,10 +827,77 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_seq_clicked(object sender, EventArgs e)
         {
-            dw_seq.URdsDw_Clicked(sender, e);
-            int nRows = ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).SelectedRows.Count;
+            //string sCustomer, msg = "", msg1 = "";
+            //List<int> seqSelectedRows = new List<int>();
+            //int nSequence, nSequenceNo, nSeqNum, nRow = 0, rowIndex;
+            int nAdrId, nRow, nRows, rowIndex;
+            // dSeqSelectedRows:  Index is rowIndex; value is AdrId.
+            Dictionary<int, int> dSeqSelectedRows = new Dictionary<int, int>();
 
-            //if (dw_seq.GetRow() < 0)
+            dw_seq.URdsDw_Clicked(sender, e);
+
+            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid"))).SelectedRows)
+            {
+                //seqSelectedRows.Add(row.Index);
+                rowIndex = row.Index;
+                nAdrId = this.dw_seq.GetValue<int?>(rowIndex, "AdrId").GetValueOrDefault();
+                dSeqSelectedRows.Add(rowIndex, nAdrId);
+                //nSequence = this.dw_seq.GetValue<int?>(rowIndex, "Sequence").GetValueOrDefault();
+                //nSequenceNo = this.dw_seq.GetValue<int?>(rowIndex, "SequenceNo").GetValueOrDefault();
+                //sCustomer = this.dw_seq.GetValue<string>(rowIndex, "Customer");
+                //sCustomer = (sCustomer == null) ? "null" : sCustomer;
+                //msg += "\n    Index " + rowIndex.ToString() 
+                //        + ": AdrId = " + nAdrId.ToString()
+                //        + ", Sequence = " + nSequence.ToString()
+                //        + ", Sequence No = " + nSequenceNo.ToString()
+                //        + ", Customer = " + sCustomer;
+            }
+            //MessageBox.Show("Selected rows: \n"
+            //                + msg
+            //                , "dw_seq_clicked");
+            //
+            //msg1 = msg = "";
+
+            // Scan the address list looking for rows whose AdrId have been selected in 
+            // some row but not in this row.
+            nRows = dw_seq.RowCount;
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                nAdrId = this.dw_seq.GetValue<int?>(nRow, "AdrId").GetValueOrDefault();
+
+                //msg1 = "    Row " + nRow.ToString();
+                //
+                //msg1 += ": AdrId " + nAdrId.ToString();
+                //
+                //if (dSeqSelectedRows.ContainsValue(nAdrId))
+                //    msg1 += " found,";
+                //else
+                //    msg1 += " not found,";
+                //
+                //if (seqSelectedRows.Contains(nRow))
+                //    msg1 += " selected ";
+                //else
+                //    msg1 += " not selected ";
+                //
+                //if (dSeqSelectedRows.ContainsValue(nAdrId)
+                //    || seqSelectedRows.Contains(nRow))
+                //{
+                //    msg += msg1 + "\n";
+                //    msg1 = "";
+                //}
+
+                // If the row's AdrId has been selected, but not this row, select it.
+                if (dSeqSelectedRows.ContainsValue(nAdrId)
+                    && (! dSeqSelectedRows.ContainsKey(nRow)))
+                {
+                    ((Metex.Windows.DataEntityGrid)(this.dw_seq.GetControlByName("grid")))[0, nRow].Selected = true;
+                }
+            }
+            //MessageBox.Show("seqSelectedRows.Contains:\n" + msg
+            //                , "dw_seq_clicked");
+
+            // Turn the arrows on and off depending on whether or not thwere are addresses selected.
+            nRows = dSeqSelectedRows.Count;
             if (nRows <= 0)
             {
                 cb_up_arrow.Enabled = false;
@@ -758,7 +923,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_unseq.DataObject.FilterString = "sequence > 0";
 
-            //! sort the sequence numbers first so that we insert numbers from the smallest to biggest
+            //! Sort the sequence numbers first so that we insert numbers from the smallest to largest
             List<int> unsequencedItems = new List<int>();
             foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
             {
@@ -859,6 +1024,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_unseq.DataObject.SortString = "road_name A, adr_no_numeric A, adr_alpha A, adr_unit A, customer A";
             dw_unseq.DataObject.Sort<UnseqAddresses>();
 
+            of_dwseq_reseqence();
+
             this.ResumeLayout(false);
 
             dw_unseq.SelectRow(0, false);
@@ -874,6 +1041,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_down_arrow.Enabled = false;
 
             il_sequence = 0;
+        }
+
+        private void of_dwseq_reseqence()
+        {
+            // Update the SeqNum and SequenceNo values of all records in dw_seq
+
+            int newSeqNum, newSequenceNo;
+            int nRow, nRows;
+            int thisAdrId, prevAdrId;
+
+            newSeqNum = 0;
+            newSequenceNo = 0;
+            prevAdrId = -1;
+            nRows = dw_seq.RowCount;
+
+            // Step through dw_seq, starting SeqNum at 1
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                // Increment the new SeqNum value only if this record's AdrId is
+                // different than the previous record's.  We've initialised the 
+                // prevAdrId to an illegal value so the first match will always 
+                // say they're different.
+                thisAdrId = (int)dw_seq.GetItem<SeqAddresses>(nRow).AdrId;
+
+                if (thisAdrId != prevAdrId)
+                {
+                    newSeqNum++;
+                    prevAdrId = thisAdrId;
+                }
+                newSequenceNo++;
+
+                dw_seq.GetItem<SeqAddresses>(nRow).SeqNum = newSeqNum;
+                dw_seq.GetItem<SeqAddresses>(nRow).SequenceNo = newSequenceNo;
+            }
         }
 
         public virtual void cb_unseq_clicked(object sender, EventArgs e)
@@ -989,7 +1190,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 || StaticFunctions.IsDirty(idw_addr_sequence_ind))
             {
                 ans = MessageBox.Show("Do you want to save changes?"
-                                      , ""
+                                      , "Rural Delivery System (Close)"
                                       , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
                                       , MessageBoxDefaultButton.Button1);
                 //  Cancel: return to window
@@ -1009,16 +1210,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     int t = rc;
                     if (true) // SUCCESS
                     {
-                        MessageBox.Show("Route saved"
+                        MessageBox.Show("Changes saved"
                                         , ""
                                         , MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         idw_seq.ResetUpdate();
                         idw_unseq.ResetUpdate();
+                        idw_addr_sequence_ind.ResetUpdate();
                     }
                     else
                     {
-                        MessageBox.Show("Error saving route.\n" 
+                        MessageBox.Show("Error saving Changes.\n" 
                                         + "Route has not been saved."
                                         , "Warning"
                                         , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1053,48 +1255,54 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
             DialogResult ans;
-            bool lb_route_saved;
+
             //  TJB SR4691  Aug 2006
             //  Handle saving of validation indicator  ( which may be the only thing changed)
             //  Note:  pfc_save will have saved the indicator  ( if it was set) 
             //         and returns SUCCESS.
             //  lb_route_saved records whether the route was successfully saved.
-            //  Used at end to decide  ( partly) whether to reset dw_seq and dw_unseq
-            lb_route_saved = false;
+            //  Used at end to decide (partly) whether to reset dw_seq and dw_unseq
+
             //  TJB SR4461
             //  If the route has been modified, ask whether to save it
-            if (StaticFunctions.IsDirty(idw_seq) || StaticFunctions.IsDirty(idw_unseq))
+            if (StaticFunctions.IsDirty(idw_seq)
+                || StaticFunctions.IsDirty(idw_unseq)
+                || StaticFunctions.IsDirty(idw_addr_sequence_ind)
+                )
             {
-                ans = MessageBox.Show("Do you want to save the modified route"
-                                      , ""
-                                      , MessageBoxButtons.OKCancel
-                                      , MessageBoxIcon.Question
+                ans = MessageBox.Show("Do you want to save changes?"
+                                      , "Rural Delivery System (save)"
+                                      , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
                                       , MessageBoxDefaultButton.Button1);
                 //  Cancel: return to window
                 if (ans == DialogResult.Cancel)
                 {
                     return;
                 }
+                if (ans == DialogResult.No)
+                {
+                    this.dw_seq.ResetUpdate();
+                    idw_unseq.ResetUpdate();
+                    idw_addr_sequence_ind.ResetUpdate();
+                    return;
+                }
                 //  OK: Save it and tell the user whether it was successful or not
                 Cursor.Current = Cursors.WaitCursor;
+
                 // PBY 03/09/2002 SR#4417 
-                this.pfc_save();
-                if (true) // SUCCESS
+                int rc = this.pfc_save();
+                if (rc == SUCCESS)
                 {
                     //  Disable the CLoseQuery processing
                     ib_disableclosequery = true;
-                    MessageBox.Show("Route saved."
-                                    , ""
+                    MessageBox.Show("Changes saved.", ""
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lb_route_saved = true;
                 }
                 else
-                {
-                    MessageBox.Show("Error saving route.\n" 
+                    MessageBox.Show("Error saving changes.\n" 
                                     + "Route has not been saved."
                                     , "Warning"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
             }
             //  TJB SR4691
             //  If the address sequence wasn't changed, the validation
@@ -1105,13 +1313,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //! idw_addr_sequence_ind.Update();
                 idw_addr_sequence_ind.Save();
             }
-            if (lb_route_saved)
-            {
-                idw_seq.Reset();
-                idw_seq.Retrieve(new object[]{il_contract_no});
-                idw_seq.SelectRow(0, false);
-            }
+            //if (lb_route_saved)
+            //{
+            //    idw_seq.Reset();
+            //    idw_seq.Retrieve(new object[]{il_contract_no});
+            //    idw_seq.SelectRow(0, false);
+            //}
+            idw_seq.ResetUpdate();
             idw_unseq.ResetUpdate();
+            idw_addr_sequence_ind.ResetUpdate();
         }
 
         public virtual void cb_stripmaker_clicked(object sender, EventArgs e)
@@ -1316,17 +1526,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //   into :ls_contract_title, :ls_delivery_office
             //   from contract, outlet
             //  where contract.contract_no = :il_contract_no 
-            //    and contract.con_base_office = outlet.outlet_id using SQLCA; */
+            //    and contract.con_base_office = outlet.outlet_id
+
+            // TJB  RPCR_026  June-2011: Added nContractStripHeight and GetDefaultStripHeight()
+            int? nContractStripHeight = 40;  // GetDefaultStripHeight() *should* always return a value
+            string sSortFrameType = "";      // This is the current (June-2011) default value
+            string sLookupError = "";
+            
             RDSDataService dataService = RDSDataService.GetContractInfoByNo(il_contract_no);
             if (dataService.ContractInfoByNoList.Count > 0)
             {
                 ContractInfoByNoItem item = dataService.ContractInfoByNoList[0];
                 ls_contract_title = item.ConTitle;
                 ls_delivery_office = item.OName;
+                nContractStripHeight = item.ConStripHeight;
+                sSortFrameType = item.ConFrameType;
             }
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Contract title lookup failed\n" 
+                sLookupError += "Contract title lookup failed\n";
+            }
+            if (nContractStripHeight == null)
+            {
+                nContractStripHeight = RDSDataService.GetDefaultStripHeightId();
+                if (nContractStripHeight < 0)
+                {
+                    MessageBox.Show("Default strip height not found.  \n"
+                                    + "Using 40."
+                                    , "Error");
+                    nContractStripHeight = 40;
+                }
+            }
+            if (dataService.SQLCode != 0)
+            {
+                sLookupError += "Strip height lookup failed\n";
+            }
+            sSortFrameType = (sSortFrameType == null) ? "" : sSortFrameType;
+
+            if (sLookupError != "")
+            {
+                MessageBox.Show(sLookupError + "\n" 
                                 + dataService.SQLErrText + "\n\n"
                                 + "(No Stripmaker files have been generated)"
                                 , "SQL error " + dataService.SQLCode
@@ -1353,27 +1592,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 ls_inikey = ls_inikeys[li_inirow];
                 ls_inivalue = ls_inivalues[li_inirow];
-                if (ls_inivalue.Length < 1)
+                if (ls_inikey == "OfficeName")
                 {
-                    ls_inivalue = "<look up>";
-                    if (ls_inikey == "OfficeName")
-                    {
-                        ls_inivalue = '\"' + ls_delivery_office + '\"';
-                    }
-                    else if (ls_inikey == "RoundName")
-                    {
-                        ls_inivalue = '\"' + ls_contract_title + '\"';
-                    }
-                    else if (ls_inikey == "RoundNumber")
-                    {
-                        ls_inivalue = il_contract_no.ToString();
-                    }
+                    ls_inivalue = '\"' + ls_delivery_office + '\"';
                 }
-                ll_rc = 1; li_file.WriteLine(ls_inikey + ',' + ls_inivalue);
-                if (ll_rc > 0)
-                    ll_written++;
-                else
-                    ll_errors++;
+                else if (ls_inikey == "RoundName")
+                {
+                    ls_inivalue = '\"' + ls_contract_title + '\"';
+                }
+                else if (ls_inikey == "FrameType")
+                {
+                    ls_inivalue = '\"' + sSortFrameType +'\"';
+                }
+                else if (ls_inikey == "RoundNumber")
+                {
+                    ls_inivalue = il_contract_no.ToString();
+                }
+                else if (ls_inikey == "StripHeight")
+                {
+                    ls_inivalue = nContractStripHeight.ToString();
+                }
+                li_file.WriteLine(ls_inikey + ',' + ls_inivalue);
+                ll_written++;
             }
             li_file.Close();
             // ---------------------------------------------------
@@ -1592,6 +1832,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 nRoadNameID = (nRoadNameID == null) ? nRoadNameID = -(1) : nRoadNameID;
                 nCustSlotAllocation = (nCustSlotAllocation == null) ? nCustSlotAllocation = 2 : nCustSlotAllocation;
 
+                // TJB  RPCR_026  June-2011
+                // Add the flat number to the address number if there is a unit number.
+                // Don't include the unit number as a separate field (leave blank).
+                if (sAdrUnit != "")
+                {
+                    sAdrNo = sAdrUnit + "-" + sAdrNo;
+                }
+
                 // For the customer name, use the case name; 
                 //     if no case name use the customer name; 
                 //     if still nothing, use a blank (not an empty string)
@@ -1607,8 +1855,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                     + sCustomer + ","                       // Customer/Case name
                                     + ","                                   // Floor
                                     + ","                                   // Suite
-                                    + sAdrNo + ","                          // House number
-                                    + sAdrUnit + ","                        // Flat number
+                                    + sAdrNo + ","                         // House number
+                                    + ","                                   // Flat number
                                     + sAdrAlpha + ","                       // Address alpha
                                     + nCustSlotAllocation.ToString() + ","  // Slots
                                     + (ll_row + 1).ToString()               // Slot order
@@ -1690,67 +1938,95 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         }
 
-        private void cb_up_arrow_Click(object sender, EventArgs e)
+        private void of_dwseq_moverow(int nFromRow, int nToRow)
         {
-            int  nPrevRow = 0;
-            int? nPrevSeq = 0, nThisSeq = 0;
-            int? nPrevSeqNum = 0, nThisSeqNum = 0;
-
             SeqAddresses thisItem = new SeqAddresses();
 
-            int nRows = dw_seq.RowCount;
+            thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrAlpha;
+            thisItem.AdrId = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrId;
+            thisItem.AdrNo = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrNo;
+            thisItem.AdrNum = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrNum;
+            thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrNumAlpha;
+            thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses>(nFromRow).AdrUnit;
+            thisItem.ContractNo = dw_seq.GetItem<SeqAddresses>(nFromRow).ContractNo;
+            thisItem.Customer = dw_seq.GetItem<SeqAddresses>(nFromRow).Customer;
+            thisItem.RoadName = dw_seq.GetItem<SeqAddresses>(nFromRow).RoadName;
+            thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses>(nFromRow).RoadNameId;
+            thisItem.SeqNum = dw_seq.GetItem<SeqAddresses>(nFromRow).SeqNum;
+            thisItem.Sequence = dw_seq.GetItem<SeqAddresses>(nFromRow).Sequence;
+
+            dw_seq.DeleteItemAt(nFromRow);
+            dw_seq.InsertItem<SeqAddresses>(nToRow);
+
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrAlpha = thisItem.AdrAlpha;
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrId = thisItem.AdrId;
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrNo = thisItem.AdrNo;
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrNum = thisItem.AdrNum;
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrNumAlpha = thisItem.AdrNumAlpha;
+            dw_seq.GetItem<SeqAddresses>(nToRow).AdrUnit = thisItem.AdrUnit;
+            dw_seq.GetItem<SeqAddresses>(nToRow).ContractNo = thisItem.ContractNo;
+            dw_seq.GetItem<SeqAddresses>(nToRow).Customer = thisItem.Customer;
+            dw_seq.GetItem<SeqAddresses>(nToRow).RoadName = thisItem.RoadName;
+            dw_seq.GetItem<SeqAddresses>(nToRow).RoadNameId = thisItem.RoadNameId;
+            dw_seq.GetItem<SeqAddresses>(nToRow).SeqNum = thisItem.SeqNum;
+            dw_seq.GetItem<SeqAddresses>(nToRow).Sequence = thisItem.Sequence;
+        }
+
+        private void cb_up_arrow_Click(object sender, EventArgs e)
+        {
+            int  nLastRow, nPrevRow = 0, nFirstRow = 0;
+            int? nPrevSeq = 0, nThisSeq = 0;
+            int? nPrevSeqNum = 0, nThisSeqNum = 0;
+            int nThisAdrId, nPrevAdrId1, nPrevAdrId2;
+
+            this.dw_seq.SuspendLayout();
+
+            nFirstRow = 0;
+            nLastRow = dw_seq.RowCount;
             List<int> selRows = new List<int>();
-            for (int i = 1; i < nRows; i++)
+            for (int nThisRow = 1; nThisRow < nLastRow; nThisRow++)
             {
-                if (dw_seq.IsSelected(i))
+                if (dw_seq.IsSelected(nThisRow))
                 {
-                    selRows.Add(i);
+                    selRows.Add(nThisRow);
                 }
             }
 
+            nFirstRow = 0;
+            List<int> movedRows = new List<int>();
             foreach (int nThisRow in selRows)
             {
                 nPrevRow = nThisRow - 1;
 
-                nPrevSeqNum = dw_seq.GetItem<SeqAddresses>(nPrevRow).SeqNum;
-                nThisSeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
-                nPrevSeq = dw_seq.GetItem<SeqAddresses>(nPrevRow).Sequence;
-                nThisSeq = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
+                nThisAdrId = (int)dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
+                nPrevAdrId1 = (int)dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrId;
+                nPrevAdrId2 = -1;
 
-                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrAlpha;
-                thisItem.AdrId = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
-                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNo;
-                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNum;
-                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNumAlpha;
-                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrUnit;
-                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses>(nThisRow).ContractNo;
-                thisItem.Customer = dw_seq.GetItem<SeqAddresses>(nThisRow).Customer;
-                thisItem.RoadName = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadName;
-                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadNameId;
-                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
-                thisItem.Sequence = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
+                
+                while ((nPrevRow - 1) >= nFirstRow )
+                {
+                    nPrevAdrId2 = (int)dw_seq.GetItem<SeqAddresses>(nPrevRow - 1).AdrId;
 
-                dw_seq.DeleteItemAt(nThisRow);
-                dw_seq.InsertItem<SeqAddresses>(nPrevRow);
+                    if (nPrevAdrId1 == nPrevAdrId2)
+                    {
+                        nPrevAdrId1 = nPrevAdrId2;
+                        nPrevRow--;
+                    }
+                    else
+                        break;
+                }
 
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrAlpha = thisItem.AdrAlpha;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrId = thisItem.AdrId;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNo = thisItem.AdrNo;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNum = thisItem.AdrNum;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrNumAlpha = thisItem.AdrNumAlpha;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).AdrUnit = thisItem.AdrUnit;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).ContractNo = thisItem.ContractNo;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).Customer = thisItem.Customer;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).RoadName = thisItem.RoadName;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).RoadNameId = thisItem.RoadNameId;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).SeqNum = thisItem.SeqNum;
-                dw_seq.GetItem<SeqAddresses>(nPrevRow).Sequence = thisItem.Sequence;
+                if (nThisAdrId != nPrevAdrId1)
+                {
+                    of_dwseq_moverow(nThisRow, nPrevRow);
+                    movedRows.Add(nPrevRow);
+                }
             }
 
-            dw_seq.Refresh();
+//            dw_seq.Refresh();
             dw_seq.SelectRow(0, false);
-
-            int nFirstRow = 1;
+/*
+            nFirstRow = 1;
             foreach (int nThisRow in selRows)
             {
                 if (nThisRow > nFirstRow)
@@ -1766,20 +2042,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     break;  
                 }
             }
+*/
+            movedRows.Sort();
+            foreach (int nThisRow in movedRows)
+            {
+                if (nThisRow <= nFirstRow)
+                {
+                    dw_seq.SelectRow(0, false);
+
+                    cb_up_arrow.Enabled = false;
+                    cb_down_arrow.Enabled = false;
+                    cb_unseq_arrow.Enabled = false;
+                    cb_unsequence.Enabled = false;
+                    break;
+                }
+                else if (nThisRow > 0)
+                    dw_seq.SelectRow((nThisRow + 1), true);
+            }
+
+            of_dwseq_reseqence();
 
             il_sequence = dw_seq.GetSelectedRow(0);
             il_sequence = (il_sequence < 0) ? 0 : il_sequence;
+
+            dw_seq.Refresh();
+            this.dw_seq.ResumeLayout(true);
         }
 
         private void cb_down_arrow_Click(object sender, EventArgs e)
         {
-            int nNextRow = 0, nLastRow = 0;
+            int  nNextRow = 0, nLastRow = 0, nRows;
             int? nThisSeq = 0;
             int? nThisSeqNum = 0;
+            int  nThisAdrId = 0, nNextAdrId1 = 0, nNextAdrId2 = 0;
 
-            SeqAddresses thisItem = new SeqAddresses();
+            this.dw_seq.SuspendLayout();
 
-            int nRows = dw_seq.RowCount;
+            // Get a list of the selected rows.
+            // Work from the bottom up, starting with the second from the bottom
+            // (since the bottom one cannot move down any further).
+            nRows = dw_seq.RowCount;
             List<int> selRows = new List<int>();
             for (int i = (nRows -2); i >= 0; i--)
             {
@@ -1794,41 +2096,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             foreach (int nThisRow in selRows)
             {
                 nNextRow = nThisRow + 1;
-                movedRows.Add(nNextRow+1);
 
-                nThisSeq = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
-                nThisSeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
+                nThisAdrId  = (int)dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
+                nNextAdrId1 = (int)dw_seq.GetItem<SeqAddresses>(nNextRow).AdrId;
+                while ((nNextRow + 1) <= nLastRow)
+                {
+                    nNextAdrId2 = (int)dw_seq.GetItem<SeqAddresses>(nNextRow + 1).AdrId;
+                    if (nNextAdrId1 != nNextAdrId2)
+                        break;
+                    nNextRow++;
+                    nNextAdrId1 = nNextAdrId2;
+                }
 
-                thisItem.AdrAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrAlpha;
-                thisItem.AdrId = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrId;
-                thisItem.AdrNo = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNo;
-                thisItem.AdrNum = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNum;
-                thisItem.AdrNumAlpha = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrNumAlpha;
-                thisItem.AdrUnit = dw_seq.GetItem<SeqAddresses>(nThisRow).AdrUnit;
-                thisItem.ContractNo = dw_seq.GetItem<SeqAddresses>(nThisRow).ContractNo;
-                thisItem.Customer = dw_seq.GetItem<SeqAddresses>(nThisRow).Customer;
-                thisItem.RoadName = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadName;
-                thisItem.RoadNameId = dw_seq.GetItem<SeqAddresses>(nThisRow).RoadNameId;
-                thisItem.SeqNum = dw_seq.GetItem<SeqAddresses>(nThisRow).SeqNum;
-                thisItem.Sequence = dw_seq.GetItem<SeqAddresses>(nThisRow).Sequence;
-
-                dw_seq.DeleteItemAt(nThisRow);
-                dw_seq.InsertItem<SeqAddresses>(nNextRow);
-
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrAlpha = thisItem.AdrAlpha;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrId = thisItem.AdrId;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNo = thisItem.AdrNo;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNum = thisItem.AdrNum;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrNumAlpha = thisItem.AdrNumAlpha;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).AdrUnit = thisItem.AdrUnit;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).ContractNo = thisItem.ContractNo;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).Customer = thisItem.Customer;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).RoadName = thisItem.RoadName;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).RoadNameId = thisItem.RoadNameId;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).SeqNum = thisItem.SeqNum;
-                dw_seq.GetItem<SeqAddresses>(nNextRow).Sequence = thisItem.Sequence;
+                if (nThisAdrId != nNextAdrId1)
+                {
+                    of_dwseq_moverow(nThisRow, nNextRow);
+                    movedRows.Add(nNextRow + 1);
+                }
             }
-            dw_seq.Refresh();
+
+//            dw_seq.Refresh();
             dw_seq.SelectRow(0, false);
 
             movedRows.Sort();
@@ -1848,8 +2135,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     dw_seq.SelectRow(nThisRow, true);
             }
 
+            of_dwseq_reseqence();
+
             il_sequence = dw_seq.GetSelectedRow(0);
             il_sequence = (il_sequence < 0) ? 0 : il_sequence;
+
+            dw_seq.Refresh();
+            this.dw_seq.ResumeLayout(true);
         }
 
         public struct unseqItem
