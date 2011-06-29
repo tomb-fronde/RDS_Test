@@ -101,8 +101,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public bool ib_Frequencies = false;
 
-        public int il_Contract = 1;
-
         public bool ib_HighLiteRows;
 
         public string is_ErrorColumn = String.Empty;
@@ -187,10 +185,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private Button SeqAddresses;
 
+        private Label strip_height_t;
+
+        private Metex.Windows.DataEntityCombo sh_id;
+
         #endregion
 
+
         // Remembers which tab page we were last on
-        int oldindex = -1;
+        int oldTabIndex = -1;
 
         public WContract2001()
         {
@@ -298,10 +301,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DContractPieceRates)dw_piece_rates.DataObject).CellClick += new EventHandler(dw_piece_rates_clicked);
 
             this.dw_fixed_assets.Constructor += new UserEventDelegate(dw_fixed_assets_constructor);
-            ((DContractFixedAssets)dw_fixed_assets.DataObject).TextBoxLostFocus += new EventHandler(dw_fixed_assets_ItemChanged);
+            ((DContractFixedAssets)dw_fixed_assets.DataObject).TextBoxLostFocus += new EventHandler(dw_fixed_assets_TextBoxLostFocus);
             this.dw_fixed_assets.PfcValidation += new UserEventDelegate1(dw_fixed_assets_pfc_validation);
             this.dw_fixed_assets.WinValidate += new UserEventDelegate2(of_validate);
-            this.dw_fixed_assets.UpdateEnd += new UserEventDelegate(dw_fix_winpfcsave);
+            //this.dw_fixed_assets.UpdateEnd += new UserEventDelegate(dw_fix_winpfcsave);
+            this.dw_fixed_assets.PfcInsertRow += new UserEventDelegate(dw_fixed_assets_pfcinsertrow);
+            this.dw_fixed_assets.PfcUpdate += new UserEventDelegate1(dw_fixed_assets_pfc_update);
+            this.dw_fixed_assets.PfcPreDeleteRow += new UserEventDelegate1(dw_fixed_assets_pfc_predeleterow);
 
             this.dw_cmbs.Constructor += new UserEventDelegate(dw_cmbs_constructor);
             ((DCmbAddressList)dw_cmbs.DataObject).CellDoubleClick += new EventHandler(dw_cmbs_doubleclicked);
@@ -317,6 +323,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_freight_allocations.Validating += new System.ComponentModel.CancelEventHandler(this.dw_freight_allocations_validating);
 
             this.em_custlist_updated.TextChanged += new System.EventHandler(this.em_custlist_updated_modified);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (!DesignMode)
+            {
+                InitializeDropdown();
+            }
+            base.OnHandleCreated(e);
+        }
+
+        private void InitializeDropdown()
+        {
+            sh_id.AssignDropdownType<DDddwStripHeight>();
         }
 
         #region Form Events & Methods
@@ -469,6 +489,52 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void close()
         {
+            int thisIndex = tab_contract.SelectedIndex;
+
+            string thisTabName = tab_contract.TabPages[thisIndex].Text.ToLower().Trim();
+            string oldTabName = tab_contract.TabPages[oldTabIndex].Text.ToLower().Trim();
+            //if (tabName == "freight allocations")
+            //{
+            //    idw_freight_allocations.uf_settoolbar();
+            //}
+/*
+            if (oldTabName == "fixed assets" || thisTabName == "fixed assets")
+            {
+                int nRow, nModified;
+                nRow = dw_fixed_assets.GetRow();
+                nModified = dw_fixed_assets.ModifiedCount();
+                for ( nRow = 0; nRow < dw_fixed_assets.RowCount; nRow++ )
+                {
+                int nShIdIndex = this.sh_id.SelectedIndex;
+                string sAssetNum = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+                int? nContractNo = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo;
+                int? nStripHeight = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ShHeight;
+                int? nShId = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ShId;
+                sAssetNum = (sAssetNum == null) ? "null" : sAssetNum;
+                string sContractNo = (nContractNo == null) ? "null" : nContractNo.ToString();
+                string sStripHeight = (nStripHeight == null) ? "null" : nStripHeight.ToString();
+                string sShId = (nShId == null) ? "null" : nShId.ToString();
+                MessageBox.Show("Close \n\n"
+                                + "thisTabName = " + thisTabName + ", oldTabName = " + oldTabName + "\n"
+                                + "nRow = " + nRow.ToString() + "\n"
+                                + "nModified = " + nModified.ToString() + "\n"
+                                + "sAssetNum = " + sAssetNum + "\n"
+                                + "nContractNo = " + sContractNo + "\n"
+                                + "nStripHeight = " + sStripHeight + "\n"
+                                + "nShIdIndex = " + nShIdIndex.ToString()
+                                , "Close"
+                                );
+                }
+            }
+            else
+            {
+                MessageBox.Show("Close \n\n"
+                                + "thisTabName = " + thisTabName + "\n"
+                                + "oldTabName = " + oldTabName + "\n"
+                                , "Close"
+                                );
+            }
+*/
             base.close();
             //  TJB  SR4657  June05
             //  Fixed detection of changed updated date  ( it failed 
@@ -478,7 +544,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (of_custlist_changed())
             {
                 int li_reply = (MessageBox.Show("Do you wish to save the new customer list updated date?"
-                                           , "Question"
+                                           , "Customer List"
                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
                              == DialogResult.Yes ? 1 : 2);
                 if (li_reply == 1)
@@ -528,6 +594,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_piece_rates = new System.Windows.Forms.TabPage();
             this.dw_piece_rates = new NZPostOffice.RDS.Controls.URdsDw();
             this.tabpage_fixed_assets = new System.Windows.Forms.TabPage();
+            this.strip_height_t = new System.Windows.Forms.Label();
+            this.sh_id = new Metex.Windows.DataEntityCombo();
             this.dw_fixed_assets = new NZPostOffice.RDS.Controls.URdsDw();
             this.tabpage_cmb = new System.Windows.Forms.TabPage();
             this.dw_cmbs = new NZPostOffice.RDS.Controls.URdsDw();
@@ -850,6 +918,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_fixed_assets
             // 
             this.tabpage_fixed_assets.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_fixed_assets.Controls.Add(this.strip_height_t);
+            this.tabpage_fixed_assets.Controls.Add(this.sh_id);
             this.tabpage_fixed_assets.Controls.Add(this.dw_fixed_assets);
             this.tabpage_fixed_assets.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_fixed_assets.Location = new System.Drawing.Point(4, 40);
@@ -860,13 +930,39 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_fixed_assets.Text = "Fixed Assets";
             this.tabpage_fixed_assets.Visible = false;
             // 
+            // strip_height_t
+            // 
+            this.strip_height_t.Location = new System.Drawing.Point(330, 16);
+            this.strip_height_t.Name = "strip_height_t";
+            this.strip_height_t.Size = new System.Drawing.Size(72, 18);
+            this.strip_height_t.TabIndex = 2;
+            this.strip_height_t.Text = "Strip Height";
+            this.strip_height_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // sh_id
+            // 
+            this.sh_id.AutoRetrieve = true;
+            this.sh_id.Cursor = System.Windows.Forms.Cursors.Default;
+            this.sh_id.DisplayMember = "ShHeight";
+            this.sh_id.DropDownWidth = 240;
+            this.sh_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.sh_id.Location = new System.Drawing.Point(405, 16);
+            this.sh_id.Name = "sh_id";
+            this.sh_id.Size = new System.Drawing.Size(82, 21);
+            this.sh_id.TabIndex = 4;
+            this.sh_id.Value = null;
+            this.sh_id.ValueMember = "ShHeight";
+            this.sh_id.LostFocus += new System.EventHandler(this.sh_id_LostFocus);
+            this.sh_id.SelectedIndexChanged += new System.EventHandler(this.sh_id_SelectedIndexChanged);
+            this.sh_id.Click += new System.EventHandler(this.sh_id_Click);
+            // 
             // dw_fixed_assets
             // 
             this.dw_fixed_assets.DataObject = null;
             this.dw_fixed_assets.FireConstructor = false;
             this.dw_fixed_assets.Location = new System.Drawing.Point(5, 7);
             this.dw_fixed_assets.Name = "dw_fixed_assets";
-            this.dw_fixed_assets.Size = new System.Drawing.Size(539, 274);
+            this.dw_fixed_assets.Size = new System.Drawing.Size(539, 280);
             this.dw_fixed_assets.TabIndex = 1;
             // 
             // tabpage_cmb
@@ -965,9 +1061,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private void dw_fix_winpfcsave()
         {
             int rowCount = idw_fixed_assets.DataObject.BindingSource.List.Count;
-            for (int i = 0; i < rowCount; i++)
+            for (int nRow = 0; nRow < rowCount; nRow++)
             {
-                ((TextBox)(((DContractFixedAssetsTest)(idw_fixed_assets.DataObject.GetControlByName("tableLayoutPanel1").Controls[i])).GetControlByName("fa_fixed_asset_no"))).ReadOnly = true;
+                ((TextBox)(((DContractFixedAssetsTest)(idw_fixed_assets.DataObject.GetControlByName("tableLayoutPanel1").Controls[nRow])).GetControlByName("fa_fixed_asset_no"))).ReadOnly = true;
             }
         }
 
@@ -1078,7 +1174,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     && idw_frequencies.GetItem<RouteFrequency>(ll_Row).CalcDeldays == "NNNNNNN")
                 {
                     MessageBox.Show("Please select the days that this frequency is delivered"
-                                    , "Contract"
+                                    , this.Text
                                     , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     ls_ErrorColumn = "rf_monday";
                 }
@@ -1091,7 +1187,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     && idw_frequencies.GetItem<RouteFrequency>(ll_Row).CalcDeldays != "NNNNNNN")
                 {
                     MessageBox.Show("Please select a frequency"
-                                    , "Contract"
+                                    , this.Text
                                     , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     ls_ErrorColumn = "sf_key";
                 }
@@ -1111,7 +1207,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         {
                             MessageBox.Show("The delivery days selected does not equal the number of days \n" 
                                             + "specified for this frequency"
-                                            , "Contract"
+                                            , this.Text
                                             , MessageBoxButtons.OK, MessageBoxIcon.Information);
                             ls_ErrorColumn = "rf_monday";
                         }
@@ -1137,55 +1233,69 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int lFatID;
             string sReturn = "";
             string sDaysDelivery = "";
-            string sFixedAssetKey = "";
+            string sFixedAssetNum = "";
             string sFAOwner;
             DateTime dFAPurchaseDate;
             System.Decimal decFAPurchasePrice;
             ll_RowCount = idw_fixed_assets.RowCount;
             for (ll_Row = 0; ll_Row < ll_RowCount; ll_Row++)
             {
-                sFixedAssetKey = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaFixedAssetNo;
+                int? t;
+                string s;
+                sFixedAssetNum = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaFixedAssetNum;
+                s = sFixedAssetNum;
                 lFatID = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FatId.GetValueOrDefault();
+                t = lFatID;
                 sFAOwner = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaOwner;
+                s = sFAOwner;
                 dFAPurchaseDate = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaPurchaseDate.GetValueOrDefault().Date;
+                s = dFAPurchaseDate.ToShortDateString();
                 decFAPurchasePrice = idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaPurchasePrice.GetValueOrDefault();
+                s = decFAPurchasePrice.ToString();
                 if ((idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).ContractNo == null))
                 {
                     idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).ContractNo = il_Contract_no;
                 }
-                if (idw_fixed_assets.uf_not_entered(ll_Row, "FaFixedAssetNo", "fixed asset number"))
+                if (idw_fixed_assets.uf_not_entered(ll_Row, "FaFixedAssetNum", "fixed asset number"))
                 {
-                    sReturn = "fa_fixed_asset_no";
+                    sReturn = "fa_fixed_asset_num";
+                    break;
                 }
-                if (idw_fixed_assets.uf_not_unique(ll_Row, "FaFixedAssetNo", "fixed asset number"))
+                if (idw_fixed_assets.uf_not_unique(ll_Row, "FaFixedAssetNum", "fixed asset number"))
                 {
-                    sReturn = "fa_fixed_asset_no";
+                    sReturn = "fa_fixed_asset_num";
+                    break;
                 }
                 if (idw_fixed_assets.uf_not_entered(ll_Row, "FatId", "fixed asset type"))
                 {
                     sReturn = "fat_id";
+                    break;
                 }
                 if (idw_fixed_assets.uf_not_unique(ll_Row, "FatId", "fixed asset type"))
                 {
                     sReturn = "fat_id";
+                    break;
                 }
+                idw_fixed_assets.uf_setrowsecurity();
+/*
                 if (StaticFunctions.f_seekkey("fixed_asset_register", "fa_fixed_asset_no=\'" + idw_fixed_assets.GetItem<ContractFixedAssets>(ll_Row).FaFixedAssetNo + "\'") == 0)
                 {
-                    /*Insert into fixed_asset_register 
-                     *      (fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) 
-                     *Values(:sFixedAssetKey,:lFatId, :sFAOwner,:dFAPurchaseDate,:decFAPurchasePrice);*/
+                    //Insert into fixed_asset_register 
+                    //      (fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) 
+                    //Values(:sFixedAssetKey,:lFatId, :sFAOwner,:dFAPurchaseDate,:decFAPurchasePrice)
                     RDSDataService.InsertFixedAssetRegister(sFixedAssetKey, lFatID, sFAOwner, dFAPurchaseDate, decFAPurchasePrice);
                 }
                 else
                 {
-                    /*UPDATE fixed_asset_register 
-                     *   set fat_id = :lFatId
-                     *     , fa_owner = :sFAOwner
-                     *     , fa_purchase_date = :dFAPurchaseDate
-                     *     , fa_purchase_price = :decFAPurchasePrice 
-                     * where fa_fixed_asset_no = :sFixedAssetKey;*/
+                    //UPDATE fixed_asset_register 
+                    //   set fat_id = :lFatId
+                    //     , fa_owner = :sFAOwner
+                    //     , fa_purchase_date = :dFAPurchaseDate
+                    //     , fa_purchase_price = :decFAPurchasePrice 
+                    // where fa_fixed_asset_no = :sFixedAssetKey
                     RDSDataService.UpdateFixedAssetRegister(lFatID, sFAOwner, dFAPurchaseDate, decFAPurchasePrice, sFixedAssetKey);
                 }
+*/
             }
 
             is_ErrorColumn = sReturn;
@@ -1495,6 +1605,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return true;
             else
                 return false;
+        }
+
+        // TJB  RPCR_026  June-2011: Added
+        public virtual int of_get_nextsequence(string sequencename)
+        {
+            int nReturn;
+            int nNextValue;
+            int SQLCode = 0;
+            string SQLErrText = string.Empty;
+            if (StaticVariables.gnv_app.of_isempty(sequencename))
+            {
+                nReturn = -(1);
+            }
+            else
+            {
+                /*select next_value into :nNextValue from id_codes where sequence_name = :sequencename ;*/
+                nNextValue = RDSDataService.GetIdCodesNextValue(sequencename, ref SQLCode, ref SQLErrText);
+                if (SQLCode != 0)
+                {
+                    /*insert into id_codes(sequence_name, next_value) values (:sequencename, 2) ;*/
+                    RDSDataService.InsertIdCodes(sequencename);
+                    nReturn = 1;
+                }
+                else
+                {
+                    nReturn = nNextValue;
+                    /*UPDATE id_codes set next_value = :nNextValue + 1 where sequence_name = :sequencename ;*/
+                    RDSDataService.UpdateIdCodes(nNextValue, sequencename);
+                }
+            }
+            //commit;
+            return nReturn;
         }
 
         public virtual int wf_contract_town(int ai_contract_no)
@@ -1844,6 +1986,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_renewals.of_setautoinsert(true);
             dw_renewals.of_SetRowSelect(true);
             idw_renewals = dw_renewals;
+        }
+
+        public virtual int dw_fixed_assets_pfc_predeleterow()
+        {
+            int nRow = dw_fixed_assets.GetRow();
+            int nSelectedRow = dw_fixed_assets.GetSelectedRow(0);
+
+            //idw_fixed_assets.SelectRow(nRow, true);
+            string sAssetNum = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+
+            MessageBox.Show("Row = " + nRow.ToString() + "\n"
+                            + "Selected row = " + nSelectedRow.ToString() + "\n"
+                            + "Asset Num = " + sAssetNum + "\n"           
+                            , "dw_fixed_assets_pfc_predeleterow");
+
+            return 1;
         }
 
         public virtual int dw_renewals_pfc_predeleterow()
@@ -2201,10 +2359,53 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_fixed_assets = dw_fixed_assets;
         }
 
-        public virtual void dw_fixed_assets_updatestart()
+        public virtual void dw_fixed_assets_pfcinsertrow()
         {
+            int nFixedAssetNo = of_get_nextsequence("FixedAssetNo");
+            string sFixedAssetNum = "RP" + nFixedAssetNo.ToString();
+            int nRow = dw_fixed_assets.GetRow();
+
+            idw_fixed_assets.SelectRow(nRow, true);
+            idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum = sFixedAssetNum;
+            idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo = il_Contract_no;
+            int default_ShId = of_getDefaultStripHeightId();
+            idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ShId = default_ShId;
+            this.sh_id.SelectedIndex = default_ShId - 1;
+            idw_fixed_assets.AcceptText();
             return;
         }
+
+        public virtual int dw_fixed_assets_pfc_update()
+        {
+            int nRow, nSqlCode, rc;
+            int nRows = dw_fixed_assets.RowCount;
+            rc = SUCCESS;
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                nSqlCode = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).SqlCode;
+                if (nSqlCode != 0)
+                {
+                    int? nContractNo;
+                    string sContractNo;
+                    string sSqlErrMsg, sAssetNum;
+                    sSqlErrMsg = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).SqlErrText;
+                    sAssetNum = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+                    nContractNo = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo;
+                    sContractNo = (nContractNo == null) ? "null" : nContractNo.ToString();
+
+                    MessageBox.Show("Error saving asset " + sAssetNum + " for contract " + sContractNo + "\n\n"
+                                    + "SQL Error: " + sSqlErrMsg + "\n"
+                                    , "Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return SUCCESS;
+        }
+
+        //public override void pfc_update()
+        //{
+        //    return SUCCESS;
+        //}
 
         public virtual int dw_fixed_assets_pfc_validation()
         {
@@ -2347,7 +2548,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else
             {
                 MessageBox.Show("Please select a row to delete"
-                               , ""
+                               , "CMB"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return FAILURE;
             }
@@ -2376,7 +2577,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             //  TJB  SR4659  July 2005
             //  Added references to CMB datawindow
-            if (oldindex == tab_contract.SelectedIndex)
+            if (oldTabIndex == tab_contract.SelectedIndex)
                 return;
 
             DialogResult ans;
@@ -2405,7 +2606,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Check for new contract
             if (il_Contract_no == -(1))
             {
-                tab_contract.SelectTab(oldindex);
+                tab_contract.SelectTab(oldTabIndex);
                 MessageBox.Show("The current contract has to be saved before you can change tabs."
                                , "New Contract"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2416,7 +2617,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (idw_contract.DataObject.DeletedCount > 0 || idw_contract.ModifiedCount() > 0)
             {
                 ans = MessageBox.Show("Do you want to update database?"
-                                         , "Update"
+                                         , "Contract"
                                          , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_contract.GetRow();
                 if (ans == DialogResult.Yes)
@@ -2446,7 +2647,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (idw_frequencies.DataObject.DeletedCount > 0 || idw_frequencies.ModifiedCount() > 0)
             {
                 ans = MessageBox.Show("Do you want to update database?"
-                                        , "Update Frequencies"
+                                        , "Frequencies"
                                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_frequencies.GetRow();
                 if (ans == DialogResult.Yes)
@@ -2467,7 +2668,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (idw_types.DataObject.DeletedCount > 0 || idw_types.ModifiedCount() > 0)
             {
                 ans = MessageBox.Show("Do you want to update database?"
-                                        , "Update Contract Types"
+                                        , "Contract Types"
                                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_types.GetRow();
                 if (ans == DialogResult.Yes)
@@ -2488,7 +2689,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (idw_allowances.DataObject.DeletedCount > 0 || idw_allowances.ModifiedCount() > 0)
             {
                 ans = MessageBox.Show("Do you want to update database?"
-                                        , "Update Allowances"
+                                        , "Allowances"
                                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_allowances.GetRow();
                 if (ans == DialogResult.Yes)
@@ -2509,7 +2710,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (idw_fixed_assets.DataObject.DeletedCount > 0 || idw_fixed_assets.ModifiedCount() > 0)
             {
                 ans = MessageBox.Show("Do you want to update database?"
-                                        , "Update Fixed Assets"
+                                        , "Fixed Assets"
                                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 ll_Row = idw_fixed_assets.GetRow();
                 if (ans == DialogResult.Yes)
@@ -2532,7 +2733,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // if we use select index to get tagepage it will throw exception. 
         public virtual void tab_contract_selectionchanged(object sender, EventArgs e)
         {
-            if (oldindex == tab_contract.SelectedIndex)
+            if (oldTabIndex == tab_contract.SelectedIndex)
             {
                 return;
             }
@@ -2556,7 +2757,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (of_custlist_changed())
             {
                 if (MessageBox.Show("Do you wish to save the new customer list information?"
-                                   , "Question"
+                                   , "Customer List"
                                    , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
                    == DialogResult.Yes)
                 {
@@ -2578,7 +2779,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             //  If we're switching away from the Address tab
             //  make sure the 'save' toolbar button is off
-            if (oldindex == 2 - 1)
+            if (oldTabIndex == 2 - 1)
             {
                 if ((lm_menu != null))
                 {
@@ -2587,8 +2788,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     lm_menu.m_updatedatabase.Enabled = false;
                 }
             }
-            // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            //int TestExpr = tab_contract.SelectedIndex + 1;//newindex;
+
+            // str is the name of the tab we've changed TO.
             string str = tab_contract.TabPages[tab_contract.SelectedIndex].Text.ToLower().Trim();
 
             if (str == "contract")
@@ -2726,20 +2927,50 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (str == "fixed assets")
             {
+                int nRow;
                 idw_fixed_assets.URdsDw_GetFocus(null, null);
 
                 if (idw_fixed_assets.RowCount == 0)
                 {
-                    idw_fixed_assets.Retrieve(new object[]{il_Contract_no});
+                    idw_fixed_assets.Retrieve(new object[] { il_Contract_no });
+                }
+                if (idw_fixed_assets.RowCount > 0)
+                {
+                    nRow = idw_fixed_assets.GetRow();
+                    int? nContract = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo;
+                    string sAssetNum = idw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+                    if (sAssetNum == null || sAssetNum.Trim() == "")
+                    {
+                        idw_fixed_assets.DeleteItemAt(nRow);
+                    }
+                }
+
+                if (idw_fixed_assets.RowCount > 0)
+                {
+                    // TJB  RPCR_026  June-2011
+                    // Wait to set the binding for the strip height dropdown 
+                    // until after the fixed assets tab has been opened
+                    if (this.sh_id.DataBindings.Count == 0)
+                        this.sh_id.DataBindings.Add(
+                                new System.Windows.Forms.Binding("Value"
+                                                                , idw_fixed_assets.DataObject.BindingSource
+                                                                , "ShHeight"
+                                                                , true
+                                                                , System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+                }
+                else
+                {
+                    this.sh_id.SelectedIndex = 3;
                 }
                 idw_fixed_assets.uf_settoolbar();
             }
+
             else if (str == "cmbs")
             {
                 if (idw_cmb.RowCount == 0)
                 {
                     idw_cmb.Reset();
-                    idw_cmb.Retrieve(new object[]{il_Contract_no});
+                    idw_cmb.Retrieve(new object[] { il_Contract_no });
                 }
                 wf_set_cmb_privs();
                 idw_cmb.uf_settoolbar();
@@ -2755,7 +2986,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 if (idw_freight_allocations.RowCount == 0)
                 {
                     idw_freight_allocations.Reset();
-                    idw_freight_allocations.Retrieve(new object[]{ il_Contract_no });
+                    idw_freight_allocations.Retrieve(new object[] { il_Contract_no });
 
                     // If there wasn't one to get, create a new one
                     int nRows = idw_freight_allocations.RowCount;
@@ -2765,7 +2996,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         idw_freight_allocations.InsertItem<FreightAllocations>(0);
                         idw_freight_allocations.GetItem<FreightAllocations>(0).ContractNo = il_Contract_no;
                         //idw_freight_allocations.GetItem<FreightAllocations>(0).PbuId = pbuId;
-                        
+
                         ((DContractFreightAllocations)(idw_freight_allocations.DataObject)).set_selected_pbu(pbuId);
                         idw_freight_allocations.AcceptText();
                     }
@@ -2773,7 +3004,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_freight_allocations.GetControlByName("active_ind").Focus();
                 wf_set_freight_allocations_toolbar();
             }
-            oldindex = tab_contract.SelectedIndex;
+            oldTabIndex = tab_contract.SelectedIndex;
             this.ResumeLayout(true);
         }
 
@@ -3139,7 +3370,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Added test for presence of anything to display  ( outer if-then-else)
             if (dw_route_audit.RowCount == 0 || (dw_route_audit.GetItem<RouteAuditListing>(row).ContractNo == null))
             {
-                MessageBox.Show("There is nothing to display", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("There is nothing to display"
+                                , "Route Audit"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -3228,43 +3461,66 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_piece_rates.URdsDw_Clicked(sender, e);
         }
 
-        public virtual void dw_fixed_assets_ItemChanged(object sender, EventArgs e)
+        public virtual void dw_fixed_assets_TextBoxLostFocus(object sender, EventArgs e)
         {
+            // TJB  RPCR_026  June-2011
+            // The logic has changed.  Originally, assets were generic with multiple contracts 
+            // sharing asset numbers (fa_fixed_asset_no in the fixed_asset_register table).
+            // Now, assets are unique with a unique asset number (fa_fixed_asset_num in the
+            // contract_fixed_assets table.  The user must fill in the asset details when 
+            // adding an asset to the contract rather than looking up the details from the
+            // generic table (as the commented-out code does).
+/*
+            string columnName = dw_fixed_assets.GetColumnName();
+            string senderName = ((TextBox)sender).Name;
+            columnName = (columnName == null) ? "null" : columnName;
+            senderName = (senderName == null) ? "null" : senderName;
+
+            MessageBox.Show("Column name = " + columnName + "\n"
+                             + "Sender name = " + senderName + "\n"
+                            , "dw_fixed_assets_TextBoxLostFocus");
+*/
+/*
             dw_fixed_assets.URdsDw_Itemchanged(sender, e);
             string sOwner;
-            string sFixedAssetNo;
+            string sFixedAssetNum;
             int lFatId;
             DateTime dFAPurchaseDate;
             System.Decimal decFAPurchaseprice;
-            int iCount;
+            int iCount, nRow;
             string sNull;
             int lContract;
             // if (dw_fixed_assets.GetColumnName() == "fa_fixed_asset_no")
-            if (((TextBox)sender).Name == "fa_fixed_asset_no")
+            string senderName = ((TextBox)sender).Name;
+            //if (((TextBox)sender).Name == "fa_fixed_asset_num")
+            if (senderName == "fa_fixed_asset_num")
             {
-                // dw_fixed_assets.GetControlByName(dw_fixed_assets.GetColumnName()).Text; //dw_fixed_assets.GetText();
-                sFixedAssetNo = Convert.ToString(dw_fixed_assets.GetValue(dw_fixed_assets.GetRow(), "fa_fixed_asset_no"));
-                //if (dw_fixed_assets.GetItemStatus(dw_fixed_assets.GetRow(), 0, primary!) == new! 
-                //    || dw_fixed_assets.GetItemStatus(dw_fixed_assets.GetRow(), 0, primary!) == newmodified!) 
-                if (dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).IsNew 
-                    || (dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).IsNew 
-                        && dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).IsDirty))
-                {
-                    lContract = -(1);
-                }
-                else
-                {
-                    lContract = il_Contract_no;
-                }
+                nRow = dw_fixed_assets.GetRow();
+                sFixedAssetNum = Convert.ToString(dw_fixed_assets.GetValue(nRow, "fa_fixed_asset_num"));
+                sFixedAssetNum = (sFixedAssetNum == null) ? "null" : sFixedAssetNum;
+                //if (dw_fixed_assets.GetItemStatus(nRow, 0, primary!) == new! 
+                //    || dw_fixed_assets.GetItemStatus(nRow, 0, primary!) == newmodified!) 
+                /* if (dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).IsNew 
+                 *     || (dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).IsNew 
+                 *         && dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).IsDirty))
+                 * {
+                 *     lContract = -(1);
+                 * }
+                 * else
+                 * {
+                 *     lContract = il_Contract_no;
+                 * }  */
+/*
+                // ==> If a record for this asset number exists, the count will be > 0
                 // select count(*) into :icount from contract_fixed_assets 
                 //  where fa_fixed_asset_no = :sFixedAssetno and contract_no <> :il_Contract_no
-                iCount = RDSDataService.GetContractFixedAssetsCount(sFixedAssetNo, il_Contract_no);
+                iCount = RDSDataService.GetContractFixedAssetsCount(sFixedAssetNum, il_Contract_no);
                 if (iCount > 0)
                 {
-                    if (MessageBox.Show("The asset number you have chosen is already is use. If you chose " 
-                                        + "to continue asset information will default to that which has " 
-                                        + "already been defined. Changing this asset information should " 
-                                        + "be performed with caution as other references to it will also " 
+                    if (MessageBox.Show("The asset number you have chosen (" + sFixedAssetNum + "is already is use. If you chose \n" 
+                                        + "to continue asset information will default to that which has \n" 
+                                        + "already been defined. Changing this asset information should \n" 
+                                        + "be performed with caution as other references to it will also \n" 
                                         + "be updated.\n\n" 
                                         + "Do you wish to use this asset number?"
                                         , "Fixed Assets"
@@ -3273,7 +3529,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                        == DialogResult.No)
                     {
                         sNull = string.Empty;
-                        dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).FaFixedAssetNo = sNull;
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum = sNull;
                         dw_fixed_assets.GetControlByName(dw_fixed_assets.GetColumnName()).Text = sNull;
                         for (int i = 0; i < dw_fixed_assets.DataObject.RowCount; i++)
                         {
@@ -3282,7 +3538,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         return;
                     }
                 }
-                if (!(StaticVariables.gnv_app.of_isempty(sFixedAssetNo)))
+                if (!(StaticVariables.gnv_app.of_isempty(sFixedAssetNum)))
                 {
                     int SQLCode = 0;
                     string SQLErrText = string.Empty;
@@ -3290,7 +3546,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     //  into :lFatId, :sOwner,:dFAPurchaseDate,:decFAPurchaseprice 
                     //  from fixed_asset_register 
                     // where fa_fixed_asset_no = :sFixedAssetno
-                    FixedAssetRegisterItem l_temp = RDSDataService.GetFixedAssetRegisterInfo(sFixedAssetNo, ref SQLCode, ref SQLErrText).FixedAssetRegisterItem;
+                    FixedAssetRegisterItem l_temp = RDSDataService.GetFixedAssetRegisterInfo(sFixedAssetNum, ref SQLCode, ref SQLErrText).FixedAssetRegisterItem;
                     lFatId = l_temp.FatId;
                     sOwner = l_temp.FaOwner;
                     dFAPurchaseDate = l_temp.FaPurchaseDate;
@@ -3300,13 +3556,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     else
                     {
-                        dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).FatId = lFatId;
-                        dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).FaOwner = sOwner;
-                        dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).FaPurchaseDate = dFAPurchaseDate;
-                        dw_fixed_assets.GetItem<ContractFixedAssets>(dw_fixed_assets.GetRow()).FaPurchasePrice = decFAPurchaseprice;
+                        nRow = dw_fixed_assets.GetRow();
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FatId = lFatId;
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaOwner = sOwner;
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaPurchaseDate = dFAPurchaseDate;
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaPurchasePrice = decFAPurchaseprice;
                     }
                 }
             }
+*/
         }
 
         public virtual void dw_cmbs_doubleclicked(object sender, EventArgs e)
@@ -3425,17 +3683,88 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void tab_contract_selectionchanging(object sender, TabControlCancelEventArgs e)
         {
-            int thisIndex = tab_contract.SelectedIndex;
-            if (oldindex == thisIndex)
+            int thisTabIndex = tab_contract.SelectedIndex;
+            if (oldTabIndex == thisTabIndex)
                 return;
             
             Cursor.Current = Cursors.WaitCursor;
             this.SuspendLayout();
-            string tabName = tab_contract.TabPages[thisIndex].Text.ToLower().Trim();
+            string thisTabName = tab_contract.TabPages[thisTabIndex].Text.ToLower().Trim();
+            string oldTabName = tab_contract.TabPages[oldTabIndex].Text.ToLower().Trim();
             //if (tabName == "freight allocations")
             //{
             //    idw_freight_allocations.uf_settoolbar();
             //}
+            string t; ;
+            t = thisTabName;
+            t = oldTabName;
+            if (oldTabName == "fixed assets")
+            {
+                int nRow = dw_fixed_assets.GetRow();
+                int nModified = dw_fixed_assets.ModifiedCount();
+/*
+                for (nRow = 0; nRow < dw_fixed_assets.RowCount; nRow++)
+                {
+                    int? nContractNo = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo;
+                    string sAssetNum = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+                    int? nStripHeight = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ShHeight;
+                    int? nShId = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ShId;
+                    int nShIdIndex = this.sh_id.SelectedIndex;
+                    sAssetNum = (sAssetNum == null) ? "null" : sAssetNum.ToString();
+                    string sContractNo = (nContractNo == null) ? "null" : nContractNo.ToString();
+                    string sStripHeight = (nStripHeight == null) ? "null" : nStripHeight.ToString();
+                    string sShId = (nShId == null) ? "null" : nShId.ToString();
+
+                    MessageBox.Show("Fixed Assets Selection Changing \n\n"
+                                    + "thisTabName = " + thisTabName + ", oldTabName = " + oldTabName + "\n"
+                                    + "nRow = " + nRow.ToString() + "\n"
+                                    + "nModified = " + nModified.ToString() + "\n"
+                                    + "nContractNo = " + sContractNo + "\n"
+                                    + "sAssetNum = " + sAssetNum + "\n"
+                                    + "nStripHeight = " + sStripHeight + "\n"
+                                    + "nShId = " + sShId + "\n"
+                                    + "nShIdIndex = " + nShIdIndex.ToString() + "\n"
+                                    , "tab_contract_selectionchanging");
+                }
+*/
+                bool bSaveChanges = true;
+                if (nModified > 0)
+                {
+                    DialogResult ans;
+                    ans = MessageBox.Show("Do you want to save the changes? \n"
+                                    , "Fixed Assets"
+                                    , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                    , MessageBoxDefaultButton.Button1);
+                    if (ans == DialogResult.Yes)
+                    {
+                        nRow = dw_fixed_assets.GetRow();
+                        int? nContractNo = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).ContractNo;
+                        string sAssetNum = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNum;
+                        string sContractNo = (nContractNo == null) ? "null" : nContractNo.ToString();
+
+                        if (nContractNo != il_Contract_no)
+                        {
+                            ans = MessageBox.Show("Please confirm that you want to assign fixed asset \n"
+                                                + sAssetNum + " to contract " + sContractNo + ".\n"
+                                                , "Fixed Assets"
+                                                , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                                , MessageBoxDefaultButton.Button1 );
+                        }
+                    }
+                    if (ans == DialogResult.No)
+                    {
+                        dw_fixed_assets.AcceptText();
+                        dw_fixed_assets.ResetUpdate();
+                    }
+                    else
+                    {
+                        tab_contract.SelectedIndex = oldTabIndex;
+                        dw_fixed_assets.URdsDw_GetFocus(null, null);
+                    }
+                    if ( bSaveChanges )
+                        dw_fixed_assets.Save();
+                }
+            }
             this.ResumeLayout(true);
         }
 
@@ -3477,7 +3806,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             // and stay on the Freight allocations tab.
                             MessageBox.Show("Save failed!", "Freight Allocations" );
                             e.Cancel = true;
-                            oldindex = tab_contract.SelectedIndex = thisTabIndex;
+                            oldTabIndex = tab_contract.SelectedIndex = thisTabIndex;
                             idw_freight_allocations.URdsDw_GetFocus(null, null);
                         }
                         wf_set_freight_allocations_toolbar();
@@ -3486,7 +3815,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         // If validation fails, don't let the change in tabs proceed.
                         e.Cancel = true;
-                        oldindex = tab_contract.SelectedIndex = thisTabIndex;
+                        oldTabIndex = tab_contract.SelectedIndex = thisTabIndex;
                         idw_freight_allocations.URdsDw_GetFocus(null, null);
                         wf_set_freight_allocations_toolbar();
                     }
@@ -3499,7 +3828,68 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     wf_set_freight_allocations_toolbar();
                 }
             }
-
         }
+
+        void sh_id_LostFocus(object sender, System.EventArgs e)
+        {
+            this.sh_id.DisplayMember = "ShHeight";
+        }
+
+        void sh_id_Click(object sender, System.EventArgs e)
+        {
+            if (this.sh_id.DroppedDown)
+            {
+                this.sh_id.DisplayMember = "";
+            }
+            else
+            {
+                this.sh_id.DisplayMember = "ShHeight";
+            }
+        }
+
+        void sh_id_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            int selectedIndex = this.sh_id.SelectedIndex;
+//            this.sh_id.DisplayMember = "ShHeight";
+//            this.sh_id.SelectedIndex = selectedIndex;
+            int nRow = this.idw_fixed_assets.GetRow();
+            if (nRow >= 0)
+            {
+                // Where there are multiple records, update all with the new ShId value
+                int nRows = this.idw_fixed_assets.RowCount;
+                for (int i = 0; i < nRows; i++)
+                {
+                    int? currentShId = dw_fixed_assets.GetItem<ContractFixedAssets>(i).ShId;
+                    int nShId = (currentShId == null) ? 0 : (int)currentShId;
+                    if ((selectedIndex >= 0) && (nShId > 0) && ((selectedIndex + 1) != nShId))
+                    {
+                        dw_fixed_assets.GetItem<ContractFixedAssets>(i).ShId = selectedIndex + 1;
+                    }
+                }
+            }
+            //this.idw_fixed_assets.AcceptText();
+
+            // if the column is not checked in itemchanged event below is not needed
+            //if (this.RowCount > 0)
+            //{
+            //    this.OnItemChanged(this.sh_id, new System.EventArgs());
+            //}
+        }
+
+        private int of_getDefaultStripHeightId()
+        {
+            int _DefaultStripHeightId = 4;
+
+            _DefaultStripHeightId = RDSDataService.GetDefaultStripHeightId();
+            if (_DefaultStripHeightId < 0)
+            {
+                MessageBox.Show("Default strip height not found.  \n"
+                                + "Using 40."
+                                , "Error");
+                _DefaultStripHeightId = 3;
+            }
+            return _DefaultStripHeightId;
+        }
+
     }
 }

@@ -1328,9 +1328,9 @@ namespace NZPostOffice.RDS.Controls
         {
             if (PfcPreDeleteRow != null && PfcPreDeleteRow() == 1)
             {
-                //int ll_Row = this.GetRow();
-                //ll_Row = this.InsertRow(ll_Row);
-                this.DeleteItemAt(this.GetRow());
+                int nRow = this.GetRow();
+                //nRow = this.InsertRow(nRow);
+                this.DeleteItemAt(nRow);
                 //this.DataObject.SetCurrent(ll_Row);
                 //this.of_filter();
             }
