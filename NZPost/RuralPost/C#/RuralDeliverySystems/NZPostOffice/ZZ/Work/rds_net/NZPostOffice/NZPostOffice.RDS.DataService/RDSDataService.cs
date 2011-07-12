@@ -7,12 +7,14 @@ using System.Data.SqlClient;
 
 using Metex.Core;
 using Metex.Core.Security;
-//************************************************************************************************
-// Modifications
-// 21 Jul 2008  Metex  Fix2 for Renewal bug.  See _GetContractRenewalsConVolumeAtRenewal
-//************************************************************************************************
 namespace NZPostOffice.RDS.DataService
 {
+    //************************************************************************************************
+    // Modifications
+    // TJB  RPCR_026  July-2011: New
+    // AssignFixedAssetToContract( fixed_asset_no, Contract_no)
+    // Deleted unused Fixed Asset functions
+    //
     // TJB   Jan-2011  Sequencing Review
     // Added UpdateAddressSeq, _UpdateAddressSeq, ClearAddressSeq, _ClearAddressSeq, FgetFrequency and _FgetFrequency
     // Obsoleted: InsertAddressFreqSeq, _InsertAddressFreqSeq, DeleteFromAddressFreqSeq and _DeleteFromAddressFreqSeq (not yet deleted)
@@ -38,6 +40,11 @@ namespace NZPostOffice.RDS.DataService
     // TJB  ECL Data Import  June-2010
     // Added struct to hold data row being imported into database
     // (see InsertIntoECLUploadData and _InsertIntoECLUploadData)
+    //
+    // 21 Jul 2008  Metex  Fix2 for Renewal bug.  See _GetContractRenewalsConVolumeAtRenewal
+    //
+    //************************************************************************************************
+
     public struct EclImportData
     {
         public int EclBatchNo;
@@ -189,15 +196,6 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        private FixedAssetRegisterItem _fixedAssetRegisterItem;
-        public FixedAssetRegisterItem FixedAssetRegisterItem
-        {
-            get
-            {
-                return _fixedAssetRegisterItem;
-            }
-        }
-
         private AddressPostCodeTowncityItem _addressPostCodeTowncityItem;
         public AddressPostCodeTowncityItem AddressPostCodeTowncityItem
         {
@@ -216,12 +214,21 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        private List<ContractInfoByNoItem> _ContractInfoByNoList;
+        private List<ContractInfoByNoItem> _contract_info_by_no_list;
         public List<ContractInfoByNoItem> ContractInfoByNoList
         {
             get
             {
-                return _ContractInfoByNoList;
+                return _contract_info_by_no_list;
+            }
+        }
+        // TJB  RPCR_026  June-2011: Added
+        private List<DefaultStripHeight> _default_strip_height;
+        public List<DefaultStripHeight> DefaultStripHeight
+        {
+            get
+            {
+                return _default_strip_height;
             }
         }
 
@@ -601,6 +608,21 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_GetContractInfoByNo", il_contract_no);
             return obj;
         }
+
+        // TJB  RPCR_026 June-2011: Added
+        public static int GetDefaultStripHeightId()
+        {
+            RDSDataService obj = Execute("_GetDefaultStripHeightId");
+            return obj.intVal;
+        }
+
+        // TJB  RPCR_026 June-2011: Added
+        public static int GetFatIdCount(int? in_contract_no, int? in_fat_id)
+        {
+            RDSDataService obj = Execute("_GetFatIdCount", in_contract_no, in_fat_id);
+            return obj.intVal;
+        }
+
         // TJB Jan-2011  Sequencing Review: No longer used
         public static RDSDataService InsertAddressFreqSeq(int? il_sf_key, int? ll_sequence_no, int? il_contract_no, int? ll_address_id, string is_delivery_days)
         {
@@ -1464,7 +1486,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary> 
-        ///SELECT count (*) INTO @ll_dup 
+        ///SELECT count(*) INTO @ll_dup 
         ///  FROM contractor 
         /// WHERE Upper(c_surname_company).Trim() = @sSurname AND
         ///       (@sFirstName IS NULL OR Upper(c_first_names).Trim() = @sFirstName) 
@@ -1512,20 +1534,20 @@ namespace NZPostOffice.RDS.DataService
             return obj.intVal;
         }
 
-        ///<summary>
-        /// Insert into fixed_asset_register (fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) Values ( @sFixedAssetKey,@lFatId, @sFAOwner,@dFAPurchaseDate,@decFAPurchasePrice);
+        // TJB  RPCR_026  July-2011: New
+        /// <summary>
+        /// sp_AssignFixedAssetToContract( fixed_asset_no, Contract_no)
+        /// Assign fixed asset to contract
+        /// Returns
+        ///     0 = Success
+        ///    -1 = Failed/Error
         /// </summary>
-        public static void InsertFixedAssetRegister(string sFixedAssetKey, int? lFatId, string sFAOwner, DateTime? dFAPurchaseDate, decimal? decFAPurchasePrice)
+        public static int? AssignFixedAssetToContract(string sFixedAssetnum, int nContractNo, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_InsertFixedAssetRegister", sFixedAssetKey, lFatId, sFAOwner, dFAPurchaseDate, decFAPurchasePrice);
-        }
-
-        ///<summary>
-        /// UPDATE fixed_asset_register set fat_id = @lFatId,fa_owner = @sFAOwner,fa_purchase_date = @dFAPurchaseDate,fa_purchase_price = @decFAPurchasePrice where 	fa_fixed_asset_no = @sFixedAssetKey;
-        /// </summary>
-        public static void UpdateFixedAssetRegister(int? lFatId, string sFAOwner, DateTime? dFAPurchaseDate, decimal? decFAPurchasePrice, string sFixedAssetKey)
-        {
-            RDSDataService obj = Execute("_UpdateFixedAssetRegister", lFatId, sFAOwner, dFAPurchaseDate, decFAPurchasePrice, sFixedAssetKey);
+            RDSDataService obj = Execute("_AssignFixedAssetToContract", sFixedAssetnum, nContractNo);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.intVal;
         }
 
         /// <summary>
@@ -1720,32 +1742,6 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_DeleteRdsTemp");
             SQLCode = obj.SQLCode;
             SQLErrText = obj.SQLErrText;
-        }
-
-        /// <summary>
-        /// select count (*) into @icount 
-        ///   from contract_fixed_assets 
-        ///  where fa_fixed_asset_no = @sFixedAssetno and 
-        ///        contract_no <> @il_Contract_no;
-        /// </summary>
-        public static int GetContractFixedAssetsCount(string sFixedAssetno, int il_Contract_no)
-        {
-            RDSDataService obj = Execute("_GetContractFixedAssetsCount", sFixedAssetno, il_Contract_no);
-            return obj.intVal;
-        }
-
-        /// <summary>
-        /// select fat_id, fa_owner, fa_purchase_date, fa_purchase_price 
-        ///   into @lFatId, @sOwner, @dFAPurchaseDate, @decFAPurchaseprice 
-        ///   from fixed_asset_register 
-        ///  where fa_fixed_asset_no = @sFixedAssetno;
-        /// </summary>
-        public static RDSDataService GetFixedAssetRegisterInfo(string sFixedAssetno, ref int SQLCode, ref string SQLErrText)
-        {
-            RDSDataService obj = Execute("_GetFixedAssetRegisterInfo", sFixedAssetno);
-            SQLCode = obj.SQLCode;
-            SQLErrText = obj.SQLErrText;
-            return obj;
         }
 
         /// <summary>
@@ -5295,13 +5291,23 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select contract.con_title, outlet.o_name " + 
-                        "from rd.contract, rd.outlet " +
-                        "where contract.contract_no = @il_contract_no and " +
-                        "contract.con_base_office = outlet.outlet_id";
+                    // NOTE: Need 'top(1)' in subqueries to avoid getting multiple rows returned
+                    cm.CommandText = "select contract.con_title " 
+                                    + "    , outlet.o_name "
+                                    + "    , (select top(1) strip_height.sh_height " 
+                                    + "         from contract_fixed_assets, strip_height "
+                                    + "        where contract_fixed_assets.contract_no = @il_contract_no "
+                                    + "          and strip_height.sh_id = contract_fixed_assets.sh_id) "
+                                    + "    , (select top(1) fixed_asset_type.fat_description "
+                                    + "         from contract_fixed_assets, fixed_asset_type "
+                                    + "        where contract_fixed_assets.contract_no = @il_contract_no "
+                                    + "          and fixed_asset_type.fat_id = contract_fixed_assets.fat_id) "
+                                    + " from rd.contract, rd.outlet "
+                                    + "where contract.contract_no = @il_contract_no "
+                                    + "  and contract.con_base_office = outlet.outlet_id";
 
                     pList.Add(cm, "il_contract_no", il_contract_no);
-                    _ContractInfoByNoList = new List<ContractInfoByNoItem>();
+                    _contract_info_by_no_list = new List<ContractInfoByNoItem>();
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -5309,9 +5315,11 @@ namespace NZPostOffice.RDS.DataService
                             if (dr.Read())
                             {
                                 ContractInfoByNoItem item = new ContractInfoByNoItem();
-                                _ContractInfoByNoList.Add(item);
                                 item._con_title = dr.GetString(0);
                                 item._o_name = dr.GetString(1);
+                                item._con_strip_height = (int?)dr.GetValue(2);
+                                item._con_frame_type = dr.GetString(3);
+                                _contract_info_by_no_list.Add(item);
                             }
                             _sqlcode = 0;
                         }
@@ -5320,6 +5328,101 @@ namespace NZPostOffice.RDS.DataService
                     {
                         _sqlcode = -1;
                         _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_026 June-2011: Added
+        [ServerMethod]
+        private void _GetDefaultStripHeightId()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select strip_height.sh_id, strip_height.sh_height "
+                                    + " from rd.strip_height "
+                                    + "where strip_height.sh_default = 1";
+
+                    intVal = -1;
+                    _default_strip_height = new List<DefaultStripHeight>();
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                DefaultStripHeight item = new DefaultStripHeight();
+                                intVal = dr.GetInt32(0);
+                                item._strip_height = dr.GetInt32(1);
+                                _default_strip_height.Add(item);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_026 June-2011: Added
+        [ServerMethod]
+        private void _GetFatIdCount(int? in_contract_no, int? in_fat_id)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "in_contract_no", in_contract_no);
+                    pList.Add(cm, "in_fat_id", in_fat_id);
+
+                    intVal = -1;
+                    try
+                    {
+                        // First, check that the contract exists and has not been terminated
+                        cm.CommandText = "select count(*) from rd.contract "
+                                        + "where contract_no = @in_contract_no"
+                                        + "  and con_date_terminated is null";
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            if (intVal < 1)
+                            {
+                                _sqlcode = -1;
+                                intVal = -1;
+                                return;
+                            }
+                        }
+
+                        // Now count the number of times the contract has the asset type as an asset
+                        cm.CommandText = "select count(*) from rd.contract_fixed_assets "
+                                        + "where contract_no = @in_contract_no"
+                                        + "  and fat_id = @in_fat_id";
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
                     }
                 }
             }
@@ -9576,7 +9679,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select region_id from rd.outlet where outlet_id = @ll_Outlet";
+                    cm.CommandText = "select region_id from rd.outlet " 
+                                   + " where outlet_id = @ll_Outlet";
                     pList.Add(cm, "ll_Outlet", ll_Outlet);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -9586,65 +9690,6 @@ namespace NZPostOffice.RDS.DataService
                         }
                     }
                     intVal = sequence;
-                }
-            }
-        }
-
-        [ServerMethod]
-        private void _InsertFixedAssetRegister(string sFixedAssetKey, int? lFatId, string sFAOwner, DateTime? dFAPurchaseDate, decimal? decFAPurchasePrice)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    cm.CommandType = CommandType.Text;
-                    cm.CommandText = "Insert into rd.fixed_asset_register(fa_fixed_asset_no,fat_id,fa_owner,fa_purchase_date,fa_purchase_price) " +
-                        "Values (@sFixedAssetKey,@lFatId, @sFAOwner,@dFAPurchaseDate,@decFAPurchasePrice)";
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "sFixedAssetKey", sFixedAssetKey);
-                    pList.Add(cm, "lFatId", lFatId);
-                    pList.Add(cm, "sFAOwner", sFAOwner);
-                    pList.Add(cm, "dFAPurchaseDate", dFAPurchaseDate);
-                    pList.Add(cm, "decFAPurchasePrice", decFAPurchasePrice);
-
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
-            }
-        }
-
-        [ServerMethod]
-        private void _UpdateFixedAssetRegister(int? lFatId, string sFAOwner, DateTime? dFAPurchaseDate, decimal? decFAPurchasePrice, string sFixedAssetKey)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    cm.CommandType = CommandType.Text;
-                    cm.CommandText = "UPDATE rd.fixed_asset_register " +
-                        "set fat_id = @lFatId,fa_owner = @sFAOwner, " +
-                            "fa_purchase_date = @dFAPurchaseDate," + 
-                            "fa_purchase_price = @decFAPurchasePrice " +
-                        "where fa_fixed_asset_no = @sFixedAssetKey";
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "lFatId", lFatId);
-                    pList.Add(cm, "sFAOwner", sFAOwner);
-                    pList.Add(cm, "dFAPurchaseDate", dFAPurchaseDate);
-                    pList.Add(cm, "decFAPurchasePrice", decFAPurchasePrice);
-                    pList.Add(cm, "sFixedAssetKey", sFixedAssetKey);
-
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                    }
-                    catch (Exception e)
-                    {
-                    }
                 }
             }
         }
@@ -10214,77 +10259,29 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetContractFixedAssetsCount(string sFixedAssetno, int il_Contract_no)
+        private void _AssignFixedAssetToContract(string sFixedAssetNo, int nContractNo)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    int sequence = 0;
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = cm.CommandText = "rd.sp_AssignFixedAssetToContract";
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select count(*) from rd.contract_fixed_assets " +
-                        "where fa_fixed_asset_no = @sFixedAssetno and " +
-                        "contract_no <> @il_Contract_no";
-                    pList.Add(cm, "sFixedAssetno", sFixedAssetno);
-                    pList.Add(cm, "il_Contract_no", il_Contract_no);
+                    pList.Add(cm, "in_fixed_asset_no", sFixedAssetNo);
+                    pList.Add(cm, "in_contract_no", nContractNo);
 
                     try
                     {
-                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                        {
-                            if (dr.Read())
-                            {
-                                sequence = dr.GetInt32(0);
-                            }
-                            else
-                            {
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                    intVal = sequence;
-                }
-            }
-        }
-
-        [ServerMethod]
-        private void _GetFixedAssetRegisterInfo(string sFixedAssetno)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select fat_id, fa_owner,fa_purchase_date,fa_purchase_price " +
-                        "from rd.fixed_asset_register " +
-                        "where fa_fixed_asset_no = @sFixedAssetno";
-                    pList.Add(cm, "sFixedAssetno", sFixedAssetno);
-                    _fixedAssetRegisterItem = new FixedAssetRegisterItem();
-                    try
-                    {
-                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                        {
-                            if (dr.Read())
-                            {
-                                _fixedAssetRegisterItem._fat_id = dr.GetInt32(0);
-                                _fixedAssetRegisterItem._fa_owner = dr.GetString(1);
-                                _fixedAssetRegisterItem._fa_purchase_date = dr.GetDateTime(2);
-                                _fixedAssetRegisterItem._fa_purchase_price = dr.GetDecimal(3);
-                                _sqlcode = 0;
-                            }
-                            else
-                            {
-                                _sqlcode = 100;
-                            }
-                        }
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
                     }
                     catch (Exception e)
                     {
                         _sqlcode = -1;
                         _sqlerrtext = e.Message;
                     }
+                    intVal = _sqlcode;
                 }
             }
         }
@@ -12266,46 +12263,6 @@ namespace NZPostOffice.RDS.DataService
     }
 
     [Serializable()]
-    public class FixedAssetRegisterItem
-    {
-        internal int _fat_id;
-        public int FatId
-        {
-            get
-            {
-                return _fat_id;
-            }
-        }
-
-        internal string _fa_owner;
-        public string FaOwner
-        {
-            get
-            {
-                return _fa_owner;
-            }
-        }
-
-        internal DateTime _fa_purchase_date;
-        public DateTime FaPurchaseDate
-        {
-            get
-            {
-                return _fa_purchase_date;
-            }
-        }
-
-        internal decimal _fa_purchase_price;
-        public decimal FaPurchasePrice
-        {
-            get
-            {
-                return _fa_purchase_price;
-            }
-        }
-    }
-
-    [Serializable()]
     public class AddressPostCodeTowncityItem
     {
         internal string _adr_rd_no;
@@ -12399,6 +12356,7 @@ namespace NZPostOffice.RDS.DataService
         }
     }
 
+    // TJB  RPCR_026  June-2011: Added _con_strip_height
     [Serializable()]
     public class ContractInfoByNoItem
     {
@@ -12417,6 +12375,38 @@ namespace NZPostOffice.RDS.DataService
             get
             {
                 return _o_name;
+            }
+        }
+
+        internal int? _con_strip_height;
+        public int? ConStripHeight
+        {
+            get
+            {
+                return _con_strip_height;
+            }
+        }
+        internal string _con_frame_type;
+        public string ConFrameType
+        {
+            get
+            {
+                return _con_frame_type;
+            }
+        }
+
+    }
+
+    // TJB  RPCR_026  June-2011: Added
+    [Serializable()]
+    public class DefaultStripHeight
+    {
+        internal int _strip_height = 40;
+        public int StripHeight
+        {
+            get
+            {
+                return _strip_height;
             }
         }
     }
