@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB  RPCR_026  July-2011
+    // Added seq_num
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -67,6 +70,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
         [DBField()]
         private string _adr_alpha;
+
+        [DBField()]
+        private int? _seq_num;
 
         public virtual int? AdrId
         {
@@ -302,6 +308,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual int? SeqNum
+        {
+            get
+            {
+                CanReadProperty("SeqNum", true);
+                return _seq_num;
+            }
+            set
+            {
+                CanWriteProperty("SeqNum", true);
+                if (_seq_num != value)
+                {
+                    _seq_num = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         /*?
 		    // needs to implement compute expression manually:
 			// compute control name=[multiple_prime]
@@ -347,7 +371,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 }
             }
         }
-
 
         // needs to implement compute expression manually:
         // compute control name=[primary_contract]
@@ -453,6 +476,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._adr_unit = GetValueFromReader<string>(dr, 10);
                                 instance._adr_no = GetValueFromReader<string>(dr, 11);
                                 instance._adr_alpha = GetValueFromReader<string>(dr, 12);
+                                instance._seq_num = GetValueFromReader<int?>(dr, 13);
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
