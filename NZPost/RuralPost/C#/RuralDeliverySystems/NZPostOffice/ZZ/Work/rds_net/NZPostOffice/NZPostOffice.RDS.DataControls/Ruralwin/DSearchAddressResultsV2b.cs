@@ -11,7 +11,11 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-	public partial class DSearchAddressResultsV2b : Metex.Windows.DataUserControl
+    // TJB  RPCR_026  July-2011
+    //  Changed Primary indicator column to display 
+    //  Address sequence number (seq_num)
+
+    public partial class DSearchAddressResultsV2b : Metex.Windows.DataUserControl
 	{
 		public DSearchAddressResultsV2b()
 		{
