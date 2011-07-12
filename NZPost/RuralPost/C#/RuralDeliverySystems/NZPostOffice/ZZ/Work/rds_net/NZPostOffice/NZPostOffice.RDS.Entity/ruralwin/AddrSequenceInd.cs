@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB_RPCR_026  June-2011
+    // Added rf_locked
+    //
     // TJB Jan-2011 Sequencing Review
     // Added handling of inSFkey == null to FetchEnity
     // Changed Update to call Update_frequency_ind stored procedure
@@ -21,15 +24,20 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("contract_no", "_contract_no", "route_frequency")]
 	[MapInfo("sf_key", "_sf_key", "route_frequency")]
 	[MapInfo("rf_delivery_days", "_rf_delivery_days", "route_frequency")]
-	[System.Serializable()]
+    [MapInfo("rf_locked", "_rf_locked", "route_frequency")]
+    
+    [System.Serializable()]
 
 	public class AddrSequenceInd : Entity<AddrSequenceInd>
 	{
 		#region Business Methods
-		[DBField()]
-		private int?  _rf_valid_ind;
+        [DBField()]
+        private int? _rf_valid_ind;
 
-		[DBField()]
+        [DBField()]
+        private int? _rf_locked;
+
+        [DBField()]
 		private DateTime?  _rf_valid_date;
 
 		[DBField()]
@@ -45,25 +53,43 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		private string  _rf_delivery_days;
 
 
-		public virtual int? RfValidInd
-		{
-			get
-			{
+        public virtual int? RfValidInd
+        {
+            get
+            {
                 CanReadProperty("RfValidInd", true);
-				return _rf_valid_ind;
-			}
-			set
-			{
+                return _rf_valid_ind;
+            }
+            set
+            {
                 CanWriteProperty("RfValidInd", true);
-				if ( _rf_valid_ind != value )
-				{
-					_rf_valid_ind = value;
-					PropertyHasChanged();
-				}
-			}
-		}
+                if (_rf_valid_ind != value)
+                {
+                    _rf_valid_ind = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
 
-		public virtual DateTime? RfValidDate
+        public virtual int? RfLocked
+        {
+            get
+            {
+                CanReadProperty("RfLocked", true);
+                return _rf_locked;
+            }
+            set
+            {
+                CanWriteProperty("RfLocked", true);
+                if (_rf_locked != value)
+                {
+                    _rf_locked = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? RfValidDate
 		{
 			get
 			{
@@ -197,35 +223,32 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContractNo", inContractNo);
 
+                    string selectCols = "route_frequency.rf_valid_ind, " +
+                                        "route_frequency.rf_valid_date, " +
+                                        "route_frequency.rf_valid_user, " +
+                                        "route_frequency.contract_no, " +
+                                        "route_frequency.sf_key, " +
+                                        "route_frequency.rf_delivery_days, " +
+                                        "route_frequency.rf_locked " +
+                                   "FROM route_frequency " +
+                                  "WHERE route_frequency.contract_no = @inContractNo ";
+
                     if (inSFkey != null)
                     {
-                        cm.CommandText = " SELECT route_frequency.rf_valid_ind," +
-                                                 "route_frequency.rf_valid_date," +
-                                                 "route_frequency.rf_valid_user," +
-                                                 "route_frequency.contract_no," +
-                                                 "route_frequency.sf_key," +
-                                                 "route_frequency.rf_delivery_days " +
-                                            "FROM route_frequency " +
-                                           "WHERE route_frequency.contract_no = @inContractNo " +
-                                             "AND route_frequency.sf_key = @inSFkey " +
-                                             "AND route_frequency.rf_delivery_days = @inDeliveryDays";
+                        cm.CommandText = " SELECT " 
+                                         + selectCols
+                                         + "AND route_frequency.sf_key = @inSFkey " 
+                                         + "AND route_frequency.rf_delivery_days = @inDeliveryDays";
                         pList.Add(cm, "inSFkey", inSFkey);
                         pList.Add(cm, "inDeliveryDays", inDeliveryDays);
                     }
                     else   // Called from WCustomerSequencer2 with sf_key == null
                     {      // Get valid ind, date, user for the contract's first active frequency
                            //  (they should all be the same)
-                        cm.CommandText = " SELECT TOP(1) " + 
-                                                 "route_frequency.rf_valid_ind," +
-                                                 "route_frequency.rf_valid_date," +
-                                                 "route_frequency.rf_valid_user," +
-                                                 "route_frequency.contract_no," +
-                                                 "route_frequency.sf_key," +
-                                                 "route_frequency.rf_delivery_days " +
-                                            "FROM route_frequency " +
-                                           "WHERE route_frequency.contract_no = @inContractNo " +
-                                             "AND rf_active = 'Y'" + 
-                                           "ORDER BY sf_key ";
+                        cm.CommandText = " SELECT TOP(1) "
+                                         + selectCols
+                                         + "AND rf_active = 'Y' " 
+                                         + "ORDER BY sf_key ";
                     }
 
                     List<AddrSequenceInd> _list = new List<AddrSequenceInd>();
@@ -240,7 +263,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             instance._contract_no = GetValueFromReader<int?>(dr,3);
                             instance._sf_key = GetValueFromReader<int?>(dr,4);
                             instance._rf_delivery_days = GetValueFromReader<string>(dr,5);
-							instance.MarkOld();
+                            instance._rf_locked = GetValueFromReader<int?>(dr, 6);
+                            instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
 						}
@@ -269,13 +293,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                            + "@contract_no, "
                                            + "@rf_valid_date, "
                                            + "@rf_valid_ind, "
-                                           + "@rf_valid_user";
+                                           + "@rf_valid_user, "
+                                           + "@rf_locked ";
 
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "contract_no", _contract_no);
+                    pList.Add(cm, "contract_no",   _contract_no);
                     pList.Add(cm, "rf_valid_date", _rf_valid_date);
-                    pList.Add(cm, "rf_valid_ind", _rf_valid_ind);
+                    pList.Add(cm, "rf_valid_ind",  _rf_valid_ind);
                     pList.Add(cm, "rf_valid_user", _rf_valid_user);
+                    pList.Add(cm, "rf_locked",     _rf_locked);
 
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
