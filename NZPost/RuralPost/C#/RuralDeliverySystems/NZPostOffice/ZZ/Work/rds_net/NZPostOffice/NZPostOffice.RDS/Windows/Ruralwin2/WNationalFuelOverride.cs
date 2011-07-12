@@ -1254,7 +1254,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             URdsDw ldw_temp;
             DialogResult li_rc;
-            if (tab_rates.SelectedIndex == 1) //(oldindex == 1)
+            if (tab_rates.SelectedIndex == 1) //(oldTabIndex == 1)
             {
                 ldw_temp = idw_details;
             }
