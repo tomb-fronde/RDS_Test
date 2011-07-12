@@ -71,22 +71,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.tbPanel);
             this.Name = "DContractFixedAssets";
             this.Size = new System.Drawing.Size(532, 300);
-            this.SizeChanged += new System.EventHandler(this.DContractFixedAssets_SizeChanged);
             this.RetrieveStart += new Metex.Windows.RetrieveEventHandler(this.DContractFixedAssets_RetrieveStart);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         void DContractFixedAssets_RetrieveStart(object sender, Metex.Windows.RetrieveEventArgs e)
         {
             tbPanel.Controls.Clear();
-        }
-
-        void DContractFixedAssets_SizeChanged(object sender, System.EventArgs e)
-        {
-            //this.tbPanel.Width = this.Width - tbPanel.Left;
-            //this.tbPanel.Height = this.Height - this.tbPanel.Top;
         }
 
         void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
@@ -110,9 +102,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                         tbPanel.Controls.RemoveAt(i);
                         break;
                     }
-                    
                 }
-
             }
             else if (e.ListChangedType == System.ComponentModel.ListChangedType.ItemAdded)
             {
@@ -122,7 +112,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 ldw_temp.Size = new System.Drawing.Size(500, 80);
                 ldw_temp.BindingSource.DataSource = this.BindingSource.List[e.NewIndex];
                 ldw_temp.Click += new System.EventHandler(ldw_temp_Click);
-                ldw_temp.TextBoxLostFocus += new System.EventHandler(ldw_temp_TextBoxLostFocus);
+//                ldw_temp.TextBoxLostFocus += new System.EventHandler(ldw_temp_TextBoxLostFocus);
                 //((TextBox)(ldw_temp.GetControlByName("fa_fixed_asset_no"))).ReadOnly = false;
                 this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
                 tbPanel.SetRow(ldw_temp, e.NewIndex);
@@ -136,9 +126,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 {
                     ((Metex.Windows.DataEntityCombo)ldw_temp.GetControlByName("fat_id")).Value = "";
                 }
-            }
-            else
-            {
             }
         }
 
