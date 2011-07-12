@@ -15,16 +15,26 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPCR_026  June-2011
+    //     Added nContractStripHeight and GetDefaultStripHeight().
+    //     Add the flat number to the address number as <flat>-<addrno> 
+    //     if there is a flat number.
+    //     Added locked checkbox and functionality.
+    //     Changed sequence number to display address seq_num instead of
+    //     route sequence.  Changes selection to select groups of addresses
+    //     with same seq_num as though one address, for moves, skipping over, etc.
+    //
     // TJB Feb-2011 Release 7.1.5 fixups
     //     Fixed a couple of bugs in how filenames and directories were handled
     //     in cb_stripmaker_clicked().
     //     Added GetParentPath()
-
-    // TJB  Jan-2011  Sequencing review
+    //
+    // TJB Jan-2011  Sequencing review
     //     Modified selection and sequencing algorithm.
     //     Added 'arror' buttons and 'Sequence at end' and 'Reverse sequence' buttons.
     //     Manages sequences for whole contract (not by frequency within contract)
     //     Called from Address tab in Contract details window.
+
     public partial class WCustomerSequencer : WAncestorWindow
     {
         #region Define
@@ -104,16 +114,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public void this_form_closing(Object s, System.ComponentModel.CancelEventArgs e)
         {
-        /*
-            int nSeqModified = dw_seq.ModifiedCount();
-            int nUnseqModified = dw_unseq.ModifiedCount();
-            int nIndModified = dw_addr_sequence_ind.ModifiedCount();
-            MessageBox.Show("Form Closing \n"
-                            + "nSeqModified = " + nSeqModified.ToString() + "\n"
-                            + "nUnseqModified = " + nUnseqModified.ToString() + "\n"
-                            + "nIndModified = " + nIndModified.ToString() + "\n"
-                            , "this_form_closing");
-        */
             dw_seq.ResetUpdate();
             dw_unseq.ResetUpdate();
             dw_addr_sequence_ind.ResetUpdate();
@@ -799,22 +799,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-            nRow = dw_unseq.GetRow();
+            nRow = dw_addr_sequence_ind.GetRow();
+            int? is_locked = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfLocked;
 
-            if (this.dw_unseq.GetSelectedRow(0) < 0)
+            if (is_locked == null || is_locked == 0)
             {
-                cb_seq_arrow.Enabled = false;
-                cb_sequence.Enabled = false;
-                cb_addseq.Enabled = false;
-                cb_reverse.Enabled = false;
+                if (this.dw_unseq.GetSelectedRow(0) < 0)
+                {
+                    cb_seq_arrow.Enabled = false;
+                    cb_sequence.Enabled = false;
+                    cb_addseq.Enabled = false;
+                    cb_reverse.Enabled = false;
+                }
+                else
+                {
+                    cb_seq_arrow.Enabled = true;
+                    cb_sequence.Enabled = true;
+                    cb_addseq.Enabled = true;
+                    cb_reverse.Enabled = true;
+                }
             }
-            else
-            {
-                cb_seq_arrow.Enabled = true;
-                cb_sequence.Enabled = true;
-                cb_addseq.Enabled = true;
-                cb_reverse.Enabled = true;
-            }
+
             this.dw_unseq.ResumeLayout(true);
             (dw_unseq.DataObject.Controls[0] as DataEntityGrid).Refresh();
             return;
@@ -896,21 +901,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //MessageBox.Show("seqSelectedRows.Contains:\n" + msg
             //                , "dw_seq_clicked");
 
-            // Turn the arrows on and off depending on whether or not thwere are addresses selected.
-            nRows = dSeqSelectedRows.Count;
-            if (nRows <= 0)
+            // Check to see if the address sequence is locked.
+            // Set operation buttons enabled/disabled depending on its setting
+            nRow = dw_addr_sequence_ind.GetRow();
+            int? is_locked = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfLocked;
+            if (is_locked == null || is_locked == 0)
             {
-                cb_up_arrow.Enabled = false;
-                cb_down_arrow.Enabled = false;
-                cb_unseq_arrow.Enabled = false;
-                cb_unsequence.Enabled = false;
-            }
-            else
-            {
-                cb_up_arrow.Enabled = true;
-                cb_down_arrow.Enabled = true;
-                cb_unseq_arrow.Enabled = true;
-                cb_unsequence.Enabled = true;
+                // Turn the arrows on and off depending on whether or not there are addresses selected.
+                nRows = dSeqSelectedRows.Count;
+                if (nRows <= 0)
+                {
+                    cb_up_arrow.Enabled = false;
+                    cb_down_arrow.Enabled = false;
+                    cb_unseq_arrow.Enabled = false;
+                    cb_unsequence.Enabled = false;
+                }
+                else
+                {
+                    cb_up_arrow.Enabled = true;
+                    cb_down_arrow.Enabled = true;
+                    cb_unseq_arrow.Enabled = true;
+                    cb_unsequence.Enabled = true;
+                }
             }
         }
 
@@ -1528,7 +1540,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  where contract.contract_no = :il_contract_no 
             //    and contract.con_base_office = outlet.outlet_id
 
-            // TJB  RPCR_026  June-2011: Added nContractStripHeight and GetDefaultStripHeight()
+            // TJB  RPCR_026  June-2011
+            // Added nContractStripHeight and GetDefaultStripHeight()
             int? nContractStripHeight = 40;  // GetDefaultStripHeight() *should* always return a value
             string sSortFrameType = "";      // This is the current (June-2011) default value
             string sLookupError = "";
@@ -1888,19 +1901,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_addr_sequence_ind_itemchanged(object sender, EventArgs e)
         {
+            dw_addr_sequence_ind.AcceptText();
             dw_addr_sequence_ind.URdsDw_Itemchanged(sender, e);
+
             //  TJB  SR4691  Aug 2006
             //  Toggle the validated indicator and update the date and userID
             // 
             //  Note: the validated indicator is the only thing selectable
             //  in this data window so we don't need to check which field
             //  was selected.
-            string ls_name;
-            ls_name = this.dw_addr_sequence_ind.GetColumnName();
-            int rows = this.dw_addr_sequence_ind.RowCount;
+            string ls_name = this.dw_addr_sequence_ind.GetColumnName();
             int row = this.dw_addr_sequence_ind.GetRow();
+
             if (ls_name == "rf_valid_ind")
             {
+                int rows = this.dw_addr_sequence_ind.RowCount;
                 if (rows > 0 && row < 0)
                     row = 0;
                 if (row >= 0)
@@ -1908,6 +1923,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_addr_sequence_ind.GetItem<AddrSequenceInd>(row).RfValidDate = System.DateTime.Today;
                     idw_addr_sequence_ind.GetItem<AddrSequenceInd>(row).RfValidUser = is_userid;
                 }
+            }
+
+            // TJB  RPCR_026  July-2011
+            // Any change to the locked checkbox clears any selections 
+            // and turns all action buttone off.  If the locked checkbox
+            // has been cleared, the user will have to re-select any selections 
+            // which will turn on any relevant action buttons.
+            if (ls_name == "rf_locked_ind")
+            {
+                cb_seq_arrow.Enabled = false;
+                cb_sequence.Enabled = false;
+                cb_addseq.Enabled = false;
+                cb_reverse.Enabled = false;
+                cb_unseq_arrow.Enabled = false;
+                cb_unsequence.Enabled = false;
+                cb_up_arrow.Enabled = false;
+                cb_down_arrow.Enabled = false;
+
+                dw_unseq.SelectRow(0, false);
+                dw_seq.SelectRow(0, false);
+
+                il_sequence = 0;
             }
         }
         #endregion
