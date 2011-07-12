@@ -14,6 +14,13 @@ using System.Text;
 
 namespace NZPostOffice.RDS.Controls
 {
+    // TJB  RPCR_026  July-2011
+    // Added SortString
+    //
+    // TJB  Release 7.1.3 fixups Aug 2010
+    // Added of_set_insertmodify and showUpdateToolButton
+    // to add Update button (m_modify) when working with Allowancws
+
     //declare  delegates.
     public delegate void EventDelegate(object send, EventArgs e);
     public delegate void UserEventDelegate();
@@ -22,10 +29,6 @@ namespace NZPostOffice.RDS.Controls
 
     public class URdsDw : UDw
     {
-        // TJB  Release 7.1.3 fixups Aug 2010
-        // Added of_set_insertmodify and showUpdateToolButton
-        // to add Update button (m_modify) when working with Allowancws
-
         #region event delegate
 
         //added by wjtang for  the delegate
@@ -359,6 +362,15 @@ namespace NZPostOffice.RDS.Controls
         public virtual int Retrieve()
         {
             return DataObject.Retrieve();
+        }
+
+        // TJB  RPCR_026  July-2011: Added
+        // Complement to Sort<T>; 
+        // sets sort string without needing to explicitly specify
+        // the dataobject.
+        public void SortString(string s)
+        {
+            DataObject.SortString = s;
         }
 
         public void Sort<T>() where T : IEntity
