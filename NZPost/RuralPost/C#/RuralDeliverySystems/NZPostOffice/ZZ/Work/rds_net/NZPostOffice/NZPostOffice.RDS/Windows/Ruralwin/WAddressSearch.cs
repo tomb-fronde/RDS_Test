@@ -54,11 +54,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public USt st_count;
 
+        public Button cb_print;
+
         // TJB  RPCR_026  July-2011
         private Button cb_sortseq;
         private Button cb_sortaddr;
 
-        public Button cb_print;
+        // TJB  RPCR_026  July-2011
+        // Specify alternate ways to sort the addresses and set the default 
+        // to sort by address.  See cb_sortseq_Click, cb_sortaddr_Click, 
+        // dw_results_sort and cb_search_Click.  Done like this so sort order 
+        // survives changes in search criteria.
+        private string sortaddr_sortstring = "RoadName A, AdrNo A, AdrAlpha A, AdrUnit A";
+        private string sortseq_sortstring = "SeqNum A, CustSurnameCompany A, CustInitials A";
+        private string dw_results_sortstring = "";
 
         #endregion
 
@@ -67,12 +76,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
             idw_results = dw_results;
             foreach (Control ctr in this.Controls)
-            {
                 if (ctr is ToolStrip)
-                {
                     ctr.Visible = false;
-                }
-            }
+
             this.cb_cancel.Visible = false;
             this.cb_select.Visible = false;
             this.AcceptButton = this.cb_search;
@@ -80,6 +86,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
             // TJB  RD7_0042  Jan-2010: Added
             this.tab_criteria.GotFocus += new System.EventHandler(tab_criteria_gainfocus);
+
+            dw_results_sortstring = sortaddr_sortstring;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -721,6 +729,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.Cursor = Cursors.WaitCursor;
             this.ue_click_search();
+            dw_results_sort();
             this.Cursor = Cursors.Default;
         }
 
@@ -1272,14 +1281,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // TJB  RPCR_026  July-2011: Added
         private void cb_sortseq_Click(object sender, EventArgs e)
         {
-            dw_results.DataObject.SortString = "SeqNum A, CustSurnameCompany A, CustInitials A";
+            dw_results_sortstring = sortseq_sortstring;
             dw_results_sort();
         }
 
         // TJB  RPCR_026  July-2011: Added
         private void cb_sortaddr_Click(object sender, EventArgs e)
         {
-            dw_results.DataObject.SortString = "RoadName A, AdrNo A, AdrAlpha A, AdrUnit A";
+            dw_results_sortstring = sortaddr_sortstring;
             dw_results_sort();
         }
 
@@ -1287,6 +1296,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private void dw_results_sort()
         {
             dw_results.SuspendLayout();
+            dw_results.DataObject.SortString = dw_results_sortstring;
             dw_results.DataObject.Sort<SearchAddressResultsV2b>();
             dw_results.ResumeLayout();
         }
