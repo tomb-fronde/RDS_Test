@@ -19,7 +19,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     //     Added nContractStripHeight and GetDefaultStripHeight().
     //     Add the flat number to the address number as <flat>-<addrno> 
     //     if there is a flat number.
-    //     Added locked checkbox and functionality.
+    //     Added frozen checkbox and functionality.
     //     Changed sequence number to display address seq_num instead of
     //     route sequence.  Changes selection to select groups of addresses
     //     with same seq_num as though one address, for moves, skipping over, etc.
@@ -172,6 +172,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DAddrSequenceInd)idw_addr_sequence_ind.DataObject).Retrieve(il_contract_no, null, "");
         }
 
+        public override void pfc_postopen()
+        {
+            base.pfc_postopen();
+            dw_unseq.URdsDw_GetFocus(null, null);
+            dw_seq.URdsDw_GetFocus(null, null);
+            is_userid = StaticVariables.LoginId;
+            
+            // TJB  RPCR_026  July-2011
+            // Disable the frozen checkbox unless the user is a member of a group for
+            // which the 'Address Sequence Freeze' Modify ('M') component/permission 
+            // is set.
+            string s_frozen_perms = of_getpermissions("Address Sequence Freeze");
+            Control frozen_ind = dw_addr_sequence_ind.GetControlByName("rf_frozen_ind");
+            //MessageBox.Show("Address Sequence Frozen permissions = " + s_frozen_perms + "\n"
+            //                , "pfc_postopen");
+            if ((s_frozen_perms != null) && (s_frozen_perms.IndexOf('M') >= 0))
+                frozen_ind.Enabled = true;
+            else
+                frozen_ind.Enabled = false;
+        }
+
         public override int pfc_save()
         {
             int ll_rc = SUCCESS;
@@ -202,32 +223,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             //  TJB  SR4691 fixup
             //  Added dw_unseq.modifiedCount to fix failure to save
-            //  unsequenced addresses  ( but this process is deathly slow!).
-/*
-            if (StaticFunctions.IsDirty(dw_seq) || StaticFunctions.IsDirty(dw_unseq))
-            {
+            //  unsequenced addresses (but this process is deathly slow!).
 
-                // Remove all sequenced for that contract
-                //* update address set seq_num = null 
-                //*  where contract_no = :il_contract_no  
-                dataService = RDSDataService.ClearAddressSeq(il_contract_no);
-                if (dataService.SQLCode != 0)
-                {
-                    MessageBox.Show("Unable to delete old route sequence.\n\n" 
-                		       + "Error Code: " + dataService.SQLCode + '\n' 
-                		       + "Error Text: " + dataService.SQLErrText + "\n" 
-                		       + "Parameters: \n" 
-                               + "   contract = " + il_contract_no.ToString() 
-                		       , "Database Error"
-                		       , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ll_rc = FAILURE;
-                }
-                else
-                {
-                    ll_rc = SUCCESS;
-                }
-*/
-            if (StaticFunctions.IsDirty(dw_seq))
+           if (StaticFunctions.IsDirty(dw_seq))
             {
                 nRows = dw_seq.RowCount;
                 if (ll_rc == SUCCESS && nRows > 0)
@@ -236,8 +234,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         nSeqNum = dw_seq.GetItem<SeqAddresses>(nRow).SeqNum;
                         nAdrId = (int)dw_seq.GetItem<SeqAddresses>(nRow).AdrId;
-                        //* update address
-                        //*    set seq_num = :nSeqNum
+                        //* update address set seq_num = :nSeqNum
                         //*  where adr_id = :nAdrId
                         //dataService = RDSDataService.InsertAddressFreqSeq(il_sf_key, ll_sequence_no, il_contract_no, ll_address_id, is_delivery_days);
                         dataService = RDSDataService.UpdateAddressSeq(nSeqNum, nAdrId);
@@ -295,7 +292,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
-/*            }  */
 
             // 
             //  TJB  SR4691
@@ -333,14 +329,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             return ll_rc;
-        }
-
-        public override void pfc_postopen()
-        {
-            base.pfc_postopen();
-            dw_unseq.URdsDw_GetFocus(null, null);
-            dw_seq.URdsDw_GetFocus(null, null);
-            is_userid = StaticVariables.LoginId;
         }
 
         public virtual void pfc_validation(object[] apo_control)
@@ -800,9 +788,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             nRow = dw_addr_sequence_ind.GetRow();
-            int? is_locked = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfLocked;
+            int? is_frozen = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfFrozen;
 
-            if (is_locked == null || is_locked == 0)
+            if (is_frozen == null || is_frozen == 0)
             {
                 if (this.dw_unseq.GetSelectedRow(0) < 0)
                 {
@@ -901,11 +889,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //MessageBox.Show("seqSelectedRows.Contains:\n" + msg
             //                , "dw_seq_clicked");
 
-            // Check to see if the address sequence is locked.
+            // Check to see if the address sequence is frozen.
             // Set operation buttons enabled/disabled depending on its setting
             nRow = dw_addr_sequence_ind.GetRow();
-            int? is_locked = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfLocked;
-            if (is_locked == null || is_locked == 0)
+            int? is_frozen = dw_addr_sequence_ind.GetItem<AddrSequenceInd>(nRow).RfFrozen;
+            if (is_frozen == null || is_frozen == 0)
             {
                 // Turn the arrows on and off depending on whether or not there are addresses selected.
                 nRows = dSeqSelectedRows.Count;
@@ -1087,6 +1075,33 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_seq.GetItem<SeqAddresses>(nRow).SeqNum = newSeqNum;
                 dw_seq.GetItem<SeqAddresses>(nRow).SequenceNo = newSequenceNo;
             }
+        }
+
+        // TJB  RPCR_026  July-2011
+        // Added from WAddressSearch
+        public virtual string of_getpermissions(string as_name)
+        {
+            int ll_componentID = 0;
+            int? ll_regionID;
+            string ls_perms;
+            ll_regionID = this.of_get_regionid();
+            ll_componentID = StaticVariables.gnv_app.of_get_securitymanager().of_get_componentid(as_name);
+            ls_perms = "";
+            if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "C", false))
+                ls_perms += "C";
+
+            if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "R", false))
+                ls_perms += "R";
+
+            if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "M", false))
+                ls_perms += "M";
+
+            if (StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(ll_componentID, ll_regionID, "D", false))
+                ls_perms += "D";
+
+            if (ls_perms == "")
+                ls_perms = null;
+            return ls_perms;
         }
 
         public virtual void cb_unseq_clicked(object sender, EventArgs e)
@@ -1926,11 +1941,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
 
             // TJB  RPCR_026  July-2011
-            // Any change to the locked checkbox clears any selections 
-            // and turns all action buttone off.  If the locked checkbox
+            // Any change to the frozen checkbox clears any selections 
+            // and turns all action buttone off.  If the frozen checkbox
             // has been cleared, the user will have to re-select any selections 
             // which will turn on any relevant action buttons.
-            if (ls_name == "rf_locked_ind")
+            if (ls_name == "rf_frozen_ind")
             {
                 cb_seq_arrow.Enabled = false;
                 cb_sequence.Enabled = false;
