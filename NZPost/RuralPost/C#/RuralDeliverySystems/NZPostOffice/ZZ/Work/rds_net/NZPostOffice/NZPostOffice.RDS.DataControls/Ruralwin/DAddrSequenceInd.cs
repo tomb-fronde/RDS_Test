@@ -11,7 +11,7 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB  RPCR_026  June-2011
-    // Added rf_locked_ind
+    // Added rf_frozen_ind
 
 	public partial class DAddrSequenceInd : Metex.Windows.DataUserControl
 	{

@@ -7,7 +7,7 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB  RPCR_026  June-2011
-    // Added rf_locked_ind
+    // Added rf_frozen_ind
 
 	partial class DAddrSequenceInd
 	{
@@ -31,7 +31,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		private System.Windows.Forms.TextBox   rf_valid_date;
 		private System.Windows.Forms.TextBox   rf_valid_user;
 		private System.Windows.Forms.CheckBox  rf_valid_ind;
-        private System.Windows.Forms.CheckBox  rf_locked_ind;
+        private System.Windows.Forms.CheckBox  rf_frozen_ind;
 
         public event EventHandler CheckedChanged;
 
@@ -48,7 +48,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.rf_valid_user = new System.Windows.Forms.TextBox();
             this.t_2 = new System.Windows.Forms.Label();
             this.rf_valid_date = new System.Windows.Forms.TextBox();
-            this.rf_locked_ind = new System.Windows.Forms.CheckBox();
+            this.rf_frozen_ind = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,25 +127,25 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.rf_valid_date.Size = new System.Drawing.Size(67, 13);
             this.rf_valid_date.TabIndex = 14;
             // 
-            // rf_locked_ind
+            // rf_frozen_ind
             // 
-            this.rf_locked_ind.AutoSize = true;
-            this.rf_locked_ind.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.rf_locked_ind.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfLocked", true));
-            this.rf_locked_ind.Location = new System.Drawing.Point(351, 2);
-            this.rf_locked_ind.Name = "rf_locked_ind";
-            this.rf_locked_ind.Size = new System.Drawing.Size(62, 17);
-            this.rf_locked_ind.TabIndex = 5;
-            this.rf_locked_ind.Text = "Locked";
-            this.rf_locked_ind.UseVisualStyleBackColor = true;
-            this.rf_locked_ind.CheckedChanged += new System.EventHandler(this.rf_valid_ind_CheckedChanged);
+            this.rf_frozen_ind.AutoSize = true;
+            this.rf_frozen_ind.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.rf_frozen_ind.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfFrozen", true));
+            this.rf_frozen_ind.Location = new System.Drawing.Point(351, 2);
+            this.rf_frozen_ind.Name = "rf_frozen_ind";
+            this.rf_frozen_ind.Size = new System.Drawing.Size(62, 17);
+            this.rf_frozen_ind.TabIndex = 5;
+            this.rf_frozen_ind.Text = "Frozen";
+            this.rf_frozen_ind.UseVisualStyleBackColor = true;
+            this.rf_frozen_ind.CheckedChanged += new System.EventHandler(this.rf_valid_ind_CheckedChanged);
             // 
             // DAddrSequenceInd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(this.rf_locked_ind);
+            this.Controls.Add(this.rf_frozen_ind);
             this.Controls.Add(this.rf_valid_ind);
             this.Controls.Add(this.t_1);
             this.Controls.Add(this.rf_valid_user);
