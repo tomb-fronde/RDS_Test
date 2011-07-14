@@ -9,7 +9,7 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB_RPCR_026  June-2011
-    // Added rf_locked
+    // Added rf_frozen
     //
     // TJB Jan-2011 Sequencing Review
     // Added handling of inSFkey == null to FetchEnity
@@ -24,7 +24,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("contract_no", "_contract_no", "route_frequency")]
 	[MapInfo("sf_key", "_sf_key", "route_frequency")]
 	[MapInfo("rf_delivery_days", "_rf_delivery_days", "route_frequency")]
-    [MapInfo("rf_locked", "_rf_locked", "route_frequency")]
+    [MapInfo("rf_frozen", "_rf_frozen", "route_frequency")]
     
     [System.Serializable()]
 
@@ -35,7 +35,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private int? _rf_valid_ind;
 
         [DBField()]
-        private int? _rf_locked;
+        private int? _rf_frozen;
 
         [DBField()]
 		private DateTime?  _rf_valid_date;
@@ -71,19 +71,19 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual int? RfLocked
+        public virtual int? RfFrozen
         {
             get
             {
-                CanReadProperty("RfLocked", true);
-                return _rf_locked;
+                CanReadProperty("RfFrozen", true);
+                return _rf_frozen;
             }
             set
             {
-                CanWriteProperty("RfLocked", true);
-                if (_rf_locked != value)
+                CanWriteProperty("RfFrozen", true);
+                if (_rf_frozen != value)
                 {
-                    _rf_locked = value;
+                    _rf_frozen = value;
                     PropertyHasChanged();
                 }
             }
@@ -229,7 +229,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                         "route_frequency.contract_no, " +
                                         "route_frequency.sf_key, " +
                                         "route_frequency.rf_delivery_days, " +
-                                        "route_frequency.rf_locked " +
+                                        "route_frequency.rf_frozen " +
                                    "FROM route_frequency " +
                                   "WHERE route_frequency.contract_no = @inContractNo ";
 
@@ -263,7 +263,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             instance._contract_no = GetValueFromReader<int?>(dr,3);
                             instance._sf_key = GetValueFromReader<int?>(dr,4);
                             instance._rf_delivery_days = GetValueFromReader<string>(dr,5);
-                            instance._rf_locked = GetValueFromReader<int?>(dr, 6);
+                            instance._rf_frozen = GetValueFromReader<int?>(dr, 6);
                             instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
@@ -294,14 +294,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                            + "@rf_valid_date, "
                                            + "@rf_valid_ind, "
                                            + "@rf_valid_user, "
-                                           + "@rf_locked ";
+                                           + "@rf_frozen ";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "contract_no",   _contract_no);
                     pList.Add(cm, "rf_valid_date", _rf_valid_date);
                     pList.Add(cm, "rf_valid_ind",  _rf_valid_ind);
                     pList.Add(cm, "rf_valid_user", _rf_valid_user);
-                    pList.Add(cm, "rf_locked",     _rf_locked);
+                    pList.Add(cm, "rf_frozen",     _rf_frozen);
 
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
