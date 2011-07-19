@@ -1495,12 +1495,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            // TJB  RPCR_026  July-2011: Bug fix
+            // The user may have entered a different filename; extract it.
+            int n = ls_filenamedir.LastIndexOf('\\');
+            if (n > 0)
+            {
+                ls_filename = ls_filenamedir.Substring(n + 1);
+                ls_filenamedir = ls_filenamedir.Substring(0, n + 1);
+            }
+
             //  Make sure we don't change the working directory
             //  Strip any file extension included
             ll_rc = ls_filename.LastIndexOf('.');
             if (ll_rc > 0)
             {
-                ls_filename = ls_filename.Substring(ll_rc);
+                ls_filename = ls_filename.Substring(0,ll_rc);
             }
             //  Remove the filename from the directory name
             ll_rc = ls_filenamedir.LastIndexOf(ls_filename);
