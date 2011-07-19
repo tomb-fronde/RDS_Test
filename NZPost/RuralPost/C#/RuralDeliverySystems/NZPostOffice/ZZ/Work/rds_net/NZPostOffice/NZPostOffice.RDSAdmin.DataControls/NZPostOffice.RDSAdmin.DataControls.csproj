@@ -363,6 +363,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DOutletList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DOutletType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DOutletType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DPieceRateSupplier.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DPieceRateSupplier.cs</DependentUpon>
