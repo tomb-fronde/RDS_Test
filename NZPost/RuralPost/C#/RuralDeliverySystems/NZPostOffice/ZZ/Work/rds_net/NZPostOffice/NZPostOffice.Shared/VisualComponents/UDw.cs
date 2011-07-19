@@ -886,7 +886,7 @@ namespace NZPostOffice.Shared.VisualComponents
             /*?
             //  TJB  Release 6.8.9 fixup  Nov 2005  NEW
             //  Set the toolbar according to the privileges set for
-            //  this datawindow  ( via the of_set_xxxxxPriv functions)
+            //  this datawindow (via the of_set_xxxxxPriv functions)
             MMainMenu lm_SheetMenu;
             MMainMenu lm_FrameMenu;
             MRdsDw lm_Dw;
@@ -1039,6 +1039,15 @@ namespace NZPostOffice.Shared.VisualComponents
         {
             is_Componentname = as_Componentname;
             return 1;
+        }
+
+        // TJB  July-2011: Added
+        public virtual bool IsNew(int row)
+        {
+            if (row >= 0 && row < this.DataObject.RowCount)
+                return ((Metex.Core.EntityBase)this.DataObject.BindingSource.List[row]).IsNew;
+            else
+                return false;
         }
 
         public virtual int ModifiedCount()
