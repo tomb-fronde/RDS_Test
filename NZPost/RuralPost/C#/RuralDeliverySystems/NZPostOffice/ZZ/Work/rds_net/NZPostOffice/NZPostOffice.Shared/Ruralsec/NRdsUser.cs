@@ -215,10 +215,18 @@ namespace NZPostOffice.Shared.Ruralsec
 
         public virtual bool of_ismember(string as_groupname)
         {
+            // TJB  July-2011: Expanded for debugging
             int ll_Ctr;
-            for (ll_Ctr = 1; ll_Ctr <= this.of_get_numgroups(); ll_Ctr++)
+            string as_groupname_upper = as_groupname.ToUpper().Trim();
+            string test_groupname_upper = "";
+
+            //for (ll_Ctr = 1; ll_Ctr <= this.of_get_numgroups(); ll_Ctr++)
+            int nCtrls = this.of_get_numgroups();
+            for (ll_Ctr = 1; ll_Ctr <= nCtrls; ll_Ctr++)
             {
-                if (inv_UserGroups[ll_Ctr].of_get_groupname().ToUpper().Trim() == as_groupname.ToUpper().Trim())
+                //if (inv_UserGroups[ll_Ctr].of_get_groupname().ToUpper().Trim() == as_groupname.ToUpper().Trim())
+                test_groupname_upper = inv_UserGroups[ll_Ctr].of_get_groupname().ToUpper().Trim();
+                if (test_groupname_upper == as_groupname_upper)
                 {
                     return true;
                 }
