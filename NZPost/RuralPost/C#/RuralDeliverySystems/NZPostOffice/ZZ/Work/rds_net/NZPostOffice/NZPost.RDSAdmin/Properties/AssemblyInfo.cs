@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Rural Delivery System Administration")]
 [assembly: AssemblyDescription("Rural Delivery System Administration")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Metex Inc.")]
+[assembly: AssemblyCompany("Fronde Systems Group")]
 [assembly: AssemblyProduct("Rural Delivery System Administration")]
-[assembly: AssemblyCopyright("Copyright @2010 Rural Post")]
+[assembly: AssemblyCopyright("Copyright@2011 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
