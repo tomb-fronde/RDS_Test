@@ -5291,20 +5291,21 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    // NOTE: Need 'top(1)' in subqueries to avoid getting multiple rows returned
                     cm.CommandText = "select contract.con_title " 
                                     + "    , outlet.o_name "
-                                    + "    , (select top(1) strip_height.sh_height " 
-                                    + "         from contract_fixed_assets, strip_height "
-                                    + "        where contract_fixed_assets.contract_no = @il_contract_no "
-                                    + "          and strip_height.sh_id = contract_fixed_assets.sh_id) "
-                                    + "    , (select top(1) fixed_asset_type.fat_description "
-                                    + "         from contract_fixed_assets, fixed_asset_type "
-                                    + "        where contract_fixed_assets.contract_no = @il_contract_no "
-                                    + "          and fixed_asset_type.fat_id = contract_fixed_assets.fat_id) "
-                                    + " from rd.contract, rd.outlet "
+                                    + "    , strip_height.sh_height " 
+                                    + "    , (select fixed_asset_type.fat_description "
+                                    + "         from fixed_asset_type "
+                                    + "        where fixed_asset_type.fat_id = fixed_asset_register.fat_id) "
+                                    + " from rd.contract join rd.outlet "
+                                    + "         on contract.con_base_office = outlet.outlet_id "
+                                    + "    , rd.contract_fixed_assets "
+                                    + "            left outer join fixed_asset_register "
+                                    + "              on fixed_asset_register.fa_fixed_asset_no = contract_fixed_assets.fa_fixed_asset_no "
+                                    + "            left outer join strip_height "
+                                    + "              on strip_height.sh_id = contract_fixed_assets.sh_id "
                                     + "where contract.contract_no = @il_contract_no "
-                                    + "  and contract.con_base_office = outlet.outlet_id";
+                                    + "  and contract_fixed_assets.contract_no = contract.contract_no ";
 
                     pList.Add(cm, "il_contract_no", il_contract_no);
                     _contract_info_by_no_list = new List<ContractInfoByNoItem>();

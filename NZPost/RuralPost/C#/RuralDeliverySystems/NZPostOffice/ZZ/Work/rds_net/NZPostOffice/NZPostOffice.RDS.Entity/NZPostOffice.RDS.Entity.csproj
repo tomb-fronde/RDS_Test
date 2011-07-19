@@ -50,8 +50,11 @@
     <Compile Include="Ruraldw\ContractAddressFrequency.cs" />
     <Compile Include="Ruraldw\CustomerInterests.cs" />
     <Compile Include="Ruraldw\CustomerOccupations.cs" />
+    <Compile Include="Ruraldw\DddwStripHeights.cs" />
     <Compile Include="Ruraldw\EclDataImport.cs" />
     <Compile Include="Ruraldw\EclDataImportExeptionReport.cs" />
+    <Compile Include="Ruraldw\FARegisterUnassigned.cs" />
+    <Compile Include="Ruraldw\FreightAllocations.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeCustomerDownloadSearch.cs" />
     <Compile Include="Ruralmailmerge\MailmergeDownloadSearchResults.cs" />

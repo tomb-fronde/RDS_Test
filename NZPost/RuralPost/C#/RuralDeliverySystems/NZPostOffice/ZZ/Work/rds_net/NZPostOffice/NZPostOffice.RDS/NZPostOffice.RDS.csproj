@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.5.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.6.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -170,6 +170,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WRenewalProcess2006.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WRouteAudit.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WRouteAudit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WWhatifCalc2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WWhatifCalc2001.cs</DependentUpon>
@@ -189,6 +193,10 @@
     <EmbeddedResource Include="Windows\Ruralwin\WAddArticleCounts.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddArticleCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddFixedAsset.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddFixedAsset.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WAddressSearch.resx">
       <SubType>Designer</SubType>
