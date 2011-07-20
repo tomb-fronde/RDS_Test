@@ -403,10 +403,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     // TJB  RD7_0039  Sept2009:  Added timeout
                     cm.CommandTimeout = 120;
                     cm.CommandText = "select adr.adr_id, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'/' END)  "
+                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
                                    + "             + adr.adr_no as adr_num, "
                                    + "       adr.adr_alpha as adr_alpha, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'/' END)  "
+                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
                                    + "             + adr.adr_no + isnull(adr.adr_alpha,'') as adr_num_alpha, "
                                    + "       road.road_name "
                                    + "               + (CASE WHEN road_type.rt_name is null   THEN '' ELSE ' '+road_type.rt_name end)  "

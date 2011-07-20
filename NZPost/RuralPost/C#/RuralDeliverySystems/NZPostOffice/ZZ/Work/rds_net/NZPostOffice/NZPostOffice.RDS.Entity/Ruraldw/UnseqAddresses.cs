@@ -346,10 +346,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandTimeout = 120;
 
                     cm.CommandText = " SELECT address.adr_id as adr_id,"
-                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'/' END) "
+                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'-' END) "
                                 + "       + address.adr_no as adr_num,"
                                 + " address.adr_alpha as adr_alpha,"
-                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'/' END) "
+                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'-' END) "
                                 + "       + address.adr_no + isnull(address.adr_alpha,'') as adr_num_alpha,"
                                 + " road.road_name + (CASE WHEN road_type.rt_name is null THEN '' ELSE ' '+road_type.rt_name end) "
                                 + "                + (CASE WHEN road_suffix.rs_name is null THEN '' ELSE ' '+road_suffix.rs_name END) as road_name,"
