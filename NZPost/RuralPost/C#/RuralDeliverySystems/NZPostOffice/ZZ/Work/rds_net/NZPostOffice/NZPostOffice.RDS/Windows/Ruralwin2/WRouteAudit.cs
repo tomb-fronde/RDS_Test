@@ -720,6 +720,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void cb_print_detail_clicked(object sender, EventArgs e)
         {
             DataUserControlContainer dw_audit = new DataUserControlContainer();
+            dw_audit = dw_2;
             if (tab_1.SelectedIndex == 0)
             {
                 // TJB  RPCR_027  May-2011
@@ -761,6 +762,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void cb_print_blank_clicked(object sender, EventArgs e)
         {
             DataUserControlContainer dw_audit = new DataUserControlContainer();
+            dw_audit = dw_2; 
             if (tab_1.SelectedIndex == 0)
             {
                 dw_report.DataObject.Reset();
