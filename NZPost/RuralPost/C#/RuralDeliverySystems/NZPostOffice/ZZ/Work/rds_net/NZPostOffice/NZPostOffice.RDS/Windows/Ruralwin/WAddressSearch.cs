@@ -15,6 +15,13 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_026  July-2011: Fixup
+    // Moved Sequence number to 2nd column (old duplicate address indicator) and
+    // re-instated 'MultiplePrime" indicator.
+    // Moved code that sets the "MultiplePrime" indicator heer from the grid_CellFormatting
+    // event handler to cb_search_clicked because the grid_CellFormatting handler didn't 
+    // catch all the rows that should have been marked (not called for some??).
+    //
     // TJB  RPCR_026  July-2011
     // Changed address results to display address sequence number
     // Added sort buttons cb_sortseq, cb_sortaddr
@@ -727,9 +734,33 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_search_clicked(object sender, EventArgs e)
         {
+            string multiplePrimeSymbol = new string(new char[] { (char)(byte)(0x2E) });
+
             this.Cursor = Cursors.WaitCursor;
             this.ue_click_search();
             dw_results_sort();
+            // TJB  RPCR_026  July-2011: Fixup
+            // Moved Sequence number to 2nd column (old duplicate address indicator) and
+            // re-instated 'MultiplePrime" indicator.
+            // Moved code that sets the "MultiplePrime" indicator heer from the grid_CellFormatting
+            // event handler because it didn't catch all the rows (not called for some??).
+            for (int nRow = 1; nRow < dw_results.RowCount; nRow++)
+            {
+                if (dw_results.GetItem<SearchAddressResultsV2b>(nRow - 1).RoadId == dw_results.GetItem<SearchAddressResultsV2b>(nRow).RoadId &&
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow - 1).AdrNum == dw_results.GetItem<SearchAddressResultsV2b>(nRow).AdrNum &&
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow - 1).TcId == dw_results.GetItem<SearchAddressResultsV2b>(nRow).TcId &&
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow - 1).AdrRdNo == dw_results.GetItem<SearchAddressResultsV2b>(nRow).AdrRdNo &&
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow - 1).AdrId == dw_results.GetItem<SearchAddressResultsV2b>(nRow).AdrId
+                    )
+                {
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow).MultiplePrime = multiplePrimeSymbol;
+                }
+                else
+                {
+                    dw_results.GetItem<SearchAddressResultsV2b>(nRow).MultiplePrime = "";
+                }                
+
+            }
             this.Cursor = Cursors.Default;
         }
 
