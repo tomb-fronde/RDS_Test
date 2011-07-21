@@ -17,11 +17,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		private System.Windows.Forms.DataGridViewTextBoxColumn  primary_contract;
 		private System.Windows.Forms.DataGridViewTextBoxColumn  adr_num;
         private Metex.Windows.DataGridViewEntityComboColumn tc_id;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  indicator;
         private Metex.Windows.DataGridViewEntityComboColumn sl_id;
 		private System.Windows.Forms.DataGridViewTextBoxColumn  road_name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn  adr_rd_no;
 		private System.Windows.Forms.DataGridViewTextBoxColumn  seq_num;
+        private System.Windows.Forms.DataGridViewTextBoxColumn multiple_prime;
 
 	
 		protected override void Dispose(bool disposing)
@@ -74,13 +74,27 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 			this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(grid_DataError);
 			this.grid.TabIndex = 0;
-            this.grid.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(grid_CellFormatting);            
             this.grid.BackgroundColor = System.Drawing.SystemColors.Window;
 
             System.Windows.Forms.Padding paddIt = new System.Windows.Forms.Padding();
             paddIt.Left = 5;
 
-			//
+            //
+            // multiple_prime
+            //
+            multiple_prime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.multiple_prime.DataPropertyName = "MultiplePrime";
+            this.multiple_prime.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.multiple_prime.DefaultCellStyle.BackColor = System.Drawing.Color.White;//.ColorTranslator.FromWin32(553648127);
+            this.multiple_prime.DefaultCellStyle.ForeColor = System.Drawing.Color.Green;
+            this.multiple_prime.DefaultCellStyle.Font = new System.Drawing.Font("Wingdings", 12F);
+            this.multiple_prime.DefaultCellStyle.Padding = paddIt;
+            this.multiple_prime.HeaderText = "Cus";
+            this.multiple_prime.Name = "multiple_prime";
+            this.multiple_prime.Width = 33;
+            this.multiple_prime.ReadOnly = true;
+            this.grid.Columns.Add(multiple_prime);
+            //
 			// seq_num
 			//
 			seq_num= new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -94,23 +108,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 			this.seq_num.Name = "seq_num";            
 			this.seq_num.Width = 33;
             this.seq_num.ReadOnly = true;         
-			this.grid.Columns.Add(seq_num);            
-			//
-			// indicator
-			//
-			indicator= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.indicator.DataPropertyName = "Indicator";
-			this.indicator.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.indicator.DefaultCellStyle.BackColor = System.Drawing.Color.White;//.ColorTranslator.FromWin32(553648127);
-			this.indicator.DefaultCellStyle.ForeColor = System.Drawing.Color.Red;
-			this.indicator.DefaultCellStyle.Font = new System.Drawing.Font("Wingdings", 12F);
-            this.indicator.DefaultCellStyle.Padding = paddIt;            
-			this.indicator.HeaderText = "Adr";
-			this.indicator.Name = "indicator";
-			this.indicator.Width = 33;            
-            this.indicator.ReadOnly = true;
-			this.grid.Columns.Add(indicator);
-			//
+			this.grid.Columns.Add(seq_num);
+            //
 			// adr_num
 			//
 			adr_num= new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -218,6 +217,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 			this.Controls.Add(grid);
             this.SizeChanged += new System.EventHandler(DSearchAddressResultsV2b_SizeChanged);
         }
+/*  TJB  RPCR_026 July-2011: Fixup
+ *  Functionality moved to cb_search_clicked in WAddressSearch because the this
+ *  didn't catch all the rows that should have been marked (not called for some??).
 
         void grid_CellFormatting(object sender, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
         {           
@@ -228,10 +230,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             {
                 return;
             }
-            if (e.ColumnIndex == 0 && e.RowIndex != 0)//! 'seq_num' column
+            if (e.ColumnIndex == 0 && e.RowIndex != 0)   //! 'multiple_prime' column
             {
-                if (
-                    SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
+                if (SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
                     !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
                     SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
                     SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
@@ -245,25 +246,26 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SourceList[e.RowIndex].MultiplePrime = "";                    
                 }                
             }            
-            if (e.ColumnIndex == 1 && e.RowIndex != 0)//! 'indicator' column
-            {
-                if (
-                    SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
-                    !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
-                    SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
-                    SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
-                    SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
-                    SourceList[e.RowIndex - 1].AdrId != SourceList[e.RowIndex].AdrId  
- 	               )  
-                {
-                    SourceList[e.RowIndex].Indicator = indicatorSymbol;                    
-                }
-                else
-                {
-                    SourceList[e.RowIndex].Indicator = "";                    
-                }
-            }               
+            //if (e.ColumnIndex == 1 && e.RowIndex != 0)//! 'indicator' column
+            //{
+            //    if (
+            //        SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
+            //        !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
+            //        SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
+            //        SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
+            //        SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
+            //        SourceList[e.RowIndex - 1].AdrId != SourceList[e.RowIndex].AdrId  
+ 	        //       )  
+            //    {
+            //        SourceList[e.RowIndex].Indicator = indicatorSymbol;                    
+            //    }
+            //    else
+            //    {
+            //        SourceList[e.RowIndex].Indicator = "";                    
+            //    }
+            //}               
         }
+*/
         void DSearchAddressResultsV2b_SizeChanged(object sender, System.EventArgs e)
         {
             this.grid.Width = this.Width - this.grid.Left;

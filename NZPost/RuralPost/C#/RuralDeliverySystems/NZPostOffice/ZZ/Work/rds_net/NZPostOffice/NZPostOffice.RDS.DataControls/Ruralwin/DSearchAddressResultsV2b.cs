@@ -11,6 +11,13 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  RPCR_026  July-2011: Fixup
+    // Moved Sequence number to 2nd column (old duplicate address indicator) and
+    // re-instated 'MultiplePrime" indicator.
+    // Moved code that sets the "MultiplePrime" indicator heer from the grid_CellFormatting
+    // event handler to cb_search_clicked in WAddressSearch because the grid_CellFormatting 
+    // handler didn't catch all the rows that should have been marked (not called for some??).
+    //
     // TJB  RPCR_026  July-2011
     //  Changed Primary indicator column to display 
     //  Address sequence number (seq_num)
@@ -24,6 +31,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
             this.grid.CellClick += new DataGridViewCellEventHandler(grid_CellClick);
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
+            //this.grid.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(grid_CellFormatting);            
 		}
 
         protected override void OnHandleCreated(EventArgs e)
