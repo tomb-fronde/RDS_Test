@@ -131,17 +131,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             base.pfc_preopen();
             string ls_con_title;
             NParameters lnv_Parameters;
-            //  Window Resize Behaviour
-            /*? of_setresize(true);
-            inv_resize.of_register(dw_unseq, 0, 0, 50, 100);
-            inv_resize.of_register(dw_seq, 50, 0, 50, 100);
-            inv_resize.of_register(cb_seq, 50, 100, 0, 0);
-            inv_resize.of_register(cb_unseq, 100, 100, 0, 0);
-            inv_resize.of_register(gb_unseq, 0, 0, 50, 100);
-            inv_resize.of_register(gb_seq, 50, 0, 50, 100);
-            inv_resize.of_register(cb_save, 100, 0, 0, 0);
-            inv_resize.of_register(cb_close, 100, 0, 0, 0);
-            inv_resize.of_register(cb_stripmaker, 100, 0, 0, 0); */
             lnv_Parameters = (NParameters)StaticMessage.PowerObjectParm;
             il_contract_no = lnv_Parameters.longparm;
             il_sf_key = lnv_Parameters.integerparm;
@@ -1544,7 +1533,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  Delete any existing stripmaker files
             lf_cleanup();
             // ---------------------------------------------------
-            //  Generate the route's header file
+            //  Generate the route's header file (<contract_no>.cps)
             // ---------------------------------------------------
             //  Look up the header section in the ini file
             li_inirows = lf_getinikeyvalues(is_inifile, "Header", ref ls_inikeys, ref ls_inivalues);
@@ -1654,7 +1643,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             li_file.Close();
             // ---------------------------------------------------
-            //  Generate the route's street file
+            //  Generate the route's street file (<contract_no>.str)
             // ---------------------------------------------------
             ls_file = is_filedir + is_streetfile;
             try
@@ -1800,7 +1789,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             li_file.Close();
             // ---------------------------------------------------
-            //  Generate the route's delivery point file
+            //  Generate the route's delivery point file (<contract_no>.dpa)
             // ---------------------------------------------------
             ls_file = is_filedir + is_deliveryfile;
             try
@@ -1872,9 +1861,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // TJB  RPCR_026  June-2011
                 // Add the flat number to the address number if there is a unit number.
                 // Don't include the unit number as a separate field (leave blank).
+                // TJB  RPCR_026  Aug-2011: Fixup
+                // If the address number includes a flat number, put the value in quotes
                 if (sAdrUnit != "")
                 {
-                    sAdrNo = sAdrUnit + "-" + sAdrNo;
+                    sAdrNo = '\"' + sAdrUnit + "-" + sAdrNo + '\"';
                 }
 
                 // For the customer name, use the case name; 
@@ -1892,7 +1883,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                     + sCustomer + ","                       // Customer/Case name
                                     + ","                                   // Floor
                                     + ","                                   // Suite
-                                    + sAdrNo + ","                         // House number
+                                    + sAdrNo + ","                          // House number
                                     + ","                                   // Flat number
                                     + sAdrAlpha + ","                       // Address alpha
                                     + nCustSlotAllocation.ToString() + ","  // Slots
