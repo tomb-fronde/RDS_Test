@@ -11,6 +11,9 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  RPCR_026 Aug-2011: Fixups
+    // Moved Sequence# column to right-most position (see designer)
+    //
     // TJB  RPCR_026  July-2011: Fixup
     // Moved Sequence number to 2nd column (old duplicate address indicator) and
     // re-instated 'MultiplePrime" indicator.
