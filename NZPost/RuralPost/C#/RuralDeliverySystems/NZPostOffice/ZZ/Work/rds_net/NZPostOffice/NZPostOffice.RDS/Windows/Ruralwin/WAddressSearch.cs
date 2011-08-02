@@ -15,6 +15,10 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_026 Aug-2011: Fixups
+    // Moved Sequence# column to right-most position (see DSearchAddressResultsV2b)
+    // Changed indexes (-1) of columns to reflect moved seq column (see TitleText)
+    //
     // TJB  RPCR_026  July-2011: Fixup
     // Moved Sequence number to 2nd column (old duplicate address indicator) and
     // re-instated 'MultiplePrime" indicator.
@@ -313,14 +317,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         //added by ygu
         private void titleText()
         {
+            // TJB  RPCR_026 Aug-2011: Fixups
+            // Changed indexes (-1) of columns to reflect moved seq column
+            int resultsRow = dw_results.GetRow();
             string sl = "";
-            string st_no = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[2].Value.ToString().ToLower();
-            string sr = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[3].Value.ToString();
-            if (((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[4].Value != null && ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[4].Value != "")
+            string st_no = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[1].Value.ToString().ToLower();
+            string sr = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[2].Value.ToString();
+            if (((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[3].Value != null 
+                && ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[3].Value != "")
             {
-                sl = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[4].Value.ToString();
+                sl = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[3].Value.ToString();
             }
-            string tc = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[dw_results.GetRow()].Cells[6].FormattedValue.ToString();
+            string tc = ((DataEntityGrid)this.dw_results.GetControlByName("grid")).Rows[resultsRow].Cells[5].FormattedValue.ToString();
             if (sl != "")
             {
                 StaticMessage.stringTitle = st_no + " " + sr + "," + sl + "," + tc;
