@@ -15,6 +15,9 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_026  Aug-2011: Fixup
+    // If the address number includes a flat number, put the value in quotes
+    //
     // TJB RPCR_026  June-2011
     //     Added nContractStripHeight and GetDefaultStripHeight().
     //     Add the flat number to the address number as <flat>-<addrno> 
