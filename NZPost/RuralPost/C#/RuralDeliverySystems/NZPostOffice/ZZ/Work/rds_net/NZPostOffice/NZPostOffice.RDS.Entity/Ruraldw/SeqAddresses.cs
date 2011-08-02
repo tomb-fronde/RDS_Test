@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_026  Aug-2011: Release fixups
+    // Missed changing unit/number character from "/" to "-"
+    //
     // TJB  Jan-2011  Sequencing review
     // Modified GetAllSeqAddresses, FetchEntity
     // Remove reference to address_frequency_sequence table
@@ -395,6 +398,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             // TJB  Jan-2011  Sequencing review
             // Remove reference to address_frequency_sequence table
             // Add seq_num from address table
+            //
+            // TJB  RPCR_026  Aug-2011: Release fixups
+            // Missed changing unit/number character from "/" to "-" for 2nd
+            // part of the union.
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -446,10 +454,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                    + "   and adr.contract_no = @al_contract_no "
                                    + "UNION "
                                    + "select adr.adr_id, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'/' END)  "
+                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
                                    + "             + adr.adr_no as adr_num, "
                                    + "       adr.adr_alpha as adr_alpha, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'/' END)  "
+                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
                                    + "             + adr.adr_no + isnull(adr.adr_alpha,'') as adr_num_alpha, "
                                    + "       road.road_name "
                                    + "               + (CASE WHEN road_type.rt_name is null   THEN '' ELSE ' '+road_type.rt_name end)  "
