@@ -5,6 +5,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	partial class DRouteAuditDe
 	{
+        // TJB  Release 7.1.6.4 fixup
+        // Changed date fields: Changed field sizes and masks for 
+        //    ra_rec_replace, ra_vehicle_purchased, ra_safty_practices_resolved_date
+        //    ra_safty_plan_completed_date, ra_safty_access_resolved_date
+        // Also added binding formats in DRouteAuditDe.cs
+
         /// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -1027,14 +1033,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_rec_replace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_rec_replace.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_rec_replace.Location = new System.Drawing.Point(141, 532);
-            this.ra_rec_replace.Mask = "00/00/00";
+            this.ra_rec_replace.Mask = "00/00/0000";
             this.ra_rec_replace.Name = "ra_rec_replace";
             this.ra_rec_replace.PromptChar = '0';
-            this.ra_rec_replace.Size = new System.Drawing.Size(54, 20);
+            this.ra_rec_replace.Size = new System.Drawing.Size(66, 20);
             this.ra_rec_replace.TabIndex = 280;
             this.ra_rec_replace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ra_rec_replace.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ra_rec_replace.ValidatingType = typeof(System.DateTime);
             // 
             // ra_gds_service
             // 
@@ -1153,10 +1158,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_vehicle_purchased.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_vehicle_purchased.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_vehicle_purchased.Location = new System.Drawing.Point(349, 622);
-            this.ra_vehicle_purchased.Mask = "00/00/00";
+            this.ra_vehicle_purchased.Mask = "00/00/0000";
             this.ra_vehicle_purchased.Name = "ra_vehicle_purchased";
             this.ra_vehicle_purchased.PromptChar = '0';
-            this.ra_vehicle_purchased.Size = new System.Drawing.Size(54, 20);
+            this.ra_vehicle_purchased.Size = new System.Drawing.Size(66, 20);
             this.ra_vehicle_purchased.TabIndex = 380;
             this.ra_vehicle_purchased.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ra_vehicle_purchased.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
@@ -2404,12 +2409,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_safty_practices_resolved_date.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaSaftyPracticesResolvedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_safty_practices_resolved_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_safty_practices_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ra_safty_practices_resolved_date.Location = new System.Drawing.Point(116, 2086);
-            this.ra_safty_practices_resolved_date.Mask = "00/00/00";
+            this.ra_safty_practices_resolved_date.Location = new System.Drawing.Point(116, 2087);
+            this.ra_safty_practices_resolved_date.Mask = "00/00/0000";
             this.ra_safty_practices_resolved_date.Name = "ra_safty_practices_resolved_date";
             this.ra_safty_practices_resolved_date.PromptChar = '0';
-            this.ra_safty_practices_resolved_date.Size = new System.Drawing.Size(58, 20);
+            this.ra_safty_practices_resolved_date.Size = new System.Drawing.Size(66, 20);
             this.ra_safty_practices_resolved_date.TabIndex = 790;
+            this.ra_safty_practices_resolved_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ra_safty_practices_resolved_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ra_safty_practices_resolved_date.ValidatingType = typeof(System.DateTime);
             // 
@@ -2431,11 +2437,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_safty_plan_completed_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_safty_plan_completed_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ra_safty_plan_completed_date.Location = new System.Drawing.Point(124, 1948);
-            this.ra_safty_plan_completed_date.Mask = "00/00/00";
+            this.ra_safty_plan_completed_date.Mask = "00/00/0000";
             this.ra_safty_plan_completed_date.Name = "ra_safty_plan_completed_date";
             this.ra_safty_plan_completed_date.PromptChar = '0';
-            this.ra_safty_plan_completed_date.Size = new System.Drawing.Size(58, 20);
+            this.ra_safty_plan_completed_date.Size = new System.Drawing.Size(66, 20);
             this.ra_safty_plan_completed_date.TabIndex = 760;
+            this.ra_safty_plan_completed_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ra_safty_plan_completed_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ra_safty_plan_completed_date.ValidatingType = typeof(System.DateTime);
             // 
@@ -2456,12 +2463,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ra_safty_access_resolved_date.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RaSaftyAccessResolvedDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ra_safty_access_resolved_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ra_safty_access_resolved_date.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ra_safty_access_resolved_date.Location = new System.Drawing.Point(515, 1796);
-            this.ra_safty_access_resolved_date.Mask = "00/00/00";
+            this.ra_safty_access_resolved_date.Location = new System.Drawing.Point(505, 1796);
+            this.ra_safty_access_resolved_date.Mask = "00/00/0000";
             this.ra_safty_access_resolved_date.Name = "ra_safty_access_resolved_date";
             this.ra_safty_access_resolved_date.PromptChar = '0';
-            this.ra_safty_access_resolved_date.Size = new System.Drawing.Size(58, 20);
+            this.ra_safty_access_resolved_date.Size = new System.Drawing.Size(66, 20);
             this.ra_safty_access_resolved_date.TabIndex = 730;
+            this.ra_safty_access_resolved_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ra_safty_access_resolved_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ra_safty_access_resolved_date.ValidatingType = typeof(System.DateTime);
             // 
@@ -2556,7 +2564,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_66.AutoSize = true;
             this.t_66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_66.Location = new System.Drawing.Point(427, 1788);
+            this.t_66.Location = new System.Drawing.Point(421, 1788);
             this.t_66.Name = "t_66";
             this.t_66.Size = new System.Drawing.Size(85, 30);
             this.t_66.TabIndex = 861;
@@ -2596,7 +2604,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.t_70.AutoSize = true;
             this.t_70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.t_70.Location = new System.Drawing.Point(43, 2090);
+            this.t_70.Location = new System.Drawing.Point(43, 2089);
             this.t_70.Name = "t_70";
             this.t_70.Size = new System.Drawing.Size(75, 15);
             this.t_70.TabIndex = 865;
@@ -3054,7 +3062,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.panel10);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.Name = "DRouteAuditDe";
-            this.Size = new System.Drawing.Size(538, 529);
+            this.Size = new System.Drawing.Size(627, 780);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

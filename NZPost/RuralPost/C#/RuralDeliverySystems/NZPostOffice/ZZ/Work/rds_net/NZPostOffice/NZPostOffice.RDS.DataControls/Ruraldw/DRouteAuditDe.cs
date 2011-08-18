@@ -10,6 +10,11 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Release 7.1.6.4 fixup
+    // Changed date fields: Added binding formats for 
+    //    ra_rec_replace, ra_vehicle_purchased, ra_safty_practices_resolved_date
+    //    ra_safty_plan_completed_date, ra_safty_access_resolved_date
+    // Also changed designer with Mask and field sizes for these.
 	public partial class DRouteAuditDe : Metex.Windows.DataUserControl
 	{
 		public DRouteAuditDe()
@@ -17,6 +22,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			InitializeComponent();
 
             this.ra_date_of_check.DataBindings[0].FormatString = "dd/MM/yyyy";
+            this.ra_rec_replace.DataBindings[0].FormatString = "dd/MM/yyyy";
+            this.ra_vehicle_purchased.DataBindings[0].FormatString = "dd/MM/yyyy";
+            this.ra_safty_practices_resolved_date.DataBindings[0].FormatString = "dd/MM/yyyy";
+            this.ra_safty_plan_completed_date.DataBindings[0].FormatString = "dd/MM/yyyy";
+            this.ra_safty_access_resolved_date.DataBindings[0].FormatString = "dd/MM/yyyy";
             this.ra_time_finished_sort.DataBindings[0].FormatString = "HH:mm";
             this.ra_time_finished_sort.ValidatingType = typeof(System.DateTime);
             this.ra_time_finished_sort.DataBindings[0].DataSourceNullValue = null;
