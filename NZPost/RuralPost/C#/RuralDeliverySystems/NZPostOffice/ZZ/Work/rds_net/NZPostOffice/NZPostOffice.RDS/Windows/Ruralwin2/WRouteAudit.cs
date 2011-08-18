@@ -14,6 +14,13 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Release 7.1.6.5 Fixups
+    // Fixed date string display for several dates (4-digit years)
+    // - these in DRouteAuditDe and DRouteAuditDe.designer.
+    // Added resizing (here).
+    // NOTE:  Changing things via the designer can mess things up; hence the 
+    //        object Anchor's added below.
+    //
     // TJB  RPCR_027  May-2011
     // Added cb_print_detail, cb_print_blank buttons, and removed cb_print.
     // Removed print radio buttons (rb_detail1, rb_dblank1, rb_detail2, rb_detail2)
@@ -101,6 +108,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_11.PfcValidation += new UserEventDelegate1(dw_11_pfcValidation);
             dw_1.DataObject.RetrieveEnd += new EventHandler(dw_1_retrieveend);
             //jlwang:end
+
+            this.cb_print_detail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_print_blank.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            
+            this.tab_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tab_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+
+            this.dw_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
         }
 
         #region Form Design
