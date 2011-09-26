@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WMaintainAddressOnly : WMaintainAddress
     {
+        // TJB  Oct-2011  NOTE: This doesn't appear to be used any more.
+        // Thought it was called when a customer was being transferred, but a search 
+        // of the code didn't find any references to it.
         public WMaintainAddressOnly()
         {
             this.InitializeComponent();
@@ -21,10 +24,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_details.DataObject = new DAddressOccupants();
             dw_movement.DataObject = new DAddressOccupantsMovement();
 
-            //jlwang:moved from IC
             dw_details.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_details_constructor);
-
-            //jlwang:end
         }
 
         #region Form Design
@@ -120,13 +120,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public override void pfc_preopen()
         {
             base.pfc_preopen();
-            //? of_setbase(true);
-            //? this.inv_base.of_center();
         }
 
         public override void dw_details_constructor()
         {
             dw_details.of_SetUpdateable(false);
+            this.st_label.Text = "WMaintainAddressOnly";
         }
     }
 }
