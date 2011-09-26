@@ -77,6 +77,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_8 = new System.Windows.Forms.TextBox();
             this.road_name = new System.Windows.Forms.TextBox();
             this.sl_name = new Metex.Windows.DataEntityCombo();
+            this.location_ind = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tc_name = new System.Windows.Forms.TextBox();
+            this.rt_name = new System.Windows.Forms.TextBox();
+            this.rs_name = new System.Windows.Forms.TextBox();
+            this.adr_sl_name = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.contract_button)).BeginInit();
             this.gb_1.SuspendLayout();
@@ -122,7 +129,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.adr_property_identification.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "AdrPropertyIdentification", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.adr_property_identification.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.adr_property_identification.Location = new System.Drawing.Point(126, 180);
+            this.adr_property_identification.Location = new System.Drawing.Point(128, 180);
             this.adr_property_identification.MaxLength = 100;
             this.adr_property_identification.Name = "adr_property_identification";
             this.adr_property_identification.Size = new System.Drawing.Size(328, 20);
@@ -610,10 +617,88 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.sl_name.Value = null;
             this.sl_name.ValueMember = "SlName";
             // 
+            // location_ind
+            // 
+            this.location_ind.AutoSize = true;
+            this.location_ind.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "AdrLocationInd", true));
+            this.location_ind.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.location_ind.Location = new System.Drawing.Point(202, 41);
+            this.location_ind.Name = "location_ind";
+            this.location_ind.Size = new System.Drawing.Size(15, 14);
+            this.location_ind.TabIndex = 110;
+            this.location_ind.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(223, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Has alternate";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.label2.Location = new System.Drawing.Point(223, 46);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 12);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "delivery location";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // tc_name
+            // 
+            this.tc_name.BackColor = System.Drawing.SystemColors.Control;
+            this.tc_name.Location = new System.Drawing.Point(317, 225);
+            this.tc_name.Name = "tc_name";
+            this.tc_name.ReadOnly = true;
+            this.tc_name.Size = new System.Drawing.Size(57, 20);
+            this.tc_name.TabIndex = 111;
+            this.tc_name.Visible = false;
+            // 
+            // rt_name
+            // 
+            this.rt_name.BackColor = System.Drawing.SystemColors.Control;
+            this.rt_name.Location = new System.Drawing.Point(128, 225);
+            this.rt_name.Name = "rt_name";
+            this.rt_name.ReadOnly = true;
+            this.rt_name.Size = new System.Drawing.Size(57, 20);
+            this.rt_name.TabIndex = 112;
+            this.rt_name.Visible = false;
+            // 
+            // rs_name
+            // 
+            this.rs_name.BackColor = System.Drawing.SystemColors.Control;
+            this.rs_name.Location = new System.Drawing.Point(191, 225);
+            this.rs_name.Name = "rs_name";
+            this.rs_name.ReadOnly = true;
+            this.rs_name.Size = new System.Drawing.Size(57, 20);
+            this.rs_name.TabIndex = 113;
+            this.rs_name.Visible = false;
+            // 
+            // adr_sl_name
+            // 
+            this.adr_sl_name.BackColor = System.Drawing.SystemColors.Control;
+            this.adr_sl_name.Location = new System.Drawing.Point(254, 225);
+            this.adr_sl_name.Name = "adr_sl_name";
+            this.adr_sl_name.ReadOnly = true;
+            this.adr_sl_name.Size = new System.Drawing.Size(57, 20);
+            this.adr_sl_name.TabIndex = 114;
+            this.adr_sl_name.Visible = false;
+            // 
             // DAddressDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.adr_sl_name);
+            this.Controls.Add(this.rs_name);
+            this.Controls.Add(this.rt_name);
+            this.Controls.Add(this.tc_name);
+            this.Controls.Add(this.location_ind);
             this.Controls.Add(this.post_code_id_t);
             this.Controls.Add(this.post_code);
             this.Controls.Add(this.adr_property_identification_t);
@@ -643,6 +728,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.gb_2);
             this.Controls.Add(this.road_name);
             this.Controls.Add(this.sl_name);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
             this.Name = "DAddressDetails";
             this.Size = new System.Drawing.Size(650, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
@@ -791,6 +878,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.TextBox sunday;
         private System.Windows.Forms.TextBox days;
         private System.Windows.Forms.TextBox compute_1;
+        private System.Windows.Forms.CheckBox location_ind;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tc_name;
+        private System.Windows.Forms.TextBox rt_name;
+        private System.Windows.Forms.TextBox rs_name;
+        private System.Windows.Forms.TextBox adr_sl_name;
     }
 }
 

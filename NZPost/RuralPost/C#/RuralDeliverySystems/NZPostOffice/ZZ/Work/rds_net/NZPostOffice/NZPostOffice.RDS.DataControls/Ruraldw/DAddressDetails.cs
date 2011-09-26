@@ -14,6 +14,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DAddressDetails : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_029  Oct-2011
+        // Added checkbox for adr_location_ind to window.
+        // Also added readonly textbox controls for road_type, road_suffix, 
+        // suburb name and town name.  These are used to replace the combo boxes 
+        // when NPAD is enabled so the fields look the same as the other header
+        // textbox fields.
+
         // TJB  Sequencing review  Jan-2011
         // Added setDeliveryDays and setTerminalDays procedures
 
@@ -58,6 +65,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_7.Text = sTermDays.Substring(7, 1);
             this.compute_8.Text = sTermDays.Substring(8, 1);
             this.compute_1.Text = sTermDays.Substring(1, 1);
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
