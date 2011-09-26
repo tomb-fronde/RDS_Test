@@ -32,12 +32,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("adr_last_amended_date", "_adr_last_amended_date", "address")]
     [MapInfo("adr_last_amended_user", "_adr_last_amended_user", "address")]
     [MapInfo("adr_unit", "_adr_unit", "address")]
+    [MapInfo("adr_location_ind", "_adr_location_ind", "address")]
     [MapInfo("rs_id", "_rs_id", "road")]
     [MapInfo("sl_name", "_sl_name", "suburblocality")]
     [System.Serializable()]
 
     public class AddressDetails : Entity<AddressDetails>
     {
+        // TJB  RPCR_029  Oct-2011
+        // Added adr_location_ind.
+
         #region Business Methods
         [DBField()]
         private int? _adr_id;
@@ -101,6 +105,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _adr_unit;
+
+        [DBField()]
+        private string _adr_location_ind;
 
         [DBField()]
         private int? _rs_id;
@@ -487,6 +494,29 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual string AdrLocationInd
+        {
+            get
+            {
+                string yn_value;
+                CanReadProperty("AdrLocationInd", true);
+                yn_value = (_adr_location_ind == "Y") ? "True" : "False";
+                return yn_value;
+                //return _adr_location_ind;
+            }
+            set
+            {
+                string yn_value;
+                CanWriteProperty("AdrLocationInd", true);
+                yn_value = (value == "True") ? "Y" : "N";
+                if (_adr_location_ind != yn_value)
+                {
+                    _adr_location_ind = yn_value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual int? RsId
         {
             get
@@ -807,33 +837,35 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = @"SELECT address.adr_id,
-                                              address.tc_id,
-                                              address.road_id,
-                                              road.road_name,
-                                              road.rt_id,
-                                              address.sl_id,
-                                              address.contract_no,
-                                              address.post_code_id,
-                                              (select post_code from post_code where post_code_id = address.post_code_id) as post_code,
-                                              address.adr_rd_no,
-                                              address.adr_no,
-                                              address.adr_alpha,
-                                              address.dp_id,
-                                              address.adr_old_delivery_days,
-                                              address.adr_property_identification ,
-                                              rd.f_getFrequency(address.adr_id, 0, 'N') as adr_freq,
-                                              (CASE WHEN address.adr_unit IS NULL THEN ''+ address.adr_no + isnull(address.adr_alpha,'') ELSE address.adr_unit+'/' + address.adr_no + isnull(address.adr_alpha,'') END) as adr_num,
-                                              rd.f_getFrequency(address.adr_id, address.contract_no, 'Y') as adr_freq_terminal,
-                                              address.adr_last_amended_date,
-                                              address.adr_last_amended_user,
-                                              address.adr_unit,
-                                              road.rs_id,
-                                              sl_name  
-                                            FROM address 
-                                            left outer join road on address.road_id = road.road_id 
-                                            left outer join suburblocality on address.sl_id = suburblocality.sl_id 
-                                            WHERE ( address.adr_id = @al_adr_id )";
+                    cm.CommandText = "SELECT address.adr_id, "
+                                          + " address.tc_id, "
+                                          + " address.road_id, "
+                                          + " road.road_name, "
+                                          + " road.rt_id, "
+                                          + " address.sl_id, "
+                                          + " address.contract_no, "
+                                          + " address.post_code_id, "
+                                          + " (select post_code from post_code where post_code_id = address.post_code_id) as post_code, "
+                                          + " address.adr_rd_no, "
+                                          + " address.adr_no, "
+                                          + " address.adr_alpha, "
+                                          + " address.dp_id, "
+                                          + " address.adr_old_delivery_days, "
+                                          + " address.adr_property_identification, "
+                                          + " rd.f_getFrequency(address.adr_id, 0, 'N') as adr_freq, "
+                                          + " (CASE WHEN address.adr_unit IS NULL THEN ''+ address.adr_no + isnull(address.adr_alpha,'') ELSE address.adr_unit+'/' + address.adr_no + isnull(address.adr_alpha,'') END) as adr_num, "
+                                          + " rd.f_getFrequency(address.adr_id, address.contract_no, 'Y') as adr_freq_terminal, "
+                                          + " address.adr_last_amended_date, "
+                                          + " address.adr_last_amended_user, "
+                                          + " address.adr_unit, "
+                                          + " address.adr_location_ind, "
+                                          + " road.rs_id, "
+                                          + " sl_name "
+                                     + " FROM address left outer join road "
+                                                  + "   on address.road_id = road.road_id "
+                                                  + " left outer join suburblocality "
+                                                  + "   on address.sl_id = suburblocality.sl_id "
+                                     + " WHERE ( address.adr_id = @al_adr_id )";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_adr_id", al_adr_id);
 
@@ -869,41 +901,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._adr_last_amended_user = dr.GetString(19);
 
                             instance._adr_unit = dr.GetString(20);
-                            instance._rs_id = dr.GetInt32(21);
-                            instance._sl_name = dr.GetString(22);
+                            instance._adr_location_ind = dr.GetString(21);
+                            instance._rs_id = dr.GetInt32(22);
+                            instance._sl_name = dr.GetString(23);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
                         }
                     }
-                    //foreach (AddressDetails instance in _list)
-                    //{
-                    //    cm.CommandType = CommandType.StoredProcedure;
-                    //    cm.CommandText = "rd.f_getFrequency";
-                    //    pList.Clear();
-                    //    pList.Add(cm, "address_id", instance._adr_id);
-                    //    pList.Add(cm, "pi_contract_no", 0);
-                    //    pList.Add(cm, "ps_terminal", "N");
-                    //    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                    //    {
-                    //        if (dr.Read())
-                    //        {
-                    //            instance._adr_freq = dr.GetString(0);
-                    //        }
-                    //    }
-                    //    pList.Clear();
-                    //    pList.Add(cm, "address_id", instance._adr_id);
-                    //    pList.Add(cm, "pi_contract_no", instance._contract_no);
-                    //    pList.Add(cm, "ps_terminal", "Y");
-                    //    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                    //    {
-                    //        if (dr.Read())
-                    //        {
-                    //            instance._adr_freq_terminal = dr.GetString(0);
-                    //        }
-                    //    }
-                    //}
                     list = _list.ToArray();
                 }
             }
