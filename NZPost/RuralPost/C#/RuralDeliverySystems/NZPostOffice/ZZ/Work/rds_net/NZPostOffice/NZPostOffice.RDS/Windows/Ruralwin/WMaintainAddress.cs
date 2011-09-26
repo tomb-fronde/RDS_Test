@@ -17,6 +17,9 @@ using System.Drawing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_029  Oct-2011
+    // Small change - see dw_header_itemchanged for details
+    //
     // TJB  Feb-2011  Bug fix
     // Replaced code accidentally removed in of_refresh_occupants
     // that meant Primary customer names not appearing.
@@ -140,6 +143,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public WMaintainAddress()
         {
+            // TJB  RPCR_029  Oct-2011
+            // Added checkbox for adr_location_ind to window.  This is updateable 
+            // where the other address fields aren't.
+            // Also changed displayed fields for the dropdown elements (road type 
+            // and suffix, suburb and town) to readonly textboxes (when NPAD is 
+            // enabled) so they appear visually the same as the other fields 
+            // (previously the combo boxes could only be made readonly by disabling
+            // then, and that meant they looked greyed out while the others weren't).
+            // See of_disable_header_maint.
             this.InitializeComponent();
             dw_header.DataObject = new DAddressDetails();
             dw_header.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -164,7 +176,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             base.pfc_preopen();
             int? ll_temp = 0;
             int? ll_tcid = 0;
-            string ls_temp;
             NRdsMsg lnv_msg;
             NCriteria lvNCriteria;
             DataUserControl ldwc_child;
@@ -281,12 +292,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             base.pfc_postopen();
             int ll_row;
-            int ll_rows;
-            int ll_master_row;
             int? ll_tcid = 0;
             Color ll_button_face = System.Drawing.SystemColors.ButtonFace;
             Color ll_win_background = System.Drawing.SystemColors.Window;
             string ls_temp;
+
+            this.st_label.Text = "WMaintainAddress";
 
             //  TJB  NPAD2  December 2005
             //  If NPAD processing is enabled, disable the fields in the
@@ -544,7 +555,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         return ii_failure;
                     }
-
                 }
                 else
                 {
@@ -2125,16 +2135,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  contract.
             //  Set the taborder for the fields to 0 
             //  so the user can't access them.
-            ((TextBox)(idw_header.DataObject.Controls["dp_id"])).ReadOnly = true;                         //idw_header.DataObject.Controls["dp_id"].Enabled = false;
-            ((TextBox)(idw_header.DataObject.Controls["adr_num"])).ReadOnly = true;                       //idw_header.DataObject.Controls["adr_num"].Enabled = false;
-            ((TextBox)(idw_header.DataObject.Controls["road_name"])).ReadOnly = true;                     //idw_header.DataObject.Controls["road_name"].Enabled = false;
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rt_id"])).Enabled = false; ; //idw_header.DataObject.Controls["rt_id"].Enabled = false;
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rs_id"])).Enabled = false;   //idw_header.DataObject.Controls["rs_id"].Enabled = false;
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["sl_name"])).Enabled = false; //idw_header.DataObject.Controls["sl_name"].Enabled = false;
-            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["tc_id"])).Enabled = false;   //idw_header.DataObject.Controls["tc_id"].Enabled = false;
-            ((TextBox)(idw_header.DataObject.Controls["adr_rd_no"])).ReadOnly = true;                     //idw_header.DataObject.Controls["adr_rd_no"].Enabled = false;
-            ((TextBox)(idw_header.DataObject.Controls["post_code"])).ReadOnly = true;                     //idw_header.DataObject.Controls["post_code"].Enabled = false;
-            ((TextBox)(idw_header.DataObject.Controls["adr_property_identification"])).ReadOnly = true;   //idw_header.DataObject.Controls["adr_property_identification"].Enabled = false;
+            ((TextBox)(idw_header.DataObject.Controls["dp_id"])).ReadOnly = true;
+            ((TextBox)(idw_header.DataObject.Controls["adr_num"])).ReadOnly = true;
+            ((TextBox)(idw_header.DataObject.Controls["road_name"])).ReadOnly = true;
+            ((TextBox)(idw_header.DataObject.Controls["adr_rd_no"])).ReadOnly = true;
+            ((TextBox)(idw_header.DataObject.Controls["post_code"])).ReadOnly = true;
+            ((TextBox)(idw_header.DataObject.Controls["adr_property_identification"])).ReadOnly = true;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rt_id"])).Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rs_id"])).Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["sl_name"])).Enabled = false;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["tc_id"])).Enabled = false;
             ((PictureBox)dw_header.GetControlByName("contract_button")).Enabled = true;
 
             if (!(StaticVariables.LoginId == "sysadmin"))
@@ -2143,11 +2153,60 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
 
             //  Set the background for each field to transparent,
-            //  to provide a visual cue that the fields aren't 
-            //  updateable.
+            //  to provide a visual cue that the fields aren't updateable.
+            ((System.Windows.Forms.TextBox)idw_header.GetControlByName("adr_num")).BackColor = System.Drawing.SystemColors.Control;
             ((System.Windows.Forms.TextBox)idw_header.GetControlByName("road_name")).BackColor = System.Drawing.SystemColors.Control;
             ((System.Windows.Forms.TextBox)idw_header.GetControlByName("adr_rd_no")).BackColor = System.Drawing.SystemColors.Control;
+            ((System.Windows.Forms.TextBox)idw_header.GetControlByName("post_code")).BackColor = System.Drawing.SystemColors.Control;
+            ((System.Windows.Forms.TextBox)idw_header.GetControlByName("adr_property_identification")).BackColor = System.Drawing.SystemColors.Control;
             ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("tc_id")).BackColor = System.Drawing.SystemColors.Control;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rt_id"])).BackColor = System.Drawing.SystemColors.Control;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["rs_id"])).BackColor = System.Drawing.SystemColors.Control;
+            ((Metex.Windows.DataEntityCombo)(idw_header.DataObject.Controls["sl_name"])).BackColor = System.Drawing.SystemColors.Control;
+
+            // TJB  RPCR029  Oct-2011
+            // When textboxes are made read-only, the text remains full colour (black in this case), but
+            // Combo controls don't have a 'readonly' property.  To make Combo controls readonly they have
+            // to be disabled, but this causes the text to be displayed greyed out.  The workaround is to 
+            // replace the Combo control with a textbox containing the Combo control's text.  That is what 
+            // the code below does for the road type and suffix (rt_id, rs_id), suburb/locality (sl_id) 
+            // and town (tc_id).
+            // NOTE: the asymetry in the suburb name textbox - the name sl_name was used elsewhere.
+           string rt_name = ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rt_id")).Text;
+            ((TextBox)(idw_header.DataObject.Controls["rt_name"])).Text = rt_name;
+            ((TextBox)(idw_header.DataObject.Controls["rt_name"])).Visible = true;
+            ((TextBox)(idw_header.DataObject.Controls["rt_name"])).Location =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rt_id")).Location;
+            ((TextBox)(idw_header.DataObject.Controls["rt_name"])).Size =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rt_id")).Size;
+            ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rt_id")).Visible = false;
+
+            string rs_name = ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rs_id")).Text;
+            ((TextBox)(idw_header.DataObject.Controls["rs_name"])).Text = rs_name;
+            ((TextBox)(idw_header.DataObject.Controls["rs_name"])).Visible = true;
+            ((TextBox)(idw_header.DataObject.Controls["rs_name"])).Location =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rs_id")).Location;
+            ((TextBox)(idw_header.DataObject.Controls["rs_name"])).Size =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rs_id")).Size;
+            ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("rs_id")).Visible = false;
+
+            string tc_name = ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("tc_id")).Text;
+            ((TextBox)(idw_header.DataObject.Controls["tc_name"])).Text = tc_name;
+            ((TextBox)(idw_header.DataObject.Controls["tc_name"])).Visible = true;
+            ((TextBox)(idw_header.DataObject.Controls["tc_name"])).Location =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("tc_id")).Location;
+            ((TextBox)(idw_header.DataObject.Controls["tc_name"])).Size =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("tc_id")).Size;
+            ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("tc_id")).Visible = false;
+
+            string adr_sl_name = ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("sl_name")).Text;
+            ((TextBox)(idw_header.DataObject.Controls["adr_sl_name"])).Text = adr_sl_name;
+            ((TextBox)(idw_header.DataObject.Controls["adr_sl_name"])).Visible = true;
+            ((TextBox)(idw_header.DataObject.Controls["adr_sl_name"])).Location =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("sl_name")).Location;
+            ((TextBox)(idw_header.DataObject.Controls["adr_sl_name"])).Size =
+                ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("sl_name")).Size;
+            ((Metex.Windows.DataEntityCombo)idw_header.GetControlByName("sl_name")).Visible = false;
 
             return;
         }
@@ -2219,7 +2278,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  (Note: il_oldsuburbtab is set in the pfc_preopen event)
             if (ab_flag)
             {
-                idw_header.DataObject.Controls["sl_name"].Enabled = true; //added by jlwang
+                idw_header.DataObject.Controls["sl_name"].Enabled = true;
                 idw_header.DataObject.Controls["sl_name"].TabIndex = il_oldsuburbtab;
             }
             else
@@ -2568,9 +2627,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     return 0;
                 }
-                else
+                else    //  Not a valid road type
                 {
-                    //  Not a valid road type
                     MessageBox.Show('\'' + ls_id + "\' is not a valid road type."
                                     , "Validation Error"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2607,9 +2665,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     return 0;
                 }
-                else
+                else    //  Not a valid road suffix
                 {
-                    //  Not a valid road type
                     MessageBox.Show('\'' + ls_id + "\' is not a valid road suffix."
                                     , "Validation Error"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2640,9 +2697,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     return 0;
                 }
-                else
+                else    //  Not a valid suburb
                 {
-                    //  Not a valid suburb
                     MessageBox.Show('\'' + ls_id + "\' is not a valid suburb."
                                     , "Validation Error"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2670,9 +2726,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     return 0;
                 }
-                else
+                else   //  Not a valid town
                 {
-                    //  Not a valid town
                     MessageBox.Show('\'' + ls_id + "\' is not a valid town."
                                     , "Validation Error"
                                     , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2680,7 +2735,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return 2;
                 }
             }
-            // PB 'Destroy' Statement
             lds_temp = null;
             return 0;
         }
@@ -2737,7 +2791,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //      Disable this validation.  It does not work reliably, we can only 
             //      change the contract number, and we only do so very occasionally.
             //      A later change request may ask for validation to be done.
-            //  pLong commented-out code section removed:  TJB  Jan-2011]
 
             return 1;
         }
@@ -6151,11 +6204,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_rc;
             string ls_msg = "";
             DataUserControl ldwc_child;
+            // TJB NOTE
+            // This doesn't necessarily get the name of the item that has changed.
+            // It gets the name of the item that currently has focus.  If you change 
+            // an item then <tab>, you ghet the name of the item you've tabbed to.
             string column = dw_header.GetColumnName();
             int row = dw_header.GetRow();
             if (row == -1 || string.IsNullOrEmpty(column))
                 return;
             dw_header.AcceptText();
+            // TJB  RPCR_029  Oct-2011
+            // The [delivery location is different indicator] is a checkbox
+            // and (apparently) cannot return an object, which causes the 
+            // GetValue to barf.  Since there's nothing really to check, we can
+            // quit now to avoid the issue.
+            if (column == "location_ind")
+                return;
             object value = dw_header.GetValue<object>(row, column);
             string data = value != null ? value.ToString() : null;
             //  TJB  Sept 2005  NPAD2 Address schema changes

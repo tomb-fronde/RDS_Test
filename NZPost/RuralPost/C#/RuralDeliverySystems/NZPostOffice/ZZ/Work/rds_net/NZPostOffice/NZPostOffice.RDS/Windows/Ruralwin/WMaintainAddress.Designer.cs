@@ -17,6 +17,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     partial class WMaintainAddress
     {
+        // TJB  RPCR_029  Oct-2011
+        // Added checkbox for adr_location_ind to window.
+        // Also added readonly textbox controls for road_type, road_suffix, 
+        // suburb name and town name.  These are used to replace the combo boxes 
+        // when NPAD is enabled so the fields look the same as the other header
+        // textbox fields.
         // TJB  Jan-2011 Sequencing Review
 
         /// Required designer variable.
