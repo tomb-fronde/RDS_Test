@@ -27,6 +27,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("adr_unit", "_adr_unit", "")]
     [MapInfo("adr_no", "_adr_no", "")]
     [MapInfo("adr_alpha", "_adr_alpha", "")]
+    [MapInfo("post_code", "_post_code", "")]
     [System.Serializable()]
 
     public class SearchAddressResultsV2b : Entity<SearchAddressResultsV2b>
@@ -73,6 +74,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
         [DBField()]
         private int? _seq_num;
+
+        [DBField()]
+        private string _post_code;
 
         public virtual int? AdrId
         {
@@ -326,6 +330,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual string PostCode
+        {
+            get
+            {
+                CanReadProperty("PostCode", true);
+                return _post_code;
+            }
+            set
+            {
+                CanWriteProperty("PostCode", true);
+                if (_post_code != value)
+                {
+                    _post_code = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         /*?
 		    // needs to implement compute expression manually:
 			// compute control name=[multiple_prime]
@@ -477,6 +499,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._adr_no = GetValueFromReader<string>(dr, 11);
                                 instance._adr_alpha = GetValueFromReader<string>(dr, 12);
                                 instance._seq_num = GetValueFromReader<int?>(dr, 13);
+                                instance._post_code = GetValueFromReader<string>(dr, 14);
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
