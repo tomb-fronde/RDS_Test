@@ -30,42 +30,68 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.SuspendLayout();
             // 
+            // idw_results
+            // 
+            this.idw_results.Location = new System.Drawing.Point(8, 141);
+            this.idw_results.Size = new System.Drawing.Size(672, 237);
+            // 
+            // tab_criteria
+            // 
+            this.tab_criteria.Size = new System.Drawing.Size(672, 129);
+            // 
+            // cb_search
+            // 
+            this.cb_search.Location = new System.Drawing.Point(688, 25);
+            // 
+            // cb_clear
+            // 
+            this.cb_clear.Location = new System.Drawing.Point(688, 52);
+            // 
             // cb_open
             // 
             this.cb_open.Enabled = false;
-            this.cb_open.Location = new System.Drawing.Point(697, 97);
+            this.cb_open.Location = new System.Drawing.Point(778, 97);
             this.cb_open.TabIndex = 0;
             this.cb_open.Visible = false;
             // 
             // cb_new
             // 
             this.cb_new.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cb_new.Location = new System.Drawing.Point(605, 165);
+            this.cb_new.Location = new System.Drawing.Point(688, 173);
+            this.cb_new.Visible = false;
             // 
             // cb_select
             // 
             this.cb_select.Enabled = true;
-            this.cb_select.Location = new System.Drawing.Point(605, 131);
+            this.cb_select.Location = new System.Drawing.Point(688, 139);
             this.cb_select.TabIndex = 5;
             this.cb_select.Visible = true;
             // 
+            // st_count
+            // 
+            this.st_count.Location = new System.Drawing.Point(454, 386);
+            // 
+            // cb_print
+            // 
+            this.cb_print.Location = new System.Drawing.Point(802, 362);
+            // 
             // st_label
             // 
-            this.st_label.Location = new System.Drawing.Point(5, 387);
+            this.st_label.Location = new System.Drawing.Point(5, 392);
             this.st_label.Text = "w_address_search_select";
             // 
             // WAddressSearchSelect
             // 
             this.CancelButton = this.cb_new;
-            this.ClientSize = new System.Drawing.Size(690, 406);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.ClientSize = new System.Drawing.Size(771, 411);
+            this.Location = new System.Drawing.Point(0, 0);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WAddressSearchSelect";
+            this.Controls.SetChildIndex(this.st_count, 0);
             this.Controls.SetChildIndex(this.cb_select, 0);
             this.Controls.SetChildIndex(this.cb_print, 0);
             this.Controls.SetChildIndex(this.idw_results, 0);
-            this.Controls.SetChildIndex(this.st_count, 0);
             this.Controls.SetChildIndex(this.cb_new, 0);
             this.Controls.SetChildIndex(this.cb_open, 0);
             this.Controls.SetChildIndex(this.cb_clear, 0);
@@ -121,7 +147,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // when called as addressSearchSelect.
             cb_select.Enabled = true;
             cb_select.Visible = true;
-            cb_select.Location = new System.Drawing.Point(605, 131);
+            //cb_select.Location = new System.Drawing.Point(605, 131);
             if (!((il_rdContractSelect == null)))
             {
                 tab_criteria.of_setrdflag(il_rdContractSelect, 1);

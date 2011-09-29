@@ -137,21 +137,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // st_label
             // 
+            this.st_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.st_label.Location = new System.Drawing.Point(8, 387);
             this.st_label.Size = new System.Drawing.Size(171, 16);
             this.st_label.Text = "w_address_search";
             // 
             // tab_criteria
             // 
-            this.tab_criteria.Location = new System.Drawing.Point(8, 0);
+            this.tab_criteria.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tab_criteria.Location = new System.Drawing.Point(8, 6);
             this.tab_criteria.Name = "tab_criteria";
             this.tab_criteria.SelectedIndex = 0;
-            this.tab_criteria.Size = new System.Drawing.Size(588, 128);
+            this.tab_criteria.Size = new System.Drawing.Size(670, 128);
             this.tab_criteria.TabIndex = 1;
             // 
             // cb_search
             // 
-            this.cb_search.Location = new System.Drawing.Point(605, 19);
+            this.cb_search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_search.Location = new System.Drawing.Point(686, 25);
             this.cb_search.Name = "cb_search";
             this.cb_search.Size = new System.Drawing.Size(75, 23);
             this.cb_search.TabIndex = 2;
@@ -160,7 +164,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_clear
             // 
-            this.cb_clear.Location = new System.Drawing.Point(605, 46);
+            this.cb_clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_clear.Location = new System.Drawing.Point(686, 52);
             this.cb_clear.Name = "cb_clear";
             this.cb_clear.Size = new System.Drawing.Size(75, 23);
             this.cb_clear.TabIndex = 3;
@@ -169,18 +174,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_open
             // 
-            this.cb_open.Location = new System.Drawing.Point(605, 131);
+            this.cb_open.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_open.Location = new System.Drawing.Point(686, 140);
             this.cb_open.Name = "cb_open";
             this.cb_open.Size = new System.Drawing.Size(75, 23);
             this.cb_open.TabIndex = 5;
-            this.cb_open.Tag = "ComponentPrivilege=C;ComponentPrivilege=R;ComponentPrivilege=M;ComponentPrivilege=R;";
+            this.cb_open.Tag = "ComponentPrivilege=C;ComponentPrivilege=R;ComponentPrivilege=M;ComponentPrivilege" +
+                "=R;";
             this.cb_open.Text = "&Open";
             this.cb_open.Click += new System.EventHandler(this.cb_open_clicked);
             // 
             // cb_new
             // 
+            this.cb_new.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_new.Enabled = false;
-            this.cb_new.Location = new System.Drawing.Point(605, 158);
+            this.cb_new.Location = new System.Drawing.Point(686, 167);
             this.cb_new.Name = "cb_new";
             this.cb_new.Size = new System.Drawing.Size(75, 23);
             this.cb_new.TabIndex = 6;
@@ -190,17 +198,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_results
             // 
+            this.dw_results.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dw_results.DataObject = null;
             this.dw_results.FireConstructor = false;
-            this.dw_results.Location = new System.Drawing.Point(8, 134);
+            this.dw_results.Location = new System.Drawing.Point(8, 140);
             this.dw_results.Name = "dw_results";
-            this.dw_results.Size = new System.Drawing.Size(588, 250);
+            this.dw_results.Size = new System.Drawing.Size(670, 238);
             this.dw_results.TabIndex = 4;
             // 
             // cb_select
             // 
+            this.cb_select.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_select.Enabled = false;
-            this.cb_select.Location = new System.Drawing.Point(721, 194);
+            this.cb_select.Location = new System.Drawing.Point(686, 193);
             this.cb_select.Name = "cb_select";
             this.cb_select.Size = new System.Drawing.Size(75, 23);
             this.cb_select.TabIndex = 0;
@@ -221,8 +233,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // st_count
             // 
+            this.st_count.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.st_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.st_count.Location = new System.Drawing.Point(388, 387);
+            this.st_count.Location = new System.Drawing.Point(470, 387);
             this.st_count.Name = "st_count";
             this.st_count.Size = new System.Drawing.Size(208, 16);
             this.st_count.TabIndex = 0;
@@ -230,8 +243,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_print
             // 
+            this.cb_print.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_print.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_print.Location = new System.Drawing.Point(605, 362);
+            this.cb_print.Location = new System.Drawing.Point(686, 355);
             this.cb_print.Name = "cb_print";
             this.cb_print.Size = new System.Drawing.Size(77, 23);
             this.cb_print.TabIndex = 7;
@@ -240,25 +254,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_sortseq
             // 
+            this.cb_sortseq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_sortseq.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_sortseq.Location = new System.Drawing.Point(605, 210);
+            this.cb_sortseq.Location = new System.Drawing.Point(686, 219);
             this.cb_sortseq.Name = "cb_sortseq";
             this.cb_sortseq.Size = new System.Drawing.Size(75, 23);
             this.cb_sortseq.TabIndex = 8;
             this.cb_sortseq.Text = "Sort Seq";
-            this.cb_sortseq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cb_sortseq.UseVisualStyleBackColor = true;
             this.cb_sortseq.Click += new System.EventHandler(this.cb_sortseq_Click);
             // 
             // cb_sortaddr
             // 
+            this.cb_sortaddr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_sortaddr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_sortaddr.Location = new System.Drawing.Point(607, 239);
+            this.cb_sortaddr.Location = new System.Drawing.Point(686, 248);
             this.cb_sortaddr.Name = "cb_sortaddr";
             this.cb_sortaddr.Size = new System.Drawing.Size(75, 23);
             this.cb_sortaddr.TabIndex = 9;
             this.cb_sortaddr.Text = "Sort Address";
-            this.cb_sortaddr.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cb_sortaddr.UseVisualStyleBackColor = true;
             this.cb_sortaddr.Click += new System.EventHandler(this.cb_sortaddr_Click);
             // 
@@ -266,7 +280,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.cb_cancel;
-            this.ClientSize = new System.Drawing.Size(690, 406);
+            this.ClientSize = new System.Drawing.Size(771, 410);
             this.Controls.Add(this.cb_sortaddr);
             this.Controls.Add(this.cb_sortseq);
             this.Controls.Add(this.tab_criteria);
@@ -1340,5 +1354,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_results.ResumeLayout();
         }
         #endregion
+
     }
 }
