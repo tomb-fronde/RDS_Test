@@ -11,7 +11,10 @@ namespace NZPostOffice.RDS.Controls
 {
     public class WReportAncestor : WAncestorWindow
     {
-        #region Define
+        // TJB RPI_029 Oct-2011: 
+        //     Disable showing the 'Abort' pop-up: it doesn't do anything (see pfc_preopen)
+
+#region Define
 
         public bool[] ib_ModRows = new bool[48];
 
@@ -24,8 +27,6 @@ namespace NZPostOffice.RDS.Controls
         public bool ib_rowspending = false;
 
         public bool ib_Abort;
-
-
 
         public URdsDw dw_parameters;
 
@@ -145,13 +146,15 @@ namespace NZPostOffice.RDS.Controls
             this.Text = StaticMessage.StringParm;
             dw_report.SuspendLayout();
             //? dw_report.Modify("DataWindow.Print.Preview=Yes");
-            if (w_print_abort == null)
-            {
-                //OpenWithParm(w_print_abort, this);
-                StaticMessage.PowerObjectParm = this;
-                w_print_abort = new WPrintAbort();
-                w_print_abort.Show();
-            }
+            // TJB RPI_029 Oct-2011: 
+            //     Disable showing the 'Abort' pop-up: it doesn't do anything (see pfc_preopen)
+            //if (w_print_abort == null)
+            //{
+            //    //OpenWithParm(w_print_abort, this);
+            //    StaticMessage.PowerObjectParm = this;
+            //    w_print_abort = new WPrintAbort();
+            //    w_print_abort.Show();
+           // }
             //TriggerEvent("ue_Report"); 
             ue_report();
         }
