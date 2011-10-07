@@ -3310,6 +3310,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DFARegisterUnassigned.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DMailCarriedFormTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DMailCarriedFormTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DNonVehicleOverrideRates.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DNonVehicleOverrideRates.cs</DependentUpon>
@@ -3439,6 +3443,7 @@
     <None Include="Resources\star_empty.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Report\EclErrDataset.xsc">
       <DependentUpon>EclErrDataset.xsd</DependentUpon>
     </None>
