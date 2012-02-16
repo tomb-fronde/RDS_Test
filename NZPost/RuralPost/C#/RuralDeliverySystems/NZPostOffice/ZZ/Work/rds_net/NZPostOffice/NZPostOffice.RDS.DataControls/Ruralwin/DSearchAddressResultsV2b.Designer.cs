@@ -188,6 +188,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.PostCode.DefaultCellStyle = dataGridViewCellStyle8;
             this.PostCode.HeaderText = "PostCode";
             this.PostCode.Name = "PostCode";
+            this.PostCode.ReadOnly = true;
             this.PostCode.Width = 60;
             // 
             // primary_contract
