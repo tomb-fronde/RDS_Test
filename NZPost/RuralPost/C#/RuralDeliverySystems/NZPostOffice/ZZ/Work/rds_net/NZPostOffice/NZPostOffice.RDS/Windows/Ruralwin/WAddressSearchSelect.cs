@@ -7,6 +7,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WAddressSearchSelect : WAddressSearch
     {
+        // TJB 22-Feb-2012 Release 7.1.7 fixups
+        // [pfc_postopen] Made cb_open and cb_select settings explicit.
+
         #region Define
         public int? il_rdContractSelect;
 
@@ -145,8 +148,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // TJB  RD7_0042  Dec-2009
             // Added cb_select setup to make visible on address search screen
             // when called as addressSearchSelect.
+            // TJB 22-Feb-2012 Release 7.1.7 fixups
+            // Made cb_open and cb_select settings explicit.  These override those set in WAddressSearch.
             cb_select.Enabled = true;
             cb_select.Visible = true;
+            cb_open.Enabled = false;
+            cb_open.Visible = false;
             //cb_select.Location = new System.Drawing.Point(605, 131);
             if (!((il_rdContractSelect == null)))
             {
