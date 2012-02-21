@@ -12,7 +12,10 @@ using NZPostOffice.RDS.DataControls.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-	public partial class DAddressDetails : Metex.Windows.DataUserControl
+    // TJB 22-Feb-2012 Release 7.1.7 fixups
+    // Made contract_no ReadOnly (in designer)
+    
+    public partial class DAddressDetails : Metex.Windows.DataUserControl
 	{
         // TJB  RPCR_029  Oct-2011
         // Added checkbox for adr_location_ind to window.

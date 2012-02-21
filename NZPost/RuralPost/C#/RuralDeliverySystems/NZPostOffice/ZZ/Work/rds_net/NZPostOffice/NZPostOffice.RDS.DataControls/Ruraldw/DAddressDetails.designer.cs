@@ -3,6 +3,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DAddressDetails
     {
+        // TJB 22-Feb-2012 Release 7.1.7 fixups
+        // Made contract_no ReadOnly
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -348,6 +351,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_no.Mask = "########";
             this.contract_no.Name = "contract_no";
             this.contract_no.PromptChar = ' ';
+            this.contract_no.ReadOnly = true;
             this.contract_no.Size = new System.Drawing.Size(78, 20);
             this.contract_no.TabIndex = 100;
             // 
