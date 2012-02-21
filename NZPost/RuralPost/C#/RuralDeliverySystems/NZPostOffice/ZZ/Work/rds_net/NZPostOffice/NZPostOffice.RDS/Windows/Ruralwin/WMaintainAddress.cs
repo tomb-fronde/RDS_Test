@@ -17,6 +17,9 @@ using System.Drawing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  22-Feb-2012  Release 7.1.7 fixups
+    // Changed ib_disableclosequery to false in cb_close_clicked and globally
+    //
     // TJB  RPCR_029  Oct-2011
     // Small change - see dw_header_itemchanged for details
     //
@@ -169,6 +172,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DAddressOccupants)(dw_details.DataObject)).Grid.CellValidated += new DataGridViewCellEventHandler(Grid_CellValidated);
             ((DAddressOccupants)(dw_details.DataObject)).Grid.CellValueChanged 
                            += new DataGridViewCellEventHandler(this.dw_details_itemchanged);
+
+            ib_disableclosequery = false;
         }
 
         public override void pfc_preopen()
@@ -6517,7 +6522,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
-            this.ib_disableclosequery = true;
+            // TJB  22-Feb-2012  Release 7.1.7 fixups
+            // Changed ib_disableclosequery to false
+            this.ib_disableclosequery = false;
             this.Close();
         }
 
