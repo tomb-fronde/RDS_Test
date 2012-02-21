@@ -15,6 +15,12 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB 22-Feb-2012 Release 7.1.7 fixups
+    // [pfc_postopen] Added cb_new visibility settings so the button wouldn't show if unavailable.
+    // Added cb_select settings for same reason.  Note: WAddressSearchSelect overrides these.
+    // [ue_click_search] 
+    // Changed how cb_open and cb_select buttons determined to be visible
+    //
     // TJB  RPCR_026 Aug-2011: Fixups
     // Moved Sequence# column to right-most position (see DSearchAddressResultsV2b)
     // Changed indexes (-1) of columns to reflect moved seq column (see TitleText)
@@ -404,21 +410,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void pfc_postopen()
         {
+            // TJB 22-Feb-2012 Release 7.1.7 fixups
+            // Added cb_new visibility settings so the button wouldn't show if unavailable
+            // Added cb_select settings for same reason.  Note: WAddressSearchSelect overrides these.
             base.pfc_postopen();
             if (StaticVariables.gnv_app.of_get_npadenabled() 
                 && tab_criteria.of_getrdflag() == 1)
             {
                 cb_new.Enabled = false;
+                cb_new.Visible = false;
             }
             else
             {
                 cb_new.Enabled = true;
+                cb_new.Visible = true;
             }
             if (!(is_addr_perms.IndexOf('C') >= 0))
             {
                 cb_new.Enabled = false;
+                cb_new.Visible = false;
             }
             cb_open.Enabled = false;
+            cb_open.Visible = true;
+            cb_select.Enabled = false;
+            cb_select.Visible = false;
             il_contract_search_type = tab_criteria.of_getrdflag();
         }
 
@@ -586,18 +601,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_results.Focus();
                 idw_results.SelectRow(1, true);
 
-                cb_open.Enabled = true;
-                if (cb_open.Visible)
-                {
-                    this.cb_open.TabIndex = 5;
-                    this.cb_select.TabIndex = 0;
-                    this.AcceptButton = cb_open;
-                }
-                else
+                // TJB 22-Feb-2012 Release 7.1.7 fixups
+                // Changed setting logic a bit to be determined by cb_select.
+                // cb_select is enabled in WAddressSearchSelect
+                if (this.cb_select.Enabled)
                 {
                     this.cb_open.TabIndex = 0;
                     this.cb_select.TabIndex = 5;
+                    this.cb_select.Visible = true;
                     this.AcceptButton = cb_select;
+                }
+                else
+                {
+                    cb_open.Enabled = true;
+                    this.cb_open.TabIndex = 5;
+                    this.cb_select.TabIndex = 0;
+                    this.cb_select.Visible = false;
+                    this.AcceptButton = cb_open;
                 }
             }
             else
@@ -605,6 +625,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 cb_open.Enabled = false;
                 this.cb_open.TabIndex = 0;
                 this.cb_select.TabIndex = 5;
+                this.cb_select.Visible = true;
                 this.AcceptButton = cb_search;
             }
             string rows_retrieved = (ll_rowCount == 1) ? " row retrieved" : " rows retrieved";
@@ -642,14 +663,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 && tab_criteria.of_getrdflag() == 1)
             {
                 cb_new.Enabled = false;
+                cb_new.Visible = false;
             }
             else
             {
                 cb_new.Enabled = true;
+                cb_new.Visible = true;
             }
             if (!(is_addr_perms.IndexOf('C') >= 0))
             {
                 cb_new.Enabled = false;
+                cb_new.Visible = true;
             }
             ll_rows = idw_results.RowCount;
             if (ll_rows <= 0)
@@ -812,12 +836,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 this.cb_open.TabIndex = 5;
                 this.cb_select.TabIndex = 0;
+                this.cb_select.Visible = false;
                 this.AcceptButton = cb_open;
             }
             else
             {
                 this.cb_open.TabIndex = 0;
                 this.cb_select.TabIndex = 5;
+                this.cb_select.Visible = true;
                 this.AcceptButton = cb_select;
             }
         }
