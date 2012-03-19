@@ -5,58 +5,53 @@ using System.Collections.Generic;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-    // TJB  RPCR_026  July-2011
-    // Changed Primary indicator column to display Address sequence number (seq_num)
+    //==============================> BEWARE!! <==================================
+    // To make GUI changes, change designer code BY HAND!  Saving designer changes
+    // made with the GUI rearranges code and stuffs it up!!!
+    //============================================================================
+    //
+    // TJB  19-Mar-2012  Release 7.1.7 fixup
+    // Re-applied Aug 2011 fixup!!
+    //
+    // TJB  29-Sep-2011 RPCR_030
+    // Added Post Code
+    // Made columns resizeable
     //
     // TJB  Aug-2011 Fixup
     // Suburb name and Town name fields not being populated.  Had to hand-craft 
     // InitializeComponent() to get working.  Problem caused by using GUI to add 
     // the seq_num column!  ** Beware **
+    //
+    // TJB  RPCR_026  July-2011
+    // Changed Primary indicator column to display Address sequence number (seq_num)
 
-	partial class DSearchAddressResultsV2b
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
+    partial class DSearchAddressResultsV2b
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-	
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null ))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
 
-		private Metex.Windows.DataEntityGrid grid;
-		#region Component Designer generated code
-		private void InitializeComponent()
-		{
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private Metex.Windows.DataEntityGrid grid;
+        #region Component Designer generated code
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
             this.grid = new Metex.Windows.DataEntityGrid();
-            this.multiple_prime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.adr_num = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.road_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sl_id = new Metex.Windows.DataGridViewEntityComboColumn();
-            this.adr_rd_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tc_id = new Metex.Windows.DataGridViewEntityComboColumn();
-            this.PostCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.primary_contract = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.seq_num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
+
             // 
             // bindingSource
             // 
@@ -68,219 +63,228 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.AllowUserToResizeRows = false;
             this.grid.AutoGenerateColumns = false;
             this.grid.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+            this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F);
+            this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.grid.ColumnHeadersHeight = 18;
-            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.multiple_prime,
-            this.adr_num,
-            this.road_name,
-            this.sl_id,
-            this.adr_rd_no,
-            this.tc_id,
-            this.PostCode,
-            this.primary_contract,
-            this.seq_num});
+            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
+            this.grid.MultiSelect = true;
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
+
+            System.Windows.Forms.Padding paddIt = new System.Windows.Forms.Padding();
+            paddIt.Left = 5;
+
             // 
             // multiple_prime
             // 
+            this.multiple_prime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.multiple_prime.DataPropertyName = "MultiplePrime";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Wingdings", 12F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Green;
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.multiple_prime.DefaultCellStyle = dataGridViewCellStyle2;
+            this.multiple_prime.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.multiple_prime.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.multiple_prime.DefaultCellStyle.Font = new System.Drawing.Font("Wingdings", 12F);
+            this.multiple_prime.DefaultCellStyle.ForeColor = System.Drawing.Color.Green;
+            this.multiple_prime.DefaultCellStyle.Padding = paddIt;
             this.multiple_prime.HeaderText = "Cus";
             this.multiple_prime.Name = "multiple_prime";
             this.multiple_prime.ReadOnly = true;
             this.multiple_prime.Width = 33;
+            this.grid.Columns.Add(multiple_prime);
             // 
             // adr_num
             // 
+            this.adr_num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.adr_num.DataPropertyName = "AdrNum";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.adr_num.DefaultCellStyle = dataGridViewCellStyle3;
+            this.adr_num.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.adr_num.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.adr_num.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.adr_num.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.adr_num.DefaultCellStyle.Padding = paddIt;
             this.adr_num.HeaderText = "St No";
             this.adr_num.Name = "adr_num";
             this.adr_num.ReadOnly = true;
             this.adr_num.Width = 60;
+            this.grid.Columns.Add(adr_num);
             // 
             // road_name
             // 
+            this.road_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.road_name.DataPropertyName = "RoadName";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.road_name.DefaultCellStyle = dataGridViewCellStyle4;
+            this.road_name.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.road_name.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.road_name.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.road_name.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.road_name.DefaultCellStyle.Padding = paddIt;
             this.road_name.HeaderText = "Street / Road";
             this.road_name.Name = "road_name";
             this.road_name.ReadOnly = true;
             this.road_name.Width = 120;
+            this.grid.Columns.Add(road_name);
             // 
             // sl_id
             // 
+            this.sl_id = new Metex.Windows.DataGridViewEntityComboColumn();
             this.sl_id.DataPropertyName = "SlId";
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            this.sl_id.DefaultCellStyle = dataGridViewCellStyle5;
-            this.sl_id.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
-            this.sl_id.DisplayStyleForCurrentCellOnly = true;
+            this.sl_id.DefaultCellStyle.BackColor = System.Drawing.Color.White;//.SystemColors.ButtonFace;
+            this.sl_id.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.sl_id.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
             this.sl_id.HeaderText = "Suburb / Locality";
             this.sl_id.Name = "sl_id";
-            this.sl_id.ReadOnly = true;
             this.sl_id.Width = 95;
+            this.sl_id.DisplayMember = "SlName";
+            this.sl_id.ValueMember = "SlId";
+            this.sl_id.ReadOnly = true;
+            this.sl_id.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
+            this.sl_id.DisplayStyleForCurrentCellOnly = true;
+            this.grid.Columns.Add(sl_id);
             // 
             // adr_rd_no
             // 
+            this.adr_rd_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.adr_rd_no.DataPropertyName = "AdrRdNo";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-            this.adr_rd_no.DefaultCellStyle = dataGridViewCellStyle6;
+            this.adr_rd_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.adr_rd_no.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.adr_rd_no.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.adr_rd_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.adr_rd_no.HeaderText = "RD";
             this.adr_rd_no.Name = "adr_rd_no";
             this.adr_rd_no.ReadOnly = true;
             this.adr_rd_no.Width = 30;
+            this.grid.Columns.Add(adr_rd_no);
             // 
             // tc_id
             // 
+            this.tc_id = new Metex.Windows.DataGridViewEntityComboColumn();
             this.tc_id.DataPropertyName = "TcId";
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            this.tc_id.DefaultCellStyle = dataGridViewCellStyle7;
-            this.tc_id.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
-            this.tc_id.DisplayStyleForCurrentCellOnly = true;
+            this.tc_id.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.tc_id.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tc_id.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.tc_id.HeaderText = "Town / City";
             this.tc_id.Name = "tc_id";
-            this.tc_id.ReadOnly = true;
             this.tc_id.Width = 82;
+            this.tc_id.DisplayMember = "TcName";
+            this.tc_id.ValueMember = "TcId";
+            this.tc_id.ReadOnly = true;
+            this.tc_id.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
+            this.tc_id.DisplayStyleForCurrentCellOnly = true;
+            this.grid.Columns.Add(tc_id);
             // 
             // PostCode
             // 
+            this.PostCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PostCode.DataPropertyName = "PostCode";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.PostCode.DefaultCellStyle = dataGridViewCellStyle8;
+            this.PostCode.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.PostCode.HeaderText = "PostCode";
             this.PostCode.Name = "PostCode";
             this.PostCode.ReadOnly = true;
             this.PostCode.Width = 60;
+            this.grid.Columns.Add(PostCode);
             // 
             // primary_contract
             // 
+            this.primary_contract = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.primary_contract.DataPropertyName = "PrimaryContract";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            this.primary_contract.DefaultCellStyle = dataGridViewCellStyle9;
+            this.primary_contract.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.primary_contract.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.primary_contract.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.primary_contract.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.primary_contract.HeaderText = "Primary Customer";
             this.primary_contract.Name = "primary_contract";
             this.primary_contract.ReadOnly = true;
             this.primary_contract.Width = 130;
+            this.grid.Columns.Add(primary_contract);
             // 
             // seq_num
             // 
+            this.seq_num = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.seq_num.DataPropertyName = "SeqNum";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.seq_num.DefaultCellStyle = dataGridViewCellStyle10;
+            this.seq_num.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.seq_num.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.seq_num.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.seq_num.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.seq_num.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.seq_num.HeaderText = "Seq";
             this.seq_num.Name = "seq_num";
             this.seq_num.ReadOnly = true;
             this.seq_num.Width = 33;
+            this.grid.Columns.Add(seq_num);
+
             // 
             // DSearchAddressResultsV2b
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.grid);
-            this.Name = "DSearchAddressResultsV2b";
-            this.Size = new System.Drawing.Size(638, 252);
-            this.SizeChanged += new System.EventHandler(this.DSearchAddressResultsV2b_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
 
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.Name = "DSearchAddressResultsV2b";
+            this.Size = new System.Drawing.Size(638, 252);
+            this.Controls.Add(this.grid);
+            this.SizeChanged += new System.EventHandler(this.DSearchAddressResultsV2b_SizeChanged);
         }
-/*  TJB  RPCR_026 July-2011: Fixup
- *  Functionality moved to cb_search_clicked in WAddressSearch because the this
- *  didn't catch all the rows that should have been marked (not called for some??).
+        /*  TJB  RPCR_026 July-2011: Fixup
+         *  Functionality moved to cb_search_clicked in WAddressSearch because the this
+         *  didn't catch all the rows that should have been marked (not called for some??).
 
-        void grid_CellFormatting(object sender, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
-        {           
-            string indicatorSymbol = new string (new char [] {(char)(byte)(0xFB)});
-            string multiplePrimeSymbol = new string (new char [] {(char)(byte)(0x2E)});
+                void grid_CellFormatting(object sender, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
+                {           
+                    string indicatorSymbol = new string (new char [] {(char)(byte)(0xFB)});
+                    string multiplePrimeSymbol = new string (new char [] {(char)(byte)(0x2E)});
 
-            if (grid.RowCount == 0 && SourceList != null)
-            {
-                return;
-            }
-            if (e.ColumnIndex == 0 && e.RowIndex != 0)   //! 'multiple_prime' column
-            {
-                if (SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
-                    !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
-                    SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
-                    SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
-                    SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
-                    SourceList[e.RowIndex - 1].AdrId == SourceList[e.RowIndex].AdrId                    
-                    )
-                {
-                    SourceList[e.RowIndex].MultiplePrime = multiplePrimeSymbol;                    
+                    if (grid.RowCount == 0 && SourceList != null)
+                    {
+                        return;
+                    }
+                    if (e.ColumnIndex == 0 && e.RowIndex != 0)   //! 'multiple_prime' column
+                    {
+                        if (SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
+                            !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
+                            SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
+                            SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
+                            SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
+                            SourceList[e.RowIndex - 1].AdrId == SourceList[e.RowIndex].AdrId                    
+                            )
+                        {
+                            SourceList[e.RowIndex].MultiplePrime = multiplePrimeSymbol;                    
+                        }
+                        else {
+                            SourceList[e.RowIndex].MultiplePrime = "";                    
+                        }                
+                    }            
+                    //if (e.ColumnIndex == 1 && e.RowIndex != 0)//! 'indicator' column
+                    //{
+                    //    if (
+                    //        SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
+                    //        !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
+                    //        SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
+                    //        SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
+                    //        SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
+                    //        SourceList[e.RowIndex - 1].AdrId != SourceList[e.RowIndex].AdrId  
+                    //       )  
+                    //    {
+                    //        SourceList[e.RowIndex].Indicator = indicatorSymbol;                    
+                    //    }
+                    //    else
+                    //    {
+                    //        SourceList[e.RowIndex].Indicator = "";                    
+                    //    }
+                    //}               
                 }
-                else {
-                    SourceList[e.RowIndex].MultiplePrime = "";                    
-                }                
-            }            
-            //if (e.ColumnIndex == 1 && e.RowIndex != 0)//! 'indicator' column
-            //{
-            //    if (
-            //        SourceList[e.RowIndex - 1].RoadId == SourceList[e.RowIndex].RoadId &&                    
-            //        !string.IsNullOrEmpty(SourceList[e.RowIndex - 1].AdrNum) && !string.IsNullOrEmpty(SourceList[e.RowIndex].AdrNum) &&                    
-            //        SourceList[e.RowIndex - 1].AdrNum == SourceList[e.RowIndex].AdrNum &&                                        
-            //        SourceList[e.RowIndex - 1].TcId == SourceList[e.RowIndex].TcId &&                                        
-            //        SourceList[e.RowIndex - 1].AdrRdNo == SourceList[e.RowIndex].AdrRdNo &&                                        
-            //        SourceList[e.RowIndex - 1].AdrId != SourceList[e.RowIndex].AdrId  
- 	        //       )  
-            //    {
-            //        SourceList[e.RowIndex].Indicator = indicatorSymbol;                    
-            //    }
-            //    else
-            //    {
-            //        SourceList[e.RowIndex].Indicator = "";                    
-            //    }
-            //}               
-        }
-*/
+        */
         void DSearchAddressResultsV2b_SizeChanged(object sender, System.EventArgs e)
         {
             this.grid.Width = this.Width - this.grid.Left;
@@ -292,7 +296,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             //return;
         }
 
-		#endregion
+        #endregion
 
         private DataGridViewTextBoxColumn multiple_prime;
         private DataGridViewTextBoxColumn adr_num;
@@ -303,8 +307,5 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn PostCode;
         private DataGridViewTextBoxColumn primary_contract;
         private DataGridViewTextBoxColumn seq_num;
-
-
-
     }
 }

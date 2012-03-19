@@ -11,6 +11,23 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    //==============================> BEWARE!! <==================================
+    // To make GUI changes, change designer code BY HAND!  Saving designer changes
+    // made with the GUI rearranges code and stuffs it up!!!
+    //============================================================================
+    //
+    // TJB  19-Mar-2012  Release 7.1.7 fixup
+    // Re-applied Aug 2011 designer code fixup!!
+    //
+    // TJB  29-Sep-2011 RPCR_030
+    // Added Post Code
+    // Made columns resizeable
+    //
+    // TJB  Aug-2011 Designer code Fixup
+    // Suburb name and Town name fields not being populated.  Had to hand-craft 
+    // InitializeComponent() to get working.  Problem caused by using GUI to add 
+    // the seq_num column!  ** Beware **
+    //
     // TJB  RPCR_026 Aug-2011: Fixups
     // Moved Sequence# column to right-most position (see designer)
     //
