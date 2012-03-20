@@ -9,16 +9,23 @@ using Metex.Core;
 using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
-
 {
+    // TJB  Feb-2012  RPI_036
+    //    Changed mask for Frequency Distances to allow negative numbers
+    //    This is a partial fix in that I've found some situations where 
+    //    the application will crash (unhandled exception), especially if
+    //    the window is closed while entering a value.
+    //
+    // TJB  15-July-2009  RD7_0033
+    //    Added to fix problem with extentions:
+    //    Itemchanged event not being triggered.
+
 	public partial class DExtension2005 : Metex.Windows.DataUserControl
 	{
 		public DExtension2005()
 		{
 			InitializeComponent();
-                // TJB  15-July-2009  RD7_0033
-                //    Added to fix problem with extentions:
-                //    Itemchanged event not being triggered.
+
             this.extn_rural_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
             this.extn_other_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
             this.extn_private_bags.Validated += new System.EventHandler(this.TextBox_LostFocus);
@@ -56,6 +63,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             {
                 TextBoxLostFocus(sender, e);
             }
+        }
+
+        private void extn_boxes_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
 	}
 }

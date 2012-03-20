@@ -4,6 +4,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DExtension2005
     {
+        // TJB  Feb-2012  RPI_036
+        //    Changed mask for Frequency Distances to allow negative numbers
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -220,8 +223,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.extn_distance.PromptChar = ' ';
             this.extn_distance.Size = new System.Drawing.Size(68, 20);
             this.extn_distance.TabIndex = 102;
+            this.extn_distance.Text = "0";
             this.extn_distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.extn_distance.Value = "";
+            this.extn_distance.Value = "0";
             this.extn_distance.Validated += new System.EventHandler(this.TextBox_LostFocus);
             // 
             // extn_boxes
@@ -239,6 +243,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.extn_boxes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.extn_boxes.Value = "0";
             this.extn_boxes.Validated += new System.EventHandler(this.TextBox_LostFocus);
+            this.extn_boxes.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.extn_boxes_MaskInputRejected);
             // 
             // extn_del_hrs
             // 
@@ -733,6 +738,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // extn_effective_date
             // 
             this.extn_effective_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ExtnEffectiveDate", true));
+            this.extn_effective_date.EditMask = null;
             this.extn_effective_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.extn_effective_date.Location = new System.Drawing.Point(92, 18);
             this.extn_effective_date.Mask = "00/00/0000";
