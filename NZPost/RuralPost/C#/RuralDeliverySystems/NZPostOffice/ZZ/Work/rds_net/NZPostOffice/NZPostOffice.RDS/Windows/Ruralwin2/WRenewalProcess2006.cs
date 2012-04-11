@@ -12,13 +12,18 @@ using NZPostOffice.RDS.Windows.Ruralwin;
 using NZPostOffice.RDS.DataService;
 using NZPostOffice.RDS.Windows.Ruralbase;
 //using System.Threading;
+using System.Drawing.Printing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
-        // TJB Oct-2010: Changed benchmark report to BenchmarkReport2010 (was 2006)
+        // TJB  11-Apr-2012  RPC_035
+        // Duplex print Route Frequency Descriptions
+        //
+        // TJB Oct-2010
+        // Changed benchmark report to BenchmarkReport2010 (was 2006)
 
         private const string DEFAULT_ASSEMBLY = "NZPostOffice.RDS.DataControls";
         private const string DEFAULT_VERSION = "1.0.0.0";
@@ -100,6 +105,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public Label note_2;
 
         #endregion
+
         // TJB  RD7_0051 Oct-2009
         // Fix display of page control buttons on Benchmark report panel.  The more-likely
         // actual fix is the commenting-out of the SetChildIndex method calls in the
@@ -270,19 +276,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // note_1
             // 
-            note_1.Text = "Double Click on contract to open";
-            note_1.Name = "note_1";
-            note_1.Location = new System.Drawing.Point(51, 390);
-            note_1.Size = new System.Drawing.Size(350, 15);
-            note_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.note_1.Location = new System.Drawing.Point(51, 390);
+            this.note_1.Name = "note_1";
+            this.note_1.Size = new System.Drawing.Size(350, 15);
+            this.note_1.TabIndex = 0;
+            this.note_1.Text = "Double Click on contract to open";
             // 
             // note_2
             // 
-            note_2.Text = "NOTE:  Only contracts that can be renewed will be retrieved";
-            note_2.Name = "note_2";
-            note_2.Location = new System.Drawing.Point(51, 403);
-            note_2.Size = new System.Drawing.Size(350, 13);
-            note_2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.note_2.Location = new System.Drawing.Point(51, 403);
+            this.note_2.Name = "note_2";
+            this.note_2.Size = new System.Drawing.Size(350, 13);
+            this.note_2.TabIndex = 1;
+            this.note_2.Text = "NOTE:  Only contracts that can be renewed will be retrieved";
             // 
             // cb_clear
             // 
@@ -299,6 +305,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.l_1.Location = new System.Drawing.Point(55, 338);
             this.l_1.Name = "l_1";
             this.l_1.Size = new System.Drawing.Size(345, 1);
+            this.l_1.TabIndex = 14;
             this.l_1.Visible = false;
             // 
             // dw_criteria1
@@ -445,10 +452,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // st_status
             // 
             this.st_status.BackColor = System.Drawing.SystemColors.Control;
+            this.st_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.st_status.Location = new System.Drawing.Point(219, 484);
             this.st_status.Name = "st_status";
-            this.st_status.Size = new System.Drawing.Size(352, 20);
-            this.st_status.BorderStyle = BorderStyle.None;
+            this.st_status.Size = new System.Drawing.Size(352, 13);
+            this.st_status.TabIndex = 4;
             // 
             // WRenewalProcess2006
             // 
@@ -460,16 +468,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Location = new System.Drawing.Point(1, 1);
             this.Name = "WRenewalProcess2006";
             this.Text = "Renewal Process";
-            //this.Controls.SetChildIndex(this.st_status, 0);
-            //this.Controls.SetChildIndex(this.dw_schedule, 0);
-            //this.Controls.SetChildIndex(this.tab_1, 0);
-            //this.Controls.SetChildIndex(this.st_label, 0);
+            this.Controls.SetChildIndex(this.st_status, 0);
+            this.Controls.SetChildIndex(this.dw_schedule, 0);
+            this.Controls.SetChildIndex(this.tab_1, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
             this.tab_1.ResumeLayout(false);
             this.tabpage_1.ResumeLayout(false);
-            this.tabpage_1.PerformLayout();
             this.tabpage_2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         /// <summary>
@@ -1065,12 +1073,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? lSequence;
             int lLoop;
             int lUpperBound;
-            DateTime? dDate;   // = new DateTime();
+            DateTime? dDate;
             int ll_Cnt;
             int ll_Ctr = 0;
             int li_sched_row;
             string ls_dispatch = null;
             bool lb_printReport;
+            bool lb_printDuplex;
 
             // TJB  RD7_0051 Oct-2009: testing
             int fileseq;
@@ -1102,28 +1111,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             Cursor.Current = Cursors.WaitCursor;
             ll_Cnt = of_getnumselectedrows();
  
-                //jlwang: thread            
-            /*
-             * Thread thread = new Thread(new ThreadStart(WStatusabortShow));
-             * thread.Priority = ThreadPriority.Highest;
-             * thread.Start();
-             */
-
             // TJB  RD7_0051 Oct-2009: testing
             fileseq = 0;
             st_message = "";
             this.st_status.Text = st_message;
             this.st_status.Visible = true;
 
-            lUpperBound = sScheduleDWs.Count;    //..UpperBound;
+            lUpperBound = sScheduleDWs.Count;
             while (lRow >= 0)
             {
                 Cursor.Current = Cursors.WaitCursor;
                 ll_Ctr++;
-                    //?if (IsValid(w_statusabort))
-                    //{
-                    //    w_statusabort.of_draw(ll_Ctr, ll_Cnt);
-                    //}
                 lContract = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).ContractNo;
                 lSequence = dw_listing.DataObject.GetItem<ListContractsForProcessing2001>(lRow).MaxSequence;
                 // TJB  RD7_0051 Oct-2009: testing
@@ -1147,13 +1145,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             "NZPostOffice.RDS.DataControls.Ruralrpt." + StaticFunctions.migrateName(sScheduleDWs[lLoop].ToString()));
                     dw_schedule.DataObject = System.Activator.CreateInstance(type) as Metex.Windows.DataUserControl;
 
-                        //?dw_schedule.settransobject(StaticVariables.sqlca);
                     //if (sScheduleDWs[lLoop].ToString() == "r_contract_summary")
                     string report = sScheduleDWs[lLoop].ToString();
                     this.st_status.Text = st_message + " - " + report.Substring(2);
+
+                    // TJB  11-Apr-2012  RPC_035
+                    // Duplex print Route Frequency Descriptions
+                    lb_printDuplex = (report == "r_route_description_single_contract");
+
                     if (report == "r_contract_summary")
                     {
-                            //?dDate = StaticFunctions.RelativeDate(Today(), 0 - Day(Today()));
                         //dw_schedule.Retrieve(new object[]{ lContract, lSequence, dDate });
                         dw_schedule.Retrieve(new object[]{ lContract, (lSequence - 1), dDate });
                     }
@@ -1166,6 +1167,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                          //  Don't print where there's nothing to print on a schedule of mail carried.
                          //     ( decided by there being nothing in the mc_dispatch_carried column)
                     lb_printReport = true;
+
                     if (sScheduleDWs[lLoop].ToString() == "r_mail_carried_single_contract")
                     {
                         li_sched_row = dw_schedule.GetRow();
@@ -1184,7 +1186,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         if (viewer != null)
                         {
                             viewer.RefreshReport();
-
+                            
                             // TJB  RD7_0051 Oct-2009: testing
                             // public virtual void PrintToPrinter(int nCopies, bool collated, int startPageN, int endPageN);
                             //((CrystalDecisions.CrystalReports.Engine.ReportClass)
@@ -1194,6 +1196,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             filename = @"C:\tmp\report-" + fileseq.ToString() + "-"
                                            + lContract.ToString() + "_" + report.Substring(2);
 
+                            // TJB  11-Apr-2012  RPC_035
+                            // Duplex print Route Frequency Descriptions
+                            if (lb_printDuplex)
+                            {
+                                ((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).PrintOptions.PrinterDuplex 
+                                          = CrystalDecisions.Shared.PrinterDuplex.Vertical;
+                            }
+                           
                             //((CrystalDecisions.CrystalReports.Engine.ReportClass)
                             //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
                             //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).SaveAs(filename,true);
@@ -1212,34 +1222,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 ((CrystalDecisions.CrystalReports.Engine.ReportClass)viewer.ReportSource).Dispose();
                         }
                     }
-                   /*
-                    * if (ib_PrintAbort)
-                    * {
-                    *     lLoop = lUpperBound;
-                    *     break;
-                    * }
-                    */
                 }
-               /*
-                * if (ib_PrintAbort)
-                * {
-                *     lRow = 0;
-                * }
-                * else
-                * {
-                *     //dw_listing.SelectRow ( lRow, False)
-                *     lRow = dw_listing.GetSelectedRow(lRow + 1);
-                * }
-                */
                 lRow = dw_listing.GetSelectedRow(lRow + 1);
             }
-           /*
-            * if (thread != null && w_statusabort != null)
-            * {
-            *     //w_statusabort.Close();
-            *     thread.Abort();
-            * }
-            */
             dw_listing.SelectRow(0, false);
             Cursor.Current = Cursors.Default;
             this.st_status.Text = "";
@@ -1354,6 +1339,57 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         #endregion
+
+        private void cb_test_Click(object sender, EventArgs e)
+        {
+            string msg = "";
+            string defaultPrinter = "";
+            string printerName = "";
+            string printerIsValid = "";
+            string printerIsDefault = "";
+            string printerCanDuplex = "";
+            string duplexSetting = "";
+
+            if (PrinterSettings.InstalledPrinters.Count <= 0)
+            {
+                MessageBox.Show("Printer not found");
+                return;
+            }
+
+            PrinterSettings ps = new PrinterSettings();
+            defaultPrinter = ps.PrinterName;
+            msg = "Default printer = " + defaultPrinter + "\n\n";
+            duplexSetting = Duplex.Default.ToString();
+            msg += "Duplex setting = " + duplexSetting + "\n";
+
+            //Get all the available printers and add them to the combo box
+/*
+            foreach (String printer in PrinterSettings.InstalledPrinters)
+            {
+                printerName = printer.ToString();
+                ps.PrinterName = printerName;
+
+                duplexSetting = Duplex.Default.ToString();
+
+                //Check if the printer is valid
+                printerIsValid = ps.IsValid.ToString();
+                printerIsDefault = ps.IsDefaultPrinter.ToString();
+                printerCanDuplex = ps.CanDuplex.ToString();
+                msg += printerName
+                       + ", Valid = " + printerIsValid
+                       + ", Default = " + printerIsDefault
+                       + ", CanDuplex = " + printerCanDuplex
+                       + "\n";
+            }
+*/
+            MessageBox.Show(msg);
+            return;
+        }
+
+        private void cbx_duplex_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
 
     }
 }
