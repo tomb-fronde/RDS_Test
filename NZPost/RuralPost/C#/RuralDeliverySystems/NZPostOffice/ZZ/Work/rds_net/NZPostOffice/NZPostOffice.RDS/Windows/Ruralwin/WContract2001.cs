@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  12-Apr-2012 Bug fix
+    // Fixed save of con_active_status value to fix displayed renewal status
+    // when con_active_sequence is 1.  See tab_contract_selectionchanged.
+    //
     // TJB  RPCR_026  July-2011
     // Major changes to the Fixed_assets tab.
     // Added sh_id and related functions to Fixed_assets tabpage.
@@ -3071,12 +3075,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 idw_renewals.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 ll_Active = idw_contract.GetItem<Contract>(0).ConActiveSequence.GetValueOrDefault();
+                string st_active, t;
+                st_active = idw_renewals.GetControlByName("st_active").Text;
+                t = st_active;
+                if (ll_Active == 1)
+                {
+                    idw_renewals.GetControlByName("st_active").Text = "0";
+                }
                 if (StaticFunctions.f_nempty(ll_Active))
                 {
                     idw_renewals.GetControlByName("st_active").Text = "0";
                 }
                 else
                 {
+                    // TJB  12-Apr-2012 Bug fix
+                    // ...("st_active").Text isn't updated if its current value is the same
+                    // as the value being assigned (ll_active in this case).  ...("st_active").Text's
+                    // default value is 1, so isn't updated when ll_active is 1.  The problem is, 
+                    // there's a trigger on the update event for ...("st_active").Text, and this 
+                    // isn't triggered.  The event updates the value st_active_text in Entity.Renewals.cs 
+                    // (via assignment to the Status object), which remains as NULL, and causes the
+                    // Status value to be returned as "Expired" instead of "Active".
+                    // This fiddle ensures the actual value of ll_active is saved, causing the event 
+                    // to trigger and the correct value to be saved in st_active_text, and thus the
+                    // correct Status to be returned.
+                    if (ll_Active == 1)
+                    {
+                        idw_renewals.GetControlByName("st_active").Text = "0";
+                    }
                     idw_renewals.GetControlByName("st_active").Text = ll_Active.ToString();
                 }
                 idw_renewals.uf_settoolbar();
