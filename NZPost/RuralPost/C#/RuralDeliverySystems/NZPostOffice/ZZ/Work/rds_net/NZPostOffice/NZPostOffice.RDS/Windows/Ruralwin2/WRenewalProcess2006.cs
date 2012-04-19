@@ -139,8 +139,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ((DListContractsForProcessing2001)dw_listings.DataObject).CellDoubleClick += new EventHandler(dw_listings_doubleclicked);
             dw_listings.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listings_constructor);
             dw_bm_report.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_bm_report_constructor);
-            dw_bm_report.DataObject.RetrieveStart += new RetrieveEventHandler(dw_bm_report_retrievestart);
-            //pp! end of code moved from InitializeComponent
 
             cb_printbm_constructor();
             cb_create_pending_constructor();
@@ -1320,16 +1318,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_listing.SelectRow(0, false);
         }
 
-        public virtual void dw_bm_report_doubleclicked(object sender, EventArgs e)
-        {
-            // this.print ( )
-        }
-
-        public virtual void dw_bm_report_retrievestart(object sender, EventArgs e)
-        {
-            //?return 2;
-        }
-
         public virtual void cb_printbm_clicked(object sender, EventArgs e)
         {
             // TJB  RD7_0051 Oct2009
@@ -1339,57 +1327,5 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         #endregion
-
-        private void cb_test_Click(object sender, EventArgs e)
-        {
-            string msg = "";
-            string defaultPrinter = "";
-            string printerName = "";
-            string printerIsValid = "";
-            string printerIsDefault = "";
-            string printerCanDuplex = "";
-            string duplexSetting = "";
-
-            if (PrinterSettings.InstalledPrinters.Count <= 0)
-            {
-                MessageBox.Show("Printer not found");
-                return;
-            }
-
-            PrinterSettings ps = new PrinterSettings();
-            defaultPrinter = ps.PrinterName;
-            msg = "Default printer = " + defaultPrinter + "\n\n";
-            duplexSetting = Duplex.Default.ToString();
-            msg += "Duplex setting = " + duplexSetting + "\n";
-
-            //Get all the available printers and add them to the combo box
-/*
-            foreach (String printer in PrinterSettings.InstalledPrinters)
-            {
-                printerName = printer.ToString();
-                ps.PrinterName = printerName;
-
-                duplexSetting = Duplex.Default.ToString();
-
-                //Check if the printer is valid
-                printerIsValid = ps.IsValid.ToString();
-                printerIsDefault = ps.IsDefaultPrinter.ToString();
-                printerCanDuplex = ps.CanDuplex.ToString();
-                msg += printerName
-                       + ", Valid = " + printerIsValid
-                       + ", Default = " + printerIsDefault
-                       + ", CanDuplex = " + printerCanDuplex
-                       + "\n";
-            }
-*/
-            MessageBox.Show(msg);
-            return;
-        }
-
-        private void cbx_duplex_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }
