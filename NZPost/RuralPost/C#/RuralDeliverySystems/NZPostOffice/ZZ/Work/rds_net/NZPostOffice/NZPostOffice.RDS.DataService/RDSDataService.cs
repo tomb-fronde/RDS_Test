@@ -9,8 +9,10 @@ using Metex.Core;
 using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
-    //************************************************************************************************
     // Modifications
+    // TJB  RPCR_036  23-Apr-2012   NEW
+    // Added UpdateAdrDeliveryDays(adr_id)
+    //
     // TJB  RPCR_026  July-2011: New
     // AssignFixedAssetToContract( fixed_asset_no, Contract_no)
     // Deleted unused Fixed Asset functions
@@ -43,7 +45,6 @@ namespace NZPostOffice.RDS.DataService
     //
     // 21 Jul 2008  Metex  Fix2 for Renewal bug.  See _GetContractRenewalsConVolumeAtRenewal
     //
-    //************************************************************************************************
 
     public struct EclImportData
     {
@@ -397,6 +398,15 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService UpdateAddressDpIdByAdrId(int? al_new_master_dpid, int? al_new_adr_id)
         {
             RDSDataService obj = Execute("_UpdateAddressDpIdByAdrId", al_new_master_dpid, al_new_adr_id);
+            return obj;
+        }
+
+        // TJB  RPCR_036  23-Apr-2012   NEW
+        // Called from WMaintainFrequencies to update the adr_delivery_days
+        // for an address.
+        public static RDSDataService UpdateAdrDeliveryDays(int? in_adrId)
+        {
+            RDSDataService obj = Execute("_UpdateAdrDeliveryDays", in_adrId);
             return obj;
         }
 
@@ -4047,6 +4057,43 @@ namespace NZPostOffice.RDS.DataService
                         ret = false;
                         _sqlcode = -1;
                         _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_036  23-Apr-2012   NEW
+        // Called from WMaintainFrequencies to update the adr_delivery_days
+        // for an address.
+        [ServerMethod]
+        public void _UpdateAdrDeliveryDays(int? in_adrId)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_updateAdrDeliveryDays";
+
+                    pList.Add(cm, "adr_id", in_adrId);
+
+                    intVal = 0;
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
                     }
                 }
             }
