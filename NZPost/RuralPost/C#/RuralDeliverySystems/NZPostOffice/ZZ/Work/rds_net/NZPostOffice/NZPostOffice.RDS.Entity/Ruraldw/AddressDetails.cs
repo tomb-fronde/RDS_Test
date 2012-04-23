@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_036  23-Apr-2012
+    // Changed references to adr_old_delivery_days to adr_delivery_days
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -24,7 +27,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("adr_no", "_adr_no", "address")]
     [MapInfo("adr_alpha", "_adr_alpha", "address")]
     [MapInfo("dp_id", "_dp_id", "address")]
-    [MapInfo("adr_old_delivery_days", "_adr_old_delivery_days", "address")]
+    [MapInfo("adr_delivery_days", "_adr_delivery_days", "address")]
     [MapInfo("adr_property_identification", "_adr_property_identification", "address")]
     [MapInfo("adr_freq", "_adr_freq", "post_code")]
     [MapInfo("adr_num", "_adr_num", "post_code")]
@@ -83,7 +86,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private int? _dp_id;
 
         [DBField()]
-        private string _adr_old_delivery_days;
+        private string _adr_delivery_days;
 
         [DBField()]
         private string _adr_property_identification;
@@ -350,19 +353,21 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual string AdrOldDeliveryDays
+        // TJB  RPCR_036  23-Apr-2012
+        // Changed references to adr_old_delivery_days to adr_delivery_days
+        public virtual string AdrDeliveryDays
         {
             get
             {
-                CanReadProperty("AdrOldDeliveryDays", true);
-                return _adr_old_delivery_days;
+                CanReadProperty("AdrDeliveryDays", true);
+                return _adr_delivery_days;
             }
             set
             {
-                CanWriteProperty("AdrOldDeliveryDays", true);
-                if (_adr_old_delivery_days != value)
+                CanWriteProperty("AdrDeliveryDays", true);
+                if (_adr_delivery_days != value)
                 {
-                    _adr_old_delivery_days = value;
+                    _adr_delivery_days = value;
                     PropertyHasChanged();
                 }
             }
@@ -832,6 +837,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod]
         private void FetchEntity(int? al_adr_id)
         {
+            // TJB  RPCR_036  23-Apr-2012
+            // Changed references to adr_old_delivery_days to adr_delivery_days
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -850,7 +857,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                           + " address.adr_no, "
                                           + " address.adr_alpha, "
                                           + " address.dp_id, "
-                                          + " address.adr_old_delivery_days, "
+                                          + " address.adr_delivery_days, "
                                           + " address.adr_property_identification, "
                                           + " rd.f_getFrequency(address.adr_id, 0, 'N') as adr_freq, "
                                           + " (CASE WHEN address.adr_unit IS NULL THEN ''+ address.adr_no + isnull(address.adr_alpha,'') ELSE address.adr_unit+'/' + address.adr_no + isnull(address.adr_alpha,'') END) as adr_num, "
@@ -891,7 +898,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._adr_no = GetValueFromReader<String>(dr,10);
                             instance._adr_alpha = GetValueFromReader<String>(dr,11);
                             instance._dp_id = GetValueFromReader<Int32?>(dr,12);
-                            instance._adr_old_delivery_days = GetValueFromReader<String>(dr,13);
+                            instance._adr_delivery_days = GetValueFromReader<String>(dr,13);
                             instance._adr_property_identification = GetValueFromReader<String>(dr,14);
 
                             instance._adr_freq = dr.GetString(15);
