@@ -6,12 +6,18 @@ using NZPostOffice.RDS.Controls;
 using System.Windows.Forms;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.DataControls.Ruraldw;
+using NZPostOffice.RDS.DataService;
 using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WMaintainFrequency : WMaster
     {
+        // TJB  RPCR_036  23-Apr-2012
+        // Update address.adr_delivery_days if the user changes the address'
+        // frequencies.
+        // See WMaintainFrequency_PfcPostUpdate()
+        //
         // TJB  Sequencing review  Jan-2011:  New
         //      Displays list of frequencies associated with a contract with check boxes 
         //      indicating which frequencies the specific address is associated with.
@@ -27,6 +33,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_cancel;
 
+        private int? adrId;
+
+        private int? contractNo;
+
         #endregion
 
         public WMaintainFrequency()
@@ -39,14 +49,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.KeyDown += new KeyEventHandler(WMaintainFrequency_KeyDown);
+            this.dw_list.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(WMaintainFrequency_PfcPostUpdate);
 
             ((DContractAddressFrequency)dw_list.DataObject).CellDoubleClick += new EventHandler(dw_list_doubleclicked);
         }
 
         public override void open()
         {
-            int? contractNo = StaticVariables.gnv_app.of_get_parameters().longparm;
-            int? adrId = StaticVariables.gnv_app.of_get_parameters().integerparm;
+            contractNo = StaticVariables.gnv_app.of_get_parameters().longparm;
+            adrId = StaticVariables.gnv_app.of_get_parameters().integerparm;
 
             base.open();
             ((DContractAddressFrequency)dw_list.DataObject).Retrieve(contractNo, adrId);
@@ -171,5 +182,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Close();
         }
         #endregion
+
+        // TJB  20-Apr-2012  RPCR_036
+        // Update the adr_delivery_days column for this address when the 
+        // address' frequencies change.
+        public virtual void WMaintainFrequency_PfcPostUpdate()
+        {
+            RDSDataService.UpdateAdrDeliveryDays(adrId);
+        }
     }
 }
