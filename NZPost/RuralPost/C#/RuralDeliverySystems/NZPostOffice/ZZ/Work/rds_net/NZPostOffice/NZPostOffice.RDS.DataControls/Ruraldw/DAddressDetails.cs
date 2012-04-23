@@ -12,21 +12,26 @@ using NZPostOffice.RDS.DataControls.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB 23-Apr-2012 fixup
+    // Removed setDeliveryDays and setTerminalDays procedures
+    // - not referenced
+    //
     // TJB 22-Feb-2012 Release 7.1.7 fixups
     // Made contract_no ReadOnly (in designer)
+    //
+    // TJB  RPCR_029  Oct-2011
+    // Added checkbox for adr_location_ind to window.
+    // Also added readonly textbox controls for road_type, road_suffix, 
+    // suburb name and town name.  These are used to replace the combo boxes 
+    // when NPAD is enabled so the fields look the same as the other header
+    // textbox fields.
+
+    // TJB  Sequencing review  Jan-2011
+    // Added setDeliveryDays and setTerminalDays procedures
+
     
     public partial class DAddressDetails : Metex.Windows.DataUserControl
 	{
-        // TJB  RPCR_029  Oct-2011
-        // Added checkbox for adr_location_ind to window.
-        // Also added readonly textbox controls for road_type, road_suffix, 
-        // suburb name and town name.  These are used to replace the combo boxes 
-        // when NPAD is enabled so the fields look the same as the other header
-        // textbox fields.
-
-        // TJB  Sequencing review  Jan-2011
-        // Added setDeliveryDays and setTerminalDays procedures
-
 		public DAddressDetails()
 		{
 			InitializeComponent();
@@ -45,7 +50,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
 			return RetrieveCore<AddressDetails>(AddressDetails.GetAllAddressDetails(al_adr_id));
 		}
-
+/*
         public void setDeliveryDays(string sDelDays)
         {
             this.mon.Text = sDelDays.Substring(0, 1);
@@ -69,7 +74,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_8.Text = sTermDays.Substring(8, 1);
             this.compute_1.Text = sTermDays.Substring(1, 1);
         }
-
+*/
         private void label2_Click(object sender, EventArgs e)
         {
 
