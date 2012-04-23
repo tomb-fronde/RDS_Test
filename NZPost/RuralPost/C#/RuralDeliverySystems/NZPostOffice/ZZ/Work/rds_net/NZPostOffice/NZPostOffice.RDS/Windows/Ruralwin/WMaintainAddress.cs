@@ -17,6 +17,10 @@ using System.Drawing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_036  23-Apr-2012
+    // Clear update flag for dw_header after WMaintainFrequency update
+    // See cb_selectfreq_Click
+    //
     // TJB  22-Feb-2012  Release 7.1.7 fixups
     // Changed ib_disableclosequery to false in cb_close_clicked and globally
     //
@@ -6645,7 +6649,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             // Update the displays if necessary
             if (!(sDelDays == oldDelDays))
+            {
                 idw_header.GetItem<AddressDetails>(0).AdrFreq = sDelDays;
+                // TJB  RPCR_036  23-Apr-2012
+                // WMaintainFrequencies will update the database if the user selects to do so 
+                // Setting AdrFreq updates dw_header with the same information.  We call
+                // resetUpdate() to clear the update flag so that the user isn't asked whether 
+                // update on closing (and get confused if they say No but the update has taken
+                // place already).
+                idw_header.ResetUpdate();
+            }
             if (!(sTermDays == oldTermDays))
                 idw_header.GetItem<AddressDetails>(0).AdrFreqTerminal = sTermDays;
 
