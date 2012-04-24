@@ -15,6 +15,9 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPI_033  Apr-2012 Bug fix: PrintDocument1_PrintPage
+    // Divide by 0 error calculating nWidth in commented-out line
+    //
     // TJB 22-Feb-2012 Release 7.1.7 fixups
     // [pfc_postopen] Added cb_new visibility settings so the button wouldn't show if unavailable.
     // Added cb_select settings for same reason.  Note: WAddressSearchSelect overrides these.
@@ -945,50 +948,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void PrintDocument1_BeginPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
-
             oStringFormat = new StringFormat();
-
             oStringFormat.Alignment = StringAlignment.Near;
-
             oStringFormat.LineAlignment = StringAlignment.Center;
-
             oStringFormat.Trimming = StringTrimming.EllipsisCharacter;
-
             oStringFormatComboBox = new StringFormat();
-
             oStringFormatComboBox.LineAlignment = StringAlignment.Center;
-
             oStringFormatComboBox.FormatFlags = StringFormatFlags.NoWrap;
-
             oStringFormatComboBox.Trimming = StringTrimming.EllipsisCharacter;
-
             oButton = new Button();
-
             oCheckbox = new CheckBox();
-
             oComboBox = new ComboBox();
-
             nTotalWidth = 0;
 
             DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
 
             foreach (DataGridViewColumn oColumn in DataGridView1.Columns)
             {
-
                 nTotalWidth = (nTotalWidth + oColumn.Width);
-
             }
-
             nPageNo = 1;
-
             NewPage = true;
-
             nRowPos = 0;
-
         }
 
-
-        
         private void DrawFooter(System.Drawing.Printing.PrintPageEventArgs e, int RowsPerPage)        
         {
             DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
@@ -1014,12 +997,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {                      
             //!int nHeight = 0;
-
- 
-
-            int nWidth = 0, i = 0, nRowsPerPage = 0;
+            int nWidth = 0;
+            int i = 0;
+            int nRowsPerPage = 0;
             int nTop = e.MarginBounds.Top;
             int nLeft = e.MarginBounds.Left;
+
+            decimal dTotalWidth = nTotalWidth;
+            decimal dColumnWidth;
+            decimal dMarginWidth = e.MarginBounds.Width;
 
             DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
 
@@ -1027,22 +1013,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 foreach (DataGridViewColumn oColumn in DataGridView1.Columns)
                 {
-                    nWidth = Convert.ToInt16(Math.Floor((double)(oColumn.Width / (nTotalWidth * (nTotalWidth * (e.MarginBounds.Width / nTotalWidth))))));
+                    // TJB  RPI_033  Apr-2012
+                    // Divide by 0 error calculating nWidth in commented-out line
+                    dColumnWidth = oColumn.Width;
+                    //nWidth = Convert.ToInt16(Math.Floor((decimal)(oColumn.Width / (nTotalWidth * (nTotalWidth * (e.MarginBounds.Width / nTotalWidth))))));
+                    nWidth = Convert.ToInt16(Math.Floor((dColumnWidth /(dTotalWidth * (dMarginWidth / dTotalWidth)))));
                     nHeight = (int)(e.Graphics.MeasureString(oColumn.HeaderText, oColumn.InheritedStyle.Font, nWidth).Height) + 11;
-
                     oColumnLefts.Add(nLeft);
-
                     oColumnWidths.Add(oColumn.Width);
-
                     oColumnTypes.Add(oColumn.GetType());
-
                     nLeft += oColumn.Width;
                 }
             }
 
-            
-             while(nRowPos <= dw_results.DataObject.RowCount - 1)
-             {
+            while(nRowPos <= dw_results.DataObject.RowCount - 1)
+            {
                 DataGridViewRow oRow = DataGridView1.Rows[nRowPos]; 
 
                 if(nTop + nHeight >= e.MarginBounds.Height + e.MarginBounds.Top)
@@ -1059,9 +1044,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {                                      
                         //!Draw Columns
                         nTop = e.MarginBounds.Top;
-                        
                         i = 0;
-
                         Font fontToUse = DataGridView1.Columns[3].InheritedStyle.Font;
                         foreach(DataGridViewColumn oColumn in DataGridView1.Columns)
                         {
@@ -1076,41 +1059,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                             i += 1;
                         }
-
                         NewPage = false;
                     }                    
-
                     nTop += nHeight;
-
                     i = 0;
-
                     foreach(DataGridViewCell oCell in oRow.Cells)
                     {                        
-
                         //!if(oColumnTypes[i] is DataGridViewTextBoxColumn || oColumnTypes[i] is DataGridViewLinkColumn)
-                       //! if (oCell.ColumnIndex != 4 && oCell.ColumnIndex != 4)//! 4 and 6 are ComboCells
+                        //! if (oCell.ColumnIndex != 4 && oCell.ColumnIndex != 4)//! 4 and 6 are ComboCells
                         {
                             e.Graphics.DrawString(oCell.EditedFormattedValue + "", oCell.InheritedStyle.Font, 
                                 new System.Drawing.SolidBrush(oCell.InheritedStyle.ForeColor), 
                                 new System.Drawing.RectangleF(Convert.ToSingle(oColumnLefts[i]), nTop, Convert.ToSingle(oColumnWidths[i]), nHeight), oStringFormat);
  
-                        }                   
-                       
+                        }
                         e.Graphics.DrawRectangle(Pens.Black, new Rectangle(Convert.ToInt32(oColumnLefts[i]), nTop, Convert.ToInt32(oColumnWidths[i]), nHeight));                       
-
                         i += 1;
-
                     }
-
                 } 
                 nRowPos += 1;
                 nRowsPerPage += 1; 
              } 
-
             DrawFooter(e, nRowsPerPage); 
-
             e.HasMorePages = false;
-        
         }
         #endregion 
 
