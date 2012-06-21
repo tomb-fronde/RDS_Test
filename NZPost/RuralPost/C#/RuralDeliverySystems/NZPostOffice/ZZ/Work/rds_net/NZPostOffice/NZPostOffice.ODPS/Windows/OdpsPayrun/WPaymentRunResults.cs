@@ -10,6 +10,8 @@ using NZPostOffice.ODPS.DataControls.OdpsPayrun;
 using NZPostOffice.Shared;
 using NZPostOffice.ODPS.DataService;
 using NZPostOffice.ODPS.Entity.OdpsPayrun;
+using CrystalDecisions.Windows.Forms;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
@@ -166,11 +168,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         {
             if (dw_1.Visible)
             {
-                //?dw_1.Print();
+                //dw_1.Print();
             }
             if (dw_2.Visible)
             {
-                //?dw_2.Print();
+                //dw_2.Print();
             }
         }
 
