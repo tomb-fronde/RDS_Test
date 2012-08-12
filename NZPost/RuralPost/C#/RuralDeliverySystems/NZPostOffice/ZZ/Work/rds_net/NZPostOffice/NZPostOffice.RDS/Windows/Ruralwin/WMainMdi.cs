@@ -35,15 +35,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // TJB  Aug2009
             // Changed content of Toolstrip StatusLabel4 to show purpose of app
             this.Text = "Rural Delivery System";
-            //this.toolStripStatusLabel4.Text = "Production Version";
+            this.toolStripStatusLabel4.Text = "Production Version";
             //this.toolStripStatusLabel4.Text = "DEV Version";
             //this.toolStripStatusLabel4.Text = "Test Version";
             // TJB  Dec-2009
             // Changed the 'Environment' value to the RDS version number
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.8.0 ";
-            this.toolStripStatusLabel6.Text = "25-Apr-2012 9:00am";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.8.1 ";
+            this.toolStripStatusLabel6.Text = "12-Aug-2012 5:00pm";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
                         System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
                 //"*** June 2011 ***";
