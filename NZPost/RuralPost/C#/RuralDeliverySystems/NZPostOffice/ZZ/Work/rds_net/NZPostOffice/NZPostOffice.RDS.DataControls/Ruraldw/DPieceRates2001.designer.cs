@@ -106,12 +106,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.pr_rate.DataPropertyName = "PrRate";
             this.pr_rate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.pr_rate.DefaultCellStyle.BackColor = System.Drawing.Color.White;//.SystemColors.ButtonFace;
-            this.pr_rate.DefaultCellStyle.Format = "###.000";
+            this.pr_rate.DefaultCellStyle.Format = "###.00000";
             this.pr_rate.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
             this.pr_rate.HeaderText = "Rate ($)";
             this.pr_rate.Name = "pr_rate";
-            this.pr_rate.Width = 55;
-            this.pr_rate.Mask = "###.000";
+            this.pr_rate.Width = 67;  // 55;
+            this.pr_rate.Mask = "###.00000";
             this.grid.Columns.Add(pr_rate);
 
 
