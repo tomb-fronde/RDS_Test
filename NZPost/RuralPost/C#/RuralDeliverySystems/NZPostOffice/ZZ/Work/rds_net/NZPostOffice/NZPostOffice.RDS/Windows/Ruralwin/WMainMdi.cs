@@ -42,7 +42,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Changed the 'Environment' value to the RDS version number
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.8.1 ";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.8.3 ";
             this.toolStripStatusLabel6.Text = "12-Aug-2012 5:00pm";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
                         System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
