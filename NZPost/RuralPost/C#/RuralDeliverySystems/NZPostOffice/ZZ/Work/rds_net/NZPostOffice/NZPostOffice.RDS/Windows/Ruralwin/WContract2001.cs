@@ -18,7 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    // TJB  12-Apr-2012 Bug fix
+    // TJB  12-Apr-2012 RPI_032 Bug fix 
+    // Fixed bug where terminated contracts shown as 'Active'
+    //
+    // TJB  12-Apr-2012 RPI_032
     // Fixed save of con_active_status value to fix displayed renewal status
     // when con_active_sequence is 1.  See tab_contract_selectionchanged.
     //
@@ -3066,6 +3069,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else if (ToTabName == "renewals")
             {
+                DateTime? Con_Date_Terminated;
+
                 idw_renewals.URdsDw_GetFocus(null, null);
 
                 idw_contract.uf_toggle_audit(false);
@@ -3075,6 +3080,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 idw_renewals.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 ll_Active = idw_contract.GetItem<Contract>(0).ConActiveSequence.GetValueOrDefault();
+                Con_Date_Terminated = idw_contract.GetItem<Contract>(0).ConDateTerminated;
                 string st_active, t;
                 st_active = idw_renewals.GetControlByName("st_active").Text;
                 t = st_active;
@@ -3088,7 +3094,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    // TJB  12-Apr-2012 Bug fix
+                    // TJB  12-Apr-2012 RPI_032
                     // ...("st_active").Text isn't updated if its current value is the same
                     // as the value being assigned (ll_active in this case).  ...("st_active").Text's
                     // default value is 1, so isn't updated when ll_active is 1.  The problem is, 
@@ -3099,11 +3105,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // This fiddle ensures the actual value of ll_active is saved, causing the event 
                     // to trigger and the correct value to be saved in st_active_text, and thus the
                     // correct Status to be returned.
-                    if (ll_Active == 1)
+                    //
+                    // TJB 4-Sep-2012 RPI_032 bug fix
+                    // Terminated contracts were also shown as active.  Add check of 
+                    // terminated date.
+
+                    if (Con_Date_Terminated == null)
                     {
-                        idw_renewals.GetControlByName("st_active").Text = "0";
+                        if (ll_Active == 1)
+                        {
+                            idw_renewals.GetControlByName("st_active").Text = "0";
+                        }
+                        idw_renewals.GetControlByName("st_active").Text = ll_Active.ToString();
                     }
-                    idw_renewals.GetControlByName("st_active").Text = ll_Active.ToString();
                 }
                 idw_renewals.uf_settoolbar();
             }
