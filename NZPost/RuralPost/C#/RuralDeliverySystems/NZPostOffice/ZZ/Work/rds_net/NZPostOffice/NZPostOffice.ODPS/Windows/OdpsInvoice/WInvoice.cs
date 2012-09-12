@@ -15,8 +15,17 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
     public partial class WInvoice : WMaster
     {
+        // TJB  12-Sep-2012
+        // Changed format of rate in piece rate sections.
+        // See
+        //     REDwInvoiceDetailPaymentPrDetailcp.rpt
+        //     REDwInvoiceDetailPaymentPrDetailkm.rpt
+        //     REDwInvoiceDetailPaymentPrDetailxp.rpt
+        //     REDwInvoiceDetailPaymentPrDetailpp.rpt
+        //
         // TJB RPCR_012 July-2010
         // Adjusted size of screen and fixed resizing
+
         #region Define
         public bool ib_canexit = true;
 
