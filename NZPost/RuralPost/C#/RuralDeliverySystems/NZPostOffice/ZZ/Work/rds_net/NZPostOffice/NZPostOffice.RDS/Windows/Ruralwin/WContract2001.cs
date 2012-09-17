@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB 18-Sep-2012 Release fixup
+    // Undid 'terminated contracts' bug fix as requested.
+    // - it is now showing incorrectly for active (contracts that have not gone through a renewal)
+    //
     // TJB  12-Apr-2012 RPI_032 Bug fix 
     // Fixed bug where terminated contracts shown as 'Active'
     //
@@ -3109,15 +3113,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // TJB 4-Sep-2012 RPI_032 bug fix
                     // Terminated contracts were also shown as active.  Add check of 
                     // terminated date.
-
-                    if (Con_Date_Terminated == null)
-                    {
+                    //
+                    // TJB 18-Sep-2012 Release fixup
+                    // Undid 'terminated contracts' bug fix as requested.
+                    
+                    //if (Con_Date_Terminated == null)
+                    //{
                         if (ll_Active == 1)
                         {
                             idw_renewals.GetControlByName("st_active").Text = "0";
                         }
                         idw_renewals.GetControlByName("st_active").Text = ll_Active.ToString();
-                    }
+                    //}
                 }
                 idw_renewals.uf_settoolbar();
             }
