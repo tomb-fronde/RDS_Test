@@ -20,6 +20,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB  Nov-2012
+        // Changed displayed title to "WWhatifRate2001" from PB format
+
         #region Define
 
         // IntArray ila_VtKeys = new IntArray();
@@ -131,7 +134,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Width = 594;
             this.Top = 0;
             this.Left = 0;
-            this.Name = "w_whatif_calc2001";
+            this.Name = "WWhatifCalc2001";
             this.DoubleClick += new EventHandler(doubleclicked);
             // 
             // st_label
