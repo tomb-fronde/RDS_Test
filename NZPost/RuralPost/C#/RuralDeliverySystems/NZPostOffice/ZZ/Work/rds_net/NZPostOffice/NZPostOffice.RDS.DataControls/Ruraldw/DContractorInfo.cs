@@ -13,9 +13,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     public partial class DContractorInfo : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_037  Dec-2012
+        // Added Mobile2, Primary contact checkboxes, and contractor notes
+        // Added mobile2 to set_phone_masks
+        //
         // TJB  RPI_002  June-2010
         //      Added routines to determine the correct phone number mask
         //      for the contractor's day, night and mobile phones.
+
         public DContractorInfo()
 		{
 			InitializeComponent();
@@ -46,6 +51,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             sPhoneNo = this.contractor_c_mobile.Text;
             sMask = set_phone_mask(sPhoneNo);
             this.contractor_c_mobile.Mask = sMask;
+            this.contractor_c_mobile2.Mask = "";
+            sPhoneNo = this.contractor_c_mobile2.Text;
+            sMask = set_phone_mask(sPhoneNo);
+            this.contractor_c_mobile2.Mask = sMask;
         }
 
         // TJB  RPI_002  June-2010: Added

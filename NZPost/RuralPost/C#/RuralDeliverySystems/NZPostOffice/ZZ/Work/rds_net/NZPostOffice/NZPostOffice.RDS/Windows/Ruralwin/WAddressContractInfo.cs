@@ -7,6 +7,10 @@ using NZPostOffice.RDS.DataControls.Ruraldw;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_037  Dec-2012
+    // Added mobile2, primary_contact checkboxes, and contractor notes (in datacontrol)
+    // Increased size of panel
+
     public class WAddressContractInfo : WMaster
     {
         #region Define
@@ -24,9 +28,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_info.DataObject.BorderStyle = BorderStyle.None;
             dw_info.DataObject.VerticalScroll.Visible = false;
 
-            //jlwang:moved from IC
             dw_info.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_info_constructor);
-            //jlwang:end
         }
 
         #region Form Design
@@ -37,27 +39,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.dw_info = new NZPostOffice.RDS.Controls.URdsDw();
             this.SuspendLayout();
-            this.dw_info = new URdsDw();
-            //!this.dw_info.DataObject = new DContractorInfo();
-            Controls.Add(dw_info);
-            this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.ControlBox = false;
-            this.Size = new System.Drawing.Size(322, 143);
             // 
             // dw_info
             // 
-            //!dw_info.DataObject.BorderStyle = BorderStyle.None;
-            //!dw_info.DataObject.VerticalScroll.Visible = false;
-            dw_info.TabIndex = 1;
-            dw_info.Size = new System.Drawing.Size(320, 142);
-            dw_info.LostFocus += new EventHandler(dw_info_losefocus);
-            //dw_info.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_info_constructor);
-            this.Deactivate += new EventHandler(dw_info_losefocus);
-            this.ResumeLayout();
+            this.dw_info.DataObject = null;
+            this.dw_info.FireConstructor = false;
+            this.dw_info.Location = new System.Drawing.Point(0, 0);
+            this.dw_info.Name = "dw_info";
+            this.dw_info.Size = new System.Drawing.Size(314, 227);
+            this.dw_info.TabIndex = 1;
+            this.dw_info.LostFocus += new System.EventHandler(this.dw_info_losefocus);
+            // 
+            // WAddressContractInfo
+            // 
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ClientSize = new System.Drawing.Size(316, 228);
+            this.ControlBox = false;
+            this.Controls.Add(this.dw_info);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WAddressContractInfo";
+            this.Deactivate += new System.EventHandler(this.dw_info_losefocus);
+            this.Controls.SetChildIndex(this.dw_info, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>

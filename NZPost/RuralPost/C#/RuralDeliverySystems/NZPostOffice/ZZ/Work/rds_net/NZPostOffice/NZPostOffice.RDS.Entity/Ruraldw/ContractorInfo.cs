@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_037  Dec-2012
+    // Added c_mobile2, c_prime_contact, c_notes to values returned
+    // and PrimeContactDay, PrimeContactNight, PrimeContactMobile
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -18,8 +22,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 	[MapInfo("c_initials", "_contractor_c_initials", "contractor")]
 	[MapInfo("c_phone_day", "_contractor_c_phone_day", "contractor")]
 	[MapInfo("c_phone_night", "_contractor_c_phone_night", "contractor")]
-	[MapInfo("c_mobile", "_contractor_c_mobile", "contractor")]
-	[System.Serializable()]
+    [MapInfo("c_mobile", "_contractor_c_mobile", "contractor")]
+    [MapInfo("c_mobile", "_contractor_c_mobile2", "contractor")]
+    [MapInfo("c_prime_contact", "_contractor_c_prime_contact", "contractor")]
+    [MapInfo("c_notes", "_contractor_c_notes", "contractor")]
+    [System.Serializable()]
 
 	public class ContractorInfo : Entity<ContractorInfo>
 	{
@@ -45,8 +52,17 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		[DBField()]
 		private string  _contractor_c_phone_night;
 
-		[DBField()]
-		private string  _contractor_c_mobile;
+        [DBField()]
+        private string _contractor_c_mobile;
+
+        [DBField()]
+        private string _contractor_c_mobile2;
+
+        [DBField()]
+        private int? _contractor_c_prime_contact;
+
+        [DBField()]
+        private string _contractor_c_notes;
 
 
 		public virtual int? ContractorContractorSupplierNo
@@ -175,25 +191,115 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			}
 		}
 
-		public virtual string ContractorCMobile
-		{
-			get
-			{
+        public virtual string ContractorCMobile
+        {
+            get
+            {
                 CanReadProperty("ContractorCMobile", true);
-				return _contractor_c_mobile;
-			}
-			set
-			{
+                return _contractor_c_mobile;
+            }
+            set
+            {
                 CanWriteProperty("ContractorCMobile", true);
-				if ( _contractor_c_mobile != value )
-				{
-					_contractor_c_mobile = value;
-					PropertyHasChanged();
-				}
-			}
-		}
+                if (_contractor_c_mobile != value)
+                {
+                    _contractor_c_mobile = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
 
-		protected override object GetIdValue()
+        public virtual string ContractorCMobile2
+        {
+            get
+            {
+                CanReadProperty("ContractorCMobile2", true);
+                return _contractor_c_mobile2;
+            }
+            set
+            {
+                CanWriteProperty("ContractorCMobile2", true);
+                if (_contractor_c_mobile2 != value)
+                {
+                    _contractor_c_mobile2 = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? ContractorCPrimeContact
+        {
+            get
+            {
+                CanReadProperty("ContractorCPrimeContact", true);
+                return _contractor_c_prime_contact;
+            }
+            set
+            {
+                CanWriteProperty("ContractorCPrimeContact", true);
+                if (_contractor_c_prime_contact != value)
+                {
+                    _contractor_c_prime_contact = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? PrimeContactDay
+        {
+            get
+            {
+                CanReadProperty("PrimeContactDay", true);
+                if (_contractor_c_prime_contact == 1)
+                    return _contractor_c_prime_contact;
+                else
+                    return null;
+            }
+        }
+
+        public virtual int? PrimeContactNight
+        {
+            get
+            {
+                CanReadProperty("PrimeContactNight", true);
+                if (_contractor_c_prime_contact == 2)
+                    return _contractor_c_prime_contact;
+                else
+                    return null;
+            }
+        }
+
+        public virtual int? PrimeContactMobile
+        {
+            get
+            {
+                CanReadProperty("PrimeContactMobile", true);
+                if (_contractor_c_prime_contact == 3)
+                    return _contractor_c_prime_contact;
+                else
+                    return null;
+            }
+        }
+
+        public virtual string ContractorCNotes
+        {
+            get
+            {
+                CanReadProperty("ContractorCNotes", true);
+                return _contractor_c_notes;
+            }
+            set
+            {
+                CanWriteProperty("ContractorCNotes", true);
+                if (_contractor_c_notes != value)
+                {
+                    _contractor_c_notes = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        protected override object GetIdValue()
 		{
 			return "";
 		}
@@ -220,7 +326,33 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "  SELECT contractor.contractor_supplier_no,  contractor.c_surname_company,   contractor.c_first_names, contractor.c_salutation, contractor.c_initials,contractor.c_phone_day,  contractor.c_phone_night,    contractor.c_mobile      FROM contract,           contract_renewals,            contractor,            contractor_renewals     WHERE ( contract_renewals.contract_no = contract.contract_no ) and           ( contractor_renewals.contractor_supplier_no = contractor.contractor_supplier_no ) and           ( contractor_renewals.contract_no = contract_renewals.contract_no ) and           ( contractor_renewals.contract_seq_number = contract_renewals.contract_seq_number )    and		contract.contract_no = @al_contract_no and 		contractor_renewals.contract_seq_number =	 (SELECT Max(cr2.contract_seq_number)	FROM	contractor_renewals cr2	 WHERE	cr2.contract_no = contract.contract_no) and      contractor_renewals.cr_effective_date = 	 (SELECT Max(cr3.cr_effective_date) 	FROM	contractor_renewals cr3 WHERE	cr3.contract_no = contract.contract_no)";
+					cm.CommandText = " SELECT contractor.contractor_supplier_no"
+                                         + ", contractor.c_surname_company"
+                                         + ", contractor.c_first_names"
+                                         + ", contractor.c_salutation"
+                                         + ", contractor.c_initials,contractor.c_phone_day"
+                                         + ", contractor.c_phone_night"
+                                         + ", contractor.c_mobile"
+                                         + ", contractor.c_mobile2"
+                                         + ", contractor.c_prime_contact"
+                                         + ", contractor.c_notes"
+                                     + " FROM contract"
+                                         + ", contract_renewals"
+                                         + ", contractor"
+                                         + ", contractor_renewals"
+                                    + " WHERE contract_renewals.contract_no = contract.contract_no "
+                                      + " AND contractor_renewals.contractor_supplier_no = contractor.contractor_supplier_no "
+                                      + " AND contractor_renewals.contract_no = contract_renewals.contract_no "
+                                      + " AND contractor_renewals.contract_seq_number = contract_renewals.contract_seq_number "
+                                      + " AND contract.contract_no = @al_contract_no "
+                                      + " AND contractor_renewals.contract_seq_number "
+                                                 + " = (SELECT Max(cr2.contract_seq_number) "
+                                                      + " FROM contractor_renewals cr2 "
+                                                     + " WHERE cr2.contract_no = contract.contract_no) "
+                                                       + " AND contractor_renewals.cr_effective_date "
+                                                               + " = (SELECT Max(cr3.cr_effective_date) "
+                                                                    + " FROM contractor_renewals cr3 "
+                                                                   + " WHERE cr3.contract_no = contract.contract_no)";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "al_contract_no", al_contract_no);
 
@@ -238,7 +370,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
                             instance._contractor_c_phone_day = GetValueFromReader<String>(dr,5);
                             instance._contractor_c_phone_night = GetValueFromReader<String>(dr,6);
-                            instance._contractor_c_mobile = GetValueFromReader<String>(dr,7);
+                            instance._contractor_c_mobile = GetValueFromReader<String>(dr, 7);
+                            instance._contractor_c_mobile2 = GetValueFromReader<String>(dr, 8);
+                            instance._contractor_c_prime_contact = GetValueFromReader<Int32?>(dr, 9);
+                            instance._contractor_c_notes = GetValueFromReader<String>(dr, 10);
 
 							instance.MarkOld();
                             instance.StoreInitialValues();

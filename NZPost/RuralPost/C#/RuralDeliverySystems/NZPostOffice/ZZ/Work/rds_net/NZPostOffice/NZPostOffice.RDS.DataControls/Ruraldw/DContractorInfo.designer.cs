@@ -60,6 +60,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contractor_c_mobile_t = new System.Windows.Forms.Label();
             this.contractor_c_mobile = new System.Windows.Forms.MaskedTextBox();
             this.t_1 = new System.Windows.Forms.Label();
+            this.primary_contact_day = new System.Windows.Forms.CheckBox();
+            this.primary_contact_night = new System.Windows.Forms.CheckBox();
+            this.primary_contact_mobile = new System.Windows.Forms.CheckBox();
+            this.contractor_c_notes = new System.Windows.Forms.TextBox();
+            this.contractor_c_notes_t = new System.Windows.Forms.Label();
+            this.contractor_c_mobile2_t = new System.Windows.Forms.Label();
+            this.contractor_c_mobile2 = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -233,10 +240,94 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_1.Text = "Salutation";
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // primary_contact_day
+            // 
+            this.primary_contact_day.AutoSize = true;
+            this.primary_contact_day.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "PrimeContactDay", true));
+            this.primary_contact_day.Enabled = false;
+            this.primary_contact_day.Location = new System.Drawing.Point(210, 85);
+            this.primary_contact_day.Name = "primary_contact_day";
+            this.primary_contact_day.Size = new System.Drawing.Size(60, 17);
+            this.primary_contact_day.TabIndex = 14;
+            this.primary_contact_day.Text = "Primary";
+            this.primary_contact_day.UseVisualStyleBackColor = true;
+            // 
+            // primary_contact_night
+            // 
+            this.primary_contact_night.AutoSize = true;
+            this.primary_contact_night.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "PrimeContactNight", true));
+            this.primary_contact_night.Enabled = false;
+            this.primary_contact_night.Location = new System.Drawing.Point(210, 105);
+            this.primary_contact_night.Name = "primary_contact_night";
+            this.primary_contact_night.Size = new System.Drawing.Size(15, 14);
+            this.primary_contact_night.TabIndex = 15;
+            this.primary_contact_night.UseVisualStyleBackColor = true;
+            // 
+            // primary_contact_mobile
+            // 
+            this.primary_contact_mobile.AutoSize = true;
+            this.primary_contact_mobile.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "PrimeContactMobile", true));
+            this.primary_contact_mobile.Enabled = false;
+            this.primary_contact_mobile.Location = new System.Drawing.Point(210, 124);
+            this.primary_contact_mobile.Name = "primary_contact_mobile";
+            this.primary_contact_mobile.Size = new System.Drawing.Size(15, 14);
+            this.primary_contact_mobile.TabIndex = 16;
+            this.primary_contact_mobile.UseVisualStyleBackColor = true;
+            // 
+            // contractor_c_notes
+            // 
+            this.contractor_c_notes.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractorCNotes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.contractor_c_notes.Font = new System.Drawing.Font("Arial", 8F);
+            this.contractor_c_notes.ForeColor = System.Drawing.Color.Black;
+            this.contractor_c_notes.Location = new System.Drawing.Point(106, 159);
+            this.contractor_c_notes.Multiline = true;
+            this.contractor_c_notes.Name = "contractor_c_notes";
+            this.contractor_c_notes.ReadOnly = true;
+            this.contractor_c_notes.Size = new System.Drawing.Size(205, 68);
+            this.contractor_c_notes.TabIndex = 17;
+            // 
+            // contractor_c_notes_t
+            // 
+            this.contractor_c_notes_t.AutoSize = true;
+            this.contractor_c_notes_t.Location = new System.Drawing.Point(5, 159);
+            this.contractor_c_notes_t.Name = "contractor_c_notes_t";
+            this.contractor_c_notes_t.Size = new System.Drawing.Size(35, 13);
+            this.contractor_c_notes_t.TabIndex = 18;
+            this.contractor_c_notes_t.Text = "Notes";
+            // 
+            // contractor_c_mobile2_t
+            // 
+            this.contractor_c_mobile2_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.contractor_c_mobile2_t.Font = new System.Drawing.Font("Arial", 8F);
+            this.contractor_c_mobile2_t.ForeColor = System.Drawing.Color.Black;
+            this.contractor_c_mobile2_t.Location = new System.Drawing.Point(38, 139);
+            this.contractor_c_mobile2_t.Name = "contractor_c_mobile2_t";
+            this.contractor_c_mobile2_t.Size = new System.Drawing.Size(44, 14);
+            this.contractor_c_mobile2_t.TabIndex = 19;
+            this.contractor_c_mobile2_t.Text = "Mobile2";
+            this.contractor_c_mobile2_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // contractor_c_mobile2
+            // 
+            this.contractor_c_mobile2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractorCMobile2", true));
+            this.contractor_c_mobile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.contractor_c_mobile2.Location = new System.Drawing.Point(106, 139);
+            this.contractor_c_mobile2.Mask = "(###) ###-#####";
+            this.contractor_c_mobile2.Name = "contractor_c_mobile2";
+            this.contractor_c_mobile2.ReadOnly = true;
+            this.contractor_c_mobile2.Size = new System.Drawing.Size(97, 20);
+            this.contractor_c_mobile2.TabIndex = 20;
+            // 
             // DContractorInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.contractor_c_mobile2_t);
+            this.Controls.Add(this.contractor_c_notes_t);
+            this.Controls.Add(this.contractor_c_notes);
+            this.Controls.Add(this.primary_contact_mobile);
+            this.Controls.Add(this.primary_contact_night);
+            this.Controls.Add(this.primary_contact_day);
             this.Controls.Add(this.contractor_contractor_supplier_no_t);
             this.Controls.Add(this.contractor_contractor_supplier_no);
             this.Controls.Add(this.contractor_c_surname_company_t);
@@ -251,14 +342,23 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.contractor_c_mobile_t);
             this.Controls.Add(this.contractor_c_mobile);
             this.Controls.Add(this.t_1);
+            this.Controls.Add(this.contractor_c_mobile2);
             this.Name = "DContractorInfo";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(321, 233);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 		#endregion
+
+        private CheckBox primary_contact_day;
+        private CheckBox primary_contact_night;
+        private CheckBox primary_contact_mobile;
+        private TextBox contractor_c_notes;
+        private Label contractor_c_notes_t;
+        private Label contractor_c_mobile2_t;
+        private MaskedTextBox contractor_c_mobile2;
 
 	}
 }
