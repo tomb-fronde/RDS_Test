@@ -11,8 +11,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // TJB  RPCR_037  Dec-2012
     // Added c_mobile2, c_prime_contact, c_notes to values returned
     // and PrimeContactDay, PrimeContactNight, PrimeContactMobile
-
-	// Mapping info for object fields to DB
+    //
+    // TJB  RPCR_046  Dec-2012
+    // Changed fetch query to use newly-created function GetSeqNo.
+    
+    // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("contractor_supplier_no", "_contractor_contractor_supplier_no", "contractor")]
@@ -325,7 +328,26 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    // TJB  RPCR_046  Dec-2012
+                    // Changed query.  Used newly-created function GetSeqNo to determine
+                    // which contract the query related to (most-recent ignoring any pending renewals).
 					cm.CommandType = CommandType.Text;
+                    cm.CommandText = " SELECT contractor.contractor_supplier_no"
+                                         + ", contractor.c_surname_company"
+                                         + ", contractor.c_first_names"
+                                         + ", contractor.c_salutation"
+                                         + ", contractor.c_initials,contractor.c_phone_day"
+                                         + ", contractor.c_phone_night"
+                                         + ", contractor.c_mobile"
+                                         + ", contractor.c_mobile2"
+                                         + ", contractor.c_prime_contact"
+                                         + ", contractor.c_notes"
+                                     + " FROM contractor"
+                                         + ", contractor_renewals"
+                                    + " WHERE contractor.contractor_supplier_no = contractor_renewals.contractor_supplier_no "
+                                      + " AND contractor_renewals.contract_no = @al_contract_no "
+                                      + " AND contractor_renewals.contract_seq_number = rd.GetConSeqNo(@al_contract_no) ";
+/*
 					cm.CommandText = " SELECT contractor.contractor_supplier_no"
                                          + ", contractor.c_surname_company"
                                          + ", contractor.c_first_names"
@@ -353,7 +375,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                                                + " = (SELECT Max(cr3.cr_effective_date) "
                                                                     + " FROM contractor_renewals cr3 "
                                                                    + " WHERE cr3.contract_no = contract.contract_no)";
-					ParameterCollection pList = new ParameterCollection();
+*/
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "al_contract_no", al_contract_no);
 
 					List<ContractorInfo> _list = new List<ContractorInfo>();
