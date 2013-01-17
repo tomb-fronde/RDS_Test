@@ -12,7 +12,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DRouteFrequency : Metex.Windows.DataUserControl
 	{
-		public DRouteFrequency()
+        // TJB  RPCR_044  Jan-2013
+        // Added in_showAll in Retrieve
+        //    == 0 select only active frequencies
+        //    == 1 select all
+        
+        public DRouteFrequency()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
@@ -52,10 +57,17 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 			sf_key.AssignDropdownType<DddwStandardFrequency>();
 		}
 
-		public int Retrieve( int? in_Contract )
+		public int Retrieve( int? in_Contract, int? in_showAll )
 		{
+            // TJB  RPCR_044  Jan-2013
+            // Added in_showAll; == 0 select only active frequencies; == 1 select all
+            if (in_showAll == null || in_showAll != 0)
+                in_showAll = 1;
+            else
+                in_showAll = 0;
+
 			return RetrieveCore<RouteFrequency>(new List<RouteFrequency>
-				(RouteFrequency.GetAllRouteFrequency(in_Contract)));
+				(RouteFrequency.GetAllRouteFrequency(in_Contract, in_showAll)));
 		}
 
         public event EventHandler CellClick;
