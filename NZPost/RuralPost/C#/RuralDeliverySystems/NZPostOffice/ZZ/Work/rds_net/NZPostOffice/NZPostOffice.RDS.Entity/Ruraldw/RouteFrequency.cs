@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_044  Jan-2013
+    // Added in_showAll; == 1 select all frequencies; == 0 select only active frequencies
+    //   
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -27,6 +31,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
     public class RouteFrequency : Entity<RouteFrequency>
     {
+        // TJB  RPCR_044  Jan-2013
+        // Added in_showAll; == 1 select all frequencies; == 0 select only active frequencies
+
         #region Business Methods
         [DBField()]
         private int? _contract_no;
@@ -350,24 +357,31 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             return Create(in_Contract);
         }
 
-        public static RouteFrequency[] GetAllRouteFrequency(int? in_Contract)
+        public static RouteFrequency[] GetAllRouteFrequency(int? in_Contract, int? in_showAll)
         {
-            return Fetch(in_Contract).list;
+            // TJB  RPCR_044  Jan-2013
+            // Added in_showAll
+            return Fetch(in_Contract, in_showAll).list;
         }
 
         #endregion
 
         #region Data Access
         [ServerMethod]
-        private void FetchEntity(int? in_Contract)
+        private void FetchEntity(int? in_Contract, int? in_showAll)
         {
+            // TJB  RPCR_044  Jan-2013
+            // Added in_showAll; == 1 select all frequencies; == 0 select only active frequencies
+            //   
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
+                    if (in_showAll == null) in_showAll = 1;
                     cm.CommandType = CommandType.StoredProcedure;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_Contract", in_Contract);
+                    pList.Add(cm, "in_showAll", in_showAll);
                     cm.CommandText = "rd.sp_getroutefrequency2001";
 
                     List<RouteFrequency> _list = new List<RouteFrequency>();
