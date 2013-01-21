@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_045  Jan 2013
+    // Added con_date_terminated to displayed values
+
     public partial class DContractorsContracts : Metex.Windows.DataUserControl
 	{
 		public DContractorsContracts()

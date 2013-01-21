@@ -5,9 +5,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  contract_no;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  con_title;
+        private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label t_1;
 	
 		protected override void Dispose(bool disposing)
@@ -23,109 +21,137 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		#region Component Designer generated code
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-			grid = new Metex.Windows.DataEntityGrid();
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
-			this.SuspendLayout();
-
-			// 
-			// bindingSource
-			//
-			this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractorsContracts);
-
-
-			// 
-			// grid
-			// 
-			this.grid.AllowUserToAddRows = false;
-			this.grid.AllowUserToResizeRows = false;
-			this.grid.AutoGenerateColumns = false;
-            this.grid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-			this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-			this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-			this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F);
-			this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			this.grid.ColumnHeadersHeight = 28;
-			this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-			this.grid.DataSource = this.bindingSource;
-            this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-			//this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-			this.grid.Location = new System.Drawing.Point(0,15);
-			this.grid.MultiSelect = true;
-			this.grid.Name = "grid";
-			this.grid.RowHeadersVisible = false;
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.grid = new Metex.Windows.DataEntityGrid();
+            this.t_1 = new System.Windows.Forms.Label();
+            this.contract_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ConTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ConDateTerminated = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bindingSource
+            // 
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractorsContracts);
+            // 
+            // grid
+            // 
+            this.grid.AllowUserToAddRows = false;
+            this.grid.AllowUserToDeleteRows = false;
+            this.grid.AllowUserToResizeRows = false;
+            this.grid.AutoGenerateColumns = false;
             this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.grid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(500, 245);
-			this.grid.TabIndex = 0;
+            this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.grid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid.ColumnHeadersHeight = 28;
+            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.contract_no,
+            this.ConTitle,
+            this.ConDateTerminated});
+            this.grid.DataSource = this.bindingSource;
+            this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.grid.Location = new System.Drawing.Point(0, 15);
+            this.grid.Name = "grid";
+            this.grid.ReadOnly = true;
+            this.grid.RowHeadersVisible = false;
             this.grid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Controls.Add(grid);
-
-			//
-			// contract_no
-			//
-			contract_no= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.contract_no.DataPropertyName = "ContractNo";
-			this.contract_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			this.contract_no.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.contract_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-			this.contract_no.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-            this.contract_no.HeaderText = "Contracts";
-			this.contract_no.Name = "contract_no";
-			this.contract_no.ReadOnly = true;
-			this.contract_no.Width = 55;
-			this.grid.Columns.Add(contract_no);
-
-
-			//
-			// con_title
-			//
-			con_title= new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.con_title.DataPropertyName = "ConTitle";
-			this.con_title.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			this.con_title.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.con_title.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-			this.con_title.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-			this.con_title.HeaderText = "";
-			this.con_title.Name = "con_title";
-			this.con_title.ReadOnly = true;
-			this.con_title.Width = 445;
-            this.con_title.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-		
-			this.grid.Columns.Add(con_title);
-
-
-            //
+            this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grid.Size = new System.Drawing.Size(500, 245);
+            this.grid.TabIndex = 0;
+            // 
             // t_1
-            //
-            this.t_1 = new System.Windows.Forms.Label();
-            this.t_1.Font = new System.Drawing.Font("MS Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            // 
+            this.t_1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.t_1.ForeColor = System.Drawing.Color.Black;
             this.t_1.Location = new System.Drawing.Point(1, 1);
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(500, 14);
+            this.t_1.TabIndex = 1;
             this.t_1.Text = "Owner Driver:";
-            this.t_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.t_1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(t_1);
-
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-			this.ResumeLayout(false); this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            // 
+            // contract_no
+            // 
+            this.contract_no.DataPropertyName = "ContractNo";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            this.contract_no.DefaultCellStyle = dataGridViewCellStyle2;
+            this.contract_no.FillWeight = 55F;
+            this.contract_no.HeaderText = "Contracts";
+            this.contract_no.Name = "contract_no";
+            this.contract_no.ReadOnly = true;
+            this.contract_no.Width = 55;
+            // 
+            // ConTitle
+            // 
+            this.ConTitle.DataPropertyName = "ConTitle";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            this.ConTitle.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ConTitle.FillWeight = 280F;
+            this.ConTitle.HeaderText = "";
+            this.ConTitle.Name = "ConTitle";
+            this.ConTitle.ReadOnly = true;
+            this.ConTitle.Width = 280;
+            // 
+            // ConDateTerminated
+            // 
+            this.ConDateTerminated.DataPropertyName = "ConDateTerminated";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            this.ConDateTerminated.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ConDateTerminated.FillWeight = 125F;
+            this.ConDateTerminated.HeaderText = "Date Terminated";
+            this.ConDateTerminated.Name = "ConDateTerminated";
+            this.ConDateTerminated.ReadOnly = true;
+            this.ConDateTerminated.Width = 125;
+            // 
+            // DContractorsContracts
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.grid);
+            this.Controls.Add(this.t_1);
+            this.Name = "DContractorsContracts";
             this.Size = new System.Drawing.Size(500, 245);
-            this.BackColor = System.Drawing.SystemColors.Control;//.ColorTranslator.FromWin32(80269524);
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion
 
-	}
+        private System.Windows.Forms.DataGridViewTextBoxColumn contract_no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ConTitle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ConDateTerminated;
+
+
+
+
+
+
+
+    }
 }
