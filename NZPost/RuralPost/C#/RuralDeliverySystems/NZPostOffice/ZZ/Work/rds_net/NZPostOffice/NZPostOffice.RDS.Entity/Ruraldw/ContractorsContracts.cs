@@ -8,11 +8,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_045  Jan-2013
+    // Added con_date_terminated to retrieved values
+    // See also sp_GetContractorsContracts
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
     [MapInfo("contract_no", "_contract_no", "")]
     [MapInfo("con_title", "_con_title", "")]
+    [MapInfo("con_date_terminated", "_con_date_terminated", "")]
     [System.Serializable()]
 
     public class ContractorsContracts : Entity<ContractorsContracts>
@@ -23,6 +28,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _con_title;
+
+        [DBField()]
+        private DateTime? _con_date_terminated;
 
         public virtual int? ContractNo
         {
@@ -58,6 +66,29 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     PropertyHasChanged();
                 }
             }
+        }
+
+        public virtual String ConDateTerminated
+        {
+            get
+            {
+                CanReadProperty("ConDateTerminated", true);
+                if (_con_date_terminated == null)
+                    return null;
+                else
+                    return String.Format("{0:dd}-{0:MMM}-{0:yyyy}", _con_date_terminated);
+            }
+            /*
+            set
+            {
+                CanWriteProperty("CoDateTerminated", true);
+                if (_con_date_terminated != value)
+                {
+                    _con_date_terminated = value;
+                    PropertyHasChanged();
+                }
+            }
+            */
         }
 
         protected override object GetIdValue()
@@ -101,6 +132,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             //instance.StoreFieldValues(dr,"");
                             instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
                             instance._con_title = GetValueFromReader<String>(dr, 1);
+                            instance._con_date_terminated = GetValueFromReader<DateTime?>(dr, 2);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
