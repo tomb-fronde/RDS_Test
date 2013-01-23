@@ -12,16 +12,21 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DNonVehicleOverrideRates : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_041  Nov-2012
+        // Added references to nvor_relief_weeks
+
 		public DNonVehicleOverrideRates()
 		{
 			InitializeComponent();
             // TJB  RD7:0038  Nov-2009:  Added to allow nulls to be entered
-            this.nvor_processing_wage_rate_1.DataBindings[0].DataSourceNullValue = null;
-            this.nvor_processing_wage_rate_1.DataBindings[0].NullValue = "";
-            this.nvor_delivery_wage_rate_1.DataBindings[0].DataSourceNullValue = null;
-            this.nvor_delivery_wage_rate_1.DataBindings[0].NullValue = "";
-            this.nvor_public_liability_rate_2.DataBindings[0].DataSourceNullValue = null;
-            this.nvor_public_liability_rate_2.DataBindings[0].NullValue = "";
+            this.nvor_relief_weeks.DataBindings[0].DataSourceNullValue = null;
+            this.nvor_relief_weeks.DataBindings[0].NullValue = "";
+            this.nvor_processing_wage_rate.DataBindings[0].DataSourceNullValue = null;
+            this.nvor_processing_wage_rate.DataBindings[0].NullValue = "";
+            this.nvor_delivery_wage_rate.DataBindings[0].DataSourceNullValue = null;
+            this.nvor_delivery_wage_rate.DataBindings[0].NullValue = "";
+            this.nvor_public_liability_rate.DataBindings[0].DataSourceNullValue = null;
+            this.nvor_public_liability_rate.DataBindings[0].NullValue = "";
             this.nvor_carrier_risk_rate.DataBindings[0].DataSourceNullValue = null;
             this.nvor_carrier_risk_rate.DataBindings[0].NullValue = "";
             this.nvor_item_proc_rate_per_hour.DataBindings[0].DataSourceNullValue = null;
@@ -39,9 +44,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.nvor_uniform.DataBindings[0].DataSourceNullValue = null;
             this.nvor_uniform.DataBindings[0].NullValue = "";
 
-            this.nvor_processing_wage_rate_1.Validated += new System.EventHandler(this.Value_Validated);
-            this.nvor_delivery_wage_rate_1.Validated += new System.EventHandler(this.Value_Validated);
-            this.nvor_public_liability_rate_2.Validated += new System.EventHandler(this.Value_Validated);
+            this.nvor_relief_weeks.Validated += new System.EventHandler(this.Value_Validated);
+            this.nvor_processing_wage_rate.Validated += new System.EventHandler(this.Value_Validated);
+            this.nvor_delivery_wage_rate.Validated += new System.EventHandler(this.Value_Validated);
+            this.nvor_public_liability_rate.Validated += new System.EventHandler(this.Value_Validated);
             this.nvor_carrier_risk_rate.Validated += new System.EventHandler(this.Value_Validated);
             this.nvor_item_proc_rate_per_hour.Validated += new System.EventHandler(this.Value_Validated);
             this.nvor_accounting.Validated += new System.EventHandler(this.Value_Validated);

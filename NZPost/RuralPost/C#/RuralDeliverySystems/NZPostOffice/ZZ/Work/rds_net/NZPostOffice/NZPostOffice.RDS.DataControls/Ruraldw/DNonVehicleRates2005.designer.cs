@@ -1,6 +1,9 @@
 using NZPostOffice.Shared.VisualComponents;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Nov-2012  RPCR_043
+    // Added nvr_relief_weeks
+
     partial class DNonVehicleRates2005
     {
         /// <summary> 
@@ -36,15 +39,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.nvr_contract_start_t = new System.Windows.Forms.Label();
             this.nvr_processing_wage_rate_t = new System.Windows.Forms.Label();
             this.t_3 = new System.Windows.Forms.Label();
-            this.nvr_public_liability_rate = new NumericalMaskedTextBox();
-            this.nvr_carrier_risk_rate = new NumericalMaskedTextBox();
-            this.nvr_acc_rate = new NumericalMaskedTextBox();
-            this.nvr_acc_rate_amount = new NumericalMaskedTextBox();
-            this.nvr_item_proc_rate_per_hr = new NumericalMaskedTextBox();
-            this.nvr_accounting = new NumericalMaskedTextBox();
-            this.nvr_telephone = new NumericalMaskedTextBox();
-            this.nvr_sundries = new NumericalMaskedTextBox();
-            this.nvr_uniform = new NumericalMaskedTextBox();
+            this.nvr_public_liability_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_carrier_risk_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_acc_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_acc_rate_amount = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_item_proc_rate_per_hr = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_accounting = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_telephone = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_sundries = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_uniform = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.nvr_carrier_risk_rate_t = new System.Windows.Forms.Label();
             this.nvr_acc_rate_t = new System.Windows.Forms.Label();
             this.t_1 = new System.Windows.Forms.Label();
@@ -55,13 +58,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_2 = new System.Windows.Forms.Label();
             this.nvr_vehicle_insurance_base_premium_t = new System.Windows.Forms.Label();
             this.nvr_public_liability_rate_t = new System.Windows.Forms.Label();
-            this.nvr_vehicle_insurance_base_premium = new NumericalMaskedTextBox();
+            this.nvr_vehicle_insurance_base_premium = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.t_4 = new System.Windows.Forms.Label();
             this.nvr_frozen_indicator_t = new System.Windows.Forms.Label();
             this.nvr_contract_end = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.nvr_frozen_indicator = new System.Windows.Forms.CheckBox();
             this.nvr_processing_wage_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
-            this.nvr_delivery_wage_rate = new NumericalMaskedTextBox();
+            this.nvr_delivery_wage_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.nvr_relief_weeks_t = new System.Windows.Forms.Label();
+            this.nvr_relief_weeks = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,7 +89,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 133;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(177, 8);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(161, 21);
@@ -95,18 +102,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // nvr_contract_start
             // 
             this.nvr_contract_start.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrContractStart", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.nvr_contract_start.EditMask = "";
             this.nvr_contract_start.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_contract_start.Location = new System.Drawing.Point(177, 31);
             this.nvr_contract_start.Mask = "00/00/0000";
-            this.nvr_contract_start.DataBindings[0].FormatString = "dd/MM/yyyy";
-            //this.nvr_contract_start.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            //this.nvr_contract_start.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_contract_start.DataBindings[0].DataSourceNullValue = null;
-            //this.nvr_contract_start.PromptChar = '0';
-            //this.nvr_contract_start.ValidatingType = typeof(System.DateTime);
             this.nvr_contract_start.Name = "nvr_contract_start";
             this.nvr_contract_start.Size = new System.Drawing.Size(69, 20);
             this.nvr_contract_start.TabIndex = 20;
+            this.nvr_contract_start.Text = "00000000";
+            this.nvr_contract_start.Value = null;
             // 
             // rg_code_t
             // 
@@ -151,137 +155,146 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // nvr_public_liability_rate
             // 
             this.nvr_public_liability_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrPublicLiabilityRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_public_liability_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_public_liability_rate.Location = new System.Drawing.Point(177, 119);
             this.nvr_public_liability_rate.EditMask = "#,##0.00";
+            this.nvr_public_liability_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_public_liability_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_public_liability_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_public_liability_rate.PromptChar = ' ';
-            this.nvr_public_liability_rate.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_public_liability_rate.Location = new System.Drawing.Point(177, 119);
             this.nvr_public_liability_rate.Name = "nvr_public_liability_rate";
+            this.nvr_public_liability_rate.PromptChar = ' ';
             this.nvr_public_liability_rate.Size = new System.Drawing.Size(60, 20);
             this.nvr_public_liability_rate.TabIndex = 70;
+            this.nvr_public_liability_rate.Text = "0.00";
             this.nvr_public_liability_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_public_liability_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_public_liability_rate.Value = "0.00";
             // 
             // nvr_carrier_risk_rate
             // 
             this.nvr_carrier_risk_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrCarrierRiskRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_carrier_risk_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_carrier_risk_rate.Location = new System.Drawing.Point(177, 141);
             this.nvr_carrier_risk_rate.EditMask = "#,##0.00";
+            this.nvr_carrier_risk_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_carrier_risk_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_carrier_risk_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_carrier_risk_rate.PromptChar = ' ';
-            this.nvr_carrier_risk_rate.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_carrier_risk_rate.Location = new System.Drawing.Point(177, 141);
             this.nvr_carrier_risk_rate.Name = "nvr_carrier_risk_rate";
+            this.nvr_carrier_risk_rate.PromptChar = ' ';
             this.nvr_carrier_risk_rate.Size = new System.Drawing.Size(60, 20);
             this.nvr_carrier_risk_rate.TabIndex = 80;
+            this.nvr_carrier_risk_rate.Text = "0.00";
             this.nvr_carrier_risk_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_carrier_risk_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_carrier_risk_rate.Value = "0.00";
             // 
             // nvr_acc_rate
             // 
             this.nvr_acc_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrAccRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_acc_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_acc_rate.Location = new System.Drawing.Point(177, 162);
             this.nvr_acc_rate.EditMask = "###0.00";
+            this.nvr_acc_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_acc_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_acc_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_acc_rate.PromptChar = ' ';
-            this.nvr_acc_rate.DataBindings[0].FormatString = "###0.00";
+            this.nvr_acc_rate.Location = new System.Drawing.Point(177, 162);
             this.nvr_acc_rate.Name = "nvr_acc_rate";
+            this.nvr_acc_rate.PromptChar = ' ';
             this.nvr_acc_rate.Size = new System.Drawing.Size(38, 20);
             this.nvr_acc_rate.TabIndex = 90;
+            this.nvr_acc_rate.Text = "0.00";
             this.nvr_acc_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_acc_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_acc_rate.Value = "0.00";
             // 
             // nvr_acc_rate_amount
             // 
             this.nvr_acc_rate_amount.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrAccRateAmount", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_acc_rate_amount.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_acc_rate_amount.Location = new System.Drawing.Point(177, 184);
             this.nvr_acc_rate_amount.EditMask = "###,##0.00";
+            this.nvr_acc_rate_amount.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_acc_rate_amount.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_acc_rate_amount.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_acc_rate_amount.PromptChar = ' ';
-            this.nvr_acc_rate_amount.DataBindings[0].FormatString = "###,##0.00";
+            this.nvr_acc_rate_amount.Location = new System.Drawing.Point(177, 184);
             this.nvr_acc_rate_amount.Name = "nvr_acc_rate_amount";
+            this.nvr_acc_rate_amount.PromptChar = ' ';
             this.nvr_acc_rate_amount.Size = new System.Drawing.Size(60, 20);
             this.nvr_acc_rate_amount.TabIndex = 100;
+            this.nvr_acc_rate_amount.Text = "0.00";
             this.nvr_acc_rate_amount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_acc_rate_amount.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_acc_rate_amount.Value = "0.00";
             // 
             // nvr_item_proc_rate_per_hr
             // 
             this.nvr_item_proc_rate_per_hr.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrItemProcRatePerHr", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_item_proc_rate_per_hr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_item_proc_rate_per_hr.Location = new System.Drawing.Point(177, 206);
             this.nvr_item_proc_rate_per_hr.EditMask = "####0";
+            this.nvr_item_proc_rate_per_hr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_item_proc_rate_per_hr.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_item_proc_rate_per_hr.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_item_proc_rate_per_hr.PromptChar = ' ';
-            this.nvr_item_proc_rate_per_hr.DataBindings[0].FormatString = "####0";
+            this.nvr_item_proc_rate_per_hr.Location = new System.Drawing.Point(177, 206);
             this.nvr_item_proc_rate_per_hr.Name = "nvr_item_proc_rate_per_hr";
+            this.nvr_item_proc_rate_per_hr.PromptChar = ' ';
             this.nvr_item_proc_rate_per_hr.Size = new System.Drawing.Size(46, 20);
             this.nvr_item_proc_rate_per_hr.TabIndex = 110;
+            this.nvr_item_proc_rate_per_hr.Text = "0";
             this.nvr_item_proc_rate_per_hr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_item_proc_rate_per_hr.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_item_proc_rate_per_hr.Value = "0";
             // 
             // nvr_accounting
             // 
             this.nvr_accounting.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrAccounting", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_accounting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_accounting.Location = new System.Drawing.Point(177, 227);
             this.nvr_accounting.EditMask = "#,##0.00";
+            this.nvr_accounting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_accounting.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_accounting.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_accounting.PromptChar = ' ';
-            this.nvr_accounting.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_accounting.Location = new System.Drawing.Point(177, 227);
             this.nvr_accounting.Name = "nvr_accounting";
+            this.nvr_accounting.PromptChar = ' ';
             this.nvr_accounting.Size = new System.Drawing.Size(60, 20);
             this.nvr_accounting.TabIndex = 120;
+            this.nvr_accounting.Text = "0.00";
             this.nvr_accounting.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_accounting.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_accounting.Value = "0.00";
             // 
             // nvr_telephone
             // 
             this.nvr_telephone.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrTelephone", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_telephone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_telephone.Location = new System.Drawing.Point(177, 248);
             this.nvr_telephone.EditMask = "#,##0.00";
+            this.nvr_telephone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_telephone.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_telephone.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_telephone.PromptChar = ' ';
-            this.nvr_telephone.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_telephone.Location = new System.Drawing.Point(177, 248);
             this.nvr_telephone.Name = "nvr_telephone";
+            this.nvr_telephone.PromptChar = ' ';
             this.nvr_telephone.Size = new System.Drawing.Size(60, 20);
             this.nvr_telephone.TabIndex = 130;
+            this.nvr_telephone.Text = "0.00";
             this.nvr_telephone.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_telephone.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_telephone.Value = "0.00";
             // 
             // nvr_sundries
             // 
             this.nvr_sundries.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrSundries", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_sundries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_sundries.Location = new System.Drawing.Point(177, 268);
             this.nvr_sundries.EditMask = "#,##0.00";
+            this.nvr_sundries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_sundries.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_sundries.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_sundries.PromptChar = ' ';
-            this.nvr_sundries.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_sundries.Location = new System.Drawing.Point(177, 268);
             this.nvr_sundries.Name = "nvr_sundries";
+            this.nvr_sundries.PromptChar = ' ';
             this.nvr_sundries.Size = new System.Drawing.Size(60, 20);
             this.nvr_sundries.TabIndex = 140;
+            this.nvr_sundries.Text = "0.00";
             this.nvr_sundries.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_sundries.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_sundries.Value = "0.00";
             // 
             // nvr_uniform
             // 
             this.nvr_uniform.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrUniform", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_uniform.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_uniform.Location = new System.Drawing.Point(177, 290);
             this.nvr_uniform.EditMask = "###,##0.00";
+            this.nvr_uniform.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_uniform.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_uniform.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_uniform.PromptChar = ' ';
-            this.nvr_uniform.DataBindings[0].FormatString = "###,##0.00";
+            this.nvr_uniform.Location = new System.Drawing.Point(177, 290);
             this.nvr_uniform.Name = "nvr_uniform";
+            this.nvr_uniform.PromptChar = ' ';
             this.nvr_uniform.Size = new System.Drawing.Size(60, 20);
             this.nvr_uniform.TabIndex = 150;
+            this.nvr_uniform.Text = "0.00";
             this.nvr_uniform.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_uniform.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_uniform.Value = "0.00";
             // 
             // nvr_carrier_risk_rate_t
             // 
@@ -386,17 +399,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // nvr_vehicle_insurance_base_premium
             // 
             this.nvr_vehicle_insurance_base_premium.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrVehicleInsuranceBasePremium", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_vehicle_insurance_base_premium.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_vehicle_insurance_base_premium.Location = new System.Drawing.Point(177, 97);
             this.nvr_vehicle_insurance_base_premium.EditMask = "#,##0.00";
+            this.nvr_vehicle_insurance_base_premium.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_vehicle_insurance_base_premium.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_vehicle_insurance_base_premium.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_vehicle_insurance_base_premium.PromptChar = ' ';
-            this.nvr_vehicle_insurance_base_premium.DataBindings[0].FormatString = "#,##0.00";
+            this.nvr_vehicle_insurance_base_premium.Location = new System.Drawing.Point(177, 97);
             this.nvr_vehicle_insurance_base_premium.Name = "nvr_vehicle_insurance_base_premium";
+            this.nvr_vehicle_insurance_base_premium.PromptChar = ' ';
             this.nvr_vehicle_insurance_base_premium.Size = new System.Drawing.Size(60, 20);
             this.nvr_vehicle_insurance_base_premium.TabIndex = 60;
+            this.nvr_vehicle_insurance_base_premium.Text = "0.00";
             this.nvr_vehicle_insurance_base_premium.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_vehicle_insurance_base_premium.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_vehicle_insurance_base_premium.Value = "0.00";
             // 
             // t_4
             // 
@@ -421,18 +435,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // nvr_contract_end
             // 
             this.nvr_contract_end.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrContractEnd", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.nvr_contract_end.EditMask = "";
             this.nvr_contract_end.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_contract_end.Location = new System.Drawing.Point(274, 31);
             this.nvr_contract_end.Mask = "00/00/0000";
-            this.nvr_contract_end.DataBindings[0].FormatString = "dd/MM/yyyy";
-            //this.nvr_contract_end.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            //this.nvr_contract_end.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.nvr_contract_end.DataBindings[0].DataSourceNullValue = null;
-            //this.nvr_contract_end.PromptChar = '0';
-            //this.nvr_contract_end.ValidatingType = typeof(System.DateTime);
             this.nvr_contract_end.Name = "nvr_contract_end";
             this.nvr_contract_end.Size = new System.Drawing.Size(69, 20);
             this.nvr_contract_end.TabIndex = 30;
+            this.nvr_contract_end.Text = "00000000";
+            this.nvr_contract_end.Value = null;
             // 
             // nvr_frozen_indicator
             // 
@@ -449,37 +460,65 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // nvr_processing_wage_rate
             // 
             this.nvr_processing_wage_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrProcessingWageRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_processing_wage_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_processing_wage_rate.Location = new System.Drawing.Point(177, 53);
             this.nvr_processing_wage_rate.EditMask = "#,##0.00";
-            this.nvr_processing_wage_rate.DataBindings[0].FormatString = "#,##0.00";
-            this.nvr_processing_wage_rate.PromptChar = ' ';
+            this.nvr_processing_wage_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_processing_wage_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_processing_wage_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_processing_wage_rate.Location = new System.Drawing.Point(177, 53);
             this.nvr_processing_wage_rate.Name = "nvr_processing_wage_rate";
+            this.nvr_processing_wage_rate.PromptChar = ' ';
             this.nvr_processing_wage_rate.Size = new System.Drawing.Size(60, 20);
             this.nvr_processing_wage_rate.TabIndex = 40;
+            this.nvr_processing_wage_rate.Text = "0.00";
             this.nvr_processing_wage_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_processing_wage_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_processing_wage_rate.Value = "0.00";
             // 
             // nvr_delivery_wage_rate
             // 
             this.nvr_delivery_wage_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrDeliveryWageRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.nvr_delivery_wage_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.nvr_delivery_wage_rate.Location = new System.Drawing.Point(177, 75);
             this.nvr_delivery_wage_rate.EditMask = "#,##0.00";
-            this.nvr_delivery_wage_rate.DataBindings[0].FormatString = "#,##0.00";
-            this.nvr_delivery_wage_rate.PromptChar = ' ';
+            this.nvr_delivery_wage_rate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.nvr_delivery_wage_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.nvr_delivery_wage_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_delivery_wage_rate.Location = new System.Drawing.Point(177, 75);
             this.nvr_delivery_wage_rate.Name = "nvr_delivery_wage_rate";
+            this.nvr_delivery_wage_rate.PromptChar = ' ';
             this.nvr_delivery_wage_rate.Size = new System.Drawing.Size(60, 20);
             this.nvr_delivery_wage_rate.TabIndex = 50;
+            this.nvr_delivery_wage_rate.Text = "0.00";
             this.nvr_delivery_wage_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_delivery_wage_rate.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_delivery_wage_rate.Value = "0.00";
+            // 
+            // nvr_relief_weeks_t
+            // 
+            this.nvr_relief_weeks_t.AutoSize = true;
+            this.nvr_relief_weeks_t.Location = new System.Drawing.Point(272, 60);
+            this.nvr_relief_weeks_t.Name = "nvr_relief_weeks_t";
+            this.nvr_relief_weeks_t.Size = new System.Drawing.Size(71, 13);
+            this.nvr_relief_weeks_t.TabIndex = 0;
+            this.nvr_relief_weeks_t.Text = "Relief Weeks";
+            // 
+            // nvr_relief_weeks
+            // 
+            this.nvr_relief_weeks.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NvrReliefWeeks", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.nvr_relief_weeks.EditMask = "#,##0.00";
+            this.nvr_relief_weeks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.nvr_relief_weeks.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.nvr_relief_weeks.Location = new System.Drawing.Point(349, 57);
+            this.nvr_relief_weeks.Name = "nvr_relief_weeks";
+            this.nvr_relief_weeks.PromptChar = ' ';
+            this.nvr_relief_weeks.Size = new System.Drawing.Size(60, 20);
+            this.nvr_relief_weeks.TabIndex = 160;
+            this.nvr_relief_weeks.Text = "0.00";
+            this.nvr_relief_weeks.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nvr_relief_weeks.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.nvr_relief_weeks.Value = "0.00";
             // 
             // DNonVehicleRates2005
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.nvr_relief_weeks_t);
             this.Controls.Add(this.nvr_rates_effective_date);
             this.Controls.Add(this.rg_code);
             this.Controls.Add(this.nvr_contract_start);
@@ -513,6 +552,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.nvr_frozen_indicator);
             this.Controls.Add(this.nvr_processing_wage_rate);
             this.Controls.Add(this.nvr_delivery_wage_rate);
+            this.Controls.Add(this.nvr_relief_weeks);
             this.Name = "DNonVehicleRates2005";
             this.Size = new System.Drawing.Size(650, 332);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
@@ -556,5 +596,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.CheckBox nvr_frozen_indicator;
         private NumericalMaskedTextBox nvr_processing_wage_rate;
         private NumericalMaskedTextBox nvr_delivery_wage_rate;
+        private System.Windows.Forms.Label nvr_relief_weeks_t;
+        private NumericalMaskedTextBox nvr_relief_weeks;
     }
 }

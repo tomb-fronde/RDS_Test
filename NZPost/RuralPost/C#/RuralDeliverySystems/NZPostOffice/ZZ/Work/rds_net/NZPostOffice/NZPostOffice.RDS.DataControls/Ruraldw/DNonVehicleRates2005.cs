@@ -12,7 +12,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DNonVehicleRates2005 : Metex.Windows.DataUserControl
 	{
-		public DNonVehicleRates2005()
+        // TJB  RPCR_041  Nov-2012
+        // Added references to nvor_relief_weeks
+
+        public DNonVehicleRates2005()
 		{
 			InitializeComponent();
 			InitializeDropdown();
