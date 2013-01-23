@@ -66,11 +66,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.st_1.BackColor = System.Drawing.SystemColors.Control;
             this.st_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.st_1.ForeColor = System.Drawing.Color.Gray;
-            this.st_1.Location = new System.Drawing.Point(119, 358);
+            this.st_1.Location = new System.Drawing.Point(119, 354);
             this.st_1.Name = "st_1";
             this.st_1.Size = new System.Drawing.Size(117, 16);
             this.st_1.TabIndex = 1;
-            this.st_1.Text = "WContract _rate2001";
+            this.st_1.Text = "WContractRrate2001";
             this.st_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tab_override_rates
@@ -121,7 +121,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_non_vehicle_rates.FireConstructor = false;
             this.dw_non_vehicle_rates.Location = new System.Drawing.Point(1, 11);
             this.dw_non_vehicle_rates.Name = "dw_non_vehicle_rates";
-            this.dw_non_vehicle_rates.Size = new System.Drawing.Size(296, 256);
+            this.dw_non_vehicle_rates.Size = new System.Drawing.Size(296, 300);
             this.dw_non_vehicle_rates.TabIndex = 2;
             // 
             // tabpage_other_rates
@@ -147,7 +147,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // cb_ok
             // 
             this.cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_ok.Location = new System.Drawing.Point(241, 350);
+            this.cb_ok.Location = new System.Drawing.Point(241, 351);
             this.cb_ok.Name = "cb_ok";
             this.cb_ok.Size = new System.Drawing.Size(57, 22);
             this.cb_ok.TabIndex = 2;

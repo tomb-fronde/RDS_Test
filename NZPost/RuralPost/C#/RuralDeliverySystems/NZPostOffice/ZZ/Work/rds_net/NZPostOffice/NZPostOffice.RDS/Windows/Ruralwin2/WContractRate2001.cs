@@ -13,6 +13,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_041  Nov-2012
+    // Added references to nvor_relief_weeks
+
     public partial class WContractRate2001 : WMaster
     {
         #region Define
@@ -521,6 +524,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? ldc_uniform = 0;
             decimal? ldc_delivery = 0;
             decimal? ldc_processing = 0;
+            decimal? ldc_reliefweeks = 0;
             string ls_frozen = null;
 
             ll_vor_rows = idw_vehiclerates.RowCount;
@@ -544,6 +548,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ldc_uniform = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorUniform;
                 ldc_delivery = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorDeliveryWageRate;
                 ldc_processing = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
+                ldc_reliefweeks = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorReliefWeeks;
             }
 
             ll_row = ids_nonvehicleratehistory.RowCount;
@@ -572,6 +577,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorUniform = ldc_uniform;
                 ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorDeliveryWageRate = ldc_delivery;
                 ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorProcessingWageRate = ldc_processing;
+                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorReliefWeeks = ldc_reliefweeks;
                 ids_nonvehicleratehistory.Save();     // NOTE: Save doesn't return a return code!
                 ll_rc = (ll_rc == null) ? 0 : ll_rc;   //       This and following ll_rc stuff is irrelevant
                 if (ll_rc < 0)
