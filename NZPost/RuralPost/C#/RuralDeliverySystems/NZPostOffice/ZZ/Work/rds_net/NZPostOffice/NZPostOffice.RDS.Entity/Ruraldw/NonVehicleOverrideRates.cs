@@ -8,10 +8,14 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_041  Nov-2012
+    // Added column nvor_relief_weeks
+
+    // TJB  RD7_0038:  Added tablename (non_vehicle_override_rate)
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
-    // TJB  RD7_0038:  Added tablename (non_vehicle_override_rate)
     [MapInfo("contract_no", "_contract_no", "non_vehicle_override_rate")]
     [MapInfo("contract_seq_number", "_contract_seq_number", "non_vehicle_override_rate")]
     [MapInfo("nvor_wage_hourly_rate", "_nvor_wage_hourly_rate", "non_vehicle_override_rate")]
@@ -27,6 +31,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("nvor_uniform", "_nvor_uniform", "non_vehicle_override_rate")]
     [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "non_vehicle_override_rate")]
     [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate")]
+    [MapInfo("nvor_relief_weeks", "_nvor_relief_weeks", "non_vehicle_override_rate")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRates : Entity<NonVehicleOverrideRates>
@@ -78,6 +83,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private decimal? _nvor_processing_wage_rate;
+
+        [DBField()]
+        private decimal? _nvor_relief_weeks;
 
 
         public virtual int? ContractNo
@@ -350,6 +358,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual decimal? NvorReliefWeeks
+        {
+            get
+            {
+                CanReadProperty("NvorReliefWeeks", true);
+                return _nvor_relief_weeks;
+            }
+            set
+            {
+                CanWriteProperty("NvorReliefWeeks", true);
+                if (_nvor_relief_weeks != value)
+                {
+                    _nvor_relief_weeks = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}", _contract_no, _contract_seq_number);
@@ -408,7 +434,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._nvor_acc_rate_amount = GetValueFromReader<Decimal?>(dr,11);
                             instance._nvor_uniform = GetValueFromReader<Decimal?>(dr,12);
                             instance._nvor_delivery_wage_rate = GetValueFromReader<Decimal?>(dr,13);
-                            instance._nvor_processing_wage_rate = GetValueFromReader<Decimal?>(dr,14);
+                            instance._nvor_processing_wage_rate = GetValueFromReader<Decimal?>(dr, 14);
+                            instance._nvor_relief_weeks = GetValueFromReader<Decimal?>(dr, 15);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
