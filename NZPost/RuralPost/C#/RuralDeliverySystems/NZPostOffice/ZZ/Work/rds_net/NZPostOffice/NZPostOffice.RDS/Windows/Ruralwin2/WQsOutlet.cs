@@ -11,6 +11,11 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_047  Jan-2013
+    // Added Show/Hide Details button (pb_outlet_details) and outlet details panel (dw_details)
+    // Added outlet ID to passed parameters (in StaticMessage.LongParm)
+    // Changed to initially display outlet detail panel (rather than search results panel)
+
     public class WQsOutlet : WMaster
     {
         #region Define
@@ -18,20 +23,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private System.ComponentModel.IContainer components = null;
 
         public Label st_1;
-
         public URdsDw dw_criteria;
-
         public URdsDw dw_results;
-
+        public URdsDw dw_details;
         public Button pb_search;
-
         public Button pb_cancel;
-
         public Button pb_return;
-
+        private Button pb_details;
         public Panel l_1;
 
         #endregion
+
+        // TJB  RPCR_047  Jan-2013: Added
+        string sOutlet;
+        int    nOutlet;
 
         public WQsOutlet()
         {
@@ -39,16 +44,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.ShowInTaskbar = false;
             dw_criteria.DataObject = new DQsOutletsCriteria();
             dw_results.DataObject = new DQsOutlets();
+            dw_details.DataObject = new DQsOutletDetails();
             dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            //jlwang:moved from IC
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
 
             dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
 
             ((DQsOutlets)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
             dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
-            //jlwang:end
         }
 
         #region Form Design
@@ -58,100 +62,139 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WQsOutlet));
+            this.st_1 = new System.Windows.Forms.Label();
+            this.l_1 = new System.Windows.Forms.Panel();
+            this.dw_criteria = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_details = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_results = new NZPostOffice.RDS.Controls.URdsDw();
+            this.pb_details = new System.Windows.Forms.Button();
+            this.pb_search = new System.Windows.Forms.Button();
+            this.pb_cancel = new System.Windows.Forms.Button();
+            this.pb_return = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.st_1 = new Label();
-            this.l_1 = new Panel();
-            this.dw_criteria = new URdsDw();
-            //!dw_criteria.DataObject = new DQsOutletsCriteria();
-            this.dw_results = new URdsDw();
-            //!dw_results.DataObject = new DQsOutlets();
-            this.pb_search = new Button();
-            this.pb_cancel = new Button();
-            this.pb_return = new Button();
-            Controls.Add(st_1);
-            Controls.Add(l_1);
-            Controls.Add(dw_criteria);
-            Controls.Add(dw_results);
-            Controls.Add(pb_search);
-            Controls.Add(pb_cancel);
-            Controls.Add(pb_return);
-            this.Text = "Outlet Search";
-            //this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.Size = new System.Drawing.Size(407, 350);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             // 
             // st_1
             // 
-            st_1.TabStop = false;
-            st_1.Text = "w_qs_outlet";
-            st_1.BackColor = System.Drawing.SystemColors.Control;
-            st_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            st_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            st_1.Location = new System.Drawing.Point(3, 302);
-            st_1.Size = new System.Drawing.Size(75, 13);
+            this.st_1.BackColor = System.Drawing.SystemColors.Control;
+            this.st_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.st_1.Location = new System.Drawing.Point(3, 302);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(75, 13);
+            this.st_1.TabIndex = 1;
+            this.st_1.Text = "WQsOutlet";
+            // 
+            // l_1
+            // 
+            this.l_1.BackColor = System.Drawing.Color.Black;
+            this.l_1.Location = new System.Drawing.Point(3, 88);
+            this.l_1.Name = "l_1";
+            this.l_1.Size = new System.Drawing.Size(325, 1);
+            this.l_1.TabIndex = 2;
             // 
             // dw_criteria
             // 
-            dw_criteria.TabIndex = 1;
-            //!dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_criteria.Location = new System.Drawing.Point(3, 0);
-            dw_criteria.Size = new System.Drawing.Size(327, 64);
-            //((DataEntityCombo)dw_criteria.GetControlByName("region_id")).SelectedValueChanged += new EventHandler(dw_criteria_itemchanged);
-            //dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
-
+            this.dw_criteria.DataObject = null;
+            this.dw_criteria.FireConstructor = false;
+            this.dw_criteria.Location = new System.Drawing.Point(3, 0);
+            this.dw_criteria.Name = "dw_criteria";
+            this.dw_criteria.Size = new System.Drawing.Size(327, 64);
+            this.dw_criteria.TabIndex = 1;
             // 
-            // l_1
-            //
-            l_1.Height = 1;
-            l_1.Width = 325;
-            l_1.BackColor = System.Drawing.Color.Black;
-            l_1.BorderStyle = BorderStyle.None;
-            l_1.Location = new System.Drawing.Point(3, 88);
-
+            // dw_details
+            // 
+            this.dw_details.DataObject = null;
+            this.dw_details.FireConstructor = false;
+            this.dw_details.Location = new System.Drawing.Point(3, 67);
+            this.dw_details.Name = "dw_details";
+            this.dw_details.Size = new System.Drawing.Size(327, 235);
+            this.dw_details.TabIndex = 6;
+            this.dw_details.Visible = false;
             // 
             // dw_results
             // 
-            dw_results.TabIndex = 5;
-            dw_results.Location = new System.Drawing.Point(3, 67);
-            dw_results.Size = new System.Drawing.Size(327, 235);
-            dw_results.Click += new EventHandler(dw_results_clicked);
-            dw_results.RowFocusChanged += new EventHandler(dw_results_rowfocuschanged);
-            //((DQsOutlets)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
-            //dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
-
+            this.dw_results.DataObject = null;
+            this.dw_results.FireConstructor = false;
+            this.dw_results.Location = new System.Drawing.Point(3, 67);
+            this.dw_results.Name = "dw_results";
+            this.dw_results.Size = new System.Drawing.Size(327, 235);
+            this.dw_results.TabIndex = 5;
+            this.dw_results.Visible = true;
+            this.dw_results.RowFocusChanged += new System.EventHandler(this.dw_results_rowfocuschanged);
+            this.dw_results.Click += new System.EventHandler(this.dw_results_clicked);
+            // 
+            // pb_details
+            // 
+            this.pb_details.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pb_details.Location = new System.Drawing.Point(336, 87);
+            this.pb_details.Name = "pb_details";
+            this.pb_details.Size = new System.Drawing.Size(60, 41);
+            this.pb_details.TabIndex = 0;
+            this.pb_details.Text = "Show Details";
+            this.pb_details.Click += new System.EventHandler(this.pb_details_clicked);
             // 
             // pb_search
             // 
-            pb_search.Image = global::NZPostOffice.Shared.Properties.Resources.SEARCH;
-            this.AcceptButton = pb_search;
-            pb_search.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            pb_search.TabIndex = 2;
-            pb_search.Location = new System.Drawing.Point(337, 4);
-            pb_search.Size = new System.Drawing.Size(59, 31);
-            pb_search.Click += new EventHandler(pb_search_clicked);
-
+            this.pb_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.pb_search.Image = ((System.Drawing.Image)(resources.GetObject("pb_search.Image")));
+            this.pb_search.Location = new System.Drawing.Point(337, 4);
+            this.pb_search.Name = "pb_search";
+            this.pb_search.Size = new System.Drawing.Size(59, 31);
+            this.pb_search.TabIndex = 2;
+            this.pb_search.Click += new System.EventHandler(this.pb_search_clicked);
             // 
             // pb_cancel
             // 
-            pb_cancel.Image = global::NZPostOffice.Shared.Properties.Resources.CANCEL;
-            this.CancelButton = pb_cancel;
-            pb_cancel.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            pb_cancel.TabIndex = 4;
-            pb_cancel.Location = new System.Drawing.Point(337, 86);
-            pb_cancel.Size = new System.Drawing.Size(59, 31);
-            pb_cancel.Click += new EventHandler(pb_cancel_clicked);
-
+            this.pb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.pb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.pb_cancel.Image = ((System.Drawing.Image)(resources.GetObject("pb_cancel.Image")));
+            this.pb_cancel.Location = new System.Drawing.Point(337, 140);
+            this.pb_cancel.Name = "pb_cancel";
+            this.pb_cancel.Size = new System.Drawing.Size(59, 31);
+            this.pb_cancel.TabIndex = 4;
+            this.pb_cancel.Click += new System.EventHandler(this.pb_cancel_clicked);
             // 
             // pb_return
             // 
-            pb_return.Image = global::NZPostOffice.Shared.Properties.Resources.RETURN;
-            pb_return.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            pb_return.TabIndex = 3;
-            pb_return.Location = new System.Drawing.Point(337, 45);
-            pb_return.Size = new System.Drawing.Size(59, 31);
-            pb_return.Click += new EventHandler(pb_return_clicked);
-            this.ResumeLayout();
+            this.pb_return.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.pb_return.Image = ((System.Drawing.Image)(resources.GetObject("pb_return.Image")));
+            this.pb_return.Location = new System.Drawing.Point(337, 45);
+            this.pb_return.Name = "pb_return";
+            this.pb_return.Size = new System.Drawing.Size(59, 31);
+            this.pb_return.TabIndex = 3;
+            this.pb_return.Click += new System.EventHandler(this.pb_return_clicked);
+            // 
+            // WQsOutlet
+            // 
+            this.AcceptButton = this.pb_search;
+            this.CancelButton = this.pb_cancel;
+            this.ClientSize = new System.Drawing.Size(399, 323);
+            this.Controls.Add(this.pb_details);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.l_1);
+            this.Controls.Add(this.dw_criteria);
+            this.Controls.Add(this.dw_details);
+            this.Controls.Add(this.dw_results);
+            this.Controls.Add(this.pb_search);
+            this.Controls.Add(this.pb_cancel);
+            this.Controls.Add(this.pb_return);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WQsOutlet";
+            this.Text = "Outlet Search";
+            this.Controls.SetChildIndex(this.pb_return, 0);
+            this.Controls.SetChildIndex(this.pb_cancel, 0);
+            this.Controls.SetChildIndex(this.pb_search, 0);
+            this.Controls.SetChildIndex(this.dw_results, 0);
+            this.Controls.SetChildIndex(this.dw_details, 0);
+            this.Controls.SetChildIndex(this.dw_criteria, 0);
+            this.Controls.SetChildIndex(this.l_1, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.Controls.SetChildIndex(this.pb_details, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>
@@ -174,8 +217,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public override void pfc_postopen()
         {
             DataUserControl dwChild;
-            string sOutlet;
+
             sOutlet = StaticMessage.StringParm;
+            nOutlet = (int)StaticMessage.LongParm;
+
             dw_criteria.InsertRow(0);
             if (!(StaticVariables.gnv_app.of_isempty(sOutlet)))
             {
@@ -191,12 +236,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
-            //?dw_results.SetRowFocusIndicator(focusrect!);
             StaticVariables.gnv_app.of_get_parameters().longparm = -(1);
             // TJB 29 Mar 2004 - Temp fix? Stops outlet query 
-            // crashing when called by RCM  ( only group) user
-            // dw_criteria.of_filter_regions ( This.of_Get_ComponentName ( ))
-            ((DataEntityCombo)dw_criteria.GetControlByName("region_id")).SelectedValueChanged += new EventHandler(dw_criteria_itemchanged);//ttjin.
+            // crashing when called by RCM (only group) user
+            // dw_criteria.of_filter_regions(This.of_Get_ComponentName())
+            ((DataEntityCombo)dw_criteria.GetControlByName("region_id")).SelectedValueChanged += new EventHandler(dw_criteria_itemchanged);
+
+            // TJB  RPCR_047  Jan-2013
+            // On startup, display the address details of the current outlet (if there is one)
+            this.SuspendLayout();
+            hide_outlet_details();
+            if (nOutlet != 0)
+                display_outlet_details(nOutlet);
+            
+            this.PerformLayout();
         }
 
         public override void pfc_preopen()
@@ -238,10 +291,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void dw_results_clicked(object sender, EventArgs e)
         {
+            string sOName;
+
             if (dw_results.GetRow() >= 0)
             {
                 //dw_results.ScrollToRow(row);
                 dw_results.SetCurrent(dw_results.GetRow());
+
+                // TJB  RPCR_047  Jan-2013
+                // Added: display selected office name in selection criteria
+                sOName = dw_results.DataObject.GetItem<QsOutlets>(dw_results.GetRow()).OName;
+                dw_criteria.GetItem<QsOutletsCriteria>(0).OName = sOName;
+                dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
             }
         }
 
@@ -255,6 +316,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             string sOutlet;
             int? lRegion;
+
             dw_criteria.DataObject.AcceptText();
             lRegion = dw_criteria.DataObject.GetItem<QsOutletsCriteria>(0).RegionId;
             sOutlet = dw_criteria.DataObject.GetItem<QsOutletsCriteria>(0).OName;
@@ -266,11 +328,85 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 sOutlet = "";
             }
+            this.SuspendLayout();
             dw_results.DataObject.Reset();
+
+            // TJB  RPCR_047  Jan-2013
+            // Hide details and display search results
+            hide_outlet_details();
+
             ((DQsOutlets)dw_results.DataObject).Retrieve(lRegion, sOutlet);
             //dw_results.TriggerEvent(rowfocuschanged!);
             dw_results_rowfocuschanged(null, null);
-            l_1.Width = 309;
+
+            // TJB  RPCR_047  Jan-2013
+            // Added: display selected office name in selection criteria
+            sOutlet = dw_results.DataObject.GetItem<QsOutlets>(dw_results.GetRow()).OName;
+            dw_criteria.GetItem<QsOutletsCriteria>(0).OName = sOutlet;
+            dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+
+            this.PerformLayout();
+            //l_1.Width = 309;
+        }
+
+        // TJB  RPCR_047  Jan-2013:  Added
+        public virtual void hide_outlet_details()
+        {
+            dw_details.Visible = false;
+            dw_results.Visible = true;
+            pb_details.Text = "Show Details";
+        }
+
+        // TJB  RPCR_047  Jan-2013:  Added
+        public virtual void display_outlet_details(int nOutlet)
+        {
+            dw_details.DataObject.Reset();
+            ((DQsOutletDetails)dw_details.DataObject).Retrieve(nOutlet);
+            dw_results.Visible = false;
+            dw_details.Visible = true;
+            this.pb_details.Text = "Hide Details";
+        }
+
+        // TJB  RPCR_047  Jan-2013:  Added
+        // pb_details is a flip-flop: we want to be able to hide the details 
+        // after selecting a search result and displaying its details in case 
+        // we want to change the one we first selected without doing another search.
+        public virtual void pb_details_clicked(object sender, EventArgs e)
+        {
+            this.SuspendLayout();
+
+            // If the details are being displayed, hide them
+            if (dw_details.Visible == true)
+            {
+                hide_outlet_details();
+                return;
+            }
+
+            // Check to see if there's anything to display
+            // The selection criteria outlet name will be blank if there isn't anything
+            string sOName = dw_criteria.GetItem<QsOutletsCriteria>(0).OName;
+            if (sOName == "")
+            {
+                MessageBox.Show("Please search for and select an office", "");
+                hide_outlet_details();
+            }
+            else
+            {
+                // If there is something, its either a search result, or the initial office name
+                // Start with the initial office ID (it will be zero if started with nothing)
+                int nOutletId = nOutlet;
+                // See if there's anything selected
+                int nRow = dw_results.GetRow();
+                if (nRow >= 0)  // yes there was
+                {
+                    int? nOutletIdSelected = dw_results.DataObject.GetItem<QsOutlets>(dw_results.GetRow()).OutletId;
+                    // The selected office SHOULD have an ID, but if not, use 0
+                    nOutletId = (nOutletIdSelected == null) ? 0 : (int)nOutletIdSelected;
+                }
+
+                display_outlet_details(nOutletId);
+            }
+            this.PerformLayout();
         }
 
         public virtual void pb_cancel_clicked(object sender, EventArgs e)
