@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Nov-2012  RPCR_043
+    // Add column nvr_relief_weeks
+    //
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -29,10 +32,13 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("nvr_uniform", "_nvr_uniform", "non_vehicle_rate")]
     [MapInfo("nvr_delivery_wage_rate", "_nvr_delivery_wage_rate", "non_vehicle_rate")]
     [MapInfo("nvr_processing_wage_rate", "_nvr_processing_wage_rate", "non_vehicle_rate")]
+    [MapInfo("nvr_relief_weeks", "_nvr_relief_weeks", "non_vehicle_rate")]
     [System.Serializable()]
 
     public class NonVehicleRates2005 : Entity<NonVehicleRates2005>
     {
+        private string SQL_Err_Text;
+
         #region Business Methods
         [DBField()]
         private int? _rg_code;
@@ -88,6 +94,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private decimal? _nvr_processing_wage_rate;
 
+        [DBField()]
+        private decimal? _nvr_relief_weeks;
 
         public virtual int? RgCode
         {
@@ -413,6 +421,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual decimal? NvrReliefWeeks
+        {
+            get
+            {
+                CanReadProperty("NvrReliefWeeks", true);
+                return _nvr_relief_weeks;
+            }
+            set
+            {
+                CanWriteProperty("NvrReliefWeeks", true);
+                if (_nvr_relief_weeks != value)
+                {
+                    _nvr_relief_weeks = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}", _rg_code, _nvr_rates_effective_date);
@@ -484,7 +510,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._nvr_acc_rate_amount = GetValueFromReader<Decimal?>(dr,14);
                             instance._nvr_uniform = GetValueFromReader<Decimal?>(dr,15);
                             instance._nvr_delivery_wage_rate = GetValueFromReader<Decimal?>(dr,16);
-                            instance._nvr_processing_wage_rate = GetValueFromReader<Decimal?>(dr,17);
+                            instance._nvr_processing_wage_rate = GetValueFromReader<Decimal?>(dr, 17);
+                            instance._nvr_relief_weeks = GetValueFromReader<Decimal?>(dr, 18);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
@@ -525,9 +552,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 {
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into non_vehicle_rate (rg_code," +
+                    cm.CommandText = "insert into non_vehicle_rate (" +
+                                     "   rg_code," +
                                      "   nvr_rates_effective_date," +
-                                      "  nvr_wage_hourly_rate," +
+                                     "   nvr_wage_hourly_rate," +
                                      "   nvr_vehicle_insurance_base_premium," +
                                      "   nvr_public_liability_rate," +
                                      "   nvr_carrier_risk_rate," +
@@ -541,11 +569,13 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                      "   nvr_sundries," +
                                      "   nvr_acc_rate_amount," +
                                      "   nvr_uniform," +
-                                      "  nvr_delivery_wage_rate," +
-                                     "   nvr_processing_wage_rate) values(" +
+                                     "   nvr_delivery_wage_rate," +
+                                     "   nvr_processing_wage_rate, " +
+                                     "   nvr_relief_weeks " +
+                                     ") values (" +
                                      "   @rg_code," +
                                      "   @nvr_rates_effective_date," +
-                                      "  @nvr_wage_hourly_rate," +
+                                     "   @nvr_wage_hourly_rate," +
                                      "   @nvr_vehicle_insurance_base_premium," +
                                      "   @nvr_public_liability_rate," +
                                      "   @nvr_carrier_risk_rate," +
@@ -559,8 +589,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                      "   @nvr_sundries," +
                                      "   @nvr_acc_rate_amount," +
                                      "   @nvr_uniform," +
-                                      "  @nvr_delivery_wage_rate," +
-                                     "   @nvr_processing_wage_rate)";
+                                     "   @nvr_delivery_wage_rate," +
+                                     "   @nvr_processing_wage_rate," +
+                                     "   @nvr_relief_weeks)";
                     pList.Add(cm, "rg_code", _rg_code);
                     pList.Add(cm, "nvr_rates_effective_date", _nvr_rates_effective_date);
                     pList.Add(cm, "nvr_wage_hourly_rate", _nvr_wage_hourly_rate);
@@ -579,14 +610,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     pList.Add(cm, "nvr_uniform", _nvr_uniform);
                     pList.Add(cm, "nvr_delivery_wage_rate", _nvr_delivery_wage_rate);
                     pList.Add(cm, "nvr_processing_wage_rate", _nvr_processing_wage_rate);
-                    //if (GenerateInsertCommandText(cm, "non_vehicle_rate", pList))
-                    //{
+                    pList.Add(cm, "nvr_relief_weeks", _nvr_relief_weeks);
+
+                    try
+                    {
                         DBHelper.ExecuteNonQuery(cm, pList);
-                    //}
+                    }
+                    catch (Exception e)
+                    {
+                        SQL_Err_Text = e.Message;
+                    }
                     StoreInitialValues();
                 }
             }
-            StoreInitialValues();
         }
 
         #endregion
