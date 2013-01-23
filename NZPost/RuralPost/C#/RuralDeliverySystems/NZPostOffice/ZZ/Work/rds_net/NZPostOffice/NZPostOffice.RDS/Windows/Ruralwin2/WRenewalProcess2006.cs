@@ -19,6 +19,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
+        // TJB  RPCR038  Oct-2012
+        // Bug fix: printed blank mail carried reports after first valid one
+        //    -removed uninitialised variable
+        //
         // TJB  11-Apr-2012  RPC_035
         // Duplex print Route Frequency Descriptions
         //
@@ -1075,7 +1079,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Cnt;
             int ll_Ctr = 0;
             int li_sched_row;
-            string ls_dispatch = null;
+            //string ls_dispatch = null;
             bool lb_printReport;
             bool lb_printDuplex;
 
@@ -1131,7 +1135,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //((WMainMdi)StaticVariables.MainMDI).Refresh();
                 for (lLoop = 0; lLoop < lUpperBound; lLoop++)
                 {
-
                     //dw_schedule.DataObject = sScheduleDWs[lLoop];
                         //!dw_schedule.SetDataObject(DEFAULT_ASSEMBLY, DEFAULT_VERSION, 
                         //!    "NZPostOffice.RDS.DataControls.Ruralrpt." + StaticFunctions.migrateName(sScheduleDWs[lLoop].ToString()));
@@ -1165,16 +1168,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                          //  Don't print where there's nothing to print on a schedule of mail carried.
                          //     ( decided by there being nothing in the mc_dispatch_carried column)
                     lb_printReport = true;
-
+                    
                     if (sScheduleDWs[lLoop].ToString() == "r_mail_carried_single_contract")
                     {
+                        lb_printReport = false;
                         li_sched_row = dw_schedule.GetRow();
 
-                        if(dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") != null)
-                            ls_dispatch = dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried").ToString();
-
-                        if (ls_dispatch == null)
-                            lb_printReport = false;
+                        // TJB  RPCR038  Oct-2012
+                        // Bug fix: printed blank mail carried reports after first valid one
+                        //    -removed uninitialised variable
+                        //if (dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") == null)
+                        //    lb_printReport = false;
+                        if (dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") != null)
+                            lb_printReport = true;
                     }
                     if (lb_printReport == true)
                     {                      
