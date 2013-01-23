@@ -42,7 +42,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // t_1
             // 
-            this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Underline);
+            this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Underline);
             this.t_1.Location = new System.Drawing.Point(90, 3);
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(79, 13);
@@ -75,6 +75,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(90, 17);
             this.region_id.Name = "region_id";
@@ -82,21 +83,22 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.TabIndex = 10;
             this.region_id.Value = null;
             this.region_id.ValueMember = "RegionId";
-            this.region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             // 
             // rg_code
             // 
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 133;
+            this.rg_code.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(90, 41);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(154, 21);
             this.rg_code.TabIndex = 20;
             this.rg_code.Value = null;
             this.rg_code.ValueMember = "RgCode";
-            this.rg_code.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             // 
             // DBenchmarkCalcCriteria
             // 
