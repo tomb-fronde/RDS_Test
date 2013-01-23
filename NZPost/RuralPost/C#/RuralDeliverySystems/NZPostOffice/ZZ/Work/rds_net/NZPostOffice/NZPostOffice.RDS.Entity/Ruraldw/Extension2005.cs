@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_041  Nov-2012
+    // Changed Reliefweeks to be obtained from database
+    
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -56,6 +59,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("nDepreciation2", "_ndepreciation2", "")]
     [MapInfo("nUse_rucs", "_nuse_rucs", "")]
     [MapInfo("processing_wage_rate", "_processing_wage_rate", "")]
+    [MapInfo("relief_weeks", "_relief_weeks", "")]
     [System.Serializable()]
 
     public class Extension2005 : Entity<Extension2005>
@@ -197,7 +201,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private decimal? _processing_wage_rate;
 
         [DBField()]
-        private int? _reliefweeks;
+        private decimal? _relief_weeks;
 
 
         public virtual int? ContractNo
@@ -1009,6 +1013,26 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
+
+        // TJB  RPCR_041: Added
+        public virtual decimal? Reliefweeks
+        {
+            get
+            {
+                CanReadProperty("Reliefweeks", true);
+                return _relief_weeks;
+            }
+            set
+            {
+                CanWriteProperty("Reliefweeks", true);
+                if (_relief_weeks != value)
+                {
+                    _relief_weeks = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         // needs to implement compute expression manually:
         // compute control name=[cust_change]
         //if(isnull(extn_boxes),0,extn_boxes) + if(isnull(extn_no_cmb_customers),0,extn_no_cmb_customers)
@@ -1379,15 +1403,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 CanReadProperty("Reliefcost", true);
                 if (_rr_item_proc_rate_per_hr.HasValue && _rr_item_proc_rate_per_hr != 0)//! prevent dividing by 0
                 {
-                    return (_extn_del_hrs *
-                        //pp - use property as it is calculated
-                        //!_reliefweeks * 
-                        Reliefweeks * 
-                        _delivery_wage_rate) + ((((VolumeChange / _rr_item_proc_rate_per_hr) / 365) * 7 *
-                        //pp - use property as it is calculated
-                        //!_reliefweeks) *
-                        Reliefweeks) *
-                        _processing_wage_rate);
+                    return (_extn_del_hrs * Reliefweeks * _delivery_wage_rate) 
+                           + ((((VolumeChange / _rr_item_proc_rate_per_hr) / 365) 
+                                * 7 * Reliefweeks) * _processing_wage_rate);
                 }
                 else 
                 {
@@ -1396,18 +1414,18 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-
-        // added by wjtang for SR4703
-        //compute column  :if( isnull(extn_effective_date), 5, if( (extn_effective_date) > date('31 October 2007'), 5, 4))
-        public virtual int? Reliefweeks
-        {
-            get
-            {
-                CanReadProperty("Reliefweeks", true);
-                
-                return _extn_effective_date == null ? 5 : DateTime.Compare(_extn_effective_date == null ? DateTime.MinValue : _extn_effective_date.Value, new DateTime(2007, 10, 31)) > 0 ? 5 : 4;
-            }
-        }
+        // TJB RPCR_041: Replaced
+            // added by wjtang for SR4703
+            //compute column  :if( isnull(extn_effective_date), 5, if( (extn_effective_date) > date('31 October 2007'), 5, 4))
+            //public virtual int? Reliefweeks
+            //{
+            //    get
+            //    {
+            //        CanReadProperty("Reliefweeks", true);
+            //       
+            //        return _extn_effective_date == null ? 5 : DateTime.Compare(_extn_effective_date == null ? DateTime.MinValue : _extn_effective_date.Value, new DateTime(2007, 10, 31)) > 0 ? 5 : 4;
+            //    }
+            //}
    
         protected override object GetIdValue()
         {
@@ -1489,7 +1507,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._naccamounts = GetValueFromReader<Decimal?>(dr,41);
                             instance._ndepreciation2 = GetValueFromReader<Decimal?>(dr,42);
                             instance._nuse_rucs = GetValueFromReader<Int32?>(dr,43);
-                            instance._processing_wage_rate = GetValueFromReader<Decimal?>(dr,44);
+                            instance._processing_wage_rate = GetValueFromReader<Decimal?>(dr, 44);
+                            instance._relief_weeks = GetValueFromReader<Decimal?>(dr, 45);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
