@@ -18,6 +18,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_047  Jan-2013
+    // Added outlet ID to passed parameters (in StaticMessage.LongParm)
+    //
     // TJB  RPCR_044  Jan-2013
     // Added cb_showAll button to Route Frequencies tab, and cb_showAll_clicked event
     //
@@ -1201,15 +1204,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string sOutlet;
             int? lRegionId;
             int? ll_Outlet;
+            string sOutletID;
+            int? nOutletID;
+
             ((Button)(idw_contract.GetControlByName(acode + "_button"))).Image 
                                   = global::NZPostOffice.Shared.Properties.Resources.PCKLSTDN;
 
             sOutlet = idw_contract.GetValue<string>(0, "con_" + aoutlet + "_office_name");
+            nOutletID = idw_contract.GetValue<Int32?>(0, "con_" + aoutlet + "_office");
             StaticVariables.gnv_app.of_set_componenttoopen(this.of_get_componentname());
             StaticVariables.gnv_app.of_get_parameters().integerparm = this.of_get_regionid();
             Cursor.Current = Cursors.WaitCursor;
 
+            // TJB  RPCR_047  Jan-2013
+            // Added outlet ID to passed parameters (in LongParm)
+            // 0 means there is no existing outlet specified (ie for new contracts)
             StaticMessage.StringParm = sOutlet;
+            StaticMessage.LongParm = (nOutletID == null) ? 0 : (int)nOutletID ;
             WQsOutlet w_qs_outlet = new WQsOutlet();
             w_qs_outlet.ShowDialog();
             if (StaticVariables.gnv_app.of_get_parameters().longparm > 0)
@@ -3340,7 +3351,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 of_get_outlet("base", "bo");
             }
-            else if ((sObjectAtPointer.Length <= 9 ? sObjectAtPointer : sObjectAtPointer.Substring(0, 9)) == "lo_button")// (sObjectAtPointer.Substring(0, 9) == "lo_button")
+            else if ((sObjectAtPointer.Length <= 9 ? sObjectAtPointer : sObjectAtPointer.Substring(0, 9)) == "lo_button")
             {
                 of_get_outlet("lodgement", "lo");
             }
