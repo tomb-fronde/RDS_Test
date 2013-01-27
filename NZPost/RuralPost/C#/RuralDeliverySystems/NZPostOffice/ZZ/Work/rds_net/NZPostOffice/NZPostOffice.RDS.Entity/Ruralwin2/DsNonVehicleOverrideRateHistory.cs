@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB  RPCR_041  Nov-2012
+    // Added nvor_relief_weeks
+    //
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -27,6 +30,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
     [MapInfo("nvor_uniform", "_nvor_uniform", "non_vehicle_override_rate_history")]
     [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "non_vehicle_override_rate_history")]
     [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate_history")]
+    [MapInfo("nvor_relief_weeks", "_nvor_relief_weeks", "non_vehicle_override_rate_history")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRateHistory : Entity<NonVehicleOverrideRateHistory>
@@ -79,6 +83,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
 
         [DBField()]
         private decimal? _nvor_processing_wage_rate;
+
+        [DBField()]
+        private decimal? _nvor_relief_weeks;
 
         public virtual int? ContractNo
         {
@@ -363,6 +370,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 if (_nvor_processing_wage_rate != value)
                 {
                     _nvor_processing_wage_rate = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? NvorReliefWeeks
+        {
+            get
+            {
+                CanReadProperty("NvorReliefWeeks", true);
+                return _nvor_relief_weeks;
+            }
+            set
+            {
+                CanWriteProperty("NvorReliefWeeks", true);
+                if (_nvor_relief_weeks != value)
+                {
+                    _nvor_relief_weeks = value;
                     PropertyHasChanged();
                 }
             }
