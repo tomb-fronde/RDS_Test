@@ -20,6 +20,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB  RPCR_041  Jan-2013
+        // Changed show calcs button to filp-flop show/hide; removed hide button
+        //
         // TJB  Nov-2012
         // Changed displayed title to "WWhatifRate2001" from PB format
 
@@ -62,23 +65,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public TabControl tab_1;
 
-        public TabPage tabpage_1;
+        public TabPage tabpage_summary;
 
         public URdsDw dw_summary;
 
-        public TabPage tabpage_2;
+        public TabPage tabpage_report;
 
         public URdsDw dw_whatifreport;
 
-        public TabPage tabpage_3;
+        public TabPage tabpage_distribution;
 
         public URdsDw dw_distribution;
 
         public Button cb_print;
 
-        public Button cb_how;
-
-        public Button cb_not;
+        public Button cb_showcalc;
 
         public WStatus w_status = null;
 
@@ -92,8 +93,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_whatifreport.DataObject = new DWhatifCalculatorReport2005();
             dw_distribution.DataObject = new DWhatifDistribution2001();
 
-            //jlwang:moved from IC
-
             //((DWhatifCalulator2005)dw_summary.DataObject).CellDoubleClick += new EventHandler(dw_summary_doubleclicked);
             dw_summary.DataObject.RetrieveEnd += new EventHandler(dw_summary_retrieveend);
             dw_summary.DataObject.RetrieveStart += new RetrieveEventHandler(dw_summary_retrievestart);
@@ -104,7 +103,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             dw_distribution.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_distribution_constructor);
 
-            //jlwang;end
             ((CrystalDecisions.Windows.Forms.CrystalReportViewer)dw_summary.GetControlByName("viewer")).Drill += new CrystalDecisions.Windows.Forms.DrillEventHandler(WWhatifCalc2001_Drill);
             ((CrystalDecisions.Windows.Forms.CrystalReportViewer)dw_summary.GetControlByName("viewer")).DrillDownSubreport += new CrystalDecisions.Windows.Forms.DrillSubreportEventHandler(WWhatifCalc2001_DrillDownSubreport);
             //((CrystalDecisions.Windows.Forms.CrystalReportViewer)dw_summary.GetControlByName("viewer")).EnableDrillDown = false;
@@ -122,13 +120,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_close = new Button();
             this.tab_1 = new TabControl();
             this.cb_print = new Button();
-            this.cb_how = new Button();
-            this.cb_not = new Button();
+            this.cb_showcalc = new Button();
             Controls.Add(cb_close);
             Controls.Add(tab_1);
             Controls.Add(cb_print);
-            Controls.Add(cb_how);
-            Controls.Add(cb_not);
+            Controls.Add(cb_showcalc);
             this.Text = "Whatif Calculation";
             this.Height = 438;
             this.Width = 594;
@@ -139,7 +135,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // st_label
             // 
-            st_label.Location = new System.Drawing.Point(5, 390);
+            st_label.Location = new System.Drawing.Point(7, 390);
+            st_label.Width = 120;
             // 
             // cb_close
             // 
@@ -152,12 +149,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // tab_1
             // 
-            tabpage_1 = new TabPage();
-            tabpage_2 = new TabPage();
-            tabpage_3 = new TabPage();
-            tab_1.Controls.Add(tabpage_1);
-            tab_1.Controls.Add(tabpage_2);
-            tab_1.Controls.Add(tabpage_3);
+            tabpage_summary = new TabPage();
+            tabpage_report = new TabPage();
+            tabpage_distribution = new TabPage();
+            tab_1.Controls.Add(tabpage_summary);
+            tab_1.Controls.Add(tabpage_report);
+            tab_1.Controls.Add(tabpage_distribution);
 
             tab_1.SelectedIndex = 0;//.SelectedTab = 1;
             tab_1.BackColor = System.Drawing.Color.FromArgb(4, 212, 208, 200);
@@ -169,17 +166,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             tab_1.Left = 3;
             tab_1.SelectedIndexChanged += new EventHandler(tab_1_selectionchanged);
             // 
-            // tabpage_1
+            // tabpage_summary
             // 
             dw_summary = new URdsDw();
             //!dw_summary.DataObject = new DWhatifCalulator2005();
-            tabpage_1.Controls.Add(dw_summary);
-            tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_1.Text = "Summary Report";
-            tabpage_1.Name = tabpage_1.Text;//
+            tabpage_summary.Controls.Add(dw_summary);
+            tabpage_summary.ForeColor = System.Drawing.SystemColors.WindowText;
+            tabpage_summary.Text = "Summary Report";
+            tabpage_summary.Name = tabpage_summary.Text;//
 
-            tabpage_1.Size = new System.Drawing.Size(565, 342);
-            tabpage_1.Location = new System.Drawing.Point(3, 25);
+            tabpage_summary.Size = new System.Drawing.Size(565, 342);
+            tabpage_summary.Location = new System.Drawing.Point(3, 25);
             // 
             // dw_summary
             // 
@@ -196,17 +193,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //dw_summary.DataObject.RetrieveStart += new RetrieveEventHandler(dw_summary_retrievestart);
             //dw_summary.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_summary_constructor);
             // 
-            // tabpage_2
+            // tabpage_report
             // 
             dw_whatifreport = new URdsDw();
             //!dw_whatifreport.DataObject = new DWhatifCalculatorReport2005();
-            tabpage_2.Controls.Add(dw_whatifreport);
-            tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_2.Text = "Full Report";
-            tabpage_2.Name = tabpage_2.Text;//
+            tabpage_report.Controls.Add(dw_whatifreport);
+            tabpage_report.ForeColor = System.Drawing.SystemColors.WindowText;
+            tabpage_report.Text = "Full Report";
+            tabpage_report.Name = tabpage_report.Text;//
 
-            tabpage_2.Size = new System.Drawing.Size(565, 342);
-            tabpage_2.Location = new System.Drawing.Point(3, 25);
+            tabpage_report.Size = new System.Drawing.Size(565, 342);
+            tabpage_report.Location = new System.Drawing.Point(3, 25);
             // 
             // dw_whatifreport
             // 
@@ -220,17 +217,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //dw_whatifreport.DataObject.RetrieveStart += new RetrieveEventHandler(dw_whatifreport_retrievestart);
             //dw_whatifreport.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_whatifreport_constructor);
             // 
-            // tabpage_3
+            // tabpage_distribution
             // 
             dw_distribution = new URdsDw();
             //!dw_distribution.DataObject = new DWhatifDistribution2001();
-            tabpage_3.Controls.Add(dw_distribution);
-            tabpage_3.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_3.Text = "Distribution Report";
-            tabpage_3.Name = tabpage_3.Text;//
+            tabpage_distribution.Controls.Add(dw_distribution);
+            tabpage_distribution.ForeColor = System.Drawing.SystemColors.WindowText;
+            tabpage_distribution.Text = "Distribution Report";
+            tabpage_distribution.Name = tabpage_distribution.Text;//
 
-            tabpage_3.Size = new System.Drawing.Size(565, 342);
-            tabpage_3.Location = new System.Drawing.Point(3, 25);
+            tabpage_distribution.Size = new System.Drawing.Size(565, 342);
+            tabpage_distribution.Location = new System.Drawing.Point(3, 25);
             // 
             // dw_distribution
             //
@@ -251,25 +248,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_print.Location = new System.Drawing.Point(433, 380);
             cb_print.Click += new EventHandler(cb_print_clicked);
             // 
-            // cb_how
+            // cb_showcalc
             // 
-            cb_how.Text = "ShowCalcs";
-            cb_how.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_how.TabIndex = 4;
-            cb_how.Size = new System.Drawing.Size(66, 22);
-            cb_how.Location = new System.Drawing.Point(7, 379);
-            cb_how.Visible = false;
-            cb_how.Click += new EventHandler(cb_how_clicked);
-            // 
-            // cb_not
-            // 
-            cb_not.Text = "Hide Calcs";
-            cb_not.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_not.TabIndex = 5;
-            cb_not.Location = new System.Drawing.Point(78, 379);
-            cb_not.Size = new System.Drawing.Size(70, 22);
-            cb_not.Visible = false;
-            cb_not.Click += new EventHandler(cb_not_clicked);
+            cb_showcalc.Text = "Show Calcs";
+            cb_showcalc.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
+            cb_showcalc.TabIndex = 4;
+            cb_showcalc.Size = new System.Drawing.Size(66, 22);
+            cb_showcalc.Location = new System.Drawing.Point(157, 379);
+            cb_showcalc.Visible = false;
+            cb_showcalc.Click += new EventHandler(cb_showcalc_clicked);
             this.ResumeLayout();
             //((CrystalDecisions.Windows.Forms.CrystalReportViewer)(dw_summary.DataObject.GetControlByName("viewer"))).DoubleClick += new EventHandler(WWhatifCalc2001_DoubleClick);
         }
@@ -1567,8 +1554,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_close.Top = cb_print.Location.Y;
             cb_close.Left = this.Width - 81;
             cb_print.Left = cb_close.Location.X - 80;
-            cb_how.Top = cb_print.Location.Y;
-            cb_not.Top = cb_how.Location.Y;
+            cb_showcalc.Top = cb_print.Location.Y;
             this.ResumeLayout();
         }
 
@@ -1576,16 +1562,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             /*?
             if (KeyDown(keycontrol!) && KeyDown(keyshift!)) {
-                cb_not.visible = true;
-                cb_how.visible = true;
+                cb_showcalc.visible = true;
             }*/
-            if (StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl) && StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift))
-            {
-                cb_not.Visible = true;
-                cb_how.Visible = true;
+            bool b_KeyCtrl = StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl);
+            bool b_KeyShift = StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift);
 
-                cb_not.BringToFront();
-                cb_how.BringToFront();
+            //if (StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl) && StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift))
+            if ( b_KeyCtrl && b_KeyShift )
+            {
+                cb_showcalc.Visible = true;
+                cb_showcalc.BringToFront();
             }
         }
 
@@ -1668,24 +1654,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        public virtual void cb_how_clicked(object sender, EventArgs e)
+        public virtual void cb_showcalc_clicked(object sender, EventArgs e)
         {
-            //?idw_summary.Modify("DataWindow.Trailer.1.Height=2500");
-            //?idw_summary.Modify("DataWindow.Detail.Height=444");
-            //?idw_summary.Modify("datawindow.print.preview=yes");
-
             DWhatifCalulator2005 dw = (DWhatifCalulator2005)idw_summary;
             dw.ShowReport();
-        }
-
-        public virtual void cb_not_clicked(object sender, EventArgs e)
-        {
-            //?idw_summary.Modify("DataWindow.Trailer.1.Height=76");
-            //?idw_summary.Modify("DataWindow.Detail.Height=0");
-            //?idw_summary.Modify("datawindow.print.preview=NO");
-
-            DWhatifCalulator2005 dw = (DWhatifCalulator2005)idw_summary;
-            dw.ShowReport();
+            if (cb_showcalc.Text == "Show Calcs")
+                cb_showcalc.Text = "Hide Calcs";
+            else
+                cb_showcalc.Text = "Show Calcs";
         }
 
         public void WWhatifCalc2001_DrillDownSubreport(object source, CrystalDecisions.Windows.Forms.DrillSubreportEventArgs e)
