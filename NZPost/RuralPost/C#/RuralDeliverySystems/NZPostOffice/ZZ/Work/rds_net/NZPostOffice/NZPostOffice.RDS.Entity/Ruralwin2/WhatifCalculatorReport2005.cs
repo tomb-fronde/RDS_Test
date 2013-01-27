@@ -8,6 +8,13 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB  RPCR_041 Jan-2013
+    // Changed Proccosts and Reliefcosts calculations: round calculated processing hours part
+    // - this fixed the values displayed on the Whatif report
+    //
+    // TJB  RPCR_041  Nov-2012
+    // Changed relief_weeks, delivery_cost, processing_cost and relief_cost to decimal
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -192,10 +199,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private decimal? _tyrestubesperannum;
 
         [DBField()]
-        private int? _deliverycost;
+        private decimal? _deliverycost;    //private int? _deliverycost;
 
         [DBField()]
-        private int? _processingcost;
+        private decimal? _processingcost;  // private int? _processingcost;
 
         [DBField()]
         private int? _publicliabilitycost;
@@ -342,7 +349,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private int? _nvtkey;
 
         [DBField()]
-        private int? _reliefcost;
+        private decimal? _reliefcost;   // private int? _reliefcost;
 
         [DBField()]
         private decimal? _procwagerate;
@@ -351,9 +358,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private decimal? _rrrate_proc_wage;
 
         [DBField()]
-        private int? _relief_weeks;
+        private decimal? _relief_weeks;
 
-        public virtual int? ReliefWeeks
+        public virtual decimal? ReliefWeeks
         {
             get
             {
@@ -1153,7 +1160,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual int? Deliverycost
+        public virtual decimal? Deliverycost    // public virtual int? Deliverycost
         {
             get
             {
@@ -1171,7 +1178,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public int? REDeliverycost
+        public decimal? REDeliverycost   // public int? REDeliverycost
         {
             get
             {
@@ -1179,7 +1186,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual int? Processingcost
+        public virtual decimal? Processingcost   // public virtual int? Processingcost
         {
             get
             {
@@ -1197,7 +1204,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public int? REProcessingcost
+        public decimal? REProcessingcost   // public int? REProcessingcost
         {
             get
             {
@@ -2453,7 +2460,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual int? Reliefcost
+        public virtual decimal? Reliefcost   // public virtual int? Reliefcost
         {
             get
             {
@@ -2471,7 +2478,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public int? REReliefcost
+        public decimal? REReliefcost   // public int? REReliefcost
         {
             get
             {
@@ -2558,10 +2565,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //((((   if(isnull(calcvolume),0,calcvolume)  /  if(isnull(itemshour),0,itemshour) ) / 365) * 7) * 52) *  if(isnull(procwagerate),0,procwagerate)
+                //((((if(isnull(calcvolume),0,calcvolume)/if(isnull(itemshour),0,itemshour))/365)*7)*52) *  if(isnull(procwagerate),0,procwagerate)
                 if (Calcvolume == null || Itemshour == null || Itemshour == 0 || Procwagerate == null)
                     return null;
-                return ((((Convert.ToDecimal(Calcvolume) / Convert.ToDecimal(Itemshour)) / 365) * 7) * 52) * Convert.ToDecimal(Procwagerate);
+                return (Decimal.Round(((Convert.ToDecimal(Calcvolume)/Convert.ToDecimal(Itemshour))/365)*7,2)* 52) * Convert.ToDecimal(Procwagerate);
             }
         }
 
@@ -2714,7 +2721,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //((((calcvolume /  itemshour ) / 365) * 7) * 56) *  delwagerate
+                //((((calcvolume/itemshour)/365)*7)*56)*delwagerate
                 if (Itemshour == null || Itemshour == 0)
                     return null;
                 return ((((Calcvolume / Itemshour) / 365) * 7) * 56) * Delwagerate;
@@ -3268,7 +3275,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         }
 
         private decimal? _Totwp;
-        //sum( if(isnull(  proccosts ),0, proccosts) for all distinct contract_no )
+        //sum( if(isnull(proccosts),0, proccosts) for all distinct contract_no )
         public virtual decimal? Totwp
         {
             get
@@ -3286,7 +3293,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         {
             get
             {
-                //sum( if(isnull(  proccosts ),0, proccosts) for all distinct contract_no )
+                //sum( if(isnull(proccosts),0, proccosts) for all distinct contract_no )
                 return decimal.Zero;
             }
         }
@@ -3591,6 +3598,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         {
             get
             {
+                decimal tmpProcHrs;
+
                 CanReadProperty(true);
                 //(if(isnull(calcdelhours),0,calcdelhours) * 4) * if(isnull(delwagerate),0,delwagerate) 
                 //          + ((((if(isnull(calcvolume),0,calcvolume) / if(isnull(itemshour),0,itemshour)) / 365) * 7) * 4) * if(isnull(procwagerate),0,procwagerate)
@@ -3598,9 +3607,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 if (Itemshour == null || Itemshour == 0)
                     return null;
 
-                return (Calcdelhours.GetValueOrDefault() * _relief_weeks.GetValueOrDefault() * Delwagerate.GetValueOrDefault()) 
-                          + ((((Calcvolume.GetValueOrDefault() / Itemshour.GetValueOrDefault()) / 365) * 7) 
-                                                 * _relief_weeks.GetValueOrDefault()) * Procwagerate.GetValueOrDefault();
+                //return (Calcdelhours.GetValueOrDefault() * _relief_weeks.GetValueOrDefault() * Delwagerate.GetValueOrDefault())
+                //          + ((((Calcvolume.GetValueOrDefault() / Itemshour.GetValueOrDefault()) / 365) * 7)
+                //                                 * _relief_weeks.GetValueOrDefault()) * Procwagerate.GetValueOrDefault();
+                tmpProcHrs = decimal.Round((((Calcvolume.GetValueOrDefault() / Itemshour.GetValueOrDefault()) / 365) * 7),2);
+
+                return (Calcdelhours.GetValueOrDefault() * Delwagerate.GetValueOrDefault()) * _relief_weeks.GetValueOrDefault()
+                          + tmpProcHrs * Procwagerate.GetValueOrDefault() 
+                                                  * _relief_weeks.GetValueOrDefault();
             }
         }
 
@@ -3695,8 +3709,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._fuelcostperannum = GetValueFromReader<decimal?>(dr, 27);
                             instance._repairsperannum = GetValueFromReader<decimal?>(dr, 28);
                             instance._tyrestubesperannum = GetValueFromReader<decimal?>(dr, 29);
-                            instance._deliverycost = GetValueFromReader<int?>(dr, 30);
-                            instance._processingcost = GetValueFromReader<int?>(dr, 31);
+                            instance._deliverycost = GetValueFromReader<decimal?>(dr, 30);    // instance._deliverycost = GetValueFromReader<int?>(dr, 30);
+                            instance._processingcost = GetValueFromReader<decimal?>(dr, 31);  // instance._processingcost = GetValueFromReader<int?>(dr, 31);
                             instance._publicliabilitycost = GetValueFromReader<int?>(dr, 32);
                             instance._accperannum = GetValueFromReader<decimal?>(dr, 33);
                             instance._vehicleinsurance = GetValueFromReader<int?>(dr, 34);
@@ -3745,10 +3759,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._nuniform = GetValueFromReader<decimal?>(dr, 77);
                             instance._naccamount = GetValueFromReader<decimal?>(dr, 78);
                             instance._nvtkey = GetValueFromReader<int?>(dr, 79);
-                            instance._reliefcost = GetValueFromReader<int?>(dr, 80);
+                            instance._reliefcost = GetValueFromReader<decimal?>(dr, 80);   // instance._reliefcost = GetValueFromReader<int?>(dr, 80);
                             instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
                             instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
-                            instance._relief_weeks = GetValueFromReader<int?>(dr, 83);
+                            instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
