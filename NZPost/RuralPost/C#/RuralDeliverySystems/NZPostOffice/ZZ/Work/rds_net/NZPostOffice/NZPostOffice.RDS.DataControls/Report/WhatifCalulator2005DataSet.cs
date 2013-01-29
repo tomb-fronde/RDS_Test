@@ -6,6 +6,8 @@ using NZPostOffice.RDS.Entity.Ruralwin2;
 
 namespace NZPostOffice.RDS.DataControls.Report
 {
+    // TJB  RPCR_041  Jan-2013
+    // Added ReliefWeeks (in vain attempt to add to WhatIfCalculatorReport)
 
     public class RWhatifCalulator2005
     {
@@ -779,6 +781,13 @@ namespace NZPostOffice.RDS.DataControls.Report
                 return 0;
             }
         }
+        public decimal Reliefweeks
+        {
+            get
+            {
+                return 0;
+            }
+        }
     }
     public class WhatifCalulator2005DataSet : ReportDataSet<WhatifCalulator2005>
     {
@@ -1003,11 +1012,13 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn Maxdaysallcontracts = new DataColumn("Maxdaysallcontracts", typeof(decimal));
 
+        public DataColumn Reliefweeks = new DataColumn("Reliefweeks", typeof(decimal));
+
 
         public WhatifCalulator2005DataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				ContractNo,ContractSeqNumber,ConTitle,Nominalvehical,Delwagerate,Repairsmaint,Tyrestubes,Vehicalallow,Vehicalinsure,Publiclia,Carrierrisk,Accrate,Licence,Rateofreturn,Salvageratio,Itemshour,Fuel,Consumption,Routedistance,Deliveryhours,Processinghours,Volume,Deliverydays,Maxdeliverydays,Numberboxholders,Routedistanceperday,Vehicledepreciation,Fuelcostperannum,Repairsperannum,Tyrestubesperannum,Deliverycost,Processingcost,Publicliabilitycost,Accperannum,Vehicleinsurance,Licensing,Carrierriskrate,Benchmark,Rateofreturn1,Finalbenchmark,Retainedallowances,Currentpayment,SfKey,RfDistance,RfDeliverydays,RfDaysyear,RfDaysweek,Itemspercust,RfActive,Firstrow,Currentbenchmark,Accounting,Telephone,Sundries,Ruc,RrrateNomvehicle,RrrateDelWage,RrrateRepairsmaint,RrrateTyretubes,RrrateVehallow,RrrateVehinsurance,RrratePubliclia,RrrateCarrierrisk,RrrateAcc,RrrateLicense,RrrateVehrateofreturn,RrrateSalvageratio,RrrateItemprocrate,RrrateRuc,RrrateAccounting,RrrateTelephone,RrrateSundries,RrrateSundriesk,Sundriesk,Nmultiplier,Ninsurancepct,Nlivery,Nuniform,Naccamount,Nvtkey,Reliefcost,Procwagerate,RrrateProcWage,Calcdelhours,Contract,Opcost,Calcroutedistance,Calcacc,Calcdc,Calcpc,Calcrc,Calcvd,Calcfc,Calcrep,Calctt,Calcruc,Calcpl,Calcvi,Calclic,Calccrr,Calctel,Caclacct,Calcbenchmark,Variance,Benchdiff,Calcvolume,Vardist,Calcrel,Taccounting,Maxdaysallcontracts
+				ContractNo,ContractSeqNumber,ConTitle,Nominalvehical,Delwagerate,Repairsmaint,Tyrestubes,Vehicalallow,Vehicalinsure,Publiclia,Carrierrisk,Accrate,Licence,Rateofreturn,Salvageratio,Itemshour,Fuel,Consumption,Routedistance,Deliveryhours,Processinghours,Volume,Deliverydays,Maxdeliverydays,Numberboxholders,Routedistanceperday,Vehicledepreciation,Fuelcostperannum,Repairsperannum,Tyrestubesperannum,Deliverycost,Processingcost,Publicliabilitycost,Accperannum,Vehicleinsurance,Licensing,Carrierriskrate,Benchmark,Rateofreturn1,Finalbenchmark,Retainedallowances,Currentpayment,SfKey,RfDistance,RfDeliverydays,RfDaysyear,RfDaysweek,Itemspercust,RfActive,Firstrow,Currentbenchmark,Accounting,Telephone,Sundries,Ruc,RrrateNomvehicle,RrrateDelWage,RrrateRepairsmaint,RrrateTyretubes,RrrateVehallow,RrrateVehinsurance,RrratePubliclia,RrrateCarrierrisk,RrrateAcc,RrrateLicense,RrrateVehrateofreturn,RrrateSalvageratio,RrrateItemprocrate,RrrateRuc,RrrateAccounting,RrrateTelephone,RrrateSundries,RrrateSundriesk,Sundriesk,Nmultiplier,Ninsurancepct,Nlivery,Nuniform,Naccamount,Nvtkey,Reliefcost,Procwagerate,RrrateProcWage,Calcdelhours,Contract,Opcost,Calcroutedistance,Calcacc,Calcdc,Calcpc,Calcrc,Calcvd,Calcfc,Calcrep,Calctt,Calcruc,Calcpl,Calcvi,Calclic,Calccrr,Calctel,Caclacct,Calcbenchmark,Variance,Benchdiff,Calcvolume,Vardist,Calcrel,Taccounting,Maxdaysallcontracts,Reliefweeks
 				});
             ContractNo.AllowDBNull = true;
             ContractSeqNumber.AllowDBNull = true;
@@ -1113,7 +1124,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             Calcrel.AllowDBNull = true;
             Taccounting.AllowDBNull = true;
             Maxdaysallcontracts.AllowDBNull = true;
-
+            Reliefweeks.AllowDBNull = true;
         }
 
         public WhatifCalulator2005DataSet(object dataSource)
@@ -1239,6 +1250,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["Calcrel"] = GetFieldValue(data.Calcrel);
             row["Taccounting"] = GetFieldValue(data.Taccounting);
             row["Maxdaysallcontracts"] = GetFieldValue(data.Maxdaysallcontracts);
+            row["Reliefweeks"] = GetFieldValue(data.ReliefWeeks);
             return row;
         }
     }
