@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DReportGenericCriteriaWithRegion
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -41,7 +44,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // n_12347112
             // 
-            this.n_12347112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.n_12347112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.n_12347112.Location = new System.Drawing.Point(88, 15);
             this.n_12347112.Name = "n_12347112";
             this.n_12347112.Size = new System.Drawing.Size(113, 13);
@@ -51,7 +54,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // st_report
             // 
-            this.st_report.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.st_report.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.st_report.Location = new System.Drawing.Point(4, 2);
             this.st_report.Name = "st_report";
             this.st_report.Size = new System.Drawing.Size(397, 13);
@@ -74,10 +77,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownHeight = 150;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(97, 31);
             this.region_id.Name = "region_id";
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
             this.region_id.Size = new System.Drawing.Size(198, 21);
             this.region_id.TabIndex = 10;
             this.region_id.Value = null;
