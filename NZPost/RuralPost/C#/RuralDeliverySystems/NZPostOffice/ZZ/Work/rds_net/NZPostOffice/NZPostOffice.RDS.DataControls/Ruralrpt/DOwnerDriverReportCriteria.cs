@@ -15,6 +15,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
 	public partial class DOwnerDriverReportCriteria : Metex.Windows.DataUserControl
 	{
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
 		public DOwnerDriverReportCriteria()
 		{
 			InitializeComponent();

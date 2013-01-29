@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DOwnerDriverReportCriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -48,7 +51,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // n_32979223
             // 
-            this.n_32979223.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.n_32979223.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.n_32979223.Location = new System.Drawing.Point(115, 20);
             this.n_32979223.Name = "n_32979223";
             this.n_32979223.Size = new System.Drawing.Size(113, 13);
@@ -58,7 +61,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // st_report
             // 
-            this.st_report.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.st_report.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.st_report.Location = new System.Drawing.Point(4, 2);
             this.st_report.Name = "st_report";
             this.st_report.Size = new System.Drawing.Size(214, 13);
@@ -86,11 +89,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownHeight = 150;
             this.region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.region_id.IntegralHeight = false;
             this.region_id.Location = new System.Drawing.Point(118, 39);
             this.region_id.Name = "region_id";
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
             this.region_id.Size = new System.Drawing.Size(181, 21);
             this.region_id.TabIndex = 0;
             this.region_id.Value = null;
@@ -141,12 +145,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rg_code.Location = new System.Drawing.Point(118, 80);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(181, 21);
             this.rg_code.TabIndex = 40;
-            this.rg_code.DataBindings[0].DataSourceNullValue = null;
             this.rg_code.Value = null;
             this.rg_code.ValueMember = "RgCode";
             // 
@@ -163,10 +167,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // ct_key
             // 
             this.ct_key.AutoRetrieve = true;
-            this.ct_key.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ct_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CtKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ct_key.DisplayMember = "ContractType";
+            this.ct_key.DropDownHeight = 150;
+            this.ct_key.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ct_key.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ct_key.IntegralHeight = false;
             this.ct_key.Location = new System.Drawing.Point(118, 101);
             this.ct_key.Name = "ct_key";
             this.ct_key.Size = new System.Drawing.Size(181, 21);
