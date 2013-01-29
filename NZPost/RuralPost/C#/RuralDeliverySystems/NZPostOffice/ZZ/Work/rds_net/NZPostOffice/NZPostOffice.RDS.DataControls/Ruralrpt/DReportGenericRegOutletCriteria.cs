@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
 	public partial class DReportGenericRegOutletCriteria : Metex.Windows.DataUserControl
 	{
+        // TJB 30-Jan-2013
+        // Increased size of region group dropdown
+
 		public DReportGenericRegOutletCriteria()
 		{
 			InitializeComponent();
