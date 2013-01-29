@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DReportAllowanceCriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -55,7 +58,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // t_1
             // 
-            this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.t_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.t_1.Location = new System.Drawing.Point(117, 20);
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(113, 13);
@@ -78,10 +81,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownHeight = 150;
             this.region_id.Font = new System.Drawing.Font("Arial", 8F);
             this.region_id.Location = new System.Drawing.Point(118, 39);
             this.region_id.Name = "region_id";
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
             this.region_id.Size = new System.Drawing.Size(159, 22);
             this.region_id.TabIndex = 10;
             this.region_id.Value = null;
@@ -92,6 +95,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.ct_key.AutoRetrieve = true;
             this.ct_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CtKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ct_key.DisplayMember = "ContractType";
+            this.ct_key.DropDownHeight = 150;
             this.ct_key.Font = new System.Drawing.Font("Arial", 8F);
             this.ct_key.Location = new System.Drawing.Point(118, 92);
             this.ct_key.Name = "ct_key";
@@ -125,15 +129,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Arial", 8F);
             this.rg_code.Location = new System.Drawing.Point(118, 65);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(159, 22);
             this.rg_code.TabIndex = 20;
-            // this.rg_code.Value = null;
+            this.rg_code.Value = null;
             this.rg_code.ValueMember = "RgCode";
-            this.rg_code.DataBindings[0].DataSourceNullValue = null;
-            this.rg_code.DataBindings[0].NullValue = null;
             // 
             // DReportAllowanceCriteria
             // 
