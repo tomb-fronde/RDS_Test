@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DReportGenericOutletCriteriawithrgct
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -28,177 +31,198 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.Name = "DReportGenericOutletCriteriawithrgct";
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
-            this.SuspendLayout();
-            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericOutletCriteriawithrgct);
-            #region n_54656863 define
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DReportGenericOutletCriteriawithrgct));
             this.n_54656863 = new System.Windows.Forms.Label();
-            this.n_54656863.Name = "n_54656863";
+            this.st_report = new System.Windows.Forms.Label();
+            this.outlet_picklist = new System.Windows.Forms.CheckBox();
+            this.outlet_region_id_t = new System.Windows.Forms.Label();
+            this.region_id_ro = new Metex.Windows.DataEntityCombo();
+            this.region_id = new Metex.Windows.DataEntityCombo();
+            this.outlet_outlet_id_t = new System.Windows.Forms.Label();
+            this.o_name = new System.Windows.Forms.TextBox();
+            this.outlet_bmp = new System.Windows.Forms.PictureBox();
+            this.n_22149720 = new System.Windows.Forms.Label();
+            this.rg_code = new Metex.Windows.DataEntityCombo();
+            this.n_65129753 = new System.Windows.Forms.Label();
+            this.ct_key = new Metex.Windows.DataEntityCombo();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outlet_bmp)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // bindingSource
+            // 
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralrpt.ReportGenericOutletCriteriawithrgct);
+            // 
+            // n_54656863
+            // 
+            this.n_54656863.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.n_54656863.Location = new System.Drawing.Point(117, 20);
+            this.n_54656863.Name = "n_54656863";
             this.n_54656863.Size = new System.Drawing.Size(113, 13);
             this.n_54656863.TabIndex = 0;
-            this.n_54656863.Font = new System.Drawing.Font("MS Sans Serif", 8F,System.Drawing.FontStyle.Bold);
-            this.n_54656863.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.n_54656863.Text = "Search Criteria";
-            #endregion
-            this.Controls.Add(n_54656863);
-            #region st_report define
-            this.st_report = new System.Windows.Forms.Label();
-            this.st_report.Name = "st_report";
+            this.n_54656863.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // st_report
+            // 
+            this.st_report.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.st_report.Location = new System.Drawing.Point(118, 3);
+            this.st_report.Name = "st_report";
             this.st_report.Size = new System.Drawing.Size(326, 13);
             this.st_report.TabIndex = 0;
-            this.st_report.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.st_report.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.st_report.Text = "Report:";
-            #endregion
-            this.Controls.Add(st_report);
-            #region outlet_picklist define
-            this.outlet_picklist = new System.Windows.Forms.CheckBox();
-            this.outlet_picklist.Name = "outlet_picklist";
+            this.st_report.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // outlet_picklist
+            // 
+            this.outlet_picklist.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.outlet_picklist.Enabled = false;
+            this.outlet_picklist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.outlet_picklist.Location = new System.Drawing.Point(701, 60);
+            this.outlet_picklist.Name = "outlet_picklist";
             this.outlet_picklist.Size = new System.Drawing.Size(30, 15);
             this.outlet_picklist.TabIndex = 0;
-            this.outlet_picklist.Enabled = false;
-            this.outlet_picklist.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.outlet_picklist.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.outlet_picklist.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.outlet_picklist.Text = "";
-            this.outlet_picklist.CheckAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.outlet_picklist.ThreeState = false;
-            #endregion
-            this.Controls.Add(outlet_picklist);
-            #region outlet_region_id_t define
-            this.outlet_region_id_t = new System.Windows.Forms.Label();
-            this.outlet_region_id_t.Name = "outlet_region_id_t";
+            // 
+            // outlet_region_id_t
+            // 
+            this.outlet_region_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.outlet_region_id_t.Location = new System.Drawing.Point(53, 40);
+            this.outlet_region_id_t.Name = "outlet_region_id_t";
             this.outlet_region_id_t.Size = new System.Drawing.Size(62, 13);
             this.outlet_region_id_t.TabIndex = 0;
-            this.outlet_region_id_t.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.outlet_region_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.outlet_region_id_t.Text = "Region";
-            #endregion
-            this.Controls.Add(outlet_region_id_t);
-            #region region_id_ro define
-            this.region_id_ro = new Metex.Windows.DataEntityCombo();
-            this.region_id_ro.Name = "region_id_ro";
+            this.outlet_region_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // region_id_ro
+            // 
+            this.region_id_ro.AutoRetrieve = true;
+            this.region_id_ro.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.region_id_ro.DisplayMember = "RgnName";
+            this.region_id_ro.DropDownHeight = 150;
+            this.region_id_ro.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.region_id_ro.IntegralHeight = false;
             this.region_id_ro.Location = new System.Drawing.Point(118, 37);
+            this.region_id_ro.Name = "region_id_ro";
             this.region_id_ro.Size = new System.Drawing.Size(179, 21);
             this.region_id_ro.TabIndex = 0;
-            this.region_id_ro.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            //this.region_id_ro.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.region_id_ro.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.region_id_ro.DataBindings[0].DataSourceNullValue = null;
-            this.region_id_ro.DisplayMember = "RgnName";
+            this.region_id_ro.Value = null;
             this.region_id_ro.ValueMember = "RegionId";
-            this.region_id_ro.AutoRetrieve = true;
-            #endregion
-            this.Controls.Add(region_id_ro);
-            #region region_id define
-            this.region_id = new Metex.Windows.DataEntityCombo();
-            this.region_id.Name = "region_id";
+            // 
+            // region_id
+            // 
+            this.region_id.AutoRetrieve = true;
+            this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.region_id.DisplayMember = "RgnName";
+            this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(118, 37);
+            this.region_id.Name = "region_id";
             this.region_id.Size = new System.Drawing.Size(179, 21);
             this.region_id.TabIndex = 20;
-            this.region_id.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            //this.region_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
-            this.region_id.DisplayMember = "RgnName";
+            this.region_id.Value = null;
             this.region_id.ValueMember = "RegionId";
-            this.region_id.AutoRetrieve = true;
-            #endregion
-            this.Controls.Add(region_id);
-            #region outlet_outlet_id_t define
-            this.outlet_outlet_id_t = new System.Windows.Forms.Label();
-            this.outlet_outlet_id_t.Name = "outlet_outlet_id_t";
+            // 
+            // outlet_outlet_id_t
+            // 
+            this.outlet_outlet_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.outlet_outlet_id_t.Location = new System.Drawing.Point(35, 61);
+            this.outlet_outlet_id_t.Name = "outlet_outlet_id_t";
             this.outlet_outlet_id_t.Size = new System.Drawing.Size(81, 13);
             this.outlet_outlet_id_t.TabIndex = 0;
-            this.outlet_outlet_id_t.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.outlet_outlet_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.outlet_outlet_id_t.Text = "Base Office";
-            #endregion
-            this.Controls.Add(outlet_outlet_id_t);
-            #region o_name define
-            this.o_name = new System.Windows.Forms.TextBox();
-            this.o_name.Name = "o_name";
+            this.outlet_outlet_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // o_name
+            // 
+            this.o_name.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "OName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.o_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.o_name.Location = new System.Drawing.Point(118, 60);
+            this.o_name.MaxLength = 40;
+            this.o_name.Name = "o_name";
             this.o_name.Size = new System.Drawing.Size(156, 20);
             this.o_name.TabIndex = 30;
-            this.o_name.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.o_name.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.o_name.MaxLength = 40;
-            this.o_name.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "OName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            #endregion
-            this.Controls.Add(o_name);
-            #region outlet_bmp define
-            this.outlet_bmp = new System.Windows.Forms.PictureBox();
-            this.outlet_bmp.Image = global::NZPostOffice.Shared.Properties.Resources.PCKLSTUP;
-            this.outlet_bmp.Name = "outlet_bmp";
+            // 
+            // outlet_bmp
+            // 
+            this.outlet_bmp.Image = ((System.Drawing.Image)(resources.GetObject("outlet_bmp.Image")));
             this.outlet_bmp.Location = new System.Drawing.Point(277, 64);
+            this.outlet_bmp.Name = "outlet_bmp";
             this.outlet_bmp.Size = new System.Drawing.Size(17, 15);
             this.outlet_bmp.TabIndex = 0;
-            //?this.outlet_bmp.Image = ((object)(resources.GetObject("outlet_bmp.Image")));
-            #endregion
-            this.Controls.Add(outlet_bmp);
-            #region n_22149720 define
-            this.n_22149720 = new System.Windows.Forms.Label();
-            this.n_22149720.Name = "n_22149720";
+            this.outlet_bmp.TabStop = false;
+            // 
+            // n_22149720
+            // 
+            this.n_22149720.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.n_22149720.Location = new System.Drawing.Point(28, 82);
+            this.n_22149720.Name = "n_22149720";
             this.n_22149720.Size = new System.Drawing.Size(88, 13);
             this.n_22149720.TabIndex = 0;
-            this.n_22149720.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.n_22149720.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.n_22149720.Text = "Renewal group";
-            #endregion
-            this.Controls.Add(n_22149720);
-            #region rg_code define
-            this.rg_code = new Metex.Windows.DataEntityCombo();
-            this.rg_code.Name = "rg_code";
-            this.rg_code.Location = new System.Drawing.Point(118, 82);
-            this.rg_code.Size = new System.Drawing.Size(179, 21);
-            this.rg_code.TabIndex = 40;
-            this.rg_code.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            //this.rg_code.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.n_22149720.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // rg_code
+            // 
+            this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
+            this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.Location = new System.Drawing.Point(118, 82);
+            this.rg_code.Name = "rg_code";
+            this.rg_code.Size = new System.Drawing.Size(179, 21);
+            this.rg_code.TabIndex = 40;
+            this.rg_code.Value = null;
             this.rg_code.ValueMember = "RgCode";
-            this.rg_code.DataBindings[0].DataSourceNullValue = null;
-            this.rg_code.AutoRetrieve = true;
-            #endregion
-            this.Controls.Add(rg_code);
-            #region n_65129753 define
-            this.n_65129753 = new System.Windows.Forms.Label();
-            this.n_65129753.Name = "n_65129753";
+            // 
+            // n_65129753
+            // 
+            this.n_65129753.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.n_65129753.Location = new System.Drawing.Point(28, 108);
+            this.n_65129753.Name = "n_65129753";
             this.n_65129753.Size = new System.Drawing.Size(88, 13);
             this.n_65129753.TabIndex = 0;
-            this.n_65129753.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            this.n_65129753.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.n_65129753.Text = "Contract type";
-            #endregion
-            this.Controls.Add(n_65129753);
-            #region ct_key define
-            this.ct_key = new Metex.Windows.DataEntityCombo();
-            this.ct_key.Name = "ct_key";
-            this.ct_key.Location = new System.Drawing.Point(118, 105);
-            this.ct_key.Size = new System.Drawing.Size(179, 21);
-            this.ct_key.TabIndex = 10;
-            this.ct_key.Font = new System.Drawing.Font("MS Sans Serif", 8);
-            //this.ct_key.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.n_65129753.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ct_key
+            // 
+            this.ct_key.AutoRetrieve = true;
             this.ct_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CtKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ct_key.DisplayMember = "ContractType";
+            this.ct_key.DropDownHeight = 150;
+            this.ct_key.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ct_key.IntegralHeight = false;
+            this.ct_key.Location = new System.Drawing.Point(118, 105);
+            this.ct_key.Name = "ct_key";
+            this.ct_key.Size = new System.Drawing.Size(179, 21);
+            this.ct_key.TabIndex = 10;
+            this.ct_key.Value = null;
             this.ct_key.ValueMember = "CtKey";
-            this.ct_key.AutoRetrieve = true;
-            #endregion
-            this.Controls.Add(ct_key);
+            // 
+            // DReportGenericOutletCriteriawithrgct
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.n_54656863);
+            this.Controls.Add(this.st_report);
+            this.Controls.Add(this.outlet_picklist);
+            this.Controls.Add(this.outlet_region_id_t);
+            this.Controls.Add(this.region_id_ro);
+            this.Controls.Add(this.region_id);
+            this.Controls.Add(this.outlet_outlet_id_t);
+            this.Controls.Add(this.o_name);
+            this.Controls.Add(this.outlet_bmp);
+            this.Controls.Add(this.n_22149720);
+            this.Controls.Add(this.rg_code);
+            this.Controls.Add(this.n_65129753);
+            this.Controls.Add(this.ct_key);
+            this.Name = "DReportGenericOutletCriteriawithrgct";
             this.Size = new System.Drawing.Size(650, 300);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outlet_bmp)).EndInit();
             this.ResumeLayout(false);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.PerformLayout();
+
         }
 
         #endregion
