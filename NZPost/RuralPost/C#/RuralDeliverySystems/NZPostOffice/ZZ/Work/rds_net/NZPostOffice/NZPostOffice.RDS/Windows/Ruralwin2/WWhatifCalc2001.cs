@@ -21,10 +21,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     public class WWhatifCalc2001 : WAncestorWindow
     {
         // TJB  RPCR_041  Jan-2013
-        // Changed show calcs button to filp-flop show/hide; removed hide button
+        // Changed 'show calcs' button to filp-flop show/hide; removed hide button
+        // Changed Totacc, Totdev, Totproc, Totrel to sum AccPerAnnum, DeliveryCost, ProcessingCost, 
+        //         ReliefCost from stored proc (rather than from recalculated values)
+        //         - See of_showreport
         //
         // TJB  Nov-2012
         // Changed displayed title to "WWhatifRate2001" from PB format
+        //
+        //-----------------------------------------------------------------------------------------
+        // Note:  
+        // The WhatIf report executes the sp_GetWhatIfCalc2005 stored procedure via 
+        // Entity.Ruralwin2.WhatIfCalculator2005.  To prepare the report, the values are copied to 
+        // Entity.Ruralwin2.WhatIfCalculatorReport2005 in which many of the values calculated in 
+        // the stored procedure are re-calculated under different, though similar, names.
+        // If multiple contracts are selected for the WhatIf report, the individual contract's 
+        // values are summed, though the summation is sometimes done in the WhatIfCalculatorReport2005
+        // entity, and sometimes in this module (see of_showreport and store_group_report).
+        // The report itself (REDEhatifCalculatorReport2005) uses values from the entity 
+        // WhatIfCalculatorReport2005, mostly from the recalculated variables.
+        // Very complex/confusing and in need of rationalisation.
+        //-----------------------------------------------------------------------------------------
 
         #region Define
 
@@ -545,6 +562,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             DataUserControl dwc1;
             DataUserControl dwc2;
             DataUserControl dwc_rates;
+
             //?idw_report.Modify("datawindow.print.preview=yes");
             dwc1 = idw_summary.GetChild("dw_rates");
             dwc2 = idw_report.GetChild("dw_rates");
@@ -686,10 +704,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? l_Totwr = 0;
 
             l_contract_no_old = idw_report.GetItem<WhatifCalculatorReport2005>(0).ContractNo;
-            l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Acccost.GetValueOrDefault();
-            l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Delcosts.GetValueOrDefault();
-            l_Totwp = idw_report.GetItem<WhatifCalculatorReport2005>(0).Proccosts.GetValueOrDefault();
-            l_Totwr = idw_report.GetItem<WhatifCalculatorReport2005>(0).Relcosts.GetValueOrDefault();
+            //l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Acccost.GetValueOrDefault();
+            //l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Delcosts.GetValueOrDefault();
+            //l_Totwp = idw_report.GetItem<WhatifCalculatorReport2005>(0).Proccosts.GetValueOrDefault();
+            //l_Totwr = idw_report.GetItem<WhatifCalculatorReport2005>(0).Relcosts.GetValueOrDefault();
+            l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Accperannum.GetValueOrDefault();
+            l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Deliverycost.GetValueOrDefault();
+            l_Totwp = idw_report.GetItem<WhatifCalculatorReport2005>(0).Processingcost.GetValueOrDefault();
+            l_Totwr = idw_report.GetItem<WhatifCalculatorReport2005>(0).Reliefcost.GetValueOrDefault();
             for (int i = 0; i < idw_report.RowCount; i++)
             {
                 l_contract_no = idw_report.GetItem<WhatifCalculatorReport2005>(i).ContractNo;
@@ -698,10 +720,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else
                 {
-                    l_Totacc += idw_report.GetItem<WhatifCalculatorReport2005>(i).Acccost.GetValueOrDefault();
-                    l_Totwd += idw_report.GetItem<WhatifCalculatorReport2005>(i).Delcosts.GetValueOrDefault();
-                    l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Proccosts.GetValueOrDefault();
-                    l_Totwr += idw_report.GetItem<WhatifCalculatorReport2005>(i).Relcosts.GetValueOrDefault();
+                    //l_Totacc += idw_report.GetItem<WhatifCalculatorReport2005>(i).Acccost.GetValueOrDefault();
+                    //l_Totwd += idw_report.GetItem<WhatifCalculatorReport2005>(i).Delcosts.GetValueOrDefault();
+                    //l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Proccosts.GetValueOrDefault();
+                    //l_Totwr += idw_report.GetItem<WhatifCalculatorReport2005>(i).Relcosts.GetValueOrDefault();
+                    l_Totacc += idw_report.GetItem<WhatifCalculatorReport2005>(i).Accperannum.GetValueOrDefault();
+                    l_Totwd += idw_report.GetItem<WhatifCalculatorReport2005>(i).Deliverycost.GetValueOrDefault();
+                    l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Processingcost.GetValueOrDefault();
+                    l_Totwr += idw_report.GetItem<WhatifCalculatorReport2005>(i).Reliefcost.GetValueOrDefault();
                 }
                 // TJB  RD7_0036  3-Apr-2009
                 // This is needed to fix a bug in the WhatIf full report
