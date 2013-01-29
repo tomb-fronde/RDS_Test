@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DOutletReportCriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -74,6 +77,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.regionid.AutoRetrieve = true;
             this.regionid.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Regionid", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.regionid.DisplayMember = "RgnName";
+            this.regionid.DropDownHeight = 150;
             this.regionid.Font = new System.Drawing.Font("Arial", 8F);
             this.regionid.Location = new System.Drawing.Point(94, 23);
             this.regionid.Name = "regionid";
