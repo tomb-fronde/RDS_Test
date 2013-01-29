@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DReportCustomerStatisticsCriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -28,6 +31,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DReportCustomerStatisticsCriteria));
             this.n_1514205 = new System.Windows.Forms.Label();
             this.st_report = new System.Windows.Forms.Label();
             this.n_13627845 = new System.Windows.Forms.Label();
@@ -84,8 +88,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Enabled = false;
-            this.rg_code.DataBindings[0].DataSourceNullValue = null;
             this.rg_code.Font = new System.Drawing.Font("Arial", 8F);
             this.rg_code.Location = new System.Drawing.Point(112, 191);
             this.rg_code.Name = "rg_code";
@@ -119,11 +123,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id_ro.AutoRetrieve = true;
             this.region_id_ro.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id_ro.DisplayMember = "RgnName";
+            this.region_id_ro.DropDownHeight = 150;
             this.region_id_ro.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id_ro.Location = new System.Drawing.Point(118, 39);
             this.region_id_ro.Name = "region_id_ro";
             this.region_id_ro.Size = new System.Drawing.Size(172, 21);
-            this.region_id_ro.DataBindings[0].DataSourceNullValue = null;
             this.region_id_ro.TabIndex = 20;
             this.region_id_ro.Value = null;
             this.region_id_ro.ValueMember = "RegionId";
@@ -136,7 +140,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(118, 39);
             this.region_id.Name = "region_id";
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
             this.region_id.Size = new System.Drawing.Size(172, 21);
             this.region_id.TabIndex = 10;
             this.region_id.Value = null;
@@ -164,11 +167,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // outlet_bmp
             // 
+            this.outlet_bmp.Image = ((System.Drawing.Image)(resources.GetObject("outlet_bmp.Image")));
             this.outlet_bmp.Location = new System.Drawing.Point(273, 68);
             this.outlet_bmp.Name = "outlet_bmp";
             this.outlet_bmp.Size = new System.Drawing.Size(17, 19);
             this.outlet_bmp.TabIndex = 0;
-            this.outlet_bmp.Image = global::NZPostOffice.Shared.Properties.Resources.PCKLSTUP;
             this.outlet_bmp.TabStop = false;
             // 
             // n_55541742
@@ -186,7 +189,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.ct_key.AutoRetrieve = true;
             this.ct_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CtKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ct_key.DisplayMember = "ContractType";
+            this.ct_key.DropDownHeight = 150;
             this.ct_key.Font = new System.Drawing.Font("Arial", 8F);
+            this.ct_key.IntegralHeight = false;
             this.ct_key.Location = new System.Drawing.Point(118, 95);
             this.ct_key.Name = "ct_key";
             this.ct_key.Size = new System.Drawing.Size(172, 22);
