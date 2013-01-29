@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
     partial class DCustCountcriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -51,7 +54,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // n_39324249
             // 
-            this.n_39324249.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F,System.Drawing.FontStyle.Bold);
+            this.n_39324249.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.n_39324249.Location = new System.Drawing.Point(117, 17);
             this.n_39324249.Name = "n_39324249";
             this.n_39324249.Size = new System.Drawing.Size(113, 13);
@@ -96,7 +99,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.region_id.DisplayMember = "RgnName";
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(118, 35);
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
             this.region_id.Name = "region_id";
             this.region_id.Size = new System.Drawing.Size(179, 21);
             this.region_id.TabIndex = 10;
@@ -125,7 +127,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             // 
             // outlet_bmp
             // 
-            this.outlet_bmp.Image = global::NZPostOffice.Shared.Properties.Resources.PCKLSTUP;
+            this.outlet_bmp.Image = ((System.Drawing.Image)(resources.GetObject("outlet_bmp.Image")));
             this.outlet_bmp.Location = new System.Drawing.Point(280, 62);
             this.outlet_bmp.Name = "outlet_bmp";
             this.outlet_bmp.Size = new System.Drawing.Size(17, 15);
@@ -170,7 +172,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(118, 115);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(179, 21);
