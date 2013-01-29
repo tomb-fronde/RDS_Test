@@ -199,10 +199,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private decimal? _tyrestubesperannum;
 
         [DBField()]
-        private decimal? _deliverycost;    //private int? _deliverycost;
+        private decimal? _deliverycost;
 
         [DBField()]
-        private decimal? _processingcost;  // private int? _processingcost;
+        private decimal? _processingcost;
 
         [DBField()]
         private int? _publicliabilitycost;
@@ -349,7 +349,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private int? _nvtkey;
 
         [DBField()]
-        private decimal? _reliefcost;   // private int? _reliefcost;
+        private decimal? _reliefcost;
 
         [DBField()]
         private decimal? _procwagerate;
@@ -1160,7 +1160,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual decimal? Deliverycost    // public virtual int? Deliverycost
+        public virtual decimal? Deliverycost
         {
             get
             {
@@ -1178,7 +1178,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public decimal? REDeliverycost   // public int? REDeliverycost
+        public decimal? REDeliverycost
         {
             get
             {
@@ -1186,7 +1186,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual decimal? Processingcost   // public virtual int? Processingcost
+        public virtual decimal? Processingcost
         {
             get
             {
@@ -2460,7 +2460,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public virtual decimal? Reliefcost   // public virtual int? Reliefcost
+        public virtual decimal? Reliefcost
         {
             get
             {
@@ -2478,7 +2478,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
-        public decimal? REReliefcost   // public int? REReliefcost
+        public decimal? REReliefcost
         {
             get
             {
@@ -3435,7 +3435,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         }
 
         private decimal? _Totwr;
-        //sum( if(isnull( relcosts ),0, relcosts )  for all distinct contract_no )
+        //sum( if(isnull(relcosts),0,relcosts) for all distinct contract_no
         public virtual decimal? Totwr
         {
             get
@@ -3453,7 +3453,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         {
             get
             {
-                //sum( if(isnull( relcosts ),0, relcosts )  for all distinct contract_no )
+                //sum( if(isnull( relcosts ),0, relcosts ) for all distinct contract_no
                 return decimal.Zero;
             }
         }
@@ -3709,8 +3709,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._fuelcostperannum = GetValueFromReader<decimal?>(dr, 27);
                             instance._repairsperannum = GetValueFromReader<decimal?>(dr, 28);
                             instance._tyrestubesperannum = GetValueFromReader<decimal?>(dr, 29);
-                            instance._deliverycost = GetValueFromReader<decimal?>(dr, 30);    // instance._deliverycost = GetValueFromReader<int?>(dr, 30);
-                            instance._processingcost = GetValueFromReader<decimal?>(dr, 31);  // instance._processingcost = GetValueFromReader<int?>(dr, 31);
+                            instance._deliverycost = GetValueFromReader<decimal?>(dr, 30);
+                            instance._processingcost = GetValueFromReader<decimal?>(dr, 31);
                             instance._publicliabilitycost = GetValueFromReader<int?>(dr, 32);
                             instance._accperannum = GetValueFromReader<decimal?>(dr, 33);
                             instance._vehicleinsurance = GetValueFromReader<int?>(dr, 34);
@@ -3759,7 +3759,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._nuniform = GetValueFromReader<decimal?>(dr, 77);
                             instance._naccamount = GetValueFromReader<decimal?>(dr, 78);
                             instance._nvtkey = GetValueFromReader<int?>(dr, 79);
-                            instance._reliefcost = GetValueFromReader<decimal?>(dr, 80);   // instance._reliefcost = GetValueFromReader<int?>(dr, 80);
+                            instance._reliefcost = GetValueFromReader<decimal?>(dr, 80);
                             instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
                             instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
                             instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
