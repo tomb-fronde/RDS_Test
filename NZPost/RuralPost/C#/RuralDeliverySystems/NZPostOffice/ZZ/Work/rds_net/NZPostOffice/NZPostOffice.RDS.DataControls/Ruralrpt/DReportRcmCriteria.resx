@@ -120,4 +120,31 @@
   <metadata name="bindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="outlet_bmp.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk0mBQAAAAAAADYEAAAoAAAADwAAAA8AAAABAAgAAAAAAAAAAADEDgAAxA4AAAABAAAAAQAAAAAA/wAA
+        gP8AgAD/AICA/4AAAP+AAID/gIAA/8DAwP/A3MD/8Mqm//D7//+koKD/gICA/wAA//8A/wD/AP////8A
+        AP//AP////8A//////8AAAD/AACA/wCAAP8AgID/gAAA/4AAgP+AgAD/wMDA/8DcwP/wyqb/8Pv//6Sg
+        oP+AgID/AAD//wD/AP8A/////wAA//8A/////wD//////wAAAP8AAID/AIAA/wCAgP+AAAD/gACA/4CA
+        AP/AwMD/wNzA//DKpv/w+///pKCg/4CAgP8AAP//AP8A/wD/////AAD//wD/////AP//////AAAA/wAA
+        gP8AgAD/AICA/4AAAP+AAID/gIAA/8DAwP/A3MD/8Mqm//D7//+koKD/gICA/wAA//8A/wD/AP////8A
+        AP//AP////8A//////8AAAD/AACA/wCAAP8AgID/gAAA/4AAgP+AgAD/wMDA/8DcwP/wyqb/8Pv//6Sg
+        oP+AgID/AAD//wD/AP8A/////wAA//8A/////wD//////wAAAP8AAID/AIAA/wCAgP+AAAD/gACA/4CA
+        AP/AwMD/wNzA//DKpv/w+///pKCg/4CAgP8AAP//AP8A/wD/////AAD//wD/////AP//////AAAA/wAA
+        gP8AgAD/AICA/4AAAP+AAID/gIAA/8DAwP/A3MD/8Mqm//D7//+koKD/gICA/wAA//8A/wD/AP////8A
+        AP//AP////8A//////8AAAD/AACA/wCAAP8AgID/gAAA/4AAgP+AgAD/wMDA/8DcwP/wyqb/8Pv//6Sg
+        oP+AgID/AAD//wD/AP8A/////wAA//8A/////wD//////wAAAP8AAID/AIAA/wCAgP+AAAD/gACA/4CA
+        AP/AwMD/wNzA//DKpv/w+///pKCg/4CAgP8AAP//AP8A/wD/////AAD//wD/////AP//////AAAA/wAA
+        gP8AgAD/AICA/4AAAP+AAID/gIAA/8DAwP/A3MD/8Mqm//D7//+koKD/gICA/wAA//8A/wD/AP////8A
+        AP//AP////8A//////8AAAD/AACA/wCAAP8AgID/gAAA/4AAgP+AgAD/wMDA/8DcwP/wyqb/8Pv//6Sg
+        oP+AgID/AAD//wD/AP8A/////wAA//8A/////wD//////wAAAP8AAID/AIAA/wCAgP+AAAD/gACA/4CA
+        AP/AwMD/wNzA//DKpv/w+///pKCg/4CAgP8AAP//AP8A/wD/////AAD//wD/////AP//////AAAA/wAA
+        gP8AgAD/AICA/4AAAP+AAID/8Pv//6SgoP+AgID/AAD//wD/AP8A/////wAA//8A/////wD//////xMM
+        DAwMDAwMDAwMDAwMDP8TEwcHBwcHBwcHBwcHBwz/ExMHBwcHBxMTBwcHBwcM/xMTBwcHBwAAEwcHBwcH
+        DP8TEwcHBwcAAAcHBwcHBwz/ExMHBwcHBxMTBwcHBwcM/xMTBwcHBwAAEwcHBwcHDP8TEwcHBwcAABMT
+        BwcHBwz/ExMHBwcHBwAAExMHBwcM/xMTBwcHExMHAAATBwcHDP8TEwcHAAATBwAAEwcHBwz/ExMHBwAA
+        ExMAAAcHBwcM/xMTBwcHAAAAAAcHBwcHDP8TExMTExMTExMTExMTEwz/ExMTExMTExMTExMTExMT/w==
+</value>
+  </data>
 </root>
