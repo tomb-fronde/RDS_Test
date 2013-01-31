@@ -13,6 +13,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     public partial class DBenchmarkCalcCriteria : Metex.Windows.DataUserControl
 	{
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
 		public DBenchmarkCalcCriteria()
 		{
 			InitializeComponent();

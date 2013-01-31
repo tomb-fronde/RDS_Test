@@ -1,7 +1,10 @@
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DBenchmarkCalcCriteria
-    {
+    {   
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -75,8 +78,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownHeight = 150;
             this.region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.region_id.IntegralHeight = false;
             this.region_id.Location = new System.Drawing.Point(90, 17);
             this.region_id.Name = "region_id";
             this.region_id.Size = new System.Drawing.Size(154, 21);
@@ -89,10 +94,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
-            this.rg_code.DropDownHeight = 133;
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(90, 41);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(154, 21);
