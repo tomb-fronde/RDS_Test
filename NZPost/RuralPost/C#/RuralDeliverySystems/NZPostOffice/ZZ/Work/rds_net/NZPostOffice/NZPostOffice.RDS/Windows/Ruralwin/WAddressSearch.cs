@@ -15,6 +15,9 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_052  Feb-2013
+    // Add address alpha (if any) to returned address
+    //
     // TJB  RPI_033  Apr-2012 Bug fix: PrintDocument1_PrintPage
     // Divide by 0 error calculating nWidth in commented-out line
     //
@@ -716,12 +719,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             ll_AddressId = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrId;
             //  Get address
-            ls_address = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrNo;
-            if ((ls_address == null))
-            {
-                ls_address = "";
-            }
-            ls_address = ls_address + " " + dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).RoadName;
+            // TJB  RPCR_052  Feb-2013
+            // Add address alpha (if any) to returned address
+            ls_address = "";
+            string sAdrNo = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrNo;
+            string sAdrAlpha = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).AdrAlpha;
+            sAdrNo = (sAdrNo == null) ? "" : sAdrNo;
+            sAdrAlpha = (sAdrAlpha == null) ? "" : sAdrAlpha;
+            ls_address = sAdrNo + sAdrAlpha + " " + dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).RoadName;
             ls_address = ls_address.TrimStart();
             ls_address = ls_address.Trim();
             ll_custId = dw_results.GetItem<SearchAddressResultsV2b>(ll_Row).CustId;
