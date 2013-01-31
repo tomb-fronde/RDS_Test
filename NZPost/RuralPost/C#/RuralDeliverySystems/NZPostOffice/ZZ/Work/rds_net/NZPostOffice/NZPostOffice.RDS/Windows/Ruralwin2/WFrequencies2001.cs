@@ -15,9 +15,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WFrequencies2001 : WAncestorWindow
     {
+        // TJB  RPCR_052  Feb-2013: Non-essential additions
+        // WaitCursor when switching to address search
+        // Refresh after address returned to show change
+        // Window/panels can be resized
+        //
         // TJB  Jan-2011  Sequencing Review
         // Removed 'Sequence addresses' button
-
+        //
         // TJB Oct-2010: Mail carried issues
         // Changed to test only time part of uplift/set down times 
         // (see dw_mail_carried_pfc_validation)
@@ -144,11 +149,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // st_label
             // 
+            this.st_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.st_label.Location = new System.Drawing.Point(5, 359);
+            this.st_label.Size = new System.Drawing.Size(171, 17);
             this.st_label.Text = "w_frequencies2001";
             // 
             // tab_frequencies
             // 
+            this.tab_frequencies.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tab_frequencies.Controls.Add(this.tabpage_extensions);
             this.tab_frequencies.Controls.Add(this.tabpage_description);
             this.tab_frequencies.Controls.Add(this.tabpage_mail_carried);
@@ -175,6 +185,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_extensions
             // 
+            this.dw_extensions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dw_extensions.DataObject = null;
             this.dw_extensions.FireConstructor = false;
             this.dw_extensions.Location = new System.Drawing.Point(5, 68);
@@ -198,6 +211,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_frequency_description
             // 
+            this.dw_frequency_description.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dw_frequency_description.DataObject = null;
             this.dw_frequency_description.FireConstructor = false;
             this.dw_frequency_description.Location = new System.Drawing.Point(5, 70);
@@ -221,6 +237,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // dw_mail_carried
             // 
+            this.dw_mail_carried.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dw_mail_carried.DataObject = null;
             this.dw_mail_carried.FireConstructor = false;
             this.dw_mail_carried.Location = new System.Drawing.Point(5, 70);
@@ -245,6 +264,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // mle_annotation
             // 
+            this.mle_annotation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.mle_annotation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.mle_annotation.ForeColor = System.Drawing.SystemColors.WindowText;
             this.mle_annotation.Location = new System.Drawing.Point(8, 89);
@@ -455,8 +477,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual int wf_get_outlet(string acode)
         {
             string sOutlet;
-            //?idw_mail_carried.Modify(acode + "_pcklst_bmp.filename=\'..\\bitmaps\\pcklstdn.bmp\'");
-            //?idw_mail_carried.SetColumn(acode + "_picklist");
             sOutlet = Convert.ToString(idw_mail_carried.DataObject.GetValue(idw_mail_carried.GetRow(), "mc_" + acode + "_outlet_name"));
             Cursor.Current = Cursors.WaitCursor;
             StaticVariables.gnv_app.of_set_componenttoopen(this.of_get_componentname());
@@ -471,7 +491,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_mail_carried.DataObject.SetValue(idw_mail_carried.GetRow(), "mc_" + acode + "_outlet", StaticVariables.gnv_app.of_get_parameters().longparm);
                 idw_mail_carried.DataObject.SetValue(idw_mail_carried.GetRow(), "mc_" + acode + "_outlet_name", StaticVariables.gnv_app.of_get_parameters().stringparm);
             }
-            //?idw_mail_carried.Modify(acode + "_pcklst_bmp.filename=\'..\\bitmaps\\pcklstup.bmp\'");
             //dw_mail_carried.DataObject.BindingSource.CurrencyManager.Refresh();
             for (int i = 0; i < idw_mail_carried.DataObject.RowCount; i++)
             {
@@ -519,7 +538,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 dTotal = 0;
             }
-            //?w_main_mdi.SetMicroHelp("Updating Running Totals");
             lRowCount = idw_description.RowCount;
             if (arow < lRowCount)
             {
@@ -534,7 +552,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ((DFreqDescription)idw_description.DataObject).GetItem<FreqDescription>(lLoop).RfRunningTotal = dTotal;
                 }
             }
-            //?w_main_mdi.SetMicroHelp("");
             return 0;
         }
 
@@ -1387,13 +1404,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             WAddressSearchSelect lw_search = new WAddressSearchSelect();
             // dw_frequency_description.DataObject.GetObjectAtPointer();
             sObjectAtPointer = dw_frequency_description.DataObject.GetColumnName();
-            // /////OLD//////////////////////////
-            // if left ( sObjectAtPointer, 10) = "dos_button" and KeyDown ( KeyShift!) then
-            // 	scrolltorow ( row)
-            // 	wf_Get_Outlet2 ( "blah", "dos")
-            // end if
-            // 
-            // //////////////////////////////////
             /*  ---------------------------- Debugging ----------------------------- //
                 string	ds_object, ds_contract
                 ds_object = sObjectAtPointer
@@ -1417,6 +1427,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 StaticVariables.gnv_app.of_get_parameters().longparm = 0;
             }
             //OpenWithParm(lw_search, iw_this);
+            // TJB  RPCR_052  Feb-2013
+            // Added waitcursor sinse bringing up the address search takes so long
+            Cursor.Current = Cursors.WaitCursor;
             StaticMessage.PowerObjectParm = iw_this;
             lw_search.ShowDialog();
 
@@ -1435,6 +1448,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 dw_frequency_description.DataObject.SetValue(dw_frequency_description.DataObject.GetRow(), "rd_description_of_point", ls_address);
             }
             dw_frequency_description.DataObject.AcceptText();
+            // TJB  RPCR_052  Feb-2013:  Added refresh to update screen after changing the address
+            this.Refresh();
         }
 
         int? i_rfptItemNo = null;
