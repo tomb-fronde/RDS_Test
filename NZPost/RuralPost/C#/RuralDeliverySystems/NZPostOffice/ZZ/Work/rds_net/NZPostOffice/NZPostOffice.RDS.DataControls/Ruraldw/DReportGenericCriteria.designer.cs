@@ -2,6 +2,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DReportGenericCriteria
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -28,6 +31,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DReportGenericCriteria));
             this.n_20005910 = new System.Windows.Forms.Label();
             this.st_report = new System.Windows.Forms.Label();
             this.outlet_picklist = new System.Windows.Forms.CheckBox();
@@ -86,9 +90,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // outlet_region_id_t
             // 
             this.outlet_region_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.outlet_region_id_t.Location = new System.Drawing.Point(61, 36);
+            this.outlet_region_id_t.Location = new System.Drawing.Point(57, 38);
             this.outlet_region_id_t.Name = "outlet_region_id_t";
-            this.outlet_region_id_t.Size = new System.Drawing.Size(39, 13);
+            this.outlet_region_id_t.Size = new System.Drawing.Size(43, 13);
             this.outlet_region_id_t.TabIndex = 0;
             this.outlet_region_id_t.Text = "Region";
             this.outlet_region_id_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -96,7 +100,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // outlet_outlet_id_t
             // 
             this.outlet_outlet_id_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.outlet_outlet_id_t.Location = new System.Drawing.Point(35, 54);
+            this.outlet_outlet_id_t.Location = new System.Drawing.Point(35, 58);
             this.outlet_outlet_id_t.Name = "outlet_outlet_id_t";
             this.outlet_outlet_id_t.Size = new System.Drawing.Size(65, 13);
             this.outlet_outlet_id_t.TabIndex = 0;
@@ -106,7 +110,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // renewal_group_rg_code_t
             // 
             this.renewal_group_rg_code_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.renewal_group_rg_code_t.Location = new System.Drawing.Point(20, 74);
+            this.renewal_group_rg_code_t.Location = new System.Drawing.Point(20, 79);
             this.renewal_group_rg_code_t.Name = "renewal_group_rg_code_t";
             this.renewal_group_rg_code_t.Size = new System.Drawing.Size(80, 13);
             this.renewal_group_rg_code_t.TabIndex = 0;
@@ -116,7 +120,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // standard_frequency_sf_key_t
             // 
             this.standard_frequency_sf_key_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.standard_frequency_sf_key_t.Location = new System.Drawing.Point(0, 94);
+            this.standard_frequency_sf_key_t.Location = new System.Drawing.Point(0, 100);
             this.standard_frequency_sf_key_t.Name = "standard_frequency_sf_key_t";
             this.standard_frequency_sf_key_t.Size = new System.Drawing.Size(105, 13);
             this.standard_frequency_sf_key_t.TabIndex = 0;
@@ -126,7 +130,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // contract_type_ct_key_t
             // 
             this.contract_type_ct_key_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.contract_type_ct_key_t.Location = new System.Drawing.Point(24, 114);
+            this.contract_type_ct_key_t.Location = new System.Drawing.Point(24, 120);
             this.contract_type_ct_key_t.Name = "contract_type_ct_key_t";
             this.contract_type_ct_key_t.Size = new System.Drawing.Size(76, 13);
             this.contract_type_ct_key_t.TabIndex = 0;
@@ -136,7 +140,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // n_45835463
             // 
             this.n_45835463.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.n_45835463.Location = new System.Drawing.Point(0, 136);
+            this.n_45835463.Location = new System.Drawing.Point(0, 140);
             this.n_45835463.Name = "n_45835463";
             this.n_45835463.Size = new System.Drawing.Size(100, 13);
             this.n_45835463.TabIndex = 0;
@@ -148,15 +152,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id_ro.AutoRetrieve = true;
             this.region_id_ro.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id_ro.DisplayMember = "RgnName";
+            this.region_id_ro.DropDownHeight = 150;
             this.region_id_ro.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.region_id_ro.IntegralHeight = false;
             this.region_id_ro.Location = new System.Drawing.Point(104, 34);
             this.region_id_ro.Name = "region_id_ro";
             this.region_id_ro.Size = new System.Drawing.Size(182, 21);
             this.region_id_ro.TabIndex = 20;
             this.region_id_ro.Value = null;
             this.region_id_ro.ValueMember = "RegionId";
-            this.region_id_ro.DataBindings[0].NullValue = null;
-            this.region_id_ro.DataBindings[0].DataSourceNullValue = null;
             // 
             // region_id
             // 
@@ -170,9 +174,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.TabIndex = 10;
             this.region_id.Value = null;
             this.region_id.ValueMember = "RegionId";
-            this.region_id.DataBindings[0].NullValue = null;
-            this.region_id.DataBindings[0].DataSourceNullValue = null;
-
             // 
             // o_name
             // 
@@ -186,9 +187,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // outlet_bmp
             // 
+            this.outlet_bmp.Image = ((System.Drawing.Image)(resources.GetObject("outlet_bmp.Image")));
             this.outlet_bmp.Location = new System.Drawing.Point(270, 56);
             this.outlet_bmp.Name = "outlet_bmp";
-            this.outlet_bmp.Image = global::NZPostOffice.Shared.Properties.Resources.PCKLSTUP;
             this.outlet_bmp.Size = new System.Drawing.Size(17, 17);
             this.outlet_bmp.TabIndex = 0;
             this.outlet_bmp.TabStop = false;
@@ -198,13 +199,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rg_code.Location = new System.Drawing.Point(104, 75);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(182, 21);
             this.rg_code.TabIndex = 50;
             this.rg_code.Value = null;
-            this.rg_code.DataBindings[0].DataSourceNullValue = null;
             this.rg_code.ValueMember = "RgCode";
             // 
             // sf_key
@@ -212,13 +213,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.sf_key.AutoRetrieve = true;
             this.sf_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "SfKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.sf_key.DisplayMember = "SfDescription";
+            this.sf_key.DropDownHeight = 150;
             this.sf_key.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.sf_key.IntegralHeight = false;
             this.sf_key.Location = new System.Drawing.Point(104, 96);
             this.sf_key.Name = "sf_key";
             this.sf_key.Size = new System.Drawing.Size(182, 21);
             this.sf_key.TabIndex = 60;
             this.sf_key.Value = null;
-            this.sf_key.DataBindings[0].DataSourceNullValue = null;
             this.sf_key.ValueMember = "SfKey";
             // 
             // ct_key
@@ -226,18 +228,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ct_key.AutoRetrieve = true;
             this.ct_key.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CtKey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ct_key.DisplayMember = "ContractType";
+            this.ct_key.DropDownHeight = 150;
             this.ct_key.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ct_key.IntegralHeight = false;
             this.ct_key.Location = new System.Drawing.Point(104, 117);
             this.ct_key.Name = "ct_key";
             this.ct_key.Size = new System.Drawing.Size(182, 21);
             this.ct_key.TabIndex = 70;
             this.ct_key.Value = null;
             this.ct_key.ValueMember = "CtKey";
-
-            this.ct_key.DataBindings[0].NullValue = null;
-            this.ct_key.DataBindings[0].DataSourceNullValue = null;
-
-
             // 
             // ceffectivedate
             // 

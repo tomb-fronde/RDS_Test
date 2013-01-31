@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DArticalCountDateStart
     {
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -56,6 +59,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.AutoRetrieve = true;
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
+            this.region_id.DropDownHeight = 150;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(190, 2);
             this.region_id.Name = "region_id";
@@ -69,6 +73,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rg_code.Location = new System.Drawing.Point(190, 26);
             this.rg_code.Name = "rg_code";
@@ -80,14 +85,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // weekstart
             // 
             this.weekstart.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "Weekstart", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.weekstart.EditMask = "";
             this.weekstart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.weekstart.Location = new System.Drawing.Point(190, 50);
             this.weekstart.Mask = "00/00/0000";
             this.weekstart.Name = "weekstart";
             this.weekstart.Size = new System.Drawing.Size(68, 20);
             this.weekstart.TabIndex = 30;
+            this.weekstart.Text = "00000000";
             this.weekstart.ValidatingType = typeof(System.DateTime);
-            this.weekstart.Value = "/  /";
+            this.weekstart.Value = null;
             this.weekstart.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
             // 
             // n_34565022

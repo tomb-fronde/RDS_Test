@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DArticalCountDateStart : Metex.Windows.DataUserControl
 	{
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
         private int regionIDLastSelectedIndex = -1;
         private int rgcodeLastSelectedIndex = -1;
 

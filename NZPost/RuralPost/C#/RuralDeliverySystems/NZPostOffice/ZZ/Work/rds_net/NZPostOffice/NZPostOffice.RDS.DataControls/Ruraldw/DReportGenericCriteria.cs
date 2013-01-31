@@ -13,6 +13,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DReportGenericCriteria : Metex.Windows.DataUserControl
 	{
+        // TJB  FCR_001 28-Nov-2012
+        // Increased size of renewal group dropdown to include November Renewals
+
 		public DReportGenericCriteria()
 		{
 			InitializeComponent();
