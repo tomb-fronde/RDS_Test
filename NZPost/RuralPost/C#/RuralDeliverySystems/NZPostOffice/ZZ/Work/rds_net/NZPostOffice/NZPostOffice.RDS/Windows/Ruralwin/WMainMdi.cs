@@ -35,18 +35,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // TJB  Aug2009
             // Changed content of Toolstrip StatusLabel4 to show purpose of app
             this.Text = "Rural Delivery System";
-            this.toolStripStatusLabel4.Text = "Production Version";
+            //this.toolStripStatusLabel4.Text = "Production Version";
             //this.toolStripStatusLabel4.Text = "DEV Version";
-            //this.toolStripStatusLabel4.Text = "Test Version";
+            this.toolStripStatusLabel4.Text = "Test Version";
             // TJB  Dec-2009
             // Changed the 'Environment' value to the RDS version number
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.8.3 ";
-            this.toolStripStatusLabel6.Text = "12-Aug-2012 5:00pm";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.9.1 ";
+            this.toolStripStatusLabel6.Text = "12-Feb-2013 10.45am";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
                         System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
-                //"*** June 2011 ***";
         }
 
         public virtual void reset_clock()
@@ -136,9 +135,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             StaticVariables.gnv_app.of_get_securitymanager().of_enable_component_menuitems(m_main_menu.MenuStrip);
 
             //jlwang:for display the information of log in user
-            this.toolStripStatusLabel5.Text = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_username() +
-           " (" + StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionname() + ")";
-
+            this.toolStripStatusLabel5.Text = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_username() 
+                + " (" + StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionname() + ")";
         }
 
         public override void pfc_postopen()
