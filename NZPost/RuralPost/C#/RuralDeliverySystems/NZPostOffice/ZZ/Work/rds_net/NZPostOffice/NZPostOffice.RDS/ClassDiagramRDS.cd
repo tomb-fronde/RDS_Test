@@ -1701,14 +1701,6 @@
     <Position X="259.5" Y="0.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
-  <Class Name="NZPostOffice.RDS.DataControls.Report.REDWhatifCalculatorReport2001bf5" Collapsed="true">
-    <Position X="259.5" Y="16.5" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
-  <Class Name="NZPostOffice.RDS.DataControls.Report.CachedREDWhatifCalculatorReport2001bf5" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="261.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
   <Class Name="NZPostOffice.RDS.DataControls.Report.REDWhatifCalculatorReport2005" Collapsed="true">
     <Position X="261.25" Y="16.5" Width="1.5" />
     <TypeIdentifier />
@@ -3223,10 +3215,6 @@
   </Class>
   <Class Name="NZPostOffice.RDS.DataControls.Ruraldw.DwAllPostTaxDeductions" Collapsed="true">
     <Position X="245.5" Y="13.5" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
-  <Class Name="NZPostOffice.RDS.DataControls.Ruraldw.DWhatifCalculatorReport2001bf5" Collapsed="true">
-    <Position X="247.25" Y="13.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
   <Class Name="NZPostOffice.RDS.DataControls.Ruraldw.DWhatifCalulator2001c" Collapsed="true">
