@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.6.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.9.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -162,6 +162,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WFrequencies2001.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WQsOutlet.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WQsOutlet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WRenewal2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WRenewal2001.cs</DependentUpon>
@@ -198,6 +202,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WAddFixedAsset.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WAddressContractInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddressContractInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WAddressSearch.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddressSearch.cs</DependentUpon>
@@ -221,6 +229,10 @@
     <EmbeddedResource Include="Windows\Ruralwin\WCustomerSequencer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WCustomerSequencer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WExtentions2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WExtentions2001.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WMainMdi.resx">
       <SubType>Designer</SubType>

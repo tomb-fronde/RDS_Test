@@ -384,12 +384,6 @@
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Report\REDWhatifCalculatorReport2001bf5.cs">
-      <DependentUpon>REDWhatifCalculatorReport2001bf5.rpt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Report\REDWhatifCalculatorReport2005.cs">
       <DependentUpon>REDWhatifCalculatorReport2005.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -907,6 +901,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DQsOutletDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DQsOutletDetails.designer.cs">
+      <DependentUpon>DQsOutletDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DContractAddressFrequency.cs">
       <SubType>UserControl</SubType>
@@ -2632,12 +2632,6 @@
     <Compile Include="Ruraldw\DwAllPostTaxDeductions.designer.cs">
       <DependentUpon>DwAllPostTaxDeductions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ruraldw\DWhatifCalculatorReport2001bf5.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruraldw\DWhatifCalculatorReport2001bf5.designer.cs">
-      <DependentUpon>DWhatifCalculatorReport2001bf5.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ruraldw\DWhatifCalulator2001c.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2958,10 +2952,6 @@
     <EmbeddedResource Include="Report\REDWhatifCalculator2005Detail.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REDWhatifCalculator2005Detail.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\REDWhatifCalculatorReport2001bf5.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>REDWhatifCalculatorReport2001bf5.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDWhatifCalculatorReport2005.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -3290,6 +3280,14 @@
       <SubType>Designer</SubType>
       <DependentUpon>DContractorInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractorsContracts.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractorsContracts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractVehicle.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractVehicle.cs</DependentUpon>
@@ -3297,6 +3295,10 @@
     <EmbeddedResource Include="Ruraldw\DCustomerDetails.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DCustomerDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DDddwRenewalgroup.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DDddwRenewalgroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DEclDataImport.resx">
       <SubType>Designer</SubType>
@@ -3310,6 +3312,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DFARegisterUnassigned.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DFuelOverrideFields.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DFuelOverrideFields.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DMailCarriedFormTest.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DMailCarriedFormTest.cs</DependentUpon>
@@ -3317,6 +3323,10 @@
     <EmbeddedResource Include="Ruraldw\DNonVehicleOverrideRates.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DNonVehicleOverrideRates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DNonVehicleRates2005.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DNonVehicleRates2005.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DPieceRateImportDiffRateReport.resx">
       <SubType>Designer</SubType>
@@ -3330,6 +3340,14 @@
       <SubType>Designer</SubType>
       <DependentUpon>DPieceRateImportInvalidDate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DQsOutletDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DQsOutletDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DQsOutlets.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DQsOutlets.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DRegionalArticalCounts.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRegionalArticalCounts.cs</DependentUpon>
@@ -3337,6 +3355,18 @@
     <EmbeddedResource Include="Ruraldw\DRenewal.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRenewal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRenewalProcessCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRenewalProcessCriteria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DReportGenericCriteria.resx">
+      <DependentUpon>DReportGenericCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DReportGenericOutletCriteriawithrg.resx">
+      <DependentUpon>DReportGenericOutletCriteriawithrg.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DRouteAuditDe.resx">
       <SubType>Designer</SubType>
@@ -3362,23 +3392,59 @@
       <SubType>Designer</SubType>
       <DependentUpon>DVehicleRates2001.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralmailmerge\DMailmergeOwnerdriverDownloadSearch.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DMailmergeOwnerdriverDownloadSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralmailmerge\DSelectProcurements.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DSelectProcurements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DCustCountcriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DCustCountcriteria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DCustCriteriaDelfreq.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DCustCriteriaDelfreq.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DExtRegion.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DExtRegion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DOutletReportCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DOutletReportCriteria.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DOwnerDriverReportCriteria.resx">
       <DependentUpon>DOwnerDriverReportCriteria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DPsReportCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPsReportCriteria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DReportAllowanceCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DReportAllowanceCriteria.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportCustomerStatisticsCriteria.resx">
+      <DependentUpon>DReportCustomerStatisticsCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DReportGenericCriteriaWithMonth.resx">
       <DependentUpon>DReportGenericCriteriaWithMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportGenericCriteriaWithRegion.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DReportGenericCriteriaWithRegion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportGenericOutletCriteriawithrgct.resx">
+      <DependentUpon>DReportGenericOutletCriteriawithrgct.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportGenericRegOutletCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DReportGenericRegOutletCriteria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DReportGenericResults.resx">
       <SubType>Designer</SubType>
@@ -3386,6 +3452,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DReportRcmCriteria.resx">
       <DependentUpon>DReportRcmCriteria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DUnoccupiedCriteria.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DUnoccupiedCriteria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DVehicleExpCriteria.resx">
+      <DependentUpon>DVehicleExpCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\ROd.resx">
       <SubType>Designer</SubType>
@@ -3444,6 +3518,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="Properties\DataSources\NZPostOffice.RDS.Entity.Ruraldw.QsOutletDetails.datasource" />
     <None Include="Report\EclErrDataset.xsc">
       <DependentUpon>EclErrDataset.xsd</DependentUpon>
     </None>
