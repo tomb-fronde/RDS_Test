@@ -11,6 +11,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WMainMdi : WMaster
     {
+        // TJB  Aug2009
+        // Changed content of Toolstrip StatusLabel4 to show purpose of app
+        //
+        // TJB  Dec-2009
+        // Changed the 'Environment' value to the RDS version number
+
         #region Define
         private System.ComponentModel.IContainer components = null;
 
@@ -32,20 +38,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
             m_main_menu = new MMainMenu(this);
-            // TJB  Aug2009
-            // Changed content of Toolstrip StatusLabel4 to show purpose of app
             this.Text = "Rural Delivery System";
-            //this.toolStripStatusLabel4.Text = "Production Version";
+            this.toolStripStatusLabel4.Text = "Production Version";
             //this.toolStripStatusLabel4.Text = "DEV Version";
-            this.toolStripStatusLabel4.Text = "Test Version";
-            // TJB  Dec-2009
-            // Changed the 'Environment' value to the RDS version number
+            //this.toolStripStatusLabel4.Text = "Test Version";
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.9.1 ";
-            this.toolStripStatusLabel6.Text = "12-Feb-2013 10.45am";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.9.3 ";
+            this.toolStripStatusLabel6.Text = "7-Mar-2013 15.20pm";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
-                        System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
+                       System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
         }
 
         public virtual void reset_clock()
