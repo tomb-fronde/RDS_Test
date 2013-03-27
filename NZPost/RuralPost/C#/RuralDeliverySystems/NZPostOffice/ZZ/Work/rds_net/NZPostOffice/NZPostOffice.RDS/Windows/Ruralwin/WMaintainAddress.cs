@@ -1855,10 +1855,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DateTime? ld_today;
             ll_exists = null;
             /* select contract_no, con_date_terminated
-                into :ll_exists, :ld_terminated
-                from contract
-                where contract.contract_no = :al_contractNo
-                using SQLCA; */
+             *  into :ll_exists, :ld_terminated
+             *  from contract
+             * where contract.contract_no = :al_contractNo */
             RDSDataService dataService = RDSDataService.GetContractNoConDateTerminated(al_contractno);
             if (dataService.ContractNoConDateTerminatedList.Count > 0)
             {
@@ -1876,13 +1875,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return 2;
             }
             ll_exists = null;
-            /* select 1
-                into :ll_exists
-                from contract_renewals
-                where contract_renewals.contract_no = :al_contractNo
-                and today() between contract_renewals.con_start_date 
-                and contract_renewals.con_expiry_date
-                using SQLCA; */
+            /* select 1 from contract_renewals
+             *  where contract_renewals.contract_no = :al_contractNo
+             *    and today() between contract_renewals.con_start_date 
+             *                    and contract_renewals.con_expiry_date */
             dataService = RDSDataService.GetContractRenewalsExists(al_contractno);
             ll_exists = dataService.intVal;
             if (ll_exists == null || ll_exists < 1)
