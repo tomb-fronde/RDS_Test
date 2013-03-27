@@ -8,12 +8,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    // TJB  RPCR_037  Dec-2012
-    // Added c_mobile2, c_prime_contact, c_notes to values returned
-    // and PrimeContactDay, PrimeContactNight, PrimeContactMobile
+    // TJB  RPCR_037 fixup Mar-2013
+    // Added "top(1) ... order by..." to select most recent driver
+    // where contract has changed hands
     //
     // TJB  RPCR_046  Dec-2012
     // Changed fetch query to use newly-created function GetSeqNo.
+    //
+    // TJB  RPCR_037  Dec-2012
+    // Added c_mobile2, c_prime_contact, c_notes to values returned
+    // and PrimeContactDay, PrimeContactNight, PrimeContactMobile
     
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -328,11 +332,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    // TJB  RPCR_037 fixup Mar-2013
+                    // Added "top(1) ... order by..." to select most recent driver
+                    // where contract has changed hands
+                    //
                     // TJB  RPCR_046  Dec-2012
                     // Changed query.  Used newly-created function GetSeqNo to determine
                     // which contract the query related to (most-recent ignoring any pending renewals).
 					cm.CommandType = CommandType.Text;
-                    cm.CommandText = " SELECT contractor.contractor_supplier_no"
+                    cm.CommandText = " SELECT top(1) contractor.contractor_supplier_no"
                                          + ", contractor.c_surname_company"
                                          + ", contractor.c_first_names"
                                          + ", contractor.c_salutation"
@@ -346,7 +354,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                          + ", contractor_renewals"
                                     + " WHERE contractor.contractor_supplier_no = contractor_renewals.contractor_supplier_no "
                                       + " AND contractor_renewals.contract_no = @al_contract_no "
-                                      + " AND contractor_renewals.contract_seq_number = rd.GetConSeqNo(@al_contract_no) ";
+                                      + " AND contractor_renewals.contract_seq_number = rd.GetConSeqNo(@al_contract_no) "
+                                    + " ORDER BY contractor_renewals.cr_effective_date desc";
 /*
 					cm.CommandText = " SELECT contractor.contractor_supplier_no"
                                          + ", contractor.c_surname_company"
