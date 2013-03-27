@@ -44,13 +44,13 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // n_997409
             // 
-            this.n_997409.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
+            this.n_997409.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))));
             this.n_997409.Location = new System.Drawing.Point(90, 2);
             this.n_997409.Name = "n_997409";
             this.n_997409.Size = new System.Drawing.Size(98, 13);
             this.n_997409.TabIndex = 0;
             this.n_997409.Text = "Search Criteria";
-            this.n_997409.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;            
+            this.n_997409.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // region_id_t
             // 
@@ -79,7 +79,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_no_t.Name = "contract_no_t";
             this.contract_no_t.Size = new System.Drawing.Size(65, 13);
             this.contract_no_t.TabIndex = 0;
-            this.contract_no.MaxLength = 8;
             this.contract_no_t.Text = "Contract No";
             this.contract_no_t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -101,7 +100,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.AutoRetrieve = true;
             this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(91, 46);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(187, 21);
@@ -114,12 +115,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.contract_no.Location = new System.Drawing.Point(91, 70);
+            this.contract_no.MaxLength = 8;
             this.contract_no.Name = "contract_no";
             this.contract_no.Size = new System.Drawing.Size(62, 20);
             this.contract_no.TabIndex = 30;
             this.contract_no.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.contract_no.DataBindings[0].NullValue = "";
-            
             // 
             // DRenewalProcessCriteria
             // 

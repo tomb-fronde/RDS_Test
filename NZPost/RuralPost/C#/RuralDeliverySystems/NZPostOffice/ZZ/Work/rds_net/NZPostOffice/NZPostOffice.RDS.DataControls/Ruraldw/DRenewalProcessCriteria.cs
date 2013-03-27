@@ -13,6 +13,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DRenewalProcessCriteria : Metex.Windows.DataUserControl
 	{
+        // TJB  Fixup  28-Mar-2013
+        // Changed length of Renewal Group dropdown to accomodate November renewals
+
 		public DRenewalProcessCriteria()
 		{
 			InitializeComponent();
