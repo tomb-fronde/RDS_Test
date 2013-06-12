@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_056  June-2013
+    // New: GetODDWSInvoiceAllowanceDetail
+    //
     // TJB RPCR_020 Sept-2010
     // Added 'Contract <no>' to ded_reference
 
@@ -216,12 +219,23 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         /// <summary>
-        /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey) 
+        /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:alcontract,:edate,:alregion,:li_ctKey) 
         ///   into :lreturn from sys.dummy
         /// </summary>
         public static ODPSDataService GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey)
         {
             ODPSDataService obj = Execute("_GetODRPFInvoicePayPiecerateDetail", alcontractor, edate, alcontract, alregion, sname, li_ctKey);
+            return obj;
+        }
+
+        // TJB  RPCR_056  Jun-2018: New
+        /// <summary>
+        /// Populate the t_invoice_allowances table for generated invoices (REDInvoiceDetailAllowances)
+        /// Called from WInvoiceSearch
+        /// </summary>
+        public static ODPSDataService GetODDWSInvoiceAllowanceDetail(int? alcontractor, int? alcontract, DateTime? edate, int? alregion, int? li_ctKey)
+        {
+            ODPSDataService obj = Execute("_GetODDWSInvoiceAllowanceDetail", alcontractor, alcontract, edate, alregion, li_ctKey);
             return obj;
         }
 
@@ -817,13 +831,56 @@ namespace NZPostOffice.ODPS.DataService
                     shellImport = new ShellImport();
 
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "odps.OD_RPF_Invoice_pay_piecerate_detail ";//( :alcontractor,:edate,:alcontract,:alregion,:sname,:li_ctKey ) from sys.dummy";
+                    cm.CommandText = "odps.OD_RPF_Invoice_pay_piecerate_detail ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContractor", alcontractor);
                     pList.Add(cm, "inDate", edate);
                     pList.Add(cm, "inContract", alcontract);
                     pList.Add(cm, "inRegion", alregion);
                     pList.Add(cm, "inCname", sname);
+                    pList.Add(cm, "inCtKey", li_ctKey);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                lreturn = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_056  Jun-2018: New
+        // Populate the t_invoice_allowances table for generated invoices (REDInvoiceDetailAllowances)
+        [ServerMethod]
+        private void _GetODDWSInvoiceAllowanceDetail(int? alcontractor, int? alcontract, DateTime? edate, int? alregion, int? li_ctKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    shellImport = new ShellImport();
+
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "odps.OD_DWS_Invoice_Allowance_Detail ";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inContractorNo", alcontractor);
+                    pList.Add(cm, "inContractNo", alcontract);
+                    pList.Add(cm, "inEdate", edate);
+                    pList.Add(cm, "inRegion", alregion);
                     pList.Add(cm, "inCtKey", li_ctKey);
                     try
                     {
@@ -857,9 +914,9 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "select count(*) from rd.contractor_renewals " +
-                        " where contractor_supplier_no = :ll_supplier and " +
-                        " contract_no = :ll_contract";
+                    cm.CommandText = "select count(*) from rd.contractor_renewals " 
+                                   + " where contractor_supplier_no = :ll_supplier " 
+                                   + "   and contract_no = :ll_contract";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_supplier", ll_supplier);
                     pList.Add(cm, "ll_contract", ll_contract);
