@@ -9,6 +9,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsInvoice
 {
+    // TJB  RPCR_056  June-2-13: New
+    // Gets allowance breakdown information from t_invoice_allowances 
+    // for invoice.
+    
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
