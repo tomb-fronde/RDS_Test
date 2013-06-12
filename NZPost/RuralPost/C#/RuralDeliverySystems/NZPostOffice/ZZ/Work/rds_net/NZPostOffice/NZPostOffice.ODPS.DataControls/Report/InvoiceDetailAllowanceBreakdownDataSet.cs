@@ -6,7 +6,11 @@ using NZPostOffice.ODPS.Entity.OdpsInvoice;
 
 namespace NZPostOffice.ODPS.DataControls.Report
 {
-    //public class RInvoiceDetailPaymentPrDetailkm
+    // TJB  RPCR_056  June-2013: New
+    // Dataset definition for REDwInvoiceDetailAllowanceBreakdown.rpt 
+    // subreport added into InvoiceHeaderv5 report.
+    // Derived from REDwInvoiceDetailPaymentDetailkmDataset.cs
+
     public class RInvoiceDetailAllowanceBreakdown
     {
         public int ContractNo
@@ -46,7 +50,6 @@ namespace NZPostOffice.ODPS.DataControls.Report
         }
     }
 
-    //public class InvoiceDetailPaymentPrDetailkmDataSet : ReportDataSet<InvoiceDetailPaymentPrDetailkm>
     public class InvoiceDetailAllowanceBreakdownDataSet : ReportDataSet<InvoiceDetailAllowanceBreakdown>
     {
         public DataColumn ContractNo = new DataColumn("ContractNo", typeof(int));
@@ -59,7 +62,6 @@ namespace NZPostOffice.ODPS.DataControls.Report
 
         public DataColumn AltValue = new DataColumn("AltValue", typeof(decimal));
 
-        //public InvoiceDetailPaymentPrDetailkmDataSet()
         public InvoiceDetailAllowanceBreakdownDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
@@ -67,11 +69,9 @@ namespace NZPostOffice.ODPS.DataControls.Report
 				});
         }
         
-        //public InvoiceDetailPaymentPrDetailkmDataSet(object dataSource)
         public InvoiceDetailAllowanceBreakdownDataSet(object dataSource)
             : this()
         {
-            //Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailkm> datas = dataSource as Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailkm>;
             Metex.Core.EntityBindingList<InvoiceDetailAllowanceBreakdown> datas = dataSource as Metex.Core.EntityBindingList<InvoiceDetailAllowanceBreakdown>;
             if (this.Columns.Count != 0)
             {
@@ -79,7 +79,6 @@ namespace NZPostOffice.ODPS.DataControls.Report
             }
         }
 
-        //protected override DataRow ApplyRow(InvoiceDetailPaymentPrDetailkm data)
         protected override DataRow ApplyRow(InvoiceDetailAllowanceBreakdown data)
         {
             DataRow row = this.NewRow();
