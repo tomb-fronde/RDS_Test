@@ -18,6 +18,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
     public partial class WInvoiceSearch : WCriteriaSearch
     {
+        // TJB  RPCR_056  June-2013
+        // Get invoice allowance details into temporary file
         //
         // TJB  RPCR_012 July-2010
         // Added sSupplier code to of_process_detail{km,cp,pp,xp}
@@ -1218,25 +1220,29 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             dw_search.DataObject.AcceptText();
             if (dw_results.RowCount == 0)
             {
-                MessageBox.Show("You must select a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contractor", "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             if (dw_search.GetValue(0, "end_date") == null)
             {
-                MessageBox.Show("You must specify a period end date", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must specify a period end date", "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             if (dw_results.GetSelectedRow(0) == -1)
             {
-                MessageBox.Show("You must select a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contractor", "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             if (dw_results.GetValue(dw_results.GetSelectedRow(0), "contractor_no") == null)
             {
-                MessageBox.Show("You must select a contractor", "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You must select a contractor", "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -1285,42 +1291,58 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             }
             //  TJB: if a contract number was specified in the search criteria
             //  and the user selected the 'all' option, use that number.
-            //  NOTE ( 1): there are situations where there will be more than one 
-            //           contractor associated with a single contract  ( eg if the 
+            //  NOTE (1): there are situations where there will be more than one 
+            //           contractor associated with a single contract (eg if the 
             //           contract changes hands during the invoice period).
-            //  NOTE ( 2): actually the contractor ID isn't used.
+            //  NOTE (2): actually the contractor ID isn't used.
             if (ls_contractNo.Length > 0 && alcontract < 1)
             {
                 alcontract = StaticFunctions.ToInt32(ls_contractNo).Value;
             }
+
+            // TJB  RPCR_056  June-2013
+            // Get allowance details into temporary file (t_invoice_allowances)
+            dataService = ODPSDataService.GetODDWSInvoiceAllowanceDetail(alcontractor, alcontract, edate, alregion, li_ctKey);
+            lreturn = dataService.LReturn;
+            if (dataService.SQLCode < 0)
+            {
+                MessageBox.Show(dataService.SQLErrText, ""
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (lreturn < 0)
+            {
+                MessageBox.Show("Error running procedure.\n"
+                                    + "Errornumber is " + string.Format("Invoice", lreturn)
+                                , "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             // Preprocess REACHMEDIA and CourierPost
             //  TJB SR4639
-            //  select OD_RPF_Invoice_pay_piecerate_detailv2 ( :alcontractor,:edate,:alcontract,:alregion,:sname) into :lreturn from sys.dummy;
+            //  select OD_RPF_Invoice_pay_piecerate_detailv2(:alcontractor,:edate,:alcontract,:alregion,:sname) into :lreturn from sys.dummy;
             // 
             //  TJB SR4684 June/2006
-            //  Added ParclPost
-            //  select odps.OD_RPF_Invoice_pay_piecerate_detailv3 ( 
+            //  Added ParcelPost
 
-            // select odps.OD_RPF_Invoice_pay_piecerate_detail ( :alcontractor, :edate, :alcontract, :alregion, :sname, :li_ctKey ) into :lreturn from sys.dummy;
-
+            // Get piecerate details into temporary file (t_invoice_piecerates)
             dataService = ODPSDataService.GetODRPFInvoicePayPiecerateDetail(alcontractor, edate, alcontract, alregion, sname, li_ctKey);
             lreturn = dataService.LReturn;
             if (dataService.SQLCode < 0)
             {
-                MessageBox.Show(dataService.SQLErrText, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //  PBY 26/04/2002 added ROLLBACK to avoid table locking problem.
-                //?ROLLBACK;
+                MessageBox.Show(dataService.SQLErrText, ""
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
-            //?COMMIT;
             if (lreturn < 0)
             {
-                MessageBox.Show("Error running procedure.\r" + "Errornumber is " + string.Format("Invoice", lreturn), "Invoice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Error running procedure.\n" 
+                                    + "Errornumber is " + string.Format("Invoice", lreturn)
+                                , "Invoice"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            // if alcontract>0 then alcontractor=0
-
             StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("w_invoice", "Startdate", sdate);
             StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("w_invoice", "Enddate", edate);
             StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("w_invoice", "contractor", alcontractor);
@@ -1329,7 +1351,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("w_invoice", "name", sname);
             StaticVariables.gnv_app.inv_ObjectMsg.of_addmsg("w_invoice", "ctKey", li_ctKey);
 
-            OpenSheet<WInvoice>(this);//OpenSheet(w_window, parent, 0, original!);
+            OpenSheet<WInvoice>(this);
         }
 
         public virtual void dw_results_doubleclicked(object sender, EventArgs e)
