@@ -2,8 +2,12 @@ using System.Data;
 using NZPostOffice.ODPS.DataControls.Report;
 using System;
 using NZPostOffice.ODPS.Entity.OdpsInvoice;
+
 namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 {
+    // TJB  RPCR_056  June-2013
+    // Add info for Allowance Breakdown subreport (table12 and table12s)
+
     partial class DwInvoiceHeaderv5
     {
         /// <summary> 
@@ -94,11 +98,17 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 
             DataTable table11 = new  NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrMessageDataSet(new RInvoiceDetailPaymentPrMessage());
             this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrMessage.rpt"].SetDataSource(table11);
+
+            // TJB  RPCR_056  June-2013
+            DataTable table12 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailAllowanceBreakdownDataSet(new RInvoiceDetailAllowanceBreakdown());
+            this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailAllowanceBreakdown.rpt"].SetDataSource(table12);
+
+            // TJB note June-2013
+            // This must follow all table definitions (add any new ones above)
             viewer.RefreshReport();
 
             this.RetrieveEnd += new System.EventHandler(DwInvoiceHeaderv5_RetrieveEnd);
             this.ResumeLayout(false);
-           
         }
 
         void reDwInvoiceHeaderv5_RefreshReport(object sender, EventArgs e)
@@ -146,6 +156,11 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 
                         DataTable table10 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailppDataSet(new Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailpp>(InvoiceDetailPaymentPrDetailpp.GetAllInvoiceDetailPaymentPrDetailpp(this.GetItem<InvoiceHeaderv5>(i).PaymentInvoiceId, this.GetItem<InvoiceHeaderv5>(i).ContractNo, this.GetItem<InvoiceHeaderv5>(i).ContractorContractorSupplierNo, this.StartDate, this.EndDate)));
                         table10S.Merge(table10);
+
+                        // TJB  RPCR_056  June-2013
+                        // Subreport parameter
+                        DataTable table12 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailAllowanceBreakdownDataSet(new Metex.Core.EntityBindingList<InvoiceDetailAllowanceBreakdown>(InvoiceDetailAllowanceBreakdown.GetAllInvoiceDetailAllowanceBreakdown(this.GetItem<InvoiceHeaderv5>(i).PaymentInvoiceId)));
+                        table12S.Merge(table12);
                     }
                 }
                 this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPayment.rpt"].SetDataSource(table3S);
@@ -155,11 +170,15 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                 this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrDetailcp.rpt"].SetDataSource(table8S);
                 this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrDetailxp.rpt"].SetDataSource(table9S);
                 this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrDetailpp.rpt"].SetDataSource(table10S);
-            }catch(Exception error){}
+                // TJB  RPCR_056  June-2013
+                this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailAllowanceBreakdown.rpt"].SetDataSource(table12S);
+            }
+            catch (Exception e) 
+            { 
+            }
 
             viewer.RefreshReport();
         }
-
         #endregion
 
         private DateTime? eDate;
@@ -172,6 +191,8 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
         private DataTable table8S = new DataTable();
         private DataTable table9S = new DataTable();
         private DataTable table10S = new DataTable();
+        // TJB  RPCR_056  June-2013
+        private DataTable table12S = new DataTable();
 
         private CrystalDecisions.Windows.Forms.CrystalReportViewer viewer;
         private NZPostOffice.ODPS.DataControls.Report.REDwInvoiceHeaderv5 reDwInvoiceHeaderv5;

@@ -9,6 +9,9 @@ using NZPostOffice.ODPS.Entity.OdpsInvoice;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 {
+    // TJB  RPCR_056  June-2013
+    // Add info for Allowance Breakdown subreport (see designer code)
+
     public partial class DwInvoiceHeaderv5 : Metex.Windows.DataUserControl
     {
         public DwInvoiceHeaderv5()
@@ -33,10 +36,15 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
             {
                 retVal = RetrieveCore<InvoiceHeaderv5>(new List<InvoiceHeaderv5>(
                     InvoiceHeaderv5.GetAllInvoiceHeaderv5(start_date, end_date, contractor, contract, region, cname, ctKey)));
-            }catch(Exception e){}
+            }
+            catch(Exception e)
+            {
+                sqlerrtext = e.Message;
+            }
             return retVal;
         }
         DateTime? EndDate;
         DateTime? StartDate;
+        string sqlerrtext = "";
     }
 }
