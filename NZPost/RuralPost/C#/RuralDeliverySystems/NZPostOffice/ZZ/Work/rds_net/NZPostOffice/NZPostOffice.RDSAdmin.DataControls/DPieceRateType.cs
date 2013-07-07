@@ -10,6 +10,9 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
+    // TJB  RPCR_054  July-2013
+    // Essentially unchanged after some made and removed changes
+
 	public partial class DPieceRateType : Metex.Windows.DataUserControl
 	{
 		public DPieceRateType()
