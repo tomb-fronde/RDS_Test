@@ -1,24 +1,51 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using System.Data.Common;using Metex.Core;using Metex.Core.Security;
+using System.Drawing;
+using System.Data.Common;
+//using System.Windows.Forms;
+using System.Collections.Generic;
+using Metex.Core;
+using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  RPCR_054  July-2013
+    // Added SQLCode and SQLErrText with try-catch blocks around data access
+    // code (fetch, insert, delete, update).
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
-	[MapInfo("prt_key", "_prt_key", "piece_rate_type", true)]
-	[MapInfo("prt_description", "_prt_description", "piece_rate_type")]
+    [MapInfo("prt_key", "_prt_key", "piece_rate_type", true)]  // 'true' means this is an identity column
+    [MapInfo("prt_description", "_prt_description", "piece_rate_type")]
 	[MapInfo("prt_code", "_prt_code", "piece_rate_type")]
 	[MapInfo("prt_print_on_schedule", "_prt_print_on_schedule", "piece_rate_type")]
 	[MapInfo("prs_key", "_prs_key", "piece_rate_type")]
 	[MapInfo("prs_true_value", "_prs_true_value", "piece_rate_type")]
-	[System.Serializable()]
+    [System.Serializable()]
 
 	public class PieceRateType : Entity<PieceRateType>
 	{
+        private int _sqlCode;
+        private string _sqlErrText;
+
+        public int SQLCode
+        {
+            get
+            {
+                return _sqlCode;
+            }
+        }
+
+        public string SQLErrText
+        {
+            get
+            {
+                return _sqlErrText;
+            }
+        }
+
 		#region Business Methods
 		[DBField()]
 		private int?  _prt_key;
@@ -37,7 +64,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
 		[DBField()]
 		private string  _prs_true_value;
-
 
 		public virtual int? PrtKey
 		{
@@ -146,7 +172,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				}
 			}
 		}
-		private PieceRateType[] dataList;
+
+        private PieceRateType[] dataList;
 
 		protected override object GetIdValue()
 		{
@@ -179,18 +206,26 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					GenerateSelectCommandText(cm, "piece_rate_type");
 
 					List<PieceRateType> list = new List<PieceRateType>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							PieceRateType instance = new PieceRateType();
-							instance.StoreFieldValues(dr, "piece_rate_type");
-							instance.MarkOld();
-							list.Add(instance);
-						}
-						dataList = new PieceRateType[list.Count];
-						list.CopyTo(dataList);
-					}
+                    try
+                    {
+    					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+	    				{
+		    				while (dr.Read())
+			    			{
+				    			PieceRateType instance = new PieceRateType();
+					    		instance.StoreFieldValues(dr, "piece_rate_type");
+						    	instance.MarkOld();
+							    list.Add(instance);
+						    }
+    						dataList = new PieceRateType[list.Count];
+	    					list.CopyTo(dataList);
+		    			}
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlErrText = e.Message;
+                        _sqlCode = -1;
+                    }
 				}
 			}
 		}
@@ -202,31 +237,49 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateUpdateCommandText(cm, "piece_rate_type", ref pList))
 				{
 					cm.CommandText += " WHERE  piece_rate_type.prt_key = @prt_key ";
 
 					pList.Add(cm, "prt_key", GetInitialValue("_prt_key"));
-					DBHelper.ExecuteNonQuery(cm, pList);
-				}
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlErrText = e.Message;
+                        _sqlCode = -1;
+                    }
+                }
 				// reinitialize original key/value list
 				StoreInitialValues();
-			}
+            }
 		}
 		[ServerMethod()]
 		private void InsertEntity()
 		{
 			using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
 			{
+                // Save the new Piece Rate Type
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
 				if (GenerateInsertCommandText(cm, "piece_rate_type", pList))
 				{
-					DBHelper.ExecuteNonQuery(cm, pList);
-				}
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlErrText = e.Message;
+                        _sqlCode = -1;
+                    }
+                }
 				StoreInitialValues();
+
 			}
 		}
 		[ServerMethod()]
@@ -239,13 +292,23 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"prt_key", GetInitialValue("_prt_key"));
-						cm.CommandText = "DELETE FROM piece_rate_type WHERE " +
-						"piece_rate_type.prt_key = @prt_key ";
-					DBHelper.ExecuteNonQuery(cm, pList);
-					tr.Commit();
-				}
+					cm.CommandText = "DELETE FROM piece_rate_type " 
+                                       + " WHERE piece_rate_type.prt_key = @prt_key ";
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        tr.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlErrText = e.Message;
+                        _sqlCode = -1;
+                        tr.Rollback();
+                    }
+                }
 			}
 		}
 		#endregion
