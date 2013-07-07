@@ -16,6 +16,9 @@ namespace NZPostOffice.RDSAdmin
 
     public class WMainMdi : FormBase
     {
+        // TJB  RPCR_054  July-2013
+        // Removed pfc_validation() - was commented out
+
         private int il_drop_success = 0;
 
         private int il_group_id = 0;
@@ -1332,10 +1335,14 @@ namespace NZPostOffice.RDSAdmin
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            /* Delete rds_user_id_group where ug_id = :al_group_id and ui_id = :al_ui_id*/
+            /* Delete rds_user_id_group 
+             *  where ug_id = :al_group_id 
+             *    and ui_id = :al_ui_id*/
             if (!MainMdiService.DeleteUserGroup(al_group_id, al_ui_id))
             {
-                MessageBox.Show("Database Error", "Unable to delete.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                MessageBox.Show("Database Error", "Unable to delete.  \n\n" 
+                                + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                + "Error Text: " + SQLErrText);
                 //  Rollback;
             }
             return SUCCESS;
@@ -1346,12 +1353,16 @@ namespace NZPostOffice.RDSAdmin
             int SQLCode = 0;
             string SQLErrText = string.Empty;
             string ls_dataobject = "";
-            /*
-            Select mt_dataobject Into :ls_dataobject From rds_maintenance_table Where mt_id = :ai_mt_id Using SQLCA;*/
 
+            /* select mt_dataobject into :ls_dataobject 
+             *   from rds_maintenance_table 
+             *  where mt_id = :ai_mt_id*/
             if (!MainMdiService.GetMtDataObject(ai_mt_id, ref ls_dataobject))
             {
-                MessageBox.Show("Database Error", "Unable to create user id.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\n" + "Error Text: " + SQLErrText);
+                MessageBox.Show("Unable to create user id.  \n\n" 
+                                  + "Error Code: " + SQLCode.ToString() + "\n" 
+                                  + "Error Text: " + SQLErrText
+                                , "Database Error");
             }
 
             //these code added by someone, why?   --modified by jlwang
@@ -2226,209 +2237,6 @@ namespace NZPostOffice.RDSAdmin
             }
         }
 
-        // public override int pfc_validation()
-        //    {
-        //        base.pfc_validation();
-        //        int ancestorreturnvalue = base.pfc_validation();
-        //        int ll_currentRow = 0;
-        //        int? ll_rc_id = 0;
-        //        int? ll_region_id = 0;
-        //        int ll_id;
-        //        string ls_route_freq;
-        //        string ls_group_name;
-        //        string ls_group_description;
-        //        string ls_name = "";
-        //        string ls_user_id = "";
-        //        string ls_password = "";
-        //        string ls_used_password = "";
-        //        int ll_count = 0;
-        //        ll_currentRow = GetRow();
-
-        //        int SQLCode = 0;
-        //        string SQLErrText = string.Empty;
-
-        //        if (ll_currentRow > 0)
-        //        {
-        //            if (this.PBName == "dw_group_details" && RowCount > 0)
-        //            {
-        //                ll_rc_id = GetItemInt(ll_currentRow, "rds_user_rights_rc_id");
-        //                if (MObject.IsNull(ll_rc_id) || ll_rc_id <= 0)
-        //                {
-        //                    MessageBox.Show("Validation Error", "A component must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    //! dw_detail.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //                ll_region_id = GetItemInt(ll_currentRow, "rds_user_rights_region_id");
-        //                if (MObject.IsNull(ll_region_id) || ll_region_id < 0)
-        //                {
-        //                    MessageBox.Show("Validation Error", "A region must be selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("rds_user_rights_region_id");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //            }
-        //            else if (PBName == "dw_user_details" && RowCount > 0)
-        //            {
-        //                ls_name = GetItemString(ll_currentRow, "rds_user_u_name");
-        //                if (MObject.IsNull(ls_name) || ls_name == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A user name must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("rds_user_u_name");
-        //                    //!this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //                //  If user name is entered or modified, need to make sure the name does not
-        //                //  duplicate in the system
-        //                // if (dw_detail.GetItemStatus(ll_currentRow, "rds_user_u_name", primary) == newmodified || dw_detail.GetItemStatus(ll_currentRow, "rds_user_u_name", primary) == datamodified) 
-        //                if (this.Table.DefaultView[ll_currentRow - 1].Row.RowState == DataRowState.Added || this.Table.DefaultView[ll_currentRow - 1].Row.RowState == DataRowState.Modified)
-        //                {
-        //                    /*  SELECT	count(*) INTO :ll_count  FROM rds_user  WHERE u_name = :ls_name*/
-
-        //                    StaticVariables.ServiceInterface.WMainMdi_DwDetail_pfc_validation_1(ref ll_count, ref ls_name, ref SQLErrText, ref SQLCode);
-
-        //                    if (SQLCode != 0)
-        //                    {
-        //                        MessageBox.Show("Database Error", "Unable to validate user name.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
-        //                        return FAILURE;
-        //                    }
-        //                    if (ll_count > 0)
-        //                    {
-        //                        MessageBox.Show("Validation Error", "The user name specified already exists in the database.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                        this.SetColumn("rds_user_u_name");
-        //                        //!this.SetFocus();
-        //                        return FAILURE;
-        //                    }
-        //                }
-        //                ls_user_id = GetItemString(ll_currentRow, "rds_user_id_ui_userid");
-        //                if (MObject.IsNull(ls_user_id) || ls_user_id == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A userid must be specified");
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("rds_user_id_ui_userid");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //                //  If user id is entered or modified, need to make sure the id does not
-        //                //  duplicate in the system
-        //                //  if (dw_detail.GetItemStatus(ll_currentRow, "rds_user_id_ui_userid", primary!) == newmodified! || dw_detail.GetItemStatus(ll_currentRow, "rds_user_id_ui_userid", primary!) == datamodified!) {
-        //                if (this.Table.DefaultView[ll_currentRow - 1].Row.RowState == DataRowState.Added || this.Table.DefaultView[ll_currentRow - 1].Row.RowState == DataRowState.Modified)
-        //                {
-        //                    /*  SELECT	count(*)  INTO  :ll_count  FROM  rds_user_id  WHERE	ui_userid = :ls_user_id*/
-
-        //                    StaticVariables.ServiceInterface.WMainMdi_DwDetail_pfc_validation_2(ref ll_count, ref ls_user_id, ref SQLErrText, ref SQLCode);
-
-        //                    if (SQLCode != 0)
-        //                    {
-        //                        MessageBox.Show("Database Error", "Unable to validate user id.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
-        //                        return FAILURE;
-        //                    }
-        //                    if (ll_count > 0)
-        //                    {
-        //                        MessageBox.Show("Validation Error", "The user id specified already exists in the database.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                        this.SetColumn("rds_user_id_ui_userid");
-        //                        //!this.SetFocus();
-        //                        return FAILURE;
-        //                    }
-        //                }
-        //                ls_password = GetItemString(ll_currentRow, "rds_user_id_ui_password");
-        //                if (MObject.IsNull(ls_password) || ls_password == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A password must be specified");
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("rds_user_id_ui_password");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //                // If the password is changed
-        //                // if (dw_detail.GetItemStatus(ll_currentRow, "rds_user_id_ui_password", primary!) == datamodified!) 
-        //                if (this.Table.DefaultView[ll_currentRow].Row.RowState == DataRowState.Modified)
-        //                {
-        //                    ll_id = GetItemInt(ll_currentRow, "rds_user_id_ui_id").Value;
-        //                    // Check that the password has not already been used
-        //                    /*  Select up_password  Into :ls_used_password   From used_password  Where ui_id = :ll_id  and up_password = :ls_password*/
-
-        //                    StaticVariables.ServiceInterface.WMainMdi_DwDetail_pfc_validation_3(ref ls_used_password, ref ll_id, ref ls_password, ref SQLErrText, ref SQLCode);
-
-        //                    if (SQLCode != 100 && SQLCode != 0)
-        //                    {
-        //                        MessageBox.Show("Database Error", "Unable to create user id.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
-        //                    }
-        //                    if (SQLCode == 0)
-        //                    {
-        //                        MessageBox.Show("Validation Error", "The password specified has already been used, Please select another.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                        // 				IF ab_focusonerror THEN 
-        //                        this.SetColumn("rds_user_id_ui_password");
-        //                        //! this.SetFocus();
-        //                        // 				END IF
-        //                        return FAILURE;
-        //                    }
-        //                }
-        //                ll_region_id = GetItemInt(ll_currentRow, "rds_user_region_id");
-        //                if (MObject.IsNull(ll_region_id) || ll_region_id < -(1))
-        //                {
-        //                    MessageBox.Show("Validation Error", "A region must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("rds_user_region_id");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //            }
-        //            else if (PBName == "d_route_freq_verbs")
-        //            {
-        //                ls_route_freq = GetItemString(ll_currentRow, "rfv_description");
-        //                if (MObject.IsNull(ls_route_freq) || ls_route_freq == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A description must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 				IF ab_focusonerror THEN 
-        //                    this.SetColumn("rfv_description");
-        //                    //! this.SetFocus();
-        //                    // 				END IF
-        //                    return FAILURE;
-        //                }
-        //            }
-        //            if (window.dw_header.PBName == "dw_group_header" && window.dw_header.DataControl.Visible == true)
-        //            {
-        //                ls_group_name = window.dw_header.GetItemString(1, "ug_name");
-        //                if (MObject.IsNull(ls_group_name) || ls_group_name == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A group name must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("ug_name");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //                ls_group_description = window.dw_header.GetItemString(1, "ug_description");
-        //                if (MObject.IsNull(ls_group_description) || ls_group_description == "")
-        //                {
-        //                    MessageBox.Show("Validation Error", "A group description must be specified", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        //                    // 			IF ab_focusonerror THEN 
-        //                    this.SetColumn("ug_description");
-        //                    //! this.SetFocus();
-        //                    // 			END IF
-        //                    return FAILURE;
-        //                }
-        //            }
-        //        }
-        //        return ancestorreturnvalue;
-        //    }
-
-        //    public override void constructor()
-        //    {
-        //        base.constructor();
-        //        //!  dw_detail.of_SetSort(true);
-        //        //! inv_sort.of_SetColumnHeader(true);
-        //    }
-
         public void dw_detail_retrieveend()
         {
             //?base.retrieveend();            
@@ -2632,8 +2440,10 @@ namespace NZPostOffice.RDSAdmin
                         else
                         {
                             string PBName = of_get_dataobject(id);
+                            string sPBName = StaticFunctions.GetPBName(PBName);
                             this.Cursor = Cursors.WaitCursor;
-                            dw_detail.SetDataObject("NZPostOffice.RDSAdmin.DataControls", Constants.ApplicationVersion, /*"NZPostOffice.RDSAdmin.DataControls.Security." + */StaticFunctions.GetPBName(PBName));
+                            //dw_detail.SetDataObject("NZPostOffice.RDSAdmin.DataControls", Constants.ApplicationVersion, /*"NZPostOffice.RDSAdmin.DataControls.Security." + */StaticFunctions.GetPBName(PBName));
+                            dw_detail.SetDataObject("NZPostOffice.RDSAdmin.DataControls", Constants.ApplicationVersion, sPBName);
                             dw_detail.Retrieve(new object[] { });
                             //if (dw_detail.DataObject is DNpadParameters)
                             //{
