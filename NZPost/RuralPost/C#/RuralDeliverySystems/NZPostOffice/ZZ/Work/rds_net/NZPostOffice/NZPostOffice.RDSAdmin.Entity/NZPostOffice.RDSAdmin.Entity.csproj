@@ -50,6 +50,7 @@
     <Compile Include="AllowanceType.cs" />
     <Compile Include="ArticalType.cs" />
     <Compile Include="ContractType.cs" />
+    <Compile Include="DddwPaymentComponentTypes.cs" />
     <Compile Include="DddwGroupRegion.cs" />
     <Compile Include="DddwOutletType.cs" />
     <Compile Include="DddwPieceRateSuppliers.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
