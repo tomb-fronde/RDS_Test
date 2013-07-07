@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DDddwPaymentComponentTypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwPaymentComponentTypes.designer.cs">
+      <DependentUpon>DDddwPaymentComponentTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAllowanceType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -435,6 +441,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="ClassDiagram_RDSAdmin_DataControls.cd" />
     <None Include="Properties\Settings.settings">
