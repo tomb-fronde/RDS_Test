@@ -5,9 +5,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
-		private System.Windows.Forms.DataGridViewTextBoxColumn  prs_description;
-
+        private System.ComponentModel.IContainer components = null;
 	
 		protected override void Dispose(bool disposing)
 		{
@@ -24,8 +22,10 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		{
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
             this.prs_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pct_id = new Metex.Windows.DataGridViewEntityComboColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +50,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.ColumnHeadersHeight = 28;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.prs_description});
+            this.prs_description,
+            this.pct_id});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -58,8 +59,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(205, 344);
+            this.grid.Size = new System.Drawing.Size(535, 344);
             this.grid.TabIndex = 0;
+            this.grid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellContentClick);
             // 
             // prs_description
             // 
@@ -73,6 +75,17 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.prs_description.Name = "prs_description";
             this.prs_description.Width = 201;
             // 
+            // pct_id
+            // 
+            this.pct_id.DataPropertyName = "PctId";
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            this.pct_id.DefaultCellStyle = dataGridViewCellStyle3;
+            this.pct_id.HeaderText = "Payment Component";
+            this.pct_id.Name = "d_dddw_payment_component_types";
+            this.pct_id.Width = 256;
+            // 
             // DPieceRateSupplier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -80,7 +93,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DPieceRateSupplier";
-            this.Size = new System.Drawing.Size(205, 344);
+            this.Size = new System.Drawing.Size(535, 344);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -88,5 +101,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		}
 		#endregion
 
+        private System.Windows.Forms.DataGridViewTextBoxColumn prs_description;
+        private Metex.Windows.DataGridViewEntityComboColumn pct_id;
 	}
 }
