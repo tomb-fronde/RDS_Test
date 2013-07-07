@@ -6,21 +6,28 @@ using System.Data.Common;using Metex.Core;using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  RPCR_054 July-2013
+    // Added pct_id to retrieved data
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("prs_key", "_prs_key", "piece_rate_supplier", true)]
 	[MapInfo("prs_description", "_prs_description", "piece_rate_supplier")]
-	[System.Serializable()]
+    [MapInfo("pct_id", "_pct_id", "piece_rate_supplier")]
+    [System.Serializable()]
 
 	public class PieceRateSupplier : Entity<PieceRateSupplier>
 	{
 		#region Business Methods
-		[DBField()]
-		private int?  _prs_key;
+        [DBField()]
+        private int? _prs_key;
 
-		[DBField()]
+        [DBField()]
 		private string  _prs_description;
+
+        [DBField()]
+        private int? _pct_id;
 
 
 		public virtual int? PrsKey
@@ -58,7 +65,25 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				}
 			}
 		}
-		private PieceRateSupplier[] dataList;
+        public virtual int? PctId
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _pct_id;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_pct_id != value)
+                {
+                    _pct_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        private PieceRateSupplier[] dataList;
 
 		protected override object GetIdValue()
 		{
@@ -82,7 +107,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		[ServerMethod]
 		private void FetchEntity(  )
 		{
-			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
+			using ( DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
@@ -118,7 +143,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				if (GenerateUpdateCommandText(cm, "piece_rate_supplier", ref pList))
 				{
 					cm.CommandText += " WHERE  piece_rate_supplier.prs_key = @prs_key ";
-
 					pList.Add(cm, "prs_key", GetInitialValue("_prs_key"));
 					DBHelper.ExecuteNonQuery(cm, pList);
 				}
@@ -151,10 +175,10 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"prs_key", GetInitialValue("_prs_key"));
-						cm.CommandText = "DELETE FROM piece_rate_supplier WHERE " +
-						"piece_rate_supplier.prs_key = @prs_key ";
+					cm.CommandText = "DELETE FROM piece_rate_supplier " 
+                                   + " WHERE piece_rate_supplier.prs_key = @prs_key ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
