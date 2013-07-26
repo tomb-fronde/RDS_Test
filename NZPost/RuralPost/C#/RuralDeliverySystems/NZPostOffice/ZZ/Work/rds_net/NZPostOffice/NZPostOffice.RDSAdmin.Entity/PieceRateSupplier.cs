@@ -8,6 +8,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 {
     // TJB  RPCR_054 July-2013
     // Added pct_id to retrieved data
+    // Changed Insert routine to use new sp_AddPieceRateSupplier
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -153,16 +154,35 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		[ServerMethod()]
 		private void InsertEntity()
 		{
+            int? rc;
+
 			using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
 			{
-				DbCommand cm = cn.CreateCommand();
-				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
-				if (GenerateInsertCommandText(cm, "piece_rate_supplier", pList))
-				{
-                    DBHelper.ExecuteNonQuery(cm, pList);
-				}
-				StoreInitialValues();
+			//	DbCommand cm = cn.CreateCommand();
+			//	cm.CommandType = CommandType.Text;
+			//		ParameterCollection pList = new ParameterCollection();
+			//	if (GenerateInsertCommandText(cm, "piece_rate_supplier", pList))
+			//	{
+            //        DBHelper.ExecuteNonQuery(cm, pList);
+			//	}
+            //  StoreInitialValues();
+
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_AddPieceRateSupplier";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inPrsDescription", PrsDescription);
+                    pList.Add(cm, "inPctId", PctId);
+
+                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    {
+                        while (dr.Read())
+                        {
+                            rc = GetValueFromReader<int?>(dr, 0);
+                        }
+                    }
+                }
 			}
 		}
 		[ServerMethod()]
