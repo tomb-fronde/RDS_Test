@@ -17,6 +17,10 @@ namespace NZPostOffice.RDSAdmin
     public class WMainMdi : FormBase
     {
         // TJB  RPCR_054  July-2013
+        // Added check for duplicate payment component type 
+        //    when creating new piece rate supplier
+        // Changed how new piece rate suppliers are added 
+        //    (in RDSAdmin.Entity.PieceRateSupplier)
         // Removed pfc_validation() - was commented out
 
         private int il_drop_success = 0;
@@ -178,7 +182,9 @@ namespace NZPostOffice.RDSAdmin
                     GroupsAndUsersLevel3 BE = node.Tag as GroupsAndUsersLevel3;
                     if (BE != null && BE.Id == userBE.Id)
                     {
-                        MessageBox.Show(BE.Label + " is already a member of this group.", "User Exists", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(BE.Label + " is already a member of this group."
+                                       , "User Exists"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
                 }
@@ -359,7 +365,11 @@ namespace NZPostOffice.RDSAdmin
             }
             else if (dw_detail.DataObject is DPieceRateType)
             {
-                ((DPieceRateType)dw_detail.DataObject).InsertItem<PieceRateType>(row, PieceRateType.NewPieceRateType(null));
+                // TJB  RPCR_054  July-2013
+                // Insert new rows at top (not where selected)
+                //((DPieceRateType)dw_detail.DataObject).InsertItem<PieceRateType>(row, PieceRateType.NewPieceRateType(null));
+                ((DPieceRateType)dw_detail.DataObject).InsertItem<PieceRateType>(0, PieceRateType.NewPieceRateType(null));
+                ((DPieceRateType)dw_detail.DataObject).SetCurrent(0);
             }
             else if (dw_detail.DataObject is DRouteFreqPointType)
             {
@@ -838,7 +848,10 @@ namespace NZPostOffice.RDSAdmin
 
         public override void pfc_exit()
         {
-            if (MessageBox.Show("Are you sure you want to exit?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to exit?"
+                               , Application.ProductName
+                               , MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+               == DialogResult.Yes)
             {
                 base.pfc_exit();
             }
@@ -1292,7 +1305,10 @@ namespace NZPostOffice.RDSAdmin
             /* Delete rd.rds_user_group Where ug_id = :al_group_id   */
             if (!MainMdiService.DeleteUserGroup(al_group_id))
             {
-                MessageBox.Show("Database Error", "Unable to delete group.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                MessageBox.Show("Unable to delete group.  \n\n"
+                               + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                               + "Error Text: " + SQLErrText
+                               , "Database Error");
             }
             return SUCCESS;
         }
@@ -1308,7 +1324,11 @@ namespace NZPostOffice.RDSAdmin
                 //  user is trying to delete the SysAdmin account
                 //  prompt for confirmation
                 //  li_rc = MessageBox.Show(this.Text, "Are you sure you want to delete the system administrator account?", question!, yesno!, 2);
-                li_rc = MessageBox.Show(this.Text, "Are you sure you want to delete the system administrator account?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes ? 1 : 2;
+                li_rc = MessageBox.Show("Are you sure you want to delete the system administrator account?"
+                                       , this.Text
+                                       , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                       , MessageBoxDefaultButton.Button2)
+                           == DialogResult.Yes ? 1 : 2;
                 if (li_rc == 2)
                 {
                     return SUCCESS;
@@ -1317,7 +1337,10 @@ namespace NZPostOffice.RDSAdmin
             /* Delete rd.rds_user Where u_id = :al_user_id*/
             if (!MainMdiService.DeleteUser(al_user_id))
             {
-                MessageBox.Show("Database Error", "Unable to delete user.  " + "\n\nError Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                MessageBox.Show("Unable to delete user. \n\n" 
+                                + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                + "Error Text: " + SQLErrText
+                                , "Database Error");
             }
             //  TJB  SR4598  April 2005
             //  If the user's record is deleted, clear out any 
@@ -1325,7 +1348,10 @@ namespace NZPostOffice.RDSAdmin
             /*  Delete rd.rds_user_region Where u_id = :al_user_id*/
             if (!MainMdiService.DeleteUserRegion(al_user_id))
             {
-                MessageBox.Show("Database Error", "Unable to delete user_region records.  " + "\n\nError Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                MessageBox.Show("Unable to delete user_region records. \n\n" 
+                                + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                + "Error Text: " + SQLErrText
+                                , "Database Error");
             }
             return SUCCESS;
         }
@@ -1392,6 +1418,7 @@ namespace NZPostOffice.RDSAdmin
             int li_YES = 1;
             int li_NO = 2;
             DataUserControl idw;
+   
             //  Checks if datawindows are modified
             dw_detail.DataObject.AcceptText();
             if (ab_prompt)
@@ -1405,7 +1432,7 @@ namespace NZPostOffice.RDSAdmin
                 {                    
                     //  TJB  Oct 2005
                     //  Changed the messages to reflect what has actually 
-                    //  changed  ( used to say everything other than a group
+                    //  changed (used to say everything other than a group
                     //  change was a user change).
                     ls_title = "";                    
                     if (dw_detail.DataObject is DwGroupDetails)
@@ -1425,15 +1452,16 @@ namespace NZPostOffice.RDSAdmin
                     }
                     if (ls_title.Length > 0)
                     {
-                        li_response = MessageBox.Show(ls_msg + "  \n" + "Do you want to save the new details?", ls_title,
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                        li_response = MessageBox.Show(ls_msg + "  \n" 
+                                           + "Do you want to save the new details?"
+                                           , ls_title
+                                           , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                           , MessageBoxDefaultButton.Button1);
                     }
                 }
                 if (li_response == DialogResult.No)
                 {
-                    //?return SUCCESS;
-                    return 1;
-
+                    return 1;     //?return SUCCESS
                 }
             }
             //  Saves the header dw if modified
@@ -1484,7 +1512,8 @@ namespace NZPostOffice.RDSAdmin
                 -9  Update prep error
                 *********************************** */
             //  Saves the detail dw if modified
-            if (StaticFunctions.IsDirty(dw_detail.DataObject) || dw_detail.DataObject.DeletedCount > 0)
+            if (StaticFunctions.IsDirty(dw_detail.DataObject) 
+                || dw_detail.DataObject.DeletedCount > 0)
             {               
                 //li_rc = inv_luw.of_save(dw_detail, sqlca);
                 if (dw_detail.DataObject is DwGroupDetails)
@@ -1500,7 +1529,9 @@ namespace NZPostOffice.RDSAdmin
 
                             if (ll_rc_id == null || ll_rc_id <= 0)
                             {
-                                MessageBox.Show("A component must be specified", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show("A component must be specified"
+                                                , "Validation Error"
+                                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                 if(((Metex.Windows.DataEntityGrid)dw_detail.DataObject.Controls["grid"]).Rows[ll_currentRow].Cells["rds_user_rights_rc_id"].Visible)
                                     ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.Controls["grid"]).Rows[ll_currentRow].Cells["rds_user_rights_rc_id"].Selected = true;
                                 return FAILURE;
@@ -1509,7 +1540,9 @@ namespace NZPostOffice.RDSAdmin
 
                             if (ll_region_id == null || ll_region_id < 0)
                             {
-                                MessageBox.Show("A region must be selected", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show("A region must be selected"
+                                                , "Validation Error"
+                                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                 //dw_detail.DataObject.GetControlByName("rds_user_rights_region_id").Focus();
                                 return FAILURE;
                             }
@@ -1534,6 +1567,27 @@ namespace NZPostOffice.RDSAdmin
                     return FAILURE;
                 }
             }
+            // TJB  RPCR_054  July-2013
+            // We've saved a dw_detail object successfully. 
+            // If it was a PieceRateType, we need to update the ODPS.PaymentComponentType
+            // table with the type's PieceRateSupplier ID (prs_key).
+            //if (dw_detail.DataObject is DPieceRateType)
+            //{
+            //    int? nPrsKey = dw_detail.DataObject.GetItem<PieceRateType>(0).PrsKey;
+            //    int? nPrtKey = dw_detail.DataObject.GetItem<PieceRateType>(0).PrtKey;
+            //    MessageBox.Show("PrsKey = " + (nPrsKey == null ? "null" : nPrsKey.ToString()) + "\n"
+            //                   + "PrtKey = " + (nPrtKey == null ? "null" : nPrtKey.ToString())
+            //                   , "PieceRateType");
+            //}
+            //if (dw_detail.DataObject is DPieceRateSupplier)
+            //{
+            //    int? iPctId = dw_detail.DataObject.GetItem<PieceRateSupplier>(0).PctId;
+            //    int? iPrsKey = dw_detail.DataObject.GetItem<PieceRateSupplier>(0).PrsKey;
+            //    MessageBox.Show("PrsKey = " + (iPrsKey == null ? "null" : iPrsKey.ToString()) + "\n"
+            //                   + "PctId = " + (iPctId == null ? "null" : iPctId.ToString())
+            //                   , "PieceRateSupplier");
+            //}
+
             //  TJB  SR4598  April 2005
             //  Save the alternate regions if changed
             li_rc = 1;
@@ -1566,7 +1620,9 @@ namespace NZPostOffice.RDSAdmin
             string ErrorMessage = "";
             if (!MainMdiService.DeleteRdsUserContractType(ui_id, ref ErrorMessage))
             {
-                MessageBox.Show("Unable to create contract types for the user.  \nError Text:" + ErrorMessage, "Database Error");
+                MessageBox.Show("Unable to create contract types for the user. \n\n" 
+                               + "Error Text:" + ErrorMessage
+                               , "Database Error");
             }
             int rowcount = dw_contract_type.RowCount;
             for (int i = 0; i < rowcount; i++)
@@ -1576,7 +1632,9 @@ namespace NZPostOffice.RDSAdmin
                     ct_key = dw_contract_type.GetItem<ContractTypes>(i).ContractTypeCtKey;
                     if (!MainMdiService.InsertRdsUserContractType(ct_key, ui_id, ref ErrorMessage))
                     {
-                        MessageBox.Show("Unable to create contract types for the user.  \nError Text:" + ErrorMessage, "Database Error");
+                        MessageBox.Show("Unable to create contract types for the user.  \n\n" 
+                                       + "Error Text:" + ErrorMessage
+                                       , "Database Error");
                         break;
                     }
                 }
@@ -1643,7 +1701,10 @@ namespace NZPostOffice.RDSAdmin
                 /*   select 1 into :li_alt  from rds_user_region  where u_id= :ll_ui_id  and region_id = :ll_regionId;*/
                 if (!MainMdiService.CheckUserExisting(ll_ui_id, ll_regionId, ref li_alt))
                 {
-                    MessageBox.Show("Database Error", "Unable to query rds_user_region table.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                    MessageBox.Show("Unable to query rds_user_region table. \n\n" 
+                                    + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                    + "Error Text: " + SQLErrText
+                                    , "Database Error");
                     return -(1);
                 }
                 if (li_alt == null)
@@ -1674,7 +1735,10 @@ namespace NZPostOffice.RDSAdmin
             /*  delete from rds_user_region  where u_id = :ll_ui_id;*/
             if (!MainMdiService.DeleteUserRegion(ll_ui_id))
             {
-                MessageBox.Show("Unable to clear rds_user_region table for user.  " + "\n\nError Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText, "Database Error");
+                MessageBox.Show("Unable to clear rds_user_region table for user. \n\n"
+                               + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                               + "Error Text: " + SQLErrText
+                               , "Database Error");
                 // rollback;
                 return -(1);
             }
@@ -1706,7 +1770,8 @@ namespace NZPostOffice.RDSAdmin
                     //dw_user_region.SetItemStatus(ll_row, 0, primary, notmodified);
                     if (!MainMdiService.InsertUserRegionList(ll_ui_id, ll_regionId))
                     {
-                        MessageBox.Show("Unable to update rds_user_region table.", "Database Error");
+                        MessageBox.Show("Unable to update rds_user_region table."
+                                       , "Database Error");
 
                         return -1;
                     }
@@ -1821,7 +1886,8 @@ namespace NZPostOffice.RDSAdmin
                     }
                     else
                     {
-                        MessageBox.Show(this, "Error determining new road suffix ID " + "(max(rs_id)=" + ll_rs_max + ')', "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("Error determining new road suffix ID " + "(max(rs_id)=" + ll_rs_max + ")"
+                                        , "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
             }
@@ -2137,7 +2203,10 @@ namespace NZPostOffice.RDSAdmin
                     ////    //!RollBack;
                     ////    return FAILURE;
 
-                            MessageBox.Show("Unable to modify user id attributes.  " + "\n\nError Code: " + "\n\nError Text: " , "Database Error");
+                            MessageBox.Show("Unable to modify user id attributes. \n\n"
+                                           + "Error Code: " + SQLCode.ToString() + "\n\n"
+                                           + "Error Text: " + SQLErrText
+                                           , "Database Error");
                             return FAILURE;
                     ////}
                         }
@@ -2157,7 +2226,10 @@ namespace NZPostOffice.RDSAdmin
                     ////    MessageBox.Show("Unable to create contract types for the user.  " + "\n\nError Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText, "Database Error");
                     ////    RollBack;
                     ////    return FAILURE;
-                            MessageBox.Show("Unable to create contract types for the user.  " + "\n\nError Code: " + "\n\nError Text: ", "Database Error");
+                            MessageBox.Show("Unable to create contract types for the user. \n\n"
+                                           + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                           + "Error Text: " + SQLErrText
+                                           , "Database Error");
                             return FAILURE;
                     ////}
                         }
@@ -2182,7 +2254,10 @@ namespace NZPostOffice.RDSAdmin
                     ////            MessageBox.Show("Unable to create contract types for the user.  " + "\n\nError Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText, "Database Error");
                     ////            RollBack;
                     ////            return FAILURE;
-                                    MessageBox.Show("Unable to create contract types for the user.  " + "\n\nError Code: " + "\n\nError Text: ", "Database Error");
+                                    MessageBox.Show("Unable to create contract types for the user. \n\n"
+                                                   + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                                   + "Error Text: " + SQLErrText
+                                                   , "Database Error");
                                     return FAILURE;
                                  }
                             
@@ -2587,7 +2662,9 @@ namespace NZPostOffice.RDSAdmin
                 ll_account_id = Entity2.Account.GetValueOrDefault();
                 if (parent_id1 == 1)
                 {
-                    li_response = MessageBox.Show("Are you sure you want to delete the entire " + ls_label + " group?", "Delete Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    li_response = MessageBox.Show("Are you sure you want to delete the entire " + ls_label + " group?"
+                                                 , "Delete Group"
+                                                 , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (li_response == DialogResult.Yes)
                     {
                         ll_return_result = of_deletegroup(ll_id);
@@ -2595,7 +2672,9 @@ namespace NZPostOffice.RDSAdmin
                 }
                 else
                 {
-                    li_response = MessageBox.Show("Are you sure you want to delete the user, " + ls_label + '?', "Delete User", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    li_response = MessageBox.Show("Are you sure you want to delete the user " + ls_label + "?"
+                                                 , "Delete User"
+                                                 , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (li_response == DialogResult.Yes)
                     {
                         ll_return_result = of_deleteuser(ll_account_id);
@@ -2622,7 +2701,9 @@ namespace NZPostOffice.RDSAdmin
                 //!tv_1.inv_levelsource.of_getdatasource(2, l_ds);
                 if (parent_id2 == 1)
                 {
-                    li_response = MessageBox.Show("Are you sure you want to remove " + ls_label + " from this group?", "Remove User", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    li_response = MessageBox.Show("Are you sure you want to remove " + ls_label + " from this group?"
+                                                  , "Remove User"
+                                                  , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (li_response == DialogResult.Yes)
                     {
                         ll_return_result = of_removeusergroup(parent_id1, ll_id);
@@ -2642,7 +2723,9 @@ namespace NZPostOffice.RDSAdmin
                 }
                 else
                 {
-                    li_response = MessageBox.Show("Are you sure you want to remove the user from the " + ls_label + " group?", "Remove Group", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    li_response = MessageBox.Show("Are you sure you want to remove the user from the " + ls_label + " group?"
+                                                  , "Remove Group"
+                                                  , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (li_response == DialogResult.Yes)
                     {
                         ll_return_result = of_removeusergroup(ll_id, parent_id1);
@@ -2822,7 +2905,9 @@ namespace NZPostOffice.RDSAdmin
                 {
                     if (adw.GetItem<NpadParameters>(i).IsNew && adw.GetItem<NpadParameters>(i).NpadEnabled == null)
                     {
-                        MessageBox.Show("Required value missing for npad_enabled on row "  + (i + 1) + ".  Please enter a value.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Required value missing for npad_enabled on row "  + (i + 1) + ".  Please enter a value."
+                                       , Application.ProductName
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ll_c = FAILURE;
                         break;
                     }
@@ -2835,298 +2920,164 @@ namespace NZPostOffice.RDSAdmin
                 ls_ug_id = dw_header.GetValue<string>(0, "ug_name");
                 if (ls_ug_id == null)
                 {
-                    //  MessageBox("Validation Error", "A group name must be specified.", exclamation);
-                    MessageBox.Show( "A group name must be specified.", "Validation Error",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    // MessageBox("Validation Error", "A group name must be specified.", exclamation);
+                    MessageBox.Show( "A group name must be specified."
+                                   , "Validation Error"
+                                   ,MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     // this.SetColumn("ug_name");
                     dw_header.DataObject.GetControlByName("ug_name").Focus();
                     //this.SetFocus();
                     dw_header.Focus();
                     ll_c = FAILURE;
                 }
-                //////  If user group is entered or modified, need to make sure the name does not
-                //////  duplicate in the system
-                ////// if (dw_header.GetItemStatus(1, "ug_name", primary) == newmodified || dw_header.GetItemStatus(1, "ug_name", primary) == datamodified)
-                ////// !if (dw_header.DataObject.GetItem<GroupHeader>(0).IsNew || dw_header.DataObject.GetItem<GroupHeader>(0).IsDirty)
-                //////! {
-                /////* SELECT count(*)  INTO :ll_count  FROM rds_user_group  WHERE ug_name = :ls_ug_id*/
-                ////if (!MainMdiService.GetRdsUserGroupDataObject(ls_ug_id, ref ll_count))
-                ////{
-                ////    MessageBox.Show("Database Error", "Unable to validate group name.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
-                ////    ll_c = FAILURE;
-                ////}
-                ////if (ll_count > 0)
-                ////{
-                ////    // ls_ug_id = this.GetItemString(1, "ug_name");
-                ////    ls_ug_id = dw_header.GetValue<string>(0, "ug_name");
-                ////    if (ls_ug_id == null)
-                ////    {
-                ////        //  MessageBox("Validation Error", "A group name must be specified.", exclamation);
-                ////        MessageBox.Show("Validation Error", "A group name must be specified.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ////        // this.SetColumn("ug_name");
-                ////        dw_header.DataObject.GetControlByName("ug_name").Focus();
-                ////        //this.SetFocus();
-                ////        dw_header.Focus();
-                ////        ll_c = FAILURE;
-                ////    }
-                ////}
-                    //  If user group is entered or modified, need to make sure the name does not
-                    //  duplicate in the system
-                    // if (dw_header.GetItemStatus(1, "ug_name", primary) == newmodified || dw_header.GetItemStatus(1, "ug_name", primary) == datamodified)
-                   
-                    //if (dw_header.DataObject.GetItem<GroupHeader>(0).IsNew || dw_header.DataObject.GetItem<GroupHeader>(0).IsDirty)
+                  
+                //if (dw_header.DataObject.GetItem<GroupHeader>(0).IsNew || dw_header.DataObject.GetItem<GroupHeader>(0).IsDirty)
                 if (dw_header.DataObject.GetItem<GroupHeader>(0).UgName != dw_header.DataObject.GetItem<GroupHeader>(0).GetInitialValue<string>("_ug_name"))
                 {
                     /* SELECT count(*)  INTO :ll_count  FROM rds_user_group  WHERE ug_name = :ls_ug_id*/
                     if (!MainMdiService.GetRdsUserGroupDataObject(ls_ug_id, ref ll_count))
                     {
-                        MessageBox.Show("Database Error", "Unable to validate group name.  \n\n" + "Error Code: " + SQLCode.ToString() + "\n\nError Text: " + SQLErrText);
+                        MessageBox.Show("Unable to validate group name. \n\n" 
+                                        + "Error Code: " + SQLCode.ToString() + "\n\n" 
+                                        + "Error Text: " + SQLErrText
+                                        , "Database Error");
                         ll_c = FAILURE;
                     }
                     if (ll_count > 0)
                     {
-                        MessageBox.Show("The group name specified already exists in the database.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("The group name specified already exists in the database."
+                                        , "Validation Error"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         dw_header.DataObject.GetControlByName("ug_name").Focus();
                         //this.SetFocus();
                         dw_header.Focus();
                         ll_c = FAILURE;
                     }
-                   }
-               }        
-               if(adw is DwUserDetails)
-                {  
-                    UserDetails userdetails = dw_detail.DataObject.Current as UserDetails;
-                    if (userdetails == null) return ll_c;
-                    if (userdetails.RdsUserUName == null || userdetails.RdsUserUName.Length <= 0)
+                }
+            }        
+            if(adw is DwUserDetails)
+            {  
+                UserDetails userdetails = dw_detail.DataObject.Current as UserDetails;
+                if (userdetails == null) return ll_c;
+                if (userdetails.RdsUserUName == null || userdetails.RdsUserUName.Length <= 0)
+                {
+                    MessageBox.Show("A user name must be specified"
+                                   , "Validation Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
+                    return FAILURE;
+                }
+                if (userdetails.RdsUserUName != dw_detail.DataObject.GetItem<UserDetails>(dw_detail.DataObject.GetRow()).GetInitialValue<string>("_rds_user_u_name"))
+                {
+                    MainMdiService.GetCountFormRdsUser(userdetails.RdsUserUName, ref ll_count);
+                    if (ll_count > 0)
                     {
-                        MessageBox.Show("A user name must be specified", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("The user name specified already exists in the database."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
                         return FAILURE;
                     }
-                    if (userdetails.RdsUserUName != dw_detail.DataObject.GetItem<UserDetails>(dw_detail.DataObject.GetRow()).GetInitialValue<string>("_rds_user_u_name"))
+                }
+                if (userdetails.RdsUserIdUiUserid == null || userdetails.RdsUserIdUiUserid.Length<=0)
+                {
+                    MessageBox.Show("A userid must be specified."
+                                   , "Validation Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
+                    return FAILURE;
+                }
+                if (userdetails.RdsUserIdUiUserid != userdetails.GetInitialValue<string>("_rds_user_id_ui_userid"))
+                {
+                    MainMdiService.GetUiUseridCountFormRdsUser(userdetails.RdsUserIdUiUserid, ref ll_count);
+                    if (ll_count > 0)
                     {
-                        
-                        MainMdiService.GetCountFormRdsUser(userdetails.RdsUserUName, ref ll_count);
-                        if (ll_count > 0)
-                        {
-                            MessageBox.Show("The user name specified already exists in the database.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
-                            return FAILURE;
-                        }
-                    }
-                    if (userdetails.RdsUserIdUiUserid == null || userdetails.RdsUserIdUiUserid.Length<=0)
-                    {
-                        MessageBox.Show("A userid must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("The user id specified already exists in the database."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
                         return FAILURE;
                     }
-                    if (userdetails.RdsUserIdUiUserid != userdetails.GetInitialValue<string>("_rds_user_id_ui_userid"))
+                }
+                if (userdetails.RdsUserIdUiPassword == null || userdetails.RdsUserIdUiPassword.Length <= 0)
+                {
+                    MessageBox.Show("A password must be specified."
+                                    , "Validation Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
+                    return FAILURE;
+                }
+                if (userdetails.RdsUserIdUiPassword != userdetails.GetInitialValue<string>("_rds_user_id_ui_password"))
+                {
+                    string returnMessage = string.Empty;
+                    MainMdiService.GetUpPasswordFormRdsUser(userdetails.RdsUserIdUiId, userdetails.RdsUserIdUiPassword, ref returnMessage);
+                    if (returnMessage != null && returnMessage != "")
                     {
-                        MainMdiService.GetUiUseridCountFormRdsUser(userdetails.RdsUserIdUiUserid, ref ll_count);
-                        if (ll_count > 0)
-                        {
-                            MessageBox.Show("The user id specified already exists in the database.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
-                            return FAILURE;
-                        }
-                    }
-                    if (userdetails.RdsUserIdUiPassword == null || userdetails.RdsUserIdUiPassword.Length <= 0)
-                    {
-                        MessageBox.Show("A password must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("The password specified has already been used. Please select another."
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
                         return FAILURE;
                     }
-                    if (userdetails.RdsUserIdUiPassword != userdetails.GetInitialValue<string>("_rds_user_id_ui_password"))
+                }
+                if (userdetails.RdsUserRegionId == null)
+                {
+                    MessageBox.Show("A region must be specified."
+                                   , "Validation Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    dw_detail.DataObject.GetControlByName("rds_user_region_id").Focus();
+                    return FAILURE;
+                }
+            }
+            // TJB  RPCR_054: Added
+            if (adw is  DPieceRateSupplier)
+            {
+                //Check for duplicate payment component types
+                int? nPctId, nTestPctId;
+                string sPrsDescription;
+
+                for (int i = 0; i < adw.RowCount; i++)
+                {
+                    if (adw.GetItem<PieceRateSupplier>(i).IsNew)
                     {
-                        string returnMessage = string.Empty;
-                        MainMdiService.GetUpPasswordFormRdsUser(userdetails.RdsUserIdUiId, userdetails.RdsUserIdUiPassword, ref returnMessage);
-                        if (returnMessage != null && returnMessage != "")
+                        nPctId = adw.GetItem<PieceRateSupplier>(i).PctId;
+                        sPrsDescription = adw.GetItem<PieceRateSupplier>(i).PrsDescription;
+                        //MessageBox.Show("Checking supplier " + sPrsDescription + "\n"
+                        //                , "WMainMidi.pfc_validation");
+                        if (nPctId == null)
                         {
-                            MessageBox.Show("The password specified has already been used, Please select another.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
-                            return FAILURE;
+                            MessageBox.Show("Supplier " + sPrsDescription + "\n\n"
+                                           + "Please select a payment component type.\n"
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ll_c = FAILURE;
+                            break;
+                        }
+                        for (int j = (i + 1); j < adw.RowCount; j++)
+                        {
+                            nTestPctId = adw.GetItem<PieceRateSupplier>(j).PctId;
+                            if (nPctId == nTestPctId)
+                            {
+                                MessageBox.Show("Supplier " + sPrsDescription + "\n\n"
+                                               + "Duplicate payment component type selected.\n\n"
+                                               + "Each piece rate supplier must be associated with a \n"
+                                               + "separate payment component type."
+                                               , "Validation Error"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                ll_c = FAILURE;
+                                break;
+                            }
                         }
                     }
-                    if (userdetails.RdsUserRegionId == null)
-                    {
-                        MessageBox.Show("A region must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        dw_detail.DataObject.GetControlByName("rds_user_region_id").Focus();
-                        return FAILURE;
-                    }
-
-                }            
+                }
+            }
             return ll_c;
         }
-
-        //protected class DwContractType : URadDW
-        //{
-        //    WMainMdi window;
-
-        //    public DwContractType(DataControlPanel dcp)
-        //        : base(dcp)
-        //    {
-        //        window = dcp.FindForm() as WMainMdi;
-        //    }
-        //    public virtual void losefocus(object sender, EventArgs e)
-        //    {
-        //        //!base.losefocus();
-        //        this.AcceptText();
-        //    }
-
-        //    public override int itemchanged(int row, DataColumn dwo, string data)
-        //    {
-        //        base.itemchanged(row, dwo, data);
-        //        /*!  dwItemStatus l_status;
-        //         l_status = dw_detail.GetItemStatus(1, 0, primary!);
-        //          if (l_status == notmodified) 
-        //          {
-        //             // window.dw_detail.SetItemStatus(1, 0, primary!, datamodified!);
-        //              window.dw_detail.Table.DefaultView[1].Row.RowState == System.Data.DataRowState.Modified;
-        //          }
-        //          else if (l_status == new) 
-        //          {
-        //             // window.dw_detail.SetItemStatus(1, 0, primary!, newmodified!);
-        //              window.dw_detail.Table.DefaultView[1].Row.RowState == System.Data.DataRowState.Modified;
-        //          }
-
-        //          DataRow row = window.dw_detail.Table.DefaultView[0].Row;
-        //          if (row.RowState == DataRowState.Unchanged)
-        //          {
-        //              row.SetModified();
-        //          }*/
-        //        return 1;
-        //    }
-
-        //    public virtual void pfc_prermbmenu()
-        //    {
-        //        /* base.pfc_prermbmenu();
-        //         MRdsDw m_SecDw;
-        //         // We create our own rmb menu inherited from m_tvs
-        //         m_SecDw = new MRdsDw();
-        //         m_SecDw.m_table.m_delete.Visible = false;
-        //         m_SecDw.m_table.m_Insert.Visible = false;
-        //         if (dw_contract_type.DataObject == "dw_contract_types")
-        //         {
-        //             m_SecDw.m_table.m_insert.Visible = false;
-        //             m_SecDw.m_table.m_delete.Visible = false;
-        //         }
-        //         // Assign our own menu 
-        //         am_dw = m_SecDw;
-        //         // Let ancestor do its normal processing
-        //         base.dw_contract_type_pfc_prermbmenu(am_dw);*/
-        //    }
-        //}
-
-        //protected class DwUserDetails : URadDW
-        //{
-        //    WMainMdi window;
-
-        //    public DwUserDetails(DataControlPanel dcp)
-        //        : base(dcp)
-        //    {
-        //        window = dcp.FindForm() as WMainMdi;
-        //    }
-        //    public override int itemchanged(int row, DataColumn dwo, string data)
-        //    {
-        //        base.itemchanged(row, dwo, data);
-        //        /*!
-        //        dwItemStatus l_status;
-        //        l_status = dw_detail.GetItemStatus(1, 0, primary!);
-        //        if (l_status == notmodified!) {
-        //            dw_detail.SetItemStatus(1, 0, primary!, datamodified!);
-        //        }
-        //        else if (l_status == new!) {
-        //            dw_detail.SetItemStatus(1, 0, primary!, newmodified!);
-        //        }
-        //        DataRow row = dw_detail.Table.DefaultView[0].Row;
-        //        if (row.RowState == DataRowState.Unchanged)
-        //        {
-        //            row.SetModified();
-        //        }*/
-        //        return 1;
-        //    }
-
-        //    public virtual void losefocus(object sender, EventArgs e)
-        //    {
-        //        //!base.losefocus();
-        //        this.AcceptText();
-        //    }
-
-        //    public virtual void pfc_prermbmenu()
-        //    {
-        //        /*! base.pfc_prermbmenu();
-        //         MRdsDw m_SecDw;
-        //         // We create our own rmb menu inherited from m_tvs
-        //         m_SecDw = new MRdsDw();
-        //         m_SecDw.m_table.m_delete.Visible = false;
-        //         m_SecDw.m_table.m_Insert.Visible = false;
-        //         // Assign our own menu 
-        //         am_dw = m_SecDw;
-        //         // Let ancestor do its normal processing
-        //         base.dw_user_details_pfc_prermbmenu(am_dw);*/
-        //    }
-
-        //    public override void clicked(int xpos, int ypos, int row, DataColumn dwo)
-        //    {
-        //        base.clicked(xpos, ypos, row, dwo);
-        //        string sObjectAtPointer = string.Empty;
-        //        string sDeliveryDays;
-        //        int ll_contract_id;
-        //        int ll_ui_id;
-
-        //        int SQLCode = 0;
-        //        string SQLErrText = string.Empty;
-
-        //        //!  sObjectAtPointer = dw_user_details.GetObjectAtPointer();
-        //        if (TextUtil.Left(sObjectAtPointer, 13) == "unlock_button")
-        //        {
-        //            ll_ui_id = this.GetItemInt(1, "ui_id").Value;
-        //            if (ll_ui_id > 0)
-        //            {
-        //                /* UPDATE rds_user_id SET ui_locked_date = NULL WHERE	ui_id = :ll_ui_id*/
-        //                StaticVariables.ServiceInterface.WMainMdi_DwUserDetails_clicked_1(ref ll_ui_id, ref SQLErrText, ref SQLCode);
-        //                // Commit;
-        //                this.Retrieve(new object[] { ll_ui_id });
-        //            }
-        //        }
-        //    }
-        //}
 
         private void WMainMdi_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.Windows.Forms.Application.Exit();
         }
 
-        // helper methods
-        /* struct GridPropertyChangeInfo
-        {
-            int row;
-            string column;
-            int prop;
-            bool value;
-
-            public GridPropertyChangeInfo(int row, string column, int value)
-            {
-                this.row = row;
-                this.column = column;
-                this.value = value;
-                this.prop = 0;
-            }
-        };
-        List<GridPropertyChangeInfo> propertyChangeList;
-
-        void AddPropertyChangeInfo(int row, string column, bool value)
-        {
-            if(propertyChangeList == null)
-            {
-                propertyChangeList = new List<GridPropertyChangeInfo>();
-            }
-            
-            propertyChangeList.Add(new GridPropertyChangeInfo(row, column, value);
-        }
-
-        void DeferedUpdate(object param)
-        {
-            System.Threading.Thread.Sleep(500);
-        } */
     }
 }
