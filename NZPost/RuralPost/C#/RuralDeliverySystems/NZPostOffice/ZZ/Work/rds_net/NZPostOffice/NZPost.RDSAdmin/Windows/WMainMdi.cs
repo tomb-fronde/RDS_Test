@@ -16,12 +16,16 @@ namespace NZPostOffice.RDSAdmin
 
     public class WMainMdi : FormBase
     {
+        // TJB  RPCR_054  12-Aug-2013
+        // Added additional validations for new piece rate types and suppliers
+        // (see pfc_validation())
+        //
         // TJB  RPCR_054  July-2013
         // Added check for duplicate payment component type 
         //    when creating new piece rate supplier
         // Changed how new piece rate suppliers are added 
         //    (in RDSAdmin.Entity.PieceRateSupplier)
-        // Removed pfc_validation() - was commented out
+        // Removed commented out version of pfc_validation()
 
         private int il_drop_success = 0;
 
@@ -3029,21 +3033,90 @@ namespace NZPostOffice.RDSAdmin
                     return FAILURE;
                 }
             }
-            // TJB  RPCR_054: Added
-            if (adw is  DPieceRateSupplier)
+            // TJB  RPCR_054  12-Aug-2013: Added
+            // Validate new piece_rate_types
+            if (adw is DPieceRateType)
             {
-                //Check for duplicate payment component types
+                int? nPrsKey;
+                string sPrtDescription, sPrtCode, sTestPrtCode;
+
+                for (int i = 0; i < adw.RowCount; i++)
+                {
+                    if (adw.GetItem<PieceRateType>(i).IsNew || adw.GetItem<PieceRateType>(i).IsDirty)
+                    {
+                        //Check for missing piece rate supplier
+                        nPrsKey = adw.GetItem<PieceRateType>(i).PrsKey;
+                        if (nPrsKey == null)
+                        {
+                            MessageBox.Show("A supplier must be selected.\n "
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ll_c = FAILURE;
+                            break;
+                        }
+                        //Check for missing type description
+                        sPrtDescription = adw.GetItem<PieceRateType>(i).PrtDescription;
+                        if (sPrtDescription == null || sPrtDescription == "")
+                        {
+                            MessageBox.Show("A description is required.\n "
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ll_c = FAILURE;
+                            break;
+                        }
+                        //Check for duplicate type codes
+                        sPrtCode = adw.GetItem<PieceRateType>(i).PrtCode;
+                        if (sPrtCode == null || sPrtCode == "")
+                        {
+                            MessageBox.Show("A type code is required.\n "
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ll_c = FAILURE;
+                            break;
+                        }
+                        for (int j = 1; j < adw.RowCount; j++)
+                        {
+                            if (j == i) continue;
+                            sTestPrtCode = adw.GetItem<PieceRateType>(j).PrtCode;
+                            if (sPrtCode == sTestPrtCode)
+                            {
+                                MessageBox.Show("Type " + sPrtDescription + "\n\n"
+                                               + "Duplicate type code specified.\n\n"
+                                               + "Each piece rate type must have a distinct code.\n"
+                                               , "Validation Error"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                ll_c = FAILURE;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            // TJB RPCR_054 April-2013: Added
+            // Validate new piece_rate_suppliers
+            if (adw is DPieceRateSupplier)
+            {
                 int? nPctId, nTestPctId;
                 string sPrsDescription;
 
                 for (int i = 0; i < adw.RowCount; i++)
                 {
-                    if (adw.GetItem<PieceRateSupplier>(i).IsNew)
+                    if (adw.GetItem<PieceRateSupplier>(i).IsNew || adw.GetItem<PieceRateSupplier>(i).IsDirty)
                     {
-                        nPctId = adw.GetItem<PieceRateSupplier>(i).PctId;
+                        //Check for missing supplier description
                         sPrsDescription = adw.GetItem<PieceRateSupplier>(i).PrsDescription;
                         //MessageBox.Show("Checking supplier " + sPrsDescription + "\n"
                         //                , "WMainMidi.pfc_validation");
+                        if (sPrsDescription == null || sPrsDescription == "")
+                        {
+                            MessageBox.Show("A description is required for the supplier.\n "
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ll_c = FAILURE;
+                            break;
+                        }
+                        //Check for missing payment component type
+                        nPctId = adw.GetItem<PieceRateSupplier>(i).PctId;
                         if (nPctId == null)
                         {
                             MessageBox.Show("Supplier " + sPrsDescription + "\n\n"
@@ -3053,6 +3126,7 @@ namespace NZPostOffice.RDSAdmin
                             ll_c = FAILURE;
                             break;
                         }
+                        //Check for duplicate payment component types
                         for (int j = (i + 1); j < adw.RowCount; j++)
                         {
                             nTestPctId = adw.GetItem<PieceRateSupplier>(j).PctId;
