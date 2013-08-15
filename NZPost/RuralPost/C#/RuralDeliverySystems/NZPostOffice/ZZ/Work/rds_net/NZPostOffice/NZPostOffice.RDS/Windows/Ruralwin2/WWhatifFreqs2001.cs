@@ -14,6 +14,9 @@ using System.Reflection;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Aug-2013
+    // Minor formatting and comment changes
+
     public class WWhatifFreqs2001 : WMaster
     {
         #region Define
@@ -287,7 +290,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ll_ConRow++;
                     if (ll_ConRow < ll_ConRowCount)
                     {
-                        if (Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(ll_ConRow).ContractNo != iContract)// "contract_no") != iContract)
+                        if (Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(ll_ConRow).ContractNo != iContract)
                         {
                             lLoop = ll_ConRowCount;
                         }
@@ -299,7 +302,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             dw_1.DataObject.SortString = "sf_key A,rf_active A,rf_distance A";
-            dw_1.Sort<WhatifFreqs>();//?dw_1.Sort<WhatifFreqs>();
+            dw_1.Sort<WhatifFreqs>();
         }
 
         public override void pfc_preopen()
@@ -340,7 +343,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int lBaseRow;
             int ll_count = 0;
             string sDelDays;
-            string[] sCalcDelDays = new string[7];//StringArray sCalcDelDays = new StringArray(7);
+            string[] sCalcDelDays = new string[7];
             string sDay = string.Empty;
             decimal decDelHrs;
             decimal d2RateofReturnCost;
@@ -372,7 +375,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // Initally set up del days to N's
                 sCalcDelDays = new string[] { "N", "N", "N", "N", "N", "N", "N" };
 
-                // Set up contract nu,ber to what has been 'highlighted' on the calling window!
+                // Set up contract number to what has been 'highlighted' on the calling window!
                 lConRow = iContractRow;
                 lBaseRow = iContractRow;
                 decDelHrs = System.Convert.ToDecimal(em_1.Text);
@@ -398,7 +401,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                         if (dwChild.GetValue<int>(lRow2, "sf_days_week") != lNumDays)
                         {
-                            MessageBox.Show("The delivery days selected does not equal the number of days specified for this f" + "requency", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);//parent.Title );
+                            MessageBox.Show("The delivery days selected does not equal the number of days specified for this frequency", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);//parent.Title );
                             return;
                         }
 
@@ -410,34 +413,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         {
                             // PowerBuilder 'Choose Case' statement converted into 'if' statement
                             long TestExpr = iDays;
-                            if (TestExpr == 1)
-                            {
-                                sDay = "monday";
-                            }
-                            else if (TestExpr == 2)
-                            {
-                                sDay = "tuesday";
-                            }
-                            else if (TestExpr == 3)
-                            {
-                                sDay = "wednesday";
-                            }
-                            else if (TestExpr == 4)
-                            {
-                                sDay = "thursday";
-                            }
-                            else if (TestExpr == 5)
-                            {
-                                sDay = "friday";
-                            }
-                            else if (TestExpr == 6)
-                            {
-                                sDay = "saturday";
-                            }
-                            else if (TestExpr == 7)
-                            {
-                                sDay = "sunday";
-                            }
+                            if (TestExpr == 1)      sDay = "monday";
+                            else if (TestExpr == 2) sDay = "tuesday";
+                            else if (TestExpr == 3) sDay = "wednesday";
+                            else if (TestExpr == 4) sDay = "thursday";
+                            else if (TestExpr == 5) sDay = "friday";
+                            else if (TestExpr == 6) sDay = "saturday";
+                            else if (TestExpr == 7) sDay = "sunday";
                             if (dw_1.GetValue(lRow, "rf_" + sDay).ToString() == "Y")
                             {
                                 sCalcDelDays[iDays] = "Y";
@@ -505,13 +487,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         Iw_whatif_calc.idw_summary.SetValue(lConRow, "maxdeliverydays",System.Convert.ToDecimal(0));
                     }
-                    if (Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Deliverydays == 0 || Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Maxdeliverydays == 0)
+                    if (Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Deliverydays == 0 
+                        || Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Maxdeliverydays == 0)
                     {
                         d2RateofReturnCost = 0;
                     }
                     else
                     {
-                        d2RateofReturnCost = Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Rateofreturn1.Value / (Math.Max(Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Deliverydays.Value, 1m) / Math.Max(Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Maxdeliverydays.Value, 1m));
+                        d2RateofReturnCost = Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Rateofreturn1.Value 
+                                                 / (Math.Max(Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Deliverydays.Value, 1m) / Math.Max(Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Maxdeliverydays.Value, 1m));
                         d2RateofReturnCost = d2RateofReturnCost * iDelDays / Math.Max(Iw_whatif_calc.idw_summary.GetItem<WhatifCalulator2005>(lConRow).Maxdeliverydays.Value, 1m);
                     }
                     Iw_whatif_calc.idw_summary.SetValue(lConRow, "rateofreturn_1", d2RateofReturnCost);
