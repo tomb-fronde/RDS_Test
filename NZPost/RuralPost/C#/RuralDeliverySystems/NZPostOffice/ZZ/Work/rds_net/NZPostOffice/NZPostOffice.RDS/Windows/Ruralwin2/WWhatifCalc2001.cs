@@ -20,6 +20,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB  Aug-2013
+        // Tidyup - removed irrelevant comments and other similar changes
+        //
         // TJB  RPCR_041  Jan-2013
         // Changed 'show calcs' button to filp-flop show/hide; removed hide button
         // Changed Totacc, Totdev, Totproc, Totrel to sum AccPerAnnum, DeliveryCost, ProcessingCost, 
@@ -217,8 +220,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             tabpage_report.Controls.Add(dw_whatifreport);
             tabpage_report.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_report.Text = "Full Report";
-            tabpage_report.Name = tabpage_report.Text;//
-
+            tabpage_report.Name = tabpage_report.Text;
             tabpage_report.Size = new System.Drawing.Size(565, 342);
             tabpage_report.Location = new System.Drawing.Point(3, 25);
             // 
@@ -298,7 +300,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public override void pfc_postopen()
         {
             base.pfc_postopen();
-            this.BringToFront();// BringToTop = true;
+            this.BringToFront();
             this.of_setup();
         }
 
@@ -336,10 +338,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             NRdsMsg lnv_Msg;
             NCriteria lnv_Criteria;
             WBenchmarkRates2001 lw_Rates;
-
-            //DECLARE GetRouteFreq CURSOR FOR  
-            //SELECT	route_frequency.sf_key, route_frequency.rf_delivery_days, route_frequency.rf_distance  
-            //FROM route_frequency WHERE 	route_frequency.rf_active = 'Y' AND route_frequency.contract_no = :ll_Contract;
 
             id_RateOf = 0;
             idw_summary.Reset();
@@ -379,8 +377,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_FirstRow = -1;
 
                 // Get frequencies
-                //OPEN GetRouteFreq
-                //FETCH GetRouteFreq INTO :ll_SfKey, :ls_DelDays, :ldec_Distance;
                 List<RouteFrequencyItem> rfList = new List<RouteFrequencyItem>();
                 RDSDataService rService = RDSDataService.GetRouteFrequencyList(ll_Contract.GetValueOrDefault());
                 rfList = rService.RoutFrequencyList;
@@ -395,15 +391,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         ((DWhatifCalulator2005)idw_summary).Retrieve(ll_Contract, ll_Sequence, il_RGCode, ld_EffectDate, ls_VolumeSource);
                         // Store vt_keys
-                        //?idw_summary.GroupCalc();
                         ll_FirstRow = idw_summary.RowCount - 1;
                         idw_summary.SetValue(ll_FirstRow, "firstrow", "Y");
-                        //.GetItemNumber(ll_FirstRow, "numberboxholders");
                         ll_numberboxholders = idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Numberboxholders;
                         ll_numberboxholders = (ll_numberboxholders == null) ? 0 : ll_numberboxholders;
                         if (ll_numberboxholders > 0)
                         {
-                            //.GetItemNumber(ll_FirstRow, "volume");
                             ll_volume = (int)idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Volume;
                             //idw_summary.GetItem<WhatifCalulator2005>(ll_FirstRow).Itemspercust 
                             //                     = Math.Round(System.Convert.ToDecimal(ll_volume) 
@@ -420,7 +413,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     else
                     {
                         ((DWhatifCalulator2005)idw_summary).Retrieve(ll_Contract, ll_Sequence, il_RGCode, ld_EffectDate, ls_VolumeSource);
-                        //?idw_summary.RowsCopy(ll_FirstRow, ll_FirstRow, primary!, idw_summary, idw_summary.RowCount + 1, primary!);
                         idw_summary.SetValue(idw_summary.RowCount - 1, "firstrow", "N");
                         // idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 1).Itemspercust 
                         //                      = idw_summary.GetItem<WhatifCalulator2005>(idw_summary.RowCount - 2).Itemspercust;
@@ -433,16 +425,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     idw_summary.SetValue(ll_Row, "rf_deliverydays", ls_DelDays);
                     idw_summary.SetValue(ll_Row, "rf_distance", ldec_Distance);
 
-                    //select rtd_days_per_annum into :ll_DaysYear 
-                    //  from rate_days 
-                    // where rg_code = :il_RGCode 
-                    //   and rr_rates_effective_date = :ld_EffectDate 
-                    //   and sf_key = :ll_SfKey;
                     ll_DaysYear = RDSDataService.GetRateDaysValue(il_RGCode, ld_EffectDate, ll_SfKey);
                     idw_summary.SetValue(ll_Row, "rf_daysyear", ll_DaysYear);
-                    //FETCH GetRouteFreq INTO :ll_SfKey, :ls_DelDays, :ldec_Distance;
                 }
-                //CLOSE GetRouteFreq
                 ll_RateRow = lw_Rates.dw_listing.GetSelectedRow(ll_RateRow + 1);
             }
 
@@ -473,9 +458,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     for (ll_Row = 0; ll_Row < ll_RowCount; ll_Row++)
                     {
-                        // id_RateOfReturn[ll_Row] = (decimal)idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1;
-                        //.GetItemNumber(ll_Row, "rateofreturn_1");
-                        //id_RateOfReturn.Add(idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1);
                         decimal? dRateofreturn1 = idw_summary.GetItem<WhatifCalulator2005>(ll_Row).Rateofreturn1;
                         id_RateOfReturn.Add(dRateofreturn1);  // TJB: id_RateOfReturn isn't used anywhere?
                     }
@@ -501,7 +483,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int j = 0;
 
             l_group = 0;
-            //l_contract_no_old = idw_summary.GetItem<WhatifCalulator2005>(0).ContractNo;
             l_contract_no_old = 0;
             for (int i = 0; i < idw_summary.RowCount; i++)
             {
@@ -563,13 +544,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             DataUserControl dwc2;
             DataUserControl dwc_rates;
 
-            //?idw_report.Modify("datawindow.print.preview=yes");
             dwc1 = idw_summary.GetChild("dw_rates");
             dwc2 = idw_report.GetChild("dw_rates");
             of_showvehiclerates();
 
-            //?dwc2.Retrieve(il_RGCode, id_EffectDate );
-            //idw_summary.ShareData(idw_report
             idw_report.Reset();
 
             for (int i = 0; i < idw_summary.RowCount; i++)
@@ -677,11 +655,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 dwc1.ShareData(dwc2);
             }
-            //?idw_report.DataControl["st_renewals"].Text = "\'" + is_reportRenewal + '\'');
-            //?idw_report.GroupCalc();
             idw_report.Visible = true;
-            //?idw_report.Focus();
-            //?idw_report.Modify("datawindow.print.preview.zoom=" + 90).ToString();
             this.ResumeLayout();
             return 1;
         }
@@ -698,16 +672,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             //Totacc,Totwd,Totwp
-            decimal? l_Totacc = 0;
-            decimal? l_Totwd = 0;
-            decimal? l_Totwp = 0;
-            decimal? l_Totwr = 0;
+            decimal? l_Totacc = 0;     // Total ACC/yr
+            decimal? l_Totwd = 0;      // Total delivery cost
+            decimal? l_Totwp = 0;      // Total processing cost
+            decimal? l_Totwr = 0;      // Total relief cost
 
             l_contract_no_old = idw_report.GetItem<WhatifCalculatorReport2005>(0).ContractNo;
-            //l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Acccost.GetValueOrDefault();
-            //l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Delcosts.GetValueOrDefault();
-            //l_Totwp = idw_report.GetItem<WhatifCalculatorReport2005>(0).Proccosts.GetValueOrDefault();
-            //l_Totwr = idw_report.GetItem<WhatifCalculatorReport2005>(0).Relcosts.GetValueOrDefault();
             l_Totacc = idw_report.GetItem<WhatifCalculatorReport2005>(0).Accperannum.GetValueOrDefault();
             l_Totwd = idw_report.GetItem<WhatifCalculatorReport2005>(0).Deliverycost.GetValueOrDefault();
             l_Totwp = idw_report.GetItem<WhatifCalculatorReport2005>(0).Processingcost.GetValueOrDefault();
@@ -720,10 +690,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 else
                 {
-                    //l_Totacc += idw_report.GetItem<WhatifCalculatorReport2005>(i).Acccost.GetValueOrDefault();
-                    //l_Totwd += idw_report.GetItem<WhatifCalculatorReport2005>(i).Delcosts.GetValueOrDefault();
-                    //l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Proccosts.GetValueOrDefault();
-                    //l_Totwr += idw_report.GetItem<WhatifCalculatorReport2005>(i).Relcosts.GetValueOrDefault();
                     l_Totacc += idw_report.GetItem<WhatifCalculatorReport2005>(i).Accperannum.GetValueOrDefault();
                     l_Totwd += idw_report.GetItem<WhatifCalculatorReport2005>(i).Deliverycost.GetValueOrDefault();
                     l_Totwp += idw_report.GetItem<WhatifCalculatorReport2005>(i).Processingcost.GetValueOrDefault();
@@ -774,7 +740,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             System.Data.DataTable table = new NZPostOffice.RDS.DataControls.Report.WhatifCalculatorReport2005DataSet(idw_report.BindingSource.DataSource);
             ((REDWhatifCalculatorReport2005)((CrystalDecisions.Windows.Forms.CrystalReportViewer)idw_report.GetControlByName("viewer")).ReportSource).SetDataSource(table);
 
-            //pp! ADDED CODE - update vehicle rates which are not binded but assigned from app code           
             int ll_vtkey = 0;
             string ls_vt;
 
@@ -793,126 +758,101 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                     if (!(of_isvtkeyinlist(ll_vtkey)))
                     {
-                        //FETCH c_vtype INTO :ll_vtkey, :ls_vt;
                         continue;
                     }
 
                     ll_Ctr++;
                     WhatifCalculatorReport2005 item = idw_report.GetItem<WhatifCalculatorReport2005>(k);
 
-                    //?idw_report.Modify("st_nvv" + ll_Ctr.ToString() + ".text=\'" + String(ldec_nominal_vehicle_value, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_nvv" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_nvv" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_nvv" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_nominal_vehicle_value.GetValueOrDefault().ToString("#,##0.00");
                             item.RrrateNomvehicle.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_rm" + ll_Ctr.ToString() + ".text=\'" + String(ldec_repairs_maintenance_rate, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_rm" + ll_Ctr.ToString()] as TextObject).Text)
                          || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_rm" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_rm" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_repairs_maintenance_rate.GetValueOrDefault().ToString("#,##0.00");
                             item.RERrrateRepairsmaint.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_t" + ll_Ctr.ToString() + ".text=\'" + String(ldec_tyre_tubes_rate, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_t" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_t" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_t" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_tyre_tubes_rate.GetValueOrDefault().ToString("#,##0.00");
                             item.RrrateTyretubes.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_va" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_allowance_rate, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_va" + ll_Ctr.ToString()] as TextObject).Text)
                          || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_va" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_va" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_vehicle_allowance_rate.GetValueOrDefault().ToString("#,##0.00");
                             item.RrrateVehallow.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_vi" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_value_insurance_pct, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_vehicle_value_insurance_pct.GetValueOrDefault().ToString("#,##0.00");
                             item.RERrrateVehinsurance.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_via" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_insurance_base_premium, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_via" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_via" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_via" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_vehicle_insurance_base_premium.GetValueOrDefault().ToString("#,##0.00");
                         item.RrrateVehinsurance.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_l" + ll_Ctr.ToString() + ".text=\'" + String(ldec_licence_rate, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_l" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_l" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_l" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_licence_rate.GetValueOrDefault().ToString("#,##0.00");
                             item.RERrrateLicense.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_vrr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_rate_of_return_pct, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vrr" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vrr" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vrr" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_vehicle_rate_of_return_pct.GetValueOrDefault().ToString("#,##0.00");
                             item.RERrrateVehrateofreturn.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_sr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_salvage_ratio, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sr" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sr" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sr" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_salvage_ratio.GetValueOrDefault().ToString("#,##0.00");
                             item.Salvageratio.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_ruc" + ll_Ctr.ToString() + ".text=\'" + String(ldec_ruc, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_ruc" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_ruc" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_ruc" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_ruc.GetValueOrDefault().ToString("#,##0.00");            
                             item.RERrrateRuc.GetValueOrDefault().ToString("#,##0.00");
                     }
 
-                    //?idw_report.Modify("st_sk" + ll_Ctr.ToString() + ".text=\'" + String(ldec_sundries_k, "#,##0.00") + '\'');
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sk" + ll_Ctr.ToString()] as TextObject).Text)
                          || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sk" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
                     {
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sk" + ll_Ctr.ToString()] as TextObject).Text =
-                            //!ldec_sundries_k.GetValueOrDefault().ToString("#,##0.00");         
                             item.RERrrateSundriesk.GetValueOrDefault().ToString("#,##0.00");
                     }
                 }
             }
-            //pp! EOF ADDED CODE - update vehicle rates which are not binded but assigned from app code           
-
             ((CrystalDecisions.Windows.Forms.CrystalReportViewer)idw_report.GetControlByName("viewer")).RefreshReport();
         }
 
@@ -998,8 +938,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         bDone = true;
                     }
-                    /*lRow =*/
-                    //idw_dist.InsertItem<WhatifDistribution2001>(0);//.InsertRow(0);
                     idw_dist.AddItem<WhatifDistribution2001>(new WhatifDistribution2001());
                     idw_dist.SetValue(lRow, "from", System.Convert.ToDouble(RangeFrom));
                     idw_dist.SetValue(lRow, "to", System.Convert.ToDouble(RangeFrom + OffsetFromRangeFrom));
@@ -1042,11 +980,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             store_group_distribution();
-            // idw_dist.print ( true)
-            //?idw_dist.Modify("datawindow.print.preview=yes");
-            //?idw_dist.Modify("datawindow.print.preview.zoom=" + 90).ToString();
-            //?((DWhatifDistribution2001)idw_dist).RefreshData();
-
             this.ResumeLayout();
             return 0;
         }
@@ -1106,7 +1039,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int of_showvehiclerates()
         {
-            // idw_report.dataobject = 'd_whatif_calculator_report2001bf3'
             int ll_Ctr = 0;
             int ll_vtkey = 0;
             string ls_vt;
@@ -1150,12 +1082,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ldec_vor_vehicle_insurance_premium = null;
             ldec_vor_livery = null;
 
-            /*
-            DECLARE c_vtype CURSOR FOR
-            SELECT  vt_key,vt_description FROM vehicle_type where vt_key = 2 
-            union SELECT  vt_key, vt_description FROM vehicle_type where vt_key = 1
-            union SELECT  vt_key, vt_description FROM vehicle_type where vt_key not in  ( 1, 2);
-            OPEN c_vtype FETCH c_vtype INTO :ll_vtkey, :ls_vt;*/
 
             List<VehicleTypeItem> vtList = new List<VehicleTypeItem>();
             RDSDataService rService = RDSDataService.GetVehicleTypeList();
@@ -1169,34 +1095,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (!(of_isvtkeyinlist(ll_vtkey)))
                 {
-                    //FETCH c_vtype INTO :ll_vtkey, :ls_vt;
                     continue;
                 }
                 if (ll_Ctr == 4)
                 {
-                    //idw_report.DataControl["st_cannotdisplay"].Text = "\'Some rates cannot be displayed due to space limitations\'";
                     ((TextObject)(((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_cannotdisplay"])).Text = "Some rates cannot be displayed due to space limitations";
                     break;
                 }
                 ll_Ctr++;
 
-                //idw_report.Modify("st_title" + ll_Ctr.ToString() + ".text=\'" + ls_vt + '\'');
                 ((TextObject)(((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_title" + ll_Ctr.ToString()])).Text = ls_vt;
-
-                /*
-                SELECT vr_nominal_vehicle_value, vr_repairs_maintenance_rate, vr_tyre_tubes_rate,   
-                vr_vehicle_allowance_rate, vr_licence_rate, vr_vehicle_rate_of_return_pct,   
-                vr_salvage_ratio, vr_ruc, vr_sundries_k, vr_vehicle_value_insurance_pct,   
-                vr_livery, nvr_vehicle_insurance_base_premium
-                INTO :ldec_nominal_vehicle_value, :ldec_repairs_maintenance_rate, :ldec_tyre_tubes_rate,
-                :ldec_vehicle_allowance_rate, :ldec_licence_rate, :ldec_vehicle_rate_of_return_pct,
-                :ldec_salvage_ratio, :ldec_ruc, :ldec_sundries_k, :ldec_vehicle_value_insurance_pct,
-                :ldec_livery, :ldec_vehicle_insurance_base_premium
-                FROM vehicle_rate, non_vehicle_rate 
-                WHERE vt_key = :ll_vtkey AND vr_rates_effective_date =  :id_effectdate 
-                AND non_vehicle_rate.nvr_rates_effective_date  = vehicle_rate.vr_rates_effective_date 
-                AND non_vehicle_rate.rg_code = :il_rgcode ;
-                */
 
                 List<VehicleRateNonVehicleRateItem> vvList = new List<VehicleRateNonVehicleRateItem>();
                 RDSDataService rdsService = RDSDataService.GetMoreValues1(ll_vtkey, id_EffectDate, il_RGCode);
@@ -1220,22 +1128,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 //  TJB SR4560
                 //  Get override rates if there's only one contract involved.
-                //  il_contract  ( and il_sequence) will be set to the contract number 
-                //   ( in of_loadvtkeys) if there's only one contract; to 0 otherwise.
+                //  il_contract (and il_sequence) will be set to the contract number 
+                //  (in of_loadvtkeys) if there's only one contract; to 0 otherwise.
                 if (il_contract != 0)
                 {
-                    /*
-                    SELECT first vor_nominal_vehicle_value ,vor_repairs_maintenance_rate ,vor_tyre_tubes_rate
-                    ,vor_vehical_allowance_rate ,vor_licence_rate ,vor_vehicle_rate_of_return_pct
-                    ,vor_salvage_ratio ,vor_ruc ,vor_sundries_k ,vor_vehicle_insurance_premium ,vor_livery
-                    INTO :ldec_vor_nominal_vehicle_value , :ldec_vor_repairs_maintenance_rate ,
-                    :ldec_vor_tyre_tubes_rate , :ldec_vor_vehicle_allowance_rate , :ldec_vor_licence_rate , 
-                    :ldec_vor_vehicle_rate_of_return_pct , :ldec_vor_salvage_ratio , :ldec_vor_ruc ,
-                    :ldec_vor_sundries_k , :ldec_vor_vehicle_insurance_premium , :ldec_vor_livery 
-                    FROM vehicle_override_rate
-                    WHERE contract_no = :il_contract and contract_seq_number = :il_sequence 
-                    order by vor_effective_date desc;
-                   */
                     List<VehicleOverrideRateItem> vlist = new List<VehicleOverrideRateItem>();
                     RDSDataService rdsService2 = RDSDataService.GetVehicleOverrideRateList(il_contract, il_sequence);
                     vlist = rdsService2.VehicleOverrideRateList;
@@ -1299,77 +1195,62 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 CrystalDecisions.CrystalReports.Engine.ReportClass report = ((DWhatifCalculatorReport2005)idw_report).Report;
                 TextObject txt;
 
-                //?idw_report.Modify("st_nvv" + ll_Ctr.ToString() + ".text=\'" + String(ldec_nominal_vehicle_value, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_nvv" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_nominal_vehicle_value.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_rm" + ll_Ctr.ToString() + ".text=\'" + String(ldec_repairs_maintenance_rate, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_rm" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_repairs_maintenance_rate.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_t" + ll_Ctr.ToString() + ".text=\'" + String(ldec_tyre_tubes_rate, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_t" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_tyre_tubes_rate.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_va" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_allowance_rate, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_va" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_vehicle_allowance_rate.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_vi" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_value_insurance_pct, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_vehicle_value_insurance_pct.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_via" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_insurance_base_premium, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_via" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_vehicle_insurance_base_premium.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_l" + ll_Ctr.ToString() + ".text=\'" + String(ldec_licence_rate, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_l" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_licence_rate.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_vrr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_rate_of_return_pct, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_vrr" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_vehicle_rate_of_return_pct.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_sr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_salvage_ratio, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_sr" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_salvage_ratio.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_ruc" + ll_Ctr.ToString() + ".text=\'" + String(ldec_ruc, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_ruc" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_ruc.GetValueOrDefault().ToString("#,##0.00");
                 }
-                //?idw_report.Modify("st_sk" + ll_Ctr.ToString() + ".text=\'" + String(ldec_sundries_k, "#,##0.00") + '\'');
                 txt = report.ReportDefinition.ReportObjects["st_sk" + ll_Ctr.ToString()] as TextObject;
                 if (txt != null)
                 {
                     txt.Text = ldec_sundries_k.GetValueOrDefault().ToString("#,##0.00");
                 }
-
-                //FETCH c_vtype INTO :ll_vtkey, :ls_vt;
             }
-            //?CLOSE c_vtype
-
             return 1;
         }
 
@@ -1400,7 +1281,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 if (!(of_isvtkeyinlist(ll_VtKey)))
                 {
-                    ila_VtKeys.Add(ll_VtKey); //ila_VtKeys[ila_VtKeys.Count + 1] = ll_VtKey;
+                    ila_VtKeys.Add(ll_VtKey); 
                 }
             }
             if (lb_oneContract == false)
@@ -1409,12 +1290,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 il_sequence = 0;
             }
 
-            /*?
-             while (SecondsAfter(tnow, Now()) < 1)
-             {
-             }
-              */
-            //?StaticVariables.gnv_app.of_hidestatus();
             return 1;
         }
 
@@ -1449,15 +1324,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? ldec_vehicle_value_insurance_pct;
             decimal? ldec_livery;
             decimal? ldec_vehicle_insurance_base_premium;
-            /*
-            DECLARE c_vtype CURSOR FOR
-            SELECT  vt_key, vt_description FROM vehicle_type where vt_key = 2 union
-            SELECT  vt_key, vt_description FROM vehicle_type where vt_key = 1 union
-            SELECT  vt_key, vt_description FROM vehicle_type where vt_key not in  ( 1, 2);
-            OPEN c_vtype
-            FETCH c_vtype INTO :ll_vtkey, :ls_vt;
-            while (StaticVariables.sqlca.SQLCode == 0)
-             */
 
             List<VehicleTypeItem> vtList = new List<VehicleTypeItem>();
             RDSDataService rService = RDSDataService.GetVehicleTypeList();
@@ -1480,24 +1346,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     break;
                 }
                 ll_Ctr++;
-                // set title
-                //?idw_report.Modify("st_title" + ll_Ctr.ToString() + ".text=\'" + ls_vt + '\'');
-                // get rates
-
-                /*
-                SELECT vr_nominal_vehicle_value,vr_repairs_maintenance_rate,vr_tyre_tubes_rate,vr_vehicle_allowance_rate,   
-                vr_licence_rate,vr_vehicle_rate_of_return_pct,vr_salvage_ratio,vr_ruc,   
-                vr_sundries_k,vr_vehicle_value_insurance_pct,vr_livery,nvr_vehicle_insurance_base_premium
-                INTO  :ldec_nominal_vehicle_value,:ldec_repairs_maintenance_rate,:ldec_tyre_tubes_rate,
-                :ldec_vehicle_allowance_rate,:ldec_licence_rate,:ldec_vehicle_rate_of_return_pct,
-                :ldec_salvage_ratio,:ldec_ruc,:ldec_sundries_k,
-                :ldec_vehicle_value_insurance_pct,:ldec_livery,:ldec_vehicle_insurance_base_premium
-                FROM vehicle_rate,non_vehicle_rate  
-                WHERE vt_key = :ll_vtkey  AND  
-                vr_rates_effective_date =  :id_effectdate and 
-                non_vehicle_rate.nvr_rates_effective_date  = vehicle_rate.vr_rates_effective_date and   
-                non_vehicle_rate.rg_code = :il_rgcode ;
-                */
 
                 List<VehicleRateNonVehicleRateItem> vvList = new List<VehicleRateNonVehicleRateItem>();
                 RDSDataService rdsService = RDSDataService.GetMoreValues1(ll_vtkey, id_EffectDate, il_RGCode);
@@ -1518,24 +1366,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ldec_vehicle_value_insurance_pct = vvList[0].VrVehicleValueInsurancePct;
                 ldec_livery = vvList[0].VrLivery;
                 ldec_vehicle_insurance_base_premium = vvList[0].NvrVehicleInsuranceBasePremium;
-                // set rates
-                //?idw_report.Modify("st_nvv" + ll_Ctr.ToString() + ".text=\'" + String(ldec_nominal_vehicle_value, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_rm" + ll_Ctr.ToString() + ".text=\'" + String(ldec_repairs_maintenance_rate, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_t" + ll_Ctr.ToString() + ".text=\'" + String(ldec_tyre_tubes_rate, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_va" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_allowance_rate, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_vi" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_value_insurance_pct, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_via" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_insurance_base_premium, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_l" + ll_Ctr.ToString() + ".text=\'" + String(ldec_licence_rate, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_vrr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_vehicle_rate_of_return_pct, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_sr" + ll_Ctr.ToString() + ".text=\'" + String(ldec_salvage_ratio, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_ruc" + ll_Ctr.ToString() + ".text=\'" + String(ldec_ruc, "#,##0.00") + '\'');
-                //?idw_report.Modify("st_sk" + ll_Ctr.ToString() + ".text=\'" + String(ldec_sundries_k, "#,##0.00") + '\'');
-
-                //FETCH c_vtype INTO :ll_vtkey, :ls_vt;
             }
-            //CLOSE c_vtype
 
-            // idw_report.DataControl["st_title1"].Text = "'FUCK OFF'")
             return 1;
         }
 
@@ -1593,7 +1425,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             bool b_KeyCtrl = StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl);
             bool b_KeyShift = StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift);
 
-            //if (StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyCtrl) && StaticFunctions.KeyDown(StaticFunctions.KeyIndexes.KeyShift))
             if ( b_KeyCtrl && b_KeyShift )
             {
                 cb_showcalc.Visible = true;
@@ -1603,7 +1434,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
-            // dw_1.saveas ( )
             this.Close();
         }
 
@@ -1611,11 +1441,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             Cursor.Current = Cursors.WaitCursor;
             string str = tab_1.TabPages[tab_1.SelectedIndex].Text.ToLower().Trim();
-            if (str == "full report") //(tab_1.SelectedIndex == 1)// (newindex == 2)
+            if (str == "full report")
             {
                 of_showreport();
             }
-            if (str == "distribution report")//(tab_1.SelectedIndex == 2) //(newindex == 3)
+            if (str == "distribution report")
             {
                 of_showdistribution();
             }
@@ -1627,23 +1457,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int lRow;
             string sObjectAtPointer = "";
             //?sObjectAtPointer = dw_summary.GetObjectAtPointer();
-            if (sObjectAtPointer != "")// (!(StaticVariables.gnv_app.of_isempty(sObjectAtPointer))) 
+            if (sObjectAtPointer != "")
             {
-                sObjectAtPointer = sObjectAtPointer.Substring(sObjectAtPointer.IndexOf("~") + 1);//  TextUtil.Mid (sObjectAtPointer, TextUtil.Pos (sObjectAtPointer, '~') + 1);
+                sObjectAtPointer = sObjectAtPointer.Substring(sObjectAtPointer.IndexOf("~") + 1);
                 lRow = System.Convert.ToInt32(sObjectAtPointer);
                 if (lRow > 0)
                 {
-                    lContract = idw_summary.GetItem<WhatifCalulator2005>(lRow).ContractNo;//.GetItemNumber(lRow, "contract_no");
-                    //?idw_summary.DataControl["st_contract"].Text = "\'" + lContract.ToString() + '\'');
+                    lContract = idw_summary.GetItem<WhatifCalulator2005>(lRow).ContractNo;
                 }
             }
-            this.ResumeLayout(); //SetRedraw(true);
+            this.ResumeLayout();
         }
 
         public virtual void dw_summary_doubleclicked(object sender, EventArgs e)
         {
             string ls_oap = "";
-            ls_oap = ((Metex.Windows.DataEntityGrid)sender).CurrentColumnName;//dw_summary.GetObjectAtPointer();
+            ls_oap = ((Metex.Windows.DataEntityGrid)sender).CurrentColumnName;
             of_openfreqs(ls_oap);
         }
 
@@ -1664,17 +1493,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void cb_print_clicked(object sender, EventArgs e)
         {
-            // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            int TestExpr = tab_1.SelectedIndex;//.SelectedTab;
-            if (TestExpr == 0)//1)
+            int TestExpr = tab_1.SelectedIndex;
+            if (TestExpr == 0)
             {
                 ((DWhatifCalulator2005)idw_summary).Print();
             }
-            else if (TestExpr == 1)//2)
+            else if (TestExpr == 1)
             {
                 ((DWhatifCalculatorReport2005)idw_report).Print();
             }
-            else if (TestExpr == 2)//3)
+            else if (TestExpr == 2)
             {
                 ((DWhatifDistribution2001)idw_dist).Print();
             }
