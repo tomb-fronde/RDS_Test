@@ -6,6 +6,8 @@ using NZPostOffice.RDS.Entity.Ruralwin2;
 
 namespace NZPostOffice.RDS.DataControls.Report
 {
+    // TJB Aug-2013
+    // Added ReliefWeeks in vain attempt to make accessible in Whatif report
 
     public class RWhatifCalculatorReport2005
     {
@@ -1210,6 +1212,14 @@ namespace NZPostOffice.RDS.DataControls.Report
                 return DateTime.MinValue;
             }
         }
+        public decimal ReliefWeeks
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
     }
 
     public class WhatifCalculatorReport2005DataSet : ReportDataSet<WhatifCalculatorReport2005>
@@ -1756,11 +1766,13 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn Compute17 = new DataColumn("Compute17", typeof(DateTime));
 
+        public DataColumn ReliefWeeks = new DataColumn("ReliefWeeks", typeof(decimal));
+
 
         public WhatifCalculatorReport2005DataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				ContractNo,REContractNo,ContractSeqNumber,REContractSeqNumber,ConTitle,REConTitle,Nominalvehical,RENominalvehical,Delwagerate,REDelwagerate,Repairsmaint,RERepairsmaint,Tyrestubes,RETyrestubes,Vehicalallow,REVehicalallow,Vehicalinsure,REVehicalinsure,Publiclia,REPubliclia,Carrierrisk,RECarrierrisk,Accrate,REAccrate,Licence,RELicence,Rateofreturn,RERateofreturn,Salvageratio,RESalvageratio,Itemshour,REItemshour,Fuel,REFuel,Consumption,REConsumption,Routedistance,RERoutedistance,Deliveryhours,REDeliveryhours,Processinghours,REProcessinghours,Volume,REVolume,Deliverydays,REDeliverydays,Maxdeliverydays,REMaxdeliverydays,Numberboxholders,RENumberboxholders,Routedistanceperday,RERoutedistanceperday,Vehicledepreciation,REVehicledepreciation,Fuelcostperannum,REFuelcostperannum,Repairsperannum,RERepairsperannum,Tyrestubesperannum,RETyrestubesperannum,Deliverycost,REDeliverycost,Processingcost,REProcessingcost,Publicliabilitycost,REPublicliabilitycost,Accperannum,REAccperannum,Vehicleinsurance,REVehicleinsurance,Licensing,RELicensing,Carrierriskrate,RECarrierriskrate,Benchmark,REBenchmark,Rateofreturn1,RERateofreturn1,Finalbenchmark,REFinalbenchmark,Retainedallowances,RERetainedallowances,Currentpayment,RECurrentpayment,SfKey,RESfKey,RfDistance,RERfDistance,RfDeliverydays,RERfDeliverydays,RfDaysyear,RERfDaysyear,RfDaysweek,RERfDaysweek,Itemspercust,REItemspercust,RfActive,RERfActive,Firstrow,REFirstrow,Currentbenchmark,RECurrentbenchmark,Accounting,REAccounting,Telephone,RETelephone,Sundries,RESundries,Ruc,RERuc,RrrateNomvehicle,RERrrateNomvehicle,RrrateDelWage,RERrrateDelWage,RrrateRepairsmaint,RERrrateRepairsmaint,RrrateTyretubes,RERrrateTyretubes,RrrateVehallow,RERrrateVehallow,RrrateVehinsurance,RERrrateVehinsurance,RrratePubliclia,RERrratePubliclia,RrrateCarrierrisk,RERrrateCarrierrisk,RrrateAcc,RERrrateAcc,RrrateLicense,RERrrateLicense,RrrateVehrateofreturn,RERrrateVehrateofreturn,RrrateSalvageratio,RERrrateSalvageratio,RrrateItemprocrate,RERrrateItemprocrate,RrrateRuc,RERrrateRuc,RrrateAccounting,RERrrateAccounting,RrrateTelephone,RERrrateTelephone,RrrateSundries,RERrrateSundries,RrrateSundriesk,RERrrateSundriesk,Sundriesk,RESundriesk,Nmultiplier,RENmultiplier,Ninsurancepct,RENinsurancepct,Nlivery,RENlivery,Nuniform,RENuniform,Naccamount,RENaccamount,Nvtkey,RENvtkey,Reliefcost,REReliefcost,Procwagerate,REProcwagerate,RrrateProcWage,RERrrateProcWage,Compute1,Proccosts,Delcosts,Acccost,Contract,Calcroutedistance,Calcdelhours,Calcbenchmark,Benchdiff,Calcvd,Calcfc,Calcrep,Calctt,Calcdc,Calcvolume,Calcpc,Calcpl,Calcacc,Calcvi,Calclic,Compute2,Publiclia2,Numcustsforcontract,Sruc,Saccounting,Ssundries,Stelephone,Compute3,Compute4,Calccrr,Kmsyear,REKmsyear,Totvol,RETotvol,Compute5,RECompute5,Compute6,RECompute6,Totdelhrs,RETotdelhrs,Totprochrs,RETotprochrs,Maxdaysallcontracts,REMaxdaysallcontracts,Oldacc,REOldacc,Oldtotwd,REOldtotwd,Oldtotwp,Totfuel,RETotfuel,Truc,RETruc,Totrm,RETotrm,Tsundriesk,RETsundriesk,Tottt,RETottt,Totva,RETotva,Totvi,RETotvi,Totpl,RETotpl,Totcr,RETotcr,Ttelephone,RETtelephone,Tsundries,RETsundries,Totwp,RETotwp,Compute9,RECompute9,Compute10,RECompute10,Compute11,RECompute11,Compute12,RECompute12,Compute14,RECompute14,Compute15,RECompute15,Compute16,RECompute16,Totwr,RETotwr,Totbm,RETotbm,Totalfloor,RETotalfloor,Totalcurrent,RETotalcurrent,Compute8,RECompute8,Totror,Taccounting,Totrel,Totacc,Totwd,Relcosts,Compute18,Compute17
+				ContractNo,REContractNo,ContractSeqNumber,REContractSeqNumber,ConTitle,REConTitle,Nominalvehical,RENominalvehical,Delwagerate,REDelwagerate,Repairsmaint,RERepairsmaint,Tyrestubes,RETyrestubes,Vehicalallow,REVehicalallow,Vehicalinsure,REVehicalinsure,Publiclia,REPubliclia,Carrierrisk,RECarrierrisk,Accrate,REAccrate,Licence,RELicence,Rateofreturn,RERateofreturn,Salvageratio,RESalvageratio,Itemshour,REItemshour,Fuel,REFuel,Consumption,REConsumption,Routedistance,RERoutedistance,Deliveryhours,REDeliveryhours,Processinghours,REProcessinghours,Volume,REVolume,Deliverydays,REDeliverydays,Maxdeliverydays,REMaxdeliverydays,Numberboxholders,RENumberboxholders,Routedistanceperday,RERoutedistanceperday,Vehicledepreciation,REVehicledepreciation,Fuelcostperannum,REFuelcostperannum,Repairsperannum,RERepairsperannum,Tyrestubesperannum,RETyrestubesperannum,Deliverycost,REDeliverycost,Processingcost,REProcessingcost,Publicliabilitycost,REPublicliabilitycost,Accperannum,REAccperannum,Vehicleinsurance,REVehicleinsurance,Licensing,RELicensing,Carrierriskrate,RECarrierriskrate,Benchmark,REBenchmark,Rateofreturn1,RERateofreturn1,Finalbenchmark,REFinalbenchmark,Retainedallowances,RERetainedallowances,Currentpayment,RECurrentpayment,SfKey,RESfKey,RfDistance,RERfDistance,RfDeliverydays,RERfDeliverydays,RfDaysyear,RERfDaysyear,RfDaysweek,RERfDaysweek,Itemspercust,REItemspercust,RfActive,RERfActive,Firstrow,REFirstrow,Currentbenchmark,RECurrentbenchmark,Accounting,REAccounting,Telephone,RETelephone,Sundries,RESundries,Ruc,RERuc,RrrateNomvehicle,RERrrateNomvehicle,RrrateDelWage,RERrrateDelWage,RrrateRepairsmaint,RERrrateRepairsmaint,RrrateTyretubes,RERrrateTyretubes,RrrateVehallow,RERrrateVehallow,RrrateVehinsurance,RERrrateVehinsurance,RrratePubliclia,RERrratePubliclia,RrrateCarrierrisk,RERrrateCarrierrisk,RrrateAcc,RERrrateAcc,RrrateLicense,RERrrateLicense,RrrateVehrateofreturn,RERrrateVehrateofreturn,RrrateSalvageratio,RERrrateSalvageratio,RrrateItemprocrate,RERrrateItemprocrate,RrrateRuc,RERrrateRuc,RrrateAccounting,RERrrateAccounting,RrrateTelephone,RERrrateTelephone,RrrateSundries,RERrrateSundries,RrrateSundriesk,RERrrateSundriesk,Sundriesk,RESundriesk,Nmultiplier,RENmultiplier,Ninsurancepct,RENinsurancepct,Nlivery,RENlivery,Nuniform,RENuniform,Naccamount,RENaccamount,Nvtkey,RENvtkey,Reliefcost,REReliefcost,Procwagerate,REProcwagerate,RrrateProcWage,RERrrateProcWage,Compute1,Proccosts,Delcosts,Acccost,Contract,Calcroutedistance,Calcdelhours,Calcbenchmark,Benchdiff,Calcvd,Calcfc,Calcrep,Calctt,Calcdc,Calcvolume,Calcpc,Calcpl,Calcacc,Calcvi,Calclic,Compute2,Publiclia2,Numcustsforcontract,Sruc,Saccounting,Ssundries,Stelephone,Compute3,Compute4,Calccrr,Kmsyear,REKmsyear,Totvol,RETotvol,Compute5,RECompute5,Compute6,RECompute6,Totdelhrs,RETotdelhrs,Totprochrs,RETotprochrs,Maxdaysallcontracts,REMaxdaysallcontracts,Oldacc,REOldacc,Oldtotwd,REOldtotwd,Oldtotwp,Totfuel,RETotfuel,Truc,RETruc,Totrm,RETotrm,Tsundriesk,RETsundriesk,Tottt,RETottt,Totva,RETotva,Totvi,RETotvi,Totpl,RETotpl,Totcr,RETotcr,Ttelephone,RETtelephone,Tsundries,RETsundries,Totwp,RETotwp,Compute9,RECompute9,Compute10,RECompute10,Compute11,RECompute11,Compute12,RECompute12,Compute14,RECompute14,Compute15,RECompute15,Compute16,RECompute16,Totwr,RETotwr,Totbm,RETotbm,Totalfloor,RETotalfloor,Totalcurrent,RETotalcurrent,Compute8,RECompute8,Totror,Taccounting,Totrel,Totacc,Totwd,Relcosts,Compute18,Compute17,ReliefWeeks
 				});
             ContractNo.AllowDBNull = true;
             REContractNo.AllowDBNull = true;
@@ -2020,7 +2032,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             Totwd.AllowDBNull = true;
             Relcosts.AllowDBNull = true;
             Compute17.AllowDBNull = true;
-
+            ReliefWeeks.AllowDBNull = true;
         }
 
         public WhatifCalculatorReport2005DataSet(object dataSource)
@@ -2307,6 +2319,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["Relcosts"] = GetFieldValue(data.Relcosts);
             row["Compute18"] = GetFieldValue(data.Compute18);
             row["Compute17"] = GetFieldValue(data.Compute17);
+            row["ReliefWeeks"] = GetFieldValue(data.ReliefWeeks);
             return row;
         }
     }
