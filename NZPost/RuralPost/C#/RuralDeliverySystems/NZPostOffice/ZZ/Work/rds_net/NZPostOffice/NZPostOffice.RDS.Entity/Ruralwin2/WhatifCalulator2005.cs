@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB Release 7.1.10 Aug-2013 Hack/Workaround
+    // Trying to get ReliefWeeks into WhatifReport
+    // Try using _rrrate_itemprocrate (appears unused)
+    //
     // TJB  RPCR_041  Nov-2012
     // Changed relief_weeks, delivery_cost, processing_cost and relief_cost to decimal
 
@@ -353,9 +357,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         private decimal? _rrrate_proc_wage;
 
         [DBField()]
-        private decimal? _relief_weeks;  //private int? _relief_weeks;
+        private decimal? _relief_weeks;
 
-        public virtual decimal? ReliefWeeks  // public virtual int? ReliefWeeks
+        public virtual decimal? ReliefWeeks
         {
             get
             {
@@ -2339,6 +2343,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
                             instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
                             instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
+                            // TJB Aug-2013 Hack
+                            // Trying to get ReliefWeeks into WhatifReport
+                            // Try using _rrrate_itemprocrate (appears unused)
+                            instance._rrrate_itemprocrate = instance._relief_weeks;
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
