@@ -5,6 +5,10 @@ using System;
 using NZPostOffice.ODPS.Controls;
 namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
+    // TJB  RPCR_056  June-2013
+    // Added ids_allowance_breakdown;
+    //       ids_detail_piecerates;
+
     partial class WInvoiceSearch
     {
         /// <summary>
@@ -116,9 +120,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
         public URdsDw ids_detailcp;
         public URdsDw ids_detailxp;
         public URdsDw ids_detailpp;
-        public URdsDw ids_payment_details;
         public URdsDw ids_payment_pr;
         public URdsDw ids_payment_ded;
+        public URdsDw ids_allowance_breakdown;
+        public URdsDw ids_payment_details;
+        public URdsDw ids_detail_piecerates;
         public Label st_1;
         public Label messagearea;
         public Button cb_export;
