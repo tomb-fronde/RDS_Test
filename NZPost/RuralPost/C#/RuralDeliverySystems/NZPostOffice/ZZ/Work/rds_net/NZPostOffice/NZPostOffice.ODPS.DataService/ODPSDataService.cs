@@ -9,8 +9,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_054 June-2013
+    // Add optional ExportFlag to [_]GetODRPFInvoicePayPiecerateDetail
+    //
     // TJB  RPCR_056  June-2013
-    // New: GetODDWSInvoiceAllowanceDetail
+    // New: [_]GetODDWSInvoiceAllowanceDetail
     //
     // TJB RPCR_020 Sept-2010
     // Added 'Contract <no>' to ded_reference
@@ -218,13 +221,21 @@ namespace NZPostOffice.ODPS.DataService
             return obj;
         }
 
+        //  TJB  RPCR_054 June-2013
+        //  Add optional ExportFlag
         /// <summary>
         /// select odps.OD_RPF_Invoice_pay_piecerate_detail(:alcontractor,:alcontract,:edate,:alregion,:li_ctKey) 
         ///   into :lreturn from sys.dummy
         /// </summary>
         public static ODPSDataService GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey)
         {
-            ODPSDataService obj = Execute("_GetODRPFInvoicePayPiecerateDetail", alcontractor, edate, alcontract, alregion, sname, li_ctKey);
+            ODPSDataService obj = Execute("_GetODRPFInvoicePayPiecerateDetail", alcontractor, edate, alcontract, alregion, sname, li_ctKey, 0);
+            return obj;
+        }
+
+        public static ODPSDataService GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey, int? nExportFlag)
+        {
+            ODPSDataService obj = Execute("_GetODRPFInvoicePayPiecerateDetail", alcontractor, edate, alcontract, alregion, sname, li_ctKey, nExportFlag);
             return obj;
         }
 
@@ -821,13 +832,24 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_054  June-2013
+        // Added nExportFlag
+        //   = 0   OD_RPF_Invoice_pay_piecerate_detail behaves normally
+        //              t_invoice_piecerates, t_invoice_piecerates2 populated for invoice
+        //   = 1   OD_RPF_Invoice_pay_piecerate_detail modified
+        //              t_invoice_piecerates (only) populated for export file
+
         [ServerMethod]
-        private void _GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey)
+        private void _GetODRPFInvoicePayPiecerateDetail(int? alcontractor, DateTime? edate, int? alcontract, int? alregion, string sname, int? li_ctKey, int? nExportFlag)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
+                    // TJB  RPCR_054  July-2013
+                    // Set the timeout longer if getting data for many contracts
+                    cm.CommandTimeout = (alcontract == null || alcontract == 0) ? 20 : 300;
+
                     shellImport = new ShellImport();
 
                     cm.CommandType = CommandType.StoredProcedure;
@@ -839,6 +861,7 @@ namespace NZPostOffice.ODPS.DataService
                     pList.Add(cm, "inRegion", alregion);
                     pList.Add(cm, "inCname", sname);
                     pList.Add(cm, "inCtKey", li_ctKey);
+                    pList.Add(cm, "inExportFlag", nExportFlag);
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
