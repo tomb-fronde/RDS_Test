@@ -27,9 +27,11 @@ namespace NZPostOffice.Shared.VisualComponents
         {
             this.InitializeComponent();
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetEntryAssembly();
+            string sBuiltOn = AppManager.ApplicationBuiltOn;
             lblVersion.Text = "Version " + AppManager.ApplicationVersion + " " +
-                " (Built on " + string.Format("{0: dd/MM/yyyy HH:mm:ss}",
-                    System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) + ")";
+                " (Built on " + string.Format("{0: dd/MM/yyyy HH:mm:ss}"
+                                   , System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) + ")" + "\n"
+                                   + "AppMgr builton = " + sBuiltOn;
                 //!AppManager.ApplicationBuiltOn;
             lblApplication.Text = ((AssemblyTitleAttribute)assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
             lblCopyright.Text = ((AssemblyCopyrightAttribute)assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)[0]).Copyright;
