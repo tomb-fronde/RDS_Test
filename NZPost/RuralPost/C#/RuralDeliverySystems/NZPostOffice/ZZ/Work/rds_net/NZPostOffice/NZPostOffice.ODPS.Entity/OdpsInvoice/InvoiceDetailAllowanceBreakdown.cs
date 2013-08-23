@@ -9,7 +9,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsInvoice
 {
-    // TJB  RPCR_056  June-2-13: New
+    // TJB  RPCR_056  June-2013: New
     // Gets allowance breakdown information from t_invoice_allowances 
     // for invoice.
     
@@ -23,7 +23,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
     [MapInfo("alt_value", "_alt_value", "")]
     [System.Serializable()]
 
-    //public class InvoiceDetailPaymentPrDetailkm : Entity<InvoiceDetailPaymentPrDetailkm>
     public class InvoiceDetailAllowanceBreakdown : Entity<InvoiceDetailAllowanceBreakdown>
     {
         #region Business Methods
@@ -140,24 +139,21 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
         #endregion
 
         #region Factory Methods
-        //public static InvoiceDetailPaymentPrDetailkm NewInvoiceDetailPaymentPrDetailkm(int? invoiceid, int? contractno, int? contractorno, DateTime? payperiod_start, DateTime? payperiod_end)
-        public static InvoiceDetailAllowanceBreakdown NewInvoiceDetailAllowanceBreakdown(int? invoiceid)
+        public static InvoiceDetailAllowanceBreakdown NewInvoiceDetailAllowanceBreakdown(int? inInvoiceId)
         {
-            //return Create(invoiceid, contractno, contractorno, payperiod_start, payperiod_end);
-            return Create(invoiceid);
+            return Create(inInvoiceId);
         }
 
-        //public static InvoiceDetailPaymentPrDetailkm[] GetAllInvoiceDetailPaymentPrDetailkm(int? invoiceid, int? contractno, int? contractorno, DateTime? payperiod_start, DateTime? payperiod_end)
-        public static InvoiceDetailAllowanceBreakdown[] GetAllInvoiceDetailAllowanceBreakdown(int? invoiceid)
+        public static InvoiceDetailAllowanceBreakdown[] GetAllInvoiceDetailAllowanceBreakdown(int? inInvoiceId)
         {
-            return Fetch(invoiceid).list;
+            return Fetch(inInvoiceId).list;
         }
         #endregion
 
         #region Data Access
+
         [ServerMethod]
-        //private void FetchEntity(int? invoiceid, int? contractno, int? contractorno, DateTime? payperiod_start, DateTime? payperiod_end)
-        private void FetchEntity(int? invoiceid)
+        private void FetchEntity(int? inInvoiceId)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -166,23 +162,21 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.od_rps_invoice_pay_allowance_breakdown";
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "invoiceid", invoiceid);
+                    pList.Add(cm, "inInvoiceId", inInvoiceId);
                     
-                    //List<InvoiceDetailPaymentPrDetailkm> _list = new List<InvoiceDetailPaymentPrDetailkm>();
                     List<InvoiceDetailAllowanceBreakdown> _list = new List<InvoiceDetailAllowanceBreakdown>();
-                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    try
                     {
-                        try
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                //InvoiceDetailPaymentPrDetailkm instance = new InvoiceDetailPaymentPrDetailkm();
                                 InvoiceDetailAllowanceBreakdown instance = new InvoiceDetailAllowanceBreakdown();
-                                instance.ContractNo = GetValueFromReader<Int32?>(dr, 0);
-                                instance.InvoiceId = GetValueFromReader<Int32?>(dr, 1);
-                                instance.AltKey = GetValueFromReader<Int32?>(dr, 2);
-                                instance.AltDescription = GetValueFromReader<string>(dr, 3);
-                                instance.AltValue = GetValueFromReader<decimal?>(dr, 4);
+                                instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
+                                instance._invoice_id = GetValueFromReader<Int32?>(dr, 1);
+                                instance._alt_key = GetValueFromReader<Int32?>(dr, 2);
+                                instance._alt_description = GetValueFromReader<string>(dr, 3);
+                                instance._alt_value = GetValueFromReader<decimal?>(dr, 4);
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
@@ -190,11 +184,11 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                             }
                             list = _list.ToArray();
                         }
-                        catch (Exception e)
-                        {
-                            this.sqlCode = -1;
-                            this.sqlErrText = e.Message;
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        this.sqlCode = -1;
+                        this.sqlErrText = e.Message;
                     }
                 }
             }
