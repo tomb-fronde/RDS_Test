@@ -96,7 +96,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
             DataTable table10 = new  NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailppDataSet(new RInvoiceDetailPaymentPrDetailpp());
             this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrDetailpp.rpt"].SetDataSource(table10);
 
-            DataTable table11 = new  NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrMessageDataSet(new RInvoiceDetailPaymentPrMessage());
+            DataTable table11 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrMessageDataSet(new RInvoiceDetailPaymentPrMessage());
             this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailPaymentPrMessage.rpt"].SetDataSource(table11);
 
             // TJB  RPCR_056  June-2013
@@ -173,8 +173,10 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                 // TJB  RPCR_056  June-2013
                 this.reDwInvoiceHeaderv5.Subreports["REDwInvoiceDetailAllowanceBreakdown.rpt"].SetDataSource(table12S);
             }
-            catch (Exception e) 
-            { 
+            catch (Exception ex) 
+            {
+                string errmsg;
+                errmsg = ex.Message;
             }
 
             viewer.RefreshReport();
