@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
+    // TJB  RPCR_054  July-2013
+    // Added cb_save
+
     //declare delegate for insert delete 
     public delegate void EventDelegate();
 
@@ -23,22 +26,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             InitializeComponent();
         }
 
-        public virtual void ue_new()
-        {
-            //?dw_selection.triggerevent("pfc_AddRow");
-            //?dw_selection.Focus();
-        }
-
-        public virtual void ue_delete()
-        {
-            //?dw_selection.triggerevent("pfc_DeleteRow");
-            //?dw_selection.Focus();
-            DialogResult dlg;
-            dlg = MessageBox.Show("Are you sure you want to delete this row?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dlg == DialogResult.Yes)
-                this.dw_selection.DeleteItemAt(this.dw_selection.GetRow());
-        }
-
         public virtual void constructor()
         {
             cb_open.Left = Width - 60 - cb_open.Width;
@@ -47,6 +34,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             cb_new.Top = cb_open.Top + cb_open.Height + 40;
             cb_delete.Left = cb_open.Left ;
             cb_delete.Top  = cb_new.Top + cb_new.Height + 40;
+            cb_save.Left = cb_open.Left;
+            cb_save.Top = cb_delete.Top + cb_delete.Height + 40;
             dw_selection.Left = 40;
             dw_selection.Top  = 40;
             dw_selection.Width = cb_open.Left - 80;
@@ -71,13 +60,40 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             this.ue_new();
         }
 
+        public virtual void ue_new()
+        {
+            //?dw_selection.triggerevent("pfc_AddRow");
+            //?dw_selection.Focus();
+        }
+
         public virtual void cb_delete_clicked(object sender, EventArgs e)
         {
             //?base.clicked();
             //dw_selection.triggerevent("pfc_deleterow");
             ue_delete();
         }
- 
+
+        public virtual void ue_delete()
+        {
+            //?dw_selection.triggerevent("pfc_DeleteRow");
+            //?dw_selection.Focus();
+            DialogResult dlg;
+            dlg = MessageBox.Show("Are you sure you want to delete this row?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dlg == DialogResult.Yes)
+                this.dw_selection.DeleteItemAt(this.dw_selection.GetRow());
+        }
+
+        public virtual void cb_save_clicked(object sender, EventArgs e)
+        {
+            //?base.clicked();
+            //?parent.TriggerEvent("ue_open");
+            this.ue_save();
+        }
+        public virtual void ue_save()
+        {
+
+        }
+
         public virtual void dw_selection_doubleclicked(object sender, EventArgs e)
         {
             //?base.doubleclicked();

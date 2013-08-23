@@ -3,6 +3,11 @@ using NZPostOffice.ODPS.Controls;
 using System;
 namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
+    // TJB  RPCR_054  July-2013
+    // Added cb_save and associated routines in UoAccountCode, 
+    // UoOaymentComponentType and UoPbuCode.  Button hidden in
+    // UoNational.
+
     partial class UDrilldownList
     {
         /// <summary>
@@ -37,13 +42,15 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             this.cb_new = new UCb();
             this.dw_selection = new URdsDw();
             this.cb_open = new UCb();
+            this.cb_save = new UCb();
             Controls.Add(cb_delete);
             Controls.Add(cb_new);
             Controls.Add(dw_selection);
             Controls.Add(cb_open);
+            Controls.Add(cb_save);
 
             this.Size = new System.Drawing.Size(280, 150);
-     
+
             // 
             // cb_open
             // 
@@ -53,7 +60,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             cb_open.Location = new System.Drawing.Point(208, 8);
             cb_open.Size = new System.Drawing.Size(60, 23);
             cb_open.Click += new EventHandler(cb_open_clicked);
-          
+
             // 
             // cb_new
             //
@@ -71,9 +78,17 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             cb_delete.Location = new System.Drawing.Point(208, 72);
             cb_delete.Size = new System.Drawing.Size(60, 23);
             cb_delete.Click += new EventHandler(cb_delete_clicked);
-            
 
-           
+            // 
+            // cb_save
+            // 
+            cb_save.Text = "Save";
+            cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            cb_save.TabIndex = 2;
+            cb_save.Location = new System.Drawing.Point(208, 104);
+            cb_save.Size = new System.Drawing.Size(60, 23);
+            cb_save.Click += new EventHandler(cb_save_clicked);
+
             // 
             // dw_selection
             // 
@@ -94,6 +109,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
         public UCb cb_new;
         public URdsDw dw_selection;
         public UCb cb_open;
+        public UCb cb_save;
 
         #endregion
     }
