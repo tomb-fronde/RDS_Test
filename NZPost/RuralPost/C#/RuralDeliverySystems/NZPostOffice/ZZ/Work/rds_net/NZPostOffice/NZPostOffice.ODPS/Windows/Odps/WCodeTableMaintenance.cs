@@ -12,6 +12,9 @@ using NZPostOffice.ODPS.Entity.Odps;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_o54  June-2013
+    // Added code to manipulate visibility of uo_1.cb_save
+
     public partial class WCodeTableMaintenance : WMaster
     {
         #region Define
@@ -53,7 +56,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 	Object:			w_CodeTables
             // 	Method:			pfc_PreOpen
             // 	Description:	perform the open logic, start the window services desired
-            // This.of_SetResize  (  TRUE )
+            // This.of_SetResize ( TRUE )
         }
 
         public override void pfc_postopen()
@@ -96,7 +99,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             //  pfc_deleterow is triggered by the menu and is trapped here
             //  from where it is redirected to the required tab
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            int TestExpr = tab_folder.SelectedIndex + 1;//.selectedtab;
+            int TestExpr = tab_folder.SelectedIndex + 1;
             if (TestExpr == 1)
             {
                 //tab_folder.tabpage_account_code.uo_1.triggerevent("ue_delete");
@@ -215,32 +218,6 @@ namespace NZPostOffice.ODPS.Windows.Odps
             return iRet;
         }
 
-        //?public virtual void pfc_endtran(int ai_update_results) 
-        //{
-        //    base.pfc_endtran();
-        //    // 	Object:			w_CodeTables
-        //    // 	Method:			pfc_EndTran
-        //    // 	Description:	issue the commit or rollback accordingly
-        //    int li_Return;
-        //    if (ai_update_results < 0) 
-        //    {
-        //        ROLLBACK USING SQLCA;
-        //        li_Return = -(1);
-        //    }
-        //    else {
-        //        COMMIT USING SQLCA;
-        //        if (StaticVariables.sqlca.SQLCode != 0)
-        //        {
-        //            ROLLBACK USING SQLCA;
-        //            li_Return = -(1);
-        //        }
-        //        else {
-        //            li_Return = 1;
-        //        }
-        //    }
-        //    return li_Return;
-        //}
-
         public virtual int of_retrievedw(URdsDw adwv_control)
         {
             // 	Object:			w_CodeTable
@@ -249,11 +226,9 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 	Arguments:		adwv_Control - datawindow of type u_dw
             // 	Returns:			0
             int ll_RowCount;
-            // 	HELP:	setup the retrieval arguments  (  if any ) for the datawindow
-            //? this.SetMicroHelp("Retrieving Information . . .");
+            // 	HELP:	setup the retrieval arguments (if any) for the datawindow
             ll_RowCount = adwv_control.Retrieve();
             adwv_control.Focus();
-            //? this.SetMicroHelp("Ready");
             return ll_RowCount;
         }
 
@@ -285,25 +260,29 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 //tabpage_account_code.uo_1.dw_selection.retrieve();
                 uo_1.dw_selection.Retrieve();
                 ib_account_retrieve = true;
+                uo_1.cb_save.Visible = true;
             }
             if (newindex == 2 && !ib_pbu_retrieve)
             {
                 //tabpage_pbu_code.uo_2.dw_selection.retrieve();
                 uo_2.dw_selection.Retrieve();
                 ib_pbu_retrieve = true;
+                uo_2.cb_save.Visible = true;
             }
             if (newindex == 3 && !ib_pct_retrieve)
             {
                 //tabpage_pct.uo_3.dw_selection.retrieve();
                 uo_3.dw_selection.Retrieve();
                 ib_pct_retrieve = true;
+                uo_3.cb_save.Visible = true;
             }
             if (newindex == 4 && !ib_national_retrieve)
             {
                 //tabpage_national.uo_4.dw_selection.retrieve();
                 uo_4.dw_selection.Retrieve();
                 ib_national_retrieve = true;
-                // tabpage_national.uo_4.of_show ( tabpage_national.uo_4.cb_delete,false)
+                // tabpage_national.uo_4.of_show(tabpage_national.uo_4.cb_delete,false)
+                uo_4.cb_save.Visible = false;
             }
         }
     }
