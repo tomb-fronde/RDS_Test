@@ -3,12 +3,16 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Forms;
 using NZPostOffice.ODPS.Windows.OdpsLib;
 using NZPostOffice.ODPS.Entity.OdpsRep;
 using Metex.Windows;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_054  July-2013
+    // Added ue_save
+
     public partial class UoPaymentComponentType : UDrilldownList
     {
         public UoPaymentComponentType()
@@ -42,6 +46,12 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.dw_selection.InsertItem<PaymentComponentType>(this.dw_selection.RowCount);
             this.dw_selection.Focus();
             this.dw_selection.SetCurrent(this.dw_selection.RowCount);
+        }
+
+        // TJB  RPCR_054  July-2013: Added
+        public override void ue_save()
+        {
+            this.dw_selection.Save();
         }
     }
 }
