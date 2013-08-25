@@ -19,6 +19,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
+        // TJB  Aug-2013
+        // Renamed buttons cb_1, cb_2 to cb_selectall, cb_unselectall
+        //
         // TJB  RPCR038  Oct-2012
         // Bug fix: printed blank mail carried reports after first valid one
         //    -removed uninitialised variable
@@ -83,7 +86,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_bm;
 
-        public Button cb_2s;
+        public Button cb_selectall;
 
         public Button cb_bmlast;
 
@@ -93,7 +96,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Button cb_searchs;
 
-        public Button cb_1;
+        public Button cb_unselectall;
 
         public Panel l_1;
 
@@ -209,12 +212,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_listings = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_create_pending = new System.Windows.Forms.Button();
             this.cb_bm = new System.Windows.Forms.Button();
-            this.cb_2s = new System.Windows.Forms.Button();
+            this.cb_selectall = new System.Windows.Forms.Button();
             this.cb_bmlast = new System.Windows.Forms.Button();
             this.cb_update_pv = new System.Windows.Forms.Button();
             this.cb_printsked = new System.Windows.Forms.Button();
             this.cb_searchs = new System.Windows.Forms.Button();
-            this.cb_1 = new System.Windows.Forms.Button();
+            this.cb_unselectall = new System.Windows.Forms.Button();
             this.tabpage_2 = new System.Windows.Forms.TabPage();
             this.dw_bm_report = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_printbm = new System.Windows.Forms.Button();
@@ -262,12 +265,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_1.Controls.Add(this.dw_listings);
             this.tabpage_1.Controls.Add(this.cb_create_pending);
             this.tabpage_1.Controls.Add(this.cb_bm);
-            this.tabpage_1.Controls.Add(this.cb_2s);
+            this.tabpage_1.Controls.Add(this.cb_selectall);
             this.tabpage_1.Controls.Add(this.cb_bmlast);
             this.tabpage_1.Controls.Add(this.cb_update_pv);
             this.tabpage_1.Controls.Add(this.cb_printsked);
             this.tabpage_1.Controls.Add(this.cb_searchs);
-            this.tabpage_1.Controls.Add(this.cb_1);
+            this.tabpage_1.Controls.Add(this.cb_unselectall);
             this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_1.Location = new System.Drawing.Point(4, 22);
             this.tabpage_1.Name = this.tabpage_1.Text;
@@ -353,15 +356,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_bm.Text = "Benchmark";
             this.cb_bm.Click += new System.EventHandler(this.cb_bm_clicked);
             // 
-            // cb_2s
+            // cb_selectall
             // 
-            this.cb_2s.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_2s.Location = new System.Drawing.Point(437, 103);
-            this.cb_2s.Name = "cb_2s";
-            this.cb_2s.Size = new System.Drawing.Size(76, 22);
-            this.cb_2s.TabIndex = 2;
-            this.cb_2s.Text = "Select &All";
-            this.cb_2s.Click += new System.EventHandler(this.cb_2s_clicked);
+            this.cb_selectall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_selectall.Location = new System.Drawing.Point(437, 103);
+            this.cb_selectall.Name = "cb_selectall";
+            this.cb_selectall.Size = new System.Drawing.Size(76, 22);
+            this.cb_selectall.TabIndex = 2;
+            this.cb_selectall.Text = "Select &All";
+            this.cb_selectall.Click += new System.EventHandler(this.cb_selectall_clicked);
             // 
             // cb_bmlast
             // 
@@ -409,15 +412,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.cb_searchs.Text = "&Search";
             this.cb_searchs.Click += new System.EventHandler(this.cb_searchs_clicked);
             // 
-            // cb_1
+            // cb_unselectall
             // 
-            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_1.Location = new System.Drawing.Point(437, 135);
-            this.cb_1.Name = "cb_1";
-            this.cb_1.Size = new System.Drawing.Size(76, 22);
-            this.cb_1.TabIndex = 5;
-            this.cb_1.Text = "&Unselect All";
-            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
+            this.cb_unselectall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_unselectall.Location = new System.Drawing.Point(437, 135);
+            this.cb_unselectall.Name = "cb_unselectall";
+            this.cb_unselectall.Size = new System.Drawing.Size(76, 22);
+            this.cb_unselectall.TabIndex = 5;
+            this.cb_unselectall.Text = "&Unselect All";
+            this.cb_unselectall.Click += new System.EventHandler(this.cb_unselectall_clicked);
             // 
             // tabpage_2
             // 
@@ -928,13 +931,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 tabpage_2.Enabled = true;
                 tab_1.SelectedIndex = 1;     //.selectTab(2);
-                    //?dw_benchmark_report.Modify("datawindow.print.preview.zoom=" + 90).ToString();
             }
-                //?commit;
             StaticVariables.gnv_app.of_hidestatus(ref w_status);
         }
 
-        public virtual void cb_2s_clicked(object sender, EventArgs e)
+        public virtual void cb_selectall_clicked(object sender, EventArgs e)
         {
             dw_listing.SelectRow(0, true);
         }
@@ -1319,7 +1320,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.l_1.Width = 328;
         }
 
-        public virtual void cb_1_clicked(object sender, EventArgs e)
+        public virtual void cb_unselectall_clicked(object sender, EventArgs e)
         {
             dw_listing.SelectRow(0, false);
         }
