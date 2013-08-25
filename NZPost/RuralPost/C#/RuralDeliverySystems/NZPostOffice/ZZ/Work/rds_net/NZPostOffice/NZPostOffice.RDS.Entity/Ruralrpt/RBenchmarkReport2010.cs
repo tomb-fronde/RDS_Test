@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB RPCR_054  July-2013
+    // Changed stored proc name to reflect change in piece rate handling
+    // 
     // TJB Oct-2010 Changed prcedure name and added frequency info
 
 	// Mapping info for object fields to DB
@@ -1944,6 +1947,7 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 		[ServerMethod]
 		private void FetchEntity( int? inContract, int? inSequence )
 		{
+            // TJB RPCR_054  July-2013: Changed stored proc name
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
@@ -1953,7 +1957,8 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                     // New proc includes frequency information (description, days and distance)
                     // for up to 5 frequencies per contract.
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2006";
-                    cm.CommandText = "rd.sp_GetBenchmarkRpt2010";
+                    //cm.CommandText = "rd.sp_GetBenchmarkRpt2010";
+                    cm.CommandText = "rd.sp_GetBenchmarkRpt2013";
                     ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContract", inContract);
 					pList.Add(cm, "inSequence", inSequence);
