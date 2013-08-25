@@ -10,6 +10,12 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_054  June-2013
+    // - (NEW) CheckExistingPieceRate: Check to see if there is n existing piece rate
+    // - Re-wrote _GetContractList query to select on arbitrary effective date 
+    //   (not just a renewal date) and to take the active indicator into account.
+    // - (NEW) [_]AddPieceRate
+    //
     // TJB  RPCR_036  23-Apr-2012   NEW
     // Added UpdateAdrDeliveryDays(adr_id)
     //
@@ -82,7 +88,6 @@ namespace NZPostOffice.RDS.DataService
         public bool ret = false;
         private string dataObject;
         public int intVal;
-//        private int ll_count;
         public DateTime? dtVal;
         public string strVal;
         public decimal? decVal;
@@ -1011,11 +1016,38 @@ namespace NZPostOffice.RDS.DataService
         /// </summary>
         public static DateTime? GetPieceRateMax(int? il_rg_code, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_GetPieceRateMax", il_rg_code);//, ref sqlCode, ref sqlErrText);
+            RDSDataService obj = Execute("_GetPieceRateMax", il_rg_code);
             sqlCode = obj._sqlcode;
             sqlErrText = obj._sqlerrtext;
             return obj.dtVal;
         }
+
+        // TJB  RPCR_054  June-2013: NEW
+        /// <summary>
+        ///    Insert a new piece rate into the piece_rate table
+        ///    Checks first to see if this duplicates an existing rate
+        /// Returns
+        ///    0    Insert failed (duplicate)
+        ///    1    Insert successful
+        /// </summary>
+        public static int AddPieceRate(int nPrtKey, int nRgCode, DateTime dtPrEffectiveDate, string sPrActive, decimal dPrRate)
+        {
+            RDSDataService obj = Execute("_AddPieceRate", nPrtKey, nRgCode, dtPrEffectiveDate, sPrActive, dPrRate);
+            return obj.intVal;
+        }
+
+        // TJB  RPCR_054  June-2013: NEW
+        /// <summary>
+        /// Check to see if there is already a record for this piece rate
+        /// (same prt_key, renewal group and effective date 
+        /// </summary>
+//        public static bool CheckExistingPieceRate(int? nPrtKey, int? nRgCode, DateTime? dtEffDate, ref int sqlCode, ref string sqlErrText)
+//        {
+//            RDSDataService obj = Execute("_CheckExistingPieceRate", nPrtKey, nRgCode, dtEffDate);
+//            sqlCode = obj._sqlcode;
+//            sqlErrText = obj._sqlerrtext;
+//            return obj.ret;
+//        }
 
         /// <summary>
         /// SELECT max(rr_rates_effective_date) INTO @ld_Max_PrEffective_Date FROM rate_days WHERE rg_code =@il_rg_code;
@@ -1164,8 +1196,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary> 
-        /// select count(*) 
-        ///   into @row_count
+        /// select count(*) into @row_count
         ///   from address addr 
         ///  where addr.tc_id = @il_long_parm
         /// </summary>
@@ -1178,7 +1209,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary> 
-        ///  select count (*) into @row_count from address addr 
+        ///  select count(*) into @row_count from address addr 
         ///   where addr.contract_no = @il_long_parm
         /// </summary>
         public static int GetAddrContractNo(int? il_long_parm, ref int SQLCode, ref string SQLErrText)
@@ -1477,7 +1508,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary> 
-        /// select count (mail_carried.mc_dispatch_carried)
+        /// select count(mail_carried.mc_dispatch_carried)
         ///   into @ll_num_dispatches
         ///   from contract, outlet, contract_renewals, mail_carried
         ///  where contract.contract_no = @lContract
@@ -1510,7 +1541,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary> 
-        ///Select count (*) Into @lCount 
+        ///Select count(*) Into @lCount 
         ///  From contractor_renewals cr, contract c, outlet o 
         /// Where cr.contract_no=c.contract_no And 
         ///       c.con_base_office=o.outlet_id And 
@@ -1640,7 +1671,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// SELECT Count (*) INTO @lCustCount FROM  address 
+        /// SELECT Count(*) INTO @lCustCount FROM  address 
         ///  WHERE contract_no = @lContractNo;
         /// </summary>
         public static int GetAddressCount(int lContractNo, ref int sqlCode, ref string sqlErrText)
@@ -1683,7 +1714,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select count (*) into @ll_count 
+        /// select count(*) into @ll_count 
         ///   from contract, contract_renewals 
         ///  where contract.contract_no = @il_Contract_no and
         ///        contract.contract_no = contract_renewals.contract_no and 
@@ -1789,7 +1820,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select count (*) into @icount from route_audit where ra_date_of_check = @dtCheck 	and contract_no = @ll_Contract 
+        /// select count(*) into @icount from route_audit where ra_date_of_check = @dtCheck 	and contract_no = @ll_Contract 
         /// </summary>        
         public static int GetRouteAuditCount(DateTime? dtCheck, int? ll_Contract)
         {
@@ -1825,8 +1856,8 @@ namespace NZPostOffice.RDS.DataService
 
         /// <summary>
         /// insert into contract_renewals 
-        ///            ( contract_no, contract_seq_number, con_relief_driver_name,con_relief_driver_address, con_relief_driver_home_phone)
-        ///            values( @lContract, @lSequence, @sname,@saddr, @sphone);
+        ///        (contract_no, contract_seq_number, con_relief_driver_name,con_relief_driver_address, con_relief_driver_home_phone)
+        /// values (@lContract, @lSequence, @sname,@saddr, @sphone);
         /// </summary>
         public static void InsertIntoContractRenewals(int? lcontract, int? lsequence, string sname, string saddr, string sphone, ref int sqlCode, ref string sqlErrText)
         {
@@ -1870,11 +1901,11 @@ namespace NZPostOffice.RDS.DataService
 
         /// <summary>
         /// INSERT INTO vehicle
-        ///             (  vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year,   
+        ///            (vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year,   
         ///            v_vehicle_registration_number, v_vehicle_cc_rating, v_road_user_charges_indicator,   
         ///            v_purchased_date, v_purchase_value, v_leased, v_vehicle_month, v_vehicle_transmission, 
         ///            vs_key, v_remaining_economic_life, v_vehicle_speedo_kms, v_vehicle_speedo_date, v_salvage_value)
-        ///            VALUES  (  @lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration,   
+        /// VALUES (@lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration,   
         ///            @lCCRate, @sUserCharge, @dPurchase, @lPurchase, @sLeased , @lMonth, @sTransmission, 
         ///            @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage )
         /// </summary>
@@ -1928,7 +1959,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// select count (*) into @lCount from contractor_renewals where contract_no = @lContract and contract_seq_number = @lSequence
+        /// select count(*) into @lCount from contractor_renewals where contract_no = @lContract and contract_seq_number = @lSequence
         /// </summary>
         public static int GetContractorRenewalsCount2(int? lContract, int? lSequence)
         {
@@ -1993,7 +2024,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///Select count ( *)  Into @lCount From contractor Where contractor_supplier_no = @lSupplier
+        ///Select count(*) Into @lCount From contractor Where contractor_supplier_no = @lSupplier
         /// </summary>
         public static int GetContractorCount2(int? lSupplier)
         {
@@ -2014,7 +2045,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        ///SELECT count ( *) INTO @li_rows FROM contract  WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence
+        ///SELECT count(*) INTO @li_rows FROM contract  WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence
         /// </summary>
         public static int GetContractorCount3(int? il_contract, int? il_sequence, ref int SQLCode, ref string SQLErrText)
         {
@@ -2874,19 +2905,27 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT piece_rate.pr_rate, piece_rate.pr_effective_date" +
-                                    "    FROM rd.contract join rd.contract_renewals " +
-                                                              " on (contract.contract_no = contract_renewals.contract_no)" + 
-                                                        " join rd.piece_rate" +
-                                                              " on  contract_renewals.con_rg_code_at_renewal = piece_rate.rg_code" +
-                                                              " and contract_renewals.con_rates_effective_date = piece_rate.pr_effective_date" +
-                                                              " and piece_rate.prt_key = @lPRKey" +
-                                    "    WHERE contract.contract_no = @lContract " +
-                                    "    AND contract_renewals.contract_seq_number = " +
-                                                     " (SELECT max(contract_seq_number) " +
-                                                        " FROM contract_renewals " +
-                                                       " WHERE contract_renewals.con_start_date <= @dPRDDate " +
-                                                         " and contract_renewals.contract_no = contract.contract_no) ";
+                    // TJB  RPCR_054  June-2013
+                    // Re-wrote query to select on arbitrary effective date (not just a renewal date)
+                    // and to take the active indicator into account.
+                    cm.CommandText = " SELECT pr1.pr_rate " 
+                                    + "     , pr1.pr_effective_date"
+                                    + "  FROM rd.piece_rate pr1"
+                                    + " WHERE pr1.prt_key = @lPRKey "
+                                    + "   AND pr1.pr_active_status = 'Y' "
+                                    + "   AND pr1.rg_code "
+                                    + "          = (select con_rg_code_at_renewal from contract_renewals "
+                                    + "              where contract_no = @lContract "
+                                    + "                and contract_seq_number "
+                                    + "                     = (SELECT max(contract_seq_number) FROM contract_renewals "
+                                    + "                         WHERE contract_no = @lContract "
+                                    + "                           AND con_start_date <= @dPRDDate))"
+                                    + "   AND pr1.pr_effective_date "
+                                    + "          = (select max(pr2.pr_effective_date) from piece_rate pr2"
+                                    + "              where pr2.prt_key = pr1.prt_key "
+                                    + "                and pr2.rg_code = pr1.rg_code "
+                                    + "                and pr2.pr_active_status = 'Y' "
+                                    + "                and pr2.pr_effective_date <= @dPRDDate)";
 
                     pList.Add(cm, "lPRKey", lPRKey);
                     pList.Add(cm, "lContract", lContract);
@@ -8163,7 +8202,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     DateTime? sequence = null;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT max(pr_effective_date) FROM rd.piece_rate WHERE rg_code = @il_rg_code;";
+                    cm.CommandText = "SELECT max(pr_effective_date) FROM rd.piece_rate " 
+                                   + " WHERE rg_code = @il_rg_code;";
                     pList.Add(cm, "il_rg_code", il_rg_code);
                     try
                     {
@@ -8184,6 +8224,99 @@ namespace NZPostOffice.RDS.DataService
                         _sqlerrtext = ex.Message;
                     }
                     dtVal = sequence;
+                }
+            }
+        }
+
+        // TJB  RPCR_054  June-2013: New
+        ///    Insert a new piece rate into the piece_rate table
+        ///    Checks first to see if this duplicates an existing rate
+        /// Returns
+        ///    0    Insert failed (duplicate)
+        ///    1    Insert successful
+        [ServerMethod]
+        private void _AddPieceRate(int nPrtKey, int nRgCode, DateTime dtPrEffectiveDate, string sPrActive, decimal dPrRate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int result = 0;
+
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_AddPieceRate";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inPrtKey", nPrtKey);
+                    pList.Add(cm, "inRGCode", nRgCode);
+                    pList.Add(cm, "inPrEffectiveDate", dtPrEffectiveDate);
+                    pList.Add(cm, "inPrActive", sPrActive);
+                    pList.Add(cm, "inPrRate", dPrRate);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _sqlcode = 0;
+                                result = dr.GetInt32(0);
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                    intVal = result;
+                }
+            }
+        }
+
+        // TJB  RPCR_054  June-2013
+        // Check to see if there is already a piece rate
+        // If there is, it is going to be updated; if not, a new one will be inserted
+        [ServerMethod]
+        private void _CheckExistingPieceRate(int? nPrtKey, int? nRgCode, DateTime? dtEffDate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? test = null;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "SELECT 1 FROM rd.piece_rate "
+                                   + " WHERE rg_code = @nRgCode "
+                                   + "   AND prt_key = @nPrtKey "
+                                   + "   AND pr_effective_date = @dtEffDate";
+                    pList.Add(cm, "nPrtKey", nPrtKey);
+                    pList.Add(cm, "nRgCode", nRgCode);
+                    pList.Add(cm, "dtEffDate", dtEffDate);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _sqlcode = 0;
+                                test = dr.GetInt32(0);
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                    ret = (test == null) ? false : true;
                 }
             }
         }
@@ -9267,7 +9400,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT rg_description FROM rd.renewal_group WHERE rg_code = @ll_rgCode";
+                    cm.CommandText = "SELECT rg_description FROM rd.renewal_group " 
+                                   + " WHERE rg_code = @ll_rgCode";
                     pList.Add(cm, "ll_rgCode", ll_rgCode);
                     try
                     {
@@ -10436,8 +10570,8 @@ namespace NZPostOffice.RDS.DataService
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "SELECT renewal_group.rg_description FROM rd.renewal_group  " +
-                        "WHERE renewal_group.rg_code = @lRenGroup";
+                    cm.CommandText = "SELECT rg_description FROM rd.renewal_group " 
+                                   + " WHERE rg_code = @lRenGroup";
 
                     pList.Add(cm, "lRenGroup", lRenGroup);
 
