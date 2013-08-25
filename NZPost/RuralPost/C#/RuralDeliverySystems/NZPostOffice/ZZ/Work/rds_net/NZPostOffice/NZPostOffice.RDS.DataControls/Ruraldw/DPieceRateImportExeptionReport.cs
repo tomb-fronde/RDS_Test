@@ -54,7 +54,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //!this.viewer.PrintReport();
             DPieceRateImportExeptionReport_Load(null, null);
             this.viewer.RefreshReport();
-            (this.viewer.ReportSource as CrystalDecisions.CrystalReports.Engine.ReportClass).PrintToPrinter(1, false, 0, 0);
+            try
+            {
+                (this.viewer.ReportSource as CrystalDecisions.CrystalReports.Engine.ReportClass).PrintToPrinter(1, false, 0, 0);
+            }
+            catch (Exception e)
+            {
+                string eMsg = e.Message;
+                MessageBox.Show(eMsg, "Warning"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 	}
 }
