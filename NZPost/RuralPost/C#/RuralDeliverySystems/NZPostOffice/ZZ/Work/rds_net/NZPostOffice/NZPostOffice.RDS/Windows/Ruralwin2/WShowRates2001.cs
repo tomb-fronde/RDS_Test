@@ -14,19 +14,30 @@ using NZPostOffice.RDS.Windows.Ruralwin;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_054  Aug-2013
+    // Added ib_pieceratechangesallowed
+    //
+    // TJB  Aug 2013
+    // Resized and positioned st_warn textbox so it doesn't overlap the 
+    // window name.
+    //
+    // TJB  RPCR_054  June-2013
+    // Changed Piece Rate handling
+    // - can be entered any time, not requiring a rates renewal
+    //   (see cb_saveprates_clicked)
+    // - cb_addratetype (and cb_addratetype_clicked) calls WAddPieceRateType
+
     public class WShowRates2001 : WAncestorWindow
     {
         #region Define
-
-        public URdsDw iuo_nonvehiclerates;
+        /// Required designer variable.
+        private System.ComponentModel.IContainer components = null;
 
         public URdsDw iuo_vehiclerates;
 
         public URdsDw iuo_vehiclerates_list;
 
         public URdsDw iuo_fuelrates;
-
-        public URdsDw iuo_piecerates;
 
         public URdsDw iuo_ratedays;
 
@@ -46,18 +57,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public int il_Rates_Complete;
 
-        public Button icb_freeze;
-
-        public Button icb_delete;
-
         public WBenchmarkRates2001 iw_caller;
-
-        /// Required designer variable.
-        private System.ComponentModel.IContainer components = null;
 
         public Button cb_save;
 
         public Button cb_close;
+
+        public Button cb_saveprates;
+
+        public Button cb_addratetype;
+
+        public Button cb_freeze;
+
+        public Button cb_delete;
 
         public Label st_1;
 
@@ -71,11 +83,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public TabPage tabpage_nonvehiclerates;
 
-        public URdsDw dw_nonvehicle;
+        public URdsDw dw_nonvehiclerates;
 
         public TabPage tabpage_piecerates;
 
-        public URdsDw dw_piecerate;
+        public URdsDw dw_piecerates;
 
         public TabPage tabpage_fuelrates;
 
@@ -89,8 +101,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw dw_other;
 
-        public Button cb_freeze;
-
         public TabPage tabpage_vehiclerates;
 
         public URdsDw dw_vehiclerates;
@@ -99,9 +109,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Label st_warn;
 
-        public Button cb_delete;
-
         public Label st_2;
+
+        // TJB  RPCR_054  Aug-2013
+        // Added to limit piecerate change to sysadmin's
+        public bool ib_pieceratechangesallowed;
 
         #endregion
 
@@ -111,17 +123,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             dw_vehiclerates.DataObject = new DVehicleRates2001();
             dw_vehicletypes.DataObject = new DVehicalTypesList();
-            dw_nonvehicle.DataObject = new DNonVehicleRates2005();
-            dw_piecerate.DataObject = new DPieceRates2001();
+            dw_nonvehiclerates.DataObject = new DNonVehicleRates2005();
+            dw_piecerates.DataObject = new DPieceRates2001();
             dw_fuelrate.DataObject = new DFuelRates2001();
             dw_ratedays.DataObject = new DRateDays2001();
             dw_other.DataObject = new DMiscRates2001();
 
             //? this.tab_main.Controls[0].Controls[0].Controls[4].Visible = false;
 
-            //jlwang:moved from IC
-            dw_nonvehicle.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_nonvehicle_constructor);
-            dw_piecerate.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_piecerate_constructor);
+            dw_nonvehiclerates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_nonvehicle_constructor);
+            dw_piecerates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_piecerate_constructor);
             dw_ratedays.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_ratedays_constructor);
             dw_fuelrate.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_fuelrate_constructor);
             dw_other.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_constructor);
@@ -137,8 +148,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             dw_vehicletypes.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicletypes_constructor);
             dw_vehicletypes.DataObject.RetrieveEnd += new EventHandler(dw_vehicletypes_retrieveend);
-            //jlwang:end
-            constructor();
+
+            //constructor();
         }
 
         #region Form Design
@@ -151,10 +162,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.SuspendLayout();
             // 
             // st_label
-            // 
-            st_label.Text = "w_show_rates2001";
+            // TJB Note: this needs to be included, marked not visible to
+            //           avoid a label "Formbase" being displayed.
+            st_label.Text = "WShowRates2001";
             st_label.Location = new System.Drawing.Point(8, 400);
             st_label.Visible = false;
+            //
+            cb_freeze = new Button();
+            cb_saveprates = new Button();
+            cb_addratetype = new Button();
             // 
             // cb_save
             // 
@@ -224,30 +240,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             this.tab_nonvehiclerates = new TabControl();
             tabpage_renewalrates.Controls.Add(tab_nonvehiclerates);
-            cb_freeze = new Button();
             tabpage_renewalrates.Controls.Add(cb_freeze);
+            tabpage_renewalrates.Controls.Add(cb_saveprates);
+            tabpage_renewalrates.Controls.Add(cb_addratetype);
             //tabpage_renewalrates.powertiptext = "All rates specific to the renewal group";
             tabpage_renewalrates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_renewalrates.Text = "Renewal Rates";
-            tabpage_renewalrates.Name = tabpage_renewalrates.Text;//
-
+            tabpage_renewalrates.Name = tabpage_renewalrates.Text;
             tabpage_renewalrates.Size = new System.Drawing.Size(615, 377);
             this.tabpage_renewalrates.Location = new System.Drawing.Point(3, 25);
             // 
             // tabpage_vehiclerates
             // 
             dw_vehiclerates = new URdsDw();
-            //!dw_vehiclerates.DataObject = new DVehicleRates2001();
-
             dw_vehicletypes = new URdsDw();
-            //!dw_vehicletypes.DataObject = new DVehicalTypesList();
-
             tabpage_vehiclerates.Controls.Add(dw_vehiclerates);
             tabpage_vehiclerates.Controls.Add(dw_vehicletypes);
-            //?tabpage_vehiclerates.powertiptext = "Rates for all vehicle types";
             tabpage_vehiclerates.Text = "Vehicle Rates";
-            tabpage_vehiclerates.Name = tabpage_vehiclerates.Text;//
-
+            tabpage_vehiclerates.Name = tabpage_vehiclerates.Text;
             tabpage_vehiclerates.Size = new System.Drawing.Size(615, 347);
             tabpage_vehiclerates.Location = new System.Drawing.Point(3, 25);
             // 
@@ -269,60 +279,45 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 
             // tabpage_nonvehiclerates
             //
-            dw_nonvehicle = new URdsDw();
-            //!dw_nonvehicle.DataObject = new DNonVehicleRates2005();
-            tabpage_nonvehiclerates.Controls.Add(dw_nonvehicle);
+            dw_nonvehiclerates = new URdsDw();
+            tabpage_nonvehiclerates.Controls.Add(dw_nonvehiclerates);
             tabpage_nonvehiclerates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_nonvehiclerates.Text = "Non-Vehicle Rates";
             tabpage_nonvehiclerates.Name = tabpage_nonvehiclerates.Text;//
-
             tabpage_nonvehiclerates.Size = new System.Drawing.Size(593, 300);
             tabpage_nonvehiclerates.Location = new System.Drawing.Point(3, 25);
             // 
-            // dw_nonvehicle
+            // dw_nonvehiclerates
             // 
-            //?dw_nonvehicle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_nonvehicle.TabIndex = 4;
-            dw_nonvehicle.Size = new System.Drawing.Size(508, 330);
-            dw_nonvehicle.Location = new System.Drawing.Point(32, 2);
-            dw_nonvehicle.GotFocus += new EventHandler(dw_nonvehicle_getfocus);
-
-            //dw_nonvehicle.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_nonvehicle_constructor);
-
+            dw_nonvehiclerates.TabIndex = 4;
+            dw_nonvehiclerates.Size = new System.Drawing.Size(508, 330);
+            dw_nonvehiclerates.Location = new System.Drawing.Point(32, 2);
+            dw_nonvehiclerates.GotFocus += new EventHandler(dw_nonvehicle_getfocus);
             // 
             // tabpage_piecerates
             // 
-            dw_piecerate = new URdsDw();
-            //!dw_piecerate.DataObject = new DPieceRates2001();
-            tabpage_piecerates.Controls.Add(dw_piecerate);
-            //?tabpage_piecerates.powertiptext = "Piece rates for the renewal group";
+            dw_piecerates = new URdsDw();
+            tabpage_piecerates.Controls.Add(dw_piecerates);
             tabpage_piecerates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_piecerates.Text = "Piece Rates";
             tabpage_piecerates.Name = tabpage_piecerates.Text;//
-
             tabpage_piecerates.Size = new System.Drawing.Size(593, 301);
             tabpage_piecerates.Location = new System.Drawing.Point(3, 25);
             // 
-            // dw_piecerate
+            // dw_piecerates
             // 
-            dw_piecerate.TabIndex = 1;
-            dw_piecerate.Size = new System.Drawing.Size(581, 263);
-            dw_piecerate.Location = new System.Drawing.Point(3, 5);
-            dw_piecerate.GotFocus += new EventHandler(dw_piecerate_getfocus);
-
-            //dw_piecerate.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_piecerate_constructor);
-
+            dw_piecerates.TabIndex = 1;
+            dw_piecerates.Size = new System.Drawing.Size(581, 263);
+            dw_piecerates.Location = new System.Drawing.Point(3, 5);
+            dw_piecerates.GotFocus += new EventHandler(dw_piecerate_getfocus);
             // 
             // tabpage_fuelrates
             // 
             dw_fuelrate = new URdsDw();
-            //!dw_fuelrate.DataObject = new DFuelRates2001();
-
             tabpage_fuelrates.Controls.Add(dw_fuelrate);
             tabpage_fuelrates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_fuelrates.Text = "Fuel Rates";
-            tabpage_fuelrates.Name = tabpage_fuelrates.Text;//
-
+            tabpage_fuelrates.Name = tabpage_fuelrates.Text;
             tabpage_fuelrates.Size = new System.Drawing.Size(593, 301);
             tabpage_fuelrates.Location = new System.Drawing.Point(3, 25);
             // 
@@ -332,19 +327,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_fuelrate.Size = new System.Drawing.Size(581, 263);
             dw_fuelrate.Location = new System.Drawing.Point(3, 5);
             dw_fuelrate.GotFocus += new EventHandler(dw_fuelrate_getfocus);
-
-            //dw_fuelrate.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_fuelrate_constructor);
             // 
             // tabpage_ratedays
             // 
             dw_ratedays = new URdsDw();
-            //!dw_ratedays.DataObject = new DRateDays2001();
             tabpage_ratedays.Controls.Add(dw_ratedays);
-            //?tabpage_ratedays.powertiptext = "Days per annum for the renewal group";
             tabpage_ratedays.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_ratedays.Text = "Days Per Annum";
-            tabpage_ratedays.Name = tabpage_ratedays.Text;//
-
+            tabpage_ratedays.Name = tabpage_ratedays.Text;
             tabpage_ratedays.Size = new System.Drawing.Size(593, 301);
             tabpage_ratedays.Location = new System.Drawing.Point(3, 25);
             // 
@@ -354,14 +344,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_ratedays.Size = new System.Drawing.Size(581, 263);
             dw_ratedays.Location = new System.Drawing.Point(3, 5);
             dw_ratedays.GotFocus += new EventHandler(dw_ratedays_getfocus);
-
-            //dw_ratedays.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_ratedays_constructor);
-
             // 
             // tabpage_miscrates
             // 
             dw_other = new URdsDw();
-            //!dw_other.DataObject = new DMiscRates2001();
             tabpage_miscrates.Controls.Add(dw_other);
             tabpage_miscrates.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_miscrates.Text = "Other Rates";
@@ -375,9 +361,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_other.TabIndex = 4;
             dw_other.Size = new System.Drawing.Size(581, 263);
             dw_other.Location = new System.Drawing.Point(3, 5);
-
-            //dw_other.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_constructor);
-
+            // 
+            // dw_vehiclerates
+            // 
+            dw_vehiclerates.TabIndex = 1;
+            dw_vehiclerates.Size = new System.Drawing.Size(349, 328);
+            dw_vehiclerates.Location = new System.Drawing.Point(210, 10);
+            dw_vehiclerates.GotFocus += new EventHandler(dw_vehiclerates_getfocus);
+            // 
+            // dw_vehicletypes
+            // 
+            dw_vehicletypes.TabIndex = 2;
+            dw_vehicletypes.Size = new System.Drawing.Size(199, 328);
+            dw_vehicletypes.Location = new System.Drawing.Point(3, 10);
+            dw_vehicletypes.Click += new EventHandler(dw_vehicletypes_clicked);
+            // 
+            // st_warn
+            // 
+            this.st_warn = new Label();
+            this.st_warn.TabStop = false;
+            this.st_warn.Text = "Please complete this set of rates before using it for What-If calculations.";
+            this.st_warn.ForeColor = System.Drawing.Color.Red;
+            this.st_warn.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            this.st_warn.Size = new System.Drawing.Size(265, 27);
+            this.st_warn.Location = new System.Drawing.Point(140, 403);
+            this.st_warn.Visible = false;
+            this.Controls.Add(st_warn);
             // 
             // cb_freeze
             // 
@@ -391,41 +400,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             cb_freeze.Location = new System.Drawing.Point(502, 322);
             cb_freeze.Click += new EventHandler(cb_freeze_clicked);
             // 
-            // dw_vehiclerates
+            // cb_saveprates
             // 
-            //?dw_vehiclerates.vscrollbar = false;
-            dw_vehiclerates.TabIndex = 1;
-            dw_vehiclerates.Size = new System.Drawing.Size(349, 328);
-            dw_vehiclerates.Location = new System.Drawing.Point(210, 10);
-            dw_vehiclerates.GotFocus += new EventHandler(dw_vehiclerates_getfocus);
-
-            //dw_vehiclerates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehiclerates_constructor);
-
+            this.cb_saveprates.Enabled = false;
+            this.cb_saveprates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_saveprates.Location = new System.Drawing.Point(396, 322);
+            this.cb_saveprates.Name = "cb_saveprates";
+            this.cb_saveprates.Size = new System.Drawing.Size(98, 24);
+            this.cb_saveprates.TabIndex = 2;
+            this.cb_saveprates.BringToFront();
+            this.cb_saveprates.Text = "Sa&ve Rates";
+            this.cb_saveprates.Visible = false;
+            this.cb_saveprates.Click += new System.EventHandler(this.cb_saveprates_clicked);
             // 
-            // dw_vehicletypes
+            // cb_addratetype
             // 
-            dw_vehicletypes.TabIndex = 2;
-            dw_vehicletypes.Size = new System.Drawing.Size(199, 328);
-            dw_vehicletypes.Location = new System.Drawing.Point(3, 10);
-            dw_vehicletypes.Click += new EventHandler(dw_vehicletypes_clicked);
-
-            //?dw_vehicletypes.RowFocusChanged += new EventHandler(dw_vehicletypes_rowfocuschanged);
-
-            //dw_vehicletypes.DataObject.RetrieveEnd += new EventHandler(dw_vehicletypes_retrieveend);
-            // dw_vehicletypes.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicletypes_constructor);
-
-            // 
-            // st_warn
-            // 
-            this.st_warn = new Label();
-            this.st_warn.TabStop = false;
-            this.st_warn.Text = "Please complete this set of rates before using it for What-If calculations.";
-            this.st_warn.ForeColor = System.Drawing.Color.Red;
-            this.st_warn.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            this.st_warn.Size = new System.Drawing.Size(355, 27);
-            this.st_warn.Location = new System.Drawing.Point(3, 403);
-            this.st_warn.Visible = false;
-            this.Controls.Add(st_warn);
+            this.cb_addratetype.Enabled = false;
+            this.cb_addratetype.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_addratetype.Location = new System.Drawing.Point(280, 322);
+            this.cb_addratetype.Name = "cb_addratetype";
+            this.cb_addratetype.Size = new System.Drawing.Size(108, 24);
+            this.cb_addratetype.TabIndex = 2;
+            this.cb_addratetype.BringToFront();
+            this.cb_addratetype.Text = "&Add Rate Type";
+            this.cb_addratetype.Visible = false;
+            this.cb_addratetype.Click += new System.EventHandler(this.cb_addratetype_clicked);
             // 
             // cb_delete
             // 
@@ -443,10 +442,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //
             this.st_2 = new Label();
             this.st_2.TabStop = false;
-            this.st_2.Text = "w_show_rates2001";
+            this.st_2.Text = "WShowRates2001";
             this.st_2.ForeColor = System.Drawing.Color.Gray;
             this.st_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            this.st_2.Size = new System.Drawing.Size(150, 13);
+            this.st_2.Size = new System.Drawing.Size(120, 13);
             this.st_2.Location = new System.Drawing.Point(8, 412);
             this.Controls.Add(st_2);
 
@@ -460,14 +459,71 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tab_nonvehiclerates.SelectedIndexChanged += new EventHandler(tab_nonvehiclerates_SelectedIndexChanged);
         }
 
+        // TJB  RPCR_054  June-2013: added
+        // Manage enabled status of cb_save when switching between vehicle and non-vehicle rates tabs
+        void tab_main_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tab_main.SelectedIndex == 0)   // Non-vehicle rates tab
+            {
+                if (tab_nonvehiclerates.SelectedIndex == 1)     // Non-vehicle piece rates tab
+                {
+                    // If we're on the piece rates tab, cb_saveprate will be enabled
+                    // disable cb_save
+                    cb_save.Enabled = false;
+                    cb_delete.Enabled = false;
+                }
+                else
+                {
+                    // Otherwise we're not on the piece rates tab, cb_saveprate will not be enabled
+                    // Enable (or not) cb_save
+                    cb_save.Enabled = (is_editable == "N") ? false : true;
+                    cb_delete.Enabled = (is_editable == "N") ? false : true;
+                }
+            }
+            else   // (== 1) Vehicle rates tab
+            {
+                // The cb_saveprate button won't be visible (hidden behind tab_main)
+                // Enable (or not) cb_save
+                cb_save.Enabled = (is_editable == "N") ? false : true;
+                cb_delete.Enabled = (is_editable == "N") ? false : true;
+            }
+        }
+
         bool dw_piecerate_1_select = false;
         bool dw_fuelrate_1_select = false;
         bool dw_ratedays_1_select = false;
+
         void tab_nonvehiclerates_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.tab_nonvehiclerates.SelectedIndex == 1)
             {
-                ((Metex.Windows.DataEntityGrid)(dw_piecerate.GetControlByName("grid"))).Rows[0].Selected = dw_piecerate_1_select;
+                ((Metex.Windows.DataEntityGrid)(dw_piecerates.GetControlByName("grid"))).Rows[0].Selected = dw_piecerate_1_select;
+                if (ib_pieceratechangesallowed)
+                {
+                    cb_saveprates.Enabled = true;
+                    cb_addratetype.Enabled = true;
+                }
+                else
+                {
+                    cb_saveprates.Enabled = false;
+                    cb_addratetype.Enabled = false;
+                }
+                cb_saveprates.Visible = true;
+                cb_addratetype.Visible = true;
+                // Disable the main save button when moving to the piecerate tab so only the cb_saveprate 
+                // can be used and not the cb_save by mistake.
+                cb_save.Enabled = false;
+                cb_delete.Enabled = false;
+            }
+            else
+            {
+                cb_saveprates.Enabled = false;
+                cb_addratetype.Enabled = false;
+                cb_saveprates.Visible = false;
+                cb_addratetype.Visible = false;
+                // Re-enable or not the cb_save button when moving off the piecerate tab
+                cb_save.Enabled = (is_editable == "N") ? false : true;
+                cb_delete.Enabled = (is_editable == "N") ? false : true;
             }
             if (this.tab_nonvehiclerates.SelectedIndex == 2)
             {
@@ -483,7 +539,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             if (e.TabPageIndex == 1)
             {
-                dw_piecerate_1_select = ((Metex.Windows.DataEntityGrid)(dw_piecerate.GetControlByName("grid"))).Rows[0].Selected;
+                dw_piecerate_1_select = ((Metex.Windows.DataEntityGrid)(dw_piecerates.GetControlByName("grid"))).Rows[0].Selected;
             }
             if (e.TabPageIndex == 2)
             {
@@ -544,7 +600,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 cb_delete.Enabled = false;
             }
             tab_nonvehiclerates.Controls.Remove(tabpage_miscrates);//added by ylwang
-            dw_nonvehicle.DataObject.BindingSource.CurrencyManager.Refresh();
+            dw_nonvehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
+
+            // TJB  RPCR_054  June-2013
+            // Disable updates on closing.  
+            // Issue with piece rates: changed (new) records updated not inserted.
+            ib_disableclosequery = true;
         }
 
         public override int pfc_preclose()
@@ -560,17 +621,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_row;
             decimal ldc_temp;
             //?dwitemStatus lis_temp;
-            iuo_nonvehiclerates.DataObject.AcceptText();
+            dw_nonvehiclerates.DataObject.AcceptText();
 
-            if (iuo_nonvehiclerates.ModifiedCount() > 0)
+            if (dw_nonvehiclerates.ModifiedCount() > 0)
             {
-                for (ll_row = 0; ll_row < iuo_nonvehiclerates.RowCount; ll_row++)
+                for (ll_row = 0; ll_row < dw_nonvehiclerates.RowCount; ll_row++)
                 {
-                    //lis_temp = iuo_nonvehiclerates.GetItemStatus(ll_row, "nvr_processing_wage_rate", primary!);
-                    if (iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(ll_row).IsDirty)// (lis_temp == datamodified!) 
+                    //lis_temp = dw_nonvehiclerates.GetItemStatus(ll_row, "nvr_processing_wage_rate", primary!);
+                    if (dw_nonvehiclerates.GetItem<NonVehicleRates2005>(ll_row).IsDirty)// (lis_temp == datamodified!) 
                     {
-                        ldc_temp = iuo_nonvehiclerates.GetValue<decimal>(ll_row, "nvr_processing_wage_rate");
-                        iuo_nonvehiclerates.SetValue(ll_row, "nvr_wage_hourly_rate", ldc_temp);
+                        ldc_temp = dw_nonvehiclerates.GetValue<decimal>(ll_row, "nvr_processing_wage_rate");
+                        dw_nonvehiclerates.SetValue(ll_row, "nvr_wage_hourly_rate", ldc_temp);
                     }
                 }
             }
@@ -590,58 +651,43 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             DateTime? ld_temp = null;
             for (ll_Row = 0; ll_Row < iuo_fuelrates.RowCount; ll_Row++)
             {
-                if (iuo_fuelrates.ModifiedCount() > 0)//? || iuo_fuelrates.DeletedCount() > 0) 
+                if (iuo_fuelrates.ModifiedCount() > 0)
                 {
                     iuo_fuelrates.SetValue(ll_Row, "rr_rates_effective_date", id_renewaldate);
                     if (is_editable == "W")
                     {
-                        // iuo_fuelrates.SetItemStatus(ll_Row, 0, primary!, newmodified!);
                         ((FuelRates2001)iuo_fuelrates.GetItem<FuelRates2001>(ll_Row)).MarkNewEntity();
                         ((FuelRates2001)iuo_fuelrates.GetItem<FuelRates2001>(ll_Row)).MarkDirtyEntity();
                     }
                 }
 
             }
-            for (ll_Row = 0; ll_Row < iuo_nonvehiclerates.RowCount; ll_Row++)
+            for (ll_Row = 0; ll_Row < dw_nonvehiclerates.RowCount; ll_Row++)
             {
-                iuo_nonvehiclerates.SetValue(ll_Row, "nvr_rates_effective_date", id_renewaldate);
-
-                if (is_editable == "W")
-                {
-                    //iuo_nonvehiclerates.SetItemStatus(ll_Row, "nvr_rates_effective_date", primary!, notmodified!);
-                    //?((NonVehicleRates2005)iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(ll_Row)).MarkNotModifiedEntity();
-                }
+                dw_nonvehiclerates.SetValue(ll_Row, "nvr_rates_effective_date", id_renewaldate);
             }
             for (ll_Row = 0; ll_Row < iuo_miscrates.RowCount; ll_Row++)
             {
-
-                if (iuo_miscrates.ModifiedCount() > 0)//?|| iuo_miscrates.DeletedCount() > 0)
+                if (iuo_miscrates.ModifiedCount() > 0)
                 {
                     iuo_miscrates.SetValue(ll_Row, "mr_effective_date", id_renewaldate);
                 }
+            }
 
-            }
-            for (ll_Row = 0; ll_Row < iuo_piecerates.RowCount; ll_Row++)
-            {
-                ld_temp = iuo_piecerates.GetItem<PieceRates2001>(ll_Row).PrEffectiveDate;//.GetItemDateTime(ll_Row, "pr_effective_date").Date;
-                if ((ld_temp == null) || ld_temp != id_renewaldate)
-                {
-                    iuo_piecerates.SetValue(ll_Row, "pr_effective_date", id_renewaldate);
-                }
-                if (is_editable == "W")
-                {
-                    //iuo_piecerates.SetItemStatus(ll_Row, "pr_effective_date", primary!, notmodified!);
-                    //?((PieceRates2001)iuo_piecerates.GetItem<PieceRates2001>(ll_Row)).MarkNotModifiedEntity();
-                }
-            }
+            // TJB  RPCR_054  June-2013
+            // Moved piece rate save process to cb_saveprate
+            //for (ll_Row = 0; ll_Row < dw_piecerates.RowCount; ll_Row++)
+            //{
+            //    ld_temp = dw_piecerates.GetItem<PieceRates2001>(ll_Row).PrEffectiveDate;//.GetItemDateTime(ll_Row, "pr_effective_date").Date;
+            //    if ((ld_temp == null) || ld_temp != id_renewaldate)
+            //    {
+            //        dw_piecerates.SetValue(ll_Row, "pr_effective_date", id_renewaldate);
+            //    }
+            //}
+
             for (ll_Row = 0; ll_Row < iuo_ratedays.RowCount; ll_Row++)
             {
                 iuo_ratedays.SetValue(ll_Row, "rr_rates_effective_date"/* "rate_days_rr_rates_effective_date"*/, id_renewaldate);//iuo_ratedays.SetItem(ll_Row, "rate_days_rr_rates_effective_date", id_renewaldate);
-                if (is_editable == "W")
-                {
-                    //iuo_ratedays.SetItemStatus(ll_Row, "rate_days_rr_rates_effective_date", primary!, notmodified!);
-                    //?((RateDays2001)iuo_ratedays.GetItem<RateDays2001>(ll_Row)).MarkNotModifiedEntity();
-                }
             }
             return 0;
         }
@@ -653,15 +699,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Count;
             DateTime? ld_EffDate;
             int ll_Row;
-            ll_rgcode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
-            ld_EffDate = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).NvrRatesEffectiveDate;
+            ll_rgcode = dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
+            ld_EffDate = dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0).NvrRatesEffectiveDate;
             //  Check rg_code
             if (ll_rgcode == 0 || ll_rgcode == null)
             {
                 MessageBox.Show("A renewal groups must be specified"
                                , this.Text
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();
+                dw_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();
                 return false;
             }
             //  Are we entering a date which is earlier than a previous one?
@@ -677,13 +723,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                + "group before a current set of rates."
                                , this.Text
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //iuo_nonvehiclerates.DataControl["nvr_rates_effective_date"].Focus();
-                iuo_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
+                //dw_nonvehiclerates.DataControl["nvr_rates_effective_date"].Focus();
+                dw_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
                 return false;
             }
             //  Do we already have a non-frozen rate for a renewal group?
-            // (iuo_nonvehiclerates.GetItemStatus(1, 0, primary!) == newmodified!)
-            if (iuo_nonvehiclerates.DataObject.GetItem<NonVehicleRates2005>(0).IsDirty)
+            // (dw_nonvehiclerates.GetItemStatus(1, 0, primary!) == newmodified!)
+            if (dw_nonvehiclerates.DataObject.GetItem<NonVehicleRates2005>(0).IsDirty)
             {
                 //SELECT count(*) INTO :ll_Count 
                 //  FROM non_vehicle_rate 
@@ -699,7 +745,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    + "renewal rates at any one time."
                                    , this.Text
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();//.DataControl["rg_code"].Focus();
+                    dw_nonvehiclerates.DataObject.GetControlByName("rg_code").Focus();//.DataControl["rg_code"].Focus();
                     return false;
                 }
             }
@@ -716,8 +762,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                + "on the entered date"
                                , "Rates Already Defined"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //iuo_nonvehiclerates.DataControl["nvr_rates_effective_date"].Focus();
-                iuo_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
+                dw_nonvehiclerates.DataObject.GetControlByName("nvr_rates_effective_date").Focus();
                 return false;
             }
             return true;
@@ -730,29 +775,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // used by of_validate
             for (ll_Row = 0; ll_Row < iuo_fuelrates.RowCount; ll_Row++)
             {
-                if (iuo_fuelrates.ModifiedCount() > 0)//?|| iuo_fuelrates.DeletedCount() > 0) 
+                if (iuo_fuelrates.ModifiedCount() > 0)
                 {
                     iuo_fuelrates.SetValue(ll_Row, "rg_code", al_rgcode);
                 }
             }
             for (ll_Row = 0; ll_Row < iuo_miscrates.RowCount; ll_Row++)
             {
-                if (iuo_miscrates.ModifiedCount() > 0)//?|| iuo_miscrates.DeletedCount() > 0) 
+                if (iuo_miscrates.ModifiedCount() > 0)
                 {
                     iuo_miscrates.SetValue(ll_Row, "rg_code", al_rgcode);
                 }
             }
-            for (ll_Row = 0; ll_Row < iuo_piecerates.RowCount; ll_Row++)
-            {
-                if (iuo_piecerates.ModifiedCount() > 0)
-                {
-                    iuo_piecerates.SetValue(ll_Row, "rg_code", al_rgcode);
-                    if (iuo_piecerates.GetValue(ll_Row, "pr_active_status") == null)
-                    {
-                        iuo_piecerates.SetValue(ll_Row, "pr_active_status", "Y");
-                    }
-                }
-            }
+
+            // TJB  RPCR_054  June-2013
+            // Moved piece rate save process to cb_saveprate
+            //for (ll_Row = 0; ll_Row < dw_piecerates.RowCount; ll_Row++)
+            //{
+            //    if (dw_piecerates.ModifiedCount() > 0)
+            //    {
+            //        dw_piecerates.SetValue(ll_Row, "rg_code", al_rgcode);
+            //        if (dw_piecerates.GetValue(ll_Row, "pr_active_status") == null)
+            //            dw_piecerates.SetValue(ll_Row, "pr_active_status", "Y");
+            //    }
+            //}
+
             for (ll_Row = 0; ll_Row < iuo_ratedays.RowCount; ll_Row++)
             {
                 if (iuo_ratedays.ModifiedCount() > 0)
@@ -778,6 +825,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             sle_effdate.Text = id_renewaldate.Value.ToString("dd/MM/yyyy");
 
+            // TJB  RPCR_054  Aug-2013
+            // Determine user privileges: only allow System Administrators
+            // to make changes to the piece rates
+            ib_pieceratechangesallowed = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_ismember("System Administrators");
+
             ib_RetrievingVehicleList = true;
             ((DVehicalTypesList)(iuo_vehiclerates_list.DataObject)).Retrieve();
             ll_Cnt = iuo_vehiclerates_list.RowCount;
@@ -788,59 +840,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
             string TestExpr = is_editable;
-            if (TestExpr == "Y")
+            if (TestExpr == "Y") // Open editable rates
             {
                 sle_effdate.Enabled = false;
                 cb_save.Enabled = true;
 
                 ((DFuelRates2001)iuo_fuelrates.DataObject).Retrieve(il_rg_code, id_renewaldate);
-                ((DPieceRates2001)iuo_piecerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
                 ((DRateDays2001)iuo_ratedays.DataObject).Retrieve(il_rg_code, id_renewaldate);
-                ((DNonVehicleRates2005)iuo_nonvehiclerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
+                ((DNonVehicleRates2005)dw_nonvehiclerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
                 ((DMiscRates2001)iuo_miscrates.DataObject).Retrieve(il_rg_code, id_renewaldate);
 
-                //iuo_nonvehiclerates.Modify("rg_code.Protect=\"0~tif ( isRowNew ( ),1,1)\"");
-                //?iuo_nonvehiclerates.(7)DataControl["rg_code"].BackColor =\'79216776\'");
-                iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Enabled = false;
+                // TJB  RPCR_054  June-2013
+                // (piecerates are always opened as new rates)
+                // NOTE: must come after nonvehiclerates have been retrieved - rg_code used in
+                //       of_copy_prev_piecerates is set in nonvehiclerates.
+                of_copy_prev_piecerates();
+                //((DPieceRates2001)dw_piecerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
 
-                //  icb_delete = tab_main.tabpage_renewalrates.cb_delete
-                icb_delete = cb_delete;
-                icb_freeze = cb_freeze;//tab_main.tabpage_renewalrates.cb_freeze;
+                dw_nonvehiclerates.DataObject.GetControlByName("rg_code").Enabled = false;
+
                 // set other attributes
                 if (iuo_miscrates.RowCount == 0)
                 {
                     iuo_miscrates.InsertRow(0);
                 }
-                icb_delete.Enabled = true;
-                icb_freeze.Enabled = true;
+                cb_delete.Enabled = true;
+                cb_freeze.Enabled = true;
                 if (!(of_are_rates_complete(false)))
                 {
                     st_warn.Visible = true;
                 }
             }
-            else if (TestExpr == "W")
+            else if (TestExpr == "W")  // Open new rates
             {
                 sle_effdate.Enabled = true;
                 cb_save.Enabled = true;
                 // copy previous non-vehicle rates
                 if (of_copy_prev_nonvehicle() == 0)
                 {
-                    iuo_nonvehiclerates.InsertRow(0);
+                    dw_nonvehiclerates.InsertRow(0);
                 }
                 // set attributes
-                iuo_nonvehiclerates.SetValue(0, "rg_code", il_rg_code);
-                //?iuo_nonvehiclerates.Modify("rg_code.Protect=\"0~tif ( isRowNew ( ),0,0)\"");
-                iuo_nonvehiclerates.ResetUpdate();//of_setstatus(iuo_nonvehiclerates, "notmodified");
+                dw_nonvehiclerates.SetValue(0, "rg_code", il_rg_code);
+                dw_nonvehiclerates.ResetUpdate();
 
                 // Grab vehicle rates
                 ((DVehicalTypesList)iuo_vehiclerates_list.DataObject).Retrieve();
                 ll_Cnt = iuo_vehiclerates_list.RowCount;
 
                 // copy previous rates
-                of_copy_prev_piecerates();
                 of_copy_prev_miscrates();
                 of_copy_prev_fuelrates();
                 of_copy_prev_ratedays();
+
+                // TJB  RPCR_054  June-2013
+                // (piecerates are always opened as new rates)
+                // NOTE: must come after nonvehiclerates have been retrieved - rg_code used in
+                //       of_copy_prev_piecerates is set in nonvehiclerates.
+                of_copy_prev_piecerates();
 
                 // set status to new!
                 //?of_setstatus(iuo_fuelrates,new!);
@@ -848,29 +905,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //?of_setstatus(iuo_ratedays,new!);
                 //?of_setstatus(iuo_miscrates,new!);
             }
-            else
+            else   //(TestExpr == "N")  // Open existing rates read-only
             {
                 sle_effdate.Enabled = false;
                 cb_save.Enabled = false;
 
                 ((DFuelRates2001)iuo_fuelrates.DataObject).Retrieve(il_rg_code, id_renewaldate);
-                iuo_fuelrates.SelectAllRows(false);//added by ybfan
-                ((DPieceRates2001)iuo_piecerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
-                iuo_piecerates.SelectAllRows(false);//added by ybfan
-                ((Metex.Windows.DataEntityGrid)iuo_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Control;
-                ((Metex.Windows.DataEntityGrid)iuo_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
-                ((DataGridView)iuo_piecerates.DataObject.Controls["grid"]).Columns["pr_rate"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-                ((DataGridView)iuo_piecerates.DataObject.Controls["grid"]).Columns["pr_active_status"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                iuo_fuelrates.SelectAllRows(false);
                 ((DRateDays2001)iuo_ratedays.DataObject).Retrieve(il_rg_code, id_renewaldate);
-                iuo_ratedays.SelectAllRows(false);//added by ybfan
-                ((DNonVehicleRates2005)iuo_nonvehiclerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
+                iuo_ratedays.SelectAllRows(false);
+                ((DNonVehicleRates2005)dw_nonvehiclerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
                 ((DMiscRates2001)iuo_miscrates.DataObject).Retrieve(il_rg_code, id_renewaldate);
 
-                iuo_nonvehiclerates.of_protectcolumns();
+                // TJB  RPCR_054  June-2013
+                // Piecerates are always opened as new rates
+                // NOTE: must come after nonvehiclerates have been retrieved - rg_code used in
+                //       of_copy_prev_piecerates is set in nonvehiclerates.
+                of_copy_prev_piecerates();
+
+                //((DPieceRates2001)dw_piecerates.DataObject).Retrieve(il_rg_code, id_renewaldate);
+                //dw_piecerates.SelectAllRows(false);
+                //((Metex.Windows.DataEntityGrid)dw_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Control;
+                //((Metex.Windows.DataEntityGrid)dw_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                //((DataGridView)dw_piecerates.DataObject.Controls["grid"]).Columns["pr_rate"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                //((DataGridView)dw_piecerates.DataObject.Controls["grid"]).Columns["pr_active_status"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                //dw_piecerates.of_protectcolumns();
+
+                dw_nonvehiclerates.of_protectcolumns();
                 iuo_fuelrates.of_protectcolumns();
                 iuo_miscrates.of_protectcolumns();
                 iuo_ratedays.of_protectcolumns();
-                iuo_piecerates.of_protectcolumns();
+
                 //((Metex.Windows.DataEntityGrid)iuo_piecerates.DataObject.GetControlByName("grid")).ClearSelection();
                 //((Metex.Windows.DataEntityGrid)iuo_piecerates.DataObject.GetControlByName("grid")).Enabled = false;//added by ylwang
                 //((Metex.Windows.DataEntityGrid)iuo_fuelrates.DataObject.GetControlByName("grid")).Enabled = false;//added by ybfan
@@ -882,18 +947,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     iuo_vehiclerates.of_protectcolumns();
                 }
-                //iuo_nonvehiclerates.Modify("rg_code.Protect=\"0~tif ( isRowNew ( ),1,1)\"");
-                //?iuo_nonvehiclerates.(7)DataControl["rg_code"].BackColor =\'79216776\'");
-                iuo_nonvehiclerates.GetControlByName("rg_code").Enabled = false;
+                dw_nonvehiclerates.GetControlByName("rg_code").Enabled = false;
             }
             this.Text = of_gettitle();
-            /*?
+/*?
             tab_main.tabpage_renewalrates.PowerTipText = "All rates specific to the " + of_getrengroup();
             tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_nonvehiclerates.PowerTipText = "Non-vehicle related rates for " + of_getrengroup();
             tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_piecerates.PowerTipText = "Piece rates for " + of_getrengroup();
             tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_fuelrates.PowerTipText = "Fuel rates for " + of_getrengroup();
             tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_ratedays.PowerTipText = "Days per annum for " + of_getrengroup();
-             */
+*/
             this.ResumeLayout(false);
 
             return 0;
@@ -920,15 +983,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             if (of_are_rates_complete(true))
             {
-                //?iuo_nonvehiclerates.Modify("rg_code.dddw.useasborder=no");
-                //!iuo_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", 'Y');
-                iuo_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", true);
-                iuo_nonvehiclerates.of_protectcolumns();
+                dw_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", true);
+                dw_nonvehiclerates.of_protectcolumns();
                 iuo_fuelrates.of_protectcolumns();
                 iuo_miscrates.of_protectcolumns();
                 iuo_ratedays.of_protectcolumns();
-                iuo_piecerates.of_protectcolumns();
-                ((Metex.Windows.DataEntityGrid)iuo_piecerates.DataObject.GetControlByName("grid")).Enabled = false;//added by ylwang
+                dw_piecerates.of_protectcolumns();
+                ((Metex.Windows.DataEntityGrid)dw_piecerates.DataObject.GetControlByName("grid")).Enabled = false;//added by ylwang
                 cb_save_clicked(null, null);
                 st_warn.Visible = false;
             }
@@ -986,9 +1047,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual int? of_getrgcode()
         {
             int? ll_RGCode = 0;
-            if (iuo_nonvehiclerates.RowCount > 0)  //added by jlwang
+            if (dw_nonvehiclerates.RowCount > 0)  //added by jlwang
                 //.GetItemNumber(1, "rg_code");
-                ll_RGCode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
+                ll_RGCode = dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
             if (ll_RGCode == null)
             {
                 ll_RGCode = il_rg_code;
@@ -1114,13 +1175,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             /* Use li_Renewal_Group and ld_Max_Effective_Date to retrieve the latest values for the Renewal Group as default values */
-            ll_Rows = ((DNonVehicleRates2005)iuo_nonvehiclerates.DataObject).Retrieve(il_rg_code, ld_Max_Effective_Date);
-            //iuo_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", false);// "N");
+            ll_Rows = ((DNonVehicleRates2005)dw_nonvehiclerates.DataObject).Retrieve(il_rg_code, ld_Max_Effective_Date);
+            //dw_nonvehiclerates.SetValue(0, "nvr_frozen_indicator", false);// "N");
             // .SetItem(1, "nvr_frozen_indicator", 'N');--no nvr_frozen_indicator
-            iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).NvrFrozenIndicator = false;
-            iuo_nonvehiclerates.ResetUpdate();
-            //iuo_nonvehiclerates.SetItemStatus(1, 0, primary!, new!);
-            ((NonVehicleRates2005)iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0)).MarkNewEntity();
+            dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0).NvrFrozenIndicator = false;
+            dw_nonvehiclerates.ResetUpdate();
+            //dw_nonvehiclerates.SetItemStatus(1, 0, primary!, new!);
+            ((NonVehicleRates2005)dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0)).MarkNewEntity();
             //  now use the max effective date to get the end of contract date 
 
             //SELECT nvr_contract_end  INTO :ld_Date_To FROM non_vehicle_rate 
@@ -1133,11 +1194,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             li_mm = ld_Date_To.Value.Month;
             ld_Date_To = System.Convert.ToDateTime(li_yy + "," + li_mm + "," + li_dd);
             //.SetItem(1, "nvr_rates_effective_date", ld_Date_From);--no nvr_rates_effective_date
-            iuo_nonvehiclerates.SetValue(0, "nvr_rates_effective_date", ld_Date_From);
+            dw_nonvehiclerates.SetValue(0, "nvr_rates_effective_date", ld_Date_From);
             //.SetItem(1, "nvr_contract_end", ld_Date_To);--no nvr_contract_end
-            iuo_nonvehiclerates.SetValue(0, "nvr_contract_end", ld_Date_To);
+            dw_nonvehiclerates.SetValue(0, "nvr_contract_end", ld_Date_To);
             //.SetItem(1, "nvr_contract_start", ld_Date_From);--no nvr_contract_start
-            iuo_nonvehiclerates.SetValue(0, "nvr_contract_start", ld_Date_From);
+            dw_nonvehiclerates.SetValue(0, "nvr_contract_start", ld_Date_From);
             return ll_Rows;
         }
 
@@ -1148,13 +1209,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Ctr;
             // The user has clicked on New Rates, so show the must current fuel rates as defaults
 
-            //SELECT max(rr_rates_effective_date) INTO :ld_Max_Effective_Date FROM Fuel_rates where rg_code = :il_rg_code;
+            //SELECT max(rr_rates_effective_date) 
+            //  FROM Fuel_rates 
+            // WHERE rg_code = :il_rg_code;
             int sqlCode = -1;
             string sqlErrText = "";
             ld_Max_Effective_Date = RDSDataService.GetFuelRatesMax(il_rg_code, ref sqlCode, ref sqlErrText);
-            if (sqlCode != 0)//(StaticVariables.sqlca.SQLCode != 0)
+            if (sqlCode != 0)
             {
-                MessageBox.Show(sqlErrText /*?app.sqlca.SQLErrText*/
+                MessageBox.Show(sqlErrText
                               , "Copy prev fuelrates"
                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
@@ -1200,14 +1263,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ld_Max_PrEffective_Date = of_getdate();
             }
-            ((DPieceRates2001)iuo_piecerates.DataObject).Retrieve(of_getrgcode(), ld_Max_PrEffective_Date);
-            iuo_piecerates.ResetUpdate();
-            for (ll_Ctr = 0; ll_Ctr < iuo_piecerates.RowCount; ll_Ctr++)
+            int? tRgCode = of_getrgcode();
+            ((DPieceRates2001)dw_piecerates.DataObject).Retrieve(tRgCode, ld_Max_PrEffective_Date);
+            dw_piecerates.ResetUpdate();
+            for (ll_Ctr = 0; ll_Ctr < dw_piecerates.RowCount; ll_Ctr++)
             {
-                iuo_piecerates.SetValue(ll_Ctr, "pr_effective_date", of_getdate());
-                iuo_piecerates.SetValue(ll_Ctr, "rg_code", of_getrgcode());
-                //iuo_piecerates.SetItemStatus(ll_Ctr, 0, primary!, new!);
-                ((PieceRates2001)iuo_piecerates.GetItem<PieceRates2001>(ll_Ctr)).MarkNewEntity();
+                // dw_piecerates.SetValue(ll_Ctr, "pr_effective_date", of_getdate());
+                dw_piecerates.SetValue(ll_Ctr, "rg_code", tRgCode);
+                // ((PieceRates2001)dw_piecerates.GetItem<PieceRates2001>(ll_Ctr)).MarkNewEntity();
+                //(dw_piecerates.GetItem<PieceRates2001>(ll_Ctr)).MarkNewEntity();
+                (dw_piecerates.GetItem<PieceRates2001>(ll_Ctr)).MarkNotModifiedEntity();
+            }
+            // TJB  RPCR_054  Aug-2013
+            // If the user is not allowed to update the rates, display them disabled 
+            // and make read-only (of_protectcolumns()).
+            if (ib_pieceratechangesallowed == false)
+            {
+                dw_piecerates.SelectAllRows(false);
+                ((Metex.Windows.DataEntityGrid)dw_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Control;
+                ((Metex.Windows.DataEntityGrid)dw_piecerates.GetControlByName("grid")).DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+                ((DataGridView)dw_piecerates.DataObject.Controls["grid"]).Columns["pr_rate"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                ((DataGridView)dw_piecerates.DataObject.Controls["grid"]).Columns["pr_active_status"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                ((DataGridView)dw_piecerates.DataObject.Controls["grid"]).Columns["pr_effective_date"].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
+                dw_piecerates.of_protectcolumns();
             }
             return 1;
         }
@@ -1300,7 +1378,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Row;
             DataUserControl dwc;//  DataControlBuilder dwc;
             //.GetChild("rg_code", dwc);
-            dwc = iuo_nonvehiclerates.DataObject.GetChild("rg_code");
+            dwc = dw_nonvehiclerates.DataObject.GetChild("rg_code");
             ll_Row = dwc.Find("rg_code  ", of_getrgcode().ToString());
             if (ll_Row > 0)
             {
@@ -1352,55 +1430,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_RGCode = of_getrgcode();
 
             // Check fuel rates
-
-            //select count(*) into :ll_Count1 from fuel_type ,fuel_rates 
-            // where fuel_type.ft_key = fuel_rates.ft_key and fuel_rates.rr_rates_effective_date = :ld_Date and fuel_rates.rg_code = :ll_RGCode and (fuel_rates.fr_fuel_rate is null or fuel_rates.fr_fuel_consumtion_rate is null);
+            //select count(*) from fuel_type, fuel_rates 
+            // where fuel_type.ft_key = fuel_rates.ft_key 
+            //   and fuel_rates.rr_rates_effective_date = :ld_Date 
+            //   and fuel_rates.rg_code = :ll_RGCode 
+            //   and (fuel_rates.fr_fuel_rate is null 
+            //        or fuel_rates.fr_fuel_consumtion_rate is null);
             ll_Count1 = RDSDataService.GetFuelTypeFuelRatesCount(ld_Date, ll_RGCode);
             if (ll_Count1 > 0)
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_fuelrates.text = "Fuel Rates (Incomplete)";
                 tabpage_fuelrates.Text = "Fuel Rates (Incomplete)";
-            }
             else
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_fuelrates.text = "Fuel Rates";
                 tabpage_fuelrates.Text = "Fuel Rates";
-            }
-            // check rate days
 
-            //select count(*) into :ll_Count2 from standard_frequency ,rate_days 
+            // Check rate days
+            //select count(*) into :ll_Count2 
+            //  from standard_frequency ,rate_days 
             // where standard_frequency.sf_key = rate_days.sf_key 
             //   and rate_days.rr_rates_effective_date = :ld_Date 
-            //   and rate_days.rg_code = :ll_RGCode and rate_days.rtd_days_per_annum is null;
+            //   and rate_days.rg_code = :ll_RGCode 
+            //   and rate_days.rtd_days_per_annum is null;
             ll_Count2 = RDSDataService.GetStandardFrequencyRateDaysCount(ld_Date, ll_RGCode);
             if (ll_Count2 > 0)
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_ratedays.text = "Rate Days (Incomplete)";
                 tabpage_ratedays.Text = "Rate Days (Incomplete)";
-            }
             else
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_ratedays.text = "Rate Days";
                 tabpage_ratedays.Text = "Rate Days";
-            }
 
-            //SELECT count(*) INTO :ll_Count3  FROM piece_rate WHERE piece_rate.pr_effective_date = :ld_Date AND piece_rate.rg_code =  :ll_RGCode  AND pr_active_status = 'Y' AND pr_rate is null;
-            ll_Count3 = RDSDataService.GetPieceRateCount(ld_Date, ll_RGCode);
-
-            if (ll_Count3 > 0)
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_piecerates.text = "Piece Rates (Incomplete)";
-                tabpage_piecerates.Text = "Piece Rates (Incomplete)";
-            }
-            else
-            {
-                //tab_main.tabpage_renewalrates.tab_nonvehiclerates.tabpage_piecerates.text = "Piece Rates";
-                tabpage_piecerates.Text = "Piece Rates";
-            }
+            // Count piecerates
+            // TJB  RPCR_054  June-2013
+            // Piecerates handled separately; no longer included in annual renewals
+            //SELECT count(*) INTO :ll_Count3  
+            //  FROM piece_rate 
+            // WHERE piece_rate.pr_effective_date = :ld_Date AND piece_rate.rg_code =  :ll_RGCode  AND pr_active_status = 'Y' AND pr_rate is null;
+            //ll_Count3 = RDSDataService.GetPieceRateCount(ld_Date, ll_RGCode);
+            //if (ll_Count3 > 0)
+            //    tabpage_piecerates.Text = "Piece Rates (Incomplete)";
+            //else
+            //    tabpage_piecerates.Text = "Piece Rates";
 
             // Count vehicle types
-            //SELECT count ( *) INTO :ll_NumVehicleTypes  FROM vehicle_type;
-
+            //SELECT count(*) INTO :ll_NumVehicleTypes  
+            //  FROM vehicle_type;
             ll_NumVehicleTypes = RDSDataService.GetVehicleTypeCount();
 
             // Count vehicle types already entered
@@ -1419,14 +1488,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             ll_NumVehicleTypesFilled = RDSDataService.GetVehicleRateCount(ld_Date);
 
-            if ((ll_NumVehicleTypesFilled == null) || (ll_NumVehicleTypesFilled < ll_NumVehicleTypes))
-            {
+            if ((ll_NumVehicleTypesFilled == null) 
+                || (ll_NumVehicleTypesFilled < ll_NumVehicleTypes))
                 tabpage_vehiclerates.Text = "Vehicle Rates (Incomplete)";
-            }
             else
-            {
                 tabpage_vehiclerates.Text = "Vehicle Rates";
-            }
+
             if (ll_Count1 > 0)
             {
                 if (ab_withmessage)
@@ -1458,27 +1525,25 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
                 return false;
             }
-            if (ll_Count3 > 0)
-            {
-                if (ab_withmessage)
-                {
-                    // question!, yesno!, 2) == 2)
-                    DialogResult dlg = MessageBox.Show("Not all piece rates have been defined for it yet. \n"
-                                                        + "Continue anyway?"
-                                                      , "title"
-                                                      , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                    if (dlg == DialogResult.No)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            // TJB  RPCR_054  June-2013
+            // Piecerates handled separately; no longer included in annual renewals
+            //if (ll_Count3 > 0)
+            //{
+            //    if (ab_withmessage)
+            //    {
+            //        // question!, yesno!, 2) == 2)
+            //        DialogResult dlg = MessageBox.Show("Not all piece rates have been defined for it yet. \n"
+            //                                            + "Continue anyway?"
+            //                                          , "title"
+            //                                          , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //
+            //        if (dlg == DialogResult.No)
+            //            return false;
+            //        else
+            //            return true;
+            //    }
+            //    return false;
+            //}
             return true;
         }
 
@@ -1487,21 +1552,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Close();
         }
 
-        private void acceptTextDiy() //added by ygu:modify statue
+        private void acceptTextDiy()
         {
             if (is_editable == "W")
             {
-                for (int row = 0; row < iuo_nonvehiclerates.RowCount; row++)
+                for (int row = 0; row < dw_nonvehiclerates.RowCount; row++)
                 {
-                    iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(row).SetMarkDirty();
+                    dw_nonvehiclerates.GetItem<NonVehicleRates2005>(row).SetMarkDirty();
                 }
             }
-            iuo_nonvehiclerates.AcceptText();
+            dw_nonvehiclerates.AcceptText();
         }
 
         public virtual void dw_nonvehicle_constructor()
         {
-            iuo_nonvehiclerates = dw_nonvehicle;
+            dw_nonvehiclerates = dw_nonvehiclerates;
         }
 
         public virtual void ue_dwnrbuttonclk()
@@ -1514,21 +1579,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // //! Defect. PaulA. 30July.  Null Object reference. 
             // 
             // if isValid ( mCurrent) then
-            // 	mCurrent.m_eh.PopMenu ( g_System.w_Active_MDI.PointerX ( ),g_System.w_Active_MDI.PointerY ( ))
+            // 	mCurrent.m_eh.PopMenu(g_System.w_Active_MDI.PointerX(), g_System.w_Active_MDI.PointerY())
             // end if
             // 
         }
 
         public virtual void dw_piecerate_constructor()
         {
-            iuo_piecerates = dw_piecerate;
-            // dw_piecerate.GetItem<PieceRates2001>(0).PrRate.GetValueOrDefault().ToString("##.000");
+            // iuo_piecerates = dw_piecerates;
+            // dw_piecerates.GetItem<PieceRates2001>(0).PrRate.GetValueOrDefault().ToString("##.000");
         }
-
-        //public virtual void ue_dwnrbuttonclk()
-        //{
-        //    // 
-        //}
 
         public virtual void ue_vscroll()
         {
@@ -1548,12 +1608,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void dw_other_constructor()
         {
             iuo_miscrates = dw_other;
-        }
-
-        public virtual void constructor()
-        {
-            icb_freeze = cb_freeze;
-            icb_delete = cb_delete;
         }
 
         public virtual void dw_vehiclerates_constructor()
@@ -1577,43 +1631,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // of_GetVehiclerate ( )
         }
 
-        //public virtual void constructor()
-        //{
-        //    icb_delete = cb_delete;
-        //}
-
         #endregion
 
         #region Events
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
+            // TJB  RPCR_054  June-2013
+            // Moved piece rate save process to cb_saveprate_clicked
             int? ll_rgcode;
             if (is_editable == "N")
             {
-                return;// -(1);
+                return;
             }
             //.GetItemNumber(1, "rg_code");
-            ll_rgcode = iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
-            iuo_nonvehiclerates.DataObject.AcceptText();
+            ll_rgcode = dw_nonvehiclerates.GetItem<NonVehicleRates2005>(0).RgCode;
+            dw_nonvehiclerates.DataObject.AcceptText();
             iuo_fuelrates.DataObject.AcceptText();
             iuo_miscrates.DataObject.AcceptText();
-            iuo_piecerates.DataObject.AcceptText();
+//            dw_piecerates.DataObject.AcceptText();
             iuo_vehiclerates.DataObject.AcceptText();
             iuo_ratedays.DataObject.AcceptText();
             // Make sure Misc rates and fuel rates get their rg_codes
             of_set_rgcode(ll_rgcode);
             of_setdates();
-            //iuo_nonvehiclerates.DataObject.AcceptText();
+            //dw_nonvehiclerates.DataObject.AcceptText();
             acceptTextDiy();
             iuo_fuelrates.DataObject.AcceptText();
             iuo_miscrates.DataObject.AcceptText();
-            iuo_piecerates.DataObject.AcceptText();
+//            dw_piecerates.DataObject.AcceptText();
             iuo_vehiclerates.DataObject.AcceptText();
             iuo_ratedays.DataObject.AcceptText();
 
             if (!(of_validate()))
             {
-                return;// -(1);
+                return;
             }
             //  TJB  SR4661  May 2005
             //  If the non-vehicle rates have been modified, set the 
@@ -1621,20 +1672,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_row;
             decimal? ldc_temp;
 
-            //?dwItemStatus lis_temp;
-            if (iuo_nonvehiclerates.ModifiedCount() > 0)
+            if (dw_nonvehiclerates.ModifiedCount() > 0)
             {
-                for (ll_row = 0; ll_row < iuo_nonvehiclerates.RowCount; ll_row++)
+                for (ll_row = 0; ll_row < dw_nonvehiclerates.RowCount; ll_row++)
                 {
-                    //lis_temp = iuo_nonvehiclerates.GetItemStatus(ll_row, "nvr_processing_wage_rate", primary!);
-                    if (iuo_nonvehiclerates.GetItem<NonVehicleRates2005>(ll_row).IsDirty) //(lis_temp == datamodified!) 
+                    if (dw_nonvehiclerates.GetItem<NonVehicleRates2005>(ll_row).IsDirty) //(lis_temp == datamodified!) 
                     {
-                        ldc_temp = iuo_nonvehiclerates.GetValue<decimal>(ll_row, "nvr_processing_wage_rate");
-                        iuo_nonvehiclerates.SetValue(ll_row, "nvr_wage_hourly_rate", ldc_temp);
+                        ldc_temp = dw_nonvehiclerates.GetValue<decimal>(ll_row, "nvr_processing_wage_rate");
+                        dw_nonvehiclerates.SetValue(ll_row, "nvr_wage_hourly_rate", ldc_temp);
                     }
                 }
             }
-            iuo_nonvehiclerates.Save();
+            dw_nonvehiclerates.Save();
             iuo_fuelrates.Save();
             iuo_miscrates.Save();
             // TJB  RD7_0036  Aug 2009
@@ -1643,24 +1692,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // iuo_vehiclerates.Save();
             save_vehiclerates();
             iuo_ratedays.Save();
-            iuo_piecerates.Save();
+
+            // TJB  RPCR_054  June-2013
+            // Moved piece rate save process to cb_saveprate
+            //dw_piecerates.Save();
 
             if (iw_caller != null)
-            {
                 iw_caller.of_retrievelist();
-            }
 
             sle_effdate.Enabled = false;
             if (is_editable == "W")
             {
                 is_editable = "Y";
-                icb_delete.Enabled = true;
-                icb_freeze.Enabled = true;
+                cb_delete.Enabled = true;
+                cb_freeze.Enabled = true;
             }
-            //?iuo_nonvehiclerates.Modify("rg_code.Protect=\"0~tif ( isRowNew ( ),1,1)\"");
-            //?iuo_nonvehiclerates.(7)DataControl["rg_code"].BackColor =\'13160660\'");
-            iuo_nonvehiclerates.DataObject.GetControlByName("rg_code").Enabled = false;
-            this.Text = of_gettitle();//parent.Title = of_gettitle();
+            dw_nonvehiclerates.DataObject.GetControlByName("rg_code").Enabled = false;
+            this.Text = of_gettitle();
             if (!(of_are_rates_complete(false)))
             {
                 st_warn.Visible = true;
@@ -1671,8 +1719,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 il_Rates_Complete = 1;
                 st_warn.Visible = false;
             }
-            //?commit;
-            return;// 1;
+            return;
         }
 
         public virtual void save_vehiclerates()
@@ -1761,7 +1808,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
 
             this.of_setdates();
-            return;// 0;
+            return;
         }
 
         public virtual void dw_nonvehicle_getfocus(object sender, EventArgs e)
@@ -1809,6 +1856,248 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 iw_caller.of_retrievelist();
             }
+        }
+
+        // TJB  RPCR_054  June-2013: New
+        // Open Add Piece Rate Type window
+        public virtual void cb_addratetype_clicked(object sender, EventArgs e)
+        {
+            NCriteria lnv_Criteria;
+            NRdsMsg lnv_Msg;
+
+            lnv_Criteria = new NCriteria();
+            lnv_Criteria.of_addcriteria("rg_code", il_rg_code);
+            lnv_Criteria.of_addcriteria("types_saved", 0);
+            lnv_Msg = new NRdsMsg();
+            lnv_Msg.of_addcriteria(lnv_Criteria);
+
+            WAddPieceRateType w_addPieceRateType = new WAddPieceRateType();
+            w_addPieceRateType.ShowDialog();
+
+            int? nRowsInserted = StaticVariables.gnv_app.of_get_parameters().integerparm;
+            nRowsInserted = (nRowsInserted == null) ? 0 : nRowsInserted;
+
+            if ((int)nRowsInserted > 0)
+            {
+                ((DPieceRates2001)dw_piecerates.DataObject).Reset();
+                of_copy_prev_piecerates();
+            }
+        }
+
+        // TJB  RPCR_054  June-2013: New
+        // Validate and save piecerates (independent of other rates)
+        public virtual void cb_saveprates_clicked(object sender, EventArgs e)
+        {
+            int nModified, nRow, nErrors, nWarnings;
+            bool bDirty, bNew, bMarkNew;
+            DateTime? dtPrDate;
+
+            // Check to see if there's anything to save
+            nModified = dw_piecerates.ModifiedCount();
+
+            // If not, tell the user and return
+            if (nModified <= 0)
+            {
+                MessageBox.Show("No piece rates have been changed; nothing to save.");
+                return;
+            }
+
+            // Loop through the piece rates to see which ones have been modified
+            nErrors = 0;
+            nWarnings = 0;
+            for (nRow = 0; nRow < dw_piecerates.RowCount; nRow++)
+            {
+                string sDescr = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrtDescription;
+                int? nPrtKey = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrtKey;
+                int? nRgCode = (dw_piecerates.GetItem<PieceRates2001>(nRow)).RgCode;
+                DateTime? dtOldPrDate = (dw_piecerates.GetItem<PieceRates2001>(nRow)).OldPrDate;
+                dtPrDate = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrEffectiveDate;
+
+                bDirty = (dw_piecerates.GetItem<PieceRates2001>(nRow)).IsDirty;
+                bNew = (dw_piecerates.GetItem<PieceRates2001>(nRow)).IsNew;
+                if (bDirty || bNew)
+                {
+                    // For testing ...
+                    /*
+                        string sActive = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrActiveStatus;
+                        decimal? dRate = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrRate;
+
+                            MessageBox.Show("Row " + nRow.ToString() + "\n"
+                                + "IsDirty = " + bDirty.ToString() + "\n"
+                                + "IsNew   = " + bNew.ToString() + "\n"
+                                + "---------------------------------------------------\n"
+                                + sDescr + "\n"
+                                + "PrtKey = " + nPrtKey.ToString() + "\n"
+                                + "Renewal Group = " + nRgCode.ToString() + "\n"
+                                + "Rate = " + dRate.ToString() + "\n"
+                                + "EffectiveDate = " + dtPrDate.ToString() + "\n"
+                                + "OldPrDate = " + dtOldPrDate.ToString() + "\n"
+                                + "Active = " + sActive + "\n"
+                                , "cb_saveprates_clicked");
+                    */
+
+                    // Check to see if the record is new (there isn't already a piece rate
+                    // for this type, renewal group and effective date).  The type (nPrtKey) 
+                    // and renewal group (nRgCode) are well-defined; we need to check the 
+                    // effective date.
+                    bMarkNew = true;
+                    if (dtPrDate == null)
+                    {
+                        MessageBox.Show("An Effective date is required for " + sDescr
+                                    , "Error");
+                        nErrors++;
+                    }
+                    else
+                    {
+                        // Check to see if the effective date has been changed
+                        if (dtOldPrDate != null && dtOldPrDate == dtPrDate)
+                        {
+                            MessageBox.Show("The Effective date was not changed for " + sDescr + "\n"
+                                    , "Warning");
+                            nWarnings++;
+                            // Set flag to not mark the record as being 'New' 
+                            // This means the 'save' below will Update this record and not
+                            // try to Insert it.
+                            bMarkNew = false;
+                        }
+                        else  // The effective date has been changed
+                        {
+                            // Check to see that it is newer than the most-recent effective date.
+                            /*
+                                // Check to see if there is already a record for the new effective date
+                                int sqlCode = -1;
+                                string sqlErrText = "";
+                                bool bFound = RDSDataService.CheckExistingPieceRate(nPrtKey, nRgCode, dtPrDate, ref sqlCode, ref sqlErrText);
+                                if (sqlCode != 0 && sqlCode != 100)  // (SQLError 100 means 'not found')
+                                {
+                                    MessageBox.Show(sqlErrText, "SQL Error"
+                                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    nErrors++;
+                                }
+                                if (bFound)  // A matching record was found
+                                {
+                                    MessageBox.Show("There is already a piece rate for " + sDescr + "\n"
+                                            + "effective for that date.  If you choose to continue, that \n"
+                                            + "record will be updated."
+                                            , "Warning");
+                                // Set flag to not mark the record as being 'New' 
+                                bMarkNew = false;
+                            */
+                            if (dtPrDate < dtOldPrDate)
+                            {
+                                MessageBox.Show("The effective date for " + sDescr + "\n"
+                                                + "may not be older that the the current effective date."
+                                                , "Error");
+                                nErrors++;
+                            }
+                        }
+                    }
+
+                    // If the effective date is new, mark this record as new
+                    // (so that when saved, it will be inserted; if its only dirty it will be updated)
+                    if (bMarkNew)
+                        (dw_piecerates.GetItem<PieceRates2001>(nRow)).MarkNewEntity();
+
+                    // For testing ...
+                    /*  bDirty = (dw_piecerates.GetItem<PieceRates2001>(nRow)).IsDirty;
+                        bNew = (dw_piecerates.GetItem<PieceRates2001>(nRow)).IsNew;
+                        MessageBox.Show("Row " + nRow.ToString() + "\n"
+                                    + "IsDirty (now) = " + bDirty2.ToString() + "\n"
+                                    + "IsNew (now) = " + bNew2.ToString() + "\n"
+                                    , "cb_saveprates_clicked");
+                    */
+                }
+            }
+            if (nErrors > 0)
+            {
+                string sPlural = (nErrors == 1) ? "" : "s";
+                MessageBox.Show(nErrors.ToString() + " error" + sPlural + " found; please correct.\n"
+                                + "Piece rates not saved."
+                                , "Warning");
+                return;
+            }
+
+            // Confirm the save
+            string sConfirmLine1 = nModified.ToString() + " new piece rates found";
+            string sConfirmLine2 = "Do you want to save these changes?\n";
+            if (nModified == 1)
+            {
+                sConfirmLine1 = nModified.ToString() + " new piece rate found";
+                sConfirmLine2 = "Do you want to save this change?\n";
+            }
+
+            // If there were warnings, add that to the confirmation message.
+            if (nWarnings > 0)
+            {
+                sConfirmLine1 += " with " + nWarnings.ToString() + " warning";
+                if (nWarnings > 1)
+                    sConfirmLine1 += "s";
+            }
+            sConfirmLine1 += ".\n";
+
+            // Display the confirmation message, with 'Yes' as the default 
+            DialogResult ans = MessageBox.Show(sConfirmLine1
+                                        + sConfirmLine2
+                                        , ""
+                                        , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                        , MessageBoxDefaultButton.Button1);
+
+            // If the user answers 'No' or Cancel', return without saving (and a message saying so) 
+            if (ans != DialogResult.Yes)
+            {
+                MessageBox.Show("The changed piece rates have not been saved.");
+                return;
+            }
+
+            // Finally, save the changes
+            int rc = dw_piecerates.Save();
+
+            // Testing ...
+            // MessageBox.Show("Save result = " + rc.ToString() + "\n");
+
+            //If successful update old effective dates
+            // (its easier to do the lot rather than only those that were changed)
+            if (rc == 1)
+            {
+                for (nRow = 0; nRow < dw_piecerates.RowCount; nRow++)
+                {
+                    dtPrDate = (dw_piecerates.GetItem<PieceRates2001>(nRow)).PrEffectiveDate;
+                    (dw_piecerates.GetItem<PieceRates2001>(nRow)).OldPrDate = dtPrDate;
+                    (dw_piecerates.GetItem<PieceRates2001>(nRow)).MarkClean();
+                }
+            }
+            else  // The save encountered an error: tell the user
+            {
+                MessageBox.Show("Error saving piece rates", "Error");
+            }
+
+            // Testing ... (that the Save cleared the 'Dirty' and 'New' flags)
+            // nModified = dw_piecerates.ModifiedCount();
+            // MessageBox.Show(nModified.ToString() + " records marked as Modified after save" + "\n"
+            //                 , "cb_saveprates_clicked");
+        }
+
+        // TJB  RPCR_054  June-2013: new
+        // Tell the user if there are any unsaved changes that will not be saved.
+        public override void close()
+        {
+            int nChanges = dw_piecerates.ModifiedCount()
+                            + dw_vehiclerates.ModifiedCount()
+                            + dw_ratedays.ModifiedCount()
+                            + dw_fuelrate.ModifiedCount()
+                            + dw_nonvehiclerates.ModifiedCount();
+            string sCloseMsg;
+            if (nChanges > 0)
+            {
+                sCloseMsg = "Closing: There are " + nChanges.ToString() + " unsaved changes.\n"
+                                + "These will not be saved.";
+                if (nChanges == 1)
+                    sCloseMsg = "Closing: There is 1 unsaved change.\n"
+                                    + "It will not be saved.";
+                MessageBox.Show(sCloseMsg, "Warning");
+            }
+
+            base.close();
         }
 
         public virtual void dw_vehiclerates_editchanged(object sender, EventArgs e)
@@ -1887,7 +2176,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             if (of_delete() == 1)
             {
-                dw_piecerate.Reset();
+                dw_piecerates.Reset();
                 if (iw_caller != null)
                 {
                     iw_caller.of_retrievelist();
