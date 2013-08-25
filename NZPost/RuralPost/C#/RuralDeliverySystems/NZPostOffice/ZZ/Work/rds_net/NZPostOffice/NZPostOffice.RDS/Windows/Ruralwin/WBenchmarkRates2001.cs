@@ -80,222 +80,263 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.dw_renewals = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_criteria = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_listing = new NZPostOffice.RDS.Controls.URdsDw();
+            this.rb_last_article_count = new System.Windows.Forms.RadioButton();
+            this.rb_last_but_one_article_count = new System.Windows.Forms.RadioButton();
+            this.rb_average_article_count = new System.Windows.Forms.RadioButton();
+            this.rb_last_renewal = new System.Windows.Forms.RadioButton();
+            this.gb_3 = new System.Windows.Forms.GroupBox();
+            this.gb_2 = new System.Windows.Forms.GroupBox();
+            this.gb_1 = new System.Windows.Forms.GroupBox();
+            this.cb_selectall = new System.Windows.Forms.Button();
+            this.cb_deselectall = new System.Windows.Forms.Button();
+            this.cb_runwhatif = new System.Windows.Forms.Button();
+            this.cb_showrates = new System.Windows.Forms.Button();
+            this.cb_1 = new System.Windows.Forms.Button();
+            this.cb_newrates = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.dw_renewals = new URdsDw();
-//!            this.dw_renewals.DataObject = new DRenewalDates2001a();
-            this.dw_criteria = new URdsDw();
-//!            this.dw_criteria.DataObject = new DBenchmarkCalcCriteria();
-            this.dw_listing = new URdsDw();
-//!            this.dw_listing.DataObject = new DWhatifContractSelection();
-            this.rb_last_article_count = new RadioButton();
-            this.rb_last_but_one_article_count = new RadioButton();
-            this.rb_average_article_count = new RadioButton();
-            this.rb_last_renewal = new RadioButton();
-            this.gb_3 = new GroupBox();
-            this.gb_2 = new GroupBox();
-            this.gb_1 = new GroupBox();
-            this.cb_selectall = new Button();
-            this.cb_deselectall = new Button();
-            this.cb_runwhatif = new Button();
-            this.cb_showrates = new Button();
-            this.cb_1 = new Button();
-            this.cb_newrates = new Button();
-
-           
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.Text = "Rates/What-If";
-            this.Location = new System.Drawing.Point(1, 1);
-            this.Size = new System.Drawing.Size(638, 433);
             // 
             // st_label
             // 
-            st_label.Text = "w_benchmark_rates2001";
-            st_label.Height = 17;
-            st_label.Top = 374;
+            this.st_label.Location = new System.Drawing.Point(1, 374);
+            this.st_label.Size = new System.Drawing.Size(171, 17);
+            this.st_label.Text = "WBenchmarkRates2001";
             // 
             // dw_renewals
             // 
-            dw_renewals.TabIndex = 5;
-            dw_renewals.Location = new System.Drawing.Point(10, 80);
-            dw_renewals.Size = new System.Drawing.Size(284, 253);
-            dw_renewals.Cursor = System.Windows.Forms.Cursors.Hand;
-//!            dw_renewals.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_renewals.RowFocusChanged += new EventHandler(dw_renewals_rowfocuschanged);
-            dw_renewals.Click += new EventHandler(dw_renewals_Click);            
-
+            this.dw_renewals.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.dw_renewals.DataObject = null;
+            this.dw_renewals.FireConstructor = false;
+            this.dw_renewals.Location = new System.Drawing.Point(10, 80);
+            this.dw_renewals.Name = "dw_renewals";
+            this.dw_renewals.Size = new System.Drawing.Size(284, 253);
+            this.dw_renewals.TabIndex = 5;
+            this.dw_renewals.RowFocusChanged += new System.EventHandler(this.dw_renewals_rowfocuschanged);
+            this.dw_renewals.Click += new System.EventHandler(this.dw_renewals_Click);
             // 
             // dw_criteria
             // 
-//!            dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_criteria.VerticalScroll.Visible = false;
-            dw_criteria.TabIndex = 8;
-            dw_criteria.Location = new System.Drawing.Point(319, 16);
-            dw_criteria.Size = new System.Drawing.Size(247, 59);
-            //dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
+            this.dw_criteria.DataObject = null;
+            this.dw_criteria.FireConstructor = false;
+            this.dw_criteria.Location = new System.Drawing.Point(319, 16);
+            this.dw_criteria.Name = "dw_criteria";
+            this.dw_criteria.Size = new System.Drawing.Size(247, 59);
+            this.dw_criteria.TabIndex = 8;
             // 
             // dw_listing
             // 
-            dw_listing.TabIndex = 10;
-            dw_listing.Location = new System.Drawing.Point(317, 80);
-            dw_listing.Size = new System.Drawing.Size(297, 253);
-//!            dw_listing.DataObject.BorderStyle = BorderStyle.Fixed3D;
-
-            //((DWhatifContractSelection)dw_listing.DataObject).CellDoubleClick += new EventHandler(dw_listing_doubleclicked);
-            //dw_listing.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_listing_constructor);
+            this.dw_listing.DataObject = null;
+            this.dw_listing.FireConstructor = false;
+            this.dw_listing.Location = new System.Drawing.Point(317, 80);
+            this.dw_listing.Name = "dw_listing";
+            this.dw_listing.Size = new System.Drawing.Size(297, 253);
+            this.dw_listing.TabIndex = 10;
             // 
             // rb_last_article_count
             // 
-            rb_last_article_count.Text = "Last";
-            rb_last_article_count.BackColor = System.Drawing.SystemColors.Control;
-            rb_last_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
-            rb_last_article_count.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            rb_last_article_count.TabIndex = 2;
-            rb_last_article_count.Location = new System.Drawing.Point(41, 38);
-            rb_last_article_count.Size = new System.Drawing.Size(44, 18);
+            this.rb_last_article_count.BackColor = System.Drawing.SystemColors.Control;
+            this.rb_last_article_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rb_last_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.rb_last_article_count.Location = new System.Drawing.Point(41, 38);
+            this.rb_last_article_count.Name = "rb_last_article_count";
+            this.rb_last_article_count.Size = new System.Drawing.Size(44, 18);
+            this.rb_last_article_count.TabIndex = 2;
+            this.rb_last_article_count.Text = "Last";
+            this.rb_last_article_count.UseVisualStyleBackColor = false;
             // 
             // rb_last_but_one_article_count
             // 
-            rb_last_but_one_article_count.Text = "Last but one";
-            rb_last_but_one_article_count.BackColor = System.Drawing.SystemColors.Control;
-            rb_last_but_one_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
-            rb_last_but_one_article_count.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            rb_last_but_one_article_count.TabIndex = 3;
-            rb_last_but_one_article_count.Location = new System.Drawing.Point(160, 20);
-            rb_last_but_one_article_count.Size = new System.Drawing.Size(87, 18);
+            this.rb_last_but_one_article_count.BackColor = System.Drawing.SystemColors.Control;
+            this.rb_last_but_one_article_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rb_last_but_one_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.rb_last_but_one_article_count.Location = new System.Drawing.Point(160, 20);
+            this.rb_last_but_one_article_count.Name = "rb_last_but_one_article_count";
+            this.rb_last_but_one_article_count.Size = new System.Drawing.Size(87, 18);
+            this.rb_last_but_one_article_count.TabIndex = 3;
+            this.rb_last_but_one_article_count.Text = "Last but one";
+            this.rb_last_but_one_article_count.UseVisualStyleBackColor = false;
             // 
             // rb_average_article_count
             // 
-            rb_average_article_count.Text = "Average";
-            rb_average_article_count.BackColor = System.Drawing.SystemColors.Control;
-            rb_average_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
-            rb_average_article_count.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            rb_average_article_count.TabIndex = 4;
-            rb_average_article_count.Location = new System.Drawing.Point(160, 38);
-            rb_average_article_count.Size = new System.Drawing.Size(65, 18);
+            this.rb_average_article_count.BackColor = System.Drawing.SystemColors.Control;
+            this.rb_average_article_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rb_average_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.rb_average_article_count.Location = new System.Drawing.Point(160, 38);
+            this.rb_average_article_count.Name = "rb_average_article_count";
+            this.rb_average_article_count.Size = new System.Drawing.Size(65, 18);
+            this.rb_average_article_count.TabIndex = 4;
+            this.rb_average_article_count.Text = "Average";
+            this.rb_average_article_count.UseVisualStyleBackColor = false;
             // 
             // rb_last_renewal
             // 
-            rb_last_renewal.Checked = true;
-            rb_last_renewal.Text = "Last renewal";
-            rb_last_renewal.BackColor = System.Drawing.SystemColors.Control;
-            rb_last_renewal.ForeColor = System.Drawing.SystemColors.WindowText;
-            rb_last_renewal.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            rb_last_renewal.TabIndex = 1;
-            rb_last_renewal.Location = new System.Drawing.Point(41, 20);
-            rb_last_renewal.Size = new System.Drawing.Size(88, 18);
+            this.rb_last_renewal.BackColor = System.Drawing.SystemColors.Control;
+            this.rb_last_renewal.Checked = true;
+            this.rb_last_renewal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rb_last_renewal.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.rb_last_renewal.Location = new System.Drawing.Point(41, 20);
+            this.rb_last_renewal.Name = "rb_last_renewal";
+            this.rb_last_renewal.Size = new System.Drawing.Size(88, 18);
+            this.rb_last_renewal.TabIndex = 1;
+            this.rb_last_renewal.TabStop = true;
+            this.rb_last_renewal.Text = "Last renewal";
+            this.rb_last_renewal.UseVisualStyleBackColor = false;
             // 
             // gb_3
             // 
-            gb_3.Text = "Renewal Rates";
-            gb_3.BackColor = System.Drawing.SystemColors.Control;
-            gb_3.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_3.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_3.Location = new System.Drawing.Point(3, 64);
-            gb_3.Size = new System.Drawing.Size(300, 304);
+            this.gb_3.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_3.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_3.Location = new System.Drawing.Point(3, 64);
+            this.gb_3.Name = "gb_3";
+            this.gb_3.Size = new System.Drawing.Size(300, 304);
+            this.gb_3.TabIndex = 14;
+            this.gb_3.TabStop = false;
+            this.gb_3.Text = "Renewal Rates";
             // 
             // gb_2
             // 
-            gb_2.Text = "Contracts";
-            gb_2.BackColor = System.Drawing.SystemColors.Control;
-            gb_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_2.Location = new System.Drawing.Point(308, 1);
-            gb_2.Size = new System.Drawing.Size(316, 367);
+            this.gb_2.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_2.Location = new System.Drawing.Point(308, 1);
+            this.gb_2.Name = "gb_2";
+            this.gb_2.Size = new System.Drawing.Size(316, 367);
+            this.gb_2.TabIndex = 15;
+            this.gb_2.TabStop = false;
+            this.gb_2.Text = "Contracts";
             // 
             // gb_1
             // 
-            gb_1.Text = "What-If Calculator Source";
-            gb_1.BackColor = System.Drawing.SystemColors.Control;
-            gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_1.Size = new System.Drawing.Size(300, 59);
-            gb_1.Location = new System.Drawing.Point(3, 1);
+            this.gb_1.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_1.Location = new System.Drawing.Point(3, 1);
+            this.gb_1.Name = "gb_1";
+            this.gb_1.Size = new System.Drawing.Size(300, 59);
+            this.gb_1.TabIndex = 16;
+            this.gb_1.TabStop = false;
+            this.gb_1.Text = "What-If Calculator Source";
             // 
             // cb_selectall
             // 
-            cb_selectall.Text = "Select All";
-            cb_selectall.Enabled = false;
-            cb_selectall.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_selectall.TabIndex = 11;
-            cb_selectall.Location = new System.Drawing.Point(449, 339);
-            cb_selectall.Size = new System.Drawing.Size(72, 22);
-            cb_selectall.Tag = "ComponentName=Run What-If;";
-            cb_selectall.Click += new EventHandler(cb_selectall_clicked);
+            this.cb_selectall.Enabled = false;
+            this.cb_selectall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_selectall.Location = new System.Drawing.Point(449, 339);
+            this.cb_selectall.Name = "cb_selectall";
+            this.cb_selectall.Size = new System.Drawing.Size(72, 22);
+            this.cb_selectall.TabIndex = 11;
+            this.cb_selectall.Tag = "ComponentName=Run What-If;";
+            this.cb_selectall.Text = "Select All";
+            this.cb_selectall.Click += new System.EventHandler(this.cb_selectall_clicked);
             // 
             // cb_deselectall
             // 
-            cb_deselectall.Text = "&Unselect All";
-            cb_deselectall.Enabled = false;
-            cb_deselectall.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_deselectall.TabIndex = 12;
-            cb_deselectall.Location = new System.Drawing.Point(537, 339);
-            cb_deselectall.Size = new System.Drawing.Size(78, 22);
-            cb_deselectall.Tag = "ComponentName=Run What-If;";
-            cb_deselectall.Click += new EventHandler(cb_deselectall_clicked);
+            this.cb_deselectall.Enabled = false;
+            this.cb_deselectall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_deselectall.Location = new System.Drawing.Point(537, 339);
+            this.cb_deselectall.Name = "cb_deselectall";
+            this.cb_deselectall.Size = new System.Drawing.Size(78, 22);
+            this.cb_deselectall.TabIndex = 12;
+            this.cb_deselectall.Tag = "ComponentName=Run What-If;";
+            this.cb_deselectall.Text = "&Unselect All";
+            this.cb_deselectall.Click += new System.EventHandler(this.cb_deselectall_clicked);
             // 
             // cb_runwhatif
             // 
-            cb_runwhatif.Text = "Run What If Calculator...";
-            cb_runwhatif.Enabled = false;
-            cb_runwhatif.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_runwhatif.TabIndex = 13;
-            cb_runwhatif.Location = new System.Drawing.Point(491, 374);
-            cb_runwhatif.Size = new System.Drawing.Size(134, 22);
-            cb_runwhatif.Tag = "ComponentName=Run What-If;";
-            cb_runwhatif.Click += new EventHandler(cb_runwhatif_clicked);
+            this.cb_runwhatif.Enabled = false;
+            this.cb_runwhatif.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_runwhatif.Location = new System.Drawing.Point(491, 374);
+            this.cb_runwhatif.Name = "cb_runwhatif";
+            this.cb_runwhatif.Size = new System.Drawing.Size(134, 22);
+            this.cb_runwhatif.TabIndex = 13;
+            this.cb_runwhatif.Tag = "ComponentName=Run What-If;";
+            this.cb_runwhatif.Text = "Run What If Calculator...";
+            this.cb_runwhatif.Click += new System.EventHandler(this.cb_runwhatif_clicked);
             // 
             // cb_showrates
             // 
-            cb_showrates.Text = "Show Rates...";
-            cb_showrates.Enabled = false;
-            cb_showrates.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_showrates.TabIndex = 6;
-            cb_showrates.Location = new System.Drawing.Point(103, 339);
-            cb_showrates.Size = new System.Drawing.Size(87, 22);
-            cb_showrates.Tag = "ComponentName=Show Rates;";
-            cb_showrates.Click += new EventHandler(cb_showrates_clicked);
+            this.cb_showrates.Enabled = false;
+            this.cb_showrates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_showrates.Location = new System.Drawing.Point(103, 339);
+            this.cb_showrates.Name = "cb_showrates";
+            this.cb_showrates.Size = new System.Drawing.Size(87, 22);
+            this.cb_showrates.TabIndex = 6;
+            this.cb_showrates.Tag = "ComponentName=Show Rates;";
+            this.cb_showrates.Text = "Show Rates...";
+            this.cb_showrates.Click += new System.EventHandler(this.cb_showrates_clicked);
             // 
             // cb_1
             // 
-            this.AcceptButton = cb_1;
-            cb_1.Text = "&Search";
-            cb_1.Enabled = false;
-            cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 9;
-            cb_1.Location = new System.Drawing.Point(565, 33);
-            cb_1.Size = new System.Drawing.Size(54, 22);
-            cb_1.Tag = "ComponentName=Run What-If;";
-            cb_1.Click += new EventHandler(cb_1_clicked);
+            this.cb_1.Enabled = false;
+            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_1.Location = new System.Drawing.Point(565, 33);
+            this.cb_1.Name = "cb_1";
+            this.cb_1.Size = new System.Drawing.Size(54, 22);
+            this.cb_1.TabIndex = 9;
+            this.cb_1.Tag = "ComponentName=Run What-If;";
+            this.cb_1.Text = "&Search";
+            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
             // 
             // cb_newrates
             // 
-            cb_newrates.Text = "New Rates...";
-            cb_newrates.Enabled = false;
-            cb_newrates.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_newrates.TabIndex = 7;
-            cb_newrates.Location = new System.Drawing.Point(208, 339);
-            cb_newrates.Size = new System.Drawing.Size(87, 22);
-            cb_newrates.Tag = "ComponentName=New Rates;";
-            cb_newrates.Click += new EventHandler(cb_newrates_clicked);
+            this.cb_newrates.Enabled = false;
+            this.cb_newrates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_newrates.Location = new System.Drawing.Point(208, 339);
+            this.cb_newrates.Name = "cb_newrates";
+            this.cb_newrates.Size = new System.Drawing.Size(87, 22);
+            this.cb_newrates.TabIndex = 7;
+            this.cb_newrates.Tag = "ComponentName=New Rates;";
+            this.cb_newrates.Text = "New Rates...";
+            this.cb_newrates.Click += new System.EventHandler(this.cb_newrates_clicked);
+            // 
+            // WBenchmarkRates2001
+            // 
+            this.AcceptButton = this.cb_1;
+            this.ClientSize = new System.Drawing.Size(632, 408);
+            this.Controls.Add(this.rb_last_article_count);
+            this.Controls.Add(this.rb_last_but_one_article_count);
+            this.Controls.Add(this.rb_average_article_count);
+            this.Controls.Add(this.rb_last_renewal);
+            this.Controls.Add(this.cb_selectall);
+            this.Controls.Add(this.cb_deselectall);
+            this.Controls.Add(this.cb_runwhatif);
+            this.Controls.Add(this.cb_showrates);
+            this.Controls.Add(this.cb_1);
+            this.Controls.Add(this.cb_newrates);
+            this.Controls.Add(this.dw_renewals);
+            this.Controls.Add(this.dw_criteria);
+            this.Controls.Add(this.dw_listing);
+            this.Controls.Add(this.gb_3);
+            this.Controls.Add(this.gb_2);
+            this.Controls.Add(this.gb_1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Location = new System.Drawing.Point(1, 1);
+            this.MaximizeBox = false;
+            this.Name = "WBenchmarkRates2001";
+            this.Text = "Rates/What-If";
+            this.Controls.SetChildIndex(this.gb_1, 0);
+            this.Controls.SetChildIndex(this.gb_2, 0);
+            this.Controls.SetChildIndex(this.gb_3, 0);
+            this.Controls.SetChildIndex(this.dw_listing, 0);
+            this.Controls.SetChildIndex(this.dw_criteria, 0);
+            this.Controls.SetChildIndex(this.dw_renewals, 0);
+            this.Controls.SetChildIndex(this.cb_newrates, 0);
+            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.cb_showrates, 0);
+            this.Controls.SetChildIndex(this.cb_runwhatif, 0);
+            this.Controls.SetChildIndex(this.cb_deselectall, 0);
+            this.Controls.SetChildIndex(this.cb_selectall, 0);
+            this.Controls.SetChildIndex(this.rb_last_renewal, 0);
+            this.Controls.SetChildIndex(this.rb_average_article_count, 0);
+            this.Controls.SetChildIndex(this.rb_last_but_one_article_count, 0);
+            this.Controls.SetChildIndex(this.rb_last_article_count, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            Controls.Add(rb_last_article_count);
-            Controls.Add(rb_last_but_one_article_count);
-            Controls.Add(rb_average_article_count);
-            Controls.Add(rb_last_renewal);
-            Controls.Add(cb_selectall);
-            Controls.Add(cb_deselectall);
-            Controls.Add(cb_runwhatif);
-            Controls.Add(cb_showrates);
-            Controls.Add(cb_1);
-            Controls.Add(cb_newrates);
-            Controls.Add(dw_renewals);
-            Controls.Add(dw_criteria);
-            Controls.Add(dw_listing);
-            Controls.Add(gb_3);
-            Controls.Add(gb_2);
-            Controls.Add(gb_1);
-            this.ResumeLayout();
         }
 
         void dw_renewals_Click(object sender, EventArgs e)
@@ -436,7 +477,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual int of_retrievelist()
         {
-            dw_renewals.Retrieve(new object[] { il_region });
+            dw_renewals.Retrieve(new object[] {il_region});
 
             // TJB RPI_007 July-2010: Added
             // Check to see if the user froze the editable rates and
