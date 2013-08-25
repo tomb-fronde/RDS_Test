@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_054  June-2013
+    // Added OldPrDate (_old_pr_date) to "remember" the starting value when making changes in WShowRates2001
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -17,6 +20,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("rg_code", "_rg_code", "piece_rate")]
     [MapInfo("pr_active_status", "_pr_active_status", "piece_rate")]
     [MapInfo("pr_rate", "_pr_rate", "piece_rate")]
+    [MapInfo("old_pr_date", "_old_pr_date","")]
     [System.Serializable()]
 
     public class PieceRates2001 : Entity<PieceRates2001>
@@ -40,6 +44,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private decimal? _pr_rate;
 
+        [DBField()]
+        private DateTime? _old_pr_date;
 
         public virtual string PrtDescription
         {
@@ -90,6 +96,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_pr_effective_date != value)
                 {
                     _pr_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? OldPrDate
+        {
+            get
+            {
+                CanReadProperty("OldPrDate", true);
+                return _old_pr_date;
+            }
+            set
+            {
+                CanWriteProperty("OldPrDate", true);
+                if (_old_pr_date != value)
+                {
+                    _old_pr_date = value;
                     PropertyHasChanged();
                 }
             }
@@ -214,6 +238,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._rg_code = GetValueFromReader<Int32?>(dr,3);
                             instance._pr_active_status = GetValueFromReader<String>(dr,4);
                             instance._pr_rate = GetValueFromReader<Decimal?>(dr,5);
+                            instance._old_pr_date = GetValueFromReader<DateTime?>(dr,2);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
