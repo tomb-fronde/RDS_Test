@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_054  July-2013 (in designer)
+    // Changed alignment of prt_key header (to MiddleLeft; was unspecified)
+
 	public partial class DPieceRateImport : Metex.Windows.DataUserControl
 	{
 		public DPieceRateImport()
