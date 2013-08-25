@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Aug-2013
+    // Tried rounding in Extnamnt
+    // Issue with differences between Benchmark and Whatif totals set aside
+    //
     // TJB  RPCR_041  Nov-2012
     // Changed Reliefweeks to be obtained from database
     
@@ -1310,17 +1314,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         + (Fuelcost == null ? 0 : Fuelcost)
                         + (Vehicledep == null ? 0 : Vehicledep);
                 return Math.Ceiling(tmpamt.GetValueOrDefault());
-                // return Math.Ceiling((
-                //      (Ruccost == null?0:Ruccost)
-                //     +(Acccost == null?0:Acccost)
-                //     +(Proccost == null?0:Proccost)
-                //     +(Delcost == null?0:Delcost)
-                //     +(Reliefcost == null?0:Reliefcost)
-                //     +(Tyretubecost == null?0:Tyretubecost)
-                //     +(Repmaintcost == null?0:Repmaintcost)
-                //     +(Fuelcost == null?0:Fuelcost)
-                //     +(Vehicledep == null?0:Vehicledep)
-                //     ).GetValueOrDefault());
+                //return Math.Round(tmpamt.GetValueOrDefault(),2);
             }
         }
 
