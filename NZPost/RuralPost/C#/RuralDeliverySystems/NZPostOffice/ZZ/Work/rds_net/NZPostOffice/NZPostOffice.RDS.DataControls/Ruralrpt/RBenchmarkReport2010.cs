@@ -13,6 +13,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
 	public partial class RBenchmarkReport2010 : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_054  Jul-2013
+        // Retrieve the data for the Piecerates subreport 
+        // (see RBenchmarkReport2010_RetrieveEnd())
+        // NOTE: Although multiple contracts can be selected for benchmark 
+        //       reports, only the first is actually displayed
+        //
         // TJB Oct 2010
         // Updated version of RBenchmarkReport2006
         // Removed Frequencies subreport and some processing of end date and Piecerate
@@ -33,20 +39,37 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
 
         void RBenchmarkReport2010_RetrieveEnd(object sender, EventArgs e)
         {
-            DataTable table = new NZPostOffice.RDS.DataControls.Report.BenchmarkReport2010DataSet(this.bindingSource.DataSource);
-            this.report.SetDataSource(table);
+            // TJB  July-2013: NOTE
+            // See See RDS.DataControls.Ruralrpt.RBenchmarkReport2010.Designer.cs InitializeComponent()
+            // where DataSources are defined for the main report and itrs subreports.
+            // This is needed to prevent connection login details being asked for
+            // for the main and subreport.
+
+            DataTable table1 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReport2010DataSet(this.bindingSource.DataSource);
+            this.report.SetDataSource(table1);
+
+            // TJB  RPCR_054  Jul-2013
+            // Retrieve the data for the Piecerates subreport
+            // Where more than one contract has been selected, table1 contains 
+            // multiple rows, with new rows added for each contract
+            // (this may or may not be the "right" way to do it, but it works after much experimentation)
+            int nRow, nContractNo;
+            nRow = table1.Rows.Count;
+            nContractNo = (int)table1.Rows[nRow-1]["ContractNo"];
+            DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportPieceratesDataSet(BenchmarkReportPiecerates.GetAllBenchmarkReportPiecerates(nContractNo));
+            this.report.Subreports["RERBenchmarkReportPiecerates.rpt"].SetDataSource(table2);
         }
 
         private int ai_inContract = 0;
         private int ai_inSequence = 0;
+
+        List<BenchmarkReport2010> combinedSource = new List<BenchmarkReport2010>();
 
         // MTX010 - Next 5 lines added
         public void ClearSource()
         {
             combinedSource.Clear();
         }
-
-        List<BenchmarkReport2010> combinedSource = new List<BenchmarkReport2010>();
 
         public int Retrieve(int? inContract, int? inSequence)
 		{
@@ -109,7 +132,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                 //
                 //     The code assumes there will always be two suppliers ...
                 //     It also assumes any "missing" suppliers will always be the last ones ...
-                
+/* TJB  RPCR_054  July-2013
+ * Removed - no longer needed (Piece rates shown in sub-report)  
+ *         - was causing 'index out of bounds' error
                 int ll_top;
                 if (source[0].PrsSupplier3 == null)
                 {
@@ -132,7 +157,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
                     (this.report.ReportDefinition.ReportObjects["prtotal1"] as
                              CrystalDecisions.CrystalReports.Engine.FieldObject).Top = ll_top;
                 }
-
+*/
                 // Determine the report's end date
                 //
                 // TJB  RD7_0005 Aug 2008:  Changed to use either the EndDate or ExpiryDate

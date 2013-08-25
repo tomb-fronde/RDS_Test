@@ -67,14 +67,28 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             this.ResumeLayout(false);
 
             this.report.RefreshReport += new System.EventHandler(report_RefreshReport);
-            DataTable table = new NZPostOffice.RDS.DataControls.Report.BenchmarkReport2010DataSet(this.bindingSource.DataSource);
-            this.report.SetDataSource(table);
+
+            // TJB  RPCR_054  Jul-2013: NOTE
+            // This appears to be redundant but isn't.  
+            // This is needed to prevent connection login details being asked for
+            // for the report.  See RDS.DataControls.Ruralrpt.RBenchmarkReport2010.cs
+            // RBenchmarkReport2010_RetrieveEnd() for the code where the table is populated.
+            DataTable table1 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReport2010DataSet(this.bindingSource.DataSource);
+            this.report.SetDataSource(table1);
 
             // TJB Oct-2010: Removed BenchmakrReportFrequencies subreport from Benchmark Report
             //DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportFrequenciesDataSet(new BenchmarkReportFrequencies());
             //this.report.Subreports["RERBenchmarkReportFrequencies.rpt"].SetDataSource(table2);
 
-		}
+            // TJB RPCR_054  Jul-2013
+            // This is needed to prevent connection login details being asked for
+            // for the subreport.  See RDS.DataControls.Ruralrpt.RBenchmarkReport2010.cs
+            // for the code where the table is populated.
+            // [There should be a way to define table1 and table2 here and use them in
+            //  RBenchmarkReport2010_RetrieveEnd(), but again, this works and other attempts haven't ...]
+            DataTable table2 = new NZPostOffice.RDS.DataControls.Report.BenchmarkReportPieceratesDataSet(new BenchmarkReportPiecerates());
+            this.report.Subreports["RERBenchmarkReportPiecerates.rpt"].SetDataSource(table2);
+        }
 		#endregion
 
         private void report_RefreshReport(object sender, System.EventArgs e)
