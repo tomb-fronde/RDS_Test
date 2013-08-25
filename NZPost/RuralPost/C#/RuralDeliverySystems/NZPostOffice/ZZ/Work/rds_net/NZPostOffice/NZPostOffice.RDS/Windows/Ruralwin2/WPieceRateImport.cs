@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_054  June-2013 
+    // wf_calculate_cost rewritten and renamed (was wf_calculate_rate)
+
     public class WPieceRateImport : WAncestorWindow
     {
         #region Define
@@ -27,24 +30,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public Label st_1;
 
-        public Button cb_1;
+        public Button cb_import_values;
 
-        public Button cb_2;
+        public Button cb_select_infile;
 
-        public Button cb_3;
+        public Button cb_save;
 
-        public Button cb_4;
+        public Button cb_import_novalues;
 
         public Button cb_cancel;
 
         public Button cb_stop;
 
         public URdsDw dw_errors;
+
         public List<PieceRateImportExeptionReport> dw_errorsList = new List<PieceRateImportExeptionReport>();
         
         public PictureBox p_abort;
 
         public string isIgnoreWrongRates = "UNDEF";
+
         public int nInputRecords;
 
         #endregion
@@ -93,29 +98,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.SuspendLayout();
 
             this.dw_1 = new URdsDw();
-//!            dw_1.DataObject = new DPieceRateImport();
-
             this.sle_1 = new TextBox();
             this.st_1 = new Label();
-            this.cb_1 = new Button();
-            this.cb_2 = new Button();
-            this.cb_3 = new Button();
-            this.cb_4 = new Button();
+            this.cb_import_values = new Button();
+            this.cb_select_infile = new Button();
+            this.cb_save = new Button();
+            this.cb_import_novalues = new Button();
             this.cb_cancel = new Button();
-
             this.dw_errors = new URdsDw();
-            //dw_errors.DataObject = new DPieceRateImportExeptionReport();
-
             this.p_abort = new PictureBox();
             this.cb_stop = new Button();
 
             Controls.Add(dw_1);
             Controls.Add(sle_1);
             Controls.Add(st_1);
-            Controls.Add(cb_1);
-            Controls.Add(cb_2);
-            Controls.Add(cb_3);
-            Controls.Add(cb_4);
+            Controls.Add(cb_import_values);
+            Controls.Add(cb_select_infile);
+            Controls.Add(cb_save);
+            Controls.Add(cb_import_novalues);
             Controls.Add(cb_cancel);
             Controls.Add(dw_errors);
             Controls.Add(p_abort);
@@ -161,44 +161,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             st_1.Size = new System.Drawing.Size(51, 16);
 
             // 
-            // cb_1   = "&Import with values"
+            // cb_import_values   = "&Import with values"
             // 
-            cb_1.Text = "&Import with values";
-            cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 3;
-            cb_1.Size = new System.Drawing.Size(101, 21);
-            cb_1.Location = new System.Drawing.Point(254, 2);
-            cb_1.Click += new EventHandler(cb_1_clicked);
+            cb_import_values.Text = "&Import with values";
+            cb_import_values.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_import_values.TabIndex = 3;
+            cb_import_values.Size = new System.Drawing.Size(101, 21);
+            cb_import_values.Location = new System.Drawing.Point(254, 2);
+            cb_import_values.Click += new EventHandler(cb_import_values_clicked);
 
             // 
-            // cb_2   = "..."
+            // cb_select_infile   == Select input file ("..." button)
             // 
-            cb_2.Text = "...";
-            cb_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_2.TabIndex = 2;
-            cb_2.Location = new System.Drawing.Point(229, 2);
-            cb_2.Size = new System.Drawing.Size(21, 21);
-            cb_2.Click += new EventHandler(cb_2_clicked);
+            cb_select_infile.Text = "...";
+            cb_select_infile.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_select_infile.TabIndex = 2;
+            cb_select_infile.Location = new System.Drawing.Point(229, 2);
+            cb_select_infile.Size = new System.Drawing.Size(21, 21);
+            cb_select_infile.Click += new EventHandler(cb_select_infile_clicked);
 
             // 
-            // cb_3   "&Save"
+            // cb_save   "&Save"
             // 
-            cb_3.Text = "&Save";
-            cb_3.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_3.TabIndex = 6;
-            cb_3.Location = new System.Drawing.Point(417, 360);
-            cb_3.Size = new System.Drawing.Size(52, 21);
-            cb_3.Click += new EventHandler(cb_3_clicked);
+            cb_save.Text = "&Save";
+            cb_save.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_save.TabIndex = 6;
+            cb_save.Location = new System.Drawing.Point(417, 360);
+            cb_save.Size = new System.Drawing.Size(52, 21);
+            cb_save.Click += new EventHandler(cb_save_clicked);
 
             // 
-            // cb_4   "&Import without values"
+            // cb_import_novalues   "&Import without values"
             // 
-            cb_4.Text = "&Import without values";
-            cb_4.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_4.TabIndex = 4;
-            cb_4.Location = new System.Drawing.Point(358, 2);
-            cb_4.Size = new System.Drawing.Size(110, 21);
-            cb_4.Click += new EventHandler(cb_4_clicked);
+            cb_import_novalues.Text = "&Import without values";
+            cb_import_novalues.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
+            cb_import_novalues.TabIndex = 4;
+            cb_import_novalues.Location = new System.Drawing.Point(358, 2);
+            cb_import_novalues.Size = new System.Drawing.Size(110, 21);
+            cb_import_novalues.Click += new EventHandler(cb_import_novalues_clicked);
 
             // 
             // cb_cancel   "&Cancel"
@@ -381,12 +381,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
             if (SQLCode == 0)
             {
-                //dw_1.DataObject.GetItem<PieceRateImport>(arow).PrtKey = lPRKey;
                 dw_1.SetValue(pRow, "prt_key", thisPrtKey);
             }
             else
             {
-                wf_saveerror_info( pRow, "Piece rate key not found on database" );
+                wf_saveerror_info( pRow, "Piece rate key for " + thisPrtCode + "not found on database" );
                 return false;
             }
             return true;
@@ -482,6 +481,48 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 wf_saveerror_info(pRow, "Piece rate not defined");
                 return false;
             }
+            return true;
+        }
+
+        public virtual bool wf_calculate_cost(int pRow)
+        {
+            // TJB  RPCR_054  June-2013
+            // Rewritten and renamed (was wf_calculate_rate)
+            // Most of the original duplicated work done in wf_check_piece_rate
+            // This gets rid of the extraneous stuff (and is MUCH simpler)
+            //
+            // Checks the piece rate and displays the cost
+            //
+            // Assumes the prt_key value has been set in PrtKey
+            // and the pr_rate value has been set in PrRdCost (in wf_check_piece_rate)
+            // If everything is as expected
+            //    Put the calculated prd_cost in PrdCost (for display)
+            //    Return TRUE
+            // If pr_rate was not found (PrRdCost is null)
+            //    Return FALSE
+            //    Add record to ErrorList
+            //    (but do not delete - done by calling routine)
+
+            int thisPrdQuantity;
+            decimal thisPrdCost;
+            decimal? thisPrdRdCost;
+            decimal? thisTotalcost;
+
+            thisPrdRdCost = dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdRdCost;
+            thisTotalcost = dw_1.DataObject.GetItem<PieceRateImport>(pRow).Totalcost;
+            thisPrdQuantity = (int)dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdQuantity;
+
+            if (thisPrdRdCost == null)
+            {
+                wf_saveerror_info(pRow, "Prd_cost not determined");
+                return false;
+            }
+
+            // Calculate the cost (this has already been calculated and saved in Totalcost)
+            thisPrdCost = thisPrdQuantity * (decimal)thisPrdRdCost;
+            // Display the answer on the dw_1
+            dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost = thisPrdCost;
+
             return true;
         }
 
@@ -590,130 +631,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        public virtual bool wf_calculate_rate(int pRow)
-        {   // 
-            // Assumes the PrtKey value for the record has been set (in wf_check_piece_rate)
-            // Save the pr_rate in PrRdCost
-            // If valid
-            //    Return TRUE
-            // If invalid
-            //    Return FALSE
-            //    Add record to ErrorList
-            //    (but do not delete - done by calling routine)
-
-            DateTime thisConStartDate = new DateTime();
-            DateTime thisConEndDate = new DateTime();
-            DateTime prevConStartDate = new DateTime();
-            DateTime prevConEndDate = new DateTime();
-            DateTime? thisConRatesEffectiveDate = new DateTime();
-            DateTime? prevConRatesEffectiveDate = new DateTime();
-            DateTime? thisPrdDate = new DateTime();
-            int thisConSeqNum = int.MinValue;
-            int prevConSeqNum = int.MinValue;
-            int thisRgCode;
-            int thisPrtKey;
-            int? thisPrdQuantity;
-            int? thisContractNo;
-            string thisPrtCode;
-            System.Decimal prevPrRate;
-            System.Decimal prevPrdCost;
-            System.Decimal? thisPrRate;
-            System.Decimal? thisPrdCost = Decimal.MinValue;
-            int SQLCode = 0;
-
-            PieceRateImport current = dw_1.DataObject.GetItem<PieceRateImport>(pRow);
-
-            // Get the required values from dw_1.
-            thisContractNo  = current.ContractNo;
-            thisPrdDate     = current.PrdDate;
-            thisPrdQuantity = current.PrdQuantity;
-            thisPrtCode = (string.IsNullOrEmpty(current.PrtCode)) ? "" : current.PrtCode.Trim();
-            //if (!string.IsNullOrEmpty(current.PrtCode))
-            //    {
-            //    thisPrtCode = current.PrtCode.Trim();
-            //}
-
-            // Get the max seq number to determine what renewal a contract is in
-            // select max(contract_seq_number) into :li_seq_num  from contract_renewals where contract_no = :li_contract_no;
-            thisConSeqNum = RDSDataService.GetMaxContractSeqNumber(thisContractNo);
-
-            // Get the start and end date of the current renewal
-            //select con_start_date, con_expiry_date  into :ld_start, :ld_end  from contract_renewals  where contract_seq_number = :li_seq_num  and contract_no = :li_contract_no;
-
-            RDSDataService dataService 
-                           = RDSDataService.GetContractRenewalsDate(thisConSeqNum, thisContractNo);
-            List<ContractRenewalsDateItem> list = dataService.ContractRenewalsDateItemList;
-            thisConStartDate = list[0].Con_start_date;
-            thisConEndDate   = list[0].Con_expiry_date;
-
-            // Use the prt code from dw_1 to determine the prt_key
-            // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-            thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
-
-            // Get the contract rates' effective date to narrow down the search for the correct rate
-            //select con_rates_effective_date into :ld_con_rates_effective_date  from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num;
-            thisConRatesEffectiveDate 
-                           = RDSDataService.GetConRatesEffDate(thisContractNo, thisConSeqNum);
-
-            // Use the prt_key to determine the the rate
-            // select pr_rate into :ldec_pr_rate from piece_rate  where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-            thisPrRate = RDSDataService.GetPrRateFromPieceRate(thisPrtKey, thisConRatesEffectiveDate);
-
-            // Check that the prd date is in the current renewal
-            if (thisPrdDate >= thisConStartDate && thisPrdDate <= thisConEndDate)
-            {
-                thisPrdCost = thisPrdQuantity * thisPrRate;
-
-                // Display the answer on the dw_1
-                //!dw_1.DataObject.GetItem<PieceRateImport>(arow).PrdCost = ldec_prd_cost;
-                dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost = thisPrdCost;
-            }
-            else
-            {
-                // Minus 1 from the current renewal 
-                //li_seq_num_min_one = li_seq_num - 1;
-                prevConSeqNum = thisConSeqNum - 1;
-
-                // select con_start_date, con_expiry_date  into :ld_prev_start, :ld_prev_end from contract_renewals  where contract_no = :li_contract_no  and contract_seq_number = :li_seq_num_min_one;
-                dataService = RDSDataService.GetContractRenewalsDate(prevConSeqNum, thisContractNo);
-                list = dataService.ContractRenewalsDateItemList;
-                if (list != null && list.Count > 0)
-                {
-                    prevConStartDate = list[0].Con_start_date;
-                    prevConEndDate   = list[0].Con_expiry_date;
-                }
-
-                //if (ld_prd_date >= ld_prev_start && ld_prd_date <= ld_prev_end)
-                if (thisPrdDate >= prevConStartDate && thisPrdDate <= prevConEndDate)
-                {
-                    // Use the prt code from dw_1 to determine the prt_key
-                    // select prt_key into :li_prt_key from piece_rate_type where prt_code = :ls_prt_code;
-                    thisPrtKey = RDSDataService.GetPrtKey(thisPrtCode, ref SQLCode);
-
-                    // Get the contract rates effective date to norrow down the search for the correct rate
-                    //select con_rates_effective_date into :ld_con_rates_effective_date from contract_renewals where contract_no = :li_contract_no and contract_seq_number = :li_seq_num_min_one;
-                    prevConRatesEffectiveDate = RDSDataService.GetConRatesEffDate(thisContractNo, prevConSeqNum);
-
-                    //  TJB  20 Jul 2005
-                    //  Fix bug: use the correct contract sequence number
-                    // 		   and contract_seq_number = :li_seq_num;
-                    // Use the prt_key to determine the the rate
-                    //select pr_rate into :ldec_pr_rate from piece_rate where prt_key = :li_prt_key and pr_effective_date = :ld_con_rates_effective_date;
-                    prevPrRate = (decimal)RDSDataService.GetPrRateFromPieceRate(thisPrtKey, prevConRatesEffectiveDate);
-                    prevPrdCost = (decimal)(thisPrdQuantity * prevPrRate);
-
-                    // Display the answer on the dw_1
-                    dw_1.DataObject.GetItem<PieceRateImport>(pRow).PrdCost = prevPrdCost;
-                }
-                else
-                {
-                    wf_saveerror_info(pRow, "Prd_cost not determined");
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private bool filterWithEmptystring(PieceRateImport item)
         {
             return true;
@@ -763,10 +680,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void post_yield()
         {
-            cb_1.Enabled = true;
-            cb_2.Enabled = true;
+            cb_import_values.Enabled = true;
+            cb_select_infile.Enabled = true;
             dw_1.Enabled = true;
-            cb_3.Enabled = true;
+            cb_save.Enabled = true;
             dw_errors.Enabled = true;
             sle_1.Enabled = true;
             st_1.Enabled = true;
@@ -783,7 +700,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #endregion
 
         #region Events
-        public virtual void cb_1_clicked(object sender, EventArgs e)
+        public virtual void cb_import_values_clicked(object sender, EventArgs e)
         {                 // Import with values
             string inFilename;
 
@@ -820,7 +737,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             wf_process_input();
         }
 
-        public virtual void cb_2_clicked(object sender, EventArgs e)
+        public virtual void cb_select_infile_clicked(object sender, EventArgs e)
         {       // Select input file
             string sFileName = string.Empty;
             string sDirectory = string.Empty;
@@ -837,7 +754,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             sle_1.Text = sFileName;
         }
 
-        public virtual void cb_3_clicked(object sender, EventArgs e)
+        public virtual void cb_save_clicked(object sender, EventArgs e)
         {      // Save
             dw_1.Save();
             //?commit;
@@ -879,7 +796,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
         }
 
-        public virtual void cb_4_clicked(object sender, EventArgs e)
+        public virtual void cb_import_novalues_clicked(object sender, EventArgs e)
         {   // Import without values - tjb version
             string inFilename;
 
@@ -919,16 +836,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void wf_process_input()
         {   // Import without values - tjb version
             int nRows, nRow;
-            int lPRKey;
-            int lRow;
-            int lContract;
-            string sPRCode;
-            string sMSNumber;
             string sFileName = string.Empty;
-            string sIgnoreWrongRates = "UNDEF";
-            string ls_test;
-            System.Decimal decRate;
-            DateTime dPRDate;
             DateTime dToday = DateTime.Today;
             int prevContractNo;
             string prevPrtCode;
@@ -947,15 +855,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TWC - fix for 4511 - need to re-set the sort criteria before sorting again
             dw_1.DataObject.SortString = "Contract A, PrdDate A, PrtCode A";
             dw_1.DataObject.Sort<PieceRateImport>();
-          //      wf_dump_records("cb_4_clicked: before calling checkdates");
+          //      wf_dump_records("cb_import_novalues_clicked: before calling checkdates");
           //      int nDateErrors = wf_checkdates();
-          //      wf_dump_records("cb_4_clicked: Starting");
+          //      wf_dump_records("cb_import_novalues_clicked: Starting");
             isIgnoreWrongRates = "UNDEF";
             nRows = dw_1.RowCount;
             if (nRows > 0)
             {
                 // Scan each input record, applying various validations
-                //for (lRow = lRowCount - 1; lRow >= 0; lRow -= 1)
+                // for (lRow = lRowCount - 1; lRow >= 0; lRow -= 1)
                 // We do the loop this way because the number of rows (nRows) may decrease
                 // as we delete faulty records.
                 string errName = "";
@@ -994,9 +902,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         errName = "check_confirm_rate";
                         delRow = true;
                     }
-                    else if (! wf_calculate_rate(nRow))
+                    else if (! wf_calculate_cost(nRow))
                     {
-                        errName = "check_calculate_rate";
+                        errName = "check_calculate_cost";
                         delRow = true;
                     }
                     if (delRow)
@@ -1020,7 +928,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         nRow++;
                     }
                 }  // End record-scanning loop
-                //P!! line moved from wf_check_duplicates to write last record in dw_errorList to file
             }
             nErrors = dw_errorsList.Count;
             nData = dw_1.RowCount;
@@ -1035,8 +942,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             if (nErrors == 0)
             {
-                //!dw_errors.DataObject.InsertItem<PieceRateImportExeptionReport>(0);
-                //!dw_errors.DataObject.GetItem<PieceRateImportExeptionReport>(0).Errormsg = "No errors found in import file";
                 PieceRateImportExeptionReport newError = new PieceRateImportExeptionReport();
                 newError.Errormsg = "No errors found in import file";
                 dw_errorsList.Insert(0, newError);
@@ -1070,10 +975,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                          , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (answer == DialogResult.Yes)
             {
-                //((DPieceRateImportExeptionReport)(dw_errors.DataObject)).Retrieve(dw_errorsList);
                 ((DPieceRateImportExeptionReport)dw_errors.DataObject).Print();
             }
-            //?w_main_mdi.SetMicroHelp("");
             post_yield();
             cb_stop.Visible = false;
             p_abort.Visible = false;
