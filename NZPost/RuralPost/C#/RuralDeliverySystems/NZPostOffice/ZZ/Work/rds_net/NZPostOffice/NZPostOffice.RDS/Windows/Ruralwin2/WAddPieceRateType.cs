@@ -149,7 +149,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.pr_rate.AllowPromptAsInput = false;
             this.pr_rate.AsciiOnly = true;
             this.pr_rate.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.pr_rate.Location = new System.Drawing.Point(381, 18);
+            this.pr_rate.Location = new System.Drawing.Point(397, 18);
             this.pr_rate.Mask = "###.00000";
             this.pr_rate.Name = "pr_rate";
             this.pr_rate.PromptChar = '0';
@@ -164,19 +164,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.pr_effective_date_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pr_effective_date_t.Location = new System.Drawing.Point(309, 46);
             this.pr_effective_date_t.Name = "pr_effective_date_t";
-            this.pr_effective_date_t.Size = new System.Drawing.Size(72, 13);
+            this.pr_effective_date_t.Size = new System.Drawing.Size(89, 13);
             this.pr_effective_date_t.TabIndex = 0;
-            this.pr_effective_date_t.Text = "Expiry Date";
+            this.pr_effective_date_t.Text = "Effective Date";
             // 
             // pr_effective_date
             // 
             this.pr_effective_date.AllowPromptAsInput = false;
             this.pr_effective_date.AsciiOnly = true;
-            this.pr_effective_date.Location = new System.Drawing.Point(381, 41);
+            this.pr_effective_date.Location = new System.Drawing.Point(397, 41);
             this.pr_effective_date.Mask = "00/00/0000";
             this.pr_effective_date.Name = "pr_effective_date";
             this.pr_effective_date.PromptChar = '0';
-            this.pr_effective_date.Size = new System.Drawing.Size(88, 20);
+            this.pr_effective_date.Size = new System.Drawing.Size(71, 20);
             this.pr_effective_date.TabIndex = 10;
             this.pr_effective_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.toolTip1.SetToolTip(this.pr_effective_date, "Enter date in dd/mm/yyyy format");
@@ -244,8 +244,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.Controls.Add(this.st_prt);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Text = "Add Piece Rate Type";
             this.Name = "WAddPieceRateType";
+            this.Text = "Add Piece Rate Type";
             this.Controls.SetChildIndex(this.st_prt, 0);
             this.Controls.SetChildIndex(this.dw_prt, 0);
             this.Controls.SetChildIndex(this.cb_close, 0);
