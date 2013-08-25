@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DPieceRates2001 : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_054  June-2013
+        // Added grid_DataError handler (to designer) to validate rate and effective date
+        //
         // TJB 12-Aug-2012
         // Changed pr_rate from 3 decimals to 5
 
