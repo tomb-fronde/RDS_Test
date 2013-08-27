@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
     <Compile Include="Ruraldw\ContractAddressFrequency.cs" />
+    <Compile Include="Ruraldw\DddwPieceRateTypes.cs" />
     <Compile Include="Ruraldw\QsOutletDetails.cs" />
     <Compile Include="Ruraldw\CustomerInterests.cs" />
     <Compile Include="Ruraldw\CustomerOccupations.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Ruralmailmerge\MailmergeOdDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeOwnerdriverDownloadSearch.cs" />
     <Compile Include="Ruralmailmerge\SelectProcurements.cs" />
+    <Compile Include="Ruralrpt\RBenchmarkReportPiecerates.cs" />
     <Compile Include="Ruralrpt\RBenchmarkReport2010.cs" />
     <Compile Include="Ruralrpt\CustCountcriteria.cs" />
     <Compile Include="Ruralrpt\CustCountExport.cs" />
@@ -273,7 +275,6 @@
     <Compile Include="Ruraldw\MiscRates2001.cs" />
     <Compile Include="Ruraldw\NationalRatesOverrideFields.cs" />
     <Compile Include="Ruraldw\NonVehicleOverrideRates.cs" />
-    <Compile Include="Ruraldw\NonVehicleRates2001.cs" />
     <Compile Include="Ruraldw\NonVehicleRates2005.cs" />
     <Compile Include="Ruraldw\Occupationlist.cs" />
     <Compile Include="Ruraldw\OtherOverrideRates.cs" />

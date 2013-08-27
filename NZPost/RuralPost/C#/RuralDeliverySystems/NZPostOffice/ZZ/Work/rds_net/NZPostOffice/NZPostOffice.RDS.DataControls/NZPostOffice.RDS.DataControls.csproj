@@ -81,6 +81,9 @@
     <Compile Include="Report\BenchmarkReportFrequenciesDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report\BenchmarkReportPieceratesDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report\ContractorLabelDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -116,6 +119,12 @@
     </Compile>
     <Compile Include="Report\ContractSummaryVolumeDataSet.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\RERBenchmarkReportPiecerates.cs">
+      <DependentUpon>RERBenchmarkReportPiecerates.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Report\CustCountcriteriaDataSet.cs">
       <SubType>Component</SubType>
@@ -437,12 +446,6 @@
     </Compile>
     <Compile Include="Report\RERAllowanceReport.cs">
       <DependentUpon>RERAllowanceReport.rpt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <SubType>Component</SubType>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Report\RERBenchmarkReport2006.cs">
-      <DependentUpon>RERBenchmarkReport2006.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
@@ -902,6 +905,12 @@
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ruraldw\DDddwPieceRateTypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DDddwPieceRateTypes.designer.cs">
+      <DependentUpon>DDddwPieceRateTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruraldw\DQsOutletDetails.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1290,12 +1299,6 @@
     </Compile>
     <Compile Include="Ruralrpt\RAllowanceReport.Designer.cs">
       <DependentUpon>RAllowanceReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ruralrpt\RBenchmarkReport2006.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruralrpt\RBenchmarkReport2006.Designer.cs">
-      <DependentUpon>RBenchmarkReport2006.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruralrpt\RBenchmarkReport2010.cs">
       <SubType>UserControl</SubType>
@@ -2254,12 +2257,6 @@
     <Compile Include="Ruraldw\DNonVehicleOverrideRates.designer.cs">
       <DependentUpon>DNonVehicleOverrideRates.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ruraldw\DNonVehicleRates2001.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruraldw\DNonVehicleRates2001.designer.cs">
-      <DependentUpon>DNonVehicleRates2001.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ruraldw\DNonVehicleRates2005.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2873,6 +2870,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report\RERBenchmarkReportPiecerates.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RERBenchmarkReportPiecerates.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report\REclDataImportExeption.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>REclDataImportExeption.cs</LastGenOutput>
@@ -2972,10 +2973,6 @@
     <EmbeddedResource Include="Report\RERAllowanceReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RERAllowanceReport.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report\RERBenchmarkReport2006.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RERBenchmarkReport2006.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\RERBenchmarkReport2010.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -3328,6 +3325,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DNonVehicleRates2005.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DPieceRateImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPieceRateImport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DPieceRateImportDiffRateReport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DPieceRateImportDiffRateReport.cs</DependentUpon>
@@ -3339,6 +3340,14 @@
     <EmbeddedResource Include="Ruraldw\DPieceRateImportInvalidDate.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DPieceRateImportInvalidDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DPieceRates.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPieceRates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DPieceRates2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPieceRates2001.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DQsOutletDetails.resx">
       <SubType>Designer</SubType>

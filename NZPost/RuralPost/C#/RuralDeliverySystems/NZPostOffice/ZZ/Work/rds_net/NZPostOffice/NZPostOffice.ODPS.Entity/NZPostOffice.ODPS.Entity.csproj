@@ -52,6 +52,8 @@
     <Compile Include="OdpsCodes\DddwPbuCode.cs" />
     <Compile Include="OdpsCodes\DddwPbuCodes.cs" />
     <Compile Include="OdpsCodes\DddwPtaCode.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPiecerates.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailAllowanceBreakdown.cs" />
     <Compile Include="OdpsInvoice\DddwContracttypes.cs" />
     <Compile Include="OdpsInvoice\DddwRegions.cs" />
     <Compile Include="OdpsInvoice\InvoiceDetailPayment.cs" />

@@ -26,7 +26,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationVersion>7.1.8.3</ApplicationVersion>
+    <ApplicationVersion>7.1.10.1</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -212,6 +212,10 @@
     <EmbeddedResource Include="Windows\Odps\WAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Odps\WCodeTableMaintenance.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WCodeTableMaintenance.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Odps\WExportCriteria.resx">
       <SubType>Designer</SubType>

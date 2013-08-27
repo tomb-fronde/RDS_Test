@@ -109,6 +109,18 @@
     <Compile Include="OdpsCodes\DddwPbuCode.Designer.cs">
       <DependentUpon>DddwPbuCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPiecerates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailAllowanceBreakdown.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailAllowanceBreakdown.Designer.cs">
+      <DependentUpon>DwInvoiceDetailAllowanceBreakdown.cs</DependentUpon>
+    </Compile>
     <Compile Include="OdpsInvoice\DDddwContracttypes.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -638,6 +650,15 @@
     <Compile Include="Report\AuditLogDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report\REDwInvoiceDetailAllowanceBreakdown.cs">
+      <DependentUpon>REDwInvoiceDetailAllowanceBreakdown.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailAllowanceBreakdownDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report\DatadictDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -973,6 +994,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.resx">
+      <DependentUpon>DwInvoiceDetailPaymentPiecerates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
@@ -984,6 +1009,10 @@
     <EmbeddedResource Include="Odps\DwReportCriteria.resx">
       <DependentUpon>DwReportCriteria.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailAllowanceBreakdown.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailAllowanceBreakdown.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report\REDDatadict.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
