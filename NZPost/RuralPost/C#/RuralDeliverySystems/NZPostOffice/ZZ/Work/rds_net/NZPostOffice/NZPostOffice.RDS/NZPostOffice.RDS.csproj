@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.9.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.10.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -130,6 +130,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WAddPieceRateType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WAddPieceRateType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WEclExceptionReport.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WEclExceptionReport.cs</DependentUpon>
@@ -178,6 +182,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WRouteAudit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WShowRates2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WShowRates2001.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WWhatifCalc2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WWhatifCalc2001.cs</DependentUpon>
@@ -213,6 +221,10 @@
     <EmbeddedResource Include="Windows\Ruralwin\WAddressSearchSelect.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddressSearchSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WBenchmarkRates2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WBenchmarkRates2001.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WContract2001.resx">
       <SubType>Designer</SubType>
@@ -272,6 +284,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Windows\Ruralwin2\WAddPieceRateType.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin2\WEclExceptionReport.cs">
       <SubType>Form</SubType>
@@ -734,9 +749,6 @@
     <Compile Include="Windows\Ruralwin2\WRenewal2001.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\Ruralwin2\WRenewalProcess2001.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Windows\Ruralwin2\WWhatifFreqs2001.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -942,6 +954,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RDSYSTAB.ICO" />
+    <None Include="Properties\DataSources\NZPostOffice.RDS.DataControls.Ruraldw.DDddwPieceRates.datasource" />
+    <None Include="Properties\DataSources\NZPostOffice.RDS.Entity.Ruraldw.DddwPieceRates.datasource" />
     <None Include="Resources\star1d.ico" />
     <None Include="Resources\star1c.ico" />
   </ItemGroup>
