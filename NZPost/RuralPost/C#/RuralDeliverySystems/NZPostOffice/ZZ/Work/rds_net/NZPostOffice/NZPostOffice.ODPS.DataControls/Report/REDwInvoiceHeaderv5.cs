@@ -290,7 +290,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentrpt_invoiceid {
             get {
-                return this.DataDefinition.ParameterFields[14];
+                return this.DataDefinition.ParameterFields[15];
             }
         }
         
@@ -298,7 +298,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentrpt_enddate {
             get {
-                return this.DataDefinition.ParameterFields[15];
+                return this.DataDefinition.ParameterFields[16];
             }
         }
         
@@ -306,7 +306,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentrpt_insupplier {
             get {
-                return this.DataDefinition.ParameterFields[16];
+                return this.DataDefinition.ParameterFields[17];
             }
         }
         
@@ -314,7 +314,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentrpt_incontract_no {
             get {
-                return this.DataDefinition.ParameterFields[17];
+                return this.DataDefinition.ParameterFields[18];
             }
         }
         
@@ -322,7 +322,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailkmrpt_invoiceid {
             get {
-                return this.DataDefinition.ParameterFields[24];
+                return this.DataDefinition.ParameterFields[25];
             }
         }
         
@@ -330,7 +330,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailkmrpt_contractno {
             get {
-                return this.DataDefinition.ParameterFields[25];
+                return this.DataDefinition.ParameterFields[26];
             }
         }
         
@@ -338,7 +338,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailkmrpt_contractorno {
             get {
-                return this.DataDefinition.ParameterFields[26];
+                return this.DataDefinition.ParameterFields[27];
             }
         }
         
@@ -346,7 +346,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailkmrpt_payperiod_start {
             get {
-                return this.DataDefinition.ParameterFields[27];
+                return this.DataDefinition.ParameterFields[28];
             }
         }
         
@@ -354,7 +354,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailkmrpt_payperiod_end {
             get {
-                return this.DataDefinition.ParameterFields[28];
+                return this.DataDefinition.ParameterFields[29];
             }
         }
         
@@ -362,7 +362,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailpprpt_invoiceid {
             get {
-                return this.DataDefinition.ParameterFields[32];
+                return this.DataDefinition.ParameterFields[33];
             }
         }
         
@@ -370,7 +370,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailpprpt_contractno {
             get {
-                return this.DataDefinition.ParameterFields[33];
+                return this.DataDefinition.ParameterFields[34];
             }
         }
         
@@ -378,7 +378,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailpprpt_contractorno {
             get {
-                return this.DataDefinition.ParameterFields[34];
+                return this.DataDefinition.ParameterFields[35];
             }
         }
         
@@ -386,7 +386,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailpprpt_payperiod_start {
             get {
-                return this.DataDefinition.ParameterFields[35];
+                return this.DataDefinition.ParameterFields[36];
             }
         }
         
@@ -394,7 +394,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailpprpt_payperiod_end {
             get {
-                return this.DataDefinition.ParameterFields[36];
+                return this.DataDefinition.ParameterFields[37];
             }
         }
         
@@ -402,7 +402,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailxprpt_invoiceid {
             get {
-                return this.DataDefinition.ParameterFields[37];
+                return this.DataDefinition.ParameterFields[38];
             }
         }
         
@@ -410,7 +410,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailxprpt_contractno {
             get {
-                return this.DataDefinition.ParameterFields[38];
+                return this.DataDefinition.ParameterFields[39];
             }
         }
         
@@ -418,7 +418,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailxprpt_contractorno {
             get {
-                return this.DataDefinition.ParameterFields[39];
+                return this.DataDefinition.ParameterFields[40];
             }
         }
         
@@ -426,7 +426,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailxprpt_payperiod_start {
             get {
-                return this.DataDefinition.ParameterFields[40];
+                return this.DataDefinition.ParameterFields[41];
             }
         }
         
@@ -434,7 +434,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceDetailPaymentPrDetailxprpt_payperiod_end {
             get {
-                return this.DataDefinition.ParameterFields[41];
+                return this.DataDefinition.ParameterFields[42];
             }
         }
         
@@ -442,7 +442,7 @@ namespace NZPostOffice.ODPS.DataControls.Report {
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public CrystalDecisions.Shared.IParameterField Parameter_REDwInvoiceHeaderPostaddressrpt_enddate {
             get {
-                return this.DataDefinition.ParameterFields[42];
+                return this.DataDefinition.ParameterFields[43];
             }
         }
     }
