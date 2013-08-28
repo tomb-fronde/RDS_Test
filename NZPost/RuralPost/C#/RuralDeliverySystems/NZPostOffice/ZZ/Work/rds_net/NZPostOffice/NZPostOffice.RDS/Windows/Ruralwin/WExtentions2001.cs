@@ -13,11 +13,14 @@ using NZPostOffice.RDS.Windows.Ruralwin2;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Release 7.1.10 Fixups  Aug-2013
+    // Added call to TruncateTBmPiecerates (in wf_addextn)
+    //
+    // TJB Oct-2010: 
+    // Changed benchmark report to BenchmarkReport2010 (was 2006)
+
     public partial class WExtentions2001 : WAncestorWindow
     {
-        // TJB Oct-2010: 
-        // Changed benchmark report to BenchmarkReport2010 (was 2006)
-
         #region Define
 
         public int iltravellingspeed = 50;
@@ -387,13 +390,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                    , "w_extentions2001.wf_addextn: Database error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                //? commit;
                 if (MessageBox.Show("Do you want a benchmark report produced of the current contract?"
                                    , this.Text
                                    , MessageBoxButtons.YesNo
                                    , MessageBoxIcon.Question) 
                          == DialogResult.Yes)
                 {
+                    // TJB Release 7.1.10 Fixups  Aug-2013
+                    // Added call to TruncateTBmPiecerates 
+                    // (truncate is no longer part of sp_GetBenchmarkRpt2003)
+                    RDSDataService.TruncateTBmPiecerates();
                     ((NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2010)dw_benchmark_report).Retrieve(lContract, lSequence);
                     dw_benchmark_report.Visible = true;
                     // 	cb_search.Visible=false
