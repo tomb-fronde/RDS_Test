@@ -978,6 +978,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             Cursor.Current = Cursors.WaitCursor;
 
+            // TJB  Release 7.1.10 fixup  Aug-2013
+            // Added this to clear t_bm_piecerates so it accumulates data for all contracts being BM'd
+            // BM report selects from accumulated data for the each report.
+            RDSDataService.TruncateTBmPiecerates();
+
             // TJB  Aug-2008:  Added from cb_bm_clicked
             // TJB  RD7_0051 Oct2009
             //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
