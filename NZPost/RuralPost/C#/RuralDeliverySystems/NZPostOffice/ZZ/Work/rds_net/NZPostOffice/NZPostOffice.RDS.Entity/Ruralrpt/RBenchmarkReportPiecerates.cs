@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB  Release 7.1.10 fixup  Aug-2013
+    // Modified fetch to get all data in t_bm_piecerates
+    //
     // TJB  RPCR_054  Aug-2013: NEW
     // Retrieve piece rates for Benchmark report
     //
@@ -160,8 +163,12 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 				{
 					cm.CommandType = CommandType.Text;
                     cm.CommandText = "SELECT contract_no, prs_key, prs_description, ytd_paid "
-                                   + "  FROM t_bm_piecerates "
-                                   + " WHERE contract_no = :lContract ";
+                                   + "  FROM t_bm_piecerates ";
+                    // TJB  Release 7.1.10 fixup  Aug-2013
+                    // Return all values from t_bm_piecerates.  It now accumulates
+                    // data for all contracts, though they're added to one contract at a time
+                    // (there's probably a better way to do this).
+                                   //+ " WHERE contract_no = :lContract ";
 					ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
 
