@@ -10,6 +10,9 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  Release 7.1.10 Fixup  Aug-2013
+    // NEW: TruncateTBmPiecerates
+    //
     // TJB  RPCR_054  June-2013
     // - (NEW) CheckExistingPieceRate: Check to see if there is n existing piece rate
     // - Re-wrote _GetContractList query to select on arbitrary effective date 
@@ -1020,6 +1023,17 @@ namespace NZPostOffice.RDS.DataService
             sqlCode = obj._sqlcode;
             sqlErrText = obj._sqlerrtext;
             return obj.dtVal;
+        }
+
+        // TJB  Release 7.1.10 Fixup  Aug-2013: NEW
+        /// <summary>
+        ///    Truncate t_bm_piecerates prior to preparing one or more BMs
+        /// </summary>
+        public static void TruncateTBmPiecerates()
+        {
+            RDSDataService obj = Execute("_TruncateTBmPiecerates");
+            //sqlCode = obj._sqlcode;
+            //sqlErrText = obj._sqlerrtext;
         }
 
         // TJB  RPCR_054  June-2013: NEW
@@ -8224,6 +8238,30 @@ namespace NZPostOffice.RDS.DataService
                         _sqlerrtext = ex.Message;
                     }
                     dtVal = sequence;
+                }
+            }
+        }
+
+        // TJB  Release 7.1.10 Fixup  Aug-2013: NEW
+        [ServerMethod]
+        private void _TruncateTBmPiecerates()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "truncate table t_bm_piecerates";
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
                 }
             }
         }
