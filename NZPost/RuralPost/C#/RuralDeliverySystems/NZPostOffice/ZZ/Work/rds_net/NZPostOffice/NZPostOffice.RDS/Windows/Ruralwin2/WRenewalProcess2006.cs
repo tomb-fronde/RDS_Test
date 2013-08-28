@@ -16,22 +16,27 @@ using System.Drawing.Printing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Release 7.1.10 fixup  Aug-2013
+    // Added call to RDSDataService.TruncateTBmPiecerates to clear the 
+    // t_bm_piecerates table so it accumulates data for all contracts being BM'd.
+    // BM report selects from accumulated data for the each report.
+    //
+    // TJB  Aug-2013
+    // Renamed buttons cb_1, cb_2 to cb_selectall, cb_unselectall
+    //
+    // TJB  RPCR038  Oct-2012
+    // Bug fix: printed blank mail carried reports after first valid one
+    //    -removed uninitialised variable
+    //
+    // TJB  11-Apr-2012  RPC_035
+    // Duplex print Route Frequency Descriptions
+    //
+    // TJB Oct-2010
+    // Changed benchmark report to BenchmarkReport2010 (was 2006)
+
     // Renewal and Benchmark window
     public class WRenewalProcess2006 : WAncestorWindow
     {
-        // TJB  Aug-2013
-        // Renamed buttons cb_1, cb_2 to cb_selectall, cb_unselectall
-        //
-        // TJB  RPCR038  Oct-2012
-        // Bug fix: printed blank mail carried reports after first valid one
-        //    -removed uninitialised variable
-        //
-        // TJB  11-Apr-2012  RPC_035
-        // Duplex print Route Frequency Descriptions
-        //
-        // TJB Oct-2010
-        // Changed benchmark report to BenchmarkReport2010 (was 2006)
-
         private const string DEFAULT_ASSEMBLY = "NZPostOffice.RDS.DataControls";
         private const string DEFAULT_VERSION = "1.0.0.0";
 
@@ -893,6 +898,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             Cursor.Current = Cursors.WaitCursor;
+
+            // TJB  Release 7.1.10 fixup  Aug-2013
+            // Added this to clear t_bm_piecerates so it accumulates data for all contracts being BM'd
+            // BM report selects from accumulated data for the each report.
+            RDSDataService.TruncateTBmPiecerates();
 
             // TJB  RD7_0051 Oct2009
             //((RBenchmarkReport2006)dw_benchmark_report.DataObject).ClearSource();
