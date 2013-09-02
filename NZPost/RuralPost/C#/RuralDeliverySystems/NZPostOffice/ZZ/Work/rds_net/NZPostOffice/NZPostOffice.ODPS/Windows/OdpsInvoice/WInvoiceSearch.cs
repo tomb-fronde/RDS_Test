@@ -18,6 +18,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
     public partial class WInvoiceSearch : WCriteriaSearch
     {
+        // TJB  Release Fixup Aug-2013
+        // Copied allowance breakdown retrieval to cb_export_clicked from 
+        // cb_open_clicked
+        //
         // TJB  RPCR_054 June-2013: NEW
         // of_process_detail_piecerates adapted from of_process_detail_km
         // Consolidate code to simplify of_process_detail_piecerates
@@ -1703,6 +1707,28 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             {
                 alcontract = StaticFunctions.ToInt32(ls_contractNo);
             }
+
+            // TJB  RPCR_056  June-2013
+            // Get allowance details into temporary file (t_invoice_allowances)
+            dataService = ODPSDataService.GetODDWSInvoiceAllowanceDetail(alcontractor, alcontract, edate, alregion, li_ctKey);
+            lreturn = dataService.LReturn;
+            if (dataService.SQLCode < 0)
+            {
+                MessageBox.Show("Error running procedure GetODDWSInvoiceAllowanceDetail.\n"
+                                + dataService.SQLErrText
+                                , "Error [cb_export_clicked]"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (lreturn < 0)
+            {
+                MessageBox.Show("Error running procedure GetODDWSInvoiceAllowanceDetail.\n"
+                                + "Error number is " + string.Format("Invoice", lreturn)
+                                , "Error [cb_export_clicked]"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             // Preprocess REACHMEDIA and CourierPost
             //  TJB SR4639
             //  select OD_RPF_Invoice_pay_piecerate_detailv2(:alcontractor,:edate,:alcontract,:alregion,:sname) into :lreturn from sys.dummy;
