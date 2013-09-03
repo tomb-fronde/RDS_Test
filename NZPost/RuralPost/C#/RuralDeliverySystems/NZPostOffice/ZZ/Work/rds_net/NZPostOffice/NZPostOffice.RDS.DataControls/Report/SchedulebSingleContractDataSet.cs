@@ -5,6 +5,8 @@ using System.Data;
 using NZPostOffice.RDS.Entity.Ruralrpt;
 namespace NZPostOffice.RDS.DataControls.Report
 {
+    // TJB Release 7.1.10.3 Sep-2013
+    // Added PrsKey
 
     public class RSchedulebSingleContract
     {
@@ -71,6 +73,13 @@ namespace NZPostOffice.RDS.DataControls.Report
                 return string.Empty;
             }
         }
+        public int PrsKey
+        {
+            get
+            {
+                return 0;
+            }
+        }
     }
     public class SchedulebSingleContractDataSet : ReportDataSet<SchedulebSingleContract>
     {
@@ -93,11 +102,13 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn PieceRateTypePrtCode = new DataColumn("PieceRateTypePrtCode", typeof(string));
 
+        public DataColumn PrsKey = new DataColumn("PrsKey", typeof(int));
+
 
         public SchedulebSingleContractDataSet()
         {
             this.Columns.AddRange(new DataColumn[]{
-				ContractNo,ContractSeqNumber,ConRenewalPaymentValue,ConTitle,GstNumber,PieceRatePrRate,PieceRateTypePrtDescription,PieceRateSupplierPrsDescription,PieceRateTypePrtCode
+				ContractNo,ContractSeqNumber,ConRenewalPaymentValue,ConTitle,GstNumber,PieceRatePrRate,PieceRateTypePrtDescription,PieceRateSupplierPrsDescription,PieceRateTypePrtCode,PrsKey
 				});
             ContractNo.AllowDBNull = true;
             ContractSeqNumber.AllowDBNull = true;
@@ -128,6 +139,7 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["PieceRateTypePrtDescription"] = GetFieldValue(data.PieceRateTypePrtDescription);
             row["PieceRateSupplierPrsDescription"] = GetFieldValue(data.PieceRateSupplierPrsDescription);
             row["PieceRateTypePrtCode"] = GetFieldValue(data.PieceRateTypePrtCode);
+            row["PrsKey"] = GetFieldValue(data.PrsKey);
             return row;
         }
     }
