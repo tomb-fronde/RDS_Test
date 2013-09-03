@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB  Release 7.1.10.3 fixups
+    // Added retrieval of pr_effective_date and prs_key
+    // related to changes in sp_schedule_b
+    
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -19,8 +23,10 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 	[MapInfo("piece_rate_pr_rate", "_piece_rate_pr_rate", "")]
 	[MapInfo("piece_rate_type_prt_description", "_piece_rate_type_prt_description", "")]
 	[MapInfo("piece_rate_supplier_prs_description", "_piece_rate_supplier_prs_description", "")]
-	[MapInfo("piece_rate_type_prt_code", "_piece_rate_type_prt_code", "")]
-	[System.Serializable()]
+    [MapInfo("piece_rate_type_prt_code", "_piece_rate_type_prt_code", "")]
+    [MapInfo("pr_effective_date", "_pr_effective_date", "")]
+    [MapInfo("prs_key", "_prs_key", "")]
+    [System.Serializable()]
 
 	public class SchedulebSingleContract : Entity<SchedulebSingleContract>
 	{
@@ -51,6 +57,12 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 
 		[DBField()]
 		private string  _piece_rate_type_prt_code;
+
+        [DBField()]
+        private DateTime? _pr_effective_date;
+
+        [DBField()]
+        private int? _prs_key;
 
 
 		public virtual int? ContractNo
@@ -215,7 +227,43 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 			}
 		}
 
-		protected override object GetIdValue()
+        public virtual DateTime? PrEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("PrEffectiveDate", true);
+                return _pr_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("PrEffectiveDate", true);
+                if (_pr_effective_date != value)
+                {
+                    _pr_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? PrsKey
+        {
+            get
+            {
+                CanReadProperty("PrsKey", true);
+                return _prs_key;
+            }
+            set
+            {
+                CanWriteProperty("PrsKey", true);
+                if (_prs_key != value)
+                {
+                    _prs_key = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        protected override object GetIdValue()
 		{
 			return "";
 		}
@@ -261,8 +309,10 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                             instance._piece_rate_pr_rate = GetValueFromReader<decimal?>(dr,5);
                             instance._piece_rate_type_prt_description = GetValueFromReader<string>(dr,6);
                             instance._piece_rate_supplier_prs_description = GetValueFromReader<string>(dr,7);
-                            instance._piece_rate_type_prt_code = GetValueFromReader<string>(dr,8);
-							instance.MarkOld();
+                            instance._piece_rate_type_prt_code = GetValueFromReader<string>(dr, 8);
+                            instance._pr_effective_date = GetValueFromReader<DateTime?>(dr, 9);
+                            instance._prs_key = GetValueFromReader<int?>(dr, 10);
+                            instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
 						}
