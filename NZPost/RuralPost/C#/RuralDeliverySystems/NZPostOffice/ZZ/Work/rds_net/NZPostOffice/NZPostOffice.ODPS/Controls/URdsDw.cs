@@ -13,7 +13,10 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.ODPS.Controls
 {
-    //declare  delegates.
+    // TJB  30-Oct-2013
+    // Removed long commented-out section from SaveAs(string filename, string saveastype)
+
+    // Declare  delegates.
     public delegate void EventDelegate(object send, EventArgs e);
     public delegate void UserEventDelegate();
 
@@ -1452,199 +1455,6 @@ namespace NZPostOffice.ODPS.Controls
         public int SaveAs(string filename, string saveastype)
         {
             return this.SaveAs(filename, saveastype, true);
-            //try
-            //{
-            //    if (filename.Length > 0)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        SaveFileDialog savedlg = new SaveFileDialog();
-            //        savedlg.Title = "Export to file...";
-            //        savedlg.Filter = "Excel files  ( *.xls)| *.xls |CSV files  ( *.csv)| *.csv";
-            //        if (savedlg.ShowDialog() == DialogResult.OK)
-            //        {
-            //            filename = savedlg.FileName;
-            //        }
-            //        else
-            //        {
-            //            return -1;
-            //        }
-            //    }
-            //    if (filename.Substring(filename.Length - 3) == "xls")
-            //    {
-            //        //Microsoft.Office.Interop.Excel.Application m_Excel = new Microsoft.Office.Interop.Excel.Application();
-            //        //m_Excel.SheetsInNewWorkbook = 1;
-            //        //Microsoft.Office.Interop.Excel._Workbook m_Book = (Microsoft.Office.Interop.Excel._Workbook)(m_Excel.Workbooks.Add(Missing.Value));
-            //        //Microsoft.Office.Interop.Excel._Worksheet m_Sheet = (Microsoft.Office.Interop.Excel._Worksheet)(m_Book.Worksheets.get_Item(1));
-            //        //m_Sheet.Name = EntityType.Name;
-            //        //int j = 0;
-            //        //foreach (PropertyInfo p in this.EntityType.GetProperties())
-            //        //{
-            //        //    j++;
-            //        //    if (p.Name == "SQLCode" || p.Name == "SQLErrText" || p.Name == "IsNew" || p.Name == "IsDeleted" || p.Name == "IsDirty" || p.Name == "IsSavable")
-            //        //    {
-            //        //    }
-            //        //    else
-            //        //    {
-            //        //        m_Sheet.Cells[1, j] = reversemigrateName(p.Name);
-            //        //    }
-            //        //}
-
-            //        //for (int i = 0; i < this.RowCount; i++)
-            //        //{
-            //        //    j = 0;
-            //        //    EntityBase sResult = this.GetItem<EntityBase>(i);
-            //        //    foreach (PropertyInfo p in sResult.GetType().GetProperties())
-            //        //    {
-            //        //        if (p.Name == "SQLCode" || p.Name == "SQLErrText" || p.Name == "IsNew" || p.Name == "IsDeleted" || p.Name == "IsDirty" || p.Name == "IsSavable")
-            //        //        {
-            //        //        }
-            //        //        else
-            //        //        {
-            //        //            j++;
-            //        //            if (p.PropertyType == typeof(string))
-            //        //            {
-            //        //                m_Sheet.Cells[2 + i, j] = "'" + p.GetValue(sResult, null);
-            //        //            }
-            //        //            else
-            //        //            {
-            //        //                m_Sheet.Cells[2 + i, j] = p.GetValue(sResult, null);
-            //        //            }
-            //        //        }
-            //        //    }
-            //        //    m_Sheet.Cells.WrapText = false;
-            //        //    m_Book.SaveAs(filename, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-            //        //    m_Book.Close(false, Missing.Value, Missing.Value);
-            //        //    m_Excel.Quit();
-            //        //    m_Book = null;
-            //        //    m_Sheet = null;
-            //        //    m_Excel = null;
-            //        //}
-            //    }
-            //    else
-            //    {
-            //        StreamWriter sw = null;
-            //        try
-            //        {
-            //            // set separator charatcer
-            //            char sep;
-            //            if (saveastype.ToLower() == "text")
-            //                sep = '\t';
-            //            else if (saveastype.ToLower() == "csv")
-            //                sep = ',';
-            //            else
-            //                throw new Exception("Unsupported save as type.");
-
-            //            // get field info from entity type
-            //            System.Reflection.FieldInfo[] column_fields = new System.Reflection.FieldInfo[this.column_name_list.Count];
-            //            for (int i = 0; i < column_name_list.Count; i++)
-            //            {
-            //                column_fields[i] = EntityType.GetField("_" + column_name_list[i],
-            //                    System.Reflection.BindingFlags.GetField |
-            //                    System.Reflection.BindingFlags.SetField |
-            //                    System.Reflection.BindingFlags.Instance |
-            //                    System.Reflection.BindingFlags.NonPublic);
-            //            }
-
-            //            sw = new StreamWriter(filename);
-            //            for (int i = 0; i < column_name_list.Count; i++)
-            //            {
-            //                sw.Write(column_name_list[i] + sep);
-            //            }
-            //            sw.Write("\r\n");
-            //            for (int r = 0; r < DataObject.RowCount; r++)
-            //            {
-            //                for (int i = 0; i < column_fields.Length; i++)
-            //                {
-            //                    sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
-            //                    if (i != column_fields.Length - 1)
-            //                        sw.Write(sep);
-            //                }
-            //                if (r != DataObject.RowCount - 1)
-            //                    sw.Write("\r\n");
-            //            }
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            GC.Collect();
-            //            return -1;
-            //        }
-            //        finally
-            //        {
-            //            if (sw != null)
-            //            {
-            //                sw.Close();
-            //            }
-            //        }
-            //        GC.Collect();
-            //        return DataObject.RowCount;
-            //    }
-            //    return 1;
-            //}
-            //catch
-            //{
-            //    return -1;
-            //}
-            //GC.Collect();
-            //return 0;
-            ////if (filename == null || filename == "")
-            ////{
-            ////    DialogResult i_return;
-            ////    SaveFileDialog file_dia = new SaveFileDialog();
-            ////    file_dia.Title = "Save As";
-            ////    file_dia.DefaultExt = "txt";
-            ////    file_dia.Filter = "Text|*.txt|CSV|*.csv";
-            ////    i_return = file_dia.ShowDialog();
-            ////    if (i_return == DialogResult.Cancel)
-            ////        return 0;
-            ////    filename = file_dia.FileName;
-            ////}
-            ////StreamWriter sw = null;
-            ////try
-            ////{
-            ////    // set separator charatcer
-            ////    char sep;
-            ////    if (saveastype.ToLower() == "text")
-            ////        sep = '\t';
-            ////    else if (saveastype.ToLower() == "csv")
-            ////        sep = ',';
-            ////    else
-            ////        throw new Exception("Unsupported save as type.");
-            ////    // get field info from entity type
-            ////    System.Reflection.FieldInfo[] column_fields = new System.Reflection.FieldInfo[this.column_name_list.Count];
-            ////    for (int i = 0; i < column_name_list.Count; i++)
-            ////    {
-            ////        column_fields[i] = EntityType.GetField("_" + column_name_list[i], System.Reflection.BindingFlags.GetField | System.Reflection.BindingFlags.SetField | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            ////    }
-
-            ////    sw = new StreamWriter(filename);
-            ////    for (int r = 0; r < DataObject.RowCount; r++)
-            ////    {
-
-            ////        for (int i = 0; i < column_fields.Length; i++)
-            ////        {
-            ////            sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
-            ////            if (i != column_fields.Length - 1)
-            ////                sw.Write(sep);
-            ////        }
-            ////        if (r != DataObject.RowCount - 1)
-            ////            sw.Write("\r\n");
-            ////    }
-            ////}
-            ////catch (Exception ex)
-            ////{
-            ////    return -1;
-            ////}
-            ////finally
-            ////{
-            ////    if (sw != null)
-            ////    {
-            ////        sw.Close();
-            ////    }
-            ////}
-            ////GC.Collect();
-            ////return DataObject.RowCount;
         }
 
         public int SaveAs(string filename, string saveastype, bool headline)
@@ -1668,8 +1478,10 @@ namespace NZPostOffice.ODPS.Controls
                         return -1;
                     }
                 }
-                if (filename.Substring(filename.Length - 3) == "xls")
+                if (filename.Substring(filename.Length - 3).ToLower() == "xls")
                 {
+                    throw new Exception("Save As type XLS not implemented.");
+
                     //Microsoft.Office.Interop.Excel.Application m_Excel = new Microsoft.Office.Interop.Excel.Application();
                     //m_Excel.SheetsInNewWorkbook = 1;
                     //Microsoft.Office.Interop.Excel._Workbook m_Book = (Microsoft.Office.Interop.Excel._Workbook)(m_Excel.Workbooks.Add(Missing.Value));
@@ -1725,11 +1537,13 @@ namespace NZPostOffice.ODPS.Controls
                     try
                     {
                         // set separator charatcer
-                        char sep;
+                        string sep;
                         if (saveastype.ToLower() == "text")
-                            sep = '\t';
+                            sep = "\t";
                         else if (saveastype.ToLower() == "csv")
-                            sep = ',';
+                            sep = ",";
+                        else if (saveastype.ToLower() == "fixed")
+                            sep = "";
                         else
                             throw new Exception("Unsupported save as type.");
 
@@ -1758,7 +1572,9 @@ namespace NZPostOffice.ODPS.Controls
                         {
                             for (int i = 0; i < column_fields.Length; i++)
                             {
-                                sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
+                                //sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
+                                string field_value = ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r]));
+                                sw.Write(field_value);
                                 if (i != column_fields.Length - 1)
                                     sw.Write(sep);
                             }
