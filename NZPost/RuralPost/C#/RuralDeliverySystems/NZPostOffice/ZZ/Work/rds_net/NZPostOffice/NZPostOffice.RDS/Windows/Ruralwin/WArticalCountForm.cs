@@ -13,6 +13,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WArticalCountForm : WMaster
     {
+        // TJB  11-Nov-2013: Bug fix
+        // Unhandled exception in cb_cancel_clicked
+        // Unable to cast RenewalArticalCounts as ContractArticalCounts (idw_parent)
+        // when <this> called from WRenewal2001 (but not when called from WContract2001!)
+        // idwParent is different type when called from WRenewal2001 vs WContract2001!
+        //
         // TJB RPCR_014 Oct-2010
         // Moved database and datawindow changes from WFullArticalCountForm to cb_ok_clicked
         // so that changes are made only when the user accepts the "Do you [really] want to ...".
@@ -305,7 +311,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Added 'MarkClean' so Close doesn't ask about changing any changes that are being abandonned
             int lRow = idw_Parent.GetRow();
             dw_artical_count.GetItem<ContractArticalCountForm>(0).MarkClean();
-            idw_Parent.GetItem<ContractArticalCounts>(lRow).MarkClean();
+            // TJB  Nov-2013
+            // Error reported when closing when opened via renewal tab
+            // - unable to cast dw_parent (RenewalArticalCounts) as ContractArticalCounts
+            //idw_Parent.GetItem<ContractArticalCounts>(lRow).MarkClean();
+            StaticFunctions.MarkDwClean(idw_Parent);
             this.Close();
         }
 
