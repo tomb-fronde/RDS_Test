@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Dec-2013  SOW (AP export file format change)
+    // Add supplier_no
+
     public partial class DContractorDs : Metex.Windows.DataUserControl
 	{
         public DContractorDs()
@@ -19,11 +22,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
         void grid_CurrentCellDirtyStateChanged(object sender, System.EventArgs e)
         {
-            if (this.grid.CurrentColumnName == "cd_old_ds_no")
+            if (this.grid.CurrentColumnName == "cd_old_ds_no"
+                || this.grid.CurrentColumnName == "supplier_no")
             {
                 this.grid.EndEdit();
             }
-
         }
 
 		public int Retrieve( int? in_Contractor )

@@ -7,6 +7,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.DataGridViewTextBoxColumn cd_old_ds_no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn supplier_no;
         private System.Windows.Forms.Label t_1;
 
         protected override void Dispose(bool disposing)
@@ -32,8 +33,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // bindingSource
             //
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractorDs);
-
-
 
             // 
             // grid
@@ -76,17 +75,40 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //
             cd_old_ds_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cd_old_ds_no.DataPropertyName = "CdOldDsNo";
-            this.cd_old_ds_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            //this.cd_old_ds_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cd_old_ds_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             //this.cd_old_ds_no.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1087955144);
+            this.cd_old_ds_no.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.cd_old_ds_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.cd_old_ds_no.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
-            this.cd_old_ds_no.HeaderText = "Owner Driver's DS Numbers";
+            //this.cd_old_ds_no.HeaderText = "Owner Driver's DS Numbers";
+            this.cd_old_ds_no.HeaderText = "Old DS Number";
             this.cd_old_ds_no.Name = "cd_old_ds_no";
             this.cd_old_ds_no.Width = 180;
             this.cd_old_ds_no.DefaultCellStyle.Format = "??????????";
             this.cd_old_ds_no.MaxInputLength = 10;
+            this.cd_old_ds_no.ReadOnly = false;
             this.grid.Columns.Add(cd_old_ds_no);
 
+            //
+            // supplier_no
+            //
+            supplier_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.supplier_no.DataPropertyName = "SupplierNo";
+            //this.supplier_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.supplier_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            //this.supplier_no.DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromWin32(1087955144);
+            this.supplier_no.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.supplier_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.supplier_no.DefaultCellStyle.Font = new System.Drawing.Font("MS Sans Serif", 8F);
+            this.supplier_no.HeaderText = "Supplier Number";
+            this.supplier_no.MinimumWidth = 5;
+            this.supplier_no.Name = "supplier_no";
+            this.supplier_no.Width = 180;
+            this.supplier_no.DefaultCellStyle.Format = "????????";
+            this.supplier_no.MaxInputLength = 8;
+            this.supplier_no.ReadOnly = false;
+            this.grid.Columns.Add(supplier_no);
 
             //
             // t_1
@@ -97,7 +119,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_1.Location = new System.Drawing.Point(1, 1);
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(500, 14);
-            this.t_1.Text = "text";
+            this.t_1.Text = "";
             this.t_1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.t_1.BackColor = System.Drawing.SystemColors.ButtonFace;
