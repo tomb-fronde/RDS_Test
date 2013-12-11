@@ -16,6 +16,8 @@ using System.Drawing.Printing;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Dec-2013: Cosmetic changes
+    //
     // TJB  Release 7.1.10 fixup  Aug-2013
     // Added call to RDSDataService.TruncateTBmPiecerates to clear the 
     // t_bm_piecerates table so it accumulates data for all contracts being BM'd.
@@ -1177,7 +1179,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     }
                     else
                     {
-                        dw_schedule.Retrieve(new object[]{lContract,lSequence});
+                        dw_schedule.Retrieve(new object[] { lContract, lSequence });
                     }
                     Cursor.Current = Cursors.WaitCursor;
                     //  TJB SR4615
@@ -1196,13 +1198,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         //if (dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") == null)
                         //    lb_printReport = false;
                         if (dw_schedule.GetValue(li_sched_row, "mc_dispatch_carried") != null)
+                        {
                             lb_printReport = true;
+                        }
                     }
+                    
+                    //MessageBox.Show(this.st_status.Text + "\n"
+                    //                + "lb_printReport = " + lb_printReport.ToString() + "\n"
+                    //                + "dw_schedule.RowCount = " + dw_schedule.RowCount.ToString()
+                    //                );
+                    //lb_printReport = false;
                     if (lb_printReport == true)
                     {                      
                         CrystalDecisions.Windows.Forms.CrystalReportViewer viewer = 
                             (CrystalDecisions.Windows.Forms.CrystalReportViewer)dw_schedule.DataObject.GetControlByName("viewer");
-
+                        
                         if (viewer != null)
                         {
                             viewer.RefreshReport();
@@ -1213,7 +1223,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             //    (((CrystalDecisions.Windows.Forms.CrystalReportViewer)
                             //                  (dw_schedule.DataObject.GetControlByName("viewer"))).ReportSource)).PrintToPrinter(1, false, 0, 0);
                             fileseq++;
-                            filename = @"C:\tmp\report-" + fileseq.ToString() + "-"
+                            filename = @"C:\temp\report-" + fileseq.ToString() + "-"
                                            + lContract.ToString() + "_" + report.Substring(2);
 
                             // TJB  11-Apr-2012  RPC_035
