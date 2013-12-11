@@ -15,6 +15,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WFrequencies2001 : WAncestorWindow
     {
+        // TJB  Nov-2013  Bug fix
+        // Added MarkDwClean when dataobject first populated to avoid 'save changes' 
+        // question when closing without having made any changes.
+        //
         // TJB  RPCR_052  Feb-2013: Non-essential additions
         // WaitCursor when switching to address search
         // Refresh after address returned to show change
@@ -1190,6 +1194,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         idw_description.DataObject.InsertItem<FreqDescription>(0);
                     }
+                    // TJB  Nov-2013  Bug fix: Add
+                    // Added MarkClean when dataobject first populated to avoid 'save changes' 
+                    // question when closing without having made any changes.
+                    StaticFunctions.MarkDwClean(idw_description);
                 }
                 // ist_maintenance.dwCurrent = idw_description
             }
@@ -1203,6 +1211,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     {
                         idw_mail_carried.DataObject.InsertItem<MailCarriedForm>(0);
                     }
+                    // TJB  Nov-2013  Bug fix: Add
+                    // Added MarkClean when dataobject first populated to avoid 'save changes' 
+                    // question when closing without having made any changes.
+                    StaticFunctions.MarkDwClean(idw_mail_carried);
                 }
                 // ist_maintenance.dwCurrent = idw_mail_carried
             }
@@ -1247,7 +1259,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_Row = idw_description.DataObject.GetRow();
                 if (ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_description.Save();// ll_Ret = base.pfc_save();
+                    ll_Ret = idw_description.Save();
                     if (ll_Ret < 0)
                     {
                         return;
@@ -1267,7 +1279,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_Row = idw_mail_carried.GetRow();
                 if (ret == DialogResult.Yes)
                 {
-                    ll_Ret = idw_mail_carried.Save();// ll_Ret = base.pfc_save();
+                    ll_Ret = idw_mail_carried.Save();
                     if (ll_Ret < 0)
                     {
                         return;
@@ -1310,7 +1322,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         return;
                     }
                 }
-                if (idw_annotation.DataObject.DeletedCount > 0 || StaticFunctions.IsDirty(idw_annotation.DataObject)/*.ModifiedCount() > 0*/)
+                if (idw_annotation.DataObject.DeletedCount > 0 || StaticFunctions.IsDirty(idw_annotation.DataObject))
                 {
                     //  TJB SR4602 23-Nov-2004: Added cancel option
                     ret = MessageBox.Show("Do you want to update database?"
@@ -1325,7 +1337,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         {
                             idw_annotation.DataObject.SetValue(ll_Row, "rf_annotation_print", 'N');
                         }
-                        ll_Ret = idw_annotation.Save();// ll_Ret = base.pfc_save();
+                        ll_Ret = idw_annotation.Save();
                         if (ll_Ret < 0)
                         {
                             return;
