@@ -14,6 +14,9 @@ using NZPostOffice.RDS.Windows.Ruralwin;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  14-Oct-2013  Refinement
+    // Only warn the user about unsaved changes if they could have been saved.
+    //
     // TJB  RPCR_054  Aug-2013
     // Added ib_pieceratechangesallowed
     //
@@ -1006,24 +1009,107 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 return 1;
             }
-            if (iuo_vehiclerates.Save() == -1)
-                return 0;
+            // TJB 14-Oct-2013 (adding comments)
+            // We're changing vehicle types
+            int vr_rows = iuo_vehiclerates.RowCount;
+            int nModified = iuo_vehiclerates.ModifiedCount();
+            // If the previous set of values is marked modified, save them
+            // They'll only be able to be modified if the rates are not frozen.
+            if (nModified > 0)
+            {
+                if (iuo_vehiclerates.Save() == -1)
+                    return 0;
+            }
+
+            //if (iuo_vehiclerates.Save() == -1)
+            //    return 0;
 
             vrl_rows = iuo_vehiclerates_list.RowCount;
             if (vrl_rows == 0)
             {
                 return 0;
             }
+            // Get the vehicle type row (and from that the vehicle type)
             vrl_row = iuo_vehiclerates_list.GetSelectedRow(0);
             if (vrl_row >= 0)
-            {
-                //GetItemNumber(iuo_vehiclerates_list.GetSelectedRow(0), "vt_key");
+            {   // [This should always be true because there are some rows in the]
+                // [vehicle type list and we got here having selected one of them!]
                 ll_vtKey = iuo_vehiclerates_list.GetItem<VehicalTypesList>(vrl_row).VtKey;
+                // Get the vehicle rates for this vehicle type for the current renewal (of_getdate)
                 ((DVehicleRates2001)iuo_vehiclerates.DataObject).Retrieve(ll_vtKey, of_getdate());
-                if (iuo_vehiclerates.RowCount == 0)
+                vr_rows = iuo_vehiclerates.RowCount;
+                if (vr_rows > 0)
                 {
-                    // insert a new row
-                    iuo_vehiclerates.InsertRow(0);
+                    // We found some rates for the current renewal date (whether new or not)
+                    // Clear the "modified" state - we haven't changed anything yet
+                    iuo_vehiclerates.ResetUpdate();
+                }
+                else
+                {
+                    // TJB  14-Oct2013: rewrite "is_editable" section (below)
+                    // We're here because there are no vehicle rates for the current renewal date
+                    // (we're processing a new renewal for this vehicle type for the first time).
+                    // Get the previous effective date for this vehicle type
+                    ld_Max_Effective_Date = RDSDataService.GetVehicleRateMax(ll_vtKey);
+                    // If found, its effective date will be found
+                    DateTime minDate = System.DateTime.MinValue;
+                    //if (ld_Max_Effective_Date != null && ld_Max_Effective_Date != System.Convert.ToDateTime("1900,1,1"))
+                    if (ld_Max_Effective_Date != null && ld_Max_Effective_Date > minDate)
+                    {
+                        // Retrieve that record
+                        ((DVehicleRates2001)iuo_vehiclerates.DataObject).Retrieve(ll_vtKey, ld_Max_Effective_Date);
+                        if (iuo_vehiclerates.RowCount == 0)
+                        {   // "This shouldn't happen": we didn't find renewal rates for this vehicle type 
+                            // for the effective date we just looked up!
+                            // Create a new record for it
+                            iuo_vehiclerates.InsertRow(0);
+                            iuo_vehiclerates.SetValue(0, "vt_key", ll_vtKey);
+                            iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());
+                        }
+                        else
+                        {   // We've got some rates from the previous renewal
+                            // Update their effective date and mark the record as being new
+                            iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());
+                            ((VehicleRates2001)iuo_vehiclerates.GetItem<VehicleRates2001>(0)).MarkNewEntity();
+                            iuo_vehiclerates.Save();
+                        }
+                        // If the current rates are frozen, clear the modified state for this vehicle type's rates 
+                        //if (is_editable != "W")
+                        //{
+                        //    iuo_vehiclerates.ResetUpdate();
+                        //}
+                    }
+                    else
+                    {   // We didn't find any previous rates for this vehicle type
+                        // Create a new record for it
+                        iuo_vehiclerates.InsertRow(0);
+                        // TJB  14-Oct2013
+                        // If a new vehicle type has been added, and this is the first time a rate 
+                        // has been added, the vt_key will be null.  Add the vt_key and effective date
+                        // to the new record.  Don't save yet - the insert may be cancelled later.
+                        int? nVtKey = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VtKey;
+                        if (nVtKey == null)
+                        {
+                            iuo_vehiclerates.SetValue(0, "vt_key", ll_vtKey);
+                            iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());
+                            iuo_vehiclerates.SetValue(0, "vr_nominal_vehicle_value", (decimal)0.0);
+                            // If we're not allowed to update these rates (rates frozen)
+                            // mark the inserted record as not modified.
+                            //if (is_editable = "W")
+                            //{  // Otherwise, save the new record
+                                iuo_vehiclerates.Save();
+                            //}
+                            //else
+                            //{
+                                iuo_vehiclerates.ResetUpdate();
+                            //}
+                        }
+                    }
+                
+// TJB  14-Oct-2013
+// Not sure about this.  If there's no previous record to retrieve, 
+// it fails when trying to set the effective date.
+/*
                     if (is_editable == "W")
                     {
                         //SELECT max(vr_rates_effective_date) INTO :ld_Max_Effective_Date FROM vehicle_rate WHERE vt_key = :ll_vtKey;
@@ -1039,8 +1125,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             ((VehicleRates2001)iuo_vehiclerates.GetItem<VehicleRates2001>(0)).MarkNewEntity();
                         }
                     }
-                }
-            } 
+ */
+                 }
+            }
+            decimal? t1 = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrNominalVehicleValue;
+            decimal? t2 = t1;
             return 1;
         }
 
@@ -1086,7 +1175,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual int of_delete()
         {
             DialogResult dlg = DialogResult.None;
-            dlg = MessageBox.Show("Are you sure you want to delete this renewal?", "Rates", MessageBoxButtons.YesNo, MessageBoxIcon.Question);//, question!, yesno!, 2)
+            dlg = MessageBox.Show("Are you sure you want to delete this renewal?"
+                                 , "Rates"
+                                 , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dlg == DialogResult.Yes)// 1)
             {
                 //move  to service
@@ -1726,7 +1817,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             // TJB  RD7_0036  Aug 2009
             // iuo_vehiclerates contains the rates for only one vehicle type, 
-            //    while iuo_vehiclerates identifies all vehicle types.  Initially, only
+            //    while iuo_vehiclerates_list identifies all vehicle types.  Initially, only
             //    the rates for the currect vehicle type were being saved, which could cause
             //    errors.  This code saves the rates for all vehicle types.
             int rc, vrl_rows, vrl_row, selected_vrl_row;
@@ -2081,20 +2172,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         // Tell the user if there are any unsaved changes that will not be saved.
         public override void close()
         {
-            int nChanges = dw_piecerates.ModifiedCount()
-                            + dw_vehiclerates.ModifiedCount()
-                            + dw_ratedays.ModifiedCount()
-                            + dw_fuelrate.ModifiedCount()
-                            + dw_nonvehiclerates.ModifiedCount();
-            string sCloseMsg;
-            if (nChanges > 0)
+            // TJB  14-Oct-2013
+            // Only warn the user about unsaved changes if they could have been saved.
+            if (is_editable == "W")
             {
-                sCloseMsg = "Closing: There are " + nChanges.ToString() + " unsaved changes.\n"
-                                + "These will not be saved.";
-                if (nChanges == 1)
-                    sCloseMsg = "Closing: There is 1 unsaved change.\n"
-                                    + "It will not be saved.";
-                MessageBox.Show(sCloseMsg, "Warning");
+                int nChanges = dw_piecerates.ModifiedCount()
+                                + dw_vehiclerates.ModifiedCount()
+                                + dw_ratedays.ModifiedCount()
+                                + dw_fuelrate.ModifiedCount()
+                                + dw_nonvehiclerates.ModifiedCount();
+                if (nChanges > 0)
+                {
+                    string sCloseMsg;
+                    if (nChanges == 1)
+                    {
+                        sCloseMsg = "Closing: There is 1 unsaved change.\n"
+                                        + "It will not be saved.";
+                    }
+                    else
+                    {
+                        sCloseMsg = "Closing: There are " + nChanges.ToString() + " unsaved changes.\n"
+                                        + "These will not be saved.";
+                    }
+                    MessageBox.Show(sCloseMsg, "Warning");
+                }
             }
 
             base.close();
@@ -2105,9 +2206,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? ldec_SalvageRatio;
             decimal? ldec_NominalVehical;
             int ll_baseRemainingEconomicLife = 200000;
+
             dw_vehiclerates.DataObject.AcceptText();
 
-            iuo_vehiclerates.SetValue(0, "vt_key", iuo_vehiclerates_list.GetItem<VehicalTypesList>(iuo_vehiclerates_list.GetRow()).VtKey);//.GetItemNumber(iuo_vehiclerates_list.GetRow(), "vt_key"));
+            int nRow = iuo_vehiclerates_list.GetRow();
+            int? nVtKey = iuo_vehiclerates_list.GetItem<VehicalTypesList>(nRow).VtKey;
+            //iuo_vehiclerates.SetValue(0, "vt_key", iuo_vehiclerates_list.GetItem<VehicalTypesList>(iuo_vehiclerates_list.GetRow()).VtKey);
+            iuo_vehiclerates.SetValue(0, "vt_key", nVtKey);
             iuo_vehiclerates.SetValue(0, "vr_rates_effective_date", of_getdate());
             //if ((DVehicleRates2001)iuo_vehiclerates.GetItemStatus(1, "vr_nominal_vehicle_value", primary!) == newmodified! || 
             //    (DVehicleRates2001)iuo_vehiclerates.GetItemStatus(1, "vr_nominal_vehicle_value", primary!) == datamodified! || 
@@ -2115,9 +2220,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //            (DVehicleRates2001)iuo_vehiclerates.GetItemStatus(1, "vr_salvage_ratio", primary!) == datamodified!) 
             if (iuo_vehiclerates.GetItem<VehicleRates2001>(0).IsDirty)
             {
-                ldec_SalvageRatio = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrSalvageRatio;//.GetItemNumber(1, "vr_salvage_ratio");
-                ldec_NominalVehical = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrNominalVehicleValue;//.GetItemNumber(1, "vr_nominal_vehicle_value");
-                //!iuo_vehiclerates.SetValue(0, "vr_vehicle_allowance_rate", (1 - ldec_SalvageRatio / 100) * ldec_NominalVehical * 1000 / ll_baseRemainingEconomicLife);
+                ldec_SalvageRatio = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrSalvageRatio;
+                ldec_NominalVehical = iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrNominalVehicleValue;
                 iuo_vehiclerates.GetItem<VehicleRates2001>(0).VrVehicleAllowanceRate =
                     (1 - ldec_SalvageRatio / 100) * ldec_NominalVehical * 1000 / ll_baseRemainingEconomicLife;
 
@@ -2141,11 +2245,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return;
             }
 
-            this.SuspendLayout();//parent.SetRedraw(false);
+            this.SuspendLayout();
             dw_vehicletypes.SelectRow(dw_vehicletypes.GetSelectedRow(0), false);
             dw_vehicletypes.SelectRow(dw_vehicletypes.GetRow() + 1, true);
             of_getvehiclerate();
-            this.ResumeLayout();//parent.ResumeLayout(false);
+            this.ResumeLayout();
         }
 
         public virtual void dw_vehicletypes_retrieveend(object sender, EventArgs e)
