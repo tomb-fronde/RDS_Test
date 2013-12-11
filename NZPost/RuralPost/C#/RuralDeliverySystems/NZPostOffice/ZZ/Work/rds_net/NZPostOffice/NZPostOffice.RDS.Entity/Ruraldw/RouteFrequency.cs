@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Change Frequencies  Dec-2013
+    // Added try-catch during debugging
+    //
     // TJB  RPCR_044  Jan-2013
     // Added in_showAll; == 1 select all frequencies; == 0 select only active frequencies
     //   
@@ -384,31 +387,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     pList.Add(cm, "in_showAll", in_showAll);
                     cm.CommandText = "rd.sp_getroutefrequency2001";
 
-                    List<RouteFrequency> _list = new List<RouteFrequency>();
-                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    // TJB  Change Frequencies  Dec-2013
+                    // Added try-catch during debugging
+                    try
                     {
-                        while (dr.Read())
+                        List<RouteFrequency> _list = new List<RouteFrequency>();
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
-                            RouteFrequency instance = new RouteFrequency();
-                            instance._contract_no = GetValueFromReader<Int32?>(dr,0);
-                            instance._sf_key = GetValueFromReader<Int32?>(dr,1);
-                            instance._rf_delivery_days = GetValueFromReader<String>(dr,2);
-                            instance._rf_active = GetValueFromReader<String>(dr,3);
-                            instance._rf_monday = GetValueFromReader<String>(dr,4);
-                            instance._rf_tuesday = GetValueFromReader<String>(dr,5);
-                            instance._rf_wednesday = GetValueFromReader<String>(dr,6);
-                            instance._rf_thursday = GetValueFromReader<String>(dr,7);
-                            instance._rf_friday = GetValueFromReader<String>(dr,8);
-                            instance._rf_saturday = GetValueFromReader<String>(dr,9);
-                            instance._rf_sunday = GetValueFromReader<String>(dr,10);
-                            instance._distance = GetValueFromReader<Decimal?>(dr,11);
-                            instance._t_computer2 = GetValueFromReader<string>(dr,12);
-                            _inUse = in_Contract.ToString();
-                            instance.MarkOld();
-                            instance.StoreInitialValues();
-                            _list.Add(instance);
+                            while (dr.Read())
+                            {
+                                RouteFrequency instance = new RouteFrequency();
+                                instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
+                                instance._sf_key = GetValueFromReader<Int32?>(dr, 1);
+                                instance._rf_delivery_days = GetValueFromReader<String>(dr, 2);
+                                instance._rf_active = GetValueFromReader<String>(dr, 3);
+                                instance._rf_monday = GetValueFromReader<String>(dr, 4);
+                                instance._rf_tuesday = GetValueFromReader<String>(dr, 5);
+                                instance._rf_wednesday = GetValueFromReader<String>(dr, 6);
+                                instance._rf_thursday = GetValueFromReader<String>(dr, 7);
+                                instance._rf_friday = GetValueFromReader<String>(dr, 8);
+                                instance._rf_saturday = GetValueFromReader<String>(dr, 9);
+                                instance._rf_sunday = GetValueFromReader<String>(dr, 10);
+                                instance._distance = GetValueFromReader<Decimal?>(dr, 11);
+                                instance._t_computer2 = GetValueFromReader<string>(dr, 12);
+                                _inUse = in_Contract.ToString();
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
                         }
-                        list = _list.ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        sqlCode = -1;
+                        sqlErrText = e.Message;
                     }
                 }
             }
