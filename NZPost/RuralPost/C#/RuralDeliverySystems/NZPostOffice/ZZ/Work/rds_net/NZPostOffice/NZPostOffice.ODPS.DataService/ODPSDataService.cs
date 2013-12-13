@@ -9,6 +9,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  23-Oct-2013  AP Export File Reformat
+    // New: [_]GetMaxBatchNo
+    // New: [_]UpdatePaymentBatchNo
+    //
     // TJB  RPCR_054 June-2013
     // Add optional ExportFlag to [_]GetODRPFInvoicePayPiecerateDetail
     //
@@ -76,6 +80,15 @@ namespace NZPostOffice.ODPS.DataService
             get 
             { 
                 return _count; 
+            }
+        }
+
+        private int _batch_no = 0;
+        public int BatchNo
+        {
+            get
+            {
+                return _batch_no;
             }
         }
 
@@ -218,6 +231,26 @@ namespace NZPostOffice.ODPS.DataService
         public static ODPSDataService GetMaxPayment()
         {
             ODPSDataService obj = Execute("_GetMaxPayment");
+            return obj;
+        }
+
+        // TJB 23-Oct-2013  AP Export File Reformat: New
+        /// <summary>
+        /// select max(isnull(batch_no,0)) from odps.payment
+        /// </summary>
+        public static ODPSDataService GetMaxBatchNo()
+        {
+            ODPSDataService obj = Execute("_GetMaxBatchNo");
+            return obj;
+        }
+
+        // TJB 23-Oct-2013  AP Export File Reformat: New
+        /// <summary>
+        /// update odps.payment set batch_no = BatchNo where invoice_date = InvoiceDate
+        /// </summary>
+        public static ODPSDataService UpdatePaymentBatchNo(int BatchNo, DateTime InvoiceDate)
+        {
+            ODPSDataService obj = Execute("_UpdatePaymentBatchNo", BatchNo, InvoiceDate);
             return obj;
         }
 
@@ -832,6 +865,73 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB 23-Oct-2013  AP Export File Reformat: New
+        [ServerMethod]
+        private void _GetMaxBatchNo()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    shellImport = new ShellImport();
+
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select max(isnull(batch_no,0)) from odps.payment";
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, null))
+                        {
+                            if (dr.Read())
+                            {
+                                _batch_no = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _batch_no = 0;
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB 31-Oct-2013  AP Export File Reformat: New
+        [ServerMethod]
+        private void _UpdatePaymentBatchNo(int BatchNo, DateTime InvoiceDate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "update odps.payment "
+                                   + "   set batch_no = :batch_no "
+                                   + " where invoice_date = :invoice_date ";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "batch_no", BatchNo);
+                    pList.Add(cm, "invoice_date", InvoiceDate);
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
         // TJB  RPCR_054  June-2013
         // Added nExportFlag
         //   = 0   OD_RPF_Invoice_pay_piecerate_detail behaves normally
@@ -849,8 +949,6 @@ namespace NZPostOffice.ODPS.DataService
                     // TJB  RPCR_054  July-2013
                     // Set the timeout longer if getting data for many contracts
                     cm.CommandTimeout = (alcontract == null || alcontract == 0) ? 20 : 300;
-
-                    shellImport = new ShellImport();
 
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.OD_RPF_Invoice_pay_piecerate_detail ";
@@ -895,8 +993,6 @@ namespace NZPostOffice.ODPS.DataService
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    shellImport = new ShellImport();
-
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.OD_DWS_Invoice_Allowance_Detail ";
                     ParameterCollection pList = new ParameterCollection();
