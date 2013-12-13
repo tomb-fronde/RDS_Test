@@ -35,96 +35,120 @@ namespace NZPostOffice.ODPS.Windows.Odps
         /// </summary>
         private void InitializeComponent()
         {
+            this.cb_ok = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.dw_gl07records = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.dw_primary = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.dw_secondary = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.cb_1 = new System.Windows.Forms.Button();
+            this.dw_tertiary = new NZPostOffice.ODPS.Controls.URdsDw();
             this.SuspendLayout();
-            this.cb_ok = new UCb();
-            this.cb_cancel = new UCb();
-            
-            this.dw_1 = new URdsDw();
-            //this.dw_1.DataObject = new DwReportCriteria();
-
-            this.dw_primary = new URdsDw();
-            this.dw_secondary = new URdsDw();
-
-            this.cb_1 = new Button();
-            this.dw_tertiary = new URdsDw();
-
-            Controls.Add(cb_ok);
-            Controls.Add(cb_cancel);
-            Controls.Add(dw_1);
-            Controls.Add(dw_primary);
-            Controls.Add(dw_secondary);
-            Controls.Add(cb_1);
-            Controls.Add(dw_tertiary);
-
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-            this.Text = "Payment";
-            this.Location = new System.Drawing.Point(31, 116);
-            this.Size = new System.Drawing.Size(264, 131);
-          
             // 
             // cb_ok
             // 
-            this.AcceptButton = cb_ok;
-            cb_ok.Text = "&Ok";
-            cb_ok.TabIndex = 2;
-            cb_ok.Location = new System.Drawing.Point(50, 72);
-            cb_ok.Size = new System.Drawing.Size(60, 23);
-            cb_ok.Click += new EventHandler(cb_ok_clicked);
-     
+            this.cb_ok.Location = new System.Drawing.Point(50, 72);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(60, 23);
+            this.cb_ok.TabIndex = 2;
+            this.cb_ok.Text = "&Ok";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
             // cb_cancel
             // 
-            cb_cancel.Text = "Ca&ncel";
-            cb_cancel.TabIndex = 7;
-            cb_cancel.Location = new System.Drawing.Point(130, 72);
-            cb_cancel.Size = new System.Drawing.Size(60, 23);
-            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
-           
+            this.cb_cancel.Location = new System.Drawing.Point(130, 72);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(60, 23);
+            this.cb_cancel.TabIndex = 7;
+            this.cb_cancel.Text = "Ca&ncel";
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // dw_1
             // 
-            dw_1.TabIndex = 1;
-            dw_1.Location = new System.Drawing.Point(3, 4);
-            dw_1.Size = new System.Drawing.Size(250, 65);
-            dw_1.ItemChanged += new EventHandler(dw_1_itemchanged);
-           
+            this.dw_1.DataObject = null;
+            this.dw_1.FireConstructor = true;
+            this.dw_1.Location = new System.Drawing.Point(3, 4);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(250, 65);
+            this.dw_1.TabIndex = 1;
+            this.dw_1.ItemChanged += new System.EventHandler(this.dw_1_itemchanged);
+            // 
+            // dw_gl07records
+            // 
+            this.dw_gl07records.DataObject = null;
+            this.dw_gl07records.FireConstructor = false;
+            this.dw_gl07records.Location = new System.Drawing.Point(0, 0);
+            this.dw_gl07records.Name = "dw_gl07records";
+            this.dw_gl07records.Size = new System.Drawing.Size(162, 139);
+            this.dw_gl07records.TabIndex = 0;
             // 
             // dw_primary
             // 
-            dw_primary.TabIndex = 6;
-            dw_primary.Location = new System.Drawing.Point(5, 115);
-            dw_primary.Size = new System.Drawing.Size(151, 397);
-            dw_primary.Visible = false;
-           
+            this.dw_primary.DataObject = null;
+            this.dw_primary.FireConstructor = true;
+            this.dw_primary.Location = new System.Drawing.Point(5, 115);
+            this.dw_primary.Name = "dw_primary";
+            this.dw_primary.Size = new System.Drawing.Size(151, 397);
+            this.dw_primary.TabIndex = 6;
+            this.dw_primary.Visible = false;
             // 
             // dw_secondary
             // 
-            dw_secondary.TabIndex = 4;
-            dw_secondary.Location = new System.Drawing.Point(171, 117);
-            dw_secondary.Size = new System.Drawing.Size(197, 394);
-            dw_secondary.Visible = false;
+            this.dw_secondary.DataObject = null;
+            this.dw_secondary.FireConstructor = true;
+            this.dw_secondary.Location = new System.Drawing.Point(171, 117);
+            this.dw_secondary.Name = "dw_secondary";
+            this.dw_secondary.Size = new System.Drawing.Size(197, 394);
+            this.dw_secondary.TabIndex = 4;
+            this.dw_secondary.Visible = false;
             // 
             // cb_1
             // 
-            cb_1.Text = "Copy rows";
-            cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 3;
-            cb_1.Location = new System.Drawing.Point(195, 71);
-            cb_1.Size = new System.Drawing.Size(62, 27);
-            cb_1.Visible = false;
-            cb_1.Click += new EventHandler(cb_1_clicked);
-            
+            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_1.Location = new System.Drawing.Point(195, 71);
+            this.cb_1.Name = "cb_1";
+            this.cb_1.Size = new System.Drawing.Size(62, 27);
+            this.cb_1.TabIndex = 3;
+            this.cb_1.Text = "Copy rows";
+            this.cb_1.Visible = false;
+            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
             // 
             // dw_tertiary
             // 
-            dw_tertiary.TabIndex = 5;
-            dw_tertiary.Location = new System.Drawing.Point(380, 119);
-            dw_tertiary.Size = new System.Drawing.Size(403, 390);
-            dw_tertiary.Visible = false;
-
-            this.MinimizeBox = false;
+            this.dw_tertiary.DataObject = null;
+            this.dw_tertiary.FireConstructor = true;
+            this.dw_tertiary.Location = new System.Drawing.Point(380, 119);
+            this.dw_tertiary.Name = "dw_tertiary";
+            this.dw_tertiary.Size = new System.Drawing.Size(403, 390);
+            this.dw_tertiary.TabIndex = 5;
+            this.dw_tertiary.Visible = false;
+            // 
+            // WExportCriteria
+            // 
+            this.AcceptButton = this.cb_ok;
+            this.ClientSize = new System.Drawing.Size(263, 103);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.dw_1);
+            this.Controls.Add(this.dw_primary);
+            this.Controls.Add(this.dw_secondary);
+            this.Controls.Add(this.cb_1);
+            this.Controls.Add(this.dw_tertiary);
+            this.Location = new System.Drawing.Point(31, 116);
             this.MaximizeBox = false;
-            this.ResumeLayout();
+            this.MinimizeBox = false;
+            this.Name = "WExportCriteria";
+            this.Text = "Payment";
+            this.Controls.SetChildIndex(this.dw_tertiary, 0);
+            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.dw_secondary, 0);
+            this.Controls.SetChildIndex(this.dw_primary, 0);
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -136,6 +160,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
         public UCb cb_ok;
         public UCb cb_cancel;
         public URdsDw dw_1;
+        public URdsDw dw_gl07records;
         public URdsDw dw_primary;
         public URdsDw dw_secondary;
         public Button cb_1;

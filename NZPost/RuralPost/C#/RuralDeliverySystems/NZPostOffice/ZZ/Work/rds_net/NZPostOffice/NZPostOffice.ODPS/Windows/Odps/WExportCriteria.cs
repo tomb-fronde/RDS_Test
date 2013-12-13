@@ -4,22 +4,27 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using NZPostOffice.ODPS.Controls;
-using NZPostOffice.Shared;
 using NZPostOffice.ODPS.DataControls.OdpsInvoice;
-using NZPostOffice.ODPS.Entity.Odps;
 using NZPostOffice.ODPS.DataControls.OdpsRep;
 using NZPostOffice.ODPS.DataControls.Odps;
+using NZPostOffice.ODPS.DataService;
+using NZPostOffice.ODPS.Entity.Odps;
 using NZPostOffice.ODPS.Entity.OdpsRep;
-using CrystalDecisions.Windows.Forms;
+using NZPostOffice.Shared;
 using NZPostOffice.Shared.VisualComponents;
+using CrystalDecisions.Windows.Forms;
 using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
     public partial class WExportCriteria : WMaster
     {
+        // TJB  30-Oct-2013  New AP Export file format
+        // Added export_AP_GL07_format(), SaveGL07
+        //
         // TJB  RPI_004  June-2010
         // Changed decimal? fields to strings in object definition (Ir348Detail)
         // Changed related variables below to non-nullable decimals.
@@ -31,11 +36,14 @@ namespace NZPostOffice.ODPS.Windows.Odps
         //
         // TJB  RPI_003  June 2010
         // Change filename for GL Payments and GL Accruals
+
+
         public WExportCriteria()
         {
             InitializeComponent();
 
             this.dw_1.DataObject = new DwReportCriteria();
+            this.dw_gl07records.DataObject = new DwApInterfaceGL07Records();
 
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).LostFocus += new EventHandler(dw_1_itemchanged);
             ((DateTimeMaskedTextBox)this.dw_1.GetControlByName("edate")).KeyPress += new KeyPressEventHandler(WReportCriteria_KeyPress1);
@@ -112,7 +120,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             //? dw_secondary.settransobject(StaticVariables.sqlca);
             //? dw_tertiary.settransobject(StaticVariables.sqlca);
 
-            dw_1.InsertRow(0);//dw_1.insertrow(1);
+            dw_1.InsertRow(0);
 
             if (dt_edate.Day >= 20)
             {
@@ -356,7 +364,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             string sInitFileName;
             dw_1.AcceptText();
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            String TestExpr = this.Text;//parent.Title;
+            String TestExpr = this.Text;
             if (TestExpr == "Updated Contractors Export")
             {
                 dt_edate = dw_1.GetValue<DateTime>(0, "edate");
@@ -562,120 +570,24 @@ namespace NZPostOffice.ODPS.Windows.Odps
             }
             else if (TestExpr == "Accounts Payable Interface")
             {
-                dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+                // TJB  23-Oct-2013  AP Export File Reformat
+                // Moved export code to two new methods
+
                 dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
-                ((DwApInterfaceHeaderRows)dw_primary.DataObject).Retrieve(dt_edate);
-                ((DwApInterfaceDetailRows)dw_secondary.DataObject).Retrieve(dt_edate);
-                // move rows here
-                int imoveres;
-                //? imoveres = dw_secondary.rowscopy(1, dw_secondary.RowCount, primary!, dw_primary, 1, primary!);
-                for (int i = 0; i < dw_secondary.RowCount; i++)
-                {
-                    dw_primary.InsertItem<ApInterfaceHeaderRows>(0);
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).TransactionId1 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).TransactionId1;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Vendor2 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Vendor2;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).VendorLocation3 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).VendorLocation3;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).InvoiceNo4 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).InvoiceNo4;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).InvoiceDate5 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).InvoiceDate5;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).PaymentNumber6 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).PaymentNumber6;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column7 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column7;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column8 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column8;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column9 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column9;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column10 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column10;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column11 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column11;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column12 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column12;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column13 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column13;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column14 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column14;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column15 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column15;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column16 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column16;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column17 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column17;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column18 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column18;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column19 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column19;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column20 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column20;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column21 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column21;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column22 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column22;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column23 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column23;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column24 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column24;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column25 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column25;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column26 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column26;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column27 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column27;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column28 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column28;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column29 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column29;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column30 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column30;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column31 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column31;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column32 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column32;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column33 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column33;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column34 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column34;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column35 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column35;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column36 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column36;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column37 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column37;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column38 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column38;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column39 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column39;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column40 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column40;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column41 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column41;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column42 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column42;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column43 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column43;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column44 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column44;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column45 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column45;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column46 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column46;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column47 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column47;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column48 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column48;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column49 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column49;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column50 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column50;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column51 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column51;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column52 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column52;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column53 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column53;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column54 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column54;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column55 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column55;
-
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column56 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column56;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column57 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column57;
-                    dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column58 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column58;
-                }
-                //? imoveres = dw_primary.SortString = "invoice_no_4,column_58,column_7";
-                dw_primary.DataObject.SortString = "invoice_no_4,column_58,column_7";
-                //? dw_primary.sort();
-                dw_primary.DataObject.Sort<ApInterfaceHeaderRows>();
-
-                // save
-                //  PBY 06/08/2002 SR#4442
-                //sInitFileName="rd_APInt."+InterfaceAlphaPrefix ( dt_edate)+right ( string ( year ( dt_edate)),2)
-                sInitFileName = "ap_rurl1_" + dt_edate.ToString("ddMMyyyy");
-                // TJB  RPI_005  Jne 2010
-                // Changed prompt string
-                //if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
-
-                if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFIleName
-                                    , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
-                                    , "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
-                {
-                    // TJB  RPI_005  Jne 2010
-                    // This is not needed:  the GetFileSaveName checks for overwrite
-                    // (and the save was being done twice - once within the IF blocks and at the end??)
-                    //if (System.IO.File.Exists(sReturnedFIleName))
-                    //{
-                    //    DialogResult reasult = MessageBox.Show("Do you want to replace the existing file " + sReturnedFIleName + "?", "Save to File", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    //    if (reasult == DialogResult.Yes)
-                    //    {
-                    //        dw_primary.SaveAs(sReturnedFIleName, "text", false);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    dw_primary.SaveAs(sReturnedFIleName, "text", false);
-                    //}
-                    dw_primary.SaveAs(sReturnedFIleName, "text", false);
-                }
+                dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+                
+                DialogResult ans = MessageBox.Show("Do you want the export file in \n"
+                                                 + "Agresso (new) format - select 'Yes'\n"
+                                                 + "PeopleSoft (old) format - select 'No'\n"
+                                                 , "Accounts Payable Interface"
+                                                 , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                                 , MessageBoxDefaultButton.Button1);
+                if (ans == DialogResult.Yes)
+                    export_AP_GL07_format(dt_sdate, dt_edate);
+                else if (ans == DialogResult.No)
+                    export_AP_Peoplesoft_format(dt_sdate, dt_edate);
+                else // (ans == DialogResult.Cancel)
+                    return;
             }
             else if (TestExpr == "IR348 Interface")
             {
@@ -874,6 +786,319 @@ namespace NZPostOffice.ODPS.Windows.Odps
                     }
                 }
             }
+        }
+
+        public virtual void export_AP_Peoplesoft_format(DateTime dt_sdate, DateTime dt_edate)
+        {
+            string sInitFileName = "";
+            string sReturnedFileName = "";
+            string smonth_prefix = "";
+
+            ((DwApInterfaceHeaderRows)dw_primary.DataObject).Retrieve(dt_edate);
+            ((DwApInterfaceDetailRows)dw_secondary.DataObject).Retrieve(dt_edate);
+            // move rows here
+            //int imoveres;
+            //? imoveres = dw_secondary.rowscopy(1, dw_secondary.RowCount, primary!, dw_primary, 1, primary!);
+            for (int i = 0; i < dw_secondary.RowCount; i++)
+            {
+                dw_primary.InsertItem<ApInterfaceHeaderRows>(0);
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).TransactionId1 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).TransactionId1;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Vendor2 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Vendor2;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).VendorLocation3 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).VendorLocation3;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).InvoiceNo4 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).InvoiceNo4;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).InvoiceDate5 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).InvoiceDate5;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).PaymentNumber6 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).PaymentNumber6;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column7 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column7;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column8 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column8;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column9 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column9;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column10 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column10;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column11 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column11;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column12 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column12;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column13 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column13;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column14 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column14;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column15 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column15;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column16 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column16;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column17 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column17;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column18 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column18;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column19 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column19;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column20 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column20;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column21 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column21;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column22 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column22;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column23 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column23;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column24 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column24;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column25 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column25;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column26 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column26;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column27 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column27;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column28 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column28;
+                // TJB 23-Oct-2013: For Peoplesoft, hide the supplier_no returned in what was Column29
+                // originally dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column29 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column29
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).SupplierNo29 = " ";  // was  dw_secondary.GetItem<ApInterfaceDetailRows>(i).SupplierNo29;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column30 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column30;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column31 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column31;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column32 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column32;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column33 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column33;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column34 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column34;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column35 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column35;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column36 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column36;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column37 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column37;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column38 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column38;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column39 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column39;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column40 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column40;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column41 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column41;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column42 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column42;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column43 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column43;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column44 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column44;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column45 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column45;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column46 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column46;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column47 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column47;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column48 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column48;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column49 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column49;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column50 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column50;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column51 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column51;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column52 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column52;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column53 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column53;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column54 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column54;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column55 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column55;
+
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column56 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column56;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column57 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column57;
+                dw_primary.GetItem<ApInterfaceHeaderRows>(0).Column58 = dw_secondary.GetItem<ApInterfaceDetailRows>(i).Column58;
+            }
+            dw_primary.DataObject.SortString = "invoice_no_4,column_58,column_7";
+            dw_primary.DataObject.Sort<ApInterfaceHeaderRows>();
+
+            // save
+            //  PBY 06/08/2002 SR#4442
+            //sInitFileName="rd_APInt."+InterfaceAlphaPrefix ( dt_edate)+right ( string ( year ( dt_edate)),2)
+            sInitFileName = "ap_rurl1_" + dt_edate.ToString("ddMMyyyy");
+            // TJB  RPI_005  Jne 2010
+            // Changed prompt string
+            //if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
+
+            if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFileName
+                                , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                , "Text Files (*.TXT)|*.TXT|CSV Files (*.CSV)|*.CSV"))
+            {
+                dw_primary.SaveAs(sReturnedFileName, "text", false);
+            }
+        }
+
+        // TJB  30-Oct-2013  New AP Export file format: NEW
+        public virtual void export_AP_GL07_format(DateTime dt_sdate, DateTime dt_edate)
+        {
+            string sInitFileName = "";
+            string sReturnedFileName = "";
+            string smonth_prefix = "";
+            string TransType, RPInvoiceNo, InvoiceNo, RPInvoiceMth;
+            int BatchNo, RPInvoiceMthNo;
+            DateTime InvoiceDate;
+            string sBatchNo, sInvoiceDate;
+
+            // Get the most-recent batch number
+            // Start at 1000 if no numbers saved yet
+            ODPSDataService dataService = ODPSDataService.GetMaxBatchNo();
+            BatchNo = dataService.BatchNo;
+            if (BatchNo == 0)
+                BatchNo = 1000;
+            BatchNo++;
+
+            // Convert it to a zero-filler 8-digit string padded to 25 characters
+            sBatchNo = (BatchNo.ToString()).PadLeft(8, '0');
+            sBatchNo = sBatchNo.PadRight(25);
+
+            // Get the invoice data to be exported
+            ((DwApInterfaceGL07Records)dw_gl07records.DataObject).Retrieve(dt_edate);
+            if (dw_gl07records.RowCount <= 0)
+            {
+                MessageBox.Show("No records to export."
+                                , "Warning"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Set the data up for export.
+            // Convert the strings to the appropriately padded fixed-lengths required
+            for (int i = 0; i < dw_gl07records.RowCount; i++)
+            {
+                // Pad out the invoice data
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InvoiceDate
+                        = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InvoiceDate.PadRight(8);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).CurAmount
+                        = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).CurAmount.PadLeft(20);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Description
+                        = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Description.PadRight(255);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).SupplierNo
+                        = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).SupplierNo.PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AcCode
+                        = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AcCode.PadRight(25);
+
+                // The invoice_no for the new system (voucher_no) is a synthetic one derived from 
+                // the RuralPost Invoice number (RPInvoiceNo) by changing the month [short]name 
+                // part to a two-digit number (eg "13Jul0001" => "13070001".
+                RPInvoiceNo = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).RPInvoiceNo.Trim();
+                RPInvoiceMth = RPInvoiceNo.Substring(2, 3);
+                RPInvoiceMthNo = "xxxJanFebMarAprMayJunJulAugSepOctNovDec".IndexOf(RPInvoiceMth) / 3;
+                InvoiceNo = RPInvoiceNo.Substring(0,2) + RPInvoiceMthNo.ToString("00") + RPInvoiceNo.Substring(RPInvoiceNo.Length - 4);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InvoiceNo = InvoiceNo.PadRight(15);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).RPInvoiceNo = RPInvoiceNo.PadRight(100);
+
+                // Populate the data with the fixed strings
+                TransType = dw_gl07records.GetItem<ApInterfaceGL07Records>(i).TransType;
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).BatchNo = sBatchNo;
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InterfaceCode = ("BI").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).VoucherType = ("AP").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Client = ("NZ").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Dim6 = ("10010").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Currency = ("NZD").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).PayTransfer = "A ";
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Status = "N";
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AparType = " ";
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).BankAccType = "1 ";
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).TaxCode = ("PS").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Dim4 = (" ").PadRight(25);
+                if (TransType == "AP")
+                {
+                    dw_gl07records.GetItem<ApInterfaceGL07Records>(i).TaxCode = ("0").PadRight(25);
+                    dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AparType = "P";
+                }
+                else if (TransType == "GL")
+                {
+                    dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Dim4 = ("181876").PadRight(25);
+                }
+
+                // Add the unused parts of the record
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused1 = (" ").PadRight(75);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused2 = (" ").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused3 = (" ").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused4 = (" ").PadRight(25);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused5 = "  ";
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused6 = (" ").PadRight(91);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused7 = (" ").PadRight(8);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused8 = (" ").PadRight(7);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused9 = (" ").PadRight(358);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused10 = (" ").PadRight(787);
+                dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused11 = (" ").PadRight(81);
+            }
+
+            // Save the data to a text file, fixed-length records
+            sInitFileName = "ap_rural_gl07_" + dt_edate.ToString("ddMMyyyy");
+            if (GetFileSaveName("Save to File", sInitFileName, ref sReturnedFileName
+                                , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                , "Text Files (*.txt)|*.txt"))
+            {
+                int nRec = SaveGL07(sReturnedFileName);
+                if (nRec > 0)
+                {
+                    MessageBox.Show(nRec.ToString() + " records exported "
+                                    + "as batch " + sBatchNo + "\n"
+                                    + "in file " + sReturnedFileName + "\n"
+                                    , "AP Invoice Export");
+                }
+                else
+                {
+                    MessageBox.Show("Error writing AP Export file.\n"
+                                    + "Error: " + SaveGL07_ErrMsg + "\n\n"
+                                    , "AP Invoice Export"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else  // Either there was an error selecting the output file 
+                  // or (more likely) the user cancelled the export.
+                return; 
+
+            // Now - update the odps.payment table records with the batch number of the exported invoices
+
+            // Get the invoice_date.  InvoiceDate is in yyymmdd format
+            // Convert it to dd/mm/yyyy format then parse to DateTime
+            sInvoiceDate = dw_gl07records.GetItem<ApInterfaceGL07Records>(0).InvoiceDate.Trim();
+            sInvoiceDate = sInvoiceDate.Substring(6, 2) + '/' + sInvoiceDate.Substring(4, 2) + '/' + sInvoiceDate.Substring(0, 4);
+            if (DateTime.TryParse(sInvoiceDate, out InvoiceDate) == false)
+            {
+                MessageBox.Show("Unable to convert invoice_date string to DateTime form.\n"
+                                + "invoice_date = " + sInvoiceDate + "\n\n"
+                                , "Error"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            ODPSDataService result = ODPSDataService.UpdatePaymentBatchNo(BatchNo, InvoiceDate);
+            if (result.SQLCode != 0)
+            {
+                MessageBox.Show("Error updating batch number in payment table\n"
+                               + "SQLCode = " + result.SQLCode.ToString() + "\n"
+                               + "SQLErrMsg = " + result.SQLErrText
+                               , "AP Invoice Export"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        string SaveGL07_ErrMsg;
+
+        // TJB  30-Oct-2013  New AP Export file format: NEW
+        public int SaveGL07(string filename)
+        {
+            StreamWriter sw = null;
+            try
+            {
+                sw = new StreamWriter(filename);
+
+                for (int i = 0; i < dw_gl07records.RowCount; i++)
+                {
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).BatchNo);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InterfaceCode);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).VoucherType);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).TransType);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Client);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AcCode);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused1);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Dim4);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused2);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Dim6);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused3);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).TaxCode);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused4);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Currency);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused5);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).CurAmount);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused6);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Description);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused7);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InvoiceDate);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).InvoiceNo);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused8);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).RPInvoiceNo);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused9);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).PayTransfer);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Status);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).AparType);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).SupplierNo);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused10);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).BankAccType);
+                    sw.Write(dw_gl07records.GetItem<ApInterfaceGL07Records>(i).Unused11);
+                    sw.Write("\r\n");
+                }
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                SaveGL07_ErrMsg = ex.Message;
+               
+                GC.Collect();
+                return -1;
+            }
+            GC.Collect();
+            return dw_gl07records.RowCount;
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
