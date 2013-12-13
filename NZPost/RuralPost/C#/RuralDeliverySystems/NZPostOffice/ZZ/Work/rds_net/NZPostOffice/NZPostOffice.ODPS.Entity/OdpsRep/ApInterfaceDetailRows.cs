@@ -10,6 +10,9 @@ using System.Reflection;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
+    // TJB 23-Oct-2013  AP Export File Reformat
+    // Add supplier_no to retrieved values (was unused Column29)
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -41,7 +44,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 	[MapInfo("column_26", "_column_26", "")]
 	[MapInfo("column_27", "_column_27", "")]
 	[MapInfo("column_28", "_column_28", "")]
-	[MapInfo("column_29", "_column_29", "")]
+    [MapInfo("supplier_no_29", "_supplier_no", "")] // was column_29
 	[MapInfo("column_30", "_column_30", "")]
 	[MapInfo("column_31", "_column_31", "")]
 	[MapInfo("column_32", "_column_32", "")]
@@ -161,7 +164,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 		private string  _column_28;
 
 		[DBField()]
-		private string  _column_29;
+        private string _supplier_no_29;   // was _column_29
 
 		[DBField()]
 		private string  _column_30;
@@ -754,19 +757,19 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 			}
 		}
 
-		public virtual string Column29
+        public virtual string SupplierNo29    // was Column29
 		{
 			get
 			{
-				CanReadProperty("Column29",true);
-				return _column_29;
+                CanReadProperty("SupplierNo29", true);
+				return _supplier_no_29;
 			}
 			set
 			{
-				CanWriteProperty("Column29",true);
-				if ( _column_29 != value )
+                CanWriteProperty("SupplierNo29", true);
+                if (_supplier_no_29 != value)
 				{
-					_column_29 = value;
+                    _supplier_no_29 = value;
 					PropertyHasChanged();
 				}
 			}
@@ -1372,7 +1375,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             instance.Column26 = GetValueFromReader<string>(dr,25);
             instance.Column27 = GetValueFromReader<string>(dr,26);
             instance.Column28 = GetValueFromReader<string>(dr,27);
-            instance.Column29 = GetValueFromReader<string>(dr,28);
+            instance.SupplierNo29 = GetValueFromReader<string>(dr, 28);  // was Column29
             instance.Column30 = GetValueFromReader<string>(dr,29);
             instance.Column31 = GetValueFromReader<string>(dr,30);
             instance.Column32 = GetValueFromReader<string>(dr,31);

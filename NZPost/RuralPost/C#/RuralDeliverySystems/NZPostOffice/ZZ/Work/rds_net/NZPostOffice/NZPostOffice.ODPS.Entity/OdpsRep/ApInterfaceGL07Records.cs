@@ -9,8 +9,8 @@ using NZPostOffice.Shared.LogicUnits;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
-    // TJB 23-.Oct-2013  AP Export File Reformat: New
-    // Data definition for GL07 Header record
+    // TJB 23-Oct-2013  AP Export File Reformat: New
+    // Data definition for GL07 export records
     //
     // NOTE: Fields are fixed-length strings, which isn't reflected here
 
