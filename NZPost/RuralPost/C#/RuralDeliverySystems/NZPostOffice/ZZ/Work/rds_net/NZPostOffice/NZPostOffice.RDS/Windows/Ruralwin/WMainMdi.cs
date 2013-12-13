@@ -39,13 +39,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
             m_main_menu = new MMainMenu(this);
             this.Text = "Rural Delivery System";
-            this.toolStripStatusLabel4.Text = "Production Version";
+            //this.toolStripStatusLabel4.Text = "Production Version";
             //this.toolStripStatusLabel4.Text = "DEV Version";
-            //this.toolStripStatusLabel4.Text = "Test Version";
+            this.toolStripStatusLabel4.Text = "Test Version";
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.10.";
-            this.toolStripStatusLabel6.Text = "28-Aug-2013 11.00pm";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.11.1";
+            this.toolStripStatusLabel6.Text = "13-Dec-2013 9:30pm";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
                        System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
         }
