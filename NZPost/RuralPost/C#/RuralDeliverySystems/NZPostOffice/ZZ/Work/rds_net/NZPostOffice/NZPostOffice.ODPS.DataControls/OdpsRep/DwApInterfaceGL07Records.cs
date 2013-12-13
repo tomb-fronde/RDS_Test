@@ -10,6 +10,9 @@ using NZPostOffice.ODPS.Entity.OdpsRep;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
+    // TJB  New AP Export File  Oct-2013: NEW
+    // Datacontrol for entity 
+
     public partial class DwApInterfaceGL07Records : Metex.Windows.DataUserControl
     {
         public DwApInterfaceGL07Records()
