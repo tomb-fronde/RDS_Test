@@ -23,6 +23,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
     // TJB  RPCR_057  Jan-2014
     // Disabled textboxLostFocus event handler (dw_criteria_ItemChange)
     // Added pb_search_clicked (from WGenericReportSearch)
+    // Added 'select a contract' warning (in pb_open_clicked)
+    // Added bAllowAll parameter in wf_gosearch
 
     public partial class WGenericReportSearchWithDate : WGenericReportSearch
     {
@@ -47,13 +49,13 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //?dw_criteria.GetItem<ReportGenericCriteriaWithMonth>(0).Monthyear = dDate;
         }
 
-        public virtual void pb_search_clicked(object sender, EventArgs e)
+        public override void pb_search_clicked(object sender, EventArgs e)
         {
             if (this.DesignMode)
             {
                 return;
             }
-            wf_gosearch();
+            wf_gosearch(false);
         }
 
         public override void pb_open_clicked(object sender, EventArgs e)
@@ -88,6 +90,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 WGenericReportPreviewWithDate w_generic_report_preview_with_date = new WGenericReportPreviewWithDate();
                 w_generic_report_preview_with_date.MdiParent = StaticVariables.MainMDI;
                 w_generic_report_preview_with_date.Show();
+            }
+            else
+            {
+                MessageBox.Show("Please select a contract", "Warning");
             }
         }
 
