@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruralrpt;
 
 namespace NZPostOffice.RDS.DataControls.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Added overload Retrieve() with ReportDate parameter
+
     public partial class RSchedulebSingleContract : Metex.Windows.DataUserControl
     {
         public RSchedulebSingleContract()
@@ -21,6 +24,15 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
         public int Retrieve(int? incontract, int? inSequence)
         {
             int ret = RetrieveCore<SchedulebSingleContract>(new List<SchedulebSingleContract>(SchedulebSingleContract.GetAllSchedulebSingleContract(incontract, inSequence)));
+
+            return ret;
+        }
+
+        // TJB  RPCR_057  Jan-2014
+        // Added overload with ReportDate parameter
+        public int Retrieve(int? incontract, int? inSequence, DateTime? inReportDate)
+        {
+            int ret = RetrieveCore<SchedulebSingleContract>(new List<SchedulebSingleContract>(SchedulebSingleContract.GetAllSchedulebSingleContract(incontract, inSequence, inReportDate)));
 
             return ret;
         }
