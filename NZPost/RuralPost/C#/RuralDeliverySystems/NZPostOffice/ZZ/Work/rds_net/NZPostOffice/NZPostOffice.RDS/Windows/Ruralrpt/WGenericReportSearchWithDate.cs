@@ -20,6 +20,10 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Disabled textboxLostFocus event handler (dw_criteria_ItemChange)
+    // Added pb_search_clicked (from WGenericReportSearch)
+
     public partial class WGenericReportSearchWithDate : WGenericReportSearch
     {
         public WGenericReportSearchWithDate()
@@ -29,10 +33,8 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.dw_criteria.DataObject = new DReportGenericCriteriaWithMonth();
             dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
-            //jlwang
             ((System.Windows.Forms.PictureBox)(dw_criteria.GetControlByName("outlet_bmp"))).Click += new System.EventHandler(dw_criteria_clicked);
-            //jlwang:end
-            ((DReportGenericCriteriaWithMonth)dw_criteria.DataObject).TextBoxLostFocus += new System.EventHandler(dw_criteria_ItemChange);
+//            ((DReportGenericCriteriaWithMonth)dw_criteria.DataObject).TextBoxLostFocus += new System.EventHandler(dw_criteria_ItemChange);
             ((TextBox)dw_criteria.GetControlByName("monthyear1")).GotFocus += new EventHandler(dw_criteria_GotFocus);
         }
 
@@ -45,9 +47,21 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //?dw_criteria.GetItem<ReportGenericCriteriaWithMonth>(0).Monthyear = dDate;
         }
 
+        public virtual void pb_search_clicked(object sender, EventArgs e)
+        {
+            if (this.DesignMode)
+            {
+                return;
+            }
+            wf_gosearch();
+        }
+
         public override void pb_open_clicked(object sender, EventArgs e)
         {
-            StaticVariables.gnv_app.of_get_parameters().dateparm = dw_criteria.GetItem<ReportGenericCriteriaWithMonth>(0).Monthyear;
+            // StaticVariables.gnv_app.of_get_parameters().dateparm = dw_criteria.GetItem<ReportGenericCriteriaWithMonth>(0).Monthyear;
+            DateTime? ReportDate;
+            ReportDate = dw_criteria.GetItem<ReportGenericCriteriaWithMonth>(0).Monthyear;
+            StaticVariables.gnv_app.of_get_parameters().dateparm = ReportDate;
             string sTitle;
             dw_criteria.AcceptText();
             if (dw_results.GetSelectedRow(0) > 0)
@@ -56,7 +70,6 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 StaticVariables.gnv_app.of_get_parameters().stringparm = isDataWindow;
                 //StaticVariables.gnv_app.of_get_parameters().dwparm = dw_results.DataObject;
                 StaticVariables.window = dw_results;
-                //add by mkwang
                 string date;
                 DateTime? dt_edate;
                 date = ((System.Windows.Forms.TextBox)dw_criteria.GetControlByName("monthyear1")).Text;
