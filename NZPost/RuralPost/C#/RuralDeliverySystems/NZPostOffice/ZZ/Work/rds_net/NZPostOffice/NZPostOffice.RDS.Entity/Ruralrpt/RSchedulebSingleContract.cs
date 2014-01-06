@@ -8,6 +8,13 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Added GetAllSchedulebSingleContract() overload with effective date parameter
+    // and efective date to FetchEntity()
+    // Replace returned GST# with effective date (string)(GST# was unused)
+    // Note: sp_schedule_b was updated to take add effective date
+    //       as an optional parameter (defaulting to <today>)
+
     // TJB  Release 7.1.10.3 fixups
     // Added retrieval of pr_effective_date and prs_key
     // related to changes in sp_schedule_b
@@ -227,24 +234,6 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 			}
 		}
 
-        public virtual DateTime? PrEffectiveDate
-        {
-            get
-            {
-                CanReadProperty("PrEffectiveDate", true);
-                return _pr_effective_date;
-            }
-            set
-            {
-                CanWriteProperty("PrEffectiveDate", true);
-                if (_pr_effective_date != value)
-                {
-                    _pr_effective_date = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
         public virtual int? PrsKey
         {
             get
@@ -272,28 +261,53 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 		#region Factory Methods
 		public static SchedulebSingleContract NewSchedulebSingleContract( int? incontract, int? inSequence )
 		{
-			return Create(incontract, inSequence);
+			return Create(incontract, inSequence, null);
 		}
 
-		public static SchedulebSingleContract[] GetAllSchedulebSingleContract( int? incontract, int? inSequence )
+        public static SchedulebSingleContract NewSchedulebSingleContract(int? incontract, int? inSequence, DateTime? inEffDate)
+        {
+            return Create(incontract, inSequence, inEffDate);
+        }
+
+        public static SchedulebSingleContract[] GetAllSchedulebSingleContract(int? incontract, int? inSequence)
 		{
-			return Fetch(incontract, inSequence).list;
+			return Fetch(incontract, inSequence, null).list;
 		}
-		#endregion
+
+        // TJB  RPCR_057  Jan-2014
+        // Added GetAllSchedulebSingleContract() overload with effective date parameter
+        public static SchedulebSingleContract[] GetAllSchedulebSingleContract(int? incontract, int? inSequence, DateTime? inEffDate)
+        {
+            return Fetch(incontract, inSequence, inEffDate).list;
+        }
+        #endregion
 
 		#region Data Access
-		[ServerMethod]
-		private void FetchEntity( int? incontract, int? inSequence )
+        [ServerMethod]
+		private void FetchEntity( int? incontract, int? inSequence, DateTime? @inEffDate )
 		{
-			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+            // TJB  RPCR_057  Jan-2014
+            // Added effective date parameter
+            using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    // TJB  RPCR_057  Jan-2014
+                    // Replace returned GST# with effective date (string)
+                    // (GST# was unused)
+                    // Note: sp_schedule_b was updated to take the effective date
+                    //       as an optional parameter (defaulting to <today>)
+                    DateTime dEffDate;
+                    string sEffDate = "";
+                    dEffDate = (inEffDate == null) ? DateTime.Now : (DateTime)inEffDate;
+                    sEffDate = dEffDate.ToString("d-MMM-yyyy");
+
 					cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "rd.sp_schedule_b";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "incontract", incontract);
-					pList.Add(cm, "inSequence", inSequence);
+                    pList.Add(cm, "inSequence", inSequence);
+                    pList.Add(cm, "inEffDate",  inEffDate);
 
 					List<SchedulebSingleContract> _list = new List<SchedulebSingleContract>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -305,7 +319,7 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                             instance._contract_seq_number = GetValueFromReader<int?>(dr,1);
                             instance._con_renewal_payment_value = GetValueFromReader<decimal?>(dr,2);
                             instance._con_title = GetValueFromReader<string>(dr,3);
-                            instance._gst_number = GetValueFromReader<string>(dr,4);
+                            instance._gst_number = sEffDate;  // GetValueFromReader<string>(dr, 4);
                             instance._piece_rate_pr_rate = GetValueFromReader<decimal?>(dr,5);
                             instance._piece_rate_type_prt_description = GetValueFromReader<string>(dr,6);
                             instance._piece_rate_supplier_prs_description = GetValueFromReader<string>(dr,7);
