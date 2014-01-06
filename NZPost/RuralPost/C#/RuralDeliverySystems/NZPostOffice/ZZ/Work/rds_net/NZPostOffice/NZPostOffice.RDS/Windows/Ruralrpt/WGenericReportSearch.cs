@@ -531,18 +531,6 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             {
                 return;
             }
-            //? base.clicked();
-            // long lRow
-            // 
-            // lRow = row
-            // 
-            // if lRow = 0 then
-            // 	return
-            // end if
-            // 
-            // this.SelectRow ( lRow, not This.IsSelected ( lRow))
-            // 
-            // //dw_Results.SetItem ( 1, "contract_no", 0)
         }
 
         public virtual void dw_results_doubleclicked(object sender, EventArgs e)

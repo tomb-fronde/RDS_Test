@@ -94,7 +94,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             dw_results.Size = new Size(293, 190);
             //!dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_results.Click += new EventHandler(dw_results_clicked); 
-            dw_results.GotFocus += new EventHandler(dw_results_getfocus);
+//            dw_results.GotFocus += new EventHandler(dw_results_getfocus);
 
             //((DReportGenericResults)dw_results.DataObject).CellDoubleClick += new EventHandler(dw_results_doubleclicked);
             //dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
