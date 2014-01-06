@@ -13,6 +13,10 @@ using NZPostOffice.RDS.DataControls.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Added parameter to wf_gosearch function (ignored) to match 
+    // overridden function in WGenericReportSearch
+
     public partial class WMailCountSearch : WGenericReportSearch
     {  
         public bool bdatechanged = false;
@@ -134,7 +138,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             return sParm;
         }
 
-        public override int wf_gosearch()
+        public override int wf_gosearch(bool bAllowAll)
         {
             DateTime mcdate;
             int? rg_code;

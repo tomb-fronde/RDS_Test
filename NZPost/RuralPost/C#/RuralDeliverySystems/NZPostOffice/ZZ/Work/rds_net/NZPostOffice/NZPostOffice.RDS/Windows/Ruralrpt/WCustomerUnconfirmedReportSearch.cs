@@ -20,6 +20,10 @@ using NZPostOffice.RDS.DataControls.Ruralsec;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Added parameter to wf_gosearch function (ignored) to match 
+    // overridden function in WGenericReportSearch
+
     public partial class WCustomerUnconfirmedReportSearch : WCustomerCountReportSearch
     {
         public WCustomerUnconfirmedReportSearch()
@@ -30,7 +34,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             this.dw_results.DataObject = new DReportRegionoutletcontractResults();
         }
 
-        public override int wf_gosearch()
+        public override int wf_gosearch(bool bAllowAll)
         {
             int? loutlet;
             int? lregion;
