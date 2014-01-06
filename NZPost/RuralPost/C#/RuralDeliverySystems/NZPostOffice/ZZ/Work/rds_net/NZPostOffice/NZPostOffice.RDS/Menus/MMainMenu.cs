@@ -17,6 +17,9 @@ namespace NZPostOffice.RDS.Menus
 
     public class MMainMenu : MFrame
     {
+        // TJB  RPCR_057  Jan-2014
+        // Changed m_scheduleb_payment_clicked search module to ...WithMthYr
+        //
         // TJB  Release 7.1.3 fixups Aug 2010
         // Added m_modify, _m_modify, of_set_modify and m_modify_clicked
 
@@ -33,8 +36,6 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripMenuItem m_updatedatabase;
 
-        // public ToolStripMenuItem m_6;
-
         public ToolStripMenuItem m_toolbars1;
 
         public ToolStripMenuItem m_ruraldelivery;
@@ -45,11 +46,7 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripMenuItem m_addresses;
 
-        // public ToolStripMenuItem m_-;
-
         public ToolStripMenuItem m_addarticalcounts;
-
-        // public ToolStripMenuItem m_-1;
 
         public ToolStripMenuItem m_benchmarkcalculator;
 
@@ -59,16 +56,12 @@ namespace NZPostOffice.RDS.Menus
 
         public ToolStripMenuItem m_setscalingfactors;
 
-        // public ToolStripMenuItem m_-2;
-
         public ToolStripMenuItem m_contractadjustmentsimport;
 
         public ToolStripMenuItem m_piecerateimport;
 
         // TJB  ECL Data Import  Apr-2010: Added
         public ToolStripMenuItem m_ecldataimport;
-
-        // public ToolStripMenuItem m_-4;
 
         public ToolStripMenuItem m_renewalrates;
 
@@ -120,8 +113,6 @@ namespace NZPostOffice.RDS.Menus
         public ToolStripMenuItem m_outstandingvalidationlist;
 
         public ToolStripMenuItem m_baseofficeoutlets;
-
-        // public ToolStripMenuItem m_-5;
 
         public ToolStripMenuItem m_addresslabels;
 
@@ -531,7 +522,6 @@ namespace NZPostOffice.RDS.Menus
             m_contract1.Text = "&Contracts";
             m_contract1.Visible = false; //add
             m_contract1.Enabled = false;  //add
-
             m_contract1.Tag = "ComponentName=Schedule A;ComponentName=Schedule B;ComponentName=Contract Summary;ComponentName=Route Description;ComponentName=Schedule of Mails Carried;ComponentName=Vehicle Schedule;ComponentName=Mail Count Forms;ComponentName=Vehicle Age Analysis;";
 
             m_chedulea_ownerdriver = new ToolStripMenuItem();
@@ -562,9 +552,8 @@ namespace NZPostOffice.RDS.Menus
             m_chedulea_ownerdriver.Text = "Schedule A - Owner Driver";
             m_chedulea_ownerdriver.Visible = false; //add
             m_chedulea_ownerdriver.Enabled = false;  //add
-
             m_chedulea_ownerdriver.Tag = "ComponentName=Schedule A;";
-            m_chedulea_ownerdriver.Click += new EventHandler(m_chedulea_ownerdriver_clicked);
+            m_chedulea_ownerdriver.Click += new EventHandler(m_schedulea_ownerdriver_clicked);
             
             // 
             // m_scheduleb-payment
@@ -572,7 +561,6 @@ namespace NZPostOffice.RDS.Menus
             m_scheduleb_payment.Text = "Schedule B - Payment";
             m_scheduleb_payment.Visible = false; //add
             m_scheduleb_payment.Enabled = false;  //add
-
             m_scheduleb_payment.Tag = "ComponentName=Schedule B;";
             m_scheduleb_payment.Click += new EventHandler(m_scheduleb_payment_clicked);
 
@@ -582,7 +570,6 @@ namespace NZPostOffice.RDS.Menus
             m_contractsummarysheet.Text = "Contract Summary Sheet";
             m_contractsummarysheet.Visible = false; //add
             m_contractsummarysheet.Enabled = false;  //add
-
             m_contractsummarysheet.Tag = "ComponentName=Contract Summary;";
             m_contractsummarysheet.Click += new EventHandler(m_contractsummarysheet_clicked);
             
@@ -592,7 +579,6 @@ namespace NZPostOffice.RDS.Menus
             m_routefrequencydescription.Text = "Route Frequency Description";
             m_routefrequencydescription.Visible = false; //add
             m_routefrequencydescription.Enabled = false;  //add
-
             m_routefrequencydescription.Tag = "ComponentName=Route Description;";
             m_routefrequencydescription.Click += new EventHandler(m_routefrequencydescription_clicked);
             
@@ -600,9 +586,8 @@ namespace NZPostOffice.RDS.Menus
             // m_scheduleofmailscarried
             // 
             m_scheduleofmailscarried.Text = "Schedule of Mails Carried";
-            m_scheduleofmailscarried.Visible = false; //add
-            m_scheduleofmailscarried.Enabled = false;  //add
-
+            m_scheduleofmailscarried.Visible = false;
+            m_scheduleofmailscarried.Enabled = false;
             m_scheduleofmailscarried.Tag = "ComponentName=Schedule of Mails Carried;";
             m_scheduleofmailscarried.Click += new EventHandler(m_scheduleofmailscarried_clicked);
           
@@ -610,9 +595,8 @@ namespace NZPostOffice.RDS.Menus
             // m_vehicleschedule
             // 
             m_vehicleschedule.Text = "Vehicle Schedule";
-            m_vehicleschedule.Visible = false; //add
-            m_vehicleschedule.Enabled = false;  //add
-
+            m_vehicleschedule.Visible = false;
+            m_vehicleschedule.Enabled = false;
             m_vehicleschedule.Tag = "ComponentName=Vehicle Schedule;";
             m_vehicleschedule.Click += new EventHandler(m_vehicleschedule_clicked);
             
@@ -620,9 +604,8 @@ namespace NZPostOffice.RDS.Menus
             // m_mailcountforms
             // 
             m_mailcountforms.Text = "Mail Count &Forms";
-            m_mailcountforms.Visible = false; //add
-            m_mailcountforms.Enabled = false;  //add
-
+            m_mailcountforms.Visible = false;
+            m_mailcountforms.Enabled = false;
             m_mailcountforms.Tag = "ComponentName=Mail Count Forms;";
             m_mailcountforms.Click += new EventHandler(m_mailcountforms_clicked);
 
@@ -630,9 +613,8 @@ namespace NZPostOffice.RDS.Menus
             // m_ehicleagereport
             // 
             m_ehicleagereport.Text = "Vehicle A&ge Report";
-            m_ehicleagereport.Visible = false; //add
-            m_ehicleagereport.Enabled = false;  //add
-
+            m_ehicleagereport.Visible = false;
+            m_ehicleagereport.Enabled = false;
             m_ehicleagereport.Tag = "ComponentName=Vehicle Age Analysis;";
             m_ehicleagereport.Click += new EventHandler(m_ehicleagereport_clicked);
            
@@ -640,9 +622,8 @@ namespace NZPostOffice.RDS.Menus
             // m_allowancesummary
             // 
             m_allowancesummary.Text = "A&llowance Summary";
-            m_allowancesummary.Visible = false; //add
-            m_allowancesummary.Enabled = false;  //add
-
+            m_allowancesummary.Visible = false;
+            m_allowancesummary.Enabled = false;
             m_allowancesummary.Tag = "ComponentName=Allowance Summary;";
             m_allowancesummary.Click += new EventHandler(m_allowancesummary_clicked);
            
@@ -650,9 +631,8 @@ namespace NZPostOffice.RDS.Menus
             // m_contractorprocurements
             // 
             m_contractorprocurements.Text = "Contractor &Procurements";
-            m_contractorprocurements.Visible = false; //add
-            m_contractorprocurements.Enabled = false;  //add
-
+            m_contractorprocurements.Visible = false;
+            m_contractorprocurements.Enabled = false;
             m_contractorprocurements.Tag = "ComponentName=Procurements;";
             m_contractorprocurements.Click += new EventHandler(m_contractorprocurements_clicked);
             
@@ -660,23 +640,12 @@ namespace NZPostOffice.RDS.Menus
             // m_financialsstatistics
             // 
             m_financialsstatistics.Text = "Financials/Statistics";
-            m_financialsstatistics.Visible = false; //add
-            m_financialsstatistics.Enabled = false;  //add
-
+            m_financialsstatistics.Visible = false;
+            m_financialsstatistics.Enabled = false;
             m_financialsstatistics.Tag = "ComponentName=RCMs Stats Report;ComponentName=Piece Rate Summary;ComponentName=Vehicle Summary;ComponentName=Performance Summary;";
-
-            m_rcmsstatisticalreport = new ToolStripMenuItem();
-            m_pieceratesummary = new ToolStripMenuItem();
-            m_vehiclesummary = new ToolStripMenuItem();
-            //? m_performancesummary = new ToolStripMenuItem();
-            m_vehicleexpiry = new ToolStripMenuItem();
-            m_deedcompliance = new ToolStripMenuItem();
-            m_outstandingvalidationlist = new ToolStripMenuItem();
-
             m_financialsstatistics.DropDownItems.Add(m_rcmsstatisticalreport);
             m_financialsstatistics.DropDownItems.Add(m_pieceratesummary);
             m_financialsstatistics.DropDownItems.Add(m_vehiclesummary);
-            //? m_financialsstatistics.DropDownItems.Add(m_performancesummary);
             m_financialsstatistics.DropDownItems.Add(m_vehicleexpiry);
             m_financialsstatistics.DropDownItems.Add(m_deedcompliance);
             m_financialsstatistics.DropDownItems.Add(m_outstandingvalidationlist);
@@ -684,36 +653,37 @@ namespace NZPostOffice.RDS.Menus
             // 
             // m_rcmsstatisticalreport
             // 
+            m_rcmsstatisticalreport = new ToolStripMenuItem();
             m_rcmsstatisticalreport.Text = "RCMs Statistical Report";
             m_rcmsstatisticalreport.Visible = false; //add
             m_rcmsstatisticalreport.Enabled = false;  //add
-
             m_rcmsstatisticalreport.Tag = "ComponentName=RCMs Stats Report;";
             m_rcmsstatisticalreport.Click += new EventHandler(m_rcmsstatisticalreport_clicked);
         
             // 
             // m_pieceratesummary
             // 
+            m_pieceratesummary = new ToolStripMenuItem();
             m_pieceratesummary.Text = "P&iece Rate Summary";
-            m_pieceratesummary.Visible = false; //add
-            m_pieceratesummary.Enabled = false;  //add
-
+            m_pieceratesummary.Visible = false;
+            m_pieceratesummary.Enabled = false;
             m_pieceratesummary.Tag = "ComponentName=Piece Rate Summary;";
             m_pieceratesummary.Click += new EventHandler(m_pieceratesummary_clicked);
             
             // 
             // m_vehiclesummary
             // 
+            m_vehiclesummary = new ToolStripMenuItem();
             m_vehiclesummary.Text = "Vehicle Summary";
-            m_vehiclesummary.Visible = false; //add
-            m_vehiclesummary.Enabled = false;  //add
-
+            m_vehiclesummary.Visible = false;
+            m_vehiclesummary.Enabled = false;
             m_vehiclesummary.Tag = "ComponentName=Vehicle Summary;";
             m_vehiclesummary.Click += new EventHandler(m_vehiclesummary_clicked);
            
             //// 
             //// m_performancesummary
             //// 
+            //m_performancesummary = new ToolStripMenuItem();
             //m_performancesummary.Visible = false;
             //m_performancesummary.Text = "&Performance Summary";
             //m_performancesummary.Tag="ComponentName=Disabled;";
@@ -722,6 +692,7 @@ namespace NZPostOffice.RDS.Menus
             // 
             // m_vehicleexpiry
             // 
+            m_vehicleexpiry = new ToolStripMenuItem();
             m_vehicleexpiry.Text = "Vehicle E&xpiry ";
             m_vehicleexpiry.ToolTipText = "Report on Vehicle Expiry dates";
             m_vehicleexpiry.Tag = "Report on Vehicle Expiry dates;";
@@ -730,6 +701,7 @@ namespace NZPostOffice.RDS.Menus
             // 
             // m_deedcompliance
             // 
+            m_deedcompliance = new ToolStripMenuItem();
             m_deedcompliance.Text = "&Deed Compliance";
             m_deedcompliance.ToolTipText = "Report on national and regional deed compliance";
             m_deedcompliance.Tag = "Report on national and regional deed compliance;";
@@ -738,6 +710,7 @@ namespace NZPostOffice.RDS.Menus
             // 
             // m_outstandingvalidationlist
             // 
+            m_outstandingvalidationlist = new ToolStripMenuItem();
             m_outstandingvalidationlist.Text = "&Outstanding Validation List";
             m_outstandingvalidationlist.ToolTipText = "Report on Outstanding Contract validations";
             m_outstandingvalidationlist.Tag = "Report on Outstanding Contract validations;";
@@ -747,9 +720,8 @@ namespace NZPostOffice.RDS.Menus
             // m_baseofficeoutlets
             // 
             m_baseofficeoutlets.Text = "Base Office Outlets";
-            m_baseofficeoutlets.Visible = false; //add
-            m_baseofficeoutlets.Enabled = false;  //add
-
+            m_baseofficeoutlets.Visible = false;
+            m_baseofficeoutlets.Enabled = false;
             m_baseofficeoutlets.ToolTipText = "Base Office Outlets by Region";
             m_baseofficeoutlets.Tag = "Base Office Outlet Report;";
             m_baseofficeoutlets.Click += new EventHandler(m_baseofficeoutlets_clicked);
@@ -758,8 +730,8 @@ namespace NZPostOffice.RDS.Menus
             // m_addresslabels
             // 
             m_addresslabels.Text = "Address Labels";
-            m_addresslabels.Visible = false; //add
-            m_addresslabels.Enabled = false;  //add
+            m_addresslabels.Visible = false;
+            m_addresslabels.Enabled = false;
 
             m_addresslabels.Tag = "ComponentName=Owner Drivers Label;ComponentName=Outlet Label;";
 
@@ -772,8 +744,8 @@ namespace NZPostOffice.RDS.Menus
             // m_wnerdriveraddress
             // 
             m_wnerdriveraddress.Text = "Owner Driver Address";
-            m_wnerdriveraddress.Visible = false; //add
-            m_wnerdriveraddress.Enabled = false;  //add
+            m_wnerdriveraddress.Visible = false;
+            m_wnerdriveraddress.Enabled = false;
 
             m_wnerdriveraddress.ToolTipText = "Owner driver address labels";
             m_wnerdriveraddress.Tag = "ComponentName=Owner Drivers Label;";
@@ -783,8 +755,8 @@ namespace NZPostOffice.RDS.Menus
             // m_outletaddress
             // 
             m_outletaddress.Text = "Outlet Address";
-            m_outletaddress.Visible = false; //add
-            m_outletaddress.Enabled = false;  //add
+            m_outletaddress.Visible = false;
+            m_outletaddress.Enabled = false;
 
             m_outletaddress.ToolTipText = "Outlet address labels";
             m_outletaddress.Tag = "ComponentName=Outlet Label;";
@@ -794,8 +766,8 @@ namespace NZPostOffice.RDS.Menus
             // m_customers1
             // 
             m_customers1.Text = "C&ustomers Listing";
-            m_customers1.Visible = false; //add
-            m_customers1.Enabled = false;  //add
+            m_customers1.Visible = false;
+            m_customers1.Enabled = false;
 
             m_customers1.Tag = "ComponentName=CC Occupations;ComponentName=CC Interests;ComponentName=CL Customer Count;ComponentName=CL No Commencement Date;ComponentName=CL Route Book;ComponentName=CL By Frequency;ComponentName=CL By Day of Week;";
 
@@ -823,7 +795,6 @@ namespace NZPostOffice.RDS.Menus
             m_customers1.DropDownItems.Add(m_customermailinglist);
             //m_customers1.DropDownItems.Add(m_unnumberedaddresses);
             //m_customers1.DropDownItems.Add(m_roadnames);
-
             
             // 
             // m_bydeliverydayofweek
@@ -851,15 +822,8 @@ namespace NZPostOffice.RDS.Menus
             m_routebook.Text = "Route Book";
             m_routebook.Visible = false; //add
             m_routebook.Enabled = false;  //add
-
             m_routebook.Tag = "ComponentName=CL Route Book;";
             m_routebook.Click += new EventHandler(m_routebook_clicked);
-
-            //// 
-            //// m_nocommencementdates
-            //// 
-            //m_nocommencementdates.Text = "&No Commencement Dates";
-            //m_nocommencementdates.Tag="ComponentName=Disabled;";
 
             // 
             // m_ustomercount
@@ -867,7 +831,6 @@ namespace NZPostOffice.RDS.Menus
             m_ustomercount.Text = "Kiwimail Count";
             m_ustomercount.Visible = false; //add
             m_ustomercount.Enabled = false;  //add
-
             m_ustomercount.Tag = "ComponentName=CL Customer Count;";
             m_ustomercount.Click += new EventHandler(m_ustomercount_clicked);
 
@@ -877,9 +840,7 @@ namespace NZPostOffice.RDS.Menus
             m_stomercategorystatistics.Text = "Customer Category &Statistics";
             m_stomercategorystatistics.Visible = false; //add
             m_stomercategorystatistics.Enabled = false;  //add
-
             m_stomercategorystatistics.Tag = "ComponentName=CC Occupations;ComponentName=CC Interests;";
-
             m_occupations = new ToolStripMenuItem();
             m_interests = new ToolStripMenuItem();
             m_stomercategorystatistics.DropDownItems.Add(m_occupations);
@@ -891,7 +852,6 @@ namespace NZPostOffice.RDS.Menus
             m_occupations.Text = "Occupations";
             m_occupations.Visible = false; //add
             m_occupations.Enabled = false;  //add
-
             m_occupations.Tag = "ComponentName=CC Occupations;";
             m_occupations.Click += new EventHandler(m_occupations_clicked);
 
@@ -901,7 +861,6 @@ namespace NZPostOffice.RDS.Menus
             m_interests.Text = "Interests";
             m_interests.Visible = false; //add
             m_interests.Enabled = false;  //add
-
             m_interests.Tag = "ComponentName=CC Interests;";
             m_interests.Click += new EventHandler(m_interests_clicked);
 
@@ -911,7 +870,6 @@ namespace NZPostOffice.RDS.Menus
             m_unoccupieddeliverypoints.Text = "Unoccupied Delivery &Points";
             m_unoccupieddeliverypoints.Visible = false; //add
             m_unoccupieddeliverypoints.Enabled = false;  //add
-
             m_unoccupieddeliverypoints.ToolTipText = "Unoccupied delivery points report";
             m_unoccupieddeliverypoints.Tag = "Unoccupied delivery points report;";
             m_unoccupieddeliverypoints.Click += new EventHandler(m_unoccupieddeliverypoints_clicked);
@@ -922,7 +880,6 @@ namespace NZPostOffice.RDS.Menus
             m_bycontracttown.Text = "by Contract or Town";
             m_bycontracttown.Visible = false; //add
             m_bycontracttown.Enabled = false;  //add
-
             m_bycontracttown.ToolTipText = "Customers by Contract or Town";
             m_bycontracttown.Tag = "Customers by Contract or Town;";
             m_bycontracttown.Click += new EventHandler(m_bycontracttown_clicked);
@@ -933,7 +890,6 @@ namespace NZPostOffice.RDS.Menus
             m_customermailinglist.Text = "Customer Mailing List";
             //m_customermailinglist.Visible = false; //add
             //m_customermailinglist.Enabled = false;  //add
-
             m_customermailinglist.ToolTipText = "Customer Mailing List search";
             m_customermailinglist.Tag = "Customer Mailing List search;";
             m_customermailinglist.Click += new EventHandler(m_customermailinglist_clicked);
@@ -944,7 +900,6 @@ namespace NZPostOffice.RDS.Menus
             m_unnumberedaddresses.Text = "Unnumbered &Addresses";
             m_unnumberedaddresses.Visible = false; //add
             m_unnumberedaddresses.Enabled = false;  //add
-
             m_unnumberedaddresses.ToolTipText = "Report on unnumbered addresses";
             m_unnumberedaddresses.Tag = "Report on unnumbered addresses;";
             m_unnumberedaddresses.Click += new EventHandler(m_unnumberedaddresses_clicked);
@@ -955,7 +910,6 @@ namespace NZPostOffice.RDS.Menus
             m_roadnames.Text = "Road &Names ";
             m_roadnames.Visible = false; //add
             m_roadnames.Enabled = false;  //add
-
             m_roadnames.ToolTipText = "Report to display road names.";
             m_roadnames.Tag = "Report to display road names.";
             m_roadnames.Click += new EventHandler(m_roadnames_clicked);
@@ -966,33 +920,27 @@ namespace NZPostOffice.RDS.Menus
             m_mailmerge.Text = "Mail Merge";
             m_mailmerge.Visible = false; //add
             m_mailmerge.Enabled = false;  //add
-
             m_mailmerge.Tag = "ComponentName=MM Customers;ComponentName=MM Owner Drivers;";
-
-            m_mmcustomers = new ToolStripMenuItem();
-            m_mmownerdrivers = new ToolStripMenuItem();
             m_mailmerge.DropDownItems.Add(m_mmcustomers);
             m_mailmerge.DropDownItems.Add(m_mmownerdrivers);
 
             // 
             // m_mmcustomers
             // 
-
-            //m_mmcustomers.Text = "Customers";
-            m_mmcustomers.Text = "Customer Mail Merge"; //chanage of 16/11/2007
+            m_mmcustomers = new ToolStripMenuItem();
+            m_mmcustomers.Text = "Customer Mail Merge";
             m_mmcustomers.Visible = false; //add
             m_mmcustomers.Enabled = false;  //add
-
             m_mmcustomers.Tag = "ComponentName=MM Customers;";
             m_mmcustomers.Click += new EventHandler(m_mmcustomers_clicked);
 
             // 
             // m_mmownerdrivers
             // 
+            m_mmownerdrivers = new ToolStripMenuItem();
             m_mmownerdrivers.Text = "Owner Drivers";
             m_mmownerdrivers.Visible = false; //add
             m_mmownerdrivers.Enabled = false;  //add
-
             m_mmownerdrivers.Tag = "ComponentName=MM Owner Drivers;";
             m_mmownerdrivers.Click += new EventHandler(m_mmownerdrivers_clicked);
 
@@ -1008,12 +956,11 @@ namespace NZPostOffice.RDS.Menus
             // 
             m_security = new ToolStripMenuItem();
             m_security.MergeAction = MergeAction.Replace;
-
             MenuStrip.Items.Add(m_security);
-
             m_security.Text = "Security";
             m_changepassword = new ToolStripMenuItem();
             m_security.DropDownItems.Add(m_changepassword);
+
             // 
             // m_changepassword
             // 
@@ -1456,7 +1403,7 @@ namespace NZPostOffice.RDS.Menus
             }
         }
 
-        public virtual void m_chedulea_ownerdriver_clicked(object sender, EventArgs e)
+        public virtual void m_schedulea_ownerdriver_clicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             StaticVariables.gnv_app.of_set_componenttoopen(StaticVariables.gnv_app.of_get_securitymanager().of_get_componentname(m_chedulea_ownerdriver.Tag.ToString()));
@@ -1468,12 +1415,14 @@ namespace NZPostOffice.RDS.Menus
 
         public virtual void m_scheduleb_payment_clicked(object sender, EventArgs e)
         {
+            // TJB  RPCR_057  Jan-2014
+            // Changed search module to ...WithMthYr
             Cursor.Current = Cursors.WaitCursor;
             StaticVariables.gnv_app.of_set_componenttoopen(StaticVariables.gnv_app.of_get_securitymanager().of_get_componentname(m_scheduleb_payment.Tag.ToString()));
-            //of_openwindow(m_scheduleb - payment.Text, "w_Generic_Report_Search", "r_scheduleb_single_contract");
             StaticVariables.gnv_app.of_get_parameters().stringparm = "r_scheduleb_single_contract";
             StaticMessage.StringParm = m_scheduleb_payment.Text;
-            OpenSheet<WGenericReportSearch>(StaticVariables.MainMDI);
+//            OpenSheet<WGenericReportSearch>(StaticVariables.MainMDI);
+            OpenSheet<WGenericReportSearchWithMthYr>(StaticVariables.MainMDI);
         }
 
         public virtual void m_contractsummarysheet_clicked(object sender, EventArgs e)
