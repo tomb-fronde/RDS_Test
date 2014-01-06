@@ -23,6 +23,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014
+    // Added bAllowAll parameter to wf_gosearch()
+
     public partial class WGenericReportSearch : WAncestorWindow
     {
         #region Define
@@ -307,7 +310,11 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             return 0;
         }
 
-        public virtual int wf_gosearch()
+        // TJB  RPCR_057  Jan-2014
+        // Added bAllowAll parameter
+        // - Make <All Contracts> in results optional
+        //   (set to false in WGenericReportSearchWithDate and ...WithMthYr)
+        public virtual int wf_gosearch(bool bAllowAll)
         {
             int? lRegionId;
             int? lOutletId;
@@ -329,7 +336,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 MessageBox.Show("Search Unsuccessful", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dw_criteria.Focus();
             }
-            else
+            else if (bAllowAll)
             {
                 dw_results.InsertItem<ReportGenericResults>(0);
                 lNull = null;
@@ -568,7 +575,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             {
                 return;
             }
-            wf_gosearch();
+            wf_gosearch(true);
         }
 
         public virtual void pb_open_clicked(object sender, EventArgs e)
