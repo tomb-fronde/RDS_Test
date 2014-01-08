@@ -9,6 +9,10 @@ using NZPostOffice.ODPS.Entity.OdpsInvoice;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 {
+    // TJB  RPCR_058  Jan-2014
+    // Fixed bug in DwInvoiceHeaderv5_RetrieveEnd for cp subreport (table8)
+    // (see designer)
+    //
     // TJB  RPCR_056  June-2013
     // Add info for Allowance Breakdown subreport (see designer code)
 

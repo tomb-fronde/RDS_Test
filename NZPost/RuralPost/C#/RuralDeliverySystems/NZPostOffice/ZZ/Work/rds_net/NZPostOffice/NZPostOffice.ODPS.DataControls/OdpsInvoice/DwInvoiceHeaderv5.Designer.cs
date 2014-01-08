@@ -5,6 +5,9 @@ using NZPostOffice.ODPS.Entity.OdpsInvoice;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
 {
+    // TJB  RPCR_058  Jan-2014
+    // Fixed bug in DwInvoiceHeaderv5_RetrieveEnd for cp subreport (table8)
+    //
     // TJB  RPCR_056  June-2013
     // Add info for Allowance Breakdown subreport (table12 and table12s)
 
@@ -148,7 +151,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
                         DataTable table7 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailkmDataSet(new Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailkm>(InvoiceDetailPaymentPrDetailkm.GetAllInvoiceDetailPaymentPrDetailkm(this.GetItem<InvoiceHeaderv5>(i).PaymentInvoiceId, this.GetItem<InvoiceHeaderv5>(i).ContractNo, this.GetItem<InvoiceHeaderv5>(i).ContractorContractorSupplierNo, this.StartDate, this.EndDate)));
                         table7S.Merge(table7);
 
-                        DataTable table8 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailcpDataSet(new Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailcp>(InvoiceDetailPaymentPrDetailcp.GetAllInvoiceDetailPaymentPrDetailcp(this.GetItem<InvoiceHeaderv5>(0).PaymentInvoiceId, this.GetItem<InvoiceHeaderv5>(i).ContractNo, this.GetItem<InvoiceHeaderv5>(i).ContractorContractorSupplierNo, this.StartDate, this.EndDate)));
+                        DataTable table8 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailcpDataSet(new Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailcp>(InvoiceDetailPaymentPrDetailcp.GetAllInvoiceDetailPaymentPrDetailcp(this.GetItem<InvoiceHeaderv5>(i).PaymentInvoiceId, this.GetItem<InvoiceHeaderv5>(i).ContractNo, this.GetItem<InvoiceHeaderv5>(i).ContractorContractorSupplierNo, this.StartDate, this.EndDate)));
                         table8S.Merge(table8);
 
                         DataTable table9 = new NZPostOffice.ODPS.DataControls.Report.InvoiceDetailPaymentPrDetailxpDataSet(new Metex.Core.EntityBindingList<InvoiceDetailPaymentPrDetailxp>(InvoiceDetailPaymentPrDetailxp.GetAllInvoiceDetailPaymentPrDetailxp(this.GetItem<InvoiceHeaderv5>(i).PaymentInvoiceId, this.GetItem<InvoiceHeaderv5>(i).ContractNo, this.GetItem<InvoiceHeaderv5>(i).ContractorContractorSupplierNo, this.StartDate, this.EndDate)));
