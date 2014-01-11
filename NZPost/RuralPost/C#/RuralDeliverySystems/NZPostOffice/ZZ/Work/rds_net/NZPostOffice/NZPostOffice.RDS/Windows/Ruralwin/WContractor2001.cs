@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NZPostOffice.RDS.Controls;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.DataControls.Ruraldw;
+using NZPostOffice.RDS.DataControls.Ruralwin;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.DataService;
 using NZPostOffice.RDS.Menus;
@@ -14,6 +15,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContractor2001 : WAncestorWindow
     {
+        // TJB  RPCR_060  Jan-2014
+        // Added tabpage_drivers and associated dw_drivers.
+        //
         // TJB  Dec-2013  RPCR057b (New AP file format)
         // Change 'DS Numbers" tab title to 'Supplier Numbers'
         // Add new supplier number to tab
@@ -23,16 +27,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         // Fix email address validation bug (of_validate)
 
         #region Define
+        public URdsDw dw_owner_driver;
+        public URdsDw dw_contract_types;
+        public URdsDw dw_contracts_held;
+        public URdsDw dw_ds_numbers;
+        public URdsDw dw_post_tax_deductions;
+        public URdsDw dw_procurement;
+        public URdsDw dw_drivers;
+
         public URdsDw idw_owner_driver;
-
         public URdsDw idw_contract_types;
-
         public URdsDw idw_contracts_held;
-
         public URdsDw idw_ds_number;
-
         public URdsDw idw_post_tax_deductions;
-
         public URdsDw idw_procurement;
 
         public WContractor2001 iw_Parent;
@@ -63,27 +70,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public TabPage tabpage_owner_driver;
 
-        public URdsDw dw_owner_driver;
-
         public TabPage tabpage_contract_types;
-
-        public URdsDw dw_contract_types;
 
         public TabPage tabpage_contracts_held;
 
-        public URdsDw dw_contracts_held;
-
         public TabPage tabpage_ds_numbers;
-
-        public URdsDw dw_ds_numbers;
 
         public TabPage tabpage_post_tax_deductions;
 
-        public URdsDw dw_post_tax_deductions;
-
         public TabPage tabpage_procurement;
 
-        public URdsDw dw_procurement;
+        public TabPage tabpage_drivers;
 
         #endregion
 
@@ -111,37 +108,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_procurement.DataObject = new DContractorProcurement();
             dw_procurement.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
+            dw_drivers.DataObject = new DContractorDriverHSInfo();
+            dw_drivers.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             dw_owner_driver.Constructor += new UserEventDelegate(dw_owner_driver_constructor);
             dw_owner_driver.URdsDwEditChanged += new EventDelegate(dw_owner_driver_editchanged);
             dw_owner_driver.PfcInsertRow += new UserEventDelegate(dw_owner_driver_pfc_insertrow);
             dw_owner_driver.PfcValidation += new UserEventDelegate1(dw_owner_driver_pfc_validation);
-
+            //((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
+            dw_owner_driver.GotFocus += new EventHandler(dw_owner_driver_getfocus);
+            dw_owner_driver.LostFocus += new EventHandler(dw_owner_driver_losefocus);
 
             dw_contract_types.Constructor += new UserEventDelegate(dw_contract_types_constructor);
             dw_contract_types.PfcValidation += new UserEventDelegate1(dw_contract_types_pfc_validation);
+            dw_contract_types.LostFocus += new EventHandler(dw_contract_types_losefocus);
 
             dw_contracts_held.Constructor += new UserEventDelegate(dw_contracts_held_constructor);
             ((DContractorsContracts)dw_contracts_held.DataObject).CellDoubleClick += new EventHandler(dw_contracts_held_doubleclicked);
+            dw_contracts_held.RowFocusChanged += new EventHandler(dw_contracts_held_rowfocuschanged);
 
             dw_ds_numbers.Constructor += new UserEventDelegate(dw_ds_numbers_constructor);
-            dw_ds_numbers.UpdateEnd += new UserEventDelegate(dw_ds_numbers_updateend);
             dw_ds_numbers.PfcPreUpdate += new UserEventDelegate1(dw_ds_numbers_ue_validate);
+            dw_ds_numbers.UpdateEnd += new UserEventDelegate(dw_ds_numbers_updateend);
 
             dw_post_tax_deductions.Constructor += new UserEventDelegate(dw_post_tax_deductions_constructor);
             ((DwAllPostTaxDeductions)dw_post_tax_deductions.DataObject).CellDoubleClick += new EventHandler(dw_post_tax_deductions_doubleclicked);
             dw_post_tax_deductions.PfcInsertRow = new UserEventDelegate(dw_post_tax_deductions_pfc_insertrow);
+            dw_post_tax_deductions.GotFocus += new EventHandler(dw_post_tax_deductions_getfocus);
+            dw_post_tax_deductions.RowFocusChanged += new EventHandler(dw_post_tax_deductions_rowfocuschanged);
 
             dw_procurement.Constructor += new UserEventDelegate(dw_procurement_constructor);
             dw_procurement.PfcPreUpdate += new UserEventDelegate1(dw_procurement_pfc_preupdate);
-
-            //((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
-            dw_contract_types.LostFocus += new EventHandler(dw_contract_types_losefocus);
-            dw_contracts_held.RowFocusChanged += new EventHandler(dw_contracts_held_rowfocuschanged);
-            dw_post_tax_deductions.GotFocus += new EventHandler(dw_post_tax_deductions_getfocus);
-            dw_post_tax_deductions.RowFocusChanged += new EventHandler(dw_post_tax_deductions_rowfocuschanged);
             dw_procurement.LostFocus += new EventHandler(dw_procurement_losefocus);
-            dw_owner_driver.GotFocus += new EventHandler(dw_owner_driver_getfocus);
-            dw_owner_driver.LostFocus += new EventHandler(dw_owner_driver_losefocus);
         }
 
         #region Form Design
@@ -158,27 +156,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "w_contractor2001";
+            this.Name = "WContractor2001";
             this.MaximizeBox = false;
             this.Location = new System.Drawing.Point(46, 55);
             this.Size = new System.Drawing.Size(599, 376);
             // 
             // st_label
             // 
-            st_label.Text = "w_contractor2001";
+            st_label.Text = "WContractor2001";
             st_label.Location = new System.Drawing.Point(8, 329);
             st_label.Size = new System.Drawing.Size(94, 15);
+
             // 
             // tab_contractor
             // 
             tabpage_owner_driver = new TabPage();
             tabpage_contract_types = new TabPage();
             tabpage_contracts_held = new TabPage();
-
             tabpage_ds_numbers = new TabPage();
             tabpage_post_tax_deductions = new TabPage();
             tabpage_procurement = new TabPage();
-
+            tabpage_drivers = new TabPage();
 
             tab_contractor.Controls.Add(tabpage_owner_driver);
             tab_contractor.Controls.Add(tabpage_contract_types);
@@ -186,7 +184,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             tab_contractor.Controls.Add(tabpage_ds_numbers);
             tab_contractor.Controls.Add(tabpage_post_tax_deductions);
             tab_contractor.Controls.Add(tabpage_procurement);
-            tab_contractor.SelectTab(0);//tab_contractor.selectedtab = 1;
+            tab_contractor.Controls.Add(tabpage_drivers);
+            tab_contractor.SelectTab(0);
             tab_contractor.Multiline = true;
             tab_contractor.BackColor = System.Drawing.Color.FromArgb(212, 208, 200);
             tab_contractor.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
@@ -196,11 +195,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             tab_contractor.Selecting +=new TabControlCancelEventHandler(tab_contractor_selectionchanging);
             tab_contractor.SelectedIndexChanged += new EventHandler(tab_contractor_selectionchanged);
             tab_contractor.GotFocus += new EventHandler(tab_contractor_getfocus);
+
             // 
             // tabpage_owner_driver
             // 
             dw_owner_driver = new URdsDw();
-            //!dw_owner_driver.DataObject = new DContractorFull();
             tabpage_owner_driver.Controls.Add(dw_owner_driver);
             tabpage_owner_driver.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_owner_driver.Text = "Owner Driver";
@@ -213,21 +212,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_owner_driver
             // 
-            //!dw_owner_driver.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dw_owner_driver.VerticalScroll.Visible = false;
             dw_owner_driver.TabIndex = 2;
             dw_owner_driver.Location = new System.Drawing.Point(3, 4);
             dw_owner_driver.Size = new System.Drawing.Size(521, 280);
             dw_owner_driver.Tag = "ComponentName=Owner Driver;";
-//!            dw_owner_driver.GotFocus += new EventHandler(dw_owner_driver_getfocus);
-//!            dw_owner_driver.LostFocus += new EventHandler(dw_owner_driver_losefocus);
-//!            ((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
 
             // 
             // tabpage_contract_types
             // 
             dw_contract_types = new URdsDw();
-            //!dw_contract_types.DataObject = new DTypesForContractor();
             tabpage_contract_types.Controls.Add(dw_contract_types);
             tabpage_contract_types.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_contract_types.Text = "Contract Types";
@@ -243,14 +237,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_contract_types.TabIndex = 2;
             dw_contract_types.Location = new System.Drawing.Point(5, 7);
             dw_contract_types.Size = new System.Drawing.Size(500, 260);
-            //!dw_contract_types.DataObject.BorderStyle = BorderStyle.Fixed3D;
-//!            dw_contract_types.LostFocus += new EventHandler(dw_contract_types_losefocus);            
 
             // 
             // tabpage_contracts_held
             // 
             dw_contracts_held = new URdsDw();
-            //!dw_contracts_held.DataObject = new DContractorsContracts();
             tabpage_contracts_held.Controls.Add(dw_contracts_held);
             tabpage_contracts_held.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_contracts_held.Text = "Contracts Held";
@@ -264,16 +255,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_contracts_held
             // 
             dw_contracts_held.TabIndex = 2;
-            //!dw_contracts_held.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_contracts_held.Location = new System.Drawing.Point(5, 7);
             dw_contracts_held.Size = new System.Drawing.Size(500, 260);
-//!            dw_contracts_held.RowFocusChanged += new EventHandler(dw_contracts_held_rowfocuschanged);            
 
             // 
             // tabpage_ds_numbers
             // 
             dw_ds_numbers = new URdsDw();
-            //!dw_ds_numbers.DataObject = new DContractorDs();
             tabpage_ds_numbers.Controls.Add(dw_ds_numbers);
             tabpage_ds_numbers.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_ds_numbers.Text = "Supplier Numbers";
@@ -282,12 +270,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             tabpage_ds_numbers.Top = 25;
             tabpage_ds_numbers.Left = 3;
             tabpage_ds_numbers.Tag = "ComponentName=DS Number;";
-
             // 
             // dw_ds_numbers
             // 
             dw_ds_numbers.TabIndex = 2;
-            //!dw_ds_numbers.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_ds_numbers.Location = new System.Drawing.Point(5, 7);
             dw_ds_numbers.Size = new System.Drawing.Size(500, 260);
             
@@ -295,7 +281,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_post_tax_deductions
             // 
             dw_post_tax_deductions = new URdsDw();
-            //!dw_post_tax_deductions.DataObject = new DwAllPostTaxDeductions();
             tabpage_post_tax_deductions.Controls.Add(dw_post_tax_deductions);
             tabpage_post_tax_deductions.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_post_tax_deductions.Text = "Post Tax Deductions";
@@ -309,17 +294,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // dw_post_tax_deductions
             // 
             dw_post_tax_deductions.TabIndex = 1;
-            //!dw_post_tax_deductions.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_post_tax_deductions.Location = new System.Drawing.Point(3, 5);
             dw_post_tax_deductions.Size = new System.Drawing.Size(530, 260);
-//!            dw_post_tax_deductions.GotFocus += new EventHandler(dw_post_tax_deductions_getfocus);
-//!            dw_post_tax_deductions.RowFocusChanged += new EventHandler(dw_post_tax_deductions_rowfocuschanged);
             
             // 
             // tabpage_procurement
             // 
             dw_procurement = new URdsDw();
-            //!dw_procurement.DataObject = new DContractorProcurement();
             tabpage_procurement.Controls.Add(dw_procurement);
             tabpage_procurement.ForeColor = System.Drawing.SystemColors.WindowText;
             tabpage_procurement.Text = "Procurement";
@@ -334,11 +315,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             dw_procurement.ib_Filter_ContractTypes = false;
             dw_procurement.TabIndex = 2;
-            //!dw_procurement.DataObject.BorderStyle = BorderStyle.Fixed3D;
             dw_procurement.Location = new System.Drawing.Point(5, 7);
             dw_procurement.Size = new System.Drawing.Size(500, 260);
-//!            dw_procurement.LostFocus += new EventHandler(dw_procurement_losefocus);
-            
+
+            // 
+            // tabpage_drivers
+            // 
+            dw_drivers = new URdsDw();
+            tabpage_drivers.Controls.Add(dw_drivers);
+            tabpage_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
+            tabpage_drivers.Text = "Drivers";
+            tabpage_drivers.BackColor = System.Drawing.SystemColors.ButtonFace;
+            tabpage_drivers.Top = 25;
+            tabpage_drivers.Left = 3;
+            tabpage_drivers.Size = new System.Drawing.Size(569, 299);
+            tabpage_drivers.Visible = false;
+            //tabpage_drivers.Tag = "ComponentName=driverss;";
+            // 
+            // dw_drivers
+            // 
+            dw_drivers.ib_Filter_ContractTypes = false;
+            dw_drivers.TabIndex = 2;
+            dw_drivers.Location = new System.Drawing.Point(5, 7);
+            dw_drivers.Size = new System.Drawing.Size(560, 260);
+
             this.ResumeLayout();
         }
 
@@ -1192,6 +1192,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_procurement.Retrieve(new object[] { ii_contractor });
                 }
             }
+            else if (str == "drivers")//(TestExpr == 7)
+            {
+                dw_drivers.URdsDw_GetFocus(null, null);
+                if (dw_drivers.RowCount == 0)
+                {
+                    dw_drivers.Retrieve(new object[] { ii_contractor });
+                }
+            }
             oldindex = this.tab_contractor.SelectedIndex;
         }
 
@@ -1210,20 +1218,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (ii_contractor == -(1))
             {
-                //!tab_contractor.SelectTab(oldindex);
                 MessageBox.Show("The current owner driver has to be saved " 
                                  + "before you can change tabs."
                                , "New Owner Driver"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                               , MessageBoxButtons.OK
+                               , MessageBoxIcon.Information);
                 e.Cancel = true;
-                return;//return 1;
+                return;
             }
             // Check for any changes to idw_owner_driver
-            if (idw_owner_driver.DataObject.DeletedCount > 0 || idw_owner_driver.ModifiedCount() > 0)
+            if (idw_owner_driver.DataObject.DeletedCount > 0 
+                || idw_owner_driver.ModifiedCount() > 0)
             {
                 ll_Ret = (MessageBox.Show("Do you want to update database?"
                                          , "Update"
-                                         , MessageBoxButtons.YesNo, MessageBoxIcon.Question) 
+                                         , MessageBoxButtons.YesNo
+                                         , MessageBoxIcon.Question) 
                           == DialogResult.Yes ? 1 : 2);
                 ll_Row = idw_owner_driver.GetRow();
                 if (ll_Ret == 1)
@@ -1239,17 +1249,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_owner_driver.Reset();
                 }
             }
-            //?idw_contract_types.AcceptText();
-            if (idw_contract_types.DataObject.DeletedCount > 0 || idw_contract_types.ModifiedCount() > 0)
+            if (idw_contract_types.DataObject.DeletedCount > 0 
+                || idw_contract_types.ModifiedCount() > 0)
             {
-                ll_Ret = (MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? 1 : 2);//ll_Ret = MessageBox("Update", "Do you want to update database?", question!, yesno!);
+                ll_Ret = (MessageBox.Show("Do you want to update database?"
+                                         , "Update"
+                                         , MessageBoxButtons.YesNo
+                                         , MessageBoxIcon.Question) 
+                              == DialogResult.Yes ? 1 : 2);
                 ll_Row = idw_contract_types.GetRow();
                 if (ll_Ret == 1)
                 {
                     ll_Ret = idw_contract_types.Save();
                     if (ll_Ret < 0)
                     {
-                        return;//return 1;
+                        return;
                     }
                 }
                 else
@@ -1257,10 +1271,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_contract_types.Reset();
                 }
             }
-            //?idw_contracts_held.AcceptText();
-            if (idw_contracts_held.DataObject.DeletedCount > 0 || idw_contracts_held.ModifiedCount() > 0)
+            if (idw_contracts_held.DataObject.DeletedCount > 0 
+                || idw_contracts_held.ModifiedCount() > 0)
             {
-                ll_Ret = (MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? 1 : 2);// ll_Ret = MessageBox("Update", "Do you want to update database?", question!, yesno!);
+                ll_Ret = (MessageBox.Show("Do you want to update database?"
+                                         , "Update"
+                                         , MessageBoxButtons.YesNo
+                                         , MessageBoxIcon.Question) 
+                               == DialogResult.Yes ? 1 : 2);
                 ll_Row = idw_contracts_held.GetRow();
                 if (ll_Ret == 1)
                 {
@@ -1275,10 +1293,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_contracts_held.Reset();
                 }
             }
-            //?idw_ds_number.AcceptText();
-            if (idw_ds_number.DataObject.DeletedCount > 0 || idw_ds_number.ModifiedCount() > 0)
+            if (idw_ds_number.DataObject.DeletedCount > 0 
+                || idw_ds_number.ModifiedCount() > 0)
             {
-                ll_Ret = (MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? 1 : 2);//ll_Ret = MessageBox("Update", "Do you want to update database?", question!, yesno!);
+                ll_Ret = (MessageBox.Show("Do you want to update database?"
+                                         , "Update"
+                                         , MessageBoxButtons.YesNo
+                                         , MessageBoxIcon.Question) 
+                              == DialogResult.Yes ? 1 : 2);
                 ll_Row = idw_ds_number.GetRow();
                 if (ll_Ret == 1)
                 {
@@ -1291,14 +1313,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 else
                 {
                     idw_ds_number.DataObject.Reset();
-
                 }
             }
-            //?idw_procurement.AcceptText();
-            if (idw_procurement.DataObject.DeletedCount > 0 || idw_procurement.ModifiedCount() > 0)
+            if (idw_procurement.DataObject.DeletedCount > 0 
+                || idw_procurement.ModifiedCount() > 0)
             {
                 ll_Row = idw_procurement.GetRow();
-                ll_Ret = (MessageBox.Show("Do you want to update database?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes ? 1 : 2);//ll_Ret = MessageBox("Update Procurement", "Do you want to update database?", question!, yesno!);
+                ll_Ret = (MessageBox.Show("Do you want to update database?"
+                                         , "Update"
+                                         , MessageBoxButtons.YesNo
+                                         , MessageBoxIcon.Question) 
+                               == DialogResult.Yes ? 1 : 2);
                 if (ll_Ret == 1)
                 {
                     ll_Ret = idw_procurement.Save();
