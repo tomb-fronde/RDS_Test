@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+    // Disable InserIntoRdsAudit and GetAkeyFromRdsAudit
+    //
     // TJB  23-Oct-2013  AP Export File Reformat
     // New: [_]GetMaxBatchNo
     // New: [_]UpdatePaymentBatchNo
@@ -452,17 +455,20 @@ namespace NZPostOffice.ODPS.DataService
             return obj;
         }
 
-        public static ODPSDataService InserIntoRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor, string ls_RunMSG)
-        {
-            ODPSDataService obj = Execute("_InserIntoRdsAudit", tStart, gs_UserID, lcontract, lcontractor, ls_RunMSG);
-            return obj;
-        }
-
-        public static ODPSDataService GetAkeyFromRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor)
-        {
-            ODPSDataService obj = Execute("_GetAkeyFromRdsAudit", tStart, gs_UserID, lcontract, lcontractor);
-            return obj;
-        }
+        // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+        // Disable InserIntoRdsAudit and GetAkeyFromRdsAudit
+        //
+//        public static ODPSDataService InserIntoRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor, string ls_RunMSG)
+//        {
+//            ODPSDataService obj = Execute("_InserIntoRdsAudit", tStart, gs_UserID, lcontract, lcontractor, ls_RunMSG);
+//            return obj;
+//        }
+//
+//        public static ODPSDataService GetAkeyFromRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor)
+//        {
+//            ODPSDataService obj = Execute("_GetAkeyFromRdsAudit", tStart, gs_UserID, lcontract, lcontractor);
+//            return obj;
+//        }
 
         /// <summary>
         /// select count(*) into :li_contract_types from rd.contract_type
@@ -1623,6 +1629,8 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+        // Disabled InserIntoRdsAudit and GetAkeyFromRdsAudit
         [ServerMethod]
         private void _InserIntoRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor, string ls_RunMSG)
         {
@@ -1657,6 +1665,8 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+        // Disabled InserIntoRdsAudit and GetAkeyFromRdsAudit
         [ServerMethod]
         private void _GetAkeyFromRdsAudit(DateTime? tStart, String gs_UserID, int? lcontract, int? lcontractor)
         {
