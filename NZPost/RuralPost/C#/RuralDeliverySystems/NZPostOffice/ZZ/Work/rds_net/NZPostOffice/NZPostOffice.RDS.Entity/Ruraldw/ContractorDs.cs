@@ -8,13 +8,20 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    // TJB  Dec-2013  AP export file format change
+    // TJB  AP export file format change  Dec-2013
     // Added supplier_no to retreived values
-    
+    //
+    // TJB  AP export file format change  Jan-2014: Bug fix
+    // Fixed bugs in update and delete functions.
+    // Fixed fetch function via modified sp_GetContractorDS()
+    // Added 2nd contractor_supplier_no to MapInfo for contractor_ds table
+    // 
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
     [MapInfo("contractor_supplier_no", "_contractor_supplier_no", "contractor")]
+    [MapInfo("contractor_supplier_no", "_contractor_no", "contractor_ds")]
     [MapInfo("cd_old_ds_no", "_cd_old_ds_no", "contractor_ds")]
     [MapInfo("supplier_no", "_supplier_no", "contractor")]
     [System.Serializable()]
@@ -24,6 +31,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #region Business Methods
         [DBField()]
         private int? _contractor_supplier_no;
+
+        [DBField()]
+        private int? _contractor_no;
 
         [DBField()]
         private string _cd_old_ds_no;
@@ -44,6 +54,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_contractor_supplier_no != value)
                 {
                     _contractor_supplier_no = value;
+                    _contractor_no = value;
                     PropertyHasChanged();
                 }
             }
@@ -123,6 +134,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         {
                             ContractorDs instance = new ContractorDs();
                             instance._contractor_supplier_no = GetValueFromReader<Int32?>(dr, 0);
+                            instance._contractor_no = GetValueFromReader<Int32?>(dr, 0);
                             instance._cd_old_ds_no = GetValueFromReader<String>(dr, 1);
                             instance._supplier_no = GetValueFromReader<String>(dr, 2);
                             instance.MarkOld();
@@ -153,26 +165,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         if (GenerateUpdateCommandText(cm, "contractor", ref pList))
                         {
                             cm.CommandText += " WHERE contractor.contractor_supplier_no = @contractor_supplier_no " 
-                                              + " AND contractor.supplier_no = @supplier_no";
+                           //                   + " AND contractor.supplier_no = @supplier_no"
+                                              ;
 
-                            pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
-                            pList.Add(cm, "supplier_no", GetInitialValue("_supplier_no"));
+                            pList.Add(cm, "contractor_supplier_no", _contractor_supplier_no);
+                            //pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
+                            //pList.Add(cm, "supplier_no", GetInitialValue("_supplier_no"));
+                            //pList.Add(cm, "supplier_no", _supplier_no);
 
                             DBHelper.ExecuteNonQuery(cm, pList);
                         }
 
-                    if (initial_cd_old_ds_no != _cd_old_ds_no)
+                    if (initial_cd_old_ds_no == null)
+                    {
+                        if (_cd_old_ds_no != null)
+                        {
+                            if (GenerateInsertCommandText(cm, "contractor_ds", pList))
+                            {
+                                DBHelper.ExecuteNonQuery(cm, pList);
+                            }
+                        }
+                    }
+                    else if (initial_cd_old_ds_no != _cd_old_ds_no)
+                    {
                         if (GenerateUpdateCommandText(cm, "contractor_ds", ref pList))
                         {
-                            cm.CommandText += " WHERE contractor_ds.contractor_supplier_no = @contractor_supplier_no " 
+                            cm.CommandText += " WHERE contractor_ds.contractor_supplier_no = @contractor_supplier_no "
                                               + " AND contractor_ds.cd_old_ds_no = @cd_old_ds_no";
 
-                            pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
+                            pList.Add(cm, "contractor_supplier_no", _contractor_supplier_no);
+                            //pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
                             pList.Add(cm, "cd_old_ds_no", GetInitialValue("_cd_old_ds_no"));
 
                             DBHelper.ExecuteNonQuery(cm, pList);
                         }
-
+                    }
                     // reinitialize original key/value list
                     StoreInitialValues();
                 }
@@ -210,12 +237,22 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     DbCommand cm = cn.CreateCommand();
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
+                    cm.CommandText = "DELETE FROM contractor_ds " 
+                                   + " WHERE contractor_ds.contractor_supplier_no = @contractor_supplier_no " 
+                    //               + "   AND  contractor_ds.cd_old_ds_no = @cd_old_ds_no"
+                                   ;
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
-                    pList.Add(cm, "cd_old_ds_no", GetInitialValue("_cd_old_ds_no"));
-                    cm.CommandText = "DELETE FROM contractor_ds WHERE " +
-                    "contractor_ds.contractor_supplier_no = @contractor_supplier_no and  contractor_ds.cd_old_ds_no = @cd_old_ds_no";
+                    pList.Add(cm, "contractor_supplier_no", _contractor_supplier_no);
+                    //pList.Add(cm, "contractor_supplier_no", GetInitialValue("_contractor_supplier_no"));
+                    //pList.Add(cm, "cd_old_ds_no", GetInitialValue("_cd_old_ds_no"));
                     DBHelper.ExecuteNonQuery(cm, pList);
+
+                    cm.CommandText = "UPDATE contractor "
+                                   + "   SET supplier_no = NULL "
+                                   + " WHERE contractor.contractor_supplier_no = @contractor_supplier_no "
+                                   ;
+                    DBHelper.ExecuteNonQuery(cm, pList);
+
                     tr.Commit();
                 }
             }
