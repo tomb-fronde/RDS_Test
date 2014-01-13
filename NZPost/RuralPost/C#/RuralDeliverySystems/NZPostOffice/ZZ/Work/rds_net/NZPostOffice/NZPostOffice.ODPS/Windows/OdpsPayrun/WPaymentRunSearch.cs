@@ -15,6 +15,9 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
+    // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+    // Disable calls to InserIntoRdsAudit and GetAkeyFromRdsAudit
+
     public partial class WPaymentRunSearch : WCriteriaSearch
     {
         //? public n_cst_selection inv_Selection;
@@ -409,34 +412,43 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 StaticMessage.PowerObject = this;
                 w_payment_run_results.ShowDialog();
                 StaticMessage.PowerObject = w_payment_run_results;
-                if (StaticMessage.DoubleParm != -(1))
+                // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+                // Disable calls to InserIntoRdsAudit and GetAkeyFromRdsAudit
+//                if (StaticMessage.DoubleParm != -(1))
+//                {
+//                    ls_RunMSG = "Successful payment run for " + dEnd.ToString() + " Start time: " + tStart.ToString() + " End time: " + System.DateTime.Now.ToString();
+//                    // INSERT INTO rd.rds_audit (  "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
+//                    // VALUES  ( null,:tStart,:gs_UserID,:lcontract,:lcontractor,:ls_RunMSG,null,null )
+//
+//                    //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
+//                    //COMMIT;
+//                    ODPSDataService dataservice1 = ODPSDataService.InserIntoRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor, ls_RunMSG);
+//                }
+//                else
+//                {
+//                    ls_RunMSG = "Unuccessful payment run for " + dEnd.ToString() + "  Reference#" + lRunResult.ToString();
+//                    //INSERT INTO rd.rds_audit( "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
+//                    // VALUES ( null, :tStart, :gs_UserID, :lcontract, :lcontractor, :ls_RunMSG , null, null );
+//
+//                    ODPSDataService dataservice2 = ODPSDataService.InserIntoRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor, ls_RunMSG);
+//
+//                    //select a_key into :ll_aKey from rd.rds_audit where a_datetime = :tstart and a_userid   = :gs_userID and a_contract = :lcontract and a_contractor = :lcontractor;
+//                    ODPSDataService dataservice3 = ODPSDataService.GetAkeyFromRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor);
+//                    ll_aKey = dataservice3.Ll_aKey;
+//                    MessageBox.Show("Payment Run Failed! - Ref# " + Convert.ToString(lRunResult) + "\r\r"
+//                                    + "rds_audit key " + Convert.ToString(ll_aKey)
+//                                    , this.Text
+//                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+//                }
+//                    MessageBox.Show("Payment Run Failed! - Ref# " + Convert.ToString(lRunResult) + "\r\r"
+//                                    + "rds_audit key " + Convert.ToString(ll_aKey)
+//                                    , this.Text
+//                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
+                // If payment run failed: tell user (removed reference to rds_audit)
+                if (StaticMessage.DoubleParm == -(1))
                 {
-                    ls_RunMSG = "Successful payment run for " + dEnd.ToString() + " Start time: " + tStart.ToString() + " End time: " + System.DateTime.Now.ToString();
-                    // INSERT INTO rd.rds_audit (  "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
-                    // VALUES  ( null,:tStart,:gs_UserID,:lcontract,:lcontractor,:ls_RunMSG,null,null )  ;
-
-                    //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
-                    //COMMIT;
-                    ODPSDataService dataservice1 = ODPSDataService.InserIntoRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor, ls_RunMSG);
-                }
-                else
-                {
-                    ls_RunMSG = "Unuccessful payment run for " + dEnd.ToString() + "  Reference#" + lRunResult.ToString();
-                    //INSERT INTO rd.rds_audit( "a_key", "a_datetime", "a_userid", "a_contract", "a_contractor", "a_comment", "a_oldvalue", "a_newvalue" )  
-                    // VALUES ( null, :tStart, :gs_UserID, :lcontract, :lcontractor, :ls_RunMSG , null, null );
-
-                    //  PBY 26/04/2002 added COMMIT to avoid table locking problem.
-                    //COMMIT;
-
-                    ODPSDataService dataservice2 = ODPSDataService.InserIntoRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor, ls_RunMSG);
-
-                    //select a_key into :ll_aKey from rd.rds_audit where a_datetime = :tstart and a_userid   = :gs_userID and a_contract = :lcontract and a_contractor = :lcontractor;
-                    ODPSDataService dataservice3 = ODPSDataService.GetAkeyFromRdsAudit(tStart, StaticVariables.LoginId, lcontract, lcontractor);
-                    ll_aKey = dataservice3.Ll_aKey;
-                    // 	messagebox ( parent.title,"Payment Run Failed! - Ref#"+lRunResult).ToString()
-                    // MessageBox(parent.Title, "Payment Run Failed!  - Ref# " + String(lRunResult) + "\r~rrds_audit key " + String(ll_aKey), exclamation!, ok!, 1);
-                    MessageBox.Show("Payment Run Failed! - Ref# " + Convert.ToString(lRunResult) + "\r\r"
-                                    + "rds_audit key " + Convert.ToString(ll_aKey)
+                    MessageBox.Show("Payment Run Failed! - Ref# " + Convert.ToString(lRunResult) + "\n"
                                     , this.Text
                                     , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
