@@ -1048,6 +1048,12 @@
     <Compile Include="Ruralmailmerge\DSelectProcurements.Designer.cs">
       <DependentUpon>DSelectProcurements.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruralrpt\DReportGenericCriteriaWithMthYr.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralrpt\DReportGenericCriteriaWithMthYr.Designer.cs">
+      <DependentUpon>DReportGenericCriteriaWithMthYr.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralrpt\DConCriteria.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2725,6 +2731,24 @@
     <Compile Include="Ruralwin2\DWhatifCalulator2005.Designer.cs">
       <DependentUpon>DWhatifCalulator2005.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruralwin\DDriverHSInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DDriverHSInfo.Designer.cs">
+      <DependentUpon>DDriverHSInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DDriverInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DDriverInfo.Designer.cs">
+      <DependentUpon>DDriverInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DContractorDriverHSInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DContractorDriverHSInfo.Designer.cs">
+      <DependentUpon>DContractorDriverHSInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralwin\DAddAllowance.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3269,6 +3293,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DContractFreightAllocations.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractorDs.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractorDs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractorFull.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractorFull.cs</DependentUpon>
@@ -3409,6 +3437,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DSelectProcurements.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralrpt\DReportGenericCriteriaWithMthYr.resx">
+      <DependentUpon>DReportGenericCriteriaWithMthYr.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralrpt\DCustCountcriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DCustCountcriteria.cs</DependentUpon>
@@ -3482,6 +3514,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DWhatifCalculatorReport2005.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DDriverHSInfo.resx">
+      <DependentUpon>DDriverHSInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DAddAllowance.resx">
       <DependentUpon>DAddAllowance.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3502,6 +3538,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DContractAllowancesV2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DContractorDriverHSInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractorDriverHSInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DCustomerInterests.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DCustomerInterests.cs</DependentUpon>
@@ -3509,6 +3549,10 @@
     <EmbeddedResource Include="Ruralwin\DCustomerOccupations.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DCustomerOccupations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DDriverInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DDriverInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DSearchAddressResultsV2b.resx">
       <SubType>Designer</SubType>
