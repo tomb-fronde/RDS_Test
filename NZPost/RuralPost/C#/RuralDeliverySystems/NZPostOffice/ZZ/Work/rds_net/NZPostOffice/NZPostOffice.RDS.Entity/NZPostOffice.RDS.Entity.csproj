@@ -63,6 +63,7 @@
     <Compile Include="Ruralmailmerge\MailmergeOdDownloadData.cs" />
     <Compile Include="Ruralmailmerge\MailmergeOwnerdriverDownloadSearch.cs" />
     <Compile Include="Ruralmailmerge\SelectProcurements.cs" />
+    <Compile Include="Ruralrpt\ReportGenericCriteriaWithMthYr.cs" />
     <Compile Include="Ruralrpt\RBenchmarkReportPiecerates.cs" />
     <Compile Include="Ruralrpt\RBenchmarkReport2010.cs" />
     <Compile Include="Ruralrpt\CustCountcriteria.cs" />
@@ -357,6 +358,9 @@
     <Compile Include="ruralwin\ContractAllowancesV2.cs" />
     <Compile Include="ruralwin\ContractMailtown.cs" />
     <Compile Include="ruralwin\ContractTown.cs" />
+    <Compile Include="ruralwin\ContractorDriverHSInfo.cs" />
+    <Compile Include="ruralwin\DriverInfo.cs" />
+    <Compile Include="ruralwin\DriverHSInfo.cs" />
     <Compile Include="ruralwin\DddwCustTitle1.cs" />
     <Compile Include="ruralwin\DddwContractMailtown.cs" />
     <Compile Include="ruralwin\DddwContractRd.cs" />
