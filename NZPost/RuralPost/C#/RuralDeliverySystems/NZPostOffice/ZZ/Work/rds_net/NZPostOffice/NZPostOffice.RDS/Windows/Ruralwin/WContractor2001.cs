@@ -5,6 +5,7 @@ using NZPostOffice.RDS.Controls;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.DataControls.Ruraldw;
 using NZPostOffice.RDS.DataControls.Ruralwin;
+using NZPostOffice.RDS.Entity.Ruralwin;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.DataService;
 using NZPostOffice.RDS.Menus;
@@ -82,6 +83,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public TabPage tabpage_drivers;
 
+        private Button cb_driverinfo;
+
         #endregion
 
         private delegate void delegateInvoke();
@@ -110,6 +113,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             dw_drivers.DataObject = new DContractorDriverHSInfo();
             dw_drivers.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            cb_driverinfo.Click += new System.EventHandler(cb_driverinfo_Click);
 
             dw_owner_driver.Constructor += new UserEventDelegate(dw_owner_driver_constructor);
             dw_owner_driver.URdsDwEditChanged += new EventDelegate(dw_owner_driver_editchanged);
@@ -150,196 +154,243 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.tab_contractor = new System.Windows.Forms.TabControl();
+            this.tabpage_owner_driver = new System.Windows.Forms.TabPage();
+            this.dw_owner_driver = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_contract_types = new System.Windows.Forms.TabPage();
+            this.dw_contract_types = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_contracts_held = new System.Windows.Forms.TabPage();
+            this.dw_contracts_held = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_ds_numbers = new System.Windows.Forms.TabPage();
+            this.dw_ds_numbers = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_post_tax_deductions = new System.Windows.Forms.TabPage();
+            this.dw_post_tax_deductions = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_procurement = new System.Windows.Forms.TabPage();
+            this.dw_procurement = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tabpage_drivers = new System.Windows.Forms.TabPage();
+            this.cb_driverinfo = new System.Windows.Forms.Button();
+            this.dw_drivers = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_contractor.SuspendLayout();
+            this.tabpage_owner_driver.SuspendLayout();
+            this.tabpage_contract_types.SuspendLayout();
+            this.tabpage_contracts_held.SuspendLayout();
+            this.tabpage_ds_numbers.SuspendLayout();
+            this.tabpage_post_tax_deductions.SuspendLayout();
+            this.tabpage_procurement.SuspendLayout();
+            this.tabpage_drivers.SuspendLayout();
             this.SuspendLayout();
-            this.tab_contractor = new TabControl();
-            Controls.Add(tab_contractor);
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "WContractor2001";
-            this.MaximizeBox = false;
-            this.Location = new System.Drawing.Point(46, 55);
-            this.Size = new System.Drawing.Size(599, 376);
             // 
             // st_label
             // 
-            st_label.Text = "WContractor2001";
-            st_label.Location = new System.Drawing.Point(8, 329);
-            st_label.Size = new System.Drawing.Size(94, 15);
-
+            this.st_label.Location = new System.Drawing.Point(8, 329);
+            this.st_label.Size = new System.Drawing.Size(94, 15);
+            this.st_label.Text = "WContractor2001";
             // 
             // tab_contractor
             // 
-            tabpage_owner_driver = new TabPage();
-            tabpage_contract_types = new TabPage();
-            tabpage_contracts_held = new TabPage();
-            tabpage_ds_numbers = new TabPage();
-            tabpage_post_tax_deductions = new TabPage();
-            tabpage_procurement = new TabPage();
-            tabpage_drivers = new TabPage();
-
-            tab_contractor.Controls.Add(tabpage_owner_driver);
-            tab_contractor.Controls.Add(tabpage_contract_types);
-            tab_contractor.Controls.Add(tabpage_contracts_held);
-            tab_contractor.Controls.Add(tabpage_ds_numbers);
-            tab_contractor.Controls.Add(tabpage_post_tax_deductions);
-            tab_contractor.Controls.Add(tabpage_procurement);
-            tab_contractor.Controls.Add(tabpage_drivers);
-            tab_contractor.SelectTab(0);
-            tab_contractor.Multiline = true;
-            tab_contractor.BackColor = System.Drawing.Color.FromArgb(212, 208, 200);
-            tab_contractor.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_contractor.TabIndex = 1;
-            tab_contractor.Size = new System.Drawing.Size(577, 328);
-            tab_contractor.Left = 8;
-            tab_contractor.Selecting +=new TabControlCancelEventHandler(tab_contractor_selectionchanging);
-            tab_contractor.SelectedIndexChanged += new EventHandler(tab_contractor_selectionchanged);
-            tab_contractor.GotFocus += new EventHandler(tab_contractor_getfocus);
-
+            this.tab_contractor.Controls.Add(this.tabpage_owner_driver);
+            this.tab_contractor.Controls.Add(this.tabpage_contract_types);
+            this.tab_contractor.Controls.Add(this.tabpage_contracts_held);
+            this.tab_contractor.Controls.Add(this.tabpage_ds_numbers);
+            this.tab_contractor.Controls.Add(this.tabpage_post_tax_deductions);
+            this.tab_contractor.Controls.Add(this.tabpage_procurement);
+            this.tab_contractor.Controls.Add(this.tabpage_drivers);
+            this.tab_contractor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_contractor.Location = new System.Drawing.Point(8, 0);
+            this.tab_contractor.Multiline = true;
+            this.tab_contractor.Name = "tab_contractor";
+            this.tab_contractor.SelectedIndex = 0;
+            this.tab_contractor.Size = new System.Drawing.Size(577, 328);
+            this.tab_contractor.TabIndex = 1;
+            this.tab_contractor.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tab_contractor_selectionchanging);
+            this.tab_contractor.GotFocus += new System.EventHandler(this.tab_contractor_getfocus);
+            this.tab_contractor.SelectedIndexChanged += new System.EventHandler(this.tab_contractor_selectionchanged);
             // 
             // tabpage_owner_driver
             // 
-            dw_owner_driver = new URdsDw();
-            tabpage_owner_driver.Controls.Add(dw_owner_driver);
-            tabpage_owner_driver.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_owner_driver.Text = "Owner Driver";
-            tabpage_owner_driver.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_owner_driver.Size = new System.Drawing.Size(569, 299);
-            tabpage_owner_driver.Top = 25;
-            tabpage_owner_driver.Left = 3;
-            tabpage_owner_driver.Visible = false;
-            tabpage_owner_driver.Tag = "ComponentName=Owner Driver;";
+            this.tabpage_owner_driver.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_owner_driver.Controls.Add(this.dw_owner_driver);
+            this.tabpage_owner_driver.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_owner_driver.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_owner_driver.Name = "tabpage_owner_driver";
+            this.tabpage_owner_driver.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_owner_driver.TabIndex = 0;
+            this.tabpage_owner_driver.Tag = "ComponentName=Owner Driver;";
+            this.tabpage_owner_driver.Text = "Owner Driver";
+            this.tabpage_owner_driver.Visible = false;
             // 
             // dw_owner_driver
             // 
-            dw_owner_driver.VerticalScroll.Visible = false;
-            dw_owner_driver.TabIndex = 2;
-            dw_owner_driver.Location = new System.Drawing.Point(3, 4);
-            dw_owner_driver.Size = new System.Drawing.Size(521, 280);
-            dw_owner_driver.Tag = "ComponentName=Owner Driver;";
-
+            this.dw_owner_driver.DataObject = null;
+            this.dw_owner_driver.FireConstructor = false;
+            this.dw_owner_driver.Location = new System.Drawing.Point(3, 4);
+            this.dw_owner_driver.Name = "dw_owner_driver";
+            this.dw_owner_driver.Size = new System.Drawing.Size(521, 280);
+            this.dw_owner_driver.TabIndex = 2;
+            this.dw_owner_driver.Tag = "ComponentName=Owner Driver;";
             // 
             // tabpage_contract_types
             // 
-            dw_contract_types = new URdsDw();
-            tabpage_contract_types.Controls.Add(dw_contract_types);
-            tabpage_contract_types.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_contract_types.Text = "Contract Types";
-            tabpage_contract_types.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_contract_types.Size = new System.Drawing.Size(569, 299);
-            tabpage_contract_types.Top = 25;
-            tabpage_contract_types.Left = 3;
-            tabpage_contract_types.Name = tabpage_contract_types.Text;
-            tabpage_contract_types.Tag = "ComponentName=OD Contract Type;";
+            this.tabpage_contract_types.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_contract_types.Controls.Add(this.dw_contract_types);
+            this.tabpage_contract_types.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_contract_types.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_contract_types.Name = this.tabpage_contract_types.Text;
+            this.tabpage_contract_types.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_contract_types.TabIndex = 1;
+            this.tabpage_contract_types.Tag = "ComponentName=OD Contract Type;";
+            this.tabpage_contract_types.Text = "Contract Types";
             // 
             // dw_contract_types
             // 
-            dw_contract_types.TabIndex = 2;
-            dw_contract_types.Location = new System.Drawing.Point(5, 7);
-            dw_contract_types.Size = new System.Drawing.Size(500, 260);
-
+            this.dw_contract_types.DataObject = null;
+            this.dw_contract_types.FireConstructor = false;
+            this.dw_contract_types.Location = new System.Drawing.Point(5, 7);
+            this.dw_contract_types.Name = "dw_contract_types";
+            this.dw_contract_types.Size = new System.Drawing.Size(500, 260);
+            this.dw_contract_types.TabIndex = 2;
             // 
             // tabpage_contracts_held
             // 
-            dw_contracts_held = new URdsDw();
-            tabpage_contracts_held.Controls.Add(dw_contracts_held);
-            tabpage_contracts_held.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_contracts_held.Text = "Contracts Held";
-            tabpage_contracts_held.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_contracts_held.Size = new System.Drawing.Size(569, 299);
-            tabpage_contracts_held.Top = 25;
-            tabpage_contracts_held.Left = 3;
-            tabpage_contracts_held.Visible = false;
-            tabpage_contracts_held.Tag = "ComponentName=Contracts Held;";
+            this.tabpage_contracts_held.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_contracts_held.Controls.Add(this.dw_contracts_held);
+            this.tabpage_contracts_held.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_contracts_held.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_contracts_held.Name = "tabpage_contracts_held";
+            this.tabpage_contracts_held.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_contracts_held.TabIndex = 2;
+            this.tabpage_contracts_held.Tag = "ComponentName=Contracts Held;";
+            this.tabpage_contracts_held.Text = "Contracts Held";
+            this.tabpage_contracts_held.Visible = false;
             // 
             // dw_contracts_held
             // 
-            dw_contracts_held.TabIndex = 2;
-            dw_contracts_held.Location = new System.Drawing.Point(5, 7);
-            dw_contracts_held.Size = new System.Drawing.Size(500, 260);
-
+            this.dw_contracts_held.DataObject = null;
+            this.dw_contracts_held.FireConstructor = false;
+            this.dw_contracts_held.Location = new System.Drawing.Point(5, 7);
+            this.dw_contracts_held.Name = "dw_contracts_held";
+            this.dw_contracts_held.Size = new System.Drawing.Size(500, 260);
+            this.dw_contracts_held.TabIndex = 2;
             // 
             // tabpage_ds_numbers
             // 
-            dw_ds_numbers = new URdsDw();
-            tabpage_ds_numbers.Controls.Add(dw_ds_numbers);
-            tabpage_ds_numbers.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_ds_numbers.Text = "Supplier Numbers";
-            tabpage_ds_numbers.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_ds_numbers.Size = new System.Drawing.Size(569, 299);
-            tabpage_ds_numbers.Top = 25;
-            tabpage_ds_numbers.Left = 3;
-            tabpage_ds_numbers.Tag = "ComponentName=DS Number;";
+            this.tabpage_ds_numbers.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_ds_numbers.Controls.Add(this.dw_ds_numbers);
+            this.tabpage_ds_numbers.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_ds_numbers.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_ds_numbers.Name = "tabpage_ds_numbers";
+            this.tabpage_ds_numbers.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_ds_numbers.TabIndex = 3;
+            this.tabpage_ds_numbers.Tag = "ComponentName=DS Number;";
+            this.tabpage_ds_numbers.Text = "Supplier Numbers";
             // 
             // dw_ds_numbers
             // 
-            dw_ds_numbers.TabIndex = 2;
-            dw_ds_numbers.Location = new System.Drawing.Point(5, 7);
-            dw_ds_numbers.Size = new System.Drawing.Size(500, 260);
-            
+            this.dw_ds_numbers.DataObject = null;
+            this.dw_ds_numbers.FireConstructor = false;
+            this.dw_ds_numbers.Location = new System.Drawing.Point(5, 7);
+            this.dw_ds_numbers.Name = "dw_ds_numbers";
+            this.dw_ds_numbers.Size = new System.Drawing.Size(500, 260);
+            this.dw_ds_numbers.TabIndex = 2;
             // 
             // tabpage_post_tax_deductions
             // 
-            dw_post_tax_deductions = new URdsDw();
-            tabpage_post_tax_deductions.Controls.Add(dw_post_tax_deductions);
-            tabpage_post_tax_deductions.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_post_tax_deductions.Text = "Post Tax Deductions";
-            tabpage_post_tax_deductions.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_post_tax_deductions.Size = new System.Drawing.Size(569, 299);
-            tabpage_post_tax_deductions.Top = 25;
-            tabpage_post_tax_deductions.Left = 3;
-            tabpage_post_tax_deductions.Visible = false;
-            tabpage_post_tax_deductions.Tag = "ComponentName=Post-Tax Deduction;";
+            this.tabpage_post_tax_deductions.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_post_tax_deductions.Controls.Add(this.dw_post_tax_deductions);
+            this.tabpage_post_tax_deductions.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_post_tax_deductions.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_post_tax_deductions.Name = "tabpage_post_tax_deductions";
+            this.tabpage_post_tax_deductions.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_post_tax_deductions.TabIndex = 4;
+            this.tabpage_post_tax_deductions.Tag = "ComponentName=Post-Tax Deduction;";
+            this.tabpage_post_tax_deductions.Text = "Post Tax Deductions";
+            this.tabpage_post_tax_deductions.Visible = false;
             // 
             // dw_post_tax_deductions
             // 
-            dw_post_tax_deductions.TabIndex = 1;
-            dw_post_tax_deductions.Location = new System.Drawing.Point(3, 5);
-            dw_post_tax_deductions.Size = new System.Drawing.Size(530, 260);
-            
+            this.dw_post_tax_deductions.DataObject = null;
+            this.dw_post_tax_deductions.FireConstructor = false;
+            this.dw_post_tax_deductions.Location = new System.Drawing.Point(3, 5);
+            this.dw_post_tax_deductions.Name = "dw_post_tax_deductions";
+            this.dw_post_tax_deductions.Size = new System.Drawing.Size(530, 260);
+            this.dw_post_tax_deductions.TabIndex = 1;
             // 
             // tabpage_procurement
             // 
-            dw_procurement = new URdsDw();
-            tabpage_procurement.Controls.Add(dw_procurement);
-            tabpage_procurement.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_procurement.Text = "Procurement";
-            tabpage_procurement.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_procurement.Top = 25;
-            tabpage_procurement.Left = 3;
-            tabpage_procurement.Size = new System.Drawing.Size(569, 299);
-            tabpage_procurement.Visible = false;
-            tabpage_procurement.Tag = "ComponentName=Procurements;";
+            this.tabpage_procurement.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_procurement.Controls.Add(this.dw_procurement);
+            this.tabpage_procurement.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_procurement.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_procurement.Name = "tabpage_procurement";
+            this.tabpage_procurement.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_procurement.TabIndex = 5;
+            this.tabpage_procurement.Tag = "ComponentName=Procurements;";
+            this.tabpage_procurement.Text = "Procurement";
+            this.tabpage_procurement.Visible = false;
             // 
             // dw_procurement
             // 
-            dw_procurement.ib_Filter_ContractTypes = false;
-            dw_procurement.TabIndex = 2;
-            dw_procurement.Location = new System.Drawing.Point(5, 7);
-            dw_procurement.Size = new System.Drawing.Size(500, 260);
-
+            this.dw_procurement.DataObject = null;
+            this.dw_procurement.FireConstructor = false;
+            this.dw_procurement.Location = new System.Drawing.Point(5, 7);
+            this.dw_procurement.Name = "dw_procurement";
+            this.dw_procurement.Size = new System.Drawing.Size(500, 260);
+            this.dw_procurement.TabIndex = 2;
             // 
             // tabpage_drivers
             // 
-            dw_drivers = new URdsDw();
-            tabpage_drivers.Controls.Add(dw_drivers);
-            tabpage_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_drivers.Text = "Drivers";
-            tabpage_drivers.BackColor = System.Drawing.SystemColors.ButtonFace;
-            tabpage_drivers.Top = 25;
-            tabpage_drivers.Left = 3;
-            tabpage_drivers.Size = new System.Drawing.Size(569, 299);
-            tabpage_drivers.Visible = false;
-            //tabpage_drivers.Tag = "ComponentName=driverss;";
+            this.tabpage_drivers.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tabpage_drivers.Controls.Add(this.cb_driverinfo);
+            this.tabpage_drivers.Controls.Add(this.dw_drivers);
+            this.tabpage_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_drivers.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_drivers.Name = "tabpage_drivers";
+            this.tabpage_drivers.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_drivers.TabIndex = 6;
+            this.tabpage_drivers.Text = "Drivers";
+            this.tabpage_drivers.Visible = false;
+            // 
+            // cb_driverinfo
+            // 
+            this.cb_driverinfo.Location = new System.Drawing.Point(459, 273);
+            this.cb_driverinfo.Name = "cb_driverinfo";
+            this.cb_driverinfo.Size = new System.Drawing.Size(75, 23);
+            this.cb_driverinfo.TabIndex = 0;
+            this.cb_driverinfo.Text = "View";
+            this.cb_driverinfo.UseVisualStyleBackColor = true;
+            this.cb_driverinfo.Visible = false;
             // 
             // dw_drivers
             // 
-            dw_drivers.ib_Filter_ContractTypes = false;
-            dw_drivers.TabIndex = 2;
-            dw_drivers.Location = new System.Drawing.Point(5, 7);
-            dw_drivers.Size = new System.Drawing.Size(560, 260);
+            this.dw_drivers.DataObject = null;
+            this.dw_drivers.FireConstructor = false;
+            this.dw_drivers.Location = new System.Drawing.Point(5, 7);
+            this.dw_drivers.Name = "dw_drivers";
+            this.dw_drivers.Size = new System.Drawing.Size(560, 260);
+            this.dw_drivers.TabIndex = 2;
+            // 
+            // WContractor2001
+            // 
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(593, 351);
+            this.Controls.Add(this.tab_contractor);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Location = new System.Drawing.Point(46, 55);
+            this.MaximizeBox = false;
+            this.Name = "WContractor2001";
+            this.Controls.SetChildIndex(this.tab_contractor, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_contractor.ResumeLayout(false);
+            this.tabpage_owner_driver.ResumeLayout(false);
+            this.tabpage_contract_types.ResumeLayout(false);
+            this.tabpage_contracts_held.ResumeLayout(false);
+            this.tabpage_ds_numbers.ResumeLayout(false);
+            this.tabpage_post_tax_deductions.ResumeLayout(false);
+            this.tabpage_procurement.ResumeLayout(false);
+            this.tabpage_drivers.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            this.ResumeLayout();
         }
 
         /// <summary>
@@ -1199,6 +1250,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     dw_drivers.Retrieve(new object[] { ii_contractor });
                 }
+                cb_driverinfo.Visible = true;
+                cb_driverinfo.Enabled = true;
             }
             oldindex = this.tab_contractor.SelectedIndex;
         }
@@ -1216,6 +1269,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 return;
             }
+
             if (ii_contractor == -(1))
             {
                 MessageBox.Show("The current owner driver has to be saved " 
@@ -1226,6 +1280,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 e.Cancel = true;
                 return;
             }
+
+            cb_driverinfo.Visible = false;
+            cb_driverinfo.Enabled = false;
+
             // Check for any changes to idw_owner_driver
             if (idw_owner_driver.DataObject.DeletedCount > 0 
                 || idw_owner_driver.ModifiedCount() > 0)
@@ -1617,5 +1675,50 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_procurement.AcceptText();
         }
         #endregion
+
+        private void cb_driverinfo_Click(object sender, EventArgs e)
+        {
+            WDriverInfoMaint wDriverInfo;
+            NCriteria lnv_Criteria;
+            NRdsMsg lnv_msg;
+            int nRow, nDriverNo;
+            string sWarning = "";
+
+            if (dw_drivers.RowCount < 1)
+            {
+                sWarning = "No drivers currently specified. \n"
+                               + "Please add a driver first.";
+                MessageBox.Show(sWarning, "Warning");
+                return;
+            }
+            if (((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows.Count < 1)
+            {
+                sWarning = "Please select a driver.      ";
+                MessageBox.Show(sWarning, "Warning");
+                return;
+            }
+            nRow = ((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows[0].Index;
+            nDriverNo = dw_drivers.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
+
+//            MessageBox.Show("cb_view Clicked \n\n"
+//                            + "nDriverNo = " + nDriverNo.ToString());
+
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Create criteria
+            lnv_Criteria = new NCriteria();
+            lnv_msg = new NRdsMsg();
+            lnv_Criteria.of_addcriteria("driver_no", nDriverNo);
+            lnv_msg.of_addcriteria(lnv_Criteria);
+            // Build title
+            //            string sTitle = "Driver: " + nDriverNo.ToString()+" Maintenance";
+            //            // Open contract window if contract with title=ls_title not open
+            //            if (!(StaticVariables.gnv_app.of_findwindow(ls_title, "w_contract2001") != null))
+            //            {
+            StaticMessage.PowerObjectParm = lnv_msg;
+            wDriverInfo = new WDriverInfoMaint();
+            wDriverInfo.MdiParent = StaticVariables.MainMDI;
+            wDriverInfo.Show();
+        }
     }
 }
