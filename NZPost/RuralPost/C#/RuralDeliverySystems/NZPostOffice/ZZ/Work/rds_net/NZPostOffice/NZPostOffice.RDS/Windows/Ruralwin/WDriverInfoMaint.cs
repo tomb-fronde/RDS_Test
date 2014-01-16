@@ -77,6 +77,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_driverhsinfo = new NZPostOffice.RDS.Controls.URdsDw();
             this.SuspendLayout();
             // 
+            // cb_close
+            // 
+            this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.cb_close.Location = new System.Drawing.Point(519, 346);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(75, 23);
+            this.cb_close.TabIndex = 30;
+            this.cb_close.Text = "Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
+            // 
             // dw_driverinfo
             // 
             this.dw_driverinfo.BackColor = System.Drawing.Color.White;
@@ -84,50 +94,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_driverinfo.FireConstructor = false;
             this.dw_driverinfo.Location = new System.Drawing.Point(19, 40);
             this.dw_driverinfo.Name = "dw_driverinfo";
-            this.dw_driverinfo.Size = new System.Drawing.Size(449, 68);
+            this.dw_driverinfo.Size = new System.Drawing.Size(574, 70);
             this.dw_driverinfo.TabIndex = 2;
-            // 
-            // dw_driverhsinfo
-            // 
-            this.dw_driverhsinfo.BackColor = System.Drawing.Color.White;
-            this.dw_driverhsinfo.DataObject = null;
-            this.dw_driverhsinfo.FireConstructor = false;
-            this.dw_driverhsinfo.Location = new System.Drawing.Point(16, 140);
-            this.dw_driverhsinfo.Name = "dw_driverhsinfo";
-            this.dw_driverhsinfo.Size = new System.Drawing.Size(449, 124);
-            this.dw_driverhsinfo.TabIndex = 33;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Enabled = false;
-            this.label1.Location = new System.Drawing.Point(15, 294);
+            this.label1.Location = new System.Drawing.Point(15, 356);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "WDriverInfoMaint";
             // 
-            // driverinfo_t
-            // 
-            this.driverinfo_t.AutoSize = true;
-            this.driverinfo_t.Location = new System.Drawing.Point(16, 24);
-            this.driverinfo_t.Name = "driverinfo_t";
-            this.driverinfo_t.Size = new System.Drawing.Size(56, 13);
-            this.driverinfo_t.TabIndex = 31;
-            this.driverinfo_t.Text = "Driver Info";
-            // 
-            // hsinfo_t
-            // 
-            this.hsinfo_t.AutoSize = true;
-            this.hsinfo_t.Location = new System.Drawing.Point(13, 123);
-            this.hsinfo_t.Name = "hsinfo_t";
-            this.hsinfo_t.Size = new System.Drawing.Size(101, 13);
-            this.hsinfo_t.TabIndex = 32;
-            this.hsinfo_t.Text = "Health && Safety Info";
-            // 
             // cb_save
             // 
-            this.cb_save.Location = new System.Drawing.Point(315, 284);
+            this.cb_save.Location = new System.Drawing.Point(436, 346);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 25;
@@ -135,21 +117,42 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_save.UseVisualStyleBackColor = true;
             this.cb_save.Click += new System.EventHandler(this.cb_save_Click);
             // 
-            // cb_close
+            // driverinfo_t
             // 
-            this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.cb_close.Location = new System.Drawing.Point(398, 284);
-            this.cb_close.Name = "cb_close";
-            this.cb_close.Size = new System.Drawing.Size(75, 23);
-            this.cb_close.TabIndex = 30;
-            this.cb_close.Text = "Close";
-            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
+            this.driverinfo_t.AutoSize = true;
+            this.driverinfo_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.driverinfo_t.Location = new System.Drawing.Point(16, 24);
+            this.driverinfo_t.Name = "driverinfo_t";
+            this.driverinfo_t.Size = new System.Drawing.Size(67, 13);
+            this.driverinfo_t.TabIndex = 31;
+            this.driverinfo_t.Text = "Driver Info";
+            // 
+            // hsinfo_t
+            // 
+            this.hsinfo_t.AutoSize = true;
+            this.hsinfo_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hsinfo_t.Location = new System.Drawing.Point(13, 122);
+            this.hsinfo_t.Name = "hsinfo_t";
+            this.hsinfo_t.Size = new System.Drawing.Size(121, 13);
+            this.hsinfo_t.TabIndex = 32;
+            this.hsinfo_t.Text = "Health && Safety Info";
+            // 
+            // dw_driverhsinfo
+            // 
+            this.dw_driverhsinfo.AutoScroll = true;
+            this.dw_driverhsinfo.BackColor = System.Drawing.Color.White;
+            this.dw_driverhsinfo.DataObject = null;
+            this.dw_driverhsinfo.FireConstructor = false;
+            this.dw_driverhsinfo.Location = new System.Drawing.Point(16, 139);
+            this.dw_driverhsinfo.Name = "dw_driverhsinfo";
+            this.dw_driverhsinfo.Size = new System.Drawing.Size(577, 201);
+            this.dw_driverhsinfo.TabIndex = 33;
             // 
             // WDriverInfoMaint
             // 
             this.AcceptButton = this.cb_close;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(480, 313);
+            this.ClientSize = new System.Drawing.Size(605, 374);
             this.Controls.Add(this.dw_driverhsinfo);
             this.Controls.Add(this.hsinfo_t);
             this.Controls.Add(this.driverinfo_t);
@@ -209,12 +212,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #region Methods
+        bool inAdminGroup;
+        int nDriverNo;
+        
+        public override void pfc_postopen()
+        {
+            base.pfc_postopen();
+
+            NRdsMsg lnv_msg;
+            NCriteria lvNCriteria;
+
+            inAdminGroup = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_ismember("System Administrators");
+
+            lnv_msg = StaticMessage.PowerObjectParm as NRdsMsg;
+            lvNCriteria = lnv_msg.of_getcriteria();
+            nDriverNo = System.Convert.ToInt32(lvNCriteria.of_getcriteria("driver_no"));
+
+            dw_driverinfo.Retrieve(new object[] { nDriverNo });
+            int nDriverinfoRows = dw_driverinfo.RowCount;
+            dw_driverhsinfo.Retrieve(new object[] { nDriverNo });
+            int nDriverhsinfoRows = dw_driverhsinfo.RowCount;
+
+//            MessageBox.Show("DriverInfo rowcount = " + nDriverinfoRows.ToString() + "\n"
+//                           + "DriverHSInfo rowcount = " + nDriverhsinfoRows.ToString() + "\n");
+        }
+
         #endregion
 
         #region Events
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
-            MessageBox.Show("Cb_save Clicked\n", "cb_save_clicked");
+            //MessageBox.Show("Close Clicked\n", "cb_save_clicked");
             Close();
         }
 
@@ -232,7 +260,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void cb_save_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Cb_save Clicked\n", "cb_save_clicked");
+            MessageBox.Show("Save Clicked\n", "cb_save_clicked");
         }
     }
 }
