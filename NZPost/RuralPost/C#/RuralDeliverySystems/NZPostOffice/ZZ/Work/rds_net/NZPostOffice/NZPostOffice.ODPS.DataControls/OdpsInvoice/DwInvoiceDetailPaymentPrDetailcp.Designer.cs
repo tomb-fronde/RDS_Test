@@ -84,7 +84,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsInvoice
             this.grid.DataSource = this.bindingSource;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 23);
-            this.grid.MultiSelect = false;
+            this.grid.MultiSelect = true;
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
