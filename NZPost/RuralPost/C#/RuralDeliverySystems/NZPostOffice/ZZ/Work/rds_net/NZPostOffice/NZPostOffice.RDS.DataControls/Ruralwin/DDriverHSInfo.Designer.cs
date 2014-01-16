@@ -24,14 +24,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
             base.Dispose(disposing);
         }
-        private System.Windows.Forms.Label first_names_t;
-        private System.Windows.Forms.Label phone_day_t;
-        private System.Windows.Forms.Label phone_night_t;
-        private System.Windows.Forms.Label mobile_t;
-        private System.Windows.Forms.TextBox first_names;
-        private System.Windows.Forms.TextBox phone_day;
-        private System.Windows.Forms.TextBox phone_night;
-        private System.Windows.Forms.TextBox mobile;
 
         #region Component Designer generated code
         /// <summary> 
@@ -41,136 +33,93 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         private void InitializeComponent()
 		{
-            this.first_names_t = new System.Windows.Forms.Label();
-            this.phone_day_t = new System.Windows.Forms.Label();
-            this.first_names = new System.Windows.Forms.TextBox();
-            this.phone_day = new System.Windows.Forms.TextBox();
-            this.phone_night = new System.Windows.Forms.TextBox();
-            this.phone_night_t = new System.Windows.Forms.Label();
-            this.mobile_t = new System.Windows.Forms.Label();
-            this.mobile = new System.Windows.Forms.TextBox();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.hstNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiDateCheckedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiPassfailIndDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiNotesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.DriverHSInfo);
             // 
-            // first_names_t
+            // dataGridView1
             // 
-            this.first_names_t.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.first_names_t.Font = new System.Drawing.Font("Arial", 8F);
-            this.first_names_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.first_names_t.Location = new System.Drawing.Point(5, 9);
-            this.first_names_t.Name = "first_names_t";
-            this.first_names_t.Size = new System.Drawing.Size(73, 14);
-            this.first_names_t.TabIndex = 1;
-            this.first_names_t.Text = "Check Type";
-            this.first_names_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.hstNameDataGridViewTextBoxColumn,
+            this.hsiDateCheckedDataGridViewTextBoxColumn,
+            this.hsiPassfailIndDataGridViewTextBoxColumn,
+            this.hsiNotesDataGridViewTextBoxColumn});
+            this.dataGridView1.DataSource = this.bindingSource;
+            this.dataGridView1.Location = new System.Drawing.Point(8, 3);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 44;
+            this.dataGridView1.Size = new System.Drawing.Size(547, 252);
+            this.dataGridView1.TabIndex = 55;
             // 
-            // phone_day_t
+            // hstNameDataGridViewTextBoxColumn
             // 
-            this.phone_day_t.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.phone_day_t.Font = new System.Drawing.Font("Arial", 8F);
-            this.phone_day_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_day_t.Location = new System.Drawing.Point(209, 12);
-            this.phone_day_t.Name = "phone_day_t";
-            this.phone_day_t.Size = new System.Drawing.Size(73, 14);
-            this.phone_day_t.TabIndex = 3;
-            this.phone_day_t.Text = "Last Checked";
-            this.phone_day_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.hstNameDataGridViewTextBoxColumn.DataPropertyName = "HstName";
+            this.hstNameDataGridViewTextBoxColumn.HeaderText = "Check Type";
+            this.hstNameDataGridViewTextBoxColumn.Name = "hstNameDataGridViewTextBoxColumn";
+            this.hstNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.hstNameDataGridViewTextBoxColumn.Width = 144;
             // 
-            // first_names
+            // hsiDateCheckedDataGridViewTextBoxColumn
             // 
-            this.first_names.BackColor = System.Drawing.Color.White;
-            this.first_names.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "HstName", true));
-            this.first_names.Font = new System.Drawing.Font("Arial", 8F);
-            this.first_names.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.first_names.Location = new System.Drawing.Point(86, 9);
-            this.first_names.MaxLength = 30;
-            this.first_names.Name = "first_names";
-            this.first_names.Size = new System.Drawing.Size(114, 20);
-            this.first_names.TabIndex = 50;
+            this.hsiDateCheckedDataGridViewTextBoxColumn.DataPropertyName = "HsiDateChecked";
+            this.hsiDateCheckedDataGridViewTextBoxColumn.HeaderText = "Date Checked";
+            this.hsiDateCheckedDataGridViewTextBoxColumn.Name = "hsiDateCheckedDataGridViewTextBoxColumn";
             // 
-            // phone_day
+            // hsiPassfailIndDataGridViewTextBoxColumn
             // 
-            this.phone_day.BackColor = System.Drawing.Color.White;
-            this.phone_day.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "HsiDateChecked", true));
-            this.phone_day.Font = new System.Drawing.Font("Arial", 8F);
-            this.phone_day.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_day.Location = new System.Drawing.Point(285, 7);
-            this.phone_day.MaxLength = 0;
-            this.phone_day.Name = "phone_day";
-            this.phone_day.Size = new System.Drawing.Size(114, 20);
-            this.phone_day.TabIndex = 10;
+            this.hsiPassfailIndDataGridViewTextBoxColumn.DataPropertyName = "HsiPassfailInd";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.hsiPassfailIndDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            this.hsiPassfailIndDataGridViewTextBoxColumn.HeaderText = "P/F";
+            this.hsiPassfailIndDataGridViewTextBoxColumn.Name = "hsiPassfailIndDataGridViewTextBoxColumn";
+            this.hsiPassfailIndDataGridViewTextBoxColumn.Width = 40;
             // 
-            // phone_night
+            // hsiNotesDataGridViewTextBoxColumn
             // 
-            this.phone_night.BackColor = System.Drawing.Color.White;
-            this.phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "HsiPassfailInd", true));
-            this.phone_night.Font = new System.Drawing.Font("Arial", 8F);
-            this.phone_night.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_night.Location = new System.Drawing.Point(462, 7);
-            this.phone_night.MaxLength = 0;
-            this.phone_night.Name = "phone_night";
-            this.phone_night.ReadOnly = true;
-            this.phone_night.Size = new System.Drawing.Size(34, 20);
-            this.phone_night.TabIndex = 51;
-            // 
-            // phone_night_t
-            // 
-            this.phone_night_t.AutoSize = true;
-            this.phone_night_t.Location = new System.Drawing.Point(405, 11);
-            this.phone_night_t.Name = "phone_night_t";
-            this.phone_night_t.Size = new System.Drawing.Size(51, 13);
-            this.phone_night_t.TabIndex = 52;
-            this.phone_night_t.Text = "Pass/Fail";
-            // 
-            // mobile_t
-            // 
-            this.mobile_t.AutoSize = true;
-            this.mobile_t.Location = new System.Drawing.Point(43, 37);
-            this.mobile_t.Name = "mobile_t";
-            this.mobile_t.Size = new System.Drawing.Size(35, 13);
-            this.mobile_t.TabIndex = 53;
-            this.mobile_t.Text = "Notes";
-            this.mobile_t.UseWaitCursor = true;
-            // 
-            // mobile
-            // 
-            this.mobile.AcceptsReturn = true;
-            this.mobile.BackColor = System.Drawing.Color.White;
-            this.mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "HsiNotes", true));
-            this.mobile.Font = new System.Drawing.Font("Arial", 8F);
-            this.mobile.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.mobile.Location = new System.Drawing.Point(86, 33);
-            this.mobile.MaxLength = 0;
-            this.mobile.Multiline = true;
-            this.mobile.Name = "mobile";
-            this.mobile.Size = new System.Drawing.Size(410, 67);
-            this.mobile.TabIndex = 54;
+            this.hsiNotesDataGridViewTextBoxColumn.DataPropertyName = "HsiNotes";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.hsiNotesDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.hsiNotesDataGridViewTextBoxColumn.HeaderText = "Notes";
+            this.hsiNotesDataGridViewTextBoxColumn.MinimumWidth = 260;
+            this.hsiNotesDataGridViewTextBoxColumn.Name = "hsiNotesDataGridViewTextBoxColumn";
+            this.hsiNotesDataGridViewTextBoxColumn.Width = 260;
             // 
             // DDriverHSInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(this.mobile);
-            this.Controls.Add(this.mobile_t);
-            this.Controls.Add(this.phone_night_t);
-            this.Controls.Add(this.first_names_t);
-            this.Controls.Add(this.phone_day_t);
-            this.Controls.Add(this.first_names);
-            this.Controls.Add(this.phone_day);
-            this.Controls.Add(this.phone_night);
+            this.Controls.Add(this.dataGridView1);
             this.Name = "DDriverHSInfo";
-            this.Size = new System.Drawing.Size(574, 110);
+            this.Size = new System.Drawing.Size(574, 265);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
         #endregion
+
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn hstNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn hsiDateCheckedDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn hsiPassfailIndDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn hsiNotesDataGridViewTextBoxColumn;
 
 
     }

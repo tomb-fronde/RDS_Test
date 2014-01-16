@@ -70,7 +70,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.title_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.title_t.Font = new System.Drawing.Font("Arial", 8F);
             this.title_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.title_t.Location = new System.Drawing.Point(50, 28);
+            this.title_t.Location = new System.Drawing.Point(19, 2);
             this.title_t.Name = "title_t";
             this.title_t.Size = new System.Drawing.Size(59, 14);
             this.title_t.TabIndex = 0;
@@ -82,7 +82,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.first_names_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.first_names_t.Font = new System.Drawing.Font("Arial", 8F);
             this.first_names_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.first_names_t.Location = new System.Drawing.Point(115, 28);
+            this.first_names_t.Location = new System.Drawing.Point(84, 2);
             this.first_names_t.Name = "first_names_t";
             this.first_names_t.Size = new System.Drawing.Size(95, 14);
             this.first_names_t.TabIndex = 1;
@@ -94,7 +94,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.surname_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.surname_t.Font = new System.Drawing.Font("Arial", 8F);
             this.surname_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.surname_t.Location = new System.Drawing.Point(351, 28);
+            this.surname_t.Location = new System.Drawing.Point(320, 2);
             this.surname_t.Name = "surname_t";
             this.surname_t.Size = new System.Drawing.Size(96, 14);
             this.surname_t.TabIndex = 2;
@@ -106,9 +106,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.phone_day_t.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.phone_day_t.Font = new System.Drawing.Font("Arial", 8F);
             this.phone_day_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_day_t.Location = new System.Drawing.Point(36, 80);
+            this.phone_day_t.Location = new System.Drawing.Point(3, 54);
             this.phone_day_t.Name = "phone_day_t";
-            this.phone_day_t.Size = new System.Drawing.Size(73, 14);
+            this.phone_day_t.Size = new System.Drawing.Size(75, 14);
             this.phone_day_t.TabIndex = 3;
             this.phone_day_t.Text = "Phone - day";
             this.phone_day_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -119,7 +119,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.title.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DTitle", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.title.Font = new System.Drawing.Font("Arial", 8F);
             this.title.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.title.Location = new System.Drawing.Point(50, 45);
+            this.title.Location = new System.Drawing.Point(19, 19);
             this.title.MaxLength = 0;
             this.title.Name = "title";
             this.title.ReadOnly = true;
@@ -132,7 +132,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.first_names.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DFirstNames", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.first_names.Font = new System.Drawing.Font("Arial", 8F);
             this.first_names.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.first_names.Location = new System.Drawing.Point(115, 45);
+            this.first_names.Location = new System.Drawing.Point(84, 19);
             this.first_names.MaxLength = 30;
             this.first_names.Name = "first_names";
             this.first_names.Size = new System.Drawing.Size(230, 20);
@@ -144,10 +144,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.surname.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DSurname", true));
             this.surname.Font = new System.Drawing.Font("Arial", 8F);
             this.surname.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.surname.Location = new System.Drawing.Point(351, 45);
+            this.surname.Location = new System.Drawing.Point(320, 19);
             this.surname.MaxLength = 45;
             this.surname.Name = "surname";
-            this.surname.Size = new System.Drawing.Size(230, 20);
+            this.surname.Size = new System.Drawing.Size(252, 20);
             this.surname.TabIndex = 40;
             // 
             // phone_day
@@ -156,7 +156,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.phone_day.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DPhoneDay", true));
             this.phone_day.Font = new System.Drawing.Font("Arial", 8F);
             this.phone_day.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_day.Location = new System.Drawing.Point(115, 75);
+            this.phone_day.Location = new System.Drawing.Point(84, 49);
             this.phone_day.MaxLength = 0;
             this.phone_day.Name = "phone_day";
             this.phone_day.Size = new System.Drawing.Size(114, 20);
@@ -168,7 +168,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.phone_night.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DPhoneNight", true));
             this.phone_night.Font = new System.Drawing.Font("Arial", 8F);
             this.phone_night.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.phone_night.Location = new System.Drawing.Point(311, 73);
+            this.phone_night.Location = new System.Drawing.Point(280, 47);
             this.phone_night.MaxLength = 0;
             this.phone_night.Name = "phone_night";
             this.phone_night.ReadOnly = true;
@@ -178,7 +178,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // phone_night_t
             // 
             this.phone_night_t.AutoSize = true;
-            this.phone_night_t.Location = new System.Drawing.Point(235, 78);
+            this.phone_night_t.Location = new System.Drawing.Point(204, 52);
             this.phone_night_t.Name = "phone_night_t";
             this.phone_night_t.Size = new System.Drawing.Size(70, 13);
             this.phone_night_t.TabIndex = 52;
@@ -187,7 +187,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // mobile_t
             // 
             this.mobile_t.AutoSize = true;
-            this.mobile_t.Location = new System.Drawing.Point(69, 110);
+            this.mobile_t.Location = new System.Drawing.Point(412, 50);
             this.mobile_t.Name = "mobile_t";
             this.mobile_t.Size = new System.Drawing.Size(38, 13);
             this.mobile_t.TabIndex = 53;
@@ -200,7 +200,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.mobile.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "DMobile", true));
             this.mobile.Font = new System.Drawing.Font("Arial", 8F);
             this.mobile.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.mobile.Location = new System.Drawing.Point(115, 107);
+            this.mobile.Location = new System.Drawing.Point(458, 47);
             this.mobile.MaxLength = 0;
             this.mobile.Name = "mobile";
             this.mobile.Size = new System.Drawing.Size(114, 20);
@@ -224,7 +224,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.Controls.Add(this.phone_day);
             this.Controls.Add(this.phone_night);
             this.Name = "DDriverInfo";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(650, 79);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
