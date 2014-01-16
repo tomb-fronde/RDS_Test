@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.10.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.11.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -130,6 +130,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralrpt\WGenericReportSearchWithMthYr.resx">
+      <DependentUpon>WGenericReportSearchWithMthYr.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralrpt\WGenericReportSearchWithDate.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WGenericReportSearchWithDate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WAddPieceRateType.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddPieceRateType.cs</DependentUpon>
@@ -210,6 +218,14 @@
       <SubType>Designer</SubType>
       <DependentUpon>WAddFixedAsset.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WContractor2001.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WContractor2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WDriverInfoMaint.resx">
+      <DependentUpon>WDriverInfoMaint.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WAddressContractInfo.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddressContractInfo.cs</DependentUpon>
@@ -285,6 +301,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreviewWithMthYr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportPreviewWithMthYr.Designer.cs">
+      <DependentUpon>WGenericReportPreviewWithMthYr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearchWithMthYr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralrpt\WGenericReportSearchWithMthYr.Designer.cs">
+      <DependentUpon>WGenericReportSearchWithMthYr.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Ruralwin2\WAddPieceRateType.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -304,6 +332,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WAddAllowance.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WDriverInfoMaint.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WCustomerSequencer.cs">
