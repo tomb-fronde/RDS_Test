@@ -88,6 +88,7 @@
     <Compile Include="OdpsPayrun\PaymentRunPerioregion.cs" />
     <Compile Include="OdpsPayrun\PostTaxDeductions.cs" />
     <Compile Include="OdpsRep\ApInterfaceDetailRows.cs" />
+    <Compile Include="OdpsRep\ApInterfaceGL07Records.cs" />
     <Compile Include="OdpsRep\ApInterfaceHeaderRows.cs" />
     <Compile Include="OdpsRep\AuditLog.cs" />
     <Compile Include="OdpsRep\AuditLogAddresschange.cs" />
