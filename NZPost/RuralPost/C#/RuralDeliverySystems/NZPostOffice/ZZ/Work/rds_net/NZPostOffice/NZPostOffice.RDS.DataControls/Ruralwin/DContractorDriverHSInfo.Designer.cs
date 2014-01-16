@@ -30,8 +30,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.hst_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hsi_date_checked = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hsi_passfail_ind = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.driver_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cb_add = new System.Windows.Forms.Button();
+            this.cb_remove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -43,6 +44,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // grid
             // 
             this.grid.AllowUserToAddRows = false;
+            this.grid.AllowUserToResizeRows = false;
             this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -65,7 +67,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.driver_name,
             this.hst_name,
             this.hsi_date_checked,
-            this.hsi_passfail_ind});
+            this.hsi_passfail_ind,
+            this.driver_no});
             this.grid.DataSource = this.bindingSource;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
@@ -117,7 +120,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.hsi_date_checked.Name = "hsi_date_checked";
             this.hsi_date_checked.ReadOnly = true;
             this.hsi_date_checked.Width = 80;
-            this.hsi_date_checked.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             // 
             // hsi_passfail_ind
             // 
@@ -132,31 +134,40 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.hsi_passfail_ind.ReadOnly = true;
             this.hsi_passfail_ind.Width = 63;
             // 
-            // button1
+            // driver_no
             // 
-            this.button1.Location = new System.Drawing.Point(473, 196);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
+            this.driver_no.DataPropertyName = "DriverNo";
+            this.driver_no.HeaderText = "DriverNo";
+            this.driver_no.Name = "driver_no";
+            this.driver_no.Visible = false;
             // 
-            // button2
+            // cb_add
             // 
-            this.button2.Location = new System.Drawing.Point(473, 228);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Remove";
-            this.button2.UseVisualStyleBackColor = true;
+            this.cb_add.Location = new System.Drawing.Point(473, 196);
+            this.cb_add.Name = "cb_add";
+            this.cb_add.Size = new System.Drawing.Size(75, 23);
+            this.cb_add.TabIndex = 1;
+            this.cb_add.Text = "Add";
+            this.cb_add.UseVisualStyleBackColor = true;
+            this.cb_add.Click += new System.EventHandler(this.cb_add_Click);
+            // 
+            // cb_remove
+            // 
+            this.cb_remove.Location = new System.Drawing.Point(473, 228);
+            this.cb_remove.Name = "cb_remove";
+            this.cb_remove.Size = new System.Drawing.Size(75, 23);
+            this.cb_remove.TabIndex = 2;
+            this.cb_remove.Text = "Remove";
+            this.cb_remove.UseVisualStyleBackColor = true;
+            this.cb_remove.Click += new System.EventHandler(this.cb_remove_Click);
             // 
             // DContractorDriverHSInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.cb_remove);
+            this.Controls.Add(this.cb_add);
             this.Controls.Add(this.grid);
             this.Name = "DContractorDriverHSInfo";
             this.Size = new System.Drawing.Size(638, 260);
@@ -167,12 +178,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         }
         #endregion
 
+        private System.Windows.Forms.Button cb_add;
+        private System.Windows.Forms.Button cb_remove;
         private System.Windows.Forms.DataGridViewTextBoxColumn driver_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn hst_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn hsi_date_checked;
         private System.Windows.Forms.DataGridViewTextBoxColumn hsi_passfail_ind;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn driver_no;
 
 
 
