@@ -10,6 +10,10 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Jan-2014
+    // Added Try/Catch to pfc_postopen to try to troubleshoot problem at Rural Pust testing
+    // Disabled for 7.1.11 release
+
     public class WBenchmarkRates2001 : WAncestorWindow
     {
         #region Define
@@ -365,25 +369,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void pfc_postopen()
         {
-            base.pfc_postopen();
-            int? ll_Region;
-            ll_Region = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionid();
-            il_region = ll_Region;
-            //?dw_criteria.settransobject(StaticVariables.sqlca);
-            dw_criteria.InsertItem<BenchmarkCalcCriteria>(0);
-            //?dw_renewals.setrowfocusindicator(focusrect!);
-            //?dw_renewals.settransobject(StaticVariables.sqlca);
-            ((DRenewalDates2001a)dw_renewals.DataObject).Retrieve(ll_Region);
-            if (dw_renewals.RowCount > 0)
-            {
-                dw_renewals.SelectRow(1, true);
-            }
-            //?dw_listing.settransobject(StaticVariables.sqlca);
-            dw_listing.URdsDw_GetFocus(null, null);//added by jlwang
+            string sErrmsg = "";
+            //try
+            //{
+                base.pfc_postopen();
+                int? ll_Region;
+                ll_Region = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionid();
+                il_region = ll_Region;
+                //?dw_criteria.settransobject(StaticVariables.sqlca);
+                dw_criteria.InsertItem<BenchmarkCalcCriteria>(0);
+                //?dw_renewals.setrowfocusindicator(focusrect!);
+                //?dw_renewals.settransobject(StaticVariables.sqlca);
+                ((DRenewalDates2001a)dw_renewals.DataObject).Retrieve(ll_Region);
+                if (dw_renewals.RowCount > 0)
+                {
+                    dw_renewals.SelectRow(1, true);
+                }
+                //?dw_listing.settransobject(StaticVariables.sqlca);
+                dw_listing.URdsDw_GetFocus(null, null);//added by jlwang
 
-            // TJB RPI_007 July-2010: Added
-            // Check to see if the the 'New Rates' button should be enabled.
-            enableNewRates();
+                // TJB RPI_007 July-2010: Added
+                // Check to see if the the 'New Rates' button should be enabled.
+                enableNewRates();
+            //}
+            //catch(Exception e)
+            //{
+            //    sErrmsg = e.Message;
+            //    MessageBox.Show("Error caught: "+sErrmsg,"WBenchmarkRates2001.pfc_postopen");
+            //}
         }
 
         public override void pfc_preopen()
