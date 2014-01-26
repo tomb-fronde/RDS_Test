@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB  RPCR_060  Jan-2014
+    // Added Insert, Update, Delete dummy functions
+    //
     // TJB  RPCR_060  Jan-2014:  NEW
     // Retrieves driver 'personal' info for the DDriverInfo DataControl
 
@@ -264,6 +267,74 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				}
 			}
 		}
+
+        [ServerMethod()]
+        private void UpdateEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+/*
+                try
+                {
+                    if (GenerateUpdateCommandText(cm, "rds_customer", ref pList))
+                    {
+                        cm.CommandText += " WHERE  rds_customer.cust_id = @cust_id ";
+
+                        pList.Add(cm, "cust_id", GetInitialValue("_cust_id"));
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _sqlerrtext = e.Message;
+                    _sqlcode = -1;
+                }
+                // reinitialize original key/value list
+                StoreInitialValues();
+*/
+            }
+        }
+        [ServerMethod()]
+        private void InsertEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+/*
+                if (GenerateInsertCommandText(cm, "rds_customer", pList))
+                {
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                StoreInitialValues();
+*/
+            }
+        }
+        [ServerMethod()]
+        private void DeleteEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbTransaction tr = cn.BeginTransaction())
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.Transaction = tr;
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "cust_id", GetInitialValue("_cust_id"));
+/*
+                    cm.CommandText = "DELETE FROM rds_customer "
+                                    + "WHERE rds_customer.cust_id = @cust_id ";
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                    tr.Commit();
+*/
+                }
+            }
+        }
 
 		#endregion
 
