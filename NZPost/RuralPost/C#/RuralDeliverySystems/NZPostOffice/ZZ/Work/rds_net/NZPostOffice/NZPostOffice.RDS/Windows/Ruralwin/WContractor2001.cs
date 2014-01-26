@@ -18,6 +18,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     {
         // TJB  RPCR_060  Jan-2014
         // Added tabpage_drivers and associated dw_drivers.
+        // (Disabled for 7.1.11.3 release)
         //
         // TJB  Dec-2013  RPCR057b (New AP file format)
         // Change 'DS Numbers" tab title to 'Supplier Numbers'
@@ -182,7 +183,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // st_label
             // 
-            this.st_label.Location = new System.Drawing.Point(8, 329);
+            this.st_label.Location = new System.Drawing.Point(8, 335);
             this.st_label.Size = new System.Drawing.Size(94, 15);
             this.st_label.Text = "WContractor2001";
             // 
@@ -194,13 +195,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tab_contractor.Controls.Add(this.tabpage_ds_numbers);
             this.tab_contractor.Controls.Add(this.tabpage_post_tax_deductions);
             this.tab_contractor.Controls.Add(this.tabpage_procurement);
-            this.tab_contractor.Controls.Add(this.tabpage_drivers);
+            //this.tab_contractor.Controls.Add(this.tabpage_drivers);
             this.tab_contractor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.tab_contractor.Location = new System.Drawing.Point(8, 0);
             this.tab_contractor.Multiline = true;
             this.tab_contractor.Name = "tab_contractor";
             this.tab_contractor.SelectedIndex = 0;
-            this.tab_contractor.Size = new System.Drawing.Size(577, 328);
+            this.tab_contractor.Size = new System.Drawing.Size(593, 329);
             this.tab_contractor.TabIndex = 1;
             this.tab_contractor.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tab_contractor_selectionchanging);
             this.tab_contractor.GotFocus += new System.EventHandler(this.tab_contractor_getfocus);
@@ -213,7 +214,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_owner_driver.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_owner_driver.Location = new System.Drawing.Point(4, 22);
             this.tabpage_owner_driver.Name = "tabpage_owner_driver";
-            this.tabpage_owner_driver.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_owner_driver.Size = new System.Drawing.Size(585, 303);
             this.tabpage_owner_driver.TabIndex = 0;
             this.tabpage_owner_driver.Tag = "ComponentName=Owner Driver;";
             this.tabpage_owner_driver.Text = "Owner Driver";
@@ -236,7 +237,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_contract_types.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_contract_types.Location = new System.Drawing.Point(4, 22);
             this.tabpage_contract_types.Name = this.tabpage_contract_types.Text;
-            this.tabpage_contract_types.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_contract_types.Size = new System.Drawing.Size(585, 303);
             this.tabpage_contract_types.TabIndex = 1;
             this.tabpage_contract_types.Tag = "ComponentName=OD Contract Type;";
             this.tabpage_contract_types.Text = "Contract Types";
@@ -257,7 +258,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_contracts_held.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_contracts_held.Location = new System.Drawing.Point(4, 22);
             this.tabpage_contracts_held.Name = "tabpage_contracts_held";
-            this.tabpage_contracts_held.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_contracts_held.Size = new System.Drawing.Size(585, 303);
             this.tabpage_contracts_held.TabIndex = 2;
             this.tabpage_contracts_held.Tag = "ComponentName=Contracts Held;";
             this.tabpage_contracts_held.Text = "Contracts Held";
@@ -279,7 +280,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_ds_numbers.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_ds_numbers.Location = new System.Drawing.Point(4, 22);
             this.tabpage_ds_numbers.Name = "tabpage_ds_numbers";
-            this.tabpage_ds_numbers.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_ds_numbers.Size = new System.Drawing.Size(585, 303);
             this.tabpage_ds_numbers.TabIndex = 3;
             this.tabpage_ds_numbers.Tag = "ComponentName=DS Number;";
             this.tabpage_ds_numbers.Text = "Supplier Numbers";
@@ -300,7 +301,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_post_tax_deductions.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_post_tax_deductions.Location = new System.Drawing.Point(4, 22);
             this.tabpage_post_tax_deductions.Name = "tabpage_post_tax_deductions";
-            this.tabpage_post_tax_deductions.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_post_tax_deductions.Size = new System.Drawing.Size(585, 303);
             this.tabpage_post_tax_deductions.TabIndex = 4;
             this.tabpage_post_tax_deductions.Tag = "ComponentName=Post-Tax Deduction;";
             this.tabpage_post_tax_deductions.Text = "Post Tax Deductions";
@@ -322,7 +323,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_procurement.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_procurement.Location = new System.Drawing.Point(4, 22);
             this.tabpage_procurement.Name = "tabpage_procurement";
-            this.tabpage_procurement.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_procurement.Size = new System.Drawing.Size(585, 303);
             this.tabpage_procurement.TabIndex = 5;
             this.tabpage_procurement.Tag = "ComponentName=Procurements;";
             this.tabpage_procurement.Text = "Procurement";
@@ -345,18 +346,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_drivers.Location = new System.Drawing.Point(4, 22);
             this.tabpage_drivers.Name = "tabpage_drivers";
-            this.tabpage_drivers.Size = new System.Drawing.Size(569, 302);
+            this.tabpage_drivers.Size = new System.Drawing.Size(585, 303);
             this.tabpage_drivers.TabIndex = 6;
-            this.tabpage_drivers.Text = "Drivers";
+            this.tabpage_drivers.Text = "Drivers H&S";
             this.tabpage_drivers.Visible = false;
             // 
             // cb_driverinfo
             // 
-            this.cb_driverinfo.Location = new System.Drawing.Point(459, 273);
+            this.cb_driverinfo.Location = new System.Drawing.Point(480, 163);
             this.cb_driverinfo.Name = "cb_driverinfo";
             this.cb_driverinfo.Size = new System.Drawing.Size(75, 23);
             this.cb_driverinfo.TabIndex = 0;
-            this.cb_driverinfo.Text = "View";
+            this.cb_driverinfo.Text = "View/Edit";
             this.cb_driverinfo.UseVisualStyleBackColor = true;
             this.cb_driverinfo.Visible = false;
             // 
@@ -372,7 +373,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // WContractor2001
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(593, 351);
+            this.ClientSize = new System.Drawing.Size(613, 352);
             this.Controls.Add(this.tab_contractor);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Location = new System.Drawing.Point(46, 55);
@@ -1243,7 +1244,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_procurement.Retrieve(new object[] { ii_contractor });
                 }
             }
-            else if (str == "drivers")//(TestExpr == 7)
+            else if (str == "drivers h&s")//(TestExpr == 7)
             {
                 dw_drivers.URdsDw_GetFocus(null, null);
                 if (dw_drivers.RowCount == 0)
