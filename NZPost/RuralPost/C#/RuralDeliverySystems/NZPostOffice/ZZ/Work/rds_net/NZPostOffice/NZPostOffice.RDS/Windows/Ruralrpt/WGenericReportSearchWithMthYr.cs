@@ -59,7 +59,9 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
         {
             DateTime? ReportDate;
             string sReportMthYr, sReportDay, sReportMth, sReportYr;
-            int nReportMth, nReportYr;
+            int nReportMth = 1, nReportYr = 14;
+            bool bDateOK;
+
             sReportDay = "01";
             sReportMthYr = dw_criteria.GetItem<ReportGenericCriteriaWithMthYr>(0).MthYr;
             if (sReportMthYr == null || sReportMthYr == "00/00")
@@ -68,6 +70,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             }
             sReportMth = sReportMthYr.Substring(0, 2);
             sReportYr = sReportMthYr.Substring(3, 2);
+            bDateOK = true;
             try
             {
                 nReportMth = Convert.ToInt32(sReportMth);
@@ -75,14 +78,21 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             }
             catch (FormatException)
             {
-                MessageBox.Show("Invalid date - must be numeric!", "Error");
-                return null;
+                bDateOK = false;
             }
             if (nReportMth < 0 || nReportMth > 12)
             {
-                MessageBox.Show("Invalid month!", "Error");
+                bDateOK = false;
+            }
+            if (bDateOK == false)
+            {
+                MessageBox.Show("Invalid date \n"
+                               + "\n"
+                               + "Please enter a date in month/year (mm/yy) format."
+                               , "Error");
                 return null;
             }
+
             sReportYr = "20" + sReportMthYr.Substring(3, 2);
             ReportDate = Convert.ToDateTime(sReportDay + "/" + sReportMth + "/" + sReportYr);
             //            ReportDate = Convert.ToDateTime("01/"+sReportDate.Substring(0, 2) + "/20" + sReportDate.Substring(3, 2));
