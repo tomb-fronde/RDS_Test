@@ -20,6 +20,10 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
+    // TJB  RPCR_057  Jan-2014: Bug fixes
+    // Check date in pb_search_clicked
+    // Fix not allowing first row to be selected
+    //
     // TJB  RPCR_057  Jan-2014:  NEW
     // Variation on WGenericReportSearchWithDate for ScheduleB reports
     // Change date from dd/mm to mm/yy and from datetime to text
@@ -49,18 +53,10 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             //?dw_criteria.GetItem<ReportGenericCriteriaWithMthYr>(0).mth_yr = dDate;
         }
 
-        public override void pb_search_clicked(object sender, EventArgs e)
+        // TJB  RPCR_057  Jan-2014: NEW
+        // Moved from pb_open_clicked and added calls in pb_search_clicked and pb_open_clicked
+        private DateTime? checkdate()
         {
-            if (this.DesignMode)
-            {
-                return;
-            }
-            wf_gosearch(false);
-        }
-
-        public override void pb_open_clicked(object sender, EventArgs e)
-        {
-            // StaticVariables.gnv_app.of_get_parameters().dateparm = dw_criteria.GetItem<ReportGenericCriteriaWithMthYr>(0).mth_yr;
             DateTime? ReportDate;
             string sReportMthYr, sReportDay, sReportMth, sReportYr;
             int nReportMth, nReportYr;
@@ -80,20 +76,44 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
             catch (FormatException)
             {
                 MessageBox.Show("Invalid date - must be numeric!", "Error");
-                return;
-            }   
+                return null;
+            }
             if (nReportMth < 0 || nReportMth > 12)
             {
                 MessageBox.Show("Invalid month!", "Error");
-                return;
+                return null;
             }
             sReportYr = "20" + sReportMthYr.Substring(3, 2);
             ReportDate = Convert.ToDateTime(sReportDay + "/" + sReportMth + "/" + sReportYr);
             //            ReportDate = Convert.ToDateTime("01/"+sReportDate.Substring(0, 2) + "/20" + sReportDate.Substring(3, 2));
+
+            return ReportDate;
+        }
+
+        // TJB  RPCR_057  Jan-2014
+        // Added call to checkdate()
+        public override void pb_search_clicked(object sender, EventArgs e)
+        {
+            if (this.DesignMode) return;
+            if (checkdate() == null) return;
+
+            wf_gosearch(false);
+        }
+
+        // TJB  RPCR_057  Jan-2014
+        // Moved date check to checkdate() replaced with call to it
+        // Bug fix: use selectedrow >= 0 - was not allowing first row
+        public override void pb_open_clicked(object sender, EventArgs e)
+        {
+            // StaticVariables.gnv_app.of_get_parameters().dateparm = dw_criteria.GetItem<ReportGenericCriteriaWithMthYr>(0).mth_yr;
+            DateTime? ReportDate;
+            ReportDate = checkdate();
+            if (ReportDate == null) return;
             StaticVariables.gnv_app.of_get_parameters().dateparm = ReportDate;
             string sTitle;
             dw_criteria.AcceptText();
-            if (dw_results.GetSelectedRow(0) > 0)
+            int nRow = dw_results.GetSelectedRow(0);
+            if (nRow >= 0)  // TJB RPCR_057 27-Jan-2014: bug fix: added "="
             {
                 sTitle = dw_criteria.GetControlByName("st_report").Text;
                 StaticVariables.gnv_app.of_get_parameters().stringparm = isDataWindow;
