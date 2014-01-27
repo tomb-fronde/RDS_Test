@@ -22,6 +22,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 {
     // TJB  RPCR_057  Jan-2014: NEW
     // For displaying ScheduleB reports with as-of date
+    // 27-Jan-2014: bug fix (added "=")
 
     public partial class WGenericReportPreviewWithMthYr : WGenericReportPreview
     {
@@ -74,7 +75,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
 
             dw_report.Reset();
             lRow = dwResults.GetSelectedRow(0);
-            if (lRow >= 0)
+            if (lRow >= 0)   // TJB  RPCR_057  Jan-2014: bug fix (added "=")
             {
                 if (dwResults.GetValue<int>(lRow, "contract_no") == 0)
                 {
@@ -97,7 +98,7 @@ namespace NZPostOffice.RDS.Windows.Ruralrpt
                 }
                 else
                 {
-                    while (lRow > 0)
+                    while (lRow >= 0)
                     {
                         lContract = dwResults.GetValue<int>(lRow, "contract_no");
                         lSequence = dwResults.GetValue<int>(lRow, "con_active_Sequence");
