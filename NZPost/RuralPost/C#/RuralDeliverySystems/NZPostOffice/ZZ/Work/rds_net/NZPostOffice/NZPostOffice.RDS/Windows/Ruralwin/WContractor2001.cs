@@ -16,6 +16,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContractor2001 : WAncestorWindow
     {
+        // TJB  RPCR_060  Feb-2014
+        // Moved View/Edit, Add driver, Remove (driver) buttons and functionality
+        //
         // TJB  RPCR_060  Jan-2014
         // Added tabpage_drivers and associated dw_drivers.
         // (Disabled for 7.1.11.3 release)
@@ -85,6 +88,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public TabPage tabpage_drivers;
 
         private Button cb_driverinfo;
+        private Button cb_addDriver;
+        private Button cb_RemoveDriver;
 
         #endregion
 
@@ -115,6 +120,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_drivers.DataObject = new DContractorDriverHSInfo();
             dw_drivers.DataObject.BorderStyle = BorderStyle.Fixed3D;
             cb_driverinfo.Click += new System.EventHandler(cb_driverinfo_Click);
+            cb_addDriver.Click += new System.EventHandler(cb_AddDriver_Click);
+            cb_RemoveDriver.Click += new System.EventHandler(cb_RemoveDriver_Click);
 
             dw_owner_driver.Constructor += new UserEventDelegate(dw_owner_driver_constructor);
             dw_owner_driver.URdsDwEditChanged += new EventDelegate(dw_owner_driver_editchanged);
@@ -171,6 +178,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_drivers = new System.Windows.Forms.TabPage();
             this.cb_driverinfo = new System.Windows.Forms.Button();
             this.dw_drivers = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_RemoveDriver = new System.Windows.Forms.Button();
+            this.cb_addDriver = new System.Windows.Forms.Button();
             this.tab_contractor.SuspendLayout();
             this.tabpage_owner_driver.SuspendLayout();
             this.tabpage_contract_types.SuspendLayout();
@@ -179,6 +188,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_post_tax_deductions.SuspendLayout();
             this.tabpage_procurement.SuspendLayout();
             this.tabpage_drivers.SuspendLayout();
+            this.dw_drivers.SuspendLayout();
             this.SuspendLayout();
             // 
             // st_label
@@ -195,7 +205,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tab_contractor.Controls.Add(this.tabpage_ds_numbers);
             this.tab_contractor.Controls.Add(this.tabpage_post_tax_deductions);
             this.tab_contractor.Controls.Add(this.tabpage_procurement);
-            //this.tab_contractor.Controls.Add(this.tabpage_drivers);
+            this.tab_contractor.Controls.Add(this.tabpage_drivers);
             this.tab_contractor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.tab_contractor.Location = new System.Drawing.Point(8, 0);
             this.tab_contractor.Multiline = true;
@@ -363,12 +373,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_drivers
             // 
+            this.dw_drivers.Controls.Add(this.cb_RemoveDriver);
+            this.dw_drivers.Controls.Add(this.cb_addDriver);
             this.dw_drivers.DataObject = null;
             this.dw_drivers.FireConstructor = false;
             this.dw_drivers.Location = new System.Drawing.Point(5, 7);
             this.dw_drivers.Name = "dw_drivers";
             this.dw_drivers.Size = new System.Drawing.Size(560, 260);
             this.dw_drivers.TabIndex = 2;
+            // 
+            // cb_RemoveDriver
+            // 
+            this.cb_RemoveDriver.Location = new System.Drawing.Point(476, 214);
+            this.cb_RemoveDriver.Name = "cb_RemoveDriver";
+            this.cb_RemoveDriver.Size = new System.Drawing.Size(75, 23);
+            this.cb_RemoveDriver.TabIndex = 2;
+            this.cb_RemoveDriver.Text = "Remove";
+            this.cb_RemoveDriver.UseVisualStyleBackColor = true;
+            this.cb_RemoveDriver.Visible = false;
+            // 
+            // cb_addDriver
+            // 
+            this.cb_addDriver.Location = new System.Drawing.Point(476, 185);
+            this.cb_addDriver.Name = "cb_addDriver";
+            this.cb_addDriver.Size = new System.Drawing.Size(75, 23);
+            this.cb_addDriver.TabIndex = 1;
+            this.cb_addDriver.Text = "Add Driver";
+            this.cb_addDriver.UseVisualStyleBackColor = true;
+            this.cb_addDriver.Visible = false;
             // 
             // WContractor2001
             // 
@@ -389,6 +421,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_post_tax_deductions.ResumeLayout(false);
             this.tabpage_procurement.ResumeLayout(false);
             this.tabpage_drivers.ResumeLayout(false);
+            this.dw_drivers.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1253,6 +1286,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 cb_driverinfo.Visible = true;
                 cb_driverinfo.Enabled = true;
+                cb_addDriver.Visible = true;
+                cb_addDriver.Enabled = true;
+                cb_RemoveDriver.Visible = true;
+                cb_RemoveDriver.Enabled = true;
             }
             oldindex = this.tab_contractor.SelectedIndex;
         }
@@ -1284,6 +1321,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             cb_driverinfo.Visible = false;
             cb_driverinfo.Enabled = false;
+            cb_addDriver.Visible = false;
+            cb_addDriver.Enabled = false;
+            cb_RemoveDriver.Visible = false;
+            cb_RemoveDriver.Enabled = false;
 
             // Check for any changes to idw_owner_driver
             if (idw_owner_driver.DataObject.DeletedCount > 0 
@@ -1677,29 +1718,72 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
         #endregion
 
+        int nRow, nDriverNo;
+
         private void cb_driverinfo_Click(object sender, EventArgs e)
         {
-            WDriverInfoMaint wDriverInfo;
-            NCriteria lnv_Criteria;
-            NRdsMsg lnv_msg;
-            int nRow, nDriverNo;
-            string sWarning = "";
+            open_driverinfo("edit");
+        }
 
+        private void cb_AddDriver_Click(object sender, EventArgs e)
+        {
+            open_driverinfo("add");
+        }
+
+        private void cb_RemoveDriver_Click(object sender, EventArgs e)
+        {
             if (dw_drivers.RowCount < 1)
             {
-                sWarning = "No drivers currently specified. \n"
-                               + "Please add a driver first.";
-                MessageBox.Show(sWarning, "Warning");
+                MessageBox.Show("No drivers to remove. \n"
+                               , "Warning");
                 return;
             }
             if (((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows.Count < 1)
             {
-                sWarning = "Please select a driver.      ";
-                MessageBox.Show(sWarning, "Warning");
+                MessageBox.Show("Please select a driver.      "
+                               , "Warning");
                 return;
             }
+
             nRow = ((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows[0].Index;
             nDriverNo = dw_drivers.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
+//            MessageBox.Show("Removing driver " + nDriverNo.ToString() + "    \n");
+            RDSDataService.DropDriverRecords(nDriverNo);
+
+            dw_drivers.Reset();
+            dw_drivers.Retrieve(new object[] { ii_contractor });
+
+        }
+
+        private void open_driverinfo( string sOptype)
+        {
+            WDriverInfoMaint wDriverInfo;
+            NCriteria lnv_Criteria;
+            NRdsMsg lnv_msg;
+
+            if (sOptype == "edit")
+            {
+                if (dw_drivers.RowCount < 1)
+                {
+                    MessageBox.Show("No drivers currently specified. \n"
+                                   + "Please add a driver first."
+                                   , "Warning");
+                    return;
+                }
+                if (((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows.Count < 1)
+                {
+                    MessageBox.Show("Please select a driver.      "
+                                   , "Warning");
+                    return;
+                }
+
+                nRow = ((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows[0].Index;
+                nDriverNo = dw_drivers.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
+            }
+            else
+            {
+                nDriverNo = 0;
+            }
 
 //            MessageBox.Show("cb_view Clicked \n\n"
 //                            + "nDriverNo = " + nDriverNo.ToString());
@@ -1709,7 +1793,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Create criteria
             lnv_Criteria = new NCriteria();
             lnv_msg = new NRdsMsg();
+            lnv_Criteria.of_addcriteria("contractor_no", ii_contractor);
             lnv_Criteria.of_addcriteria("driver_no", nDriverNo);
+            lnv_Criteria.of_addcriteria("op_type", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
             // Build title
             //            string sTitle = "Driver: " + nDriverNo.ToString()+" Maintenance";
@@ -1717,9 +1803,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //            if (!(StaticVariables.gnv_app.of_findwindow(ls_title, "w_contract2001") != null))
             //            {
             StaticMessage.PowerObjectParm = lnv_msg;
+            StaticVariables.window = this;
             wDriverInfo = new WDriverInfoMaint();
             wDriverInfo.MdiParent = StaticVariables.MainMDI;
             wDriverInfo.Show();
+            return;
         }
     }
 }
