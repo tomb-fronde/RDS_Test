@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB  RPCR_060  Feb-2014
+    // All functions working (though Delete never used)
+    //
     // TJB  RPCR_060  Jan-2014
     // Added Insert, Update, Delete dummy functions
     //
@@ -17,7 +20,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
-    [MapInfo("driver_no", "_driver_no", "driver",true)]
+    [MapInfo("driver_no", "_driver_no", "driver")]
     [MapInfo("d_title", "_d_title", "driver")]
     [MapInfo("d_first_names", "_d_first_names", "driver")]
     [MapInfo("d_surname", "_d_surname", "driver")]
@@ -220,6 +223,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
 		#region Data Access
 
+        public virtual void marknew()
+        {
+            base.MarkClean();
+            base.MarkNew();
+        }
+
         public int SqlErrCode = 0;
         public string SqlErrMsg = "";
 
@@ -271,30 +280,31 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         [ServerMethod()]
         private void UpdateEntity()
         {
+            if (GetInitialValue("_d_surname") == null)
+            {
+                InsertEntity();
+                return;
+            }
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
-/*
                 try
                 {
-                    if (GenerateUpdateCommandText(cm, "rds_customer", ref pList))
+                    if (GenerateUpdateCommandText(cm, "driver", ref pList))
                     {
-                        cm.CommandText += " WHERE  rds_customer.cust_id = @cust_id ";
-
-                        pList.Add(cm, "cust_id", GetInitialValue("_cust_id"));
+                        cm.CommandText += " WHERE  driver_no = @driver_no ";
+                        pList.Add(cm, "driver_no", GetInitialValue("_driver_no"));
                         DBHelper.ExecuteNonQuery(cm, pList);
                     }
+                    StoreInitialValues();
                 }
                 catch (Exception e)
                 {
-                    _sqlerrtext = e.Message;
-                    _sqlcode = -1;
+                    SqlErrMsg  = e.Message;
+                    SqlErrCode = -1;
                 }
-                // reinitialize original key/value list
-                StoreInitialValues();
-*/
             }
         }
         [ServerMethod()]
@@ -305,13 +315,19 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 DbCommand cm = cn.CreateCommand();
                 cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
-/*
-                if (GenerateInsertCommandText(cm, "rds_customer", pList))
+                try
                 {
-                    DBHelper.ExecuteNonQuery(cm, pList);
+                    if (GenerateInsertCommandText(cm, "driver", pList))
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    StoreInitialValues();
                 }
-                StoreInitialValues();
-*/
+                catch (Exception e)
+                {
+                    SqlErrMsg = e.Message;
+                    SqlErrCode = -1;
+                }
             }
         }
         [ServerMethod()]
@@ -325,13 +341,20 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "cust_id", GetInitialValue("_cust_id"));
-/*
-                    cm.CommandText = "DELETE FROM rds_customer "
-                                    + "WHERE rds_customer.cust_id = @cust_id ";
-                    DBHelper.ExecuteNonQuery(cm, pList);
-                    tr.Commit();
-*/
+                    pList.Add(cm, "driver_no", GetInitialValue("_driver_no"));
+                    try
+                    {
+                        cm.CommandText = "DELETE FROM driver "
+                                        + "WHERE driver_no = @driver_no ";
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        tr.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        SqlErrMsg = e.Message;
+                        SqlErrCode = -1;
+                        tr.Rollback();
+                    }
                 }
             }
         }
