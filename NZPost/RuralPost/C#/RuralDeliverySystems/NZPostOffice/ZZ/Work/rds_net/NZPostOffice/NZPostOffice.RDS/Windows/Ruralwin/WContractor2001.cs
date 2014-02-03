@@ -162,6 +162,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tab_contractor = new System.Windows.Forms.TabControl();
             this.tabpage_owner_driver = new System.Windows.Forms.TabPage();
             this.dw_owner_driver = new NZPostOffice.RDS.Controls.URdsDw();
@@ -363,6 +364,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_driverinfo
             // 
+            this.cb_driverinfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_driverinfo.Location = new System.Drawing.Point(480, 163);
             this.cb_driverinfo.Name = "cb_driverinfo";
             this.cb_driverinfo.Size = new System.Drawing.Size(75, 23);
@@ -384,6 +386,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_RemoveDriver
             // 
+            this.cb_RemoveDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_RemoveDriver.Location = new System.Drawing.Point(476, 214);
             this.cb_RemoveDriver.Name = "cb_RemoveDriver";
             this.cb_RemoveDriver.Size = new System.Drawing.Size(75, 23);
@@ -394,6 +397,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_addDriver
             // 
+            this.cb_addDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_addDriver.Location = new System.Drawing.Point(476, 185);
             this.cb_addDriver.Name = "cb_addDriver";
             this.cb_addDriver.Size = new System.Drawing.Size(75, 23);
