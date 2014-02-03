@@ -14,6 +14,9 @@ using Metex.Core;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_060 Feb-2014
+    // Adjusted size of window to accommodate additional info
+    //
     // TJB  RPCR_060 Jan-2014: NEW
     // Driver info maintenance window
     // Displays driver personal and H&S info in separate panels
@@ -85,7 +88,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // cb_close
             // 
             this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.cb_close.Location = new System.Drawing.Point(519, 346);
+            this.cb_close.Location = new System.Drawing.Point(551, 346);
             this.cb_close.Name = "cb_close";
             this.cb_close.Size = new System.Drawing.Size(75, 23);
             this.cb_close.TabIndex = 30;
@@ -97,9 +100,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_driverinfo.BackColor = System.Drawing.Color.White;
             this.dw_driverinfo.DataObject = null;
             this.dw_driverinfo.FireConstructor = false;
-            this.dw_driverinfo.Location = new System.Drawing.Point(19, 40);
+            this.dw_driverinfo.Location = new System.Drawing.Point(6, 40);
             this.dw_driverinfo.Name = "dw_driverinfo";
-            this.dw_driverinfo.Size = new System.Drawing.Size(574, 70);
+            this.dw_driverinfo.Size = new System.Drawing.Size(621, 70);
             this.dw_driverinfo.TabIndex = 2;
             // 
             // label1
@@ -114,7 +117,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_save
             // 
-            this.cb_save.Location = new System.Drawing.Point(436, 346);
+            this.cb_save.Location = new System.Drawing.Point(468, 346);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 25;
@@ -150,14 +153,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_driverhsinfo.FireConstructor = false;
             this.dw_driverhsinfo.Location = new System.Drawing.Point(16, 139);
             this.dw_driverhsinfo.Name = "dw_driverhsinfo";
-            this.dw_driverhsinfo.Size = new System.Drawing.Size(577, 201);
+            this.dw_driverhsinfo.Size = new System.Drawing.Size(611, 201);
             this.dw_driverhsinfo.TabIndex = 33;
             // 
             // WDriverInfoMaint
             // 
             this.AcceptButton = this.cb_close;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(605, 374);
+            this.ClientSize = new System.Drawing.Size(639, 374);
             this.Controls.Add(this.dw_driverhsinfo);
             this.Controls.Add(this.hsinfo_t);
             this.Controls.Add(this.driverinfo_t);
@@ -169,6 +172,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.MaximizeBox = false;
             this.Name = "WDriverInfoMaint";
             this.Text = "Driver Information Maintenance";
+            this.Controls.SetChildIndex(this.st_label, 0);
             this.Controls.SetChildIndex(this.dw_driverinfo, 0);
             this.Controls.SetChildIndex(this.cb_close, 0);
             this.Controls.SetChildIndex(this.label1, 0);
