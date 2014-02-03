@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  RPCR_060  Feb-2014
+    // Added Mobile2 to display
+    //
     // TJB  RPCR_060  Jan-2014: NEW
     // Datacontrol for Driver 'personal' info
 
