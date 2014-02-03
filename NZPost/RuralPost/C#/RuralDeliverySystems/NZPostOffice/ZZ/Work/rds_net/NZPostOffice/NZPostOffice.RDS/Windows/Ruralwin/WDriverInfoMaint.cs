@@ -7,6 +7,7 @@ using Metex.Windows;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.Windows.Ruralrpt;
+using NZPostOffice.RDS.Entity.Ruralwin;
 using System.Collections.Generic;
 using NZPostOffice.Entity;
 using Metex.Core;
@@ -16,10 +17,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  RPCR_060 Jan-2014: NEW
     // Driver info maintenance window
     // Displays driver personal and H&S info in separate panels
-    // Maintenance allowed.
+    // Editing allowed.
     // Also used to add new drivers
 
-    public class WDriverInfoMaint : WMaster
+    public class WDriverInfoMaint : WAncestorWindow  //WMaster
     {
         // TJB  RPCR_054  June-2013: NEW
         // Displays the list of defined piece rate types and allows the user 
@@ -49,7 +50,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         NCriteria nvCriteria;
         NRdsMsg nvMsg;
-        int nCurrentRow;
+        int nContractor;
+        string sOptype = "";
+        bool inAdminGroup;
+        int nDriverNo;
+        bool bSomethingSaved;
 
         public WDriverInfoMaint()
         {
@@ -203,38 +208,55 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             nvMsg = (NRdsMsg)StaticMessage.PowerObjectParm;
             nvCriteria = nvMsg.of_getcriteria();
-            //nRgCode = System.Convert.ToInt32(nvCriteria.of_getcriteria("rg_code"));
 
-            // The initial rate and effective date are set to 
-            // 0.0000 abd 00/00/0000 respectively
-            decimal dRate = 0.00M;
-            cb_save.Enabled = false;
+            cb_save.Enabled = true;
         }
 
         #region Methods
-        bool inAdminGroup;
-        int nDriverNo;
-        
         public override void pfc_postopen()
         {
             base.pfc_postopen();
 
             NRdsMsg lnv_msg;
             NCriteria lvNCriteria;
+            int nDriverinfoRows;
+            int nDriverhsinfoRows;
 
             inAdminGroup = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_ismember("System Administrators");
+            bSomethingSaved = false;
 
             lnv_msg = StaticMessage.PowerObjectParm as NRdsMsg;
             lvNCriteria = lnv_msg.of_getcriteria();
             nDriverNo = System.Convert.ToInt32(lvNCriteria.of_getcriteria("driver_no"));
+            nContractor = System.Convert.ToInt32(nvCriteria.of_getcriteria("contractor_no"));
+            sOptype = System.Convert.ToString(nvCriteria.of_getcriteria("op_type"));
 
-            dw_driverinfo.Retrieve(new object[] { nDriverNo });
-            int nDriverinfoRows = dw_driverinfo.RowCount;
-            dw_driverhsinfo.Retrieve(new object[] { nDriverNo });
-            int nDriverhsinfoRows = dw_driverhsinfo.RowCount;
+            if (sOptype == "edit")
+            {
+                dw_driverinfo.Retrieve(new object[] { nDriverNo });
+                nDriverinfoRows = dw_driverinfo.RowCount;
+                dw_driverhsinfo.Retrieve(new object[] { nDriverNo });
+                nDriverhsinfoRows = dw_driverhsinfo.RowCount;
+//                MessageBox.Show("View/Edit driver " + nDriverNo.ToString() + "\n"
+//                               + "DriverInfo rowcount = " + nDriverinfoRows.ToString() + "\n"
+//                               + "DriverHSInfo rowcount = " + nDriverhsinfoRows.ToString() + "\n");
+            }
+            else if ( sOptype == "add" )
+            {
+                RDSDataService DS = RDSDataService.GetNextSequence("DriverNo");
+                nDriverNo = DS.intVal;
+                dw_driverinfo.InsertRow(0);
+                int nRow = dw_driverinfo.GetRow();
+                nDriverinfoRows = dw_driverinfo.RowCount;
+                dw_driverinfo.InsertItem<DriverInfo>(nRow).DriverNo = nDriverNo;
+                dw_driverinfo.GetItem<DriverInfo>(nRow).marknew();
+                dw_driverhsinfo.Retrieve(new object[] { nDriverNo });
+                nDriverhsinfoRows = dw_driverhsinfo.RowCount;
+//                MessageBox.Show("Add new driver "+nDriverNo.ToString()+" \n"
+//                               + "DriverInfo rowcount = " + nDriverinfoRows.ToString() + "\n"
+//                               + "DriverHSInfo rowcount = " + nDriverhsinfoRows.ToString() + "\n");
+            }
 
-//            MessageBox.Show("DriverInfo rowcount = " + nDriverinfoRows.ToString() + "\n"
-//                           + "DriverHSInfo rowcount = " + nDriverhsinfoRows.ToString() + "\n");
         }
 
         #endregion
@@ -242,7 +264,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         #region Events
         public virtual void cb_close_clicked(object sender, EventArgs e)
         {
-            //MessageBox.Show("Close Clicked\n", "cb_save_clicked");
+//            MessageBox.Show("Close Clicked\n", "cb_save_clicked");
             Close();
         }
 
@@ -260,7 +282,79 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void cb_save_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Save Clicked\n", "cb_save_clicked");
+            int nRow = dw_driverinfo.GetRow();
+            int nRows = dw_driverhsinfo.RowCount;
+
+//            MessageBox.Show("Save Clicked\n", "cb_save_clicked");
+
+            if (sOptype == "edit")
+            {
+                if (dw_driverinfo.GetItem<DriverInfo>(nRow).IsDirty)
+                {
+//                    MessageBox.Show("Saving driver info; Row " + nRow.ToString());
+                    dw_driverinfo.Save();
+                    bSomethingSaved = true;
+                }
+                for (nRow = 0; nRow < nRows; nRow++)
+                {
+                    if (dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).IsDirty)
+                    {
+//                        MessageBox.Show("Saving driver H&S info; Row " + nRow.ToString());
+                        dw_driverhsinfo.Save();
+                        bSomethingSaved = true;
+                    }
+                }
+            }
+            else if (sOptype == "add")
+            {
+                if (dw_driverinfo.GetItem<DriverInfo>(nRow).IsDirty)
+                {
+//                    MessageBox.Show("Saving driver "+nDriverNo.ToString()+" info; Row " + nRow.ToString());
+                    dw_driverinfo.Save();
+                    bSomethingSaved = true;
+                }
+                for (nRow = 0; nRow < nRows; nRow++)
+                {
+                    if (dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).IsDirty)
+                    {
+//                        MessageBox.Show("Saving driver H&S info; Row " + nRow.ToString());
+                        dw_driverhsinfo.Save();
+                        bSomethingSaved = true;
+                    }
+                }
+                RDSDataService.AddContractorDriver(nContractor, nDriverNo);
+            }
+            else
+            {
+                MessageBox.Show("Saving for optype "+sOptype+"not yet implemented \n"
+                                , "Warning");
+            }
+/*
+            if (bSomethingSaved)
+            {
+                string msg;
+                if (sOptype == "edit")
+                    msg = "     Changes saved      \n";
+                else
+                    msg = "     Driver added       \n";
+                MessageBox.Show(msg);
+            }
+            else
+                MessageBox.Show("No changes made - nothing to save");
+*/
+            Close();
+            
+        }
+
+        public override void close()
+        {
+            if (bSomethingSaved)
+            {
+                //  Tell the parent to refresh
+                ((WContractor2001)StaticVariables.window).dw_drivers.Reset();
+                ((WContractor2001)StaticVariables.window).dw_drivers.Retrieve(new object[] { nContractor });
+            }
+            StaticVariables.window = null;
         }
     }
 }
