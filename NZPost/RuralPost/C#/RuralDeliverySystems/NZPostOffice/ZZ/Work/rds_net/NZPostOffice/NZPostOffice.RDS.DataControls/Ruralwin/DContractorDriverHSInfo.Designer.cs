@@ -31,8 +31,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.hsi_date_checked = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hsi_passfail_ind = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.driver_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cb_add = new System.Windows.Forms.Button();
-            this.cb_remove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -141,33 +139,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.driver_no.Name = "driver_no";
             this.driver_no.Visible = false;
             // 
-            // cb_add
-            // 
-            this.cb_add.Location = new System.Drawing.Point(473, 196);
-            this.cb_add.Name = "cb_add";
-            this.cb_add.Size = new System.Drawing.Size(75, 23);
-            this.cb_add.TabIndex = 1;
-            this.cb_add.Text = "Add";
-            this.cb_add.UseVisualStyleBackColor = true;
-            this.cb_add.Click += new System.EventHandler(this.cb_add_Click);
-            // 
-            // cb_remove
-            // 
-            this.cb_remove.Location = new System.Drawing.Point(473, 228);
-            this.cb_remove.Name = "cb_remove";
-            this.cb_remove.Size = new System.Drawing.Size(75, 23);
-            this.cb_remove.TabIndex = 2;
-            this.cb_remove.Text = "Remove";
-            this.cb_remove.UseVisualStyleBackColor = true;
-            this.cb_remove.Click += new System.EventHandler(this.cb_remove_Click);
-            // 
             // DContractorDriverHSInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.Controls.Add(this.cb_remove);
-            this.Controls.Add(this.cb_add);
             this.Controls.Add(this.grid);
             this.Name = "DContractorDriverHSInfo";
             this.Size = new System.Drawing.Size(638, 260);
@@ -178,8 +154,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         }
         #endregion
 
-        private System.Windows.Forms.Button cb_add;
-        private System.Windows.Forms.Button cb_remove;
         private System.Windows.Forms.DataGridViewTextBoxColumn driver_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn hst_name;
         private System.Windows.Forms.DataGridViewTextBoxColumn hsi_date_checked;
