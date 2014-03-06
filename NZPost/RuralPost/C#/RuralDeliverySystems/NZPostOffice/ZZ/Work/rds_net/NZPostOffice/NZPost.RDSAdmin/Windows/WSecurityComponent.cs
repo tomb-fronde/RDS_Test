@@ -229,34 +229,6 @@ namespace NZPostOffice.RDSAdmin
             ib_Action = true;
             StaticMessage.PowerObjectParm = lstr_info;
             this.Close();
-
-
         }
-
-        //protected class DwComponentSearch : URadDW
-        //{
-        //    WSecurityComponent window;
-
-        //    public DwComponentSearch(DataControlPanel dcp)
-        //        : base(dcp)
-        //    {
-        //        window = dcp.FindForm() as WSecurityComponent;
-        //    }
-
-        //    public override void constructor()
-        //    {
-        //        base.constructor();
-        //        //!dw_component_search.SetTransObject(sqlca);
-        //        //1dw_component_search.of_SetRowSelect(true);
-        //        //!inv_rowselect.of_SetStyle(inv_rowselect.EXTENDED);
-        //    }
-
-        //    public override void doubleclicked(int xpos, int ypos, int row, DataColumn dwo)
-        //    {
-        //        base.doubleclicked(xpos, ypos, row, dwo);
-        //        //!cb_select.TriggerEvent(clicked!);
-        //    }
-        //}
-
     }
 }
