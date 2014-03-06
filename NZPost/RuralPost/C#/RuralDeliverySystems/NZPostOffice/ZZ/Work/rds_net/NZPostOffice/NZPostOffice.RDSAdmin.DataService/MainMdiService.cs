@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.DataService
 {
+    // TJB  RPCR_060  Mar_2014
+    // GetMaxHstId:  NEW
+
     [Serializable()]
     public class MainMdiService : CommandEntity<MainMdiService>
     {
@@ -101,6 +104,14 @@ namespace NZPostOffice.RDSAdmin.DataService
         {
             MainMdiService obj = Execute("_GetMaxOutletId");
             outletId = obj.intVal.GetValueOrDefault();
+            return obj.ret;
+        }
+
+        // TJB  RPCR_060  Mar_2014: NEW
+        public static bool GetMaxHstId(ref int hstId)
+        {
+            MainMdiService obj = Execute("_GetMaxHstId");
+            hstId = obj.intVal.GetValueOrDefault();
             return obj.ret;
         }
 
@@ -608,7 +619,28 @@ namespace NZPostOffice.RDSAdmin.DataService
                 }
             }
         }
-        
+
+        // TJB  RPCR_060  Mar_2014: NEW
+        [ServerMethod()]
+        private void _GetMaxHstId()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select max(hst_id) from rd.hs_type";
+                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, null))
+                    {
+                        if (dr.Read())
+                        {
+                            intVal = dr.GetInt32(0);
+                        }
+                    }
+                }
+            }
+        }
+
         [ServerMethod()]
         private void _InsertTownSuburb(int townId, int suburbId)
         {
