@@ -1,32 +1,35 @@
+using System;
+using System.Data;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Collections;
+using System.Collections.Generic;
+using Metex.Windows;
+using NZPostOffice.Shared;
+using NZPostOffice.Shared.VisualComponents;
+using NZPostOffice.RDSAdmin.DataService;
+using NZPostOffice.RDSAdmin.Menus;
+using NZPostOffice.RDSAdmin.DataControls.Security;
+using NZPostOffice.RDSAdmin.Entity.Security;
+
 namespace NZPostOffice.RDSAdmin
 {
-    using System;
-    using System.Data;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.Collections;
-    using System.Collections.Generic;
-    using Metex.Windows;
-    using NZPostOffice.Shared;
-    using NZPostOffice.Shared.VisualComponents;
-    using NZPostOffice.RDSAdmin.DataService;
-    using NZPostOffice.RDSAdmin.Menus;
-    using NZPostOffice.RDSAdmin.DataControls.Security;
-    using NZPostOffice.RDSAdmin.Entity.Security;
+    // TJB  RPCR_060  Mar-2014
+    // Added insert code for hs_type table (see m_insert_click)
+    //
+    // TJB  RPCR_054  12-Aug-2013
+    // Added additional validations for new piece rate types and suppliers
+    // (see pfc_validation())
+    //
+    // TJB  RPCR_054  July-2013
+    // Added check for duplicate payment component type 
+    //    when creating new piece rate supplier
+    // Changed how new piece rate suppliers are added 
+    //    (in RDSAdmin.Entity.PieceRateSupplier)
+    // Removed commented out version of pfc_validation()
 
     public class WMainMdi : FormBase
     {
-        // TJB  RPCR_054  12-Aug-2013
-        // Added additional validations for new piece rate types and suppliers
-        // (see pfc_validation())
-        //
-        // TJB  RPCR_054  July-2013
-        // Added check for duplicate payment component type 
-        //    when creating new piece rate supplier
-        // Changed how new piece rate suppliers are added 
-        //    (in RDSAdmin.Entity.PieceRateSupplier)
-        // Removed commented out version of pfc_validation()
-
         private int il_drop_success = 0;
 
         private int il_group_id = 0;
@@ -123,9 +126,8 @@ namespace NZPostOffice.RDSAdmin
                 if (tn.PrevVisibleNode != null)
                     tn.PrevVisibleNode.EnsureVisible();
             }
-
-
         }
+
         private void tv_1_MouseDown(object sender, MouseEventArgs e)
         {
             TreeNode node = tv_1.GetNodeAt(e.X, e.Y);
@@ -147,10 +149,12 @@ namespace NZPostOffice.RDSAdmin
                 }
             }
         }
+
         private void tv_1_MouseUp(object sender, MouseEventArgs e)
         {
             dragBoxFromMouseDown = Rectangle.Empty;
         }
+
         private void tv_1_MouseMove(object sender, MouseEventArgs e)
         {
             if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
@@ -164,6 +168,7 @@ namespace NZPostOffice.RDSAdmin
                 }
             }
         }
+
         private void tv_1_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
@@ -358,6 +363,15 @@ namespace NZPostOffice.RDSAdmin
             else if (dw_detail.DataObject is DFuelType)
             {
                 ((DFuelType)dw_detail.DataObject).InsertItem<FuelType>(row, FuelType.NewFuelType(null));
+            }
+            // TJB  RPCR_060  Mar-2014
+            // Added insert code for hs_type table
+            else if (dw_detail.DataObject is DHsType)
+            {
+                int nHstId = 0;
+                MainMdiService.GetMaxHstId(ref nHstId);
+                ((DHsType)dw_detail.DataObject).InsertItem<HSType>(row, HSType.NewHSType(nHstId+1));
+                ((DHsType)dw_detail.DataObject).SetCurrent(0);
             }
             else if (dw_detail.DataObject is DOutletType)
             {
@@ -2824,76 +2838,6 @@ namespace NZPostOffice.RDSAdmin
              }*/
         }
 
-        //protected class DwHeader : URadDW
-        //{
-        //    WMainMdi window;
-
-        //    public DwHeader(DataControlPanel dcp)
-        //        : base(dcp)
-        //    {
-        //        window = dcp.FindForm() as WMainMdi;
-        //    }
-        //    public override void constructor()
-        //    {
-        //        base.constructor();
-        //        //! dw_header.SetTransObject(sqlca);
-        //    }
-
-        //    public override int pfc_preupdate()
-        //    {
-        //        base.pfc_preupdate();
-        //        int ancestorreturnvalue = base.pfc_preupdate();
-        //        DateTime ldt_current = DateTime.MaxValue;
-        //        int? ll_group_id;
-
-        //        int SQLCode = 0;
-        //        string SQLErrText = string.Empty;
-
-        //        //  Setup the Created_By and Created_Date column as well as the identity column
-        //        if (this.PBName == "dw_group_header")
-        //        {
-        //            /*SELECT getDate()  INTO :ldt_current  FROM dummy;*/
-        //            StaticVariables.ServiceInterface.WMainMdi_DwHeader_pfc_preupdate_1(ref ldt_current, ref SQLErrText, ref SQLCode);
-
-        //            ll_group_id = GetItemInt(1, "ug_id");
-        //            if (MObject.IsNull(ll_group_id) || ll_group_id <= 0)
-        //            {
-        //                this.SetItem(1, "ug_created_date", ldt_current);
-        //                //!  this.SetItem(1, "ug_created_by", gnv_app.of_GetUserId());
-        //                //!  this.SetItem(1, "ug_id", gnv_app.of_Get_NextSequence("rdsUserGroup"));
-        //            }
-        //            this.SetItem(1, "ug_modified_date", ldt_current);
-        //            //!  this.SetItem(1, "ug_modified_by", gnv_app.of_GetUserId());
-        //            this.AcceptText();
-        //        }
-        //        return ancestorreturnvalue;
-        //    }
-
-        //    public virtual void losefocus(object sender, EventArgs e)
-        //    {
-        //        //!base.losefocus();
-        //        this.AcceptText();
-        //    }
-
-        //    public virtual void pfc_prermbmenu()
-        //    {
-        //        /*! base.pfc_prermbmenu();
-        //         MRdsDw m_SecDw;
-        //         // We create our own rmb menu inherited from m_tvs
-        //         m_SecDw = new MRdsDw();
-        //         m_SecDw.m_table.m_delete.Visible = false;
-        //         m_SecDw.m_table.m_Insert.Visible = false;
-        //         if (dw_header.DataObject == "dw_group_header")
-        //         {
-        //             m_SecDw.m_table.m_insert.Visible = false;
-        //             m_SecDw.m_table.m_delete.Visible = false;
-        //         }
-        //         // Assign our own menu 
-        //         am_dw = m_SecDw;
-        //         // Let ancestor do its normal processing
-        //         base.dw_header_pfc_prermbmenu(am_dw);*/
-        //    }
-
         public virtual int pfc_validation(DataUserControl adw)
         {
             //  base.pfc_validation();
@@ -2938,7 +2882,7 @@ namespace NZPostOffice.RDSAdmin
                 //if (dw_header.DataObject.GetItem<GroupHeader>(0).IsNew || dw_header.DataObject.GetItem<GroupHeader>(0).IsDirty)
                 if (dw_header.DataObject.GetItem<GroupHeader>(0).UgName != dw_header.DataObject.GetItem<GroupHeader>(0).GetInitialValue<string>("_ug_name"))
                 {
-                    /* SELECT count(*)  INTO :ll_count  FROM rds_user_group  WHERE ug_name = :ls_ug_id*/
+                    /* SELECT count(*) INTO :ll_count FROM rds_user_group WHERE ug_name = :ls_ug_id*/
                     if (!MainMdiService.GetRdsUserGroupDataObject(ls_ug_id, ref ll_count))
                     {
                         MessageBox.Show("Unable to validate group name. \n\n" 
