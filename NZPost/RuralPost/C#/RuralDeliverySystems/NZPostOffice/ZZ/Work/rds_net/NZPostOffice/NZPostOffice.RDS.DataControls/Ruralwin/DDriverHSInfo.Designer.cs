@@ -39,11 +39,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.hstNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hsiDateCheckedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hsiPassfailIndDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hstName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiDateChecked = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiPassfailInd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AdditionalDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hsiNotesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hsiNotes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hstHelp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -56,49 +57,54 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.hstNameDataGridViewTextBoxColumn,
-            this.hsiDateCheckedDataGridViewTextBoxColumn,
-            this.hsiPassfailIndDataGridViewTextBoxColumn,
+            this.hstName,
+            this.hsiDateChecked,
+            this.hsiPassfailInd,
             this.AdditionalDate,
-            this.hsiNotesDataGridViewTextBoxColumn});
+            this.hsiNotes,
+            this.hstHelp});
             this.dataGridView1.DataSource = this.bindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(8, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 44;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridView1.Size = new System.Drawing.Size(602, 252);
             this.dataGridView1.TabIndex = 55;
             // 
-            // hstNameDataGridViewTextBoxColumn
+            // hstName
             // 
-            this.hstNameDataGridViewTextBoxColumn.DataPropertyName = "HstName";
+            this.hstName.DataPropertyName = "HstName";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.hstNameDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
-            this.hstNameDataGridViewTextBoxColumn.HeaderText = "Check Type";
-            this.hstNameDataGridViewTextBoxColumn.Name = "hstNameDataGridViewTextBoxColumn";
-            this.hstNameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.hstNameDataGridViewTextBoxColumn.Width = 144;
+            dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.hstName.DefaultCellStyle = dataGridViewCellStyle1;
+            this.hstName.HeaderText = "Check Type";
+            this.hstName.Name = "hstName";
+            this.hstName.ReadOnly = true;
+            this.hstName.Width = 144;
             // 
-            // hsiDateCheckedDataGridViewTextBoxColumn
+            // hsiDateChecked
             // 
-            this.hsiDateCheckedDataGridViewTextBoxColumn.DataPropertyName = "HsiDateChecked";
+            this.hsiDateChecked.DataPropertyName = "HsiDateChecked";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.hsiDateCheckedDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
-            this.hsiDateCheckedDataGridViewTextBoxColumn.HeaderText = "Date Checked";
-            this.hsiDateCheckedDataGridViewTextBoxColumn.Name = "hsiDateCheckedDataGridViewTextBoxColumn";
-            this.hsiDateCheckedDataGridViewTextBoxColumn.Width = 80;
+            this.hsiDateChecked.DefaultCellStyle = dataGridViewCellStyle2;
+            this.hsiDateChecked.HeaderText = "Date Checked";
+            this.hsiDateChecked.MaxInputLength = 12;
+            this.hsiDateChecked.Name = "hsiDateChecked";
+            this.hsiDateChecked.Width = 80;
             // 
-            // hsiPassfailIndDataGridViewTextBoxColumn
+            // hsiPassfailInd
             // 
-            this.hsiPassfailIndDataGridViewTextBoxColumn.DataPropertyName = "HsiPassfailInd";
+            this.hsiPassfailInd.DataPropertyName = "HsiPassfailInd";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.hsiPassfailIndDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
-            this.hsiPassfailIndDataGridViewTextBoxColumn.HeaderText = "P/F";
-            this.hsiPassfailIndDataGridViewTextBoxColumn.Name = "hsiPassfailIndDataGridViewTextBoxColumn";
-            this.hsiPassfailIndDataGridViewTextBoxColumn.Width = 40;
+            this.hsiPassfailInd.DefaultCellStyle = dataGridViewCellStyle3;
+            this.hsiPassfailInd.HeaderText = "P/F";
+            this.hsiPassfailInd.Name = "hsiPassfailInd";
+            this.hsiPassfailInd.Width = 40;
             // 
             // AdditionalDate
             // 
@@ -109,16 +115,24 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.AdditionalDate.Name = "AdditionalDate";
             this.AdditionalDate.Width = 80;
             // 
-            // hsiNotesDataGridViewTextBoxColumn
+            // hsiNotes
             // 
-            this.hsiNotesDataGridViewTextBoxColumn.DataPropertyName = "HsiNotes";
+            this.hsiNotes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+            this.hsiNotes.DataPropertyName = "HsiNotes";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.hsiNotesDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
-            this.hsiNotesDataGridViewTextBoxColumn.HeaderText = "Notes";
-            this.hsiNotesDataGridViewTextBoxColumn.MinimumWidth = 254;
-            this.hsiNotesDataGridViewTextBoxColumn.Name = "hsiNotesDataGridViewTextBoxColumn";
-            this.hsiNotesDataGridViewTextBoxColumn.Width = 254;
+            this.hsiNotes.DefaultCellStyle = dataGridViewCellStyle5;
+            this.hsiNotes.HeaderText = "Notes";
+            this.hsiNotes.MinimumWidth = 254;
+            this.hsiNotes.Name = "hsiNotes";
+            this.hsiNotes.Width = 254;
+            // 
+            // hstHelp
+            // 
+            this.hstHelp.DataPropertyName = "HstHelp";
+            this.hstHelp.HeaderText = "HS Type Help";
+            this.hstHelp.Name = "HstHelp";
+            this.hstHelp.Visible = false;
             // 
             // DDriverHSInfo
             // 
@@ -136,12 +150,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         #endregion
 
         private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn hstNameDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn hsiDateCheckedDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn hsiPassfailIndDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn hstName;
+        private DataGridViewTextBoxColumn hsiDateChecked;
+        private DataGridViewTextBoxColumn hsiPassfailInd;
         private DataGridViewTextBoxColumn AdditionalDate;
-        private DataGridViewTextBoxColumn hsiNotesDataGridViewTextBoxColumn;
-
-
+        private DataGridViewTextBoxColumn hsiNotes;
+        private DataGridViewTextBoxColumn hstHelp;
     }
 }
