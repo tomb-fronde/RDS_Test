@@ -7,6 +7,8 @@ using System.Data.Common;using Metex.Core;using Metex.Core.Security;
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
     // TJB  RPCR_060  Mar-2014: NEW
+    // TJB  RPCR_060  Apr-2014
+    // Added hst_additional_date_errmsg and hst_notes_errmsg columns
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -14,7 +16,10 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("hst_id", "_hst_id", "hs_type")]
 	[MapInfo("hst_name", "_hst_name", "hs_type")]
     [MapInfo("hst_description", "_hst_description", "hs_type")]
-	[System.Serializable()]
+    [MapInfo("hst_help", "_hst_help", "hs_type")]
+    [MapInfo("hst_additional_date_errmsg", "_hst_additional_date_errmsg", "hs_type")]
+    [MapInfo("hst_notes_errmsg", "_hst_notes_errmsg", "hs_type")]
+    [System.Serializable()]
 
 	public class HSType : Entity<HSType>
 	{
@@ -25,20 +30,29 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		[DBField()]
 		private string  _hst_name;
 
-		[DBField()]
+        [DBField()]
         private string _hst_description;
+
+        [DBField()]
+        private string _hst_help;
+
+        [DBField()]
+        private string _hst_additional_date_errmsg;
+
+        [DBField()]
+        private string _hst_notes_errmsg;
 
 
 		public virtual int? HstId
 		{
 			get
 			{
-				CanReadProperty(true);
+				CanReadProperty("HstId",true);
                 return _hst_id;
 			}
 			set
 			{
-				CanWriteProperty(true);
+                CanWriteProperty("HstId", true);
 				if ( _hst_id != value )
 				{
 					_hst_id = value;
@@ -51,12 +65,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		{
 			get
 			{
-				CanReadProperty(true);
+                CanReadProperty("HstName", true);
 				return _hst_name;
 			}
 			set
 			{
-				CanWriteProperty(true);
+                CanWriteProperty("HstName", true);
 				if ( _hst_name != value )
 				{
 					_hst_name = value;
@@ -66,23 +80,79 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		}
 
         public virtual string HstDescription
-		{
-			get
-			{
-				CanReadProperty(true);
-				return _hst_description;
-			}
-			set
-			{
-				CanWriteProperty(true);
-				if ( _hst_description != value )
-				{
-					_hst_description = value;
-					PropertyHasChanged();
-				}
-			}
-		}
-		private HSType[] dataList;
+        {
+            get
+            {
+                CanReadProperty("HstDescription", true);
+                return _hst_description;
+            }
+            set
+            {
+                CanWriteProperty("HstDescription", true);
+                if (_hst_description != value)
+                {
+                    _hst_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HstHelp
+        {
+            get
+            {
+                CanReadProperty("HstHelp", true);
+                return _hst_help;
+            }
+            set
+            {
+                CanWriteProperty("HstHelp", true);
+                if (_hst_help != value)
+                {
+                    _hst_help = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HstAdditionalDateErrmsg
+        {
+            get
+            {
+                CanReadProperty("HstAdditionalDateErrmsg", true);
+                return _hst_additional_date_errmsg;
+            }
+            set
+            {
+                CanWriteProperty("HstAdditionalDateErrmsg", true);
+                if (_hst_additional_date_errmsg != value)
+                {
+                    _hst_additional_date_errmsg = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HstNotesErrmsg
+        {
+            get
+            {
+                CanReadProperty("HstNotesErrmsg", true);
+                return _hst_notes_errmsg;
+            }
+            set
+            {
+                CanWriteProperty("HstNotesErrmsg", true);
+                if (_hst_notes_errmsg != value)
+                {
+                    _hst_notes_errmsg = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+
+        private HSType[] dataList;
 
 		protected override object GetIdValue()
 		{
