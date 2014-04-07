@@ -9,6 +9,12 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB  RPCR_060  Feb-2014
+    // Added HstHelp, HstAdditionalDateErrmsg, HstNotesErrmsg 
+    //    - populated from the hs_type table
+    // Fixed bugs in delete and update data access functions
+    //    - added hst_id to where clauses
+    //
+    // TJB  RPCR_060  Feb-2014
     // All functions working (though Delete never used)
     //
     // TJB  RPCR_060  Jan-2014
@@ -28,6 +34,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("hsi_passfail_ind", "_hsi_passfail_ind", "driver_hs_info")]
     [MapInfo("hsi_additional_date", "_hsi_additional_date", "driver_hs_info")]
     [MapInfo("hsi_notes", "_hsi_notes", "driver_hs_info")]
+    [MapInfo("hst_help", "_hst_help", "")]
+    [MapInfo("hst_additional_date_errmsg", "_hst_additional_date_errmsg", "")]
+    [MapInfo("hst_notes_errmsg", "_hst_notes_errmsg", "")]
     [System.Serializable()]
 
 	public class DriverHSInfo : Entity<DriverHSInfo>
@@ -53,6 +62,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
         [DBField()]
         private string _hsi_notes;
+
+        [DBField()]
+        private string _hst_help;
+
+        [DBField()]
+        private string _hst_additional_date_errmsg;
+
+        [DBField()]
+        private string _hst_notes_errmsg;
 
 
 		public virtual int? DriverNo
@@ -127,21 +145,51 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual DateTime? prevHsiDateChecked
+        {
+            get
+            {
+                CanReadProperty("HsiDateChecked", true);
+                return (DateTime?)GetInitialValue("_hsi_date_checked");
+            }
+        }
+
         public virtual string HsiPassfailInd
         {
             get
             {
                 CanReadProperty("HsiPassfailInd", true);
-                return _hsi_passfail_ind;
+                return (_hsi_passfail_ind == null) ? _hsi_passfail_ind : _hsi_passfail_ind.ToUpper();
             }
             set
             {
                 CanWriteProperty("HsiPassfailInd", true);
-                if (_hsi_passfail_ind != value)
+                if (_hsi_passfail_ind == null)
                 {
-                    _hsi_passfail_ind = value;
+                    _hsi_passfail_ind = (value == null) ? value : value.ToUpper();
                     PropertyHasChanged();
                 }
+                else
+                if (value == null)
+                {
+                    _hsi_passfail_ind = null;
+                    PropertyHasChanged();
+                }
+                else
+                if (_hsi_passfail_ind.ToUpper() != value.ToUpper())
+                {
+                    _hsi_passfail_ind = value.ToUpper();
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string prevHsiPassfailInd
+        {
+            get
+            {
+                CanReadProperty("HsiPassfailInd", true);
+                return (string)GetInitialValue("_hsi_passfail_ind");
             }
         }
 
@@ -163,6 +211,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual DateTime? prevHsiAdditionalDate
+        {
+            get
+            {
+                CanReadProperty("prevHsiAdditionalDate", true);
+                return (DateTime?)GetInitialValue("_hsi_additional_date");
+            }
+        }
+
         public virtual string HsiNotes
         {
             get
@@ -181,7 +238,70 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual string prevHsiNotes
+        {
+            get
+            {
+                CanReadProperty("prevHsiNotes", true);
+                return (string)GetInitialValue("_hsi_notes");
+            }
+        }
 
+        public virtual string HstHelp
+        {
+            get
+            {
+                CanReadProperty("HstHelp", true);
+                return _hst_help;
+            }
+            set
+            {
+                CanWriteProperty("HstHelp", true);
+                if (_hst_help != value)
+                {
+                    _hst_help = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HstAdditionalDateErrmsg
+        {
+            get
+            {
+                CanReadProperty("HstAdditionalDateErrmsg", true);
+                return _hst_additional_date_errmsg;
+            }
+            set
+            {
+                CanWriteProperty("HstAdditionalDateErrmsg", true);
+                if (_hst_additional_date_errmsg != value)
+                {
+                    _hst_additional_date_errmsg = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HstNotesErrmsg
+        {
+            get
+            {
+                CanReadProperty("HstNotesErrmsg", true);
+                return _hst_notes_errmsg;
+            }
+            set
+            {
+                CanWriteProperty("HstNotesErrmsg", true);
+                if (_hst_notes_errmsg != value)
+                {
+                    _hst_notes_errmsg = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        
         protected override object GetIdValue()
 		{
 			return "";
@@ -212,6 +332,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    string newLine = Environment.NewLine;
+
 					cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "rd.sp_getDriverHSInfo";
                     ParameterCollection pList = new ParameterCollection();
@@ -234,6 +356,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._hsi_passfail_ind = GetValueFromReader<string>(dr, 4);
                                 instance._hsi_additional_date = GetValueFromReader<DateTime?>(dr, 5);
                                 instance._hsi_notes = GetValueFromReader<string>(dr, 6);
+                                instance._hst_help = GetValueFromReader<string>(dr, 7);
+                                if (instance._hst_help != null && instance._hst_help.Length > 0)
+                                    instance._hst_help = instance._hst_help.Replace("|", newLine);
+                                instance._hst_additional_date_errmsg = GetValueFromReader<string>(dr, 8);
+                                if (instance._hst_additional_date_errmsg != null && instance._hst_additional_date_errmsg.Length > 0)
+                                    instance._hst_additional_date_errmsg = instance._hst_additional_date_errmsg.Replace("|", newLine);
+                                instance._hst_notes_errmsg = GetValueFromReader<string>(dr, 9);
+                                if (instance._hst_notes_errmsg != null && instance._hst_notes_errmsg.Length > 0)
+                                    instance._hst_notes_errmsg = instance._hst_notes_errmsg.Replace("|", newLine);
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
                                 _list.Add(instance);
@@ -258,6 +389,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 InsertEntity();
                 return;
             }
+            if (_hsi_date_checked == null)
+            {
+                DeleteEntity();
+                return;
+            }
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 DbCommand cm = cn.CreateCommand();
@@ -267,9 +404,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 {
                     if (GenerateUpdateCommandText(cm, "driver_hs_info", ref pList))
                     {
-                        cm.CommandText += " WHERE  driver_no = @driver_no ";
+                        cm.CommandText += " WHERE driver_no = @driver_no "
+                                        + "   and hst_id = @hst_id";
 
                         pList.Add(cm, "driver_no", GetInitialValue("_driver_no"));
+                        pList.Add(cm, "hst_id", GetInitialValue("_hst_id"));
                         DBHelper.ExecuteNonQuery(cm, pList);
                     }
                     StoreInitialValues();
@@ -316,10 +455,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "driver_no", GetInitialValue("_driver_no"));
+                    pList.Add(cm, "hst_id", GetInitialValue("_hst_id"));
                     try
                     {
                         cm.CommandText = "DELETE FROM driver_hs_info "
-                                       + "WHERE driver_no = @driver_no ";
+                                       + "WHERE driver_no = @driver_no "
+                                       + "  AND hst_id = @hst_id";
                         DBHelper.ExecuteNonQuery(cm, pList);
                         tr.Commit();
                     }
