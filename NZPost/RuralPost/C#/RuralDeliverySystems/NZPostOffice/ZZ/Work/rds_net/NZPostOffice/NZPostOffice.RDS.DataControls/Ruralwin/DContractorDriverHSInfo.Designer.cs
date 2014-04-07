@@ -80,6 +80,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // driver_name
             // 
+            this.driver_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.driver_name.DataPropertyName = "DriverName";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -87,10 +88,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.driver_name.DefaultCellStyle = dataGridViewCellStyle2;
+            this.driver_name.FillWeight = 10F;
             this.driver_name.HeaderText = "Driver";
             this.driver_name.Name = "driver_name";
             this.driver_name.ReadOnly = true;
-            this.driver_name.Width = 160;
+            this.driver_name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.driver_name.Width = 155;
             // 
             // hst_name
             // 
@@ -159,6 +162,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private System.Windows.Forms.DataGridViewTextBoxColumn hsi_date_checked;
         private System.Windows.Forms.DataGridViewTextBoxColumn hsi_passfail_ind;
         private System.Windows.Forms.DataGridViewTextBoxColumn driver_no;
+
+
+
 
 
 
