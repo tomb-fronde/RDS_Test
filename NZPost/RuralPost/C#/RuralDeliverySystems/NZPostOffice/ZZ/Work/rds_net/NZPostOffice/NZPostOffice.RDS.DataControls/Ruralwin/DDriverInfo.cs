@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  RPCR_060  Mar-2014
+    // Removed redundant/unused code
+    //
     // TJB  RPCR_060  Feb-2014
     // Added Mobile2 to display
     //
@@ -21,25 +24,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         public DDriverInfo()
         {
             InitializeComponent();
-            //InitializeDropdown();
-        }
-/*
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            if (!DesignMode)
-            {
-                InitializeDropdown();
-            }
-            
-            base.OnHandleCreated(e);
         }
 
-        private void InitializeDropdown()
-        {
-            rd_no.AssignDropdownType<DDddwContractRd>();
-            tc_id.AssignDropdownType<DDddwContractMailtown>();
-        }
-*/
         public int Retrieve(int? in_driver_no)
         {
             return RetrieveCore<DriverInfo>(DriverInfo.GetAllDriverInfo(in_driver_no));
