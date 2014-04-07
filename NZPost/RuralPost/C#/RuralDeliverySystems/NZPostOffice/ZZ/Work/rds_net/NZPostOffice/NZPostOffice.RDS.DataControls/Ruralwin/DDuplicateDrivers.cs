@@ -10,13 +10,12 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  RPCR_060  Mar-2014: NEW
+    // DW for WDuplicateDrivers
+    // Display list of duplicate drivers in an untitled popup window
+
     public partial class DDuplicateDrivers : Metex.Windows.DataUserControl
     {
-        // TJB  RPCR_017 July-2010
-        // Added 'Approved' column + associated layout changes
-        // Added setTotal method so WDuplicateDrivers can 
-        // save recalculated compute_1 value.
-
         public DDuplicateDrivers()
         {
             InitializeComponent();
@@ -24,7 +23,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         public int Retrieve(string inFirstnames, string inSurname)
         {
-            //DuplicateDrivers
             return RetrieveCore<DuplicateDrivers>(new List<DuplicateDrivers>
                 (DuplicateDrivers.GetAllDuplicateDrivers(inFirstnames, inSurname)));
         }

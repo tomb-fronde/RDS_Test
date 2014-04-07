@@ -51,10 +51,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.grid.AllowUserToAddRows = false;
             this.grid.AllowUserToDeleteRows = false;
-            this.grid.AllowUserToResizeRows = false;
-            this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.grid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.grid.AutoGenerateColumns = false;
+            this.grid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.grid.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.grid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -82,8 +83,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.Name = "grid";
             this.grid.ReadOnly = true;
             this.grid.RowHeadersVisible = false;
+            this.grid.RowTemplate.Height = 16;
+            this.grid.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(585, 126);
+            this.grid.Size = new System.Drawing.Size(637, 126);
             this.grid.TabIndex = 0;
             // 
             // driver_no
@@ -95,6 +98,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
             this.driver_no.DefaultCellStyle = dataGridViewCellStyle11;
             this.driver_no.HeaderText = "Driver No";
+            this.driver_no.MinimumWidth = 60;
             this.driver_no.Name = "driver_no";
             this.driver_no.ReadOnly = true;
             this.driver_no.Width = 60;
@@ -149,7 +153,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.phone_day.HeaderText = "Phone Day";
             this.phone_day.Name = "phone_day";
             this.phone_day.ReadOnly = true;
-            this.phone_day.Width = 60;
+            this.phone_day.Width = 72;
             // 
             // phone_night
             // 
@@ -162,7 +166,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.phone_night.HeaderText = "Phone Night";
             this.phone_night.Name = "phone_night";
             this.phone_night.ReadOnly = true;
-            this.phone_night.Width = 60;
+            this.phone_night.Width = 72;
             // 
             // mobile
             // 
@@ -175,7 +179,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.mobile.HeaderText = "Mobile";
             this.mobile.Name = "mobile";
             this.mobile.ReadOnly = true;
-            this.mobile.Width = 60;
+            this.mobile.Width = 72;
             // 
             // mobile2
             // 
@@ -188,16 +192,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.mobile2.HeaderText = "Mobile2";
             this.mobile2.Name = "mobile2";
             this.mobile2.ReadOnly = true;
-            this.mobile2.Width = 60;
+            this.mobile2.Width = 72;
             // 
             // DDuplicateDrivers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Controls.Add(this.grid);
             this.Name = "DDuplicateDrivers";
-            this.Size = new System.Drawing.Size(585, 134);
+            this.Size = new System.Drawing.Size(640, 134);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -214,6 +220,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private System.Windows.Forms.DataGridViewTextBoxColumn phone_night;
         private System.Windows.Forms.DataGridViewTextBoxColumn mobile;
         private System.Windows.Forms.DataGridViewTextBoxColumn mobile2;
+
+
+
 
     }
 }
