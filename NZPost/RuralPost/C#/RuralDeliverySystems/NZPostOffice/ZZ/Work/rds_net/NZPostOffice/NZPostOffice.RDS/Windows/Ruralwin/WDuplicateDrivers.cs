@@ -12,6 +12,11 @@ using NZPostOffice.Shared.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_060  Mar-2014: NEW
+    // Display list of drivers matching firstname/surname
+    // - wildcards ("%") allowed
+    // Update parent (WDriverInfoMaint) with selected driver's info
+
     public class WDuplicateDrivers : WMaster
     {
 
@@ -50,8 +55,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_cancel
             // 
+            this.cb_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_cancel.Location = new System.Drawing.Point(559, 141);
+            this.cb_cancel.Location = new System.Drawing.Point(601, 158);
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(72, 20);
             this.cb_cancel.TabIndex = 1;
@@ -60,18 +67,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dwdriver
             // 
+            this.dwdriver.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dwdriver.DataObject = null;
             this.dwdriver.FireConstructor = false;
-            this.dwdriver.Location = new System.Drawing.Point(0, 0);
+            this.dwdriver.Location = new System.Drawing.Point(5, 5);
             this.dwdriver.Name = "dwdriver";
-            this.dwdriver.Size = new System.Drawing.Size(631, 132);
+            this.dwdriver.Size = new System.Drawing.Size(668, 144);
             this.dwdriver.TabIndex = 2;
             this.dwdriver.RowFocusChanged += new System.EventHandler(this.dwdriver_rowfocuschanged);
             // 
             // cb_save
             // 
+            this.cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_save.Location = new System.Drawing.Point(481, 141);
+            this.cb_save.Location = new System.Drawing.Point(523, 158);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(72, 20);
             this.cb_save.TabIndex = 3;
@@ -80,14 +91,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // WDuplicateDrivers
             // 
-            this.AcceptButton = this.cb_cancel;
+            this.AcceptButton = this.cb_save;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(635, 165);
+            this.CancelButton = this.cb_cancel;
+            this.ClientSize = new System.Drawing.Size(677, 182);
             this.ControlBox = false;
             this.Controls.Add(this.cb_save);
             this.Controls.Add(this.cb_cancel);
             this.Controls.Add(this.dwdriver);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Location = new System.Drawing.Point(182, 89);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
