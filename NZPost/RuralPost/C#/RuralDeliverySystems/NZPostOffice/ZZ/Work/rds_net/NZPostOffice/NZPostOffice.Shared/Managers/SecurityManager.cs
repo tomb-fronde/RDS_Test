@@ -86,7 +86,8 @@ namespace NZPostOffice.Shared.Security
             if (componentlist.RowCount > 0)
             {
                 int componentId = componentlist.GetValue<int>(0, "Id");
-                return HasPrivilege(componentId, "", "");
+                bool bHasPrivilege = HasPrivilege(componentId, "", "");
+                return bHasPrivilege;
             }
             else
             {
