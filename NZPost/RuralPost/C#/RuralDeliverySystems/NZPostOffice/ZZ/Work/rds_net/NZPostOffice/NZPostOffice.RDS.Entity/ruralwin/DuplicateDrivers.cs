@@ -8,9 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
-    // TJB RPCR_017 July-2010
-    // Added column ca_approved and associated changes
-    // Reformatted query strings
+    // TJB RPCR_060  Mar-2014: NEW
+    // Select duplicate drivers given first names and surname
+    // Apr-2014: changed to allow "%" wildcards and comparison from "=" to "like"
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -234,8 +234,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                         + "d_mobile, "
                                         + "d_mobile2 "
                                    + "FROM rd.driver "
-                                  + "WHERE d_first_names = @Firstnames "
-                                    + "and d_surname = @Surname ";
+                                  + "WHERE d_first_names like @Firstnames "
+                                    + "and d_surname like @Surname ";
                     
                     ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "Firstnames", inFirstnames);
