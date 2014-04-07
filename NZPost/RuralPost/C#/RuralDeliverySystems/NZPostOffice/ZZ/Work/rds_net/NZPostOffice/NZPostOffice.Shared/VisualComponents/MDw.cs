@@ -252,63 +252,9 @@ namespace NZPostOffice.Shared.VisualComponents
             m_debug.Click += new EventHandler(m_debug_clicked);
         }
 
-        //!public virtual int of_setparent(Controls.UDw adw_parent)
-        //{
-        //    // ////////////////////////////////////////////////////////////////////////////
-        //    // 
-        //    // 	Function:  of_SetParent
-        //    // 
-        //    // 	Access:  public
-        //    // 
-        //    // 	Arguments:
-        //    // 	adw_parent   parent object of the menu
-        //    // 
-        //    // 	Returns:  integer
-        //    // 	 1 = success
-        //    // 	-1 = failure, parent reference is not valid
-        //    // 
-        //    // 	Description:  Sets the parent object of this menu
-        //    // 
-        //    // ////////////////////////////////////////////////////////////////////////////
-        //    // 
-        //    // 	Revision History
-        //    // 
-        //    // 	Version
-        //    // 	5.0   Initial version
-        //    // 
-        //    // ////////////////////////////////////////////////////////////////////////////
-        //    // 
-        //    // 	Copyright © 1996-1997 Sybase, Inc. and its subsidiaries.  All rights reserved.
-        //    // 	Any distribution of the PowerBuilder Foundation Classes  ( PFC)
-        //    // 	source code by other than Sybase, Inc. and its subsidiaries is prohibited.
-        //    // 
-        //    // ////////////////////////////////////////////////////////////////////////////
-        //    //int li_rc = 1;
-        //    //if (IsValid(adw_parent))
-        //    //{
-        //    //    idw_parent = adw_parent;
-        //    //}
-        //    //else
-        //    //{
-        //    //    li_rc = -(1);
-        //    //}
-        //    //return li_rc;
-        //    idw_parent = adw_parent;
-        //    if (adw_parent.DataControl is DataGridUserControl)
-        //    {
-        //        ((DataGridUserControl)adw_parent.DataControl).DataGrid.ContextMenuStrip = this;
-        //    }
-        //    else
-        //    {
-        //        adw_parent.DataControl.ContextMenuStrip = this;
-        //    }
-        //    return 1;
-        //}
-
         public virtual void m_cut_clicked(object sender, EventArgs e)
         {
             //!idw_parent.pfc_cut();
-
         }
 
         public virtual void m_copy_clicked(object sender, EventArgs e)
