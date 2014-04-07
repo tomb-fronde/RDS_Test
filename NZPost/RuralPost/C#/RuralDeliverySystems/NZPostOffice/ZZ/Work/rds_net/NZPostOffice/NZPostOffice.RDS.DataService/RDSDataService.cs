@@ -10,6 +10,16 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_060  Mar-2014
+    // NEW: LookForDuplicateDriver
+    // NEW: AddDriver
+    // Renamed DropDriverRecords as RemoveDriver
+    // Tidied code in GetNextSequence (removed extraneous commented-out code)
+    //
+    // TJB  RPCR_060  Feb-2014
+    // NEW: DropDriverRecords
+    // NEW: AddContractorDriver
+    //
     // TJB  Release 7.1.10 Fixup  Aug-2013
     // NEW: TruncateTBmPiecerates
     //
@@ -1034,6 +1044,55 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_TruncateTBmPiecerates");
             //sqlCode = obj._sqlcode;
             //sqlErrText = obj._sqlerrtext;
+        }
+
+        // TJB  RPCR_060  Feb-2014: NEW
+        /// <summary>
+        /// Checks to see if a driver is already listed
+        /// Returns the number of matches.
+        /// </summary>
+        public static RDSDataService LookForDuplicateDriver(string sFirstnames, string sSurname)
+        {
+            RDSDataService obj = Execute("_LookForDuplicateDriver", sFirstnames, sSurname);
+            return obj;
+        }
+
+        // TJB  RPCR_060  Feb-2014: NEW
+        /// <summary>
+        ///    Inserts a new entry in the contractor_driver table
+        /// Returns
+        ///    0    Insert failed (duplicate)
+        ///    1    Insert successful
+        /// </summary>
+        public static RDSDataService AddContractorDriver(int nContractorNo, int nDriverNo)
+        {
+            RDSDataService obj = Execute("_AddContractorDriver", nContractorNo, nDriverNo);
+            return obj;
+        }
+
+        // TJB  RPCR_060  Feb-2014: NEW
+        /// <summary>
+        ///    Inserts a new entry in the driver table
+        /// Returns
+        ///    0    Insert failed (duplicate)
+        ///    1    Insert successful
+        /// </summary>
+        public static int AddDriver(int nDriverNo, string sTitle, string sFirstnames, string sSurname
+                                    , string sPhoneDay, string sPhoneNight, string sMobile, string sMobile2)
+        {
+            RDSDataService obj = Execute("_AddDriver", nDriverNo, sTitle, sFirstnames, sSurname
+                                    , sPhoneDay, sPhoneNight, sMobile, sMobile2);
+            return obj.intVal;
+        }
+
+        // TJB  RPCR_060  Feb-2014: NEW
+        /// <summary>
+        ///    Removes a driver from the contractor_driver, 
+        ///    driver, and driver_hs_info tables
+        /// </summary>
+        public static void RemoveDriver(int nContractorNo, int nDriverNo)
+        {
+            RDSDataService obj = Execute("_RemoveDriver", nContractorNo, nDriverNo);
         }
 
         // TJB  RPCR_054  June-2013: NEW
@@ -5797,18 +5856,6 @@ namespace NZPostOffice.RDS.DataService
             {
                 using (SqlCommand cm = cn.CreateCommand())
                 {                 
-                  
-                    // add by mkwang
-                    //!cm.CommandText = "declare @x  int exec @x = rd.f_getNextSequence 'NPADFileSeq',1,10000 select @x";
-                    ////cm.CommandType = CommandType.StoredProcedure;
-                    ////cm.CommandText = "rd.f_getNextSequence";                    
-
-                    ////pList.Add(cm, "sequencename", seqname);
-                    ////pList.Add(cm, "update_flag", 1);
-                    ////pList.Add(cm, "wrapValue", 10000);
-                    //pList.Add(cm, "RETURN_VALUE", intVal);                    
-                    //pList["RETURN_VALUE"].Direction = ParameterDirection.ReturnValue;
-
                     cm.CommandType = CommandType.Text;
                     cm.CommandText = "declare @RETURN_VALUE  int exec @RETURN_VALUE = rd.f_getNextSequence '" + seqname + "',1,10000 select @RETURN_VALUE";                 
 
@@ -8261,6 +8308,175 @@ namespace NZPostOffice.RDS.DataService
                     {
                         _sqlcode = -1;
                         _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_060  Mar-2014: New
+        /// <summary>
+        ///     Checks to see if a driver is already listed
+        ///     Returns the number of matches.
+        /// </summary>
+        [ServerMethod]
+        private void _LookForDuplicateDriver(string sFirstnames, string sSurname)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "select count(*) from rd.driver"
+                                   + " where d_surname like @Surname "
+                                   + "   and d_first_names like @Firstnames ";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "Firstnames", sFirstnames);
+                    pList.Add(cm, "Surname", sSurname);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _sqlcode = 0;
+                                intVal = dr.GetInt32(0);
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                                intVal = -1;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_060  Feb-2014: New
+        /// <summary>
+        ///     Inserts a record in the contractor_driver table
+        ///     Returns
+        ///        0    Insert failed (duplicate)
+        ///        1    Insert successful
+        /// </summary>
+        [ServerMethod]
+        private void _AddContractorDriver(int nContractorNo, int nDriverNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "insert into rd.contractor_driver"
+                                   + " (contractor_supplier_no, driver_no) "
+                                   + "values "
+                                   + " (@ContractorNo, @DriverNo)";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "ContractorNo", nContractorNo);
+                    pList.Add(cm, "DriverNo", nDriverNo);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                        intVal = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_060  Mar-2014: New
+        /// <summary>
+        ///     Inserts a record in the driver table
+        ///     Returns
+        ///        0    Insert failed (duplicate)
+        ///        1    Insert successful
+        /// </summary>
+        [ServerMethod]
+        private void _AddDriver(int nDriverNo, string sTitle, string sFirstnames, string sSurname,
+                                string sPhoneDay, string sPhoneNight, string sMobile, string sMobile2)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandText = "insert into rd.driver"
+                                   + " (driver_no, d_title, d_surname, d_first_names"
+                                   + ", d_phone_day, d_phone_night, d_mobile, d_mobile2) "
+                                   + "values "
+                                   + " (@DriverNo, @Title, @Surname, @Firstnames" 
+                                   + ", @PhoneDay, @PhoneNight, @Mobile, @Mobile2)";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "DriverNo", nDriverNo);
+                    pList.Add(cm, "Title", sTitle);
+                    pList.Add(cm, "Firstnames", sFirstnames);
+                    pList.Add(cm, "Surname", sSurname);
+                    pList.Add(cm, "PhoneDay", sPhoneDay);
+                    pList.Add(cm, "PhoneNight", sPhoneNight);
+                    pList.Add(cm, "Mobile", sMobile);
+                    pList.Add(cm, "Mobile2", sMobile2);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                        intVal = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_060  Apr-2014: NEW
+        /// <summary>
+        ///    Removes a driver from the contractor_driver, and if no
+        ///    longer referenced in that table, removes the driver records
+        ///    from the driver and driver_hs_info tables.
+        /// </summary>
+        [ServerMethod]
+        private void _RemoveDriver(int nContractorNo, int nDriverNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_remove_driver";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inContractorNo", nContractorNo);
+                    pList.Add(cm, "inDriverNo", nDriverNo);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                        intVal = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                        intVal = -1;
                     }
                 }
             }
