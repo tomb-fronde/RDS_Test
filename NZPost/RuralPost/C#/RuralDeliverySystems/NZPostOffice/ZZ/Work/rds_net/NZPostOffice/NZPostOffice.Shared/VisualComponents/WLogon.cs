@@ -1,5 +1,9 @@
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB  Apr-2014
+    // Added Application.ProductName == "Rural Delivery System Administration"
+    // to btnLogin_Click to give user grace login attempts.
+
     using System;
     using System.Configuration;
     using System.Windows.Forms;
@@ -346,8 +350,10 @@ namespace NZPostOffice.Shared.VisualComponents
                     {
                         // number of login attempts exceeded
                         // lock this account!
-                        MessageBox.Show("Sorry, you do not have access to this system.\n The account '" +
-                            tbUserID.Text + "' has been disabled", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Sorry, you do not have access to this system.\n" 
+                                        + " The account '" + tbUserID.Text + "' has been disabled."
+                                        , ""
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //!DisableAccount(uID);
                         userID = StaticVariables.LoginId;
                         UpdateAppSettings(userID);
@@ -356,7 +362,10 @@ namespace NZPostOffice.Shared.VisualComponents
                     }
                     break;
                 case -3:
-                    MessageBox.Show("Your password has expired.  " + "You must change the password before you can run the system.", "Password Expired", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show("Your password has expired.  \n" 
+                                    + "You must change the password before you can run the system."
+                                    , "Password Expired"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     // inv_logonattrib.ii_rc = -1;
                     DialogResult = DialogResult.No;
                     break;
@@ -381,7 +390,8 @@ namespace NZPostOffice.Shared.VisualComponents
                 return;
             }
             if (Application.ProductName == "Rural Delivery System" ||
-                Application.ProductName == "Owner Driver Payment System")
+                Application.ProductName == "Owner Driver Payment System" ||
+                Application.ProductName == "Rural Delivery System Administration")
                 return;
 
             NZPostOffice.Shared.Security.SecurityManager securitymanager = new NZPostOffice.Shared.Security.SecurityManager();
