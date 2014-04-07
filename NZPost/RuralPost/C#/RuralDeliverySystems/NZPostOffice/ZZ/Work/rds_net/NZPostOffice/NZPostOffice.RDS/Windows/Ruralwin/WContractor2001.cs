@@ -16,11 +16,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContractor2001 : WAncestorWindow
     {
+        // TJB  RPCR_060  Mar-2014
+        // Refinements to View/Edit, Add driver,and Remove button functionality
+        //
         // TJB  RPCR_060  Feb-2014
         // Moved View/Edit, Add driver, Remove (driver) buttons and functionality
         //
         // TJB  RPCR_060  Jan-2014
-        // Added tabpage_drivers and associated dw_drivers.
+        // Added tabpage_drivers and associated dw_driversHSInfo.
         // (Disabled for 7.1.11.3 release)
         //
         // TJB  Dec-2013  RPCR057b (New AP file format)
@@ -38,7 +41,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public URdsDw dw_ds_numbers;
         public URdsDw dw_post_tax_deductions;
         public URdsDw dw_procurement;
-        public URdsDw dw_drivers;
+        public URdsDw dw_driversHSInfo;
 
         public URdsDw idw_owner_driver;
         public URdsDw idw_contract_types;
@@ -65,6 +68,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public bool ib_IS_NEW = false;
 
+        public bool ib_CB_ADD_OWNER = false;
+
         private bool inAdminGroup = false;         // TJB Dec-2013: added
 
         private string checkString = "";
@@ -87,9 +92,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public TabPage tabpage_drivers;
 
-        private Button cb_driverinfo;
-        private Button cb_addDriver;
+        private Button cb_EditDriver;
+        private Button cb_AddDriver;
         private Button cb_RemoveDriver;
+        private Button cb_AddOwner;
+        private ToolTip tt_RemoveDriver;
 
         #endregion
 
@@ -117,10 +124,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_procurement.DataObject = new DContractorProcurement();
             dw_procurement.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            dw_drivers.DataObject = new DContractorDriverHSInfo();
-            dw_drivers.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            cb_driverinfo.Click += new System.EventHandler(cb_driverinfo_Click);
-            cb_addDriver.Click += new System.EventHandler(cb_AddDriver_Click);
+            dw_driversHSInfo.DataObject = new DContractorDriverHSInfo();
+            dw_driversHSInfo.DataObject.BorderStyle = BorderStyle.Fixed3D;
+            dw_driversHSInfo.DoubleClick += new EventHandler(dw_driversHSInfo_DoubleClick);
+
+            cb_AddDriver.Click += new System.EventHandler(cb_AddDriver_Click);
+            cb_EditDriver.Click += new System.EventHandler(cb_EditDriver_Click);
             cb_RemoveDriver.Click += new System.EventHandler(cb_RemoveDriver_Click);
 
             dw_owner_driver.Constructor += new UserEventDelegate(dw_owner_driver_constructor);
@@ -177,10 +186,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_procurement = new System.Windows.Forms.TabPage();
             this.dw_procurement = new NZPostOffice.RDS.Controls.URdsDw();
             this.tabpage_drivers = new System.Windows.Forms.TabPage();
-            this.cb_driverinfo = new System.Windows.Forms.Button();
-            this.dw_drivers = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_EditDriver = new System.Windows.Forms.Button();
+            this.dw_driversHSInfo = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_RemoveDriver = new System.Windows.Forms.Button();
-            this.cb_addDriver = new System.Windows.Forms.Button();
+            this.cb_AddDriver = new System.Windows.Forms.Button();
+            this.tt_RemoveDriver = new System.Windows.Forms.ToolTip(this.components);
+            this.cb_AddOwner = new System.Windows.Forms.Button();
             this.tab_contractor.SuspendLayout();
             this.tabpage_owner_driver.SuspendLayout();
             this.tabpage_contract_types.SuspendLayout();
@@ -189,7 +200,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_post_tax_deductions.SuspendLayout();
             this.tabpage_procurement.SuspendLayout();
             this.tabpage_drivers.SuspendLayout();
-            this.dw_drivers.SuspendLayout();
+            this.dw_driversHSInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // st_label
@@ -352,37 +363,39 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // tabpage_drivers
             // 
             this.tabpage_drivers.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.tabpage_drivers.Controls.Add(this.cb_driverinfo);
-            this.tabpage_drivers.Controls.Add(this.dw_drivers);
+            this.tabpage_drivers.Controls.Add(this.cb_EditDriver);
+            this.tabpage_drivers.Controls.Add(this.dw_driversHSInfo);
             this.tabpage_drivers.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_drivers.Location = new System.Drawing.Point(4, 22);
             this.tabpage_drivers.Name = "tabpage_drivers";
             this.tabpage_drivers.Size = new System.Drawing.Size(585, 303);
             this.tabpage_drivers.TabIndex = 6;
-            this.tabpage_drivers.Text = "Drivers H&S";
+            this.tabpage_drivers.Tag = "ComponentName=Driver HS;";
+            this.tabpage_drivers.Text = "Driver HS";
             this.tabpage_drivers.Visible = false;
             // 
-            // cb_driverinfo
+            // cb_EditDriver
             // 
-            this.cb_driverinfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cb_driverinfo.Location = new System.Drawing.Point(480, 163);
-            this.cb_driverinfo.Name = "cb_driverinfo";
-            this.cb_driverinfo.Size = new System.Drawing.Size(75, 23);
-            this.cb_driverinfo.TabIndex = 0;
-            this.cb_driverinfo.Text = "View/Edit";
-            this.cb_driverinfo.UseVisualStyleBackColor = true;
-            this.cb_driverinfo.Visible = false;
+            this.cb_EditDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_EditDriver.Location = new System.Drawing.Point(480, 163);
+            this.cb_EditDriver.Name = "cb_EditDriver";
+            this.cb_EditDriver.Size = new System.Drawing.Size(75, 23);
+            this.cb_EditDriver.TabIndex = 0;
+            this.cb_EditDriver.Text = "View/Edit";
+            this.cb_EditDriver.UseVisualStyleBackColor = true;
+            this.cb_EditDriver.Visible = false;
             // 
-            // dw_drivers
+            // dw_driversHSInfo
             // 
-            this.dw_drivers.Controls.Add(this.cb_RemoveDriver);
-            this.dw_drivers.Controls.Add(this.cb_addDriver);
-            this.dw_drivers.DataObject = null;
-            this.dw_drivers.FireConstructor = false;
-            this.dw_drivers.Location = new System.Drawing.Point(5, 7);
-            this.dw_drivers.Name = "dw_drivers";
-            this.dw_drivers.Size = new System.Drawing.Size(560, 260);
-            this.dw_drivers.TabIndex = 2;
+            this.dw_driversHSInfo.Controls.Add(this.cb_AddOwner);
+            this.dw_driversHSInfo.Controls.Add(this.cb_RemoveDriver);
+            this.dw_driversHSInfo.Controls.Add(this.cb_AddDriver);
+            this.dw_driversHSInfo.DataObject = null;
+            this.dw_driversHSInfo.FireConstructor = false;
+            this.dw_driversHSInfo.Location = new System.Drawing.Point(5, 7);
+            this.dw_driversHSInfo.Name = "dw_driversHSInfo";
+            this.dw_driversHSInfo.Size = new System.Drawing.Size(560, 260);
+            this.dw_driversHSInfo.TabIndex = 2;
             // 
             // cb_RemoveDriver
             // 
@@ -392,19 +405,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_RemoveDriver.Size = new System.Drawing.Size(75, 23);
             this.cb_RemoveDriver.TabIndex = 2;
             this.cb_RemoveDriver.Text = "Remove";
+            this.tt_RemoveDriver.SetToolTip(this.cb_RemoveDriver, "Remove a driver and associated data");
             this.cb_RemoveDriver.UseVisualStyleBackColor = true;
             this.cb_RemoveDriver.Visible = false;
             // 
-            // cb_addDriver
+            // tt_RemoveDriver
             // 
-            this.cb_addDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cb_addDriver.Location = new System.Drawing.Point(476, 185);
-            this.cb_addDriver.Name = "cb_addDriver";
-            this.cb_addDriver.Size = new System.Drawing.Size(75, 23);
-            this.cb_addDriver.TabIndex = 1;
-            this.cb_addDriver.Text = "Add Driver";
-            this.cb_addDriver.UseVisualStyleBackColor = true;
-            this.cb_addDriver.Visible = false;
+            this.tt_RemoveDriver.IsBalloon = true;
+            // 
+            // cb_AddDriver
+            // 
+            this.cb_AddDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_AddDriver.Location = new System.Drawing.Point(476, 185);
+            this.cb_AddDriver.Name = "cb_AddDriver";
+            this.cb_AddDriver.Size = new System.Drawing.Size(75, 23);
+            this.cb_AddDriver.TabIndex = 1;
+            this.cb_AddDriver.Text = "Add Driver";
+            this.cb_AddDriver.UseVisualStyleBackColor = true;
+            this.cb_AddDriver.Visible = false;
+            // 
+            // cb_AddOwner
+            // 
+            this.cb_AddOwner.Location = new System.Drawing.Point(477, 104);
+            this.cb_AddOwner.Name = "cb_AddOwner";
+            this.cb_AddOwner.Size = new System.Drawing.Size(75, 23);
+            this.cb_AddOwner.TabIndex = 3;
+            this.cb_AddOwner.Text = "Add Owner";
+            this.cb_AddOwner.UseVisualStyleBackColor = true;
+            this.cb_AddOwner.Click += new System.EventHandler(this.cb_AddOwner_Click);
+            this.cb_AddOwner.Visible = false;
             // 
             // WContractor2001
             // 
@@ -425,7 +454,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_post_tax_deductions.ResumeLayout(false);
             this.tabpage_procurement.ResumeLayout(false);
             this.tabpage_drivers.ResumeLayout(false);
-            this.dw_drivers.ResumeLayout(false);
+            this.dw_driversHSInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -519,11 +548,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ls_GstNo = idw_owner_driver.GetItem<ContractorFull>(0).CGstNumber;
                 ls_IrdNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask;
                 ls_GstNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask;
-
-                //MessageBox.Show(  "CIrdNo = <" + ls_IrdNo + ">, Length = " + ls_IrdNo.Length.ToString() + ", Mask = <" + ls_IrdNo_Mask + ">\r"
-                //                + "CGstNo = <" + ls_GstNo + ">, Length = " + ls_GstNo.Length.ToString() + ", Mask = <" + ls_GstNo_Mask + ">\r"
-                //                , "WContractor2001.pfc_postopen"
-                //               );
+/*
+                MessageBox.Show( "CIrdNo = <" + ls_IrdNo + ">, Length = " + ls_IrdNo.Length.ToString() + ", Mask = <" + ls_IrdNo_Mask + ">\r"
+                               + "CGstNo = <" + ls_GstNo + ">, Length = " + ls_GstNo.Length.ToString() + ", Mask = <" + ls_GstNo_Mask + ">\r"
+                               , "Testing: WContractor2001.pfc_postopen"
+                               );
+*/
                 if (ls_IrdNo != null && ls_IrdNo.Length > 8)
                 {
                     ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask = "000-000-009";
@@ -554,22 +584,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_owner_driver.GetItem<ContractorFull>(0).NzPostEmployee = "N";
                 idw_owner_driver.AcceptText();
             }
-            //?idw_contracts_held.SetRowFocusIndicator(focusrect!);
             this.Text = ls_Title;
             ll_UserRegionID = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionid();
-            //?if ((w_contractor_search != null))
-            //?{
             ll_RegionId = ((WContractorSearch)StaticVariables.window).dw_criteria.GetValue<int?>(0, "region_id");
             if (ll_UserRegionID != ll_RegionId)
             {
                 if ((ll_UserRegionID != null) && (ll_RegionId != null))
                 {
-                    idw_owner_driver.DataObject.Enabled = false;//idw_owner_driver.Object.DataWindow.ReadOnly = "Yes";
+                    idw_owner_driver.DataObject.Enabled = false;
                 }
             }
-            //?}
 
-            BeginInvoke(new delegateInvoke(ue_set_security_Invoke)); //PostEvent("ue_set_security");
+            BeginInvoke(new delegateInvoke(ue_set_security_Invoke)); 
         }
 
         public override int closequery()
@@ -594,12 +620,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         ll_ctkey = idw_contract_types.GetItem<TypesForContractor>(ll_row).CtKey;
                         if ((ll_ctkey == null))
                         {
-                            idw_contract_types.RowsDiscard(ll_row, ll_row);//idw_contract_types.RowsDiscard(ll_row, ll_row, primary!);
+                            idw_contract_types.RowsDiscard(ll_row, ll_row);
                         }
                     }
                     if (idw_contract_types.RowCount <= 0)
                     {
-                        MessageBox.Show("You must specify a contract type for this Owner Driver", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show("You must specify a contract type for this Owner Driver"
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return PREVENT_CLOSE;
                     }
                 }
@@ -612,7 +640,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void ue_set_security_Invoke()
         {
             this.ue_set_security();
-            dw_owner_driver_getfocus(null, null);//added by jlwang
+            dw_owner_driver_getfocus(null, null);
         }
 
         public virtual void ue_set_security()
@@ -778,7 +806,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int lCount;
             int ll_Region;
             ll_Region = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionid().GetValueOrDefault();
-            /*Select count(*) into :lCount from contractor_renewals cr, contract c, outlet o Where cr.contract_no=c.contract_no And c.con_base_office=o.outlet_id And o.region_id=:ll_Region And cr.contractor_supplier_no = :ii_contractor;*/
             lCount = RDSDataService.GetContractorRenewalsCount(ll_Region, ii_contractor).GetValueOrDefault();
             return lCount;
         }
@@ -805,15 +832,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ls_prime = "c_mobile";
                 }
             }
-            //if (ls_prime == null)
-            //{
-            //    MessageBox.Show("Required value missing for c_prime_contact on row 1 " + ".  Please enter a value.", "Rural Delivery System with NPAD Extensions(enabled)", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
             if (!((ls_prime == null)))
             {
                 if ((idw_owner_driver.GetValue(al_row, ls_prime) == null))
                 {
-                    MessageBox.Show("There must be a number for the primary contact.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("There must be a number for the primary contact."
+                                   , "Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
                 {
@@ -834,7 +859,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                MessageBox.Show("A daytime, after hours, or mobile number must be entered for the primary contact." + "", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("A daytime, after hours, or mobile number must be entered for the primary contact." 
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
             idw_owner_driver.GetItem<ContractorFull>(al_row).CPrimeContact = ll_prime;
@@ -901,7 +928,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_owner_driver_updateend()
         {
-            ii_contractor = dw_owner_driver.GetItem<ContractorFull>(0).ContractorSupplierNo.GetValueOrDefault();// GetItemNumber(1, "contractor_supplier_no");        }
+            ii_contractor = dw_owner_driver.GetItem<ContractorFull>(0).ContractorSupplierNo.GetValueOrDefault();
         }
 
         private string getReadioButton()
@@ -929,7 +956,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_contract_types_ue_setuprow()
         {
-            int regionId;
+            //int regionId;
             //?regionId = w_contractor_search.dw_criteria.GetItemNumber(1, "region_id");
         }
 
@@ -958,7 +985,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_contracts_held_ue_setuprow()
         {
-            int regionId;
+            //int regionId;
             //?regionId = w_contractor_search.dw_criteria.GetItemNumber(1, "region_id");
         }
 
@@ -969,7 +996,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_ds_numbers_ue_setuprow()
         {
-            int regionId;
+            //int regionId;
             //?regionId = w_contractor_search.dw_criteria.GetItemNumber(1, "region_id");
         }
 
@@ -1195,7 +1222,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         #region Events
         int oldindex = -1;
 
-        // jlwang:change selectindex to name 
         // log in app with different user ,the tabpage should be invisible or visible
         // if we use select index to get tagepage it will throw exception. 
         public virtual void tab_contractor_selectionchanged(object sender, EventArgs e)
@@ -1281,19 +1307,54 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_procurement.Retrieve(new object[] { ii_contractor });
                 }
             }
-            else if (str == "drivers h&s")//(TestExpr == 7)
+            else if (str == "driver hs")//(TestExpr == 7)
             {
-                dw_drivers.URdsDw_GetFocus(null, null);
-                if (dw_drivers.RowCount == 0)
+                dw_driversHSInfo.URdsDw_GetFocus(null, null);
+                if (dw_driversHSInfo.RowCount == 0)
                 {
-                    dw_drivers.Retrieve(new object[] { ii_contractor });
+                    dw_driversHSInfo.Retrieve(new object[] { ii_contractor });
                 }
-                cb_driverinfo.Visible = true;
-                cb_driverinfo.Enabled = true;
-                cb_addDriver.Visible = true;
-                cb_addDriver.Enabled = true;
+                cb_EditDriver.Visible = true;
+                cb_EditDriver.Enabled = true;
+                cb_AddDriver.Visible = true;
+                cb_AddDriver.Enabled = true;
                 cb_RemoveDriver.Visible = true;
                 cb_RemoveDriver.Enabled = true;
+                cb_AddOwner.Visible = false;
+                cb_AddOwner.Enabled = false;
+
+                // Check to see if the owner(s) have been added to the list of drivers
+                // Split the owner names (if there are more than one)
+                bSplitOwnerNames();
+
+                // See if they're in the list of drivers
+                // Initialise the 'driver found' flag (row in driversHSInfo) to 'not found'
+                driverFound1 = -1;
+                driverFound2 = -1;  
+                driverFound1 = dw_driversHSInfo.Find("driver_name", sDriver1);
+                if (bTwonames)
+                    driverFound2 = dw_driversHSInfo.Find("driver_name", sDriver2);
+                bool bShowCbAddOwner = false;
+                if (driverFound1 < 0)   // Driver 1 not found
+                    bShowCbAddOwner = true;
+                else if (bTwonames && driverFound2 < 0)  // There were two drivers and driver2 wasn't found
+                    bShowCbAddOwner = true;
+
+/*------------------------------------------- Testing -------------------------------------/
+                string msg = "bTwonames = " + bTwonames.ToString() + "\n\n";
+                msg += "Driver 1: driverFound1= " + driverFound1.ToString() + ", " + sDriver1 + "\n";
+                msg += "Driver 2: driverFound2= " + driverFound2.ToString() + ", " + sDriver2 + "\n";
+                msg += "\nbShowCbAddOwner = " + bShowCbAddOwner.ToString() + "\n";
+                MessageBox.Show(msg, "Testing: WContractor2001:tab_contractor_selectionchanged");
+                //DumpDrivers(25);
+//----------------------------------------------------------------------------------------*/
+
+                if (bShowCbAddOwner)
+                {
+                    cb_AddOwner.Visible = true;
+                    cb_AddOwner.Enabled = true;
+                }
+
             }
             oldindex = this.tab_contractor.SelectedIndex;
         }
@@ -1323,12 +1384,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return;
             }
 
-            cb_driverinfo.Visible = false;
-            cb_driverinfo.Enabled = false;
-            cb_addDriver.Visible = false;
-            cb_addDriver.Enabled = false;
+            cb_EditDriver.Visible = false;
+            cb_EditDriver.Enabled = false;
+            cb_AddDriver.Visible = false;
+            cb_AddDriver.Enabled = false;
             cb_RemoveDriver.Visible = false;
             cb_RemoveDriver.Enabled = false;
+            cb_AddOwner.Visible = false;
+            cb_AddOwner.Enabled = false;
 
             // Check for any changes to idw_owner_driver
             if (idw_owner_driver.DataObject.DeletedCount > 0 
@@ -1524,18 +1587,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
-        //++++++++++++++++++ tjb +++++++++++++++++++++
-        public virtual void WContractor2001_TextBoxLostFocus(object sender, EventArgs e)
-        {
-            string ls_temp = dw_owner_driver.GetColumnName();
-            if (!string.IsNullOrEmpty(ls_temp))
-            {
-                ls_temp = "null";
-            }
-            MessageBox.Show("ls_dwoName = <" + ls_temp + ">", "WContractor2001_TextBoxLostFocus");
-        }
-        //++++++++++++++++++++++++++++++++++++++++++++
-
         public virtual void dw_owner_driver_itemchanged(object sender, EventArgs e)
         {
         /*++++++++++++++++++ tjb Sept 2008 +++++++++++++++++++//
@@ -1724,7 +1775,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         int nRow, nDriverNo;
 
-        private void cb_driverinfo_Click(object sender, EventArgs e)
+        private void cb_EditDriver_Click(object sender, EventArgs e)
         {
             open_driverinfo("edit");
         }
@@ -1734,29 +1785,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             open_driverinfo("add");
         }
 
-        private void cb_RemoveDriver_Click(object sender, EventArgs e)
+        private void dw_driversHSInfo_DoubleClick(object sender, EventArgs e)
         {
-            if (dw_drivers.RowCount < 1)
-            {
-                MessageBox.Show("No drivers to remove. \n"
-                               , "Warning");
-                return;
-            }
-            if (((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows.Count < 1)
-            {
-                MessageBox.Show("Please select a driver.      "
-                               , "Warning");
-                return;
-            }
-
-            nRow = ((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows[0].Index;
-            nDriverNo = dw_drivers.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
-//            MessageBox.Show("Removing driver " + nDriverNo.ToString() + "    \n");
-            RDSDataService.DropDriverRecords(nDriverNo);
-
-            dw_drivers.Reset();
-            dw_drivers.Retrieve(new object[] { ii_contractor });
-
+            open_driverinfo("edit");
         }
 
         private void open_driverinfo( string sOptype)
@@ -1767,30 +1798,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if (sOptype == "edit")
             {
-                if (dw_drivers.RowCount < 1)
+                if (dw_driversHSInfo.RowCount < 1)
                 {
                     MessageBox.Show("No drivers currently specified. \n"
                                    + "Please add a driver first."
                                    , "Warning");
                     return;
                 }
-                if (((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows.Count < 1)
+                if (((Metex.Windows.DataEntityGrid)(dw_driversHSInfo.GetControlByName("grid"))).SelectedRows.Count < 1)
                 {
                     MessageBox.Show("Please select a driver.      "
                                    , "Warning");
                     return;
                 }
 
-                nRow = ((Metex.Windows.DataEntityGrid)(dw_drivers.GetControlByName("grid"))).SelectedRows[0].Index;
-                nDriverNo = dw_drivers.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
+                nRow = ((Metex.Windows.DataEntityGrid)(dw_driversHSInfo.GetControlByName("grid"))).SelectedRows[0].Index;
+                nDriverNo = dw_driversHSInfo.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
             }
             else
             {
                 nDriverNo = 0;
             }
-
-//            MessageBox.Show("cb_view Clicked \n\n"
-//                            + "nDriverNo = " + nDriverNo.ToString());
 
             Cursor.Current = Cursors.WaitCursor;
 
@@ -1801,17 +1829,226 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("driver_no", nDriverNo);
             lnv_Criteria.of_addcriteria("op_type", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
-            // Build title
-            //            string sTitle = "Driver: " + nDriverNo.ToString()+" Maintenance";
-            //            // Open contract window if contract with title=ls_title not open
-            //            if (!(StaticVariables.gnv_app.of_findwindow(ls_title, "w_contract2001") != null))
-            //            {
+
             StaticMessage.PowerObjectParm = lnv_msg;
             StaticVariables.window = this;
             wDriverInfo = new WDriverInfoMaint();
             wDriverInfo.MdiParent = StaticVariables.MainMDI;
-            wDriverInfo.Show();
+            wDriverInfo.Show();   // Could try ShowDialog()
             return;
+        }
+
+        private void cb_RemoveDriver_Click(object sender, EventArgs e)
+        {
+            int nDrivers = dw_driversHSInfo.RowCount;
+            if (nDrivers < 1)
+            {
+                MessageBox.Show("No drivers to remove. \n"
+                               , "Warning");
+                return;
+            }
+            int nSelectedRows = ((Metex.Windows.DataEntityGrid)(dw_driversHSInfo.GetControlByName("grid"))).SelectedRows.Count;
+            if (nSelectedRows <= 0)
+            {
+                MessageBox.Show("Please select a driver.      "
+                               , "Warning");
+                return;
+            }
+            int nRowsRemoved = 0;
+            for (int i = (nSelectedRows - 1); i >= 0; i--)
+            {
+                int nRow = ((Metex.Windows.DataEntityGrid)(dw_driversHSInfo.GetControlByName("grid"))).SelectedRows[i].Index;
+
+                nDriverNo = dw_driversHSInfo.GetItem<ContractorDriverHSInfo>(nRow).DriverNo.GetValueOrDefault();
+                string sDriverName = dw_driversHSInfo.GetItem<ContractorDriverHSInfo>(nRow).DriverName;
+                if (sDriverName == null) sDriverName = "";
+
+                DialogResult Ans = MessageBox.Show("Remove driver " + nDriverNo.ToString() + " (" + sDriverName + ")   \n"
+                    //               +"Row "+(nRow+1).ToString()+" of "+nDrivers.ToString()+"\n"
+                                                  , "Warning"
+                                                  , MessageBoxButtons.YesNo
+                                                  , MessageBoxIcon.Question
+                                                  , MessageBoxDefaultButton.Button1);
+                if (Ans == DialogResult.No)
+                    continue;
+
+                RDSDataService.RemoveDriver(ii_contractor, nDriverNo);
+                nRowsRemoved++;
+            }
+            if (nRowsRemoved > 0)
+            {
+                dw_driversHSInfo.Reset();
+                dw_driversHSInfo.Retrieve(new object[] { ii_contractor });
+            }
+
+        }
+
+        // TJB  RPCR_060  Mar-2014
+        // Add DumpDrivers() for testing
+
+        private void DumpDrivers(int nDumpRows)
+        {
+            int nRow, nRows;
+            string msg = "";
+            nRows = dw_driversHSInfo.RowCount;
+            if (nDumpRows > nRows) nDumpRows = nRows;
+            for (nRow = 0; nRow < nDumpRows; nRow++)
+            {
+                msg += nRow.ToString() + ": "
+                       + (dw_driversHSInfo.GetItem<ContractorDriverHSInfo>(nRow).DriverName).Trim()
+                       + "\n";
+            }
+            MessageBox.Show(msg, "TESTING: dw_driversHSInfo dump");
+        }
+
+        // TJB  RPCR_060  Mar-2014
+        // Add bSplitOwnerNames(), bSplitTitle(), bSplitFirstnames() and related globals
+        
+        int driverFound1, driverFound2;
+        string sTitle, sFirstnames, sSurname;
+        string sTitle1 = "", sTitle2 = "";
+        string sFirstname1 = "", sFirstname2 = "";
+        string sSurname1 = "", sSurname2 = "";
+        string sDriver1 = "", sDriver2 = "";
+        bool bTwonames;
+
+        private bool bSplitOwnerNames()
+        {
+            bTwonames = false;
+
+            sTitle = idw_owner_driver.GetItem<ContractorFull>(0).CTitle;
+            sFirstnames = idw_owner_driver.GetItem<ContractorFull>(0).CFirstNames;
+            sSurname = idw_owner_driver.GetItem<ContractorFull>(0).CSurnameCompany;
+
+            if (bSplitTitle(sTitle))
+            {
+                bSplitFirstnames(sFirstnames);
+                sDriver2 = (sTitle2 + " " + sFirstname2 + " " + sSurname2).Trim();
+                bTwonames = true;
+            }
+            else if (bSplitFirstnames(sFirstnames))
+            {
+                sDriver2 = (sTitle2 + " " + sFirstname2 + " " + sSurname2).Trim();
+                bTwonames = true;
+            }
+            else
+            {
+                sTitle1 = sTitle;
+                sFirstname1 = sFirstnames;
+                sSurname1 = sSurname.Trim();
+                bTwonames = false;
+            }
+            sDriver1 = (sTitle1 + " " + sFirstname1 + " " + sSurname1).Trim();
+
+            return bTwonames;
+        }
+
+        private void cb_AddOwner_Click(object sender, EventArgs e)
+        {
+/*
+            MessageBox.Show("cb_AddOwner Clicked\n\n"
+                            + "bTwonames = "+bTwonames.ToString()+"\n"
+                            + "(1) " + sDriver1 + "\n"
+                            + "(2) " + sDriver2 + "\n"
+                            , "Testing"
+                            );
+*/
+            // To add the owner(s), we need to add each owner as a driver to the 
+            // driver table, and also to the contractor_driver table.  The addition 
+            // to the driver table must come first in order to get the new driver's 
+            // driver_no.
+
+            int nDriverNo;
+            bool bDriverAdded;
+            string sPhoneDay, sPhoneNight, sMobile, sMobile2;
+
+            sPhoneDay = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneDay;
+            sPhoneNight = idw_owner_driver.GetItem<ContractorFull>(0).CPhoneNight;
+            sMobile = idw_owner_driver.GetItem<ContractorFull>(0).CMobile;
+            sMobile2 = idw_owner_driver.GetItem<ContractorFull>(0).CMobile2;
+            bDriverAdded = false;
+
+            // Add the first driver (if not found listed already)
+            if (driverFound1 < 0)
+            {
+                RDSDataService DS = RDSDataService.GetNextSequence("DriverNo");
+                nDriverNo = DS.intVal;
+                RDSDataService.AddContractorDriver(ii_contractor, nDriverNo);
+
+                RDSDataService.AddDriver(nDriverNo, sTitle1, sFirstname1, sSurname1
+                                         , sPhoneDay, sPhoneNight, sMobile, sMobile2);
+                bDriverAdded = true;
+                driverFound1 = 0;
+            }
+            // Add the second driver (if not found listed already)
+            if (driverFound2 < 0)
+            {
+                RDSDataService DS = RDSDataService.GetNextSequence("DriverNo");
+                nDriverNo = DS.intVal;
+                RDSDataService.AddContractorDriver(ii_contractor, nDriverNo);
+
+                RDSDataService.AddDriver(nDriverNo, sTitle2, sFirstname2, sSurname2
+                                         , sPhoneDay, sPhoneNight, sMobile, sMobile2);
+                bDriverAdded = true;
+                driverFound2 = 0;
+            }
+
+            if (bDriverAdded)
+            {
+                dw_driversHSInfo.Reset();
+                dw_driversHSInfo.Retrieve(new object[] { ii_contractor });
+                cb_AddOwner.Visible = false;
+                cb_AddOwner.Enabled = false;
+            }
+        }
+
+        private bool bSplitTitle(string pTitle)
+        {
+            int i, l;
+            i = sTitle.IndexOf('&');
+            if (i > 0)
+            {
+                sTitle1 = pTitle.Substring(0, i - 1).Trim();
+                sTitle2 = pTitle.Substring(i + 1).Trim();
+                return true;
+            }
+            if (pTitle.Trim() == "Messrs")
+            {
+                sTitle1 = "Mr";
+                sTitle2 = "Mr";
+                return true;
+            }
+            i = pTitle.IndexOf('/');
+            if (i > 0)
+            {
+                sTitle1 = pTitle.Substring(0, i - 1).Trim();
+                sTitle2 = pTitle.Substring(i + 1).Trim();
+                return true;
+            }
+            i = pTitle.IndexOf("and");
+            if (i > 0)
+            {
+                sTitle1 = pTitle.Substring(0, i - 1).Trim();
+                sTitle2 = pTitle.Substring(i + 3).Trim();
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool bSplitFirstnames(string sFirstnames)
+        {
+            int i, l;
+            i = sFirstnames.IndexOf('&');
+            if (i > 0)
+            {
+                sFirstname1 = sFirstnames.Substring(0, i - 1).Trim();
+                sFirstname2 = sFirstnames.Substring(i + 1).Trim();
+                sSurname1 = sSurname.Trim();
+                sSurname2 = sSurname.Trim();
+                return true;
+            }
+            return false;
         }
     }
 }
