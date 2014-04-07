@@ -17,6 +17,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  RPCR_060 Mar-2014
     // Added cb_check_dup button and functionality
     // Misc refinements
+    // 7-Apr-2014: Fix bug in validation: Added bIsEntering[something]
     //
     // TJB  RPCR_060 Feb-2014
     // Adjusted size of window to accommodate additional info
@@ -377,40 +378,60 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             sErrMsg = "";
             if (dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).IsDirty)
-            {
+            {        // If the row is dirty, the user is either entering something (new/modified)
+                     // or is removing the values.
+                bool bIsEntering = false;
                 sHstName = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HstName;
                 thisDateChecked = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiDateChecked;
-                prevDateChecked = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiDateChecked;
-                if (prevDateChecked == null && thisDateChecked == null)
-                {
-                    sErrMsg += sHstName + ": The date checked must be entered.\n";
-                }
                 thisPassfailInd = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiPassfailInd;
-                prevPassfailInd = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiPassfailInd;
-                if (prevPassfailInd == null && thisPassfailInd == null)
-                {
-                    sErrMsg += sHstName + ": A pass/fail status must be entered.\n";
-                }
-                if (thisPassfailInd != null
-                    && thisPassfailInd != "P"
-                    && thisPassfailInd != "F")
-                {
-                    sErrMsg += sHstName + ": The pass/fail indicator must be either P or F\n";
-                }
                 thisAdditionalDate = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiAdditionalDate;
-                prevAdditionalDate = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiAdditionalDate;
-                sAdditionalDateErrmsg = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HstAdditionalDateErrmsg;
-                if ((prevAdditionalDate == null && thisAdditionalDate == null) && sAdditionalDateErrmsg != null)
-                {
-                    sErrMsg += sHstName + ": " + sAdditionalDateErrmsg + "\n";
-                }
-
                 thisNotes = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiNotes;
-                prevNotes = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiNotes;
-                sNotesErrmsg = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HstNotesErrmsg;
-                if ((prevNotes == null && thisNotes == null) && sNotesErrmsg != null)
+                /* These are no longer needed?
+                    prevDateChecked = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiDateChecked;
+                    prevPassfailInd = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiPassfailInd;
+                    prevAdditionalDate = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiAdditionalDate;
+                    prevNotes = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).prevHsiNotes;
+                */
+                if (thisDateChecked != null || thisPassfailInd != null)
+                {   // The user is entering something
+                    bIsEntering = true;
+                }
+                else
+                    bIsEntering = false;
+                
+                //if (prevDateChecked == null && thisDateChecked == null)
+                if (bIsEntering)
                 {
-                    sErrMsg += sHstName + ": " + sNotesErrmsg + "\n";
+                    if (thisDateChecked == null)
+                    {
+                        sErrMsg += sHstName + ": The date checked must be entered.\n";
+                    }
+                    //if (prevPassfailInd == null && thisPassfailInd == null)
+                    if (thisPassfailInd == null)
+                    {
+                        sErrMsg += sHstName + ": A pass/fail status must be entered.\n";
+                    }
+                    if (thisPassfailInd != "P" && thisPassfailInd != "F")
+                    {
+                        sErrMsg += sHstName + ": The pass/fail indicator must be either P or F\n";
+                    }
+                    sAdditionalDateErrmsg = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HstAdditionalDateErrmsg;
+                    if (thisAdditionalDate == null && sAdditionalDateErrmsg != null)
+                    {
+                        sErrMsg += sHstName + ": " + sAdditionalDateErrmsg + "\n";
+                    }
+                    sNotesErrmsg = dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HstNotesErrmsg;
+                    if (thisNotes == null && sNotesErrmsg != null)
+                    {
+                        sErrMsg += sHstName + ": " + sNotesErrmsg + "\n";
+                    }
+                }
+                else  // We're not adding or modifying the values; delete all of them
+                {
+                    dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiDateChecked = null;
+                    dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiPassfailInd = null;
+                    dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiAdditionalDate = null;
+                    dw_driverhsinfo.GetItem<DriverHSInfo>(nRow).HsiNotes = null;
                 }
             }
             if (sErrMsg != "")
@@ -425,9 +446,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private bool do_save()
         {
-            //if (bClosing)
-            //    return true;
-
             int nRow = dw_driverinfo.GetRow();
             int nRows = dw_driverhsinfo.RowCount;
             bool bValidated = true;
