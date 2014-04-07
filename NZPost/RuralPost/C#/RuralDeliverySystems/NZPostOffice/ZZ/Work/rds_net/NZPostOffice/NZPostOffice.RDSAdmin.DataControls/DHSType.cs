@@ -11,6 +11,10 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
     // TJB  RPCR_060  Mar-2014: NEW
+    //
+    // TJB  RPCR_060  Apr-2014
+    // Added  hst_additional_date_errmsg and hst_notes_errmsg columns
+    // and removed hst_description.
 
 	public partial class DHsType : Metex.Windows.DataUserControl
 

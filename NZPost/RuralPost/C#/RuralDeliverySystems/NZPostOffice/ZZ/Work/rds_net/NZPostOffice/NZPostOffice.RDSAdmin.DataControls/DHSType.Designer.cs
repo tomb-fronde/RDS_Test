@@ -9,9 +9,6 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		/// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private System.Windows.Forms.DataGridViewTextBoxColumn hst_name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hst_description;
-
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null ))
@@ -28,9 +25,13 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
             this.hst_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hst_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HstHelp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HstAdditionalDateErrmsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HstNotesErrmsg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +58,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.hst_name,
-            this.hst_description});
+            this.HstHelp,
+            this.HstAdditionalDateErrmsg,
+            this.HstNotesErrmsg});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -65,7 +68,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(514, 252);
+            this.grid.Size = new System.Drawing.Size(688, 252);
             this.grid.TabIndex = 0;
             // 
             // hst_name
@@ -80,18 +83,32 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.hst_name.Name = "hst_name";
             this.hst_name.Width = 160;
             // 
-            // hst_description
+            // HstHelp
             // 
-            this.hst_description.DataPropertyName = "HstDescription";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.HstHelp.DataPropertyName = "HstHelp";
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.hst_description.DefaultCellStyle = dataGridViewCellStyle3;
-            this.hst_description.HeaderText = "Description";
-            this.hst_description.Name = "hst_description";
-            this.hst_description.Width = 350;
+            this.HstHelp.DefaultCellStyle = dataGridViewCellStyle3;
+            this.HstHelp.HeaderText = "Notes Help";
+            this.HstHelp.Name = "HstHelp";
+            this.HstHelp.Width = 175;
+            // 
+            // HstAdditionalDateErrmsg
+            // 
+            this.HstAdditionalDateErrmsg.DataPropertyName = "HstAdditionalDateErrmsg";
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.HstAdditionalDateErrmsg.DefaultCellStyle = dataGridViewCellStyle4;
+            this.HstAdditionalDateErrmsg.HeaderText = "Additional Date Error Msg";
+            this.HstAdditionalDateErrmsg.Name = "HstAdditionalDateErrmsg";
+            this.HstAdditionalDateErrmsg.Width = 175;
+            // 
+            // HstNotesErrmsg
+            // 
+            this.HstNotesErrmsg.DataPropertyName = "HstNotesErrmsg";
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.HstNotesErrmsg.DefaultCellStyle = dataGridViewCellStyle5;
+            this.HstNotesErrmsg.HeaderText = "Notes Error Msg";
+            this.HstNotesErrmsg.Name = "HstNotesErrmsg";
+            this.HstNotesErrmsg.Width = 175;
             // 
             // DHsType
             // 
@@ -100,13 +117,23 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DHsType";
-            this.Size = new System.Drawing.Size(514, 252);
+            this.Size = new System.Drawing.Size(688, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
 
 		}
 		#endregion
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn hst_name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HstHelp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HstAdditionalDateErrmsg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HstNotesErrmsg;
+
+
+
+
+
 
     }
 }
