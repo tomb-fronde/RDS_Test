@@ -377,8 +377,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "vehicle_rate", ref pList))
                 {
-                    cm.CommandText += " WHERE  vehicle_rate.vt_key = @vt_key AND " +
-                        "vehicle_rate.vr_rates_effective_date = @vr_rates_effective_date ";
+                    cm.CommandText += " WHERE  vehicle_rate.vt_key = @vt_key " 
+                                    + "   AND vehicle_rate.vr_rates_effective_date = @vr_rates_effective_date ";
 
                     pList.Add(cm, "vt_key", GetInitialValue("_vt_key"));
                     pList.Add(cm, "vr_rates_effective_date", GetInitialValue("_vr_rates_effective_date"));
@@ -414,10 +414,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
+
                     pList.Add(cm, "vt_key", GetInitialValue("_vt_key"));
                     pList.Add(cm, "vr_rates_effective_date", GetInitialValue("_vr_rates_effective_date"));
-                    cm.CommandText = "DELETE FROM vehicle_rate WHERE  vehicle_rate.vt_key = @vt_key AND " +
-                        "vehicle_rate.vr_rates_effective_date = @vr_rates_effective_date ";
+                    cm.CommandText = "DELETE FROM vehicle_rate " 
+                                   + " WHERE vehicle_rate.vt_key = @vt_key " 
+                                   + "   AND vehicle_rate.vr_rates_effective_date = @vr_rates_effective_date ";
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
