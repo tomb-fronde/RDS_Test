@@ -17,7 +17,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  RPCR_060 Mar-2014
     // Added cb_check_dup button and functionality
     // Misc refinements
-    // 7-Apr-2014: Fix bug in validation: Added bIsEntering[something]
+    // 7-Apr-2014: 
+    //    Fix bug in validation: Added bIsEntering[something]
+    //    Added call to set_disableclosequery
     //
     // TJB  RPCR_060 Feb-2014
     // Adjusted size of window to accommodate additional info
@@ -254,6 +256,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int nDriverinfoRows;
             int nDriverhsinfoRows;
 
+            // TJB  Apr-2014
+            // Added  call to set_disableclosequery
             set_disableclosequery(true);
 
             inAdminGroup = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_ismember("System Administrators");
