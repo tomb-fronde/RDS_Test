@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB APR-2014
+    // Added Trim() when returning _driver_name
+    //
     // TJB  RPCR_060  Jan-2014:  NEW
     // Retrieves summary H&S information about a contractor's drivers
     // for the DContractorDriverHSInfo DataControl
@@ -84,9 +87,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         public virtual string DriverName
         {
             get
-            {
+            {   // TJB APR-2014: Added Trim()
                 CanReadProperty("DriverName", true);
-                return _driver_name;
+                return _driver_name.Trim();
             }
             set
             {
