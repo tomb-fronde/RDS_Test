@@ -14,16 +14,19 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Apr-2014 "Contract Postie Renewals"
+    // Allow any contract to set override rates
+    //
+    // TJB RPI_015 Oct-2010 
+    // Changed evaluation of ConProcessingHoursPerWeek 
+    // (see wf_checkaccepted)
+    //
+    // TJB RPCR_01 July-2010
+    // Added most functions to DContractVehicle with support here
+    // Added error handling to vehicle insert & update
+
     public class WRenewal2001 : WAncestorWindow
     {
-        // TJB RPI_015 Oct-2010 
-        // Changed evaluation of ConProcessingHoursPerWeek 
-        // (see wf_checkaccepted)
-        //
-        // TJB RPCR_01 July-2010
-        // Added most functions to DContractVehicle with support here
-        // Added error handling to vehicle insert & update
-
         #region Define
         private WRenewal2001 iw_renewal;
 
@@ -591,14 +594,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // else
             // 	gnv_App.of_Get_Parameters().BooleanParm = True
             // end if
-            //  tjb  SR4695  Jan-2007
-            if (il_contract > 5999)
-            {
-                MessageBox.Show("Override rates may only be entered for rural delivery contracts."
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            //open(w_contract_rate2001);
+
+            // TJB  Apr-2014 "Contract Postie Renewals"
+            // Allow any contract to set override rates
+            // if (il_contract > 5999)
+            // {
+            //     MessageBox.Show("Override rates may only be entered for rural delivery contracts."
+            //                    , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //     return;
+            // }
+
             WContractRate2001 w_contract_rate2001 = new WContractRate2001();
             w_contract_rate2001.ShowDialog();
         }
