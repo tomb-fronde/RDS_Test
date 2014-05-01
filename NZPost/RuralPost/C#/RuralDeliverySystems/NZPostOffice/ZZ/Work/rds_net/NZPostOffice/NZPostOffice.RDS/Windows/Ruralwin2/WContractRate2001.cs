@@ -13,6 +13,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Apr-2014
+    // Several minor tidying changes
+    //
     // TJB  RPCR_041  Nov-2012
     // Added references to nvor_relief_weeks
 
@@ -76,6 +79,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
         }
 
+        public override void pfc_preopen()
+        {
+            base.pfc_preopen();
+            this.of_set_componentname("Renewal Rates");
+        }
+
         public override void pfc_postopen()
         {
             int ll_rc;
@@ -130,19 +139,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  whether to save them.  We only want to save them if the 
             //  user makes changes.
             idw_vehiclerates.ResetUpdate();
+
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
-
-            // SELECT	BenchmarkCalc2005(:il_contract, :il_sequence) 
-            //   INTO	:idc_original_benchmark 
-            //   FROM	dummy
-            //  USING	SQLCA
             RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
-                MessageBox.Show("Unable to retreive the original benchmark for the contract."
+                // TJB  Apr-2014
+                // Added SQL Error message
+                string sqlErrMsg = dataService.SQLErrText;
+                MessageBox.Show("Unable to retreive the original benchmark for the contract.\n"
+                                + "SQL Error: " + sqlErrMsg
                                , "WContractRate2001.pfc_postopen: Database Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
@@ -151,12 +160,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Create a datastore for the (new) Non-vehicle_override_rate_history table
             ids_nonvehicleratehistory = new DsNonVehicleOverrideRateHistory();
             //  ids_nonvehicleratehistory.retrieve(il_contract, il_sequence)
-        }
-
-        public override void pfc_preopen()
-        {
-            base.pfc_preopen();
-            this.of_set_componentname("Renewal Rates");
         }
 
         #region Methods
@@ -812,9 +815,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             //  TJB SR4632 29-Jul-2004
             //  Added 'Note:' to message.
-            ls_msg = "Inserting new Vehicle Override Rates will effect the Benchmark Calculation.";
-            ls_msg = ls_msg + "\nNote: the resulting frequency adjustment needs to be confirmed separately.   ";
-            ls_msg = ls_msg + "\nDo you wish to continue?";
+            ls_msg = "Inserting new Vehicle Override Rates will effect the Benchmark Calculation. \n";
+            ls_msg = ls_msg + "Note: the resulting frequency adjustment needs to be confirmed separately. \n";
+            ls_msg = ls_msg + "Do you wish to continue?";
             DialogResult answer;
             answer = MessageBox.Show(ls_msg
                                , "Inserting new rates"
