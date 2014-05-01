@@ -13,6 +13,9 @@ using NZPostOffice.RDS.Windows.Ruralbase;
 
 namespace NZPostOffice.RDS.Controls
 {
+    // TJB  Apr-2014
+    // Created to allow setting of ib_disableclosequery when inaccessible
+    // Used by WDriverInfoMaint
     public partial class WAncestorWindow : WMaster
     {
         #region Define
@@ -84,6 +87,14 @@ namespace NZPostOffice.RDS.Controls
         {
             //?base.activate();
             //?StaticVariables.gnv_app.of_set_activesheet(this);
+        }
+
+        // TJB  Apr-2014
+        // Created to allow setting of ib_disableclosequery when inaccessible
+        // Used by WDriverInfoMaint
+        public virtual void set_disableclosequery(bool value)
+        {
+            ib_disableclosequery = value;
         }
 
         public virtual void pfc_preupdate()
