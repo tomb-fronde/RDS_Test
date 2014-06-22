@@ -44,8 +44,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.toolStripStatusLabel4.Text = "Test Version";
             // since its value was meaningless (just like the clock).
             //this.oolStripStatusLabel3.Text = "Environment 8.0.00";
-            this.toolStripStatusLabel3.Text = "RDS 7.1.12.2 ";
-            this.toolStripStatusLabel6.Text = "01-May-2014 14:00";
+            this.toolStripStatusLabel3.Text = "RDS 7.1.12.3 ";
+            this.toolStripStatusLabel6.Text = "22-Jun-2014 19:15";
             this.toolStripStatusLabel6.Text = string.Format("{0:dd-MMM-yyyy HH:mm}",
                        System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location));
         }
