@@ -16,6 +16,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public class WContractor2001 : WAncestorWindow
     {
+        // TJB  RPCR_060  Jun-2014 bug fix
+        // "sTitle" changed to "pTitle" in bSplitTitle
+        // Null check added to bSplitTitle and bSplitFirstnames
+        // Added explicit check for company name to bSplitOwnerNames
+        //
         // TJB  RPCR_060  Mar-2014
         // Refinements to View/Edit, Add driver,and Remove button functionality
         //
@@ -1920,6 +1925,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             sFirstnames = idw_owner_driver.GetItem<ContractorFull>(0).CFirstNames;
             sSurname = idw_owner_driver.GetItem<ContractorFull>(0).CSurnameCompany;
 
+            // TJB  Jun-2014  RPCR_+060 bug fix
+            // Added check for company (no title or first name)
+            if (sTitle == null && sFirstnames == null)
+            {
+                sDriver1 = "";
+                sDriver2 = "";
+                return bTwonames;
+            }
+
             if (bSplitTitle(sTitle))
             {
                 bSplitFirstnames(sFirstnames);
@@ -2004,8 +2018,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private bool bSplitTitle(string pTitle)
         {
-            int i, l;
-            i = sTitle.IndexOf('&');
+            int i;
+            if (pTitle == null)
+                return false;
+            i = pTitle.IndexOf('&');
             if (i > 0)
             {
                 sTitle1 = pTitle.Substring(0, i - 1).Trim();
@@ -2038,7 +2054,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private bool bSplitFirstnames(string sFirstnames)
         {
-            int i, l;
+            int i;
+            if (sFirstnames == null)
+                return false;
             i = sFirstnames.IndexOf('&');
             if (i > 0)
             {
