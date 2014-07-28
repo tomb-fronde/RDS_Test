@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rural Post")]
 [assembly: AssemblyProduct("NZPostOffice.RDS.DataControls")]
-[assembly: AssemblyCopyright("Copyright © 2013 Rural Post")]
+[assembly: AssemblyCopyright("Copyright © 2014 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
