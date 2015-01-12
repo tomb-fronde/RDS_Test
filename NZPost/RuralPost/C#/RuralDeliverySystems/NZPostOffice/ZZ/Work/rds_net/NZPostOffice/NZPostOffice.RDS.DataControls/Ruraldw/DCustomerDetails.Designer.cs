@@ -330,6 +330,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_date_commenced.Location = new System.Drawing.Point(107, 25);
             this.cust_date_commenced.Mask = "00/00/0000";
             this.cust_date_commenced.Name = "cust_date_commenced";
+            this.cust_date_commenced.ReadOnly = true;
             this.cust_date_commenced.Size = new System.Drawing.Size(82, 20);
             this.cust_date_commenced.TabIndex = 10;
             this.cust_date_commenced.Text = "00000000";
@@ -518,7 +519,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.case_name_max_size.TabIndex = 148;
             this.case_name_max_size.Text = "(Max 25 characters)";
             // 
-            // DCustomerDetails2
+            // DCustomerDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -559,7 +560,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.cust_business);
             this.Controls.Add(this.cust_rural_resident);
             this.Controls.Add(this.cust_rural_farmer);
-            this.Name = "DCustomerDetails2";
+            this.Name = "DCustomerDetails";
             this.Size = new System.Drawing.Size(374, 284);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
