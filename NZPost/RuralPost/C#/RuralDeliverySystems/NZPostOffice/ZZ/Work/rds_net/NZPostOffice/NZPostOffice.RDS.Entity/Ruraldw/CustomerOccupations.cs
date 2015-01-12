@@ -8,7 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
-    // TJB  Feb-2011  RPCR_023  :New
+    // TJB  RPCR_091  17-Dec-2014
+    // Changed FindEntity sort order 
+    //    from 'selected, occupation_id' to 'selected, occupation_description'
+
+    // TJB  RPCR_023  Feb-2011  :New
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -151,6 +155,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
 		#region Data Access
 		[ServerMethod]
+        // TJB  RPCR_091  17-Dec-2014
+        // Changed sort order from 'selected, occupation_id' to 'selected, occupation_description'
 		private void FetchEntity(int? in_cust_id)
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -172,7 +178,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 							+ "                                   on o2.occupation_id = co.occupation_id "
 							+ "               where o2.occupation_id = o.occupation_id "
 							+ "                 and co.cust_id = @in_cust_id) "
-							+ "order by selected desc, occupation_id ";
+                            + "order by selected desc, occupation_description ";
 
 					pList.Add(cm,"in_cust_id", in_cust_id);
 
