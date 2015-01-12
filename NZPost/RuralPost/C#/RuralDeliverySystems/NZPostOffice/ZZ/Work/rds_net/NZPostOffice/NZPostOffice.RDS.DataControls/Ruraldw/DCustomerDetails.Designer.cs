@@ -292,6 +292,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_3.TabIndex = 0;
             this.t_3.Text = "dd/MM/yyyy";
             this.t_3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.t_3.Visible = false;
             // 
             // cust_adpost_quantity
             // 
@@ -324,14 +325,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // cust_date_commenced
             // 
+            this.cust_date_commenced.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.cust_date_commenced.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CustDateCommenced", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.cust_date_commenced.EditMask = "";
             this.cust_date_commenced.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cust_date_commenced.Location = new System.Drawing.Point(107, 25);
+            this.cust_date_commenced.Location = new System.Drawing.Point(107, 29);
             this.cust_date_commenced.Mask = "00/00/0000";
             this.cust_date_commenced.Name = "cust_date_commenced";
             this.cust_date_commenced.ReadOnly = true;
-            this.cust_date_commenced.Size = new System.Drawing.Size(82, 20);
+            this.cust_date_commenced.Size = new System.Drawing.Size(82, 13);
             this.cust_date_commenced.TabIndex = 10;
             this.cust_date_commenced.Text = "00000000";
             this.cust_date_commenced.Value = null;

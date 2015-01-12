@@ -15,7 +15,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     public partial class DCustomerDetails : Metex.Windows.DataUserControl
 	{
         // TJB  Jan 2015  RPCR_092
-        // Changed Date Commenced property to read-only (in designer)
+        // Changed 'Date Commenced' property to read-only with no border (in designer)
         //
         // TJB  Jan-2011  Bug fix
         // Changed call to GetAllCustomerDetails2 to call to GetAllCustomerDetails
