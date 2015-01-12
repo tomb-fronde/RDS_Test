@@ -15,6 +15,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     public partial class WCustomer : WMaster
     {
+        // TJB  Dec-2014  RPCR_091
+        // Resized window to fit all occupations
+        //
         // TJB  Feb-2011  RPCR_023
         // Changed Occupations and Interests datawindows 
         //    from DCustomerOccupation to DCustomerOccupations

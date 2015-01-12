@@ -12,12 +12,15 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Dec-2014  RPCR_091
+    // Resized dw_occupations window to fit all occupations
+    //
+    // TJB  Feb-2011  RPCR_023
+    // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
+    // and cb_clearOccupations buttons.
+
     partial class WCustomer
     {
-        // TJB  Feb-2011  RPCR_023
-        // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
-        // and cb_clearOccupations buttons.
-
         #region Define
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
@@ -100,7 +103,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tab_1.Location = new System.Drawing.Point(5, 3);
             this.tab_1.Name = "tab_1";
             this.tab_1.SelectedIndex = 0;
-            this.tab_1.Size = new System.Drawing.Size(415, 349);
+            this.tab_1.Size = new System.Drawing.Size(415, 411);
             this.tab_1.TabIndex = 1;
             this.tab_1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tab1_selectionchanging);
             this.tab_1.SelectedIndexChanged += new System.EventHandler(this.tab_1_SelectedIndexChanged);
@@ -112,7 +115,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_1.Location = new System.Drawing.Point(4, 22);
             this.tabpage_1.Name = this.tabpage_1.Text;
-            this.tabpage_1.Size = new System.Drawing.Size(407, 323);
+            this.tabpage_1.Size = new System.Drawing.Size(407, 432);
             this.tabpage_1.TabIndex = 0;
             this.tabpage_1.Tag = "ComponentName=Customer;";
             this.tabpage_1.Text = "Customer";
@@ -123,7 +126,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_generic.FireConstructor = false;
             this.dw_generic.Location = new System.Drawing.Point(14, 28);
             this.dw_generic.Name = "dw_generic";
-            this.dw_generic.Size = new System.Drawing.Size(368, 277);
+            this.dw_generic.Size = new System.Drawing.Size(368, 395);
             this.dw_generic.TabIndex = 0;
             // 
             // gb_1
@@ -133,7 +136,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.gb_1.Location = new System.Drawing.Point(8, 9);
             this.gb_1.Name = "gb_1";
-            this.gb_1.Size = new System.Drawing.Size(389, 302);
+            this.gb_1.Size = new System.Drawing.Size(389, 420);
             this.gb_1.TabIndex = 2;
             this.gb_1.TabStop = false;
             this.gb_1.Text = "Customer Details";
@@ -145,7 +148,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_2.Location = new System.Drawing.Point(4, 22);
             this.tabpage_2.Name = this.tabpage_2.Text;
-            this.tabpage_2.Size = new System.Drawing.Size(407, 323);
+            this.tabpage_2.Size = new System.Drawing.Size(407, 432);
             this.tabpage_2.TabIndex = 1;
             this.tabpage_2.Tag = "ComponentName=Recipients;";
             this.tabpage_2.Text = "Recipients";
@@ -180,7 +183,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_4.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_4.Location = new System.Drawing.Point(4, 22);
             this.tabpage_4.Name = this.tabpage_4.Text;
-            this.tabpage_4.Size = new System.Drawing.Size(407, 323);
+            this.tabpage_4.Size = new System.Drawing.Size(407, 385);
             this.tabpage_4.TabIndex = 2;
             this.tabpage_4.Tag = "ComponentName=Occupations;";
             this.tabpage_4.Text = "Occupations";
@@ -191,7 +194,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_occupations.FireConstructor = false;
             this.dw_occupations.Location = new System.Drawing.Point(10, 24);
             this.dw_occupations.Name = "dw_occupations";
-            this.dw_occupations.Size = new System.Drawing.Size(382, 252);
+            this.dw_occupations.Size = new System.Drawing.Size(382, 316);
             this.dw_occupations.TabIndex = 0;
             // 
             // gb_occupations
@@ -203,14 +206,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.gb_occupations.ForeColor = System.Drawing.SystemColors.WindowText;
             this.gb_occupations.Location = new System.Drawing.Point(3, 6);
             this.gb_occupations.Name = "gb_occupations";
-            this.gb_occupations.Size = new System.Drawing.Size(394, 304);
+            this.gb_occupations.Size = new System.Drawing.Size(394, 376);
             this.gb_occupations.TabIndex = 1;
             this.gb_occupations.TabStop = false;
             this.gb_occupations.Text = "Occupations";
             // 
             // cb_clearOccupations
             // 
-            this.cb_clearOccupations.Location = new System.Drawing.Point(230, 278);
+            this.cb_clearOccupations.Location = new System.Drawing.Point(230, 344);
             this.cb_clearOccupations.Name = "cb_clearOccupations";
             this.cb_clearOccupations.Size = new System.Drawing.Size(75, 23);
             this.cb_clearOccupations.TabIndex = 1;
@@ -219,7 +222,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_allOccupations
             // 
-            this.cb_allOccupations.Location = new System.Drawing.Point(309, 278);
+            this.cb_allOccupations.Location = new System.Drawing.Point(309, 344);
             this.cb_allOccupations.Name = "cb_allOccupations";
             this.cb_allOccupations.Size = new System.Drawing.Size(75, 23);
             this.cb_allOccupations.TabIndex = 0;
@@ -234,7 +237,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_5.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_5.Location = new System.Drawing.Point(4, 22);
             this.tabpage_5.Name = this.tabpage_5.Text;
-            this.tabpage_5.Size = new System.Drawing.Size(407, 323);
+            this.tabpage_5.Size = new System.Drawing.Size(407, 432);
             this.tabpage_5.TabIndex = 3;
             this.tabpage_5.Tag = "ComponentName=Interests;";
             this.tabpage_5.Text = "Interests";
@@ -245,7 +248,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_interests.FireConstructor = false;
             this.dw_interests.Location = new System.Drawing.Point(10, 24);
             this.dw_interests.Name = "dw_interests";
-            this.dw_interests.Size = new System.Drawing.Size(382, 252);
+            this.dw_interests.Size = new System.Drawing.Size(382, 316);
             this.dw_interests.TabIndex = 0;
             // 
             // gb_interests
@@ -256,14 +259,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.gb_interests.ForeColor = System.Drawing.SystemColors.WindowText;
             this.gb_interests.Location = new System.Drawing.Point(3, 6);
             this.gb_interests.Name = "gb_interests";
-            this.gb_interests.Size = new System.Drawing.Size(394, 305);
+            this.gb_interests.Size = new System.Drawing.Size(394, 423);
             this.gb_interests.TabIndex = 1;
             this.gb_interests.TabStop = false;
             this.gb_interests.Text = "Interests";
             // 
             // cb_clearInterests
             // 
-            this.cb_clearInterests.Location = new System.Drawing.Point(230, 278);
+            this.cb_clearInterests.Location = new System.Drawing.Point(230, 344);
             this.cb_clearInterests.Name = "cb_clearInterests";
             this.cb_clearInterests.Size = new System.Drawing.Size(75, 23);
             this.cb_clearInterests.TabIndex = 1;
@@ -272,7 +275,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_allInterests
             // 
-            this.cb_allInterests.Location = new System.Drawing.Point(309, 278);
+            this.cb_allInterests.Location = new System.Drawing.Point(309, 344);
             this.cb_allInterests.Name = "cb_allInterests";
             this.cb_allInterests.Size = new System.Drawing.Size(75, 23);
             this.cb_allInterests.TabIndex = 0;
@@ -281,7 +284,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // st_label
             // 
-            this.st_label.Location = new System.Drawing.Point(10, 364);
+            this.st_label.Location = new System.Drawing.Point(10, 430);
             this.st_label.Name = "st_label";
             this.st_label.Size = new System.Drawing.Size(84, 15);
             this.st_label.TabIndex = 4;
@@ -290,7 +293,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_save
             // 
-            this.cb_save.Location = new System.Drawing.Point(255, 358);
+            this.cb_save.Location = new System.Drawing.Point(255, 421);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 2;
@@ -300,7 +303,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // cb_close
             // 
             this.cb_close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cb_close.Location = new System.Drawing.Point(342, 358);
+            this.cb_close.Location = new System.Drawing.Point(342, 421);
             this.cb_close.Name = "cb_close";
             this.cb_close.Size = new System.Drawing.Size(75, 23);
             this.cb_close.TabIndex = 3;
@@ -312,7 +315,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.AcceptButton = this.cb_save;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.cb_close;
-            this.ClientSize = new System.Drawing.Size(423, 387);
+            this.ClientSize = new System.Drawing.Size(423, 447);
             this.ControlBox = false;
             this.Controls.Add(this.tab_1);
             this.Controls.Add(this.cb_save);
