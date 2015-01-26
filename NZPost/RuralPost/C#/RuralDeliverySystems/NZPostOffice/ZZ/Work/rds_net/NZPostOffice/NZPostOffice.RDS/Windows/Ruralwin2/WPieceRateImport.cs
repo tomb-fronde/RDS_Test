@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Jan-2015
+    // Added wait cursor to Save_clicked
+    //
     // TJB  RPCR_054  June-2013 
     // wf_calculate_cost rewritten and renamed (was wf_calculate_rate)
 
@@ -755,9 +758,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         public virtual void cb_save_clicked(object sender, EventArgs e)
-        {      // Save
+        {
+            Cursor.Current = Cursors.WaitCursor;
             dw_1.Save();
-            //?commit;
             MessageBox.Show("The piece rate information has been saved to the database"
                            , base.Text
                            , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -767,7 +770,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
-        {     // Cancel
+        {
             ib_disableclosequery = true;
             this.Close();
         }
