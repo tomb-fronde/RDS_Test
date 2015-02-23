@@ -453,7 +453,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     s2 = s1;
                 }
 
-                update_artical_count(cm, pList);
+                update_artical_count();
             }
         }
         [ServerMethod()]
@@ -492,17 +492,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         s2 = s1;
                     }
 
-                    update_artical_count(cm, pList);
+                    update_artical_count();
                 }
             }
         }
-        #endregion
 
         [ServerMethod()]
-        private void update_artical_count(DbCommand cm, ParameterCollection pList)
+        private void update_artical_count()
         {
             string artical_count_field = "";
-            int artical_count_value = 0;
+            int    artical_count_value = 0;
 
             /******************************************************
              * Need to determine which field to populate, and     *
@@ -551,42 +550,37 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
             artical_count_value = (WeekTotal == null) ? 0 : (int)WeekTotal;
 
-            pList.Add(cm, artical_count_field, artical_count_value);
+            // If no record exists in the artical_count table for
+            // contract_no/ac_start_week_period, sp_AddArticalCountValue 
+            // will first create one with 0's for the counts, then 
+            // update the appropriate column with the computed value.
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    ParameterCollection pList = new ParameterCollection();
 
-            cm.CommandText = "if exists (select 1 from rd.artical_count "
-                           + "            where contract_no = @contract_no "
-                           + "              and ac_start_week_period = @ac_start_week_period) "
-                           + "begin "
-                           + "   update rd.artical_count "
-                           + "      set " + artical_count_field + " = @" + artical_count_field + " "
-                           + "        , ac_w1_large_parcels = 0 "
-                           + "        , ac_w2_large_parcels = 0 "
-                           + "    where contract_no = @contract_no "
-                           + "      and ac_start_week_period = @ac_start_week_period "
-                           + "end "
-                           + "else "
-                           + "begin "
-                           + "   insert into rd.artical_count "
-                           + "      (contract_no, ac_start_week_period, ac_w1_large_parcels, ac_w2_large_parcels, " 
-                           +         artical_count_field + ") "
-                           + "   values "
-                           + "      (@contract_no, @ac_start_week_period, 0, 0, @" + artical_count_field + ")"
-                           + "end "
-                           ;
-            try
-            {
-                DBHelper.ExecuteNonQuery(cm, pList);
-                // reinitialize original key/value list
-                StoreInitialValues();
-            }
-            catch (Exception e)
-            {
-                string s1, s2;
-                s1 = e.Message;
-                s2 = s1;
+                    pList.Add(cm, "inContractNo", _contract_no);
+                    pList.Add(cm, "inStartWeekPeriod", _ac_start_week_period);
+                    pList.Add(cm, "inColumnName", artical_count_field);
+                    pList.Add(cm, "inValue", artical_count_value);
+                    cm.CommandText = "rd.sp_AddArticalCountValue";
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        // reinitialize original key/value list
+                        StoreInitialValues();
+                    }
+                    catch (Exception e)
+                    {
+                        string s1, s2;
+                        s1 = e.Message;
+                        s2 = s1;
+                    }
+                }
             }
         }
-
 
         [ServerMethod()]
         private void CreateEntity(int? in_Contract
@@ -599,5 +593,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             _acd_week_no = in_WeekNo;
             _act_key = in_ActKey;
         }
+        #endregion
     }
 }
