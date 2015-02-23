@@ -14,6 +14,12 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_093  Feb-2015
+    // Added WaitCursor in dw_renewal_artical_counts_doubleclicked
+    // Added commented-out WDailyArticalCounts in case subsequently requested
+    // to match detail shown in Contract article counts
+    // (See dw_renewal_artical_counts_doubleclicked)
+    //
     // TJB  Apr-2014 "Contract Postie Renewals"
     // Allow any contract to set override rates
     //
@@ -2791,17 +2797,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Ignore if there's nothing to display
             if (dw_renewal_artical_counts.RowCount < 1) return;
 
-            // if This.RowCount > 0 then
-            // 	SetPointer ( HourGlass!)
-            // 	if g_Security.Access_Groups[7] > -1 then  // Does the user have access to full functions
-            //OpenWithParm(w_full_artical_count_form, dw_renewal_artical_counts);
+            // TJB  RPCR_093  Feb-2015
+            // Added commented-out WDailyArticalCounts in case subsequently requested
+            // to match detail shown in Contract article counts
+            Cursor.Current = Cursors.WaitCursor;
+            
             StaticMessage.PowerObjectParm = dw_renewal_artical_counts.DataObject;
             WFullArticalCountForm w_full_artical_count_form = new WFullArticalCountForm();
+            // WDailyArticalCounts w_full_artical_count_form = new WDailyArticalCounts();
             w_full_artical_count_form.ShowDialog();
-            // 	else
-            // 		OpenWithParm ( w_Artical_Count_Form, This)
-            // 	end if
-            // end if
         }
 
         public virtual void dw_renewal_artical_counts_getfocus(object sender, EventArgs e)
