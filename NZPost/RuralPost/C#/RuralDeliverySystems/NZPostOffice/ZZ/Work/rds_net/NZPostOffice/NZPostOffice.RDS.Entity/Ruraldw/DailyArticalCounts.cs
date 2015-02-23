@@ -9,6 +9,7 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
     // TJB  RPCR_093:  New
+    // Used in {W|D}DailyArticalCounts to display daily counts
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
