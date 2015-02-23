@@ -1,3 +1,4 @@
+
 using System.Windows.Forms;
 using NZPostOffice.RDS.Entity.Ruraldw;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
@@ -47,7 +48,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_inward_mail_t = new System.Windows.Forms.Label();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
-            this.tbPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // bindingSource
@@ -240,7 +240,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.RetrieveEnd += new System.EventHandler(this.DContractArticalCountsTest_RetrieveEnd);
             this.SizeChanged += new System.EventHandler(this.DContractArticalCounts_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
-            this.tbPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
