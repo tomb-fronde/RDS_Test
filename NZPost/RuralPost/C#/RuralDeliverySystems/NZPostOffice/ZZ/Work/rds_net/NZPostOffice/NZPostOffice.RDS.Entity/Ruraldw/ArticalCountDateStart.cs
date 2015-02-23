@@ -8,9 +8,13 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_093  Feb-2015
+    // Added Contract_no for single-contract article count addions
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
+    [MapInfo("contract_no", "_contract_no", "")]
     [MapInfo("region_id", "_region_id", "")]
     [MapInfo("rg_code", "_rg_code", "")]
     [MapInfo("weekstart", "_weekstart", "")]
@@ -20,6 +24,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     {
         #region Business Methods
         [DBField()]
+        private int? _contract_no;
+
+        [DBField()]
         private int? _region_id;
 
         [DBField()]
@@ -27,6 +34,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private DateTime? _weekstart;
+
+        public virtual int? ContractNo
+        {
+            get
+            {
+                CanReadProperty("ContractNo", true);
+                return _contract_no;
+            }
+            set
+            {
+                CanWriteProperty("ContractNo", true);
+                if (_contract_no != value)
+                {
+                    _contract_no = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
 
         public virtual int? RegionId
         {
