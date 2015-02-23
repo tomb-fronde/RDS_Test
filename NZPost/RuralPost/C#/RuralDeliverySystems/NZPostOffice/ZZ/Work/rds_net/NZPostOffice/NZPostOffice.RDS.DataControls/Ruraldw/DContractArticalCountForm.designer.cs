@@ -36,7 +36,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_4 = new System.Windows.Forms.Label();
             this.ac_w1_medium_letters_t = new System.Windows.Forms.Label();
             this.ac_w1_other_envelopes_t = new System.Windows.Forms.Label();
-            this.ac_w1_large_parcels_t = new System.Windows.Forms.Label();
             this.t_6 = new System.Windows.Forms.Label();
             this.ac_w1_inward_mail_t = new System.Windows.Forms.Label();
             this.ac_w1_small_parcels_t = new System.Windows.Forms.Label();
@@ -61,12 +60,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_inward_mail = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             this.week2del = new System.Windows.Forms.TextBox();
             this.compute_6 = new System.Windows.Forms.TextBox();
-            this.ac_w1_large_parcels = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
-            this.ac_w2_large_parcels = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
-            this.compute_5 = new System.Windows.Forms.TextBox();
             this.week1del = new System.Windows.Forms.TextBox();
-            this.t_5 = new System.Windows.Forms.Label();
-            this.note = new System.Windows.Forms.Label();
             this.l_1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
@@ -79,7 +73,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // st_contract
             // 
             this.st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.st_contract.Location = new System.Drawing.Point(0, 0);
+            this.st_contract.Location = new System.Drawing.Point(-63, 0);
             this.st_contract.Name = "st_contract";
             this.st_contract.Size = new System.Drawing.Size(690, 12);
             this.st_contract.TabIndex = 0;
@@ -146,16 +140,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_other_envelopes_t.Text = "Other";
             this.ac_w1_other_envelopes_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // ac_w1_large_parcels_t
-            // 
-            this.ac_w1_large_parcels_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.ac_w1_large_parcels_t.Location = new System.Drawing.Point(426, 10);
-            this.ac_w1_large_parcels_t.Name = "ac_w1_large_parcels_t";
-            this.ac_w1_large_parcels_t.Size = new System.Drawing.Size(43, 26);
-            this.ac_w1_large_parcels_t.TabIndex = 0;
-            this.ac_w1_large_parcels_t.Text = "Large\r\nParcels";
-            this.ac_w1_large_parcels_t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // t_6
             // 
             this.t_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -169,7 +153,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // ac_w1_inward_mail_t
             // 
             this.ac_w1_inward_mail_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.ac_w1_inward_mail_t.Location = new System.Drawing.Point(479, 10);
+            this.ac_w1_inward_mail_t.Location = new System.Drawing.Point(419, 10);
             this.ac_w1_inward_mail_t.Name = "ac_w1_inward_mail_t";
             this.ac_w1_inward_mail_t.Size = new System.Drawing.Size(40, 26);
             this.ac_w1_inward_mail_t.TabIndex = 0;
@@ -282,7 +266,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_7.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.compute_7.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute7", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.compute_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.compute_7.Location = new System.Drawing.Point(475, 93);
+            this.compute_7.Location = new System.Drawing.Point(415, 93);
             this.compute_7.Name = "compute_7";
             this.compute_7.ReadOnly = true;
             this.compute_7.Size = new System.Drawing.Size(44, 13);
@@ -312,30 +296,25 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // ac_w1_medium_letters
             // 
-            this.ac_w1_medium_letters.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w1_medium_letters.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w1_medium_letters.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w1_medium_letters.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW1MediumLetters", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w1_medium_letters.EditMask = "###,###";
-            this.ac_w1_medium_letters.DataBindings[0].FormatString = "###,###";
             this.ac_w1_medium_letters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w1_medium_letters.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ac_w1_medium_letters.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_medium_letters.Location = new System.Drawing.Point(188, 41);
             this.ac_w1_medium_letters.Name = "ac_w1_medium_letters";
             this.ac_w1_medium_letters.PromptChar = ' ';
             this.ac_w1_medium_letters.Size = new System.Drawing.Size(44, 20);
             this.ac_w1_medium_letters.TabIndex = 10;
             this.ac_w1_medium_letters.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w1_medium_letters.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_medium_letters.Value = "";
             // 
             // ac_w1_other_envelopes
             // 
-            this.ac_w1_other_envelopes.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w1_other_envelopes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w1_other_envelopes.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w1_other_envelopes.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW1OtherEnvelopes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w1_other_envelopes.EditMask = "###,###";
-            this.ac_w1_other_envelopes.DataBindings[0].FormatString = "###,###";
-            this.ac_w1_other_envelopes.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_other_envelopes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w1_other_envelopes.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ac_w1_other_envelopes.Location = new System.Drawing.Point(238, 41);
@@ -344,16 +323,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_other_envelopes.Size = new System.Drawing.Size(44, 20);
             this.ac_w1_other_envelopes.TabIndex = 20;
             this.ac_w1_other_envelopes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w1_other_envelopes.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_other_envelopes.Value = "";
             // 
             // ac_w1_small_parcels
             // 
-            this.ac_w1_small_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w1_small_parcels.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w1_small_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w1_small_parcels.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW1SmallParcels", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w1_small_parcels.EditMask = "###,###";
-            this.ac_w1_small_parcels.DataBindings[0].FormatString = "###,###";
-            this.ac_w1_small_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_small_parcels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w1_small_parcels.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ac_w1_small_parcels.Location = new System.Drawing.Point(294, 41);
@@ -362,16 +339,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_small_parcels.Size = new System.Drawing.Size(44, 20);
             this.ac_w1_small_parcels.TabIndex = 30;
             this.ac_w1_small_parcels.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w1_small_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_small_parcels.Value = "";
             // 
             // ac_w2_medium_letters
             // 
-            this.ac_w2_medium_letters.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w2_medium_letters.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w2_medium_letters.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w2_medium_letters.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW2MediumLetters", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w2_medium_letters.EditMask = "###,###";
-            this.ac_w2_medium_letters.DataBindings[0].FormatString = "###,###";
-            this.ac_w2_medium_letters.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_medium_letters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w2_medium_letters.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ac_w2_medium_letters.Location = new System.Drawing.Point(188, 67);
@@ -380,16 +355,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_medium_letters.Size = new System.Drawing.Size(44, 20);
             this.ac_w2_medium_letters.TabIndex = 60;
             this.ac_w2_medium_letters.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w2_medium_letters.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_medium_letters.Value = "";
             // 
             // ac_w2_other_envelopes
             // 
-            this.ac_w2_other_envelopes.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w2_other_envelopes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w2_other_envelopes.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w2_other_envelopes.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW2OtherEnvelopes", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w2_other_envelopes.EditMask = "###,###";
-            this.ac_w2_other_envelopes.DataBindings[0].FormatString = "###,###";
-            this.ac_w2_other_envelopes.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_other_envelopes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w2_other_envelopes.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ac_w2_other_envelopes.Location = new System.Drawing.Point(238, 67);
@@ -398,16 +371,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_other_envelopes.Size = new System.Drawing.Size(44, 20);
             this.ac_w2_other_envelopes.TabIndex = 70;
             this.ac_w2_other_envelopes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w2_other_envelopes.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_other_envelopes.Value = "";
             // 
             // ac_w2_small_parcels
             // 
-            this.ac_w2_small_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w2_small_parcels.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w2_small_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w2_small_parcels.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW2SmallParcels", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w2_small_parcels.EditMask = "###,###";
-            this.ac_w2_small_parcels.DataBindings[0].FormatString = "###,###";
-            this.ac_w2_small_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_small_parcels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w2_small_parcels.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.ac_w2_small_parcels.Location = new System.Drawing.Point(294, 67);
@@ -416,42 +387,39 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w2_small_parcels.Size = new System.Drawing.Size(44, 20);
             this.ac_w2_small_parcels.TabIndex = 80;
             this.ac_w2_small_parcels.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w2_small_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_small_parcels.Value = "";
             // 
             // ac_w2_inward_mail
             // 
-            this.ac_w2_inward_mail.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w2_inward_mail.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w2_inward_mail.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w2_inward_mail.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW2InwardMail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w2_inward_mail.EditMask = "###,###";
-            this.ac_w2_inward_mail.DataBindings[0].FormatString = "###,###";
-            this.ac_w2_inward_mail.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_inward_mail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w2_inward_mail.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ac_w2_inward_mail.Location = new System.Drawing.Point(475, 67);
+            this.ac_w2_inward_mail.Location = new System.Drawing.Point(415, 67);
             this.ac_w2_inward_mail.Name = "ac_w2_inward_mail";
             this.ac_w2_inward_mail.PromptChar = ' ';
             this.ac_w2_inward_mail.Size = new System.Drawing.Size(44, 20);
             this.ac_w2_inward_mail.TabIndex = 100;
             this.ac_w2_inward_mail.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w2_inward_mail.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w2_inward_mail.Value = "";
             // 
             // ac_w1_inward_mail
             // 
-            this.ac_w1_inward_mail.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w1_inward_mail.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ac_w1_inward_mail.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ac_w1_inward_mail.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW1InwardMail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.ac_w1_inward_mail.EditMask = "###,###";
-            this.ac_w1_inward_mail.DataBindings[0].FormatString = "###,###";
-            this.ac_w1_inward_mail.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_inward_mail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.ac_w1_inward_mail.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ac_w1_inward_mail.Location = new System.Drawing.Point(475, 41);
+            this.ac_w1_inward_mail.Location = new System.Drawing.Point(415, 41);
             this.ac_w1_inward_mail.Name = "ac_w1_inward_mail";
             this.ac_w1_inward_mail.PromptChar = ' ';
             this.ac_w1_inward_mail.Size = new System.Drawing.Size(44, 20);
             this.ac_w1_inward_mail.TabIndex = 50;
             this.ac_w1_inward_mail.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ac_w1_inward_mail.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.ac_w1_inward_mail.Value = "";
             // 
             // week2del
@@ -465,7 +433,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.week2del.Size = new System.Drawing.Size(51, 13);
             this.week2del.TabIndex = 0;
             this.week2del.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.week2del.DataBindings[0].FormatString = "#,##0";
             // 
             // compute_6
             // 
@@ -480,53 +447,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.compute_6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.compute_6.Visible = false;
             // 
-            // ac_w1_large_parcels
-            // 
-            this.ac_w1_large_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w1_large_parcels.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW1LargeParcels", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ac_w1_large_parcels.EditMask = "###,###";
-            this.ac_w1_large_parcels.DataBindings[0].FormatString = "###,###";
-            this.ac_w1_large_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ac_w1_large_parcels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.ac_w1_large_parcels.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ac_w1_large_parcels.Location = new System.Drawing.Point(420, 41);
-            this.ac_w1_large_parcels.Name = "ac_w1_large_parcels";
-            this.ac_w1_large_parcels.PromptChar = ' ';
-            this.ac_w1_large_parcels.Size = new System.Drawing.Size(44, 20);
-            this.ac_w1_large_parcels.TabIndex = 40;
-            this.ac_w1_large_parcels.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ac_w1_large_parcels.Value = "";
-            // 
-            // ac_w2_large_parcels
-            // 
-            this.ac_w2_large_parcels.BackColor = System.Drawing.SystemColors.ButtonShadow;//.Color.Gray;
-            this.ac_w2_large_parcels.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "AcW2LargeParcels", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ac_w2_large_parcels.EditMask = "###,###";
-            this.ac_w2_large_parcels.DataBindings[0].FormatString = "###,###";
-            this.ac_w2_large_parcels.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
-            this.ac_w2_large_parcels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.ac_w2_large_parcels.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.ac_w2_large_parcels.Location = new System.Drawing.Point(420, 69);
-            this.ac_w2_large_parcels.Name = "ac_w2_large_parcels";
-            this.ac_w2_large_parcels.PromptChar = ' ';
-            this.ac_w2_large_parcels.Size = new System.Drawing.Size(44, 20);
-            this.ac_w2_large_parcels.TabIndex = 90;
-            this.ac_w2_large_parcels.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ac_w2_large_parcels.Value = "";
-            // 
-            // compute_5
-            // 
-            this.compute_5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.compute_5.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute5", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.compute_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.compute_5.Location = new System.Drawing.Point(420, 93);
-            this.compute_5.Name = "compute_5";
-            this.compute_5.ReadOnly = true;
-            this.compute_5.Size = new System.Drawing.Size(44, 13);
-            this.compute_5.TabIndex = 0;
-            this.compute_5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.compute_5.Visible = false;
-            // 
             // week1del
             // 
             this.week1del.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -538,33 +458,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.week1del.Size = new System.Drawing.Size(51, 13);
             this.week1del.TabIndex = 0;
             this.week1del.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.week1del.DataBindings[0].FormatString = "#,##0";
-            // 
-            // t_5
-            // 
-            this.t_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.t_5.Location = new System.Drawing.Point(2, 94);
-            this.t_5.Name = "t_5";
-            this.t_5.Size = new System.Drawing.Size(33, 13);
-            this.t_5.TabIndex = 0;
-            this.t_5.Text = "Note: ";
-            this.t_5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // note
-            // 
-            this.note.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.note.Location = new System.Drawing.Point(35, 92);
-            this.note.Name = "note";
-            this.note.Size = new System.Drawing.Size(497, 20);
-            this.note.TabIndex = 0;
-            this.note.Text = "Large Parcel items are not included in the Total Deliveries but are counted in th" +
-                "e mailcounts.";
-            this.note.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // l_1
             // 
             this.l_1.BackColor = System.Drawing.Color.Black;
-            this.l_1.Location = new System.Drawing.Point(136, 90);
+            this.l_1.Location = new System.Drawing.Point(76, 90);
             this.l_1.Name = "l_1";
             this.l_1.Size = new System.Drawing.Size(390, 1);
             this.l_1.TabIndex = 101;
@@ -580,7 +478,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.t_4);
             this.Controls.Add(this.ac_w1_medium_letters_t);
             this.Controls.Add(this.ac_w1_other_envelopes_t);
-            this.Controls.Add(this.ac_w1_large_parcels_t);
             this.Controls.Add(this.t_6);
             this.Controls.Add(this.ac_w1_inward_mail_t);
             this.Controls.Add(this.ac_w1_small_parcels_t);
@@ -605,12 +502,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.ac_w1_inward_mail);
             this.Controls.Add(this.week2del);
             this.Controls.Add(this.compute_6);
-            this.Controls.Add(this.ac_w1_large_parcels);
-            this.Controls.Add(this.ac_w2_large_parcels);
-            this.Controls.Add(this.compute_5);
             this.Controls.Add(this.week1del);
-            this.Controls.Add(this.t_5);
-            this.Controls.Add(this.note);
             this.Controls.Add(this.l_1);
             this.Name = "DContractArticalCountForm";
             this.Size = new System.Drawing.Size(650, 300);
@@ -634,7 +526,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label t_4;
         private System.Windows.Forms.Label ac_w1_medium_letters_t;
         private System.Windows.Forms.Label ac_w1_other_envelopes_t;
-        private System.Windows.Forms.Label ac_w1_large_parcels_t;
         private System.Windows.Forms.Label t_6;
         private System.Windows.Forms.Label ac_w1_inward_mail_t;
         private System.Windows.Forms.Label ac_w1_small_parcels_t;
@@ -660,12 +551,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox ac_w1_inward_mail;
         private System.Windows.Forms.TextBox week2del;
         private System.Windows.Forms.TextBox compute_6;
-        private NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox ac_w1_large_parcels;
-        private NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox ac_w2_large_parcels;
-        private System.Windows.Forms.TextBox compute_5;
         private System.Windows.Forms.TextBox week1del;
-        private System.Windows.Forms.Label t_5;
-        private System.Windows.Forms.Label note;
         private System.Windows.Forms.Panel l_1;
     }
 }
