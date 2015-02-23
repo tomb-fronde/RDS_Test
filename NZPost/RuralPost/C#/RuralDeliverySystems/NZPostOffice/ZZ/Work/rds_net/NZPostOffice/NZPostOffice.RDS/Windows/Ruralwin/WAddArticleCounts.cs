@@ -10,6 +10,11 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_093  Feb-2015
+    // Changed main entry DW from DRegionalArticalCounts to 
+    // DRegionalDailyArticalCounts.  Added 'Close' button 
+    // and single-contract addition.
+
     public class WAddArticleCounts : WAncestorWindow
     {
         #region Define
@@ -20,6 +25,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public URdsDw dw_date;
 
         public Button cb_save;
+        public Button cb_close;
+
+        private string dw_generic_DataObject_Name;
         #endregion
 
         public WAddArticleCounts()
@@ -27,15 +35,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.InitializeComponent();
 
             this.dw_date.DataObject = new DArticalCountDateStart();
-            //jlwang:moved from IC
+            this.dw_date.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_date.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_date_constructor);
             ((DArticalCountDateStart)this.dw_date.DataObject).SelectedItemChanged += new EventHandler(WAddArticleCounts_SelectedItemChanged);
-            //jlwnag:end           
-            this.dw_date.DataObject.BorderStyle = BorderStyle.Fixed3D;
+
             this.dw_date.DataObject.FilterString = "";
             this.dw_date.DataObject.SortString = "";
 
-            this.dw_generic.DataObject = new DRegionalArticalCounts();
+            //this.dw_generic.DataObject = new DRegionalArticalCounts();
+            //dw_generic_DataObject_Name = "DRegionalArticalCounts";
+            this.dw_generic.DataObject = new DRegionalDailyArticalCounts();
+            dw_generic_DataObject_Name = "DRegionalDailyArticalCounts";
             this.dw_generic.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_generic.DataObject.FilterString = "";
             this.dw_generic.DataObject.SortString = "";
@@ -43,78 +53,88 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ((DArticalCountDateStart)dw_date.DataObject).SelectedItemChanged += new EventHandler(dw_date_itemchanged);
             ((DArticalCountDateStart)dw_date.DataObject).TextBoxLostFocus += new EventHandler(dw_date_itemchanged);
 
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.WAddArticleCounts_KeyDown);
         }
 
         #region Form Design
         private void InitializeComponent()
         {
-            this.dw_generic = new URdsDw();
-            this.dw_date = new URdsDw();
-         
+            this.dw_date = new NZPostOffice.RDS.Controls.URdsDw();
+            this.dw_generic = new NZPostOffice.RDS.Controls.URdsDw();
             this.cb_save = new System.Windows.Forms.Button();
+            this.cb_close = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // dw_generic
+            // st_label
             // 
-           
-            this.dw_generic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));            
-            
-            this.dw_generic.Location = new System.Drawing.Point(2, 80);
-            this.dw_generic.Name = "dw_generic";
-            this.dw_generic.Size = new System.Drawing.Size(450, 150);
-         
-            this.dw_generic.TabIndex = 1;
+            this.st_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.st_label.Location = new System.Drawing.Point(3, 316);
+            this.st_label.Size = new System.Drawing.Size(136, 15);
+            this.st_label.Text = "w_add_article_counts";
             // 
             // dw_date
             // 
-          
             this.dw_date.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-          
+            this.dw_date.DataObject = null;
+            this.dw_date.FireConstructor = false;
             this.dw_date.Location = new System.Drawing.Point(2, 2);
             this.dw_date.Name = "dw_date";
-            this.dw_date.Size = new System.Drawing.Size(450, 76);
-          
+            this.dw_date.Size = new System.Drawing.Size(693, 76);
             this.dw_date.TabIndex = 2;
-          
-            //this.dw_date.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_date_constructor);
-            //((DArticalCountDateStart)this.dw_date.DataObject).SelectedItemChanged += new EventHandler(WAddArticleCounts_SelectedItemChanged);
-
+            // 
+            // dw_generic
+            // 
+            this.dw_generic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_generic.DataObject = null;
+            this.dw_generic.FireConstructor = false;
+            this.dw_generic.Location = new System.Drawing.Point(2, 80);
+            this.dw_generic.Name = "dw_generic";
+            this.dw_generic.Size = new System.Drawing.Size(693, 212);
+            this.dw_generic.TabIndex = 1;
             // 
             // cb_save
             // 
+            this.cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom)));
-            this.cb_save.Location = new System.Drawing.Point(376, 233);
+            this.cb_save.Location = new System.Drawing.Point(534, 305);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 2;
             this.cb_save.Text = "Save";
             this.cb_save.Click += new System.EventHandler(this.cb_save_clicked);
-
             // 
-            // st_label
+            // cb_close
             // 
-            st_label.Text = "w_add_article_counts";
-            st_label.Anchor = (AnchorStyles)(AnchorStyles.Bottom | AnchorStyles.Left);
-            st_label.Width = 136;
-            st_label.Location = new System.Drawing.Point(3, 248);
-
+            this.cb_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_close.Location = new System.Drawing.Point(625, 305);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(75, 23);
+            this.cb_close.TabIndex = 4;
+            this.cb_close.Text = "Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_Click);
             // 
             // WAddArticleCounts
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(469, 270);
+            this.ClientSize = new System.Drawing.Size(712, 332);
+            this.Controls.Add(this.cb_close);
             this.Controls.Add(this.dw_generic);
             this.Controls.Add(this.dw_date);
             this.Controls.Add(this.cb_save);
-
-            this.Name = "w_add_article_counts";
+            this.Name = "WAddArticleCounts";
             this.Text = "Add Article Counts";
-            this.KeyDown += new KeyEventHandler(WAddArticleCounts_KeyDown);
+            this.Controls.SetChildIndex(this.cb_save, 0);
+            this.Controls.SetChildIndex(this.dw_date, 0);
+            this.Controls.SetChildIndex(this.dw_generic, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
             this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         ////added by jlwang 
@@ -216,9 +236,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dDate = null;
             int ll_Ctr;
             bool lb_Null;
+            int? lContract;
             int? lRegion;
             int? lRenewal;
             MMainMenu mCurrent;
+
+            lContract = dw_date.GetItem<ArticalCountDateStart>(0).ContractNo;
             lRegion = dw_date.GetItem<ArticalCountDateStart>(0).RegionId;
             lRenewal = dw_date.GetItem<ArticalCountDateStart>(0).RgCode;
             //if (dw_date.GetControlByName("weekstart").Text != "00/00/00")
@@ -229,31 +252,45 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dDate = Convert.ToDateTime(dw_date.GetControlByName("weekstart").Text);
             }
             //if (!(f_nEmpty(lRegion)) && !(f_nEmpty(lRenewal)) && !(IsNull(dDate)))
-            if (!(StaticFunctions.f_nempty(lRegion)) && !(StaticFunctions.f_nempty(lRenewal)) && !(dDate == null))
+            if ((!(StaticFunctions.f_nempty(lRegion)) && !(StaticFunctions.f_nempty(lRenewal)) && !(dDate == null))
+                || (!(StaticFunctions.f_nempty(lContract)) && !(dDate == null)))
             {
-                dw_generic.Retrieve(new object[] { lRegion, lRenewal, dDate });
+                dw_generic.Retrieve(new object[] { lContract, lRegion, lRenewal, dDate });
 
                 mCurrent = this.m_sheet;
                 mCurrent.m_updatedatabase.Enabled = true;
             }
             dw_generic.of_SetUpdateable(true);
+
             for (ll_Ctr = 0; ll_Ctr < dw_generic.RowCount; ll_Ctr++)
             {
-                //if (dw_generic.GetItemNumber(ll_Ctr, "ac_w1_medium_letters") == 0 
-                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_other_envelopes") == 0 
-                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_small_parcels") == 0 
-                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_large_parcels") == 0 
-                //   && dw_generic.GetItemNumber(ll_Ctr, "ac_w1_inward_mail") == 0)
-                if (dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1MediumLetters == 0 &&
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1OtherEnvelopes == 0 &&
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1SmallParcels == 0 &&
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1LargeParcels == 0 &&
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1InwardMail == 0)
+                if (dw_generic_DataObject_Name == "DRegionalArticalCounts")
                 {
-                    //dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
-                    dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).MarkAsNewAndModified();
+                    if (dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1MediumLetters == 0 &&
+                        dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1OtherEnvelopes == 0 &&
+                        dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1SmallParcels == 0 &&
+                        dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1LargeParcels == 0 &&
+                        dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1InwardMail == 0)
+                    {
+                        //dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
+                        dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).MarkAsNewAndModified();
+                    }
+                }
+                else  // dw_generic_DataObject_Name == "DRegionalDailyArticalCounts"
+                {
+                    if (dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdMonCount == null &&
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdTueCount == null &&
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdWedCount == null &&
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdThuCount == null &&
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdFriCount == null &&
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).AcdSatCount == null)
+                    {
+                        //dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
+                        dw_generic.GetItem<RegionalDailyArticalCounts>(ll_Ctr).MarkAsNewAndModified();
+                    }
                 }
             }
+
             // TJB  RPI_006  May 2010: 
             //    Added focus setting to stop tabbing going to <save> button
             //    Tried to get focus on 1st element in dw_generic (didn't work?)
@@ -279,35 +316,44 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_date_itemchanged(object sender, EventArgs e)
         {
-            dw_date.URdsDw_Itemchanged(sender, e);
-            dw_date_ue_getcontracts();//dw_date.PostEvent("ue_getcontracts");
+            if (sender != null)
+            {
+                dw_date.URdsDw_Itemchanged(sender, e);
+                dw_date_ue_getcontracts();
+            }
         }
 
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
-            int ll_Row;
-            int ll_RowCount;
-            int ll_contract_no;
+            int nSqlCode;
+            string sSqlErrText;
+
             //DWItemStatus l_row_status;
-            ll_RowCount = dw_generic.RowCount;
-            if (ll_RowCount > 0)
+            dw_generic.DataObject.AcceptText();
+            if (dw_generic.RowCount > 0)
             {
-                dw_generic.DataObject.Save();//dw_generic.Update();
-
-                if (dw_generic.DataObject.GetItem<RegionalArticalCounts>(0).SQLCode != 0)//(StaticVariables.sqlca.SQLCode != 0)
+                dw_generic.DataObject.Save();
+                if (dw_generic_DataObject_Name == "DRegionalArticalCounts")
                 {
-                    //MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + String(app.sqlca.SQLCode) + "\n\nError Text: " + app.sqlca.SQLErrText, "Database Error");
-                    MessageBox.Show("Unable to update.  \n\n" + "Error Code: " + dw_generic.DataObject.GetItem<RegionalArticalCounts>(0).SQLCode.ToString() + "\n\nError Text: " + dw_generic.DataObject.GetItem<RegionalArticalCounts>(0).SQLErrText, "Database Error");
-
-                    //?RollBack;
-                    return;//? return FAILURE;
+                    nSqlCode = dw_generic.DataObject.GetItem<RegionalArticalCounts>(0).SQLCode;
+                    sSqlErrText = dw_generic.DataObject.GetItem<RegionalArticalCounts>(0).SQLErrText;
                 }
                 else
                 {
-                    //?COMMIT;
+                    nSqlCode = dw_generic.DataObject.GetItem<RegionalDailyArticalCounts>(0).SQLCode;
+                    sSqlErrText = dw_generic.DataObject.GetItem<RegionalDailyArticalCounts>(0).SQLErrText;
+                }
+
+                if ( nSqlCode != 0 )
+                {
+                    MessageBox.Show("Unable to save.  \n\n"
+                                    + "Error Code: " + nSqlCode.ToString() + "\n\n"
+                                    + "Error Text: " + sSqlErrText
+                                    , "Database Error");
+                    return;
                 }
             }
-            return;//?return SUCCESS;
+            return;
         }
 
         public void WAddArticleCounts_KeyDown(object sender, KeyEventArgs e)
@@ -320,5 +366,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
         #endregion
+
+        private void cb_close_Click(object sender, EventArgs e)
+        {
+            int nModified = dw_generic.ModifiedCount() + dw_generic.NewCount();
+            int t2 = nModified;
+            this.ib_disableclosequery = false;
+            this.Close();
+        }
     }
 }
