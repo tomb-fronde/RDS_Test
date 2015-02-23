@@ -162,7 +162,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // panel1
             // 
-            //?this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(7, 32);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(450, 85);
@@ -171,11 +170,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // vScrollBar1
             // 
             this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(393, 0);
+            this.vScrollBar1.Location = new System.Drawing.Point(461, 0);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(17, 150);
             this.vScrollBar1.TabIndex = 2;
             this.vScrollBar1.Visible = false;
+            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             // 
             // DRegionalArticalCounts
             // 
@@ -195,11 +195,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.t_8);
             this.Controls.Add(this.panel1);
             this.Name = "DRegionalArticalCounts";
-            this.Size = new System.Drawing.Size(410, 150);
+            this.Size = new System.Drawing.Size(478, 150);
             this.RetrieveEnd += new System.EventHandler(this.DRegionalArticalCounts_RetrieveEnd);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
-            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(vScrollBar1_Scroll);
+
         }
 
         void vScrollBar1_Scroll(object sender, System.Windows.Forms.ScrollEventArgs e)

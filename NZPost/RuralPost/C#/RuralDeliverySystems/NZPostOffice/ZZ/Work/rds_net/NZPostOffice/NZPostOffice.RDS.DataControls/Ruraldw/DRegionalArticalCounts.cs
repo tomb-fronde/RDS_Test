@@ -11,17 +11,20 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-	public partial class DRegionalArticalCounts : Metex.Windows.DataUserControl
+    // TJB  RPCR_093  Feb 2015
+    // Obsolete: replaced with DRegionalDailyArticalCounts
+
+    public partial class DRegionalArticalCounts : Metex.Windows.DataUserControl
 	{
 		public DRegionalArticalCounts()
 		{
 			InitializeComponent();
 		}
 
-		public int Retrieve( int? in_Region, int? in_RenewalGroup, DateTime? in_Period )
+        public int Retrieve(int? in_Contract, int? in_Region, int? in_RenewalGroup, DateTime? in_Period)
 		{
 			return RetrieveCore<RegionalArticalCounts>(new List<RegionalArticalCounts>
-				(RegionalArticalCounts.GetAllRegionalArticalCounts( in_Region, in_RenewalGroup, in_Period )));
+                (RegionalArticalCounts.GetAllRegionalArticalCounts(in_Contract, in_Region, in_RenewalGroup, in_Period)));
 		}
 
         private void DRegionalArticalCounts_RetrieveEnd(object sender, System.EventArgs e)
