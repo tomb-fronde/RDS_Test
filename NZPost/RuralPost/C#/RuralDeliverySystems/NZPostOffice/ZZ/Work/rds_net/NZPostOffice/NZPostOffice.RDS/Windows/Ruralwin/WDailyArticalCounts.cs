@@ -12,11 +12,12 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_093  16-Jan-2015: NEW
+    // Created from WArticalCountForm
+    // Displays daily article counts for selected contract/count period
+    
     public class WDailyArticalCounts : WMaster
     {
-        // TJB  RPCR_093  16-Jan-2015: NEW
-        // Created from WArticalCountForm
-        
         #region Define
         private System.ComponentModel.IContainer components = null;
 
@@ -26,11 +27,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private DateTime dtAcStartWeekPeriod;
         private decimal? dAcScaleFactor;
         int SQLCode = 0;
-
-        // TJB RPCR_014 Oct-2010
-        // Added to provide for deferred artical_count table updates
-        private Boolean bAssignToPending = false;
-        private DialogResult bAssignToPending_ReplaceAll = DialogResult.Cancel;
 
         private DataUserControl dw_Parent;
 
@@ -69,8 +65,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Label Sat2Date;
         private Label Total1;
         private Label Total2;
-        private Button cb_ok;
-        private Button cb_cancel;
+        // private Button cb_ok;
+        private Button cb_close;
         private Button cb_scaling;
         private Button cb_pending;
 
@@ -85,8 +81,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_artical_count2.DataObject = new DDailyArticalCounts();
             dw_artical_count2.DataObject.BorderStyle = BorderStyle.FixedSingle;
 
-            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
-            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
+            // this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
             this.cb_scaling.Click += new System.EventHandler(this.cb_scaling_clicked);
             this.cb_pending.Click += new System.EventHandler(this.cb_pending_clicked);
 
@@ -221,7 +217,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.dw_artical_count1 = new NZPostOffice.RDS.Controls.URdsDw();
             this.dw_artical_count2 = new NZPostOffice.RDS.Controls.URdsDw();
-            this.cb_ok = new System.Windows.Forms.Button();
+            //this.cb_ok = new System.Windows.Forms.Button();
             this.cb_scaling = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.Week1 = new System.Windows.Forms.Label();
@@ -253,7 +249,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Total1 = new System.Windows.Forms.Label();
             this.Total2 = new System.Windows.Forms.Label();
             this.cb_pending = new System.Windows.Forms.Button();
-            this.cb_cancel = new System.Windows.Forms.Button();
+            this.cb_close = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // dw_artical_count1
@@ -280,13 +276,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_ok
             // 
-            this.cb_ok.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_ok.Location = new System.Drawing.Point(424, 270);
-            this.cb_ok.Name = "cb_ok";
-            this.cb_ok.Size = new System.Drawing.Size(75, 23);
-            this.cb_ok.TabIndex = 2;
-            this.cb_ok.Text = "&OK";
+            //this.cb_ok.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            //this.cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            //this.cb_ok.Location = new System.Drawing.Point(424, 270);
+            //this.cb_ok.Name = "cb_ok";
+            //this.cb_ok.Size = new System.Drawing.Size(75, 23);
+            //this.cb_ok.TabIndex = 2;
+            //this.cb_ok.Text = "&OK";
             // 
             // cb_scaling
             // 
@@ -643,22 +639,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_pending.Text = "Assign to Pending";
             this.cb_pending.UseVisualStyleBackColor = true;
             // 
-            // cb_cancel
+            // cb_close
             // 
-            this.cb_cancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.cb_cancel.Location = new System.Drawing.Point(505, 269);
-            this.cb_cancel.Name = "cb_cancel";
-            this.cb_cancel.Size = new System.Drawing.Size(75, 23);
-            this.cb_cancel.TabIndex = 18;
-            this.cb_cancel.Text = "Cancel";
-            this.cb_cancel.UseVisualStyleBackColor = true;
+            this.cb_close.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.cb_close.Location = new System.Drawing.Point(505, 269);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(75, 23);
+            this.cb_close.TabIndex = 18;
+            this.cb_close.Text = "Close";
+            this.cb_close.UseVisualStyleBackColor = true;
             // 
             // WDailyArticalCounts
             // 
-            this.AcceptButton = this.cb_ok;
+            //this.AcceptButton = this.cb_ok;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(588, 304);
-            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.cb_close);
             this.Controls.Add(this.cb_pending);
             this.Controls.Add(this.Total2);
             this.Controls.Add(this.Total1);
@@ -691,12 +687,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dw_artical_count2);
             this.Controls.Add(this.dw_artical_count1);
-            this.Controls.Add(this.cb_ok);
+            //this.Controls.Add(this.cb_ok);
             this.Controls.Add(this.cb_scaling);
             this.Name = "WDailyArticalCounts";
             this.Text = "Article Count Detail";
             this.Controls.SetChildIndex(this.cb_scaling, 0);
-            this.Controls.SetChildIndex(this.cb_ok, 0);
+            //this.Controls.SetChildIndex(this.cb_ok, 0);
             this.Controls.SetChildIndex(this.dw_artical_count1, 0);
             this.Controls.SetChildIndex(this.dw_artical_count2, 0);
             this.Controls.SetChildIndex(this.label1, 0);
@@ -729,7 +725,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.Total1, 0);
             this.Controls.SetChildIndex(this.Total2, 0);
             this.Controls.SetChildIndex(this.cb_pending, 0);
-            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -776,138 +772,142 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
-        public virtual void cb_ok_clicked(object sender, EventArgs e)
+        public virtual void cb_pending_clicked(object sender, EventArgs e)
         {
-            int nRow;
+            int nRow = 0;
+            int nRows = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
-            int? nContractNo;
+            int? nContract;
             DateTime? dtStartWeek;
             Decimal? dScaleFactor;
+            DialogResult Answer;
+            DialogResult bAssignToPending;
 
-            // bAssignToPending will be set if the user pressed the 'Assign To Pending' button.  
-            // Acting on it is deferred to here.
+            bAssignToPending = DialogResult.Yes;
+            nRow = dw_Parent.GetRow();
+            nContract = Convert.ToInt32(dw_Parent.GetValue(nRow, "ContractNo"));
+            dtStartWeek = Convert.ToDateTime(dw_Parent.GetValue(nRow, "AcStartWeekPeriod"));
+            dScaleFactor = Convert.ToDecimal(dw_Parent.GetValue(nRow, "AcScaleFactor"));
 
-            if (bAssignToPending)
+            // SELECT count(artical_count.contract_no)
+            //  WHERE artical_count.contract_no = nContract
+            //    AND artical_count.contract_seq_number = nRenewal
+            nRows = RDSDataService.GetArticalCountRows(nContract, nRenewal);
+            if (nRows > 0)
             {
-                // First, confirm the user still wants to do the assignment
-                DialogResult Answer = MessageBox.Show("Please confirm that you want to add these counts to the pending contract."
-                                                     , StaticVariables.MainMDI.Text
-                                                     , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (Answer == DialogResult.Cancel)
+                // TJB  Feb-2015: changed the default answer to Yes, and merged 
+                // 'OK' button functions.
+
+                string sRows = (nRows > 1)
+                             ? "are " + nRows.ToString() + " article counts"
+                             : "is one article count";
+                string sItThem = (nRows > 1) ? "them ?" : "it?";
+
+                bAssignToPending
+                    = MessageBox.Show("Warning: There " + sRows + " already assigned to this contract. \n"
+                                     + "Do you wish to replace " + sItThem
+                                     , "Assign to Pending"
+                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                     , MessageBoxDefaultButton.Button1);
+                // Don't do anything if the user answered 'No'
+                if (bAssignToPending == DialogResult.No)
                 {
-                    bAssignToPending = false;
                     cb_pending.Enabled = true;
                     return;
                 }
 
-                if (Answer == DialogResult.Yes)
+                // Replace all existing counts: 'UnAssign' the old article count renewals
+                //UPDATE artical_count 
+                //   SET contract_seq_number = null 
+                // WHERE artical_count.contract_no = nContract
+                //   AND artical_count.contract_seq_number = nRenewal 
+                RDSDataService.ClearArticalCountContractSeqNumber(nContract, nRenewal
+                                                                  , ref SQLCode, ref SQLErrText);
+                if (SQLCode != 0)
                 {
-                    nRow = dw_Parent.GetRow();
-                    nContractNo = Convert.ToInt32(dw_Parent.GetValue(nRow, "ContractNo"));
-                    dtStartWeek = Convert.ToDateTime(dw_Parent.GetValue(nRow, "AcStartWeekPeriod"));
-                    dScaleFactor = Convert.ToDecimal(dw_Parent.GetValue(nRow, "AcScaleFactor"));
-
-                    // If the user has one or more article counts already assigned to the renewal,
-                    // and the user has selected to make changes, bAssignToPending_ReplaceAll = YES
-                    // If this contract has no counts already assigned, or none are to be replaced, 
-                    // bAssignToPending_ReplaceAll = No
-                    // In all cases the final thing is to add these counts to the renewal.
-
-                    if (bAssignToPending_ReplaceAll == DialogResult.Yes)  // Replace all existing counts
-                    {
-                        // 'UnAssign' the old article count renewals
-                        //UPDATE artical_count 
-                        //   SET contract_seq_number = null 
-                        // WHERE artical_count.contract_no = :lContract
-                        //   AND artical_count.contract_seq_number = :ilRenewal 
-                        RDSDataService.ClearArticalCountContractSeqNumber(nContractNo, nRenewal
-                                                                          , ref SQLCode, ref SQLErrText);
-                        if (SQLCode != 0)
-                        {
-                            MessageBox.Show("Error clearing previous weekly article counts \n\n"
-                                           + SQLErrText
-                                           , "SQL Error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
-                        }
-                        // The above changes the database but doesn't update the retrieved data.
-                        // uf_clear_parent_renewal searches the parent list and nulls the renewal.
-                        // This is picked up in WContract to update the article count tab display
-                        // to reflect all the changes.
-                        uf_clear_parent_renewal(nContractNo, nRenewal);
-
-                        //UPDATE artical_count_daily
-                        //   SET contract_seq_number = null 
-                        // WHERE artical_count.contract_no = :lContract
-                        //   AND artical_count.contract_seq_number = :ilRenewal 
-                        RDSDataService.ClearArticalCountDailyContractSeqNumber(nContractNo, nRenewal
-                                                                          , ref SQLCode, ref SQLErrText);
-                        if (SQLCode != 0)
-                        {
-                            MessageBox.Show("Error clearing previous daily article counts \n\n"
-                                           + SQLErrText
-                                           , "SQL Error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return;
-                        }
-                    }
-
-                    // At this point, we know the user has asked to add this set of article counts to 
-                    // the contract's pending renewal.  Any previous counts assigned will either have 
-                    // been deassigned or left, as requested by the user.
-                    // Now, all that's left to do is to assign these counts to the contract renewal. 
-
-                    // First assign the weekly counts (in the Parent)
-
-                    // Assign the weekly article counts to the renewal
-                    //UPDATE artical_count 
-                    //   SET contract_seq_number = :nRenewal 
-                    // WHERE contract_no = :nContractNo
-                    //   AND ac_start_week_period = :dtStartWeek 
-                    RDSDataService.UpdateArticalCountContractSeqNumber(nContractNo, nRenewal, dtStartWeek, dScaleFactor
-                                                                          , ref SQLCode, ref SQLErrText);
-                    if (SQLCode != 0)
-                    {
-                        MessageBox.Show("Error assigning weekly artical counts to the renewal \n\n"
-                                       + SQLErrText
-                                       , "SQL Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-
-                    // Update the sequence number in the parent's datawindow
-                    nRow = dw_Parent.GetRow();
-                    dw_Parent.SetValue(nRow, "ContractSeqNumber", nRenewal);
-
-                    // Now assign the daily counts (here)
-
-                    // Assign the daily article counts to the renewal
-                    //UPDATE artical_count_daily 
-                    //   SET contract_seq_number = nRenewal 
-                    // WHERE contract_no = nContractNo
-                    //   AND ac_start_week_period = dtStartWeek 
-                    RDSDataService.UpdateArticalCountDailyContractSeqNumber(nContractNo, nRenewal, dtStartWeek, dScaleFactor
-                                                                                  , ref SQLCode, ref SQLErrText);
-                    if (SQLCode != 0)
-                    {
-                        MessageBox.Show("Error assigning daily artical counts to the renewal \n\n"
-                                       + SQLErrText
-                                       , "SQL Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
-                    }
-                    nRow = dw_artical_count1.GetRow();
-                    dw_artical_count1.GetItem<DailyArticalCounts>(nRow).MarkClean();
-                    nRow = dw_artical_count2.GetRow();
-                    dw_artical_count2.GetItem<DailyArticalCounts>(nRow).MarkClean();
+                    MessageBox.Show("Error clearing previous weekly article counts \n\n"
+                                   + SQLErrText
+                                   , "SQL Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
+                // The above changes the database but doesn't update the retrieved data.
+                // uf_clear_parent_renewal searches the parent list and nulls the renewal.
+                // This is picked up in WContract to update the article count tab display
+                // to reflect all the changes.
+                uf_clear_parent_renewal(nContract, nRenewal);
             }
-            this.Close();
+
+            // At this point, bAssignToPending will be 'Yes'
+            // Assign these counts to the contract's pending renewal
+
+            //UPDATE artical_count_daily
+            //   SET contract_seq_number = null 
+            // WHERE artical_count.contract_no = nContract
+            //   AND artical_count.contract_seq_number = nRenewal 
+            RDSDataService.ClearArticalCountDailyContractSeqNumber(nContract, nRenewal
+                                                              , ref SQLCode, ref SQLErrText);
+            if (SQLCode != 0)
+            {
+                MessageBox.Show("Error clearing previous daily article counts \n\n"
+                               + SQLErrText
+                               , "SQL Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Assign the current counts:
+            // First assign the weekly counts (in the Parent)
+
+            // Assign the weekly article counts to the renewal
+            //UPDATE artical_count 
+            //   SET contract_seq_number = nRenewal 
+            // WHERE contract_no = nContract
+            //   AND ac_start_week_period = dtStartWeek 
+            RDSDataService.UpdateArticalCountContractSeqNumber(nContract, nRenewal, dtStartWeek, dScaleFactor
+                                                                  , ref SQLCode, ref SQLErrText);
+            if (SQLCode != 0)
+            {
+                MessageBox.Show("Error assigning weekly artical counts to the renewal \n\n"
+                               + SQLErrText
+                               , "SQL Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Update the sequence number in the parent's datawindow
+            nRow = dw_Parent.GetRow();
+            dw_Parent.SetValue(nRow, "ContractSeqNumber", nRenewal);
+
+            // Now assign the daily counts (here)
+
+            // Assign the daily article counts to the renewal
+            //UPDATE artical_count_daily 
+            //   SET contract_seq_number = nRenewal 
+            // WHERE contract_no = nContract
+            //   AND ac_start_week_period = dtStartWeek 
+            RDSDataService.UpdateArticalCountDailyContractSeqNumber(nContract, nRenewal, dtStartWeek, dScaleFactor
+                                                                          , ref SQLCode, ref SQLErrText);
+            if (SQLCode != 0)
+            {
+                MessageBox.Show("Error assigning daily artical counts to the renewal \n\n"
+                               + SQLErrText
+                               , "SQL Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            nRow = dw_artical_count1.GetRow();
+            dw_artical_count1.GetItem<DailyArticalCounts>(nRow).MarkClean();
+            nRow = dw_artical_count2.GetRow();
+            dw_artical_count2.GetItem<DailyArticalCounts>(nRow).MarkClean();
+
+            cb_pending.Enabled = false;
         }
 
-        public virtual void cb_cancel_clicked(object sender, EventArgs e)
+        public virtual void cb_close_clicked(object sender, EventArgs e)
         {
+            this.ib_disableclosequery = false;
             this.Close();
         }
 
@@ -922,13 +922,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
         #endregion
 
+/*
         private void cb_pending_clicked(object sender, EventArgs e)
         {
+            // TJB  RPCR_093  Feb-2015
+            // Removed functionality that allowed a set of counts to be added 
+            // to a pending contract where another set had already been assigned
+            // on advice from Rural Post.
             int nRows = 0;
-            int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            bAssignToPending = true;
+            bAssignToPending = DialogResult.Yes;
 
             // SELECT count(artical_count.contract_no)
             //  WHERE artical_count.contract_no = nContractNo
@@ -936,25 +940,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nRows = RDSDataService.GetArticalCountRows(nContractNo, nRenewal);
             if (nRows > 0)
             {
+                // TJB  Feb-2015: changed the default answer to Yes, and merged 
+                // 'OK' button functions.
+
                 string sRows = (nRows > 1)
                              ? "are " + nRows.ToString() + " article counts"
                              : "is one article count";
+                string sItThem = (nRows > 1) ? "them ?" : "it?";
 
-                bAssignToPending_ReplaceAll
+                bAssignToPending
                     = MessageBox.Show("Warning: There " + sRows + " already assigned to this contract. \n"
-                                     + "Do you wish to replace them?"
+                                     + "Do you wish to replace " + sItThem
                                      , "Assign to Pending"
-                                     , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
-                                     , MessageBoxDefaultButton.Button2);
-                if (bAssignToPending_ReplaceAll == DialogResult.Cancel)
-                {
-                    bAssignToPending = false;
-                    bAssignToPending_ReplaceAll = DialogResult.No;
-                }
+                                     , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                     , MessageBoxDefaultButton.Button1);
             }
 
-            if (bAssignToPending)
-                cb_pending.Enabled = false;
+            if (bAssignToPending == DialogResult.No)
+            {
+                cb_pending.Enabled = true;
+                return;
+            }
+
         }
+ */
     }
 }
