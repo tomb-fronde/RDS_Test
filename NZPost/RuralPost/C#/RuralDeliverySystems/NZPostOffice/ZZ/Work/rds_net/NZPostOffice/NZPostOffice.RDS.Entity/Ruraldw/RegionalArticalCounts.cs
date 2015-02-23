@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_093  Feb-2015
+    // Changed total deliveries calculations (Compute_1 and Compute_2)
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -304,25 +307,29 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         }
         // needs to implement compute expression manually:
         // compute control name=[compute_2]
-        //if(isnull(ac_w1_medium_letters),0,ac_w1_medium_letters) + if(isnull(ac_w1_other_envelopes),0,ac_w1_other_envelopes) + if(isnull(ac_w1_small_parcels),0,ac_w1_small_parcels)
         public virtual int? Compute2
         {
             get
             {
+                int? total_w1_deliveries = (_ac_w1_medium_letters == null ? 0 : _ac_w1_medium_letters) 
+                                + (_ac_w1_other_envelopes == null ? 0 : _ac_w1_other_envelopes) 
+                                + (_ac_w1_small_parcels == null ? 0 : _ac_w1_small_parcels);
                 CanReadProperty("Compute2", true);
-                return (_ac_w1_medium_letters == null ? 0 : _ac_w1_medium_letters) + (_ac_w1_other_envelopes == null ? 0 : _ac_w1_other_envelopes) + (_ac_w1_small_parcels == null ? 0 : _ac_w1_small_parcels);// +(_ac_w1_large_parcels == null ? 0 : _ac_w1_large_parcels);
+                return total_w1_deliveries;
             }
         }
 
         // needs to implement compute expression manually:
         // compute control name=[compute_1]
-        //if(isnull(ac_w2_medium_letters),0,ac_w2_medium_letters) + if(isnull(ac_w2_other_envelopes),0,ac_w2_other_envelopes) + if(isnull(ac_w2_small_parcels),0,ac_w2_small_parcels)
         public virtual int? Compute1
         {
             get
             {
+                int? total_w2_deliveries = (_ac_w2_medium_letters == null ? 0 : _ac_w2_medium_letters)
+                                + (_ac_w2_other_envelopes == null ? 0 : _ac_w2_other_envelopes)
+                                + (_ac_w2_small_parcels == null ? 0 : _ac_w2_small_parcels);
                 CanReadProperty("Compute1", true);
-                return (_ac_w2_medium_letters == null ? 0 : _ac_w2_medium_letters) + (_ac_w2_other_envelopes == null ? 0 : _ac_w2_other_envelopes) + (_ac_w2_small_parcels == null ? 0 : _ac_w2_small_parcels);// +(_ac_w2_large_parcels == null ? 0 : _ac_w2_large_parcels);
+                return total_w2_deliveries;
             }
         }
 
@@ -339,7 +346,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             return Create(in_Region, in_RenewalGroup, in_Period);
         }
 
-        public static RegionalArticalCounts[] GetAllRegionalArticalCounts(int? in_Region, int? in_RenewalGroup, DateTime? in_Period)
+        public static RegionalArticalCounts[] GetAllRegionalArticalCounts(int? in_Contract, int? in_Region, int? in_RenewalGroup, DateTime? in_Period)
         {
             return Fetch(in_Region, in_RenewalGroup, in_Period).list;
         }
@@ -350,7 +357,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             //base.MarkDirty();
             base.MarkClean();
         }
-
         #endregion
 
         #region Data Access
