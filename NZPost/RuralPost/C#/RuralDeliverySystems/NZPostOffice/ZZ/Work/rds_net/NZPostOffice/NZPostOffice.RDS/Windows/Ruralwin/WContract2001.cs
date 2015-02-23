@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_093  Feb-2015
+    // Changed article cound detail window displayed from WFullArticalCountForm 
+    // to WDailyArticalCounts.  See dw_artical_counts_doubleclicked.
+    //
     // TJB  RPCR_047  Jan-2013
     // Added outlet ID to passed parameters (in StaticMessage.LongParm)
     //
@@ -2441,10 +2445,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //idw_article_count.DataObject.RetrieveEnd += new EventHandler(DataObject_RetrieveEnd);
         }
 
-        public virtual void dw_artical_counts_ue_validate()
-        {
-        }
-
         public virtual int dw_artical_counts_pfc_preinsertrow()
         {
             // Prevent a row from being inserted
@@ -3752,17 +3752,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (dw_artical_counts.RowCount > 0)
             {
                 Cursor.Current = Cursors.WaitCursor;
-
-                if (!((dw_artical_counts.GetItem<ContractArticalCounts>(1).AcStartWeekPeriod.GetValueOrDefault().Date == null)))
+                int nRow = dw_artical_counts.GetRow();
+                if (!((dw_artical_counts.GetItem<ContractArticalCounts>(nRow).AcStartWeekPeriod.GetValueOrDefault().Date == null)))
                 {
-                    //OpenWithParm(w_full_artical_count_form, dw_artical_counts);
                     StaticMessage.PowerObjectParm = ((URdsDw)this.GetContainerControl().ActiveControl).DataObject;
-                    WFullArticalCountForm w_full_artical_count_form = new WFullArticalCountForm();
-                    w_full_artical_count_form.ShowDialog();
+                /*
+                 *  WFullArticalCountForm w_full_artical_count_form = new WFullArticalCountForm();
+                 *  w_full_artical_count_form.ShowDialog();
+                */
+                    WDailyArticalCounts w_daily_artical_count = new WDailyArticalCounts();
+                    w_daily_artical_count.ShowDialog();
 
-                    for (int i = 0; i < dw_artical_counts.DataObject.RowCount; i++)
+                    // WDailyArticalCounts may have updated the contract sequence number in one or more rows 
+                    // of dw_artical_counts. Refresh the panel containing the weekly counts and contract number.
+                    int nModifiedRows = dw_artical_counts.ModifiedCount();
+                    if (nModifiedRows == 1)      // If there's only one, it will be the current one
                     {
-                        ((DContractArticalCountsTest)(((TableLayoutPanel)dw_artical_counts.GetControlByName("tbPanel")).Controls[i])).BindingSource.CurrencyManager.Refresh();
+                        ((DContractArticalCountsTest)(((TableLayoutPanel)dw_artical_counts.GetControlByName("tbPanel")).Controls[nRow])).BindingSource.CurrencyManager.Refresh();
+                    }
+                    else if (nModifiedRows > 1)  // If more than one, do them all
+                    {
+                        for (nRow = 0; nRow < dw_artical_counts.RowCount; nRow++)
+                            ((DContractArticalCountsTest)(((TableLayoutPanel)dw_artical_counts.GetControlByName("tbPanel")).Controls[nRow])).BindingSource.CurrencyManager.Refresh();
                     }
                 }
                 else
