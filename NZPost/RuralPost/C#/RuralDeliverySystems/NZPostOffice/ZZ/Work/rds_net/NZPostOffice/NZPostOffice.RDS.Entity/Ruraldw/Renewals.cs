@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_093  Feb-2015
+    // Added note about _st_active_sequence
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -156,6 +159,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             get
             {
+                // NOTE:  _st_active_sequence is the contract.con_active_sequence value for the contract.
+                //        It will usually be set to 0 if con_active_sequence is null (but don't count on it)
                 CanReadProperty("Compute1", true);
                 //IF( contract_seq_number >0,if(long(describe("st_active.text"))=contract_seq_number, "Active", if(long(describe("st_active.text"))<contract_seq_number, if(isnull(con_acceptance_flag) or con_acceptance_flag <> 'Y', "Pending", "Accepted"), "Expired")),'')
                 if (_contract_seq_number != null && _contract_seq_number > 0)
