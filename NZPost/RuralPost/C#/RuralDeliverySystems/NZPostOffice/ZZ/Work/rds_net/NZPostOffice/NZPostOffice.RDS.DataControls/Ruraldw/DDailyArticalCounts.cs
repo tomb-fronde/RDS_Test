@@ -12,7 +12,7 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     // TJB  RPCR_093  Feb-2015: New
-    // Created from 
+    // Datawindow for WDailyArticalCounts
 
     //==============================> BEWARE!! <==================================
     // To make GUI changes, change designer code BY HAND!  Saving designer changes
