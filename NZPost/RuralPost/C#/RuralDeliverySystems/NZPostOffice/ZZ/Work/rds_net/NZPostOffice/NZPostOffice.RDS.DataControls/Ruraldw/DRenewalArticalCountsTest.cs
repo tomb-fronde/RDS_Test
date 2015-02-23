@@ -9,11 +9,18 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_093  Feb-2015
+    // Hide references to Large Parcels
+
     public partial class DRenewalArticalCounts : Metex.Windows.DataUserControl
     {
         public DRenewalArticalCounts()
         {
             InitializeComponent();
+
+            ac_w1_large_parcels_t.Visible = false;
+            t_10.Visible = false;
+            t_11.Visible = false;
         }
 
         public int Retrieve(int? in_Contract, int? in_Sequence)

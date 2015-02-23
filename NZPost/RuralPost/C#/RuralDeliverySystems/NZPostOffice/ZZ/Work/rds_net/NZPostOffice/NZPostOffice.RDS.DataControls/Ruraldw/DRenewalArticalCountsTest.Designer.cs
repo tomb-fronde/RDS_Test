@@ -62,24 +62,56 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.n_46881303 = new System.Windows.Forms.Label();
             this.n_19278548 = new System.Windows.Forms.Label();
             this.n_45626804 = new System.Windows.Forms.Label();
-
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.RenewalArticalCounts);
-
             // 
             // st_title
             // 
-            this.st_title.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Bold);
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.st_title.Location = new System.Drawing.Point(-3, 0);
             this.st_title.Name = "st_title";
             this.st_title.Size = new System.Drawing.Size(690, 13);
             this.st_title.TabIndex = 0;
             this.st_title.Text = "Contract No";
             this.st_title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // t_10
+            // 
+            this.t_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.t_10.Location = new System.Drawing.Point(0, 310);
+            this.t_10.Name = "t_10";
+            this.t_10.Size = new System.Drawing.Size(33, 13);
+            this.t_10.TabIndex = 0;
+            this.t_10.Text = "Note:";
+            this.t_10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // t_11
+            // 
+            this.t_11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.t_11.Location = new System.Drawing.Point(33, 310);
+            this.t_11.Name = "t_11";
+            this.t_11.Size = new System.Drawing.Size(575, 13);
+            this.t_11.TabIndex = 0;
+            this.t_11.Text = "Large Parcel items are not included in the Total Deliveries but are counted in th" +
+                "e mailcounts.    ";
+            this.t_11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tbPanel
+            // 
+            this.tbPanel.AutoScroll = true;
+            this.tbPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.tbPanel.ColumnCount = 1;
+            this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tbPanel.Location = new System.Drawing.Point(0, 53);
+            this.tbPanel.Name = "tbPanel";
+            this.tbPanel.RowCount = 1;
+            this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tbPanel.Size = new System.Drawing.Size(537, 244);
+            this.tbPanel.TabIndex = 0;
             // 
             // n_20409962
             // 
@@ -160,7 +192,27 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_inward_mail_t.TabIndex = 0;
             this.ac_w1_inward_mail_t.Text = "Inward\r\nMail";
             this.ac_w1_inward_mail_t.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            
+            // 
+            // n_27578655
+            // 
+            this.n_27578655.Location = new System.Drawing.Point(0, 0);
+            this.n_27578655.Name = "n_27578655";
+            this.n_27578655.Size = new System.Drawing.Size(100, 23);
+            this.n_27578655.TabIndex = 0;
+            // 
+            // n_46881303
+            // 
+            this.n_46881303.Location = new System.Drawing.Point(0, 0);
+            this.n_46881303.Name = "n_46881303";
+            this.n_46881303.Size = new System.Drawing.Size(100, 23);
+            this.n_46881303.TabIndex = 0;
+            // 
+            // n_19278548
+            // 
+            this.n_19278548.Location = new System.Drawing.Point(0, 0);
+            this.n_19278548.Name = "n_19278548";
+            this.n_19278548.Size = new System.Drawing.Size(100, 23);
+            this.n_19278548.TabIndex = 0;
             // 
             // n_45626804
             // 
@@ -172,41 +224,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.n_45626804.Text = "Count Period";
             this.n_45626804.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tbPanel
+            // DRenewalArticalCounts
             // 
-            this.tbPanel.AutoScroll = true;
-            this.tbPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.None;
-            this.tbPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.tbPanel.ColumnCount = 1;
-            this.tbPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tbPanel.Location = new System.Drawing.Point(0, 53);
-            this.tbPanel.Name = "tbPanel";
-            this.tbPanel.RowCount = 1;
-            this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tbPanel.Size = new System.Drawing.Size(539, 80);
-            this.tbPanel.TabIndex = 0;
-
-            // 
-            // t_10
-            // 
-            this.t_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.t_10.Location = new System.Drawing.Point(0, 310);
-            this.t_10.Name = "t_10";
-            this.t_10.Size = new System.Drawing.Size(33, 13);
-            this.t_10.TabIndex = 0;
-            this.t_10.Text = "Note:";
-            this.t_10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // t_11
-            // 
-            this.t_11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.t_11.Location = new System.Drawing.Point(33, 310);
-            this.t_11.Name = "t_11";
-            this.t_11.Size = new System.Drawing.Size(575, 13);
-            this.t_11.TabIndex = 0;
-            this.t_11.Text = "Large Parcel items are not included in the Total Deliveries but are counted in the mailcounts.    ";
-            this.t_11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Controls.Add(this.tbPanel);
             this.Controls.Add(this.st_title);
@@ -221,12 +240,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.n_47803537);
             this.Controls.Add(this.ac_w1_inward_mail_t);
             this.Controls.Add(this.n_45626804);
-            
             this.Name = "DRenewalArticalCounts";
-            this.Size = new System.Drawing.Size(500, 300);
-            this.RetrieveEnd += new System.EventHandler(DRenewalArticalCounts_RetrieveEnd);
+            this.Size = new System.Drawing.Size(540, 300);
+            this.RetrieveEnd += new System.EventHandler(this.DRenewalArticalCounts_RetrieveEnd);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         void DRenewalArticalCounts_RetrieveEnd(object sender, System.EventArgs e)
