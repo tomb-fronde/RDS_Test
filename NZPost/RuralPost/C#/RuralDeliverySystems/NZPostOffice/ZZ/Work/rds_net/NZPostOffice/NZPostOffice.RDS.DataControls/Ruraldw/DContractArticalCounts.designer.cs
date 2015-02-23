@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DContractArticalCountsTest
@@ -377,7 +378,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.compute_3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute3", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.compute_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.compute_3.Location = new System.Drawing.Point(296, 42);
+            this.compute_3.Location = new System.Drawing.Point(294, 42);
             this.compute_3.Name = "compute_3";
             this.compute_3.DataBindings[0].FormatString = "#,##0";
             this.compute_3.Size = new System.Drawing.Size(44, 20);
@@ -425,7 +426,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.compute_4.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute4", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.compute_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.compute_4.Location = new System.Drawing.Point(400, 42);
+            this.compute_4.Location = new System.Drawing.Point(399, 42);
             this.compute_4.Name = "compute_4";
             this.compute_4.DataBindings[0].FormatString = "#,##0";
             this.compute_4.Size = new System.Drawing.Size(44, 20);

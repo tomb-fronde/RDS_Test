@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_093  Feb 2015
+    // Hide Large Parcels fields and computed value
+
     public partial class DContractArticalCountsTest : Metex.Windows.DataUserControl
 	{
         public DContractArticalCountsTest()
@@ -39,8 +42,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ac_w1_large_parcels.BorderStyle = BorderStyle.None;
             this.ac_w2_large_parcels.BorderStyle = BorderStyle.None;
             this.compute_4.BorderStyle = BorderStyle.None;
-
-
+            // TJB  RPCR_093  Feb 2015
+            this.ac_w1_large_parcels.Visible = false;
+            this.ac_w2_large_parcels.Visible = false;
+            this.compute_4.Visible = false;
         }
 
 		public int Retrieve( int? in_Contract )
