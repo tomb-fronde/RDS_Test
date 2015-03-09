@@ -1,4 +1,3 @@
-//qtdong
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
+    // TJB  RPCR_094  Mar-2015
+    // NEW based on NegativePay
+    // Added contract_pay
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -21,9 +24,10 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
     [MapInfo("tax", "_tax", "")]
     [MapInfo("post_tax_adjustments", "_post_tax_adjustments", "")]
     [MapInfo("net_pay", "_net_pay", "")]
+    [MapInfo("contract_pay", "_contract_pay", "")]
     [System.Serializable()]
 
-    public class PaymentRunNegativepay : Entity<PaymentRunNegativepay>
+    public class PayrunNegativepay : Entity<PayrunNegativepay>
     {
 
         #region Business Methods
@@ -53,6 +57,9 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 
         [DBField()]
         private decimal? _net_pay;
+
+        [DBField()]
+        private decimal? _contract_pay;
 
         public virtual int? ContractNo
         {
@@ -216,6 +223,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
             }
         }
 
+        public virtual decimal? ContractPay
+        {
+            get
+            {
+                CanReadProperty("ContractPay", true);
+                return _contract_pay;
+            }
+            set
+            {
+                CanWriteProperty("ContractPay", true);
+                if (_contract_pay != value)
+                {
+                    _contract_pay = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return "";
@@ -223,12 +248,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
         #endregion
 
         #region Factory Methods
-        public static PaymentRunNegativepay NewPaymentRunNegativepay()
+        public static PayrunNegativepay NewPayrunNegativepay()
         {
             return Create();
         }
 
-        public static PaymentRunNegativepay[] GetAllPaymentRunNegativepay()
+        public static PayrunNegativepay[] GetAllPayrunNegativepay()
         {
             return Fetch().list;
         }
@@ -246,12 +271,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
                     cm.CommandText = "odps.od_rps_tnegativepay";
                     ParameterCollection pList = new ParameterCollection();
 
-                    List<PaymentRunNegativepay> _list = new List<PaymentRunNegativepay>();
+                    List<PayrunNegativepay> _list = new List<PayrunNegativepay>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
                         while (dr.Read())
                         {
-                            PaymentRunNegativepay instance = new PaymentRunNegativepay();
+                            PayrunNegativepay instance = new PayrunNegativepay();
                             instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
                             instance._c_surname_company = GetValueFromReader<string>(dr, 1);
                             instance._c_first_names = GetValueFromReader<string>(dr, 2);
@@ -261,6 +286,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
                             instance._tax = GetValueFromReader<decimal?>(dr, 6);
                             instance._post_tax_adjustments = GetValueFromReader<decimal?>(dr, 7);
                             instance._net_pay = GetValueFromReader<decimal?>(dr, 8);
+                            instance._contract_pay = GetValueFromReader<decimal?>(dr, 9);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
