@@ -11,6 +11,7 @@ using NZPostOffice.ODPS.Entity.OdpsPayrun;
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
     // TJB  RPCR_094  Mar-2015 - NEW
+    // Datawindow for WNegativePayReport
     
     public partial class DwPayrunNegativepay : Metex.Windows.DataUserControl
     {
