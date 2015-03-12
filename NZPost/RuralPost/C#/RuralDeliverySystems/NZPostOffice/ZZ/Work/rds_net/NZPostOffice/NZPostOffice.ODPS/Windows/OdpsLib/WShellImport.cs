@@ -14,6 +14,7 @@ using NZPostOffice.ODPS.DataControls.OdpsLib;
 namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
     // TJB  RPCR_094  Mar-2015
+    // Changed 'Shell deduction' to 'Fuel card deduction'
     // Changed name from SelectTShellImport to CountTShellImport
     // Changed InsertPostTaxAdjustments to InsertShellPostTaxAdjustments
     //  - Added Billdate parameter
