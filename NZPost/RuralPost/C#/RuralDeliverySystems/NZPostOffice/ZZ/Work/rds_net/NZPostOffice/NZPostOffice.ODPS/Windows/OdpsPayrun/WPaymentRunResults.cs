@@ -15,6 +15,9 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
+    // TJB  RPCR_094  Mar-2015
+    // Fix negative pay reporting. See pfc_postopen.
+
     public partial class WPaymentRunResults : WMaster
     {
         #region Define
@@ -29,7 +32,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
             this.dw_2.DataObject = new DwAcceptRejectMainrundetailGrid();
             this.dw_1.DataObject = new DwAcceptRejectMainrunGrid();
-            this.dw_negative.DataObject = new DwPaymentRunNegativepay();
+            this.dw_negative.DataObject = new DwPayrunNegativepay();
             dw_negative.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -41,8 +44,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             base.open();
             int lcount;
             bool lb_valid;
-            //? dw_1.settransobject(StaticVariables.sqlca);
-            //? dw_2.settransobject(StaticVariables.sqlca);
             ((DwAcceptRejectMainrunGrid)dw_1.DataObject).Retrieve();
             WPaymentRunSearch w_payment_run_search = (WPaymentRunSearch)StaticMessage.PowerObject;
             //lb_valid = IsValid(w_payment_run_search);
@@ -64,16 +65,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 st_processingtime.Text = "Processing time: " + Convert.ToInt32(StaticMessage.DoubleParm).ToString() + " seconds " 
                                          + "(" + string.Format("{0:F2}",temp) + " seconds per contract-O/D)";
             }
-            // Find out if any negative pays were produced and if so print a list of them
-            dw_negative.Retrieve();
-            if (dw_negative.RowCount > 0)
-            {
-                cb_accept.Enabled = false;
-                MessageBox.Show("Negative pay report will be printed"
-                               , "Negative Pay Detected!"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                //?dw_negative.Print();
-            }
         }
 
         public override void pfc_postopen()
@@ -85,10 +76,34 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 MessageBox.Show("Nobody got paid anything", "Payment Run");
                 this.Close();
             }
+            // TJB  RPCR_094  Mar-2015
+            // Created WNegativePayReport and got working here
 
-            //SELECT count ( t_posttax_deductions_not_applied.ded_id) INTO :lcount FROM t_posttax_deductions_not_applied;
+            // Find out if any negative pays were produced and if so print a list of them
+            dw_negative.Retrieve();
+            if (dw_negative.RowCount > 0)
+            {
+                string Pays;
+                Pays = (dw_negative.RowCount > 1) ? "pays" : "pay";
+                cb_accept.Enabled = false;
+                MessageBox.Show(dw_negative.RowCount.ToString() + " Negative "+Pays+" detected!\n\n"
+                                + "Negative pay report will be displayed"
+                                , "Warning!"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
+                Cursor.Current = Cursors.WaitCursor;
+                StaticVariables.gnv_app.of_get_parameters().dateparm = id_Enddate;
+                WNegativePayReport w_negative_pay_report = new WNegativePayReport();
+
+                w_negative_pay_report.ShowDialog();
+            }
+
+            //SELECT count(t_posttax_deductions_not_applied.ded_id)
+            //  INTO :lcount 
+            //  FROM t_posttax_deductions_not_applied;
             ODPSDataService dataservice = ODPSDataService.GetCountFromTPosttaxDeductionsNotApplied();
-            lcount = dataservice.Count;
+            lcount = dataservice.Count; 
+
             if (lcount > 0)
             {
                 MessageBox.Show("Not all post-tax deductions are automatically deducted"
