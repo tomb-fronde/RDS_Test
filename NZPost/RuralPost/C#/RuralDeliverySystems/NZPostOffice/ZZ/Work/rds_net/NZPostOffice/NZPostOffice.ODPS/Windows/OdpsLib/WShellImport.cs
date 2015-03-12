@@ -13,6 +13,11 @@ using NZPostOffice.ODPS.DataControls.OdpsLib;
 
 namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
+    // TJB  RPCR_094  Mar-2015
+    // Changed name from SelectTShellImport to CountTShellImport
+    // Changed InsertPostTaxAdjustments to InsertShellPostTaxAdjustments
+    //  - Added Billdate parameter
+
     public partial class WShellImport : WMaster
     {
         public string is_docname = String.Empty;
@@ -117,6 +122,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                 }
                 ll_row++;
             }
+            // TJB  RPCR_094  Mar-2015
+            // Changed name from SelectTShellImport to CountTShellImport
+            //
             // TJB SR4597 (May 2004)
             //  Query the database for the summary info
             //  then ask if the user wants to continue.
@@ -124,7 +132,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             //       into :ls_total_contracts, :ls_import_total 
             //       from odps.t_shell_import 
 
-            service = ODPSDataService.SelectTShellImport();
+            service = ODPSDataService.CountTShellImport();
             if (service.SQLCode != 0)
             {
                 ls_message = "Error obtaining summary totals from t_shell_import";
@@ -141,6 +149,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             }
             ld_import_total = Convert.ToDecimal(ls_import_total);
             ls_message = "Totals: " + "\n"
+                         + "Records  " + ll_import.ToString() + "\n"
                          + "Contracts  " + ls_total_contracts + "\n"
                          + "Value   " + (ld_import_total == 0 ? "" : ld_import_total.ToString("$###,###.##"));
 
@@ -148,26 +157,36 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                                    , "Summary"
                                    , MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
-            if (li_ok == DialogResult.Cancel)
+            if (li_ok != DialogResult.OK)
             {
                 MessageBox.Show("Import cancelled"
                                , ""
                                ,MessageBoxButtons.OK,MessageBoxIcon.Information);
                 ll_import = 0;
             }
+
             if (ll_import > 0)
             {
-                // insert shell data into post_tax_adjustments
-                service = ODPSDataService.InsertPostTaxAdjustments();
+                // Insert shell data into post_tax_adjustments
+
+                // Determine billing date (month/year one month ago)
+                DateTime billdate = DateTime.Today.AddDays(-30);
+                string sBilldate = billdate.ToString("MMM yyyy");
+
+                // TJB  RPCR_094  Mar-2015
+                // Changed InsertPostTaxAdjustments to InsertShellPostTaxAdjustments
+                // Added Billdate parameter
+                service = ODPSDataService.InsertShellPostTaxAdjustments(sBilldate);
                 if (service.SQLCode != 0)
                 {
-                    MessageBox.Show(service.SQLErrText
-                                   , "Error inserting into post_tax_deductions");
+                    MessageBox.Show("Error inserting into post_tax_deductions\n\n"
+                                    + service.SQLErrText
+                                   , "Error");
                     return;
                 }
 
                 this.Cursor = Cursors.Arrow;
-                MessageBox.Show(ll_import.ToString() + " Rows Imported"
+                MessageBox.Show(ll_import.ToString() + " Records Imported"
                                ,"Import complete");
             }
         }
