@@ -8,9 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
-    // TJB  RPCR_094  Mar-2015
-    // NEW based on NegativePay
-    // Added contract_pay
+    // TJB  RPCR_094  Mar-2015 - NEW
+    // Based on ODPSRep.NegativePay
+    // with contract_pay added
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
