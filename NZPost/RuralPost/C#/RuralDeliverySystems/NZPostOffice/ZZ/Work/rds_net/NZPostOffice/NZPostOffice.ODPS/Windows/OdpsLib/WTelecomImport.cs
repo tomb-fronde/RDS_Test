@@ -14,6 +14,12 @@ using System.IO;
 
 namespace NZPostOffice.ODPS.Windows.OdpsLib
 {
+    // TJB  RPCR_094  Mar-2015
+    // Changed 'Telecom deduction' to 'Mobile phone deduction'
+    //     (see ODPSDataServices.InsertTelecomPostTaxDeductions())
+    // Added parameter 2 to SelectPostTaxDeductions2 and SelectPostTaxDeductions
+    // Changed InsertPostTaxDeductions to InsertTelecomPostTaxDeductions
+
     public partial class WTelecomImport : WMaster
     {
         public string is_docname = String.Empty;
@@ -284,8 +290,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             int li_ok;
             int li_i;
             string ls_message = "";
-            string ls_temp;
-            //  TJB  SR4674  July 2006
+            string ls_temp1, ls_temp2;
             DateTime ld_billMonth;
             string ls_this_month;
             string ls_this_year;
@@ -351,11 +356,15 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             }
             if (ii_errcount == 0)
             {
-                ls_temp = "Telecom Deduction Month " + ls_bill_month;
+                // TJB  RPCR_094  Mar-2015
+                // Added parameter 2 to SelectPostTaxDeductions2
+
+                ls_temp1 = "Telecom Deduction Month " + ls_bill_month;
+                ls_temp2 = "Mobile Phone Deduction Month " + ls_bill_month;
                 // select count(*) into :ll_import 
                 //   from odps.post_tax_deductions 
-                //  where ded_description like :ls_temp using sqlca;
-                ODPSDataService serv = ODPSDataService.SelectPostTaxDeductions2(ls_temp);
+                //  where ded_description like :ls_temp1 or ded_description like :ls_temp2
+                ODPSDataService serv = ODPSDataService.SelectPostTaxDeductions2(ls_temp1, ls_temp2);
                 ll_import = serv.RowCount;
                 if (serv.SQLCode != 0)
                 {
@@ -481,7 +490,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                 // Collect and present summary info about what has been done
                 //   select count(*), sum(curr_chg) into :ll_rowcount, :dc_hashtotal 
                 //     from odps.t_telecom_import;
-                serv = ODPSDataService.SelectTelecomImport();
+                serv = ODPSDataService.CountTelecomImport();
                 if (serv.SQLCode != 0)
                 {
                     MessageBox.Show("Error obtaining summary totals from t_telecom_import table \n\n"
@@ -533,7 +542,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             DialogResult li_ok;
             int li_imported = 0;
             string ls_today;
-            string ls_select;
+            string ls_select1, ls_select2;
             System.Decimal dc_hashtotal = 0;
             if (!ib_loaded)
             {
@@ -568,23 +577,29 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                                 , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            service = ODPSDataService.InsertPostTaxDeductions(ls_today);
+            // TJB  RPCR_094  Mar-2015
+            // Changed InsertPostTaxDeductions to InsertTelecomPostTaxDeductions
+            service = ODPSDataService.InsertTelecomPostTaxDeductions(ls_today);
             if (service.SQLCode != 0)
             {
-                MessageBox.Show("Error inserting into post_tax_deductions.\n"
+                MessageBox.Show("Error inserting into post_tax_deductions "
                                 + "- Import aborted! \n\n"
                                 + service.SQLErrText 
                                 , "SQL Error "
                                 , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            ls_select = "Telecom Deduction % imported on " + ls_today;
+            // TJB  RPCR_094  Mar-2015
+            // Added parameter 2 to SelectPostTaxDeductions
+
+            ls_select1 = "Telecom Deduction % imported on " + ls_today;
+            ls_select2 = "Mobile Phone Deduction % imported on " + ls_today;
             //SELECT count(*), sum(ded_fixed_amount) 
             //  INTO :li_imported, :dc_hashtotal 
             //  FROM odps.post_tax_deductions 
-            // WHERE ded_reference like :ls_select
+            // WHERE ded_reference like :ls_select1 or ded_reference like :ls_select2
 
-            service = ODPSDataService.SelectPostTaxDeductions(ls_select);
+            service = ODPSDataService.SelectPostTaxDeductions(ls_select1, ls_select2);
             
             li_imported = service.LiImported;
             dc_hashtotal = service.DcHashtotal;
@@ -592,7 +607,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
             if (service.SQLCode != 0)
             {
                 MessageBox.Show("Error obtaining insert count. \n" 
-                                + "(" + ls_select + ") \n\n"
+                                + "(" + ls_select1 + " or " + ls_select2 + ") \n\n"
                                 + service.SQLErrText
                                 ,"SQL Error");
                 li_imported = -1;
