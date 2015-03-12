@@ -9,6 +9,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_094  Mar-2015
+    // Changed 'Telecom' to 'Mobile Phone' and 'Shell' to 'Fuel Card' 
+    // in ded_description and ded_reference in InsertTelecomPostTaxDeductions
+    // and InsertShellPostTaxAdjustments
+    // Changed InsertPostTaxDeductions to InsertTelecomPostTaxDeductions
+    // and InsertPostTaxAdjustments to InsertShellPostTaxAdjustments
+    // Added Billdate parameter to InsertShellPostTaxAdjustments
+    // Changed SelectTShellImport to CountTShellImport
+    // Change SelectTelecomImport to CountTelecomImport
+    //
     // TJB  RPCR_057  Dec-2013  [Drop audit triggers]
     // Disable InserIntoRdsAudit and GetAkeyFromRdsAudit
     //
@@ -208,23 +218,29 @@ namespace NZPostOffice.ODPS.DataService
             return obj;
         }
 
+        // TJB  RPCR_094  Mar-2015
+        // Changed name from SelectTShellImport to CountTShellImport
+        //
         /// <summary>
         /// select count(distinct(contract_no)), sum(total_deduction) 
         ///   into :ls_total_contracts, :ls_import_total 
         ///   from odps.t_shell_import
         /// </summary>
-        public static ODPSDataService SelectTShellImport()
+        public static ODPSDataService CountTShellImport()
         {
-            ODPSDataService obj = Execute("_SelectTShellImport");
+            ODPSDataService obj = Execute("_CountTShellImport");
             return obj;
         }
 
+        // TJB  RPCR_094  Mar-2015
+        // Changed InsertPostTaxAdjustments to InsertShellPostTaxAdjustments
+        // Added Billdate parameter
         /// <summary>
         /// insert shell data into post_tax_adjustments
         /// </summary>
-        public static ODPSDataService InsertPostTaxAdjustments()
+        public static ODPSDataService InsertShellPostTaxAdjustments(string sBilldate)
         {
-            ODPSDataService obj = Execute("_InsertPostTaxAdjustments");
+            ODPSDataService obj = Execute("_InsertShellPostTaxAdjustments", sBilldate);
             return obj;
         }
 
@@ -306,13 +322,15 @@ namespace NZPostOffice.ODPS.DataService
             ODPSDataService obj = Execute("_SelectDateDummy");
             return obj;
         }
+        // TJB  RPCR_094  Mar-2015
+        // Changed name from InsertPostTaxDeductions to InsertTelecomPostTaxDeductions
 
         /// <summary>
         /// INSERT INTO odps.post_tax_deductions (ded_id,ded_description,ded_priority,...
         /// </summary>
-        public static ODPSDataService InsertPostTaxDeductions(string ls_today)
+        public static ODPSDataService InsertTelecomPostTaxDeductions(string ls_today)
         {
-            ODPSDataService obj = Execute("_InsertPostTaxDeductions", ls_today);
+            ODPSDataService obj = Execute("_InsertTelecomPostTaxDeductions", ls_today);
             return obj;
         }
 
@@ -322,9 +340,9 @@ namespace NZPostOffice.ODPS.DataService
         ///   FROM odps.post_tax_deductions 
         ///  WHERE ded_reference like :ls_select
         /// </summary>
-        public static ODPSDataService SelectPostTaxDeductions(string ls_select)
+        public static ODPSDataService SelectPostTaxDeductions(string ls_select1, string ls_select2)
         {
-            ODPSDataService obj = Execute("_SelectPostTaxDeductions", ls_select);
+            ODPSDataService obj = Execute("_SelectPostTaxDeductions", ls_select1, ls_select2);
             return obj;
         }
 
@@ -333,9 +351,9 @@ namespace NZPostOffice.ODPS.DataService
         ///   from odps.post_tax_deductions 
         ///  where ded_description like :ls_temp
         /// </summary>
-        public static ODPSDataService SelectPostTaxDeductions2(string ls_temp)
+        public static ODPSDataService SelectPostTaxDeductions2(string ls_temp1, string ls_temp2)
         {
-            ODPSDataService obj = Execute("_SelectPostTaxDeductions2", ls_temp);
+            ODPSDataService obj = Execute("_SelectPostTaxDeductions2", ls_temp1, ls_temp2);
             return obj;
         }
 
@@ -414,14 +432,17 @@ namespace NZPostOffice.ODPS.DataService
             return obj;
         }
 
+        // TJB  RPCR_094  Mar-2015
+        // Change name from SelectTelecomImport to CountTelecomImport
+        //
         /// <summary>
         /// select count(*), sum(curr_chg) 
         ///   into :ll_rowcount, :dc_hashtotal 
         /// from odps.t_telecom_import
         /// </summary>
-        public static ODPSDataService SelectTelecomImport()
+        public static ODPSDataService CountTelecomImport()
         {
-            ODPSDataService obj = Execute("_SelectTelecomImport");
+            ODPSDataService obj = Execute("_CountTelecomImport");
             return obj;
         }
 
@@ -688,14 +709,10 @@ namespace NZPostOffice.ODPS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "insert into odps.t_shell_import (" +
-                        " contract_no, " +
-                        " contractor, " +
-                        " total_deduction) " +
-                        " values (" +
-                        " :ls_contract_no, " +
-                        " :ls_contractor, " +
-                        " :dc_total_deduction)";
+                    cm.CommandText = "insert into odps.t_shell_import " 
+                                     + "   (contract_no, contractor, total_deduction) " 
+                                     + " values" 
+                                     + "   (:ls_contract_no, :ls_contractor, :dc_total_deduction)";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ls_contract_no", ls_contract_no);
                     pList.Add(cm, "ls_contractor", ls_contractor);
@@ -718,7 +735,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         [ServerMethod]
-        private void _SelectTShellImport()
+        private void _CountTShellImport()
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -754,11 +771,18 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_094  Mar-2015
+        // Changed InsertShellPostTaxAdjustments to InsertShellPostTaxAdjustments
+        // Added Billdate parameter
         [ServerMethod]
-        private void _InsertPostTaxAdjustments()
+        private void _InsertShellPostTaxAdjustments(string sBilldate)
         {
+            // TJB  RPCR_094  Mar-2015
+            // Changed 'Shell' to 'Fuel Card' in ded_description and ded_reference
+            //
             // TJB RPCR_020 Sept-2010
             // Added 'Contract <no>' to ded_reference
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -783,10 +807,10 @@ namespace NZPostOffice.ODPS.DataService
                        " contractor_supplier_no," +
                        " ded_pay_highest_value)" +
                     " select " +
-                       " 'Shell Deduction Month' + ' ' + convert (varchar,Month(getdate()-30))," +
+                       " 'Fuel Card Deduction Month " + sBilldate + "'," + // convert (varchar,Month(getdate()-30))," +
                        " 1," +
                        " 6," +
-                       " 'Shell Deductions Contract '+cast(contract_no as varchar)+' imported on ' + convert(varchar(10), getdate(), 20)," +//! need format: yyyy-mm-dd
+                       " 'Fuel Card Deduction Contract '+cast(contract_no as varchar)+' imported on ' + convert(varchar(10),getdate(),20)," +
                        " 'M'," +
                        " null," +
                        " null," +
@@ -1107,8 +1131,11 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_094  Mar-2015
+        // Changed 'Telecom' to 'Mobile Phone' in ded_description and ded_reference
+
         [ServerMethod]
-        private void _InsertPostTaxDeductions(string ls_today)
+        private void _InsertTelecomPostTaxDeductions(string ls_today)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -1132,10 +1159,10 @@ namespace NZPostOffice.ODPS.DataService
                                     + " contractor_supplier_no,"
                                     + " ded_pay_highest_value)"
                                + " SELECT"
-                                    + " 'Telecom Deduction Month '+bill_month,"
+                                    + " 'Mobile Phone Deduction Month '+bill_month,"
                                     + " 1,"
                                     + " 6,"
-                                    + " 'Telecom Deduction Contract '+cast(contract_no as varchar)+' imported on '+:ls_today,"
+                                    + " 'Mobile Phone Deduction Contract '+cast(contract_no as varchar)+' imported on '+:ls_today,"
                                     + " 'M',"
                                     + " null,"
                                     + " null,"
@@ -1173,7 +1200,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         [ServerMethod]
-        private void _SelectPostTaxDeductions(string ls_select)
+        private void _SelectPostTaxDeductions(string ls_select1, string ls_select2)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -1182,20 +1209,20 @@ namespace NZPostOffice.ODPS.DataService
                     postTaxDeductions = new PostTaxDeductions();
 
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = " SELECT count(*), sum(ded_fixed_amount)" +
-                        " FROM odps.post_tax_deductions " +
-                        " WHERE ded_reference like :ls_select";
+                    cm.CommandText = "SELECT count(*), sum(ded_fixed_amount)" 
+                                   + "  FROM odps.post_tax_deductions " 
+                                   + " WHERE ded_reference like :ls_select1"
+                                   + "    or ded_reference like :ls_select2";
 
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "ls_select", ls_select);
+                    pList.Add(cm, "ls_select1", ls_select1);
+                    pList.Add(cm, "ls_select2", ls_select2);
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             if (dr.Read())
                             {
-                               // postTaxDeductions.li_imported = dr.GetInt32(0);
-                                // postTaxDeductions.dc_hashtotal = dr.GetDecimal(1);
                                 li_imported = dr.GetInt32(0);
                                 dc_hashtotal = dr.GetDecimal(1);
                                 _sqlcode = 0;
@@ -1216,7 +1243,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         [ServerMethod]
-        private void _SelectPostTaxDeductions2(string ls_temp)
+        private void _SelectPostTaxDeductions2(string ls_temp1, string ls_temp2)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -1224,12 +1251,15 @@ namespace NZPostOffice.ODPS.DataService
                 {
 
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "select count(*) from odps.post_tax_deductions where ded_description like :ls_temp";
+                    cm.CommandText = "select count(*) from odps.post_tax_deductions "
+                                   + " where ded_description like :ls_temp1"
+                                   + "    or ded_description like :ls_temp2";
 
                     try
                     {
                         ParameterCollection pList = new ParameterCollection();
-                        pList.Add(cm, "ls_temp", ls_temp);
+                        pList.Add(cm, "ls_temp1", ls_temp1);
+                        pList.Add(cm, "ls_temp2", ls_temp2);
 
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
@@ -1360,7 +1390,7 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         [ServerMethod]
-        private void _SelectTelecomImport()
+        private void _CountTelecomImport()
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -1369,8 +1399,9 @@ namespace NZPostOffice.ODPS.DataService
                     telecomImport = new TelecomImport();
 
                     cm.CommandType = CommandType.Text;
-                  //?  cm.CommandText = "select count( distinct(contract_no)), sum(total_deduction) from odps.t_shell_import";
-                    cm.CommandText = "select count(*), sum(curr_chg) from odps.t_telecom_import";
+                    //?  cm.CommandText = "select count( distinct(contract_no)), sum(total_deduction) from odps.t_shell_import";
+                    cm.CommandText = "select count(*), sum(curr_chg) " 
+                                     + "from odps.t_telecom_import";
 
                     try
                     {
