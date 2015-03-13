@@ -10,6 +10,10 @@ using NZPostOffice.ODPS.DataControls.OdpsPayrun;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
+    // TJB  RPCR_094  Mar-2015
+    // Made Print button inviible (doesn't work)
+    // Added window name
+
     public partial class WPaymentManualAdjustment : WResponse
     {
         public WPaymentManualAdjustment()

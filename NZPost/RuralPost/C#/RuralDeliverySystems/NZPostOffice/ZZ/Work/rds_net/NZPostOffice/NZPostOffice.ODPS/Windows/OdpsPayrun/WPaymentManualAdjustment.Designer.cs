@@ -31,56 +31,79 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
-            this.Size = new System.Drawing.Size(550, 373);
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WPaymentManualAdjustment));
+            this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.cb_ok = new System.Windows.Forms.Button();
+            this.cb_print = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            this.dw_1 = new URdsDw();
-            //!this.dw_1.DataObject = new DwPaymentManualAdjustment();
-
-            this.cb_ok = new Button();
-            this.cb_print = new Button();
-          
-            Controls.Add(dw_1);
-            Controls.Add(cb_ok);
-            Controls.Add(cb_print);
-            this.Text = "Automatic Deductions Not Applied";
-            this.ControlBox = true;
-           
             // 
             // dw_1
             // 
-            dw_1.TabIndex = 2;
-            dw_1.Location = new System.Drawing.Point(5, 5);
-            dw_1.Size = new System.Drawing.Size(530, 310);
-           
+            this.dw_1.DataObject = null;
+            this.dw_1.FireConstructor = false;
+            this.dw_1.Location = new System.Drawing.Point(5, 5);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(530, 310);
+            this.dw_1.TabIndex = 2;
             // 
             // cb_ok
             // 
-            cb_ok.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_ok.Text = "&OK";
-            cb_ok.TabIndex = 3;
-            cb_ok.Location = new System.Drawing.Point(405, 319);
-            cb_ok.Size = new System.Drawing.Size(54, 25);
-            cb_ok.Click += new EventHandler(cb_ok_clicked);
-          
+            this.cb_ok.Font = new System.Drawing.Font("Arial", 8F);
+            this.cb_ok.Location = new System.Drawing.Point(481, 321);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(54, 25);
+            this.cb_ok.TabIndex = 3;
+            this.cb_ok.Text = "&OK";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
             // cb_print
             // 
-            cb_print.Font = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-            cb_print.Text = "&Print";
-            cb_print.TabIndex = 1;
-            cb_print.Location = new System.Drawing.Point(481, 319);
-            cb_print.Size = new System.Drawing.Size(54, 25);
-            cb_print.Click += new EventHandler(cb_print_clicked);
-            this.Icon = global::NZPostOffice.Shared.Properties.Resources.SAFE02;
-            this.ResumeLayout();
+            this.cb_print.Enabled = false;
+            this.cb_print.Font = new System.Drawing.Font("Arial", 8F);
+            this.cb_print.Location = new System.Drawing.Point(421, 321);
+            this.cb_print.Name = "cb_print";
+            this.cb_print.Size = new System.Drawing.Size(54, 25);
+            this.cb_print.TabIndex = 1;
+            this.cb_print.TabStop = false;
+            this.cb_print.Text = "&Print";
+            this.cb_print.Visible = false;
+            this.cb_print.Click += new System.EventHandler(this.cb_print_clicked);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label1.Location = new System.Drawing.Point(2, 333);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(146, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "WPaymentManualAdjustment";
+            // 
+            // WPaymentManualAdjustment
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(542, 346);
+            this.Controls.Add(this.dw_1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_print);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "WPaymentManualAdjustment";
+            this.Text = "Automatic Deductions Not Applied";
+            this.Controls.SetChildIndex(this.cb_print, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.Controls.SetChildIndex(this.label1, 0);
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         public URdsDw dw_1;
         public Button cb_ok;
         public Button cb_print;
+        private Label label1;
     }
 }
