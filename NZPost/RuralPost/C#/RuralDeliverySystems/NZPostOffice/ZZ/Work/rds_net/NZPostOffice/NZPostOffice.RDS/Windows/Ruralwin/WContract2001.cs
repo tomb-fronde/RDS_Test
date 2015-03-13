@@ -19,7 +19,7 @@ using NZPostOffice.Entity;
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     // TJB  RPCR_093  Feb-2015
-    // Changed article cound detail window displayed from WFullArticalCountForm 
+    // Changed article count detail window displayed from WFullArticalCountForm 
     // to WDailyArticalCounts.  See dw_artical_counts_doubleclicked.
     //
     // TJB  RPCR_047  Jan-2013
