@@ -10,6 +10,11 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_093  Feb-2015
+    // NEW: ClearArticalCountDailyContractSeqNumber
+    // NEW: UpdateArticalCountDailyContractSeqNumber
+    // Changed name from GetArticalCountCount2 to GetArticalCountRows
+    //
     // TJB  RPCR_060  Mar-2014
     // NEW: LookForDuplicateDriver
     // NEW: AddDriver
@@ -1226,15 +1231,43 @@ namespace NZPostOffice.RDS.DataService
             return obj.ret;
         }
 
+        // TJB RPCR_093  Feb-2015: New
+        ///<summary>
+        /// UPDATE artical_count_daily set contract_seq_number = null 
+        ///  where contract_no = @lContract and contract_seq_number	= @lrenewal;
+        ///</summary>
+        public static bool ClearArticalCountDailyContractSeqNumber(int? lContract, int? lrenewal
+                                                                 , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_ClearArticalCountDailyContractSeqNumber", lContract, lrenewal);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
         // TJB RPCR_014  Oct-2010: New
         ///<summary>
         /// UPDATE artical_count set contract_seq_number = @lrenewal 
-        ///  where contract_no = @lContract and contract_seq_number	is null and ;
+        ///  where contract_no = @lContract and ac_start_week_period = dtStartWeek;
         ///</summary>
         public static bool UpdateArticalCountContractSeqNumber(int? lContract, int? lrenewal, DateTime? dtStartWeek, Decimal? dScaleFactor
                                                               , ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_UpdateArticalCountContractSeqNumber", lContract, lrenewal, dtStartWeek, dScaleFactor);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.ret;
+        }
+
+        // TJB RPCR_093  Feb-2015: New
+        ///<summary>
+        /// UPDATE artical_count_daily set contract_seq_number = lrenewal 
+        ///  where contract_no = lContract and ac_start_week_period = dtStartWeek;
+        ///</summary>
+        public static bool UpdateArticalCountDailyContractSeqNumber(int? lContract, int? lrenewal, DateTime? dtStartWeek, Decimal? dScaleFactor
+                                                              , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateArticalCountDailyContractSeqNumber", lContract, lrenewal, dtStartWeek, dScaleFactor);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.ret;
@@ -2498,17 +2531,17 @@ namespace NZPostOffice.RDS.DataService
             return obj.intVal;
         }
 
+        //  TJB  RPCR_093  Feb-2015
+        // Changed name from GetArticalCountCount2 to GetArticalCountRows
         /// <summary>
-        /// 
-        /// SELECT count(artical_count.contract_no ) 
-        ///   INTO @lCount  
+        /// SELECT count(artical_count.contract_no) INTO @lCount 
         ///   FROM artical_count  
         ///  WHERE (artical_count.contract_no = @lContract) 
-        ///    AND (artical_count.contract_seq_number = @ilRenewal )  
+        ///    AND (artical_count.contract_seq_number = @ilRenewal)  
         /// </summary>
-        public static int GetArticalCountCount2(int? lContract, int ilRenewal)
+        public static int GetArticalCountRows(int? lContract, int ilRenewal)
         {
-            RDSDataService obj = Execute("_GetArticalCountCount2", lContract, ilRenewal);
+            RDSDataService obj = Execute("_GetArticalCountRows", lContract, ilRenewal);
             return obj.intVal;
         }
 
@@ -3339,7 +3372,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetArticalCountCount2(int? lContract, int ilRenewal)
+        private void _GetArticalCountRows(int? lContract, int ilRenewal)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -8866,6 +8899,42 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB RPCR_093  Feb-2015: New
+        // Clear the contract sequence number from the artical_count_daily rows
+        // (deassign the counts from the specific contract renewal)
+        // (see WDailyArticalCounts)
+        [ServerMethod]
+        private void _ClearArticalCountDailyContractSeqNumber(int? lContract, int? lrenewal)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "UPDATE rd.artical_count_daily "
+                                    + "  set contract_seq_number = null "
+                                    + "where contract_no = @lContract "
+                                    + "  and contract_seq_number = @lrenewal";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "lContract", lContract);
+                    pList.Add(cm, "lrenewal", lrenewal);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
         // TJB RPCR_014  Oct-2010: New
         // Added to update the database when adding article counts to pending contracts
         // (see WArticalCountForm)
@@ -8884,6 +8953,46 @@ namespace NZPostOffice.RDS.DataService
                                     + "  and (contract_seq_number is null or contract_seq_number = @lRenewal) "
                                     + "  and ac_start_week_period = @dtStartWeek";
                     
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "lContract", lContract);
+                    pList.Add(cm, "lRenewal", lRenewal);
+                    pList.Add(cm, "dtStartWeek", dtStartWeek);
+                    pList.Add(cm, "dScaleFactor", dScaleFactor);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB RPCR_093  Feb-2015: New
+        // Update the artical_count_daily table in the database when adding article counts to pending contracts
+        // (see WDailyArticalCountForm)
+        [ServerMethod]
+        private void _UpdateArticalCountDailyContractSeqNumber(int? lContract, int? lRenewal
+                                                             , DateTime? dtStartWeek, Decimal? dScaleFactor)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "UPDATE rd.artical_count_daily "
+                                    + "  set contract_seq_number = @lRenewal "
+                                    + "where contract_no = @lContract "
+                                    + "  and (contract_seq_number is null or contract_seq_number = @lRenewal) "
+                                    + "  and ac_start_week_period = @dtStartWeek";
+
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "lContract", lContract);
                     pList.Add(cm, "lRenewal", lRenewal);
