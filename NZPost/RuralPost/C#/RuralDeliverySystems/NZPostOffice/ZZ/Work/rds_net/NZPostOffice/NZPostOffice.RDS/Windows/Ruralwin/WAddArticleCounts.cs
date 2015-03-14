@@ -11,9 +11,11 @@ using NZPostOffice.RDS.Controls;
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     // TJB  RPCR_093  Feb-2015
-    // Changed main entry DW from DRegionalArticalCounts to 
-    // DRegionalDailyArticalCounts.  Added 'Close' button 
-    // and single-contract addition.
+    // Changed main entry DW from DRegionalArticalCounts to DRegionalDailyArticalCounts.  
+    // Added 'Close' button and single-contract addition.
+    //
+    // TJB  RPCR_093  Mar-2015
+    // Added wait cursor in cb_save_clicked
 
     public class WAddArticleCounts : WAncestorWindow
     {
@@ -241,6 +243,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? lRenewal;
             MMainMenu mCurrent;
 
+            Cursor.Current = Cursors.WaitCursor;
+
             lContract = dw_date.GetItem<ArticalCountDateStart>(0).ContractNo;
             lRegion = dw_date.GetItem<ArticalCountDateStart>(0).RegionId;
             lRenewal = dw_date.GetItem<ArticalCountDateStart>(0).RgCode;
@@ -332,6 +336,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_generic.DataObject.AcceptText();
             if (dw_generic.RowCount > 0)
             {
+                // TJB  RPCR_093  Mar-2015
+                // Added wait cursor
+                Cursor.Current = Cursors.WaitCursor;
+
                 dw_generic.DataObject.Save();
                 if (dw_generic_DataObject_Name == "DRegionalArticalCounts")
                 {
