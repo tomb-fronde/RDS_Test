@@ -12,6 +12,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // Fetch, save data to/from artical_count_daily table 
     //    for daily artical count entry.
     // Also saves weekly totals in artical_count table
+    //
+    // TJB  RPCR_093  Mar-2015
+    // Added update/insert test to InsertEntity and UpdateEntity
+    // Added acd_update to retrieved data
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -27,6 +31,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("acd_thu_count", "_acd_thu_count", "artical_count_daily")]
     [MapInfo("acd_fri_count", "_acd_fri_count", "artical_count_daily")]
     [MapInfo("acd_sat_count", "_acd_sat_count", "artical_count_daily")]
+    [MapInfo("acd_update", "_acd_update", "")]
     [MapInfo("act_description", "_act_description", "")]
     [System.Serializable()]
 
@@ -68,6 +73,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _act_description;
+
+        [DBField()]
+        private string _acd_update;
+
 
         public virtual int? ContractNo
         {
@@ -285,6 +294,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual string AcdUpdate
+        {
+            get
+            {
+                CanReadProperty("AcdUpdate", true);
+                return _acd_update;
+            }
+            set
+            {
+                CanWriteProperty("AcdUpdate", true);
+                if (_acd_update != value)
+                {
+                    _acd_update = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         // Compute field for week total
         public virtual int? WeekTotal
         {
@@ -330,6 +357,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void FetchEntity(int? in_Contract, int? in_Region, int? in_Renewal, DateTime? in_Period)
         {
+            // TJB  RPCR_093  Mar-2015
+            // Added acd_update to retrieved data
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -370,6 +399,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                 instance._acd_thu_count = GetValueFromReader<Int32?>(dr, 8);
                                 instance._acd_fri_count = GetValueFromReader<Int32?>(dr, 9);
                                 instance._acd_sat_count = GetValueFromReader<Int32?>(dr, 10);
+                                instance._acd_update = GetValueFromReader<string>(dr, 11);
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
                                 _list.Add(instance);
@@ -390,94 +420,63 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [ServerMethod()]
         private void InsertEntity()
         {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            // TJB  RPCR_093  Mar-2015
+            // Added update/insert test
+            if (_acd_update == "U")
             {
-                DbCommand cm = cn.CreateCommand();
-                cm.CommandType = CommandType.Text;
-                cm.CommandText = "insert into artical_count_daily" 
-                    + "( contract_no"
-                    + ", ac_start_week_period"
-                    + ", contract_seq_number"
-                    + ", acd_week_no"
-                    + ", act_key"
-                    + ", acd_mon_count"
-                    + ", acd_tue_count"
-                    + ", acd_wed_count"
-                    + ", acd_thu_count"
-                    + ", acd_fri_count"
-                    + ", acd_sat_count)"
-                + " values"
-                    + "( @contract_no"
-                    + ", @ac_start_week_period"
-                    + ", @contract_seq_number"
-                    + ", @acd_week_no"
-                    + ", @act_key"
-                    + ", @acd_mon_count"
-                    + ", @acd_tue_count"
-                    + ", @acd_wed_count"
-                    + ", @acd_thu_count"
-                    + ", @acd_fri_count"
-                    + ", @acd_sat_count)"
-                ;
-                // If we're creating a new record, onvert and null's to 0
-                if (_acd_mon_count == null) AcdMonCount = 0;
-                if (_acd_tue_count == null) AcdTueCount = 0;
-                if (_acd_wed_count == null) AcdWedCount = 0;
-                if (_acd_thu_count == null) AcdThuCount = 0;
-                if (_acd_fri_count == null) AcdFriCount = 0;
-                if (_acd_sat_count == null) AcdSatCount = 0;
-
-                ParameterCollection pList = new ParameterCollection();
-                pList.Add(cm, "contract_no", _contract_no);
-                pList.Add(cm, "ac_start_week_period", _ac_start_week_period);
-                pList.Add(cm, "contract_seq_number", _contract_seq_number);
-                pList.Add(cm, "acd_week_no", _acd_week_no);
-                pList.Add(cm, "act_key", _act_key);
-                pList.Add(cm, "acd_mon_count", _acd_mon_count);
-                pList.Add(cm, "acd_tue_count", _acd_tue_count);
-                pList.Add(cm, "acd_wed_count", _acd_wed_count);
-                pList.Add(cm, "acd_thu_count", _acd_thu_count);
-                pList.Add(cm, "acd_fri_count", _acd_fri_count);
-                pList.Add(cm, "acd_sat_count", _acd_sat_count);
-
-                try
-                {
-                    DBHelper.ExecuteNonQuery(cm, pList);
-                    // reinitialize original key/value list
-                    StoreInitialValues();
-                }
-                catch (Exception e)
-                {
-                    string s1, s2;
-                    s1 = e.Message;
-                    s2 = s1;
-                }
-
-                update_artical_count();
+                UpdateEntity();
             }
-        }
-        [ServerMethod()]
-        private void UpdateEntity()
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            else
             {
-                DbCommand cm = cn.CreateCommand();
-                cm.CommandType = CommandType.Text;
-                ParameterCollection pList = new ParameterCollection();
-
-                if (GenerateUpdateCommandText(cm, "artical_count_daily", ref pList))
+                using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
                 {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "insert into artical_count_daily"
+                        + "( contract_no"
+                        + ", ac_start_week_period"
+                        + ", contract_seq_number"
+                        + ", acd_week_no"
+                        + ", act_key"
+                        + ", acd_mon_count"
+                        + ", acd_tue_count"
+                        + ", acd_wed_count"
+                        + ", acd_thu_count"
+                        + ", acd_fri_count"
+                        + ", acd_sat_count)"
+                    + " values"
+                        + "( @contract_no"
+                        + ", @ac_start_week_period"
+                        + ", @contract_seq_number"
+                        + ", @acd_week_no"
+                        + ", @act_key"
+                        + ", @acd_mon_count"
+                        + ", @acd_tue_count"
+                        + ", @acd_wed_count"
+                        + ", @acd_thu_count"
+                        + ", @acd_fri_count"
+                        + ", @acd_sat_count)"
+                    ;
+                    // If we're creating a new record, onvert and null's to 0
+                    if (_acd_mon_count == null) AcdMonCount = 0;
+                    if (_acd_tue_count == null) AcdTueCount = 0;
+                    if (_acd_wed_count == null) AcdWedCount = 0;
+                    if (_acd_thu_count == null) AcdThuCount = 0;
+                    if (_acd_fri_count == null) AcdFriCount = 0;
+                    if (_acd_sat_count == null) AcdSatCount = 0;
+
+                    ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "contract_no", _contract_no);
                     pList.Add(cm, "ac_start_week_period", _ac_start_week_period);
                     pList.Add(cm, "contract_seq_number", _contract_seq_number);
                     pList.Add(cm, "acd_week_no", _acd_week_no);
                     pList.Add(cm, "act_key", _act_key);
-
-                    cm.CommandText += " where "
-                        + "    contract_no=@contract_no "
-                        + "and ac_start_week_period=@ac_start_week_period "
-                        + "and acd_week_no=@acd_week_no "
-                        + "and act_key=@act_key ";
+                    pList.Add(cm, "acd_mon_count", _acd_mon_count);
+                    pList.Add(cm, "acd_tue_count", _acd_tue_count);
+                    pList.Add(cm, "acd_wed_count", _acd_wed_count);
+                    pList.Add(cm, "acd_thu_count", _acd_thu_count);
+                    pList.Add(cm, "acd_fri_count", _acd_fri_count);
+                    pList.Add(cm, "acd_sat_count", _acd_sat_count);
 
                     try
                     {
@@ -493,6 +492,56 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     }
 
                     update_artical_count();
+                }
+            }
+        }
+        [ServerMethod()]
+        private void UpdateEntity()
+        {
+            // TJB  RPCR_093  Mar-2015
+            // Added update/insert test
+            if (_acd_update == "A")
+            {
+                InsertEntity();
+                _acd_update = "U";
+            }
+            else
+            {
+                using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+
+                    if (GenerateUpdateCommandText(cm, "artical_count_daily", ref pList))
+                    {
+                        pList.Add(cm, "contract_no", _contract_no);
+                        pList.Add(cm, "ac_start_week_period", _ac_start_week_period);
+                        pList.Add(cm, "contract_seq_number", _contract_seq_number);
+                        pList.Add(cm, "acd_week_no", _acd_week_no);
+                        pList.Add(cm, "act_key", _act_key);
+
+                        cm.CommandText += " where "
+                            + "    contract_no=@contract_no "
+                            + "and ac_start_week_period=@ac_start_week_period "
+                            + "and acd_week_no=@acd_week_no "
+                            + "and act_key=@act_key ";
+
+                        try
+                        {
+                            DBHelper.ExecuteNonQuery(cm, pList);
+                            // reinitialize original key/value list
+                            StoreInitialValues();
+                        }
+                        catch (Exception e)
+                        {
+                            string s1, s2;
+                            s1 = e.Message;
+                            s2 = s1;
+                        }
+
+                        update_artical_count();
+                    }
                 }
             }
         }
