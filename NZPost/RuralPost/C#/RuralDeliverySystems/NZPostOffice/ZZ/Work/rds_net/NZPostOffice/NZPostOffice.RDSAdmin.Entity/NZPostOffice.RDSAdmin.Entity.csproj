@@ -50,6 +50,7 @@
     <Compile Include="AllowanceType.cs" />
     <Compile Include="ArticalType.cs" />
     <Compile Include="ContractType.cs" />
+    <Compile Include="HSType.cs" />
     <Compile Include="DddwPaymentComponentTypes.cs" />
     <Compile Include="DddwGroupRegion.cs" />
     <Compile Include="DddwOutletType.cs" />

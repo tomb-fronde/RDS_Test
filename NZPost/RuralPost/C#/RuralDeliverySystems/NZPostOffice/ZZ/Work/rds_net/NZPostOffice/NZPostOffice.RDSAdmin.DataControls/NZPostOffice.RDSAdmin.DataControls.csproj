@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DHSType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DHSType.Designer.cs">
+      <DependentUpon>DHSType.cs</DependentUpon>
+    </Compile>
     <Compile Include="DDddwPaymentComponentTypes.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -360,6 +366,10 @@
     <EmbeddedResource Include="DEclQualityMappings.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DEclQualityMappings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DHSType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DHSType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DOutletForm.resx">
       <SubType>Designer</SubType>

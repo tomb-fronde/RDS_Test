@@ -83,7 +83,7 @@
     <Compile Include="OdpsPayrun\PaymentManualAdjustment.cs" />
     <Compile Include="OdpsPayrun\PaymentRunContractors.cs" />
     <Compile Include="OdpsPayrun\PaymentRunContractorsRegion.cs" />
-    <Compile Include="OdpsPayrun\PaymentRunNegativepay.cs" />
+    <Compile Include="OdpsPayrun\PayrunNegativepay.cs" />
     <Compile Include="OdpsPayrun\PaymentRunPeriod.cs" />
     <Compile Include="OdpsPayrun\PaymentRunPerioregion.cs" />
     <Compile Include="OdpsPayrun\PostTaxDeductions.cs" />

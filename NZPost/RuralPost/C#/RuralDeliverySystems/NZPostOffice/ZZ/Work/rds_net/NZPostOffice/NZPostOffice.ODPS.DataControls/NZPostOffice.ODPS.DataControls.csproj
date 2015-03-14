@@ -295,11 +295,11 @@
     <Compile Include="OdpsPayrun\DwPaymentRunContractorsRegion.Designer.cs">
       <DependentUpon>DwPaymentRunContractorsRegion.cs</DependentUpon>
     </Compile>
-    <Compile Include="OdpsPayrun\DwPaymentRunNegativepay.cs">
+    <Compile Include="OdpsPayrun\DwPayrunNegativepay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OdpsPayrun\DwPaymentRunNegativepay.Designer.cs">
-      <DependentUpon>DwPaymentRunNegativepay.cs</DependentUpon>
+    <Compile Include="OdpsPayrun\DwPayrunNegativepay.Designer.cs">
+      <DependentUpon>DwPayrunNegativepay.cs</DependentUpon>
     </Compile>
     <Compile Include="OdpsPayrun\DwPaymentRunPeriod.cs">
       <SubType>UserControl</SubType>
@@ -1007,6 +1007,14 @@
     <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPaymentManualAdjustment.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPaymentManualAdjustment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPayrunNegativepay.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPayrunNegativepay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OdpsRep\DwApInterfaceGL07Records.resx">
       <SubType>Designer</SubType>

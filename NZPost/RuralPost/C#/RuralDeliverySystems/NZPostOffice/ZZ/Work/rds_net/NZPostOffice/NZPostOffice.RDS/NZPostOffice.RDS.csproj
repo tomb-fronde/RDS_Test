@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.11.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.12.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -174,6 +174,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WFrequencies2001.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WFullArticalCountForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WFullArticalCountForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WQsOutlet.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WQsOutlet.cs</DependentUpon>
@@ -222,6 +226,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WContractor2001.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WDailyArticalCounts.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WDailyArticalCounts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WDriverInfoMaint.resx">
       <DependentUpon>WDriverInfoMaint.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -257,6 +265,10 @@
     <EmbeddedResource Include="Windows\Ruralwin\WCustomerSequencer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WCustomerSequencer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WDuplicateDrivers.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WDuplicateDrivers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WExtentions2001.resx">
       <SubType>Designer</SubType>
@@ -329,6 +341,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WDailyArticalCounts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WDuplicateDrivers.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WAddAllowance.cs">

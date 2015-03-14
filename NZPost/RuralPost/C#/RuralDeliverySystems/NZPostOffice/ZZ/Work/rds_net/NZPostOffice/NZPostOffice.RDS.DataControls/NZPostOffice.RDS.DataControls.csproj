@@ -905,6 +905,12 @@
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ruraldw\DRegionalDailyArticalCounts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DRegionalDailyArticalCounts.designer.cs">
+      <DependentUpon>DRegionalDailyArticalCounts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruraldw\DDddwPieceRateTypes.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2731,6 +2737,18 @@
     <Compile Include="Ruralwin2\DWhatifCalulator2005.Designer.cs">
       <DependentUpon>DWhatifCalulator2005.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruraldw\DDailyArticalCounts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DDailyArticalCounts.Designer.cs">
+      <DependentUpon>DDailyArticalCounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DDuplicateDrivers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DDuplicateDrivers.Designer.cs">
+      <DependentUpon>DDuplicateDrivers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralwin\DDriverHSInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3238,6 +3256,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RERCustlistRandomLabel_Lbl.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRegionalDailyArticalCounts.resx">
+      <DependentUpon>DRegionalDailyArticalCounts.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DAddressDetails.resx">
       <DependentUpon>DAddressDetails.cs</DependentUpon>
     </EmbeddedResource>
@@ -3393,6 +3415,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DRenewal.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRenewalArticalCountsTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRenewalArticalCountsTest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DRenewalProcessCriteria.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRenewalProcessCriteria.cs</DependentUpon>
@@ -3513,6 +3539,14 @@
     <EmbeddedResource Include="Ruralwin2\DWhatifCalculatorReport2005.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DWhatifCalculatorReport2005.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DDailyArticalCounts.resx">
+      <DependentUpon>DDailyArticalCounts.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DDuplicateDrivers.resx">
+      <DependentUpon>DDuplicateDrivers.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DDriverHSInfo.resx">
       <DependentUpon>DDriverHSInfo.cs</DependentUpon>

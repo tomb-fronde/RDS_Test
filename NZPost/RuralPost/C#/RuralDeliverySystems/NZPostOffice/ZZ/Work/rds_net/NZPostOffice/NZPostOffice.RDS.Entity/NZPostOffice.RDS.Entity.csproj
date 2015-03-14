@@ -48,6 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
     <Compile Include="Ruraldw\ContractAddressFrequency.cs" />
+    <Compile Include="Ruraldw\RegionalDailyArticalCounts.cs" />
+    <Compile Include="Ruraldw\DailyArticalCounts.cs" />
     <Compile Include="Ruraldw\DddwPieceRateTypes.cs" />
     <Compile Include="Ruraldw\QsOutletDetails.cs" />
     <Compile Include="Ruraldw\CustomerInterests.cs" />
@@ -359,6 +361,7 @@
     <Compile Include="ruralwin\ContractMailtown.cs" />
     <Compile Include="ruralwin\ContractTown.cs" />
     <Compile Include="ruralwin\ContractorDriverHSInfo.cs" />
+    <Compile Include="ruralwin\DuplicateDrivers.cs" />
     <Compile Include="ruralwin\DriverInfo.cs" />
     <Compile Include="ruralwin\DriverHSInfo.cs" />
     <Compile Include="ruralwin\DddwCustTitle1.cs" />
