@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DArticalCountDateStart : Metex.Windows.DataUserControl
 	{
+        // TJB  RPCR_093  30-Mar-2015
+        // [Re-]Added Contract_no to designer.
+        //
         // TJB  FCR_001 28-Nov-2012
         // Increased size of renewal group dropdown to include November Renewals
 

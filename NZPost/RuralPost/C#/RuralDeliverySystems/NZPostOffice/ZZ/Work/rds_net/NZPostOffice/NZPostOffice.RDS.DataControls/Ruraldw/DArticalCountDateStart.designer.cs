@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DArticalCountDateStart
     {
+        // TJB  RPCR_093  30-Mar-2015
+        // [Re-]Added Contract_No and fiddled tab sequence (date last)
+        //
         // TJB  FCR_001 28-Nov-2012
         // Increased size of renewal group dropdown to include November Renewals
 
@@ -41,12 +44,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
+            NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox contractno;
             this.region_id = new Metex.Windows.DataEntityCombo();
             this.rg_code = new Metex.Windows.DataEntityCombo();
             this.weekstart = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.n_34565022 = new System.Windows.Forms.Label();
             this.n_42649746 = new System.Windows.Forms.Label();
             this.weekstart_t = new System.Windows.Forms.Label();
+            this.contract_t = new System.Windows.Forms.Label();
+            contractno = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,6 +67,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.DisplayMember = "RgnName";
             this.region_id.DropDownHeight = 150;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.region_id.IntegralHeight = false;
             this.region_id.Location = new System.Drawing.Point(190, 2);
             this.region_id.Name = "region_id";
             this.region_id.Size = new System.Drawing.Size(182, 21);
@@ -75,6 +82,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rg_code.DisplayMember = "RgDescription";
             this.rg_code.DropDownHeight = 150;
             this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
             this.rg_code.Location = new System.Drawing.Point(190, 26);
             this.rg_code.Name = "rg_code";
             this.rg_code.Size = new System.Drawing.Size(182, 21);
@@ -91,7 +99,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.weekstart.Mask = "00/00/0000";
             this.weekstart.Name = "weekstart";
             this.weekstart.Size = new System.Drawing.Size(68, 20);
-            this.weekstart.TabIndex = 30;
+            this.weekstart.TabIndex = 40;
             this.weekstart.Text = "00000000";
             this.weekstart.ValidatingType = typeof(System.DateTime);
             this.weekstart.Value = null;
@@ -127,10 +135,38 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.weekstart_t.Text = "Enter the commencing week date";
             this.weekstart_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // contractno
+            // 
+            contractno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            contractno.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            contractno.EditMask = "";
+            contractno.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            contractno.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            contractno.Location = new System.Drawing.Point(535, 2);
+            contractno.Mask = "99999";
+            contractno.Name = "contractno";
+            contractno.PromptChar = ' ';
+            contractno.Size = new System.Drawing.Size(100, 20);
+            contractno.TabIndex = 30;
+            contractno.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            contractno.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            contractno.Value = null;
+            // 
+            // contract_t
+            // 
+            this.contract_t.AutoSize = true;
+            this.contract_t.Location = new System.Drawing.Point(465, 6);
+            this.contract_t.Name = "contract_t";
+            this.contract_t.Size = new System.Drawing.Size(64, 13);
+            this.contract_t.TabIndex = 0;
+            this.contract_t.Text = "Contract No";
+            // 
             // DArticalCountDateStart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.contract_t);
+            this.Controls.Add(contractno);
             this.Controls.Add(this.region_id);
             this.Controls.Add(this.rg_code);
             this.Controls.Add(this.weekstart);
@@ -153,5 +189,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label n_34565022;
         private System.Windows.Forms.Label n_42649746;
         private System.Windows.Forms.Label weekstart_t;
+        private Label contract_t;
     }
 }
