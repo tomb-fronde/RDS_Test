@@ -14,6 +14,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DArticalCountDateStart : Metex.Windows.DataUserControl
 	{
+        // TJB  May-2015: RPCR_093 bugfix (tweak)
+        // Modified contractno to be blank when empty (in designer)
+        //
         // TJB  RPCR_093  30-Mar-2015
         // [Re-]Added Contract_no to designer.
         //
@@ -32,6 +35,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
             //!this.Load += new EventHandler(DArticalCountDateStart_Load);
             //this.RetrieveEnd += new EventHandler(DArticalCountDateStart_Load);
+            
         }
 
         protected override void OnHandleCreated(EventArgs e)

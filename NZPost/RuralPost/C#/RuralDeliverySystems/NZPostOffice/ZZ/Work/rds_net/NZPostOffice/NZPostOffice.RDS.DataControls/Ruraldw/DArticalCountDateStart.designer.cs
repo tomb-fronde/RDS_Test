@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DArticalCountDateStart
     {
+        // TJB  May-2015: RPCR_093 bugfix (tweak)
+        // Modified contractno to be blank when empty
+        //
         // TJB  RPCR_093  30-Mar-2015
         // [Re-]Added Contract_No and fiddled tab sequence (date last)
         //
@@ -36,6 +39,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             base.Dispose(disposing);
         }
 
+
         #region Component Designer generated code
 
         /// <summary> 
@@ -44,7 +48,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
-            NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox contractno;
             this.region_id = new Metex.Windows.DataEntityCombo();
             this.rg_code = new Metex.Windows.DataEntityCombo();
             this.weekstart = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
@@ -52,6 +55,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.n_42649746 = new System.Windows.Forms.Label();
             this.weekstart_t = new System.Windows.Forms.Label();
             this.contract_t = new System.Windows.Forms.Label();
+            NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox contractno;
             contractno = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
@@ -59,6 +63,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ArticalCountDateStart);
+            // 
+            // contractno
+            // 
+            contractno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            contractno.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            contractno.EditMask = "#####";
+            contractno.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            contractno.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            contractno.Location = new System.Drawing.Point(535, 2);
+            //contractno.Mask = "#####";
+            contractno.Name = "contractno";
+            //contractno.PromptChar = ' ';
+            contractno.Size = new System.Drawing.Size(100, 20); 
+            contractno.TabIndex = 30;
+            contractno.Text = "";
+            contractno.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            contractno.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            contractno.Value = "";
             // 
             // region_id
             // 
@@ -134,23 +156,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.weekstart_t.TabIndex = 0;
             this.weekstart_t.Text = "Enter the commencing week date";
             this.weekstart_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // contractno
-            // 
-            contractno.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            contractno.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            contractno.EditMask = "";
-            contractno.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            contractno.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            contractno.Location = new System.Drawing.Point(535, 2);
-            contractno.Mask = "99999";
-            contractno.Name = "contractno";
-            contractno.PromptChar = ' ';
-            contractno.Size = new System.Drawing.Size(100, 20);
-            contractno.TabIndex = 30;
-            contractno.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            contractno.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
-            contractno.Value = null;
             // 
             // contract_t
             // 
