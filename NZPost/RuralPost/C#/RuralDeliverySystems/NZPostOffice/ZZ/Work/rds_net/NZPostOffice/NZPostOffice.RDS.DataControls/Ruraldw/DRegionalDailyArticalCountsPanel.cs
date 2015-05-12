@@ -17,11 +17,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     // Added enter and leave event handlers for daily count fields
     //    - blank field on entry and replace original content on exit if unaltered
     // Removed field masks from daily and weekly fields
+    // Renamed DRegionalDailyArticalCountsPanel was RegionalDailyArticalCountsPanel
 
-    public class RegionalDailyArticalCountsPanel : UserControl
+    public class DRegionalDailyArticalCountsPanel : UserControl
     {
         #region Constructor
-        public RegionalDailyArticalCountsPanel()
+        public DRegionalDailyArticalCountsPanel()
         {
             InitializeComponent();
         }
