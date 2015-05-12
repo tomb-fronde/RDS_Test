@@ -1,5 +1,4 @@
 using System;
-//using rural32;
 using System.Windows.Forms;
 using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.RDS.DataControls.Ruraldw;
@@ -10,6 +9,10 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  May-2015 Tweak
+    // Close button asks to save if anything not saved
+    // Upper-right "X" button doesn't
+    //
     // TJB  RPCR_093  Feb-2015
     // Changed main entry DW from DRegionalArticalCounts to DRegionalDailyArticalCounts.  
     // Added 'Close' button and single-contract addition.
@@ -72,7 +75,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.st_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.st_label.Location = new System.Drawing.Point(3, 316);
             this.st_label.Size = new System.Drawing.Size(136, 15);
-            this.st_label.Text = "w_add_article_counts";
+            this.st_label.Text = "wAddArticleCounts";
             // 
             // dw_date
             // 
@@ -195,6 +198,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_date.InsertRow(0);
             //dw_date.InsertItem<ArticalCountDateStart>(0);
             dw_date.Focus();
+            this.ib_disableclosequery = true;
         }
 
         public override void pfc_preopen()
@@ -237,7 +241,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DateTime? dDate;
             dDate = null;
             int ll_Ctr;
-            bool lb_Null;
             int? lContract;
             int? lRegion;
             int? lRenewal;
@@ -248,14 +251,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lContract = dw_date.GetItem<ArticalCountDateStart>(0).ContractNo;
             lRegion = dw_date.GetItem<ArticalCountDateStart>(0).RegionId;
             lRenewal = dw_date.GetItem<ArticalCountDateStart>(0).RgCode;
-            //if (dw_date.GetControlByName("weekstart").Text != "00/00/00")
             string s_weekStart = dw_date.GetControlByName("weekstart").Text;
             if (s_weekStart != "00/00/0000")
             {
-                //dw_date.GetItem<ArticalCountDateStart>(0).Weekstart;
                 dDate = Convert.ToDateTime(dw_date.GetControlByName("weekstart").Text);
             }
-            //if (!(f_nEmpty(lRegion)) && !(f_nEmpty(lRenewal)) && !(IsNull(dDate)))
             if ((!(StaticFunctions.f_nempty(lRegion)) && !(StaticFunctions.f_nempty(lRenewal)) && !(dDate == null))
                 || (!(StaticFunctions.f_nempty(lContract)) && !(dDate == null)))
             {
@@ -276,7 +276,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1LargeParcels == 0 &&
                         dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).AcW1InwardMail == 0)
                     {
-                        //dw_generic.SetItemStatus(ll_Ctr, 0, primary!, newmodified!);
                         dw_generic.GetItem<RegionalArticalCounts>(ll_Ctr).MarkAsNewAndModified();
                     }
                 }
@@ -377,10 +376,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void cb_close_Click(object sender, EventArgs e)
         {
+            // TJB  May-2015
+            // Close button asks to save if anything not saved
+            // Upper-right "X" button doesn't
             int nModified = dw_generic.ModifiedCount() + dw_generic.NewCount();
             int t2 = nModified;
             this.ib_disableclosequery = false;
             this.Close();
+            this.ib_disableclosequery = true;
         }
     }
 }
