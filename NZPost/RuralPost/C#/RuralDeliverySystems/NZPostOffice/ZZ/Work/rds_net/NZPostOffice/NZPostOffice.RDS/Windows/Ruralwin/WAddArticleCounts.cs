@@ -12,6 +12,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  May-2015 Tweak
     // Close button asks to save if anything not saved
     // Upper-right "X" button doesn't
+    // (13-May-2015: undone - both now ask)
     //
     // TJB  RPCR_093  Feb-2015
     // Changed main entry DW from DRegionalArticalCounts to DRegionalDailyArticalCounts.  
@@ -198,7 +199,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_date.InsertRow(0);
             //dw_date.InsertItem<ArticalCountDateStart>(0);
             dw_date.Focus();
-            this.ib_disableclosequery = true;
+            this.ib_disableclosequery = false;
         }
 
         public override void pfc_preopen()
@@ -365,6 +366,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public void WAddArticleCounts_KeyDown(object sender, KeyEventArgs e)
         {
+            // TJB  RPCR_093  Feb-2015
+            // Needed to allow <cr> to be used after entering a date 
+            // in the contract selection panel
             if (e.KeyValue == 13)
             {
                 this.dw_generic.Focus();
@@ -376,14 +380,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private void cb_close_Click(object sender, EventArgs e)
         {
-            // TJB  May-2015
-            // Close button asks to save if anything not saved
-            // Upper-right "X" button doesn't
-            int nModified = dw_generic.ModifiedCount() + dw_generic.NewCount();
-            int t2 = nModified;
-            this.ib_disableclosequery = false;
             this.Close();
-            this.ib_disableclosequery = true;
         }
     }
 }
