@@ -21,6 +21,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  RPCR_096  May-2015
     // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
     // (see of_validate_contract)
+    // Changed RDSDataService name from GetRenewalRateRrFrozenIndicator to GetNvrFrozenIndicator
     //
     // TJB  RPCR_093  Feb-2015
     // Changed article count detail window displayed from WFullArticalCountForm 
@@ -1939,13 +1940,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 // TJB  RPCR_096  May-2015
                 // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
+                // Changed RDSDataService name from GetRenewalRateRrFrozenIndicator to GetNvrFrozenIndicator
                 lRGCode = idw_contract.GetItem<Contract>(arow).RgCode.GetValueOrDefault();
                 // select nvr_frozen_indicator from non_vheicle_rate 
                 //  where rg_code = :lRGCode 
                 //    and nvr_rates_effective_date 
                 //          = (select max(nvr_rates_effective_date) from non_vehicle_rate 
                 //              where rg_code = :lRGCode);
-                sFrozenInd = RDSDataService.GetRenewalRateRrFrozenIndicator(lRGCode);
+                sFrozenInd = RDSDataService.GetNvrFrozenIndicator(lRGCode);
                 if (sFrozenInd != "Y")
                 {
                     MessageBox.Show("This renewal group cannot be selected because the\n" 
