@@ -27,6 +27,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationVersion>7.1.12.1</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ApplicationIcon>AdminKey.ICO</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -158,7 +159,7 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="arrowr.ICO" />
+    <Content Include="AdminKey.ICO" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
