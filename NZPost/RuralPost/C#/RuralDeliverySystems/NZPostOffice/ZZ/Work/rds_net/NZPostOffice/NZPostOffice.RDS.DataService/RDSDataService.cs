@@ -10,6 +10,10 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_096  May-2015
+    // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
+    // Changed GetRenewalRateRrFrozenIndicator name to GetNvrFrozenIndicator
+    //
     // TJB  RPCR_093  Feb-2015
     // NEW: ClearArticalCountDailyContractSeqNumber
     // NEW: UpdateArticalCountDailyContractSeqNumber
@@ -1789,12 +1793,18 @@ namespace NZPostOffice.RDS.DataService
             return obj.intVal;
         }
 
+        // TJB  RPCR_096  May-2015
+        // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
+        // Changed GetRenewalRateRrFrozenIndicator name to GetNvrFrozenIndicator
         /// <summary>
-        /// select rr_frozen_indicator into @sFrozenInd from renewal_rate where rg_code = @lRGCode and rr_rates_effective_date  =  ( select max(rr_rates_effective_date) from renewal_rate where rg_code = @lRGCode);
+        /// select nvr_frozen_indicator into @sFrozenInd from non_vehicle_rate
+        ///  where rg_code = @lRGCode and nvr_rates_effective_date 
+        ///          = (select max(nvr_rates_effective_date) from non_vehicle_rate 
+        ///              where rg_code = @lRGCode);
         /// </summary>
-        public static string GetRenewalRateRrFrozenIndicator(int lRGCode)
+        public static string GetNvrFrozenIndicator(int lRGCode)
         {
-            RDSDataService obj = Execute("_GetRenewalRateRrFrozenIndicator", lRGCode);
+            RDSDataService obj = Execute("_GetNvrFrozenIndicator", lRGCode);
             return obj.dataObject;
         }
 
@@ -10489,8 +10499,11 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  RPCR_096  May-2015
+        // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
+        // Changed name to _GetNvrFrozenIndicator
         [ServerMethod]
-        private void _GetRenewalRateRrFrozenIndicator(int lRGCode)
+        private void _GetNvrFrozenIndicator(int lRGCode)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -10498,10 +10511,13 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = "";
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "select rr_frozen_indicator from rd.renewal_rate " +
-                        "where rg_code = @lRGCode and " +
-                        "rr_rates_effective_date = (select max(rr_rates_effective_date) " +
-                                                     "from rd.renewal_rate where rg_code = @lRGCode);";
+                    cm.CommandText = "select nvr_frozen_indicator "
+                                   + "  from rd.non_vehicle_rate " 
+                                   + " where rg_code = @lRGCode "
+                                   + "   and nvr_rates_effective_date " 
+                                   +          " = (select max(nvr_rates_effective_date) " 
+                                   +          "      from rd.non_vehicle_rate " 
+                                   +          "     where rg_code = @lRGCode)";
                     pList.Add(cm, "lRGCode", lRGCode);
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
