@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_096  May-2015
+    // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
+    // (see of_validate_contract)
+    //
     // TJB  RPCR_093  Feb-2015
     // Changed article count detail window displayed from WFullArticalCountForm 
     // to WDailyArticalCounts.  See dw_artical_counts_doubleclicked.
@@ -1930,16 +1934,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             //else if (idw_contract.GetItemStatus(arow, "rg_code", primary!) == datamodified!) 
-            else if (idw_contract.GetItem<Contract>(arow).RgCode != idw_contract.GetItem<Contract>(arow).GetInitialValue<int?>("RgCode")) 
+            else if (idw_contract.GetItem<Contract>(arow).RgCode 
+                           != idw_contract.GetItem<Contract>(arow).GetInitialValue<int?>("RgCode")) 
             {
+                // TJB  RPCR_096  May-2015
+                // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
                 lRGCode = idw_contract.GetItem<Contract>(arow).RgCode.GetValueOrDefault();
-                // select rr_frozen_indicator into :sFrozenInd 
-                //   from renewal_rate 
+                // select nvr_frozen_indicator from non_vheicle_rate 
                 //  where rg_code = :lRGCode 
-                //    and rr_rates_effective_date 
-                //             = (select max(rr_rates_effective_date) 
-                //                  from renewal_rate 
-                //                 where rg_code = :lRGCode);
+                //    and nvr_rates_effective_date 
+                //          = (select max(nvr_rates_effective_date) from non_vehicle_rate 
+                //              where rg_code = :lRGCode);
                 sFrozenInd = RDSDataService.GetRenewalRateRrFrozenIndicator(lRGCode);
                 if (sFrozenInd != "Y")
                 {
