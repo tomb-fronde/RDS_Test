@@ -905,6 +905,9 @@
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ruraldw\DRegionalDailyArticalCountsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Ruraldw\DRegionalDailyArticalCounts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3410,6 +3413,10 @@
     <EmbeddedResource Include="Ruraldw\DRegionalArticalCounts.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRegionalArticalCounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRegionalDailyArticalCountsPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRegionalDailyArticalCountsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DRenewal.resx">
       <SubType>Designer</SubType>
