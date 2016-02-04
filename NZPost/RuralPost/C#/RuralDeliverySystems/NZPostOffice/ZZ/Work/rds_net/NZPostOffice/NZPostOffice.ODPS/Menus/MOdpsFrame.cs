@@ -15,6 +15,9 @@ using CrystalDecisions.Windows.Forms;
 
 namespace NZPostOffice.ODPS.Menus
 {
+    // TJB  RPCR_098  Jan-2016
+    // Added m_ptdimport and m_ptdimport_clicked()
+
     public class MOdpsFrame : MFrame
     {
         public MOdpsFrame(Form form)
@@ -41,8 +44,9 @@ namespace NZPostOffice.ODPS.Menus
         public ToolStripMenuItem m_ir3interfacereport;
         public ToolStripMenuItem m_ir348interface;
         public ToolStripMenuItem m_updatedcontractorsexport;
-        public ToolStripMenuItem m_1;
         public ToolStripMenuItem m_shellimport;
+        public ToolStripMenuItem m_telecomimport;
+        public ToolStripMenuItem m_ptdimport;
         public ToolStripMenuItem m_pots;
 
         //Rural Delvery
@@ -230,8 +234,9 @@ namespace NZPostOffice.ODPS.Menus
             m_ir3interfacereport = new ToolStripMenuItem();
             m_ir348interface = new ToolStripMenuItem();
             m_updatedcontractorsexport = new ToolStripMenuItem();
-            m_1 = new ToolStripMenuItem();
             m_shellimport = new ToolStripMenuItem();
+            m_telecomimport = new ToolStripMenuItem();
+            m_ptdimport = new ToolStripMenuItem();
             m_pots = new ToolStripMenuItem();
 
             MenuStrip.Items.Add(m_odps);
@@ -244,8 +249,9 @@ namespace NZPostOffice.ODPS.Menus
             m_odps.DropDownItems.Add(m_ir3interfacereport);
             m_odps.DropDownItems.Add(m_ir348interface);
             m_odps.DropDownItems.Add(m_updatedcontractorsexport);
-            m_odps.DropDownItems.Add(m_1);
             m_odps.DropDownItems.Add(m_shellimport);
+            m_odps.DropDownItems.Add(m_telecomimport);
+            m_odps.DropDownItems.Add(m_ptdimport);
             m_odps.DropDownItems.Add(m_pots);
 
             // 
@@ -345,22 +351,29 @@ namespace NZPostOffice.ODPS.Menus
             m_updatedcontractorsexport.Tag = "ComponentName=ODPS Financials;";
             m_updatedcontractorsexport.Click += new EventHandler(m_updatedcontractorsexport_clicked);
             // 
-            // m_1
-            // 
-            m_1.Text = "&Shell Import...";
-            m_1.Enabled = false;
-            m_1.Visible = false;
-
-            m_1.Tag = "ComponentName=ODPS Financials;";
-            m_1.Click += new EventHandler(m_1_clicked);
-            // 
             // m_shellimport
             // 
-            m_shellimport.Text = "&Telecom Import...";
+            m_shellimport.Text = "&Shell Import...";
             m_shellimport.Enabled = false;
             m_shellimport.Visible = false;
             m_shellimport.Tag = "ComponentName=ODPS Financials;";
             m_shellimport.Click += new EventHandler(m_shellimport_clicked);
+            // 
+            // m_telecomimport
+            // 
+            m_telecomimport.Text = "&Telecom Import...";
+            m_telecomimport.Enabled = false;
+            m_telecomimport.Visible = false;
+            m_telecomimport.Tag = "ComponentName=ODPS Financials;";
+            m_telecomimport.Click += new EventHandler(m_telecomimport_clicked);
+            // 
+            // m_ptdimport
+            // 
+            m_ptdimport.Text = "&PTD Import...";
+            m_ptdimport.Enabled = false;
+            m_ptdimport.Visible = false;
+            m_ptdimport.Tag = "ComponentName=ODPS Financials;";
+            m_ptdimport.Click += new EventHandler(m_ptdimport_clicked);
 
             //
             //m_pots
@@ -815,18 +828,24 @@ namespace NZPostOffice.ODPS.Menus
             }
         }
 
-        public virtual void m_1_clicked(object sender, EventArgs e)
+        public virtual void m_shellimport_clicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             //OpenSheet(w_shell_import, ParentWindow, 0, original!);
             OpenSheet<WShellImport>(StaticVariables.MainMDI);
         }
 
-        public virtual void m_shellimport_clicked(object sender, EventArgs e)
+        public virtual void m_telecomimport_clicked(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
             //OpenSheet(w_telecom_import, ParentWindow, 0, original!);
             OpenSheet<WTelecomImport>(StaticVariables.MainMDI);
+        }
+
+        public virtual void m_ptdimport_clicked(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            OpenSheet<WPTDImport>(StaticVariables.MainMDI);
         }
 
         public virtual void m_contracts_clicked(object sender, EventArgs e)
