@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_098  Jan-2016
+    // Created InsertPTDs()
+    //
     // TJB  RPCR_094  Mar-2015
     // Changed 'Telecom' to 'Mobile Phone' and 'Shell' to 'Fuel Card' 
     // in ded_description and ded_reference in InsertTelecomPostTaxDeductions
@@ -164,6 +167,17 @@ namespace NZPostOffice.ODPS.DataService
         public ContractType contractType;
         public RdsUserId rdsUserId;
         public UsedPassword usedPassword;
+
+        //  TJB  RPCR_098  Jan-2016: NEW
+        //  Load PTDs using insertPTDs stored procedure
+        /// <summary>
+        /// [execute] rd.insert_PTDs contract_no, amount, description, reference
+        /// </summary>
+        public static ODPSDataService InsertPTDs(int contract_no, decimal amount, string description, string reference )
+        {
+            ODPSDataService obj = Execute("_InsertPTDs", contract_no, amount, description, reference);
+            return obj;
+        }
 
         public static ODPSDataService NewPots(string ls_name, string ls_ird, int ll_contract_no, string ls_vendor, int ll_supplier, Decimal ld_gross, Decimal ld_tax, Decimal ld_gst, Decimal ld_net, int ll_invoice_no, DateTime ld_input_date)
         {
@@ -557,6 +571,52 @@ namespace NZPostOffice.ODPS.DataService
         #endregion
 
         #region Server-side Code
+
+        // TJB  RPCR_098  Jan-2016: NEW
+        
+        [ServerMethod]
+        private void _InsertPTDs(int contract_no, decimal amount, string description, string reference )
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.insert_PTDs";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "con_no", contract_no);
+                    pList.Add(cm, "amount", amount);
+                    pList.Add(cm, "in_description", description);
+                    pList.Add(cm, "in_reference", reference);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                lreturn = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                               //_sqlcode = 100;
+                                lreturn = 1;
+                                _sqlcode = 0;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
+
         [ServerMethod]
         private void _NewPots(string ls_name, string ls_ird, int ll_contract_no, string ls_vendor, int ll_supplier, Decimal ld_gross, Decimal ld_tax, Decimal ld_gst, Decimal ld_net, int ll_invoice_no, DateTime ld_input_date)
         {
