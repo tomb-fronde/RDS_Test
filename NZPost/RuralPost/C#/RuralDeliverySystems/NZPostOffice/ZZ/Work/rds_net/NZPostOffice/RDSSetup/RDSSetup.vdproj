@@ -165,6 +165,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_36EB5AE28F364F4BBD7B4551F0D81AF4"
+        "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3DA126535AC06049DAB2FE72023B173D"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
         "MsmSig" = "8:_UNDEFINED"
@@ -183,13 +189,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_75D398DB4956414587196F2D338EB680"
-        "OwnerKey" = "8:_F431224290CD478CB45B3C3CC7943440"
+        "MsmKey" = "8:_7B03D1F353B34D119625CDC0E877FD1F"
+        "OwnerKey" = "8:_36EB5AE28F364F4BBD7B4551F0D81AF4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_75D398DB4956414587196F2D338EB680"
+        "MsmKey" = "8:_7B03D1F353B34D119625CDC0E877FD1F"
         "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -255,8 +261,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F431224290CD478CB45B3C3CC7943440"
-        "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
+        "MsmKey" = "8:_EF36CB960EDE43BEA31E3E44B0DA9F8D"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -828,6 +834,26 @@
             {
             "SourcePath" = "8:..\\NZPostOffice.RDS\\RDSYSTAB.ICO"
             "TargetName" = "8:RDSYSTAB.ICO"
+            "Tag" = "8:"
+            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EF36CB960EDE43BEA31E3E44B0DA9F8D"
+            {
+            "SourcePath" = "8:..\\NZPostOffice.RDS\\bin\\Release\\RDS_UAT.config"
+            "TargetName" = "8:RDS_UAT.config"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
             "Condition" = "8:"
@@ -1550,11 +1576,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_75D398DB4956414587196F2D338EB680"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_36EB5AE28F364F4BBD7B4551F0D81AF4"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_8_0_microsoft_vc80_atl_x86.msm"
+            "SourcePath" = "8:microsoft_vc80_atl_x86.msm"
                 "Properties"
                 {
                 }
@@ -1564,11 +1590,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F431224290CD478CB45B3C3CC7943440"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_7B03D1F353B34D119625CDC0E877FD1F"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc80_atl_x86.msm"
+            "SourcePath" = "8:policy_8_0_microsoft_vc80_atl_x86.msm"
                 "Properties"
                 {
                 }
