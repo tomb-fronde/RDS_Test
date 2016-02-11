@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0A4F3AB85EBB4E6F85B9E227B23A9524"
+        "MsmKey" = "8:_2549AEBA26FD481B992C846851C121D8"
         "OwnerKey" = "8:_7977CF9573714A318AA6FAC26A3ED22F"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -81,18 +81,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_51B43AD05E00407C9206903E55225B65"
-        "OwnerKey" = "8:_0A4F3AB85EBB4E6F85B9E227B23A9524"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_51B43AD05E00407C9206903E55225B65"
-        "OwnerKey" = "8:_7977CF9573714A318AA6FAC26A3ED22F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_75B675CDBC7FF9E2F0F2BEEC42D72B07"
         "OwnerKey" = "8:_F0614799D2034C3CA4E2A097F433A430"
         "MsmSig" = "8:_UNDEFINED"
@@ -106,6 +94,12 @@
         "Entry"
         {
         "MsmKey" = "8:_7977CF9573714A318AA6FAC26A3ED22F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_803758E0FC6644E98854261A4A69302B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -161,6 +155,18 @@
         {
         "MsmKey" = "8:_B6F1626FF426422394D0F06A2F8706B1"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C4247C134E0E420094E9883FF080924B"
+        "OwnerKey" = "8:_2549AEBA26FD481B992C846851C121D8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C4247C134E0E420094E9883FF080924B"
+        "OwnerKey" = "8:_7977CF9573714A318AA6FAC26A3ED22F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -491,6 +497,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_803758E0FC6644E98854261A4A69302B"
+            {
+            "SourcePath" = "8:..\\NZPostOffice.ODPS\\bin\\Release\\ODPS_UAT.config"
+            "TargetName" = "8:ODPS_UAT.config"
+            "Tag" = "8:"
+            "Folder" = "8:_DE28D2D21CB1463A987B40E8C6B654AF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ACD25BB4A3A7C6EB3884AFE0AABE0607"
             {
             "AssemblyRegister" = "3:1"
@@ -733,7 +759,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ODPS.net"
         "ProductCode" = "8:{D75ABCC1-6AE8-46DE-97A0-945E42958BB8}"
-        "PackageCode" = "8:{A15E1F61-730E-49DD-9213-4E0721D3F9B9}"
+        "PackageCode" = "8:{BBE7CE59-CD91-4A19-AF7B-65FAB5AC8727}"
         "UpgradeCode" = "8:{1D36E2F6-D2F3-49C1-85DC-0D4FFEFE95B9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1262,25 +1288,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_0A4F3AB85EBB4E6F85B9E227B23A9524"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_2549AEBA26FD481B992C846851C121D8"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "SourcePath" = "8:microsoft_vc80_atl_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_51B43AD05E00407C9206903E55225B65"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_8_0_microsoft_vc80_atl_x86.msm"
                 "Properties"
                 {
                 }
@@ -1362,6 +1374,20 @@
                     "DefaultValue" = "8:1"
                     "UsePlugInResources" = "11:FALSE"
                     }
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C4247C134E0E420094E9883FF080924B"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_8_0_microsoft_vc80_atl_x86.msm"
+                "Properties"
+                {
                 }
             "LanguageId" = "3:0"
             "Exclude" = "11:FALSE"
