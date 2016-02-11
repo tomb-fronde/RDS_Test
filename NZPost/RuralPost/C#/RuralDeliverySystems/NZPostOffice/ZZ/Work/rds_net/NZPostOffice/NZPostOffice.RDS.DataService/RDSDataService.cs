@@ -10,6 +10,12 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
+    // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+    // Changed GetVoVEffectiveDate to GetVorEffectiveDate
+    // Changed _GetConRatesEffDate1 to _GetConRatesEffDate 
+    //           and removed previous _GetConRatesEffDate
+    //
     // TJB  RPCR_096  May-2015
     // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
     // Changed GetRenewalRateRrFrozenIndicator name to GetNvrFrozenIndicator
@@ -729,10 +735,11 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_GetCustomerAddressMovesDpId", al_custId);
             return obj;
         }
-
-        public static RDSDataService GetVovEffectiveDate(DateTime? ld_effective_date, int? il_sequence, int? il_contract)
+        // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
+        // Changed GetVoVEffectiveDate to GetVorEffectiveDate
+        public static RDSDataService GetVorEffectiveDate(DateTime? ld_effective_date, int? il_sequence, int? il_contract)
         {
-            RDSDataService obj = Execute("_GetVovEffectiveDate", ld_effective_date, il_sequence, il_contract);
+            RDSDataService obj = Execute("_GetVorEffectiveDate", ld_effective_date, il_sequence, il_contract);
             return obj;
         }
 
@@ -2473,12 +2480,15 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_UpdateMailCountDateMailCountDate", mcdate);
         }
 
+        // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
+        // Changed _GetConRatesEffDate1 to _GetConRatesEffDate and removed previous _GetConRatesEffDate
+        //
         /// <summary>
         /// select con_start_date, con_expiry_date into @ld_start, @ld_end from contract_renewals  where contract_seq_number = @li_seq_num  and contract_no = @li_contract_no
         /// </summary>
         public static RDSDataService GetContractRenewalsDate(int? li_seq_num, int? li_contract_no)
         {
-            RDSDataService obj = Execute("_GetContractRenewalsDate1", li_seq_num, li_contract_no);
+            RDSDataService obj = Execute("_GetContractRenewalsDate", li_seq_num, li_contract_no);
             return obj;
         }
 
@@ -2500,6 +2510,9 @@ namespace NZPostOffice.RDS.DataService
             return obj.decVal;
         }
 
+        // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
+        // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+        //
         /// <summary>
         /// UPDATE vehicle_override_rate vor1  
         ///    SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate 
@@ -2512,7 +2525,7 @@ namespace NZPostOffice.RDS.DataService
         ///                 WHERE vor2.contract_no = vor1.contract_no 
         ///                   AND vor2.contract_seq_number = vor1.contract_seq_number)
         /// </summary>
-        public static void UpdateVehicleOverrideRate(
+        public static void UpdateVehicleOverrideFuelRate(
             decimal? ldc_new_override_fuel_rate,
             int? ll_contract_no,
             int? ll_sequence_no,
@@ -2520,7 +2533,7 @@ namespace NZPostOffice.RDS.DataService
             ref int sqlCode,
             ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateVehicleOverrideRate", ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date);
+            RDSDataService obj = Execute("_UpdateVehicleOverrideFuelRate", ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date);
             sqlCode = obj._sqlcode;
             sqlErrText = obj._sqlerrtext;
         }
@@ -3464,43 +3477,6 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetContractRenewalsDate(decimal? ldc_new_override_fuel_rate, int? ll_contract_no, int? ll_sequence_no, DateTime? ld_rates_effective_dateref)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "UPDATE rd.vehicle_override_rate vor1 " +
-                                        "SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate " +
-                                      "WHERE vor1.contract_no = @ll_contract_no AND " +
-                                            "vor1.contract_seq_number = @ll_sequence_no AND " +
-                                            "vor1.vor_effective_date >= @ld_rates_effective_date AND " +
-                                           "vor1.vor_effective_date = (SELECT max(vor2.vor_effective_date) " + 
-                                                                        "FROM rd.vehicle_override_rate vor2 " +
-                                                                       "WHERE vor2.contract_no = vor1.contract_no " + 
-                                                                         "AND vor2.contract_seq_number = vor1.contract_seq_number)";
-
-                    pList.Add(cm, "ldc_new_override_fuel_rate", ldc_new_override_fuel_rate);
-                    pList.Add(cm, "ll_contract_no", ll_contract_no);
-                    pList.Add(cm, "ll_sequence_no", ll_sequence_no);
-                    pList.Add(cm, "ld_rates_effective_dateref", ld_rates_effective_dateref);
-
-                    _vehicleList = new List<VehicleItem>();
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                    }
-                    catch (Exception ex)
-                    {
-                        _sqlcode = -1;
-                        _sqlerrtext = ex.Message;
-                    }
-                }
-            }
-        }
-
-        [ServerMethod]
         private void _GetPrRateFromPieceRate(int? li_prt_key, DateTime? ld_con_rates_effective_date)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -3562,7 +3538,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetContractRenewalsDate1(int? li_seq_num, int? li_contract_no)
+        private void _GetContractRenewalsDate(int? li_seq_num, int? li_contract_no)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -6018,7 +5994,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetVovEffectiveDate(DateTime? ld_effective_date, int? il_sequence, int? il_contract)
+        private void _GetVorEffectiveDate(DateTime? ld_effective_date, int? il_sequence, int? il_contract)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -7150,16 +7126,17 @@ namespace NZPostOffice.RDS.DataService
                     ParameterCollection pList = new ParameterCollection();
                     /* -----------------------------------------------------------
                      * TJB  RD7_0051  Oct-2009
-                     * * Original ignores override rate:
+                     * Original ignores override rate:
                      * cm.CommandText = "select non_vehicle_rate.nvr_item_proc_rate_per_hr" 
                      *                 + " from rd.non_vehicle_rate"
                      *                 + " where non_vehicle_rate.rg_code = @lRgCode"
                      *                 + " and non_vehicle_rate.nvr_rates_effective_date = @dDate";
                      * ----------------------------------------------------------- */
                     cm.CommandText = "select isnull(nvor_item_proc_rate_per_hour,nvr_item_proc_rate_per_hr) "
-                                     + "from rd.non_vehicle_rate as nvr left outer join rd.non_vehicle_override_rate as nvor "
-                                     + "        on nvor.contract_no = @lContractNo and "
-                                     + "           nvor.contract_seq_number = @lSeqNo "
+                                     + "from rd.non_vehicle_rate as nvr " 
+                                     + "           left outer join rd.non_vehicle_override_rate as nvor "
+                                     + "                      on nvor.contract_no = @lContractNo "
+                                     + "                      and nvor.contract_seq_number = @lSeqNo "
                                      + "where rg_code = @lRgCode"
                                      + "  and nvr_rates_effective_date = @dDate";
 
@@ -10592,7 +10569,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _UpdateVehicleOverrideRate(
+        private void _UpdateVehicleOverrideFuelRate(
             decimal? ldc_new_override_fuel_rate,
             int? ll_contract_no,
             int? ll_sequence_no,
