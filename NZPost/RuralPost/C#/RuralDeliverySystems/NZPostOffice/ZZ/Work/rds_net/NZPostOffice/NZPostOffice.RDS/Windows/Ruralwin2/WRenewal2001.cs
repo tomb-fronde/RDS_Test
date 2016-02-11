@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using NZPostOffice.RDS.Controls;
 using Metex.Windows;
 using NZPostOffice.Shared;
@@ -7,13 +8,22 @@ using NZPostOffice.RDS.DataControls.Ruraldw;
 using NZPostOffice.RDS.DataControls.Ruralwin2;
 using NZPostOffice.RDS.Entity.Ruraldw;
 using NZPostOffice.RDS.Entity.Ruralwin2;
-using System.Collections.Generic;
 using NZPostOffice.RDS.Menus;
 using NZPostOffice.RDS.Windows.Ruralwin;
 using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_099  Jan-2016
+    // Changed NVOR handling: Now treated like VOR (see WContractRate2001)
+    // - NVOR History table no longer used
+    // - affected frequency_adjustment deletion
+    // Added code to ignore the keyboard Delete key (see WRenewal2001_KeyDown)
+    //
+    // TJB  RPCR_099 Nov/Dec 2015
+    // Fixed bugs with deleting frequency_adjustments
+    // Fixed bug with updating route_frequency table
+    //
     // TJB  RPCR_093  Feb-2015
     // Added WaitCursor in dw_renewal_artical_counts_doubleclicked
     // Added commented-out WDailyArticalCounts in case subsequently requested
@@ -37,24 +47,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         private WRenewal2001 iw_renewal;
 
         public int il_contract;
-
         public int il_sequence;
-
         public int il_newvehicle;
-
         public int il_row;
 
         public URdsDw idw_renewal;
-
         public URdsDw idw_frequency_adjustment;
-
         public URdsDw idw_contract_adjustment;
-
         public URdsDw idw_owner_drivers;
-
         public URdsDw idw_vehicle;
-
         public URdsDw idw_article_count;
+
+
+        // TJB  RPCR_099 Nov/Dec 2015
+        public bool ib_rf_modified = false;
+        public bool ib_nvor_modified = false;
 
         public bool ib_new_veh_added = false;
 
@@ -77,35 +84,36 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public DateTime? id_effective = DateTime.MinValue;
 
-        //  sf_key of the the selected frequency adjustment 
+        // TJB  RPCR_099  Dec 2015 - Added
+        // Holds the vor_effective_date prior to any new rates that may be created
+        // Used to restore the original NVOR record from the NVORH table when
+        // deleting an unconfirmed frequency adjustment.  Default to MinValue in 
+        // case there isn't a VOR record for this contract.
+        public DateTime id_vor_original_effective_date = DateTime.MinValue;
+
+        // sf_key of the the selected frequency adjustment 
         public int? il_sfKey;
 
-        //  rf_delivery_days of the the selected frequency adjustment 
+        // rf_delivery_days of the the selected frequency adjustment 
         public string is_delDays = String.Empty;
 
-        //  fd_change_reason from associated frequency_distances record 
+        // fd_change_reason from associated frequency_distances record 
         public string is_reason = String.Empty;
 
-        //  Date this renewal started 
+        // Date this renewal started 
         public DateTime? id_renewal_start = DateTime.MinValue;
 
+        public int il_fa_row;
         public int il_fd_row;
-
         public int? il_vor_row;
-
-        public int il_nvor_row;
-
-        public int? il_nvorh_row;
+        public int? il_nvor_row;
+        // public int? il_nvorh_row;  // TJB  RPCR_099: NVOR History table no longer used
 
         public DataUserControl ids_route_frequency;
-
         public DataUserControl ids_frequency_distances;
-
         public DataUserControl ids_vehicle_override_rate;
-
         public DataUserControl ids_non_vehicle_override_rate;
-
-        public DataUserControl ids_non_vehicle_override_rate_history;
+        // public DataUserControl ids_non_vehicle_override_rate_history;   // TJB  RPCR_099: NVOR History table no longer used
 
         /// Required designer variable.
         private System.ComponentModel.IContainer components = null;
@@ -221,7 +229,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_renewal_artical_counts.PfcPreInsertRow += new UserEventDelegate1(dw_renewal_artical_counts_pfc_preinsertrow);
             dw_renewal_artical_counts.WinPfcSave += new UserEventDelegate1(this.pfc_save);
 
-            //jlwang:end
+            // TJB  RPCR_099: Added
+            this.KeyDown += new KeyEventHandler(WRenewal2001_KeyDown);
+        }
+
+        // TJB  RPCR_099: Added
+        // Ignore keyboard the Delete key
+        // Was deleting rows from the display without executing delete code
+        // (not validated or deleted from the database)
+        void WRenewal2001_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Determine whether the keystroke is the Delete key.
+            if (e.KeyCode == Keys.Delete)
+            {
+                // Set the Handled flag to cause the keypress to be ignored
+                e.Handled = true;
+            }
         }
 
         #region Form Design
@@ -429,8 +452,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         }
 
-        //added by jlwang
-
         void WRenewal2001_CellLeave(object sender, DataGridViewCellEventArgs e)
         {
             int? lContractor = 0;
@@ -531,13 +552,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ids_frequency_distances = new DsFrequencyDistances();
             ids_vehicle_override_rate = new DsVehicleOverrideRate();
             ids_non_vehicle_override_rate = new DsNonVehicleOverrideRate();
-            ids_non_vehicle_override_rate_history = new DsNonVehicleOverrideRateHistory();
+            // TJB  RPCR_099: NVOR History table no longer used
+            // ids_non_vehicle_override_rate_history = new DsNonVehicleOverrideRateHistory();
             ids_route_frequency = new DsRouteFrequency();
 
             // TJB  RD7_0037  Aug2009
             // Get the current vehicle details
-            il_contract = (il_contract == null) ? 0 : il_contract;
-            il_sequence = (il_sequence == null) ? 0 : il_sequence;
+            //il_contract = (il_contract == null) ? 0 : il_contract;  // TJB  Jan-2016: il_contract not int?
+            //il_sequence = (il_sequence == null) ? 0 : il_sequence;  // TJB  Jan-2016: il_sequence not int?
             if (dw_contract_vehicle.RowCount == 0 && il_contract > 0 && il_sequence > 0)
             {
                 ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
@@ -595,6 +617,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             StaticVariables.gnv_app.of_get_parameters().stringparm = this.Text;
             StaticVariables.gnv_app.of_get_parameters().longparm = il_contract;
             StaticVariables.gnv_app.of_get_parameters().integerparm = il_sequence;
+
+            // TJB  RPCR_099  Nov-2015: added
+            StaticVariables.gnv_app.of_get_parameters().booleanparm = false;  // no refresh required
+
             // if g_security.Access_Groups[1] = 7 then
             // 	gnv_App.of_Get_Parameters().booleanparm = (tab_renewal.tabpage_renewal.dw_renewal.getitemstring(1,"con_acceptance_flag") = 'Y')
             // else
@@ -609,9 +635,69 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //                    , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
             //     return;
             // }
+            
+            // TJB  RPCR_099  Dec 2015
+            // Get the VOR effective date prior to any new rates that may be added
+            int nVorRows = ids_vehicle_override_rate.RowCount;
+            if (nVorRows < 1)
+            { // There's nothing in the VOR table; use the default date
+                id_vor_original_effective_date = DateTime.MinValue;
+            }
+            else
+            {
+                id_vor_original_effective_date = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(nVorRows - 1).VorEffectiveDate);
+            }
+
+            /******************************* Debugging **************************
+            int nFABefore = idw_frequency_adjustment.RowCount;
+            ********************************************************************/
 
             WContractRate2001 w_contract_rate2001 = new WContractRate2001();
             w_contract_rate2001.ShowDialog();
+
+            // TJB  RPCR_099  Nov-2015
+            // Added refresh after creating new overrides
+            bool b_refresh_requested = StaticVariables.gnv_app.of_get_parameters().booleanparm;
+            if (b_refresh_requested)
+            {
+                ((DRenewalFreqAdjust)idw_frequency_adjustment.DataObject).Reset();
+                ((DRenewalFreqAdjust)idw_frequency_adjustment.DataObject).Retrieve(il_contract, il_sequence);
+                ((DsFrequencyDistances)ids_frequency_distances).Retrieve(il_contract, id_renewal_start);
+                int ll_vor_rc = ((DsVehicleOverrideRate)ids_vehicle_override_rate).Retrieve(il_contract, il_sequence);
+                int ll_nvor_rc = ((DsNonVehicleOverrideRate)ids_non_vehicle_override_rate).Retrieve(il_contract, il_sequence);
+                
+                // TJB  RPCR_099: NVOR History table no longer used
+                // int ll_nvorh_rc = ((DsNonVehicleOverrideRateHistory)ids_non_vehicle_override_rate_history).Retrieve(il_contract, il_sequence);
+
+                /******************************* Debugging **************************
+                int t11 = ids_vehicle_override_rate.RowCount;
+                int t22 = ids_non_vehicle_override_rate.RowCount;
+                //int t33 = ids_non_vehicle_override_rate_history.RowCount;
+
+                string msg = "  VOR table Effective_dates: \n";
+                for (int i = 0; i < t11; i++)
+                {
+                    DateTime dt = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(i).VorEffectiveDate);
+                    msg += "Row " + i.ToString() + ", effective_date = " + dt.ToShortDateString() + "\n";
+                }
+
+                int nFAAfter = idw_frequency_adjustment.RowCount;
+
+                nVorRows = ids_vehicle_override_rate.RowCount;
+                DateTime ld_vor_effective_date = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(nVorRows - 1).VorEffectiveDate);
+
+                MessageBox.Show("Return from w_contract_rate2001 \n"
+                                + "Frequency_adjustments rows: Before "+nFABefore.ToString() + ", After "+nFAAfter.ToString() + "\n"
+                                + "  vor: rc = "+ll_vor_rc.ToString()+", rowcount = "+t11.ToString()+"\n"
+                                + "  nvor: rc = " + ll_nvor_rc.ToString() + ", rowcount = " + t22.ToString() + "\n"
+                //                + "  nvorh: rc = " + ll_nvorh_rc.ToString() + ", rowcount = " + t33.ToString() + "\n"
+                                + msg
+                                + "  VOR Effective Dates: \n"
+                                + "  Pre-addition: "+id_vor_original_effective_date.ToShortDateString()+"\n"
+                                + "  Now: "+ld_vor_effective_date.ToShortDateString()
+                                ,"ue_open_rates");
+                ********************************************************************/
+            }
         }
 
         public override int pfc_save()
@@ -623,7 +709,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Added ib_new_veh_validated to the condition to stop
             //  the message being displayed when the new vehicle
             //  details don't pass validation.
-            //   ( See dw_contract_vehicle.updatestart)
+            //  (See dw_contract_vehicle.updatestart)
             if (ib_new_veh_added && ib_new_veh_validated)
             {
                 ll_response = MessageBox.Show("Do you wish to review the overrides for this contract?"
@@ -639,65 +725,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB  SR4695  Jan-2007
             //  Check to see if any of the datastores need to be updated
             //  as a result of deleting a frequency adjustment.
-            int ll_fd_delcount;
-            int ll_vor_delcount;
-            int ll_nvorh_delcount;
-            int ll_nvor_modcount = 0;
-            int ll_rf_modcount = 0;
+            int ll_fd_delcount = 0;
+            int ll_vor_delcount = 0;
+            int ll_nvor_delcount = 0;
+            // int ll_nvorh_delcount = 0;            // TJB  RPCR_099: NVOR History table no longer used
+
             ll_fd_delcount = ids_frequency_distances.DeletedCount;
             ll_vor_delcount = ids_vehicle_override_rate.DeletedCount;
-            ll_nvorh_delcount = ids_non_vehicle_override_rate_history.DeletedCount;
-            //?ll_nvor_modcount = ids_non_vehicle_override_rate.ModifiedCount;
-            //?ll_rf_modcount = ids_route_frequency.ModifiedCount;
-            /*  ------------------------- Debugging ------------------------- //
-            string	ds_msg
-            ds_msg = ""
-            if ll_fd_delcount > 0 then
-            ds_msg = ds_msg + "Deleting "+ll_fd_delcount.ToString()  &
-            + " records from frequency_distances \n"
-            end if
-            if ll_vor_delcount > 0 then
-            ds_msg = ds_msg + "Deleting record "+ll_vor_delcount.ToString()  &
-            + " records from vehicle_override_rate \n"
-            end if
-            if ll_nvorh_delcount > 0 then
-            ds_msg = ds_msg + "Deleting "+ll_nvorh_delcount.ToString()  &
-            + " records from non_vehicle_override_rate_history \n"
-            end if
-            if ll_nvor_modcount > 0 then
-            ds_msg = ds_msg + "Updating "+ll_nvor_modcount.ToString()  &
-            + " records in non_vehicle_override_rate \n"
-            end if
-            if ll_rf_modcount > 0 then
-            ds_msg = ds_msg + "Updating "+ll_rf_modcount.ToString()  &
-            + " records in route_frequency \n"
-            end if
-            MessageBox.Show(ds_msg, "w_renewal2001.pfc_save" )
-            // -------------------------------------------------------------  */
+            ll_nvor_delcount = ids_non_vehicle_override_rate.DeletedCount;  // TJB  RPCR_099: Added 
+            //ll_nvorh_delcount = ids_non_vehicle_override_rate_history.DeletedCount;  // TJB  RPCR_099: Disabled
+
             if (ll_fd_delcount > 0)
             {
-                //! ids_frequency_distances.Update();
                 ids_frequency_distances.Save();
             }
             if (ll_vor_delcount > 0)
             {
-                //! ids_vehicle_override_rate.Update();
                 ids_vehicle_override_rate.Save();
             }
-            if (ll_nvorh_delcount > 0)
+            // TJB  RPCR_099: Disabled: NVOR History not in use
+            // if (ll_nvorh_delcount > 0)
+            // {
+            //     ids_non_vehicle_override_rate_history.Save();
+            // }
+
+            // TJB  RPCR_099: Changed to ib_nvor_deleted
+            //if (ib_nvor_modified)
+            if (ll_nvor_delcount > 0)
             {
-                //!ids_non_vehicle_override_rate_history.Update();
-                ids_non_vehicle_override_rate_history.Save();
-            }
-            if (ll_nvor_modcount > 0)
-            {
-                //!ids_non_vehicle_override_rate.Update();
                 ids_non_vehicle_override_rate.Save();
             }
-            if (ll_rf_modcount > 0)
+            if (ib_rf_modified)
             {
-                //!ids_route_frequency.Update();
                 ids_route_frequency.Save();
+                ib_rf_modified = false;
             }
             return SUCCESS;
         }
@@ -975,7 +1036,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         //    and contract_seq_number = :lSequence
                         //    and cv_vehical_status = 'A';
 
-                        //select f_GetLatestVehicle ( :lContract, :lSequence) into :lCount from dummy;
+                        //select f_GetLatestVehicle(:lContract, :lSequence) into :lCount from dummy;
                         lCount = RDSDataService.GetLatestVehicleFormDummy(lContract, lSequence);
                         if (StaticFunctions.f_nempty(lCount))
                         {
@@ -996,7 +1057,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int wf_add_frequency_adjustment(int ai_contractno, int ai_sequenceno, System.Decimal adc_newbenchmark, System.Decimal adc_prevbenchmark)
         {
-            //  TJB  8-Oct-2004  SR4633   ( new)
+            //  TJB  8-Oct-2004  SR4633  (new)
             //  Called from dw_contract_vehicle.pfc_postupdate when a new 
             //  vehicle has been entered and a frequency adjustment is needed.
             // 
@@ -1025,13 +1086,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             li_return = n_freq.of_save();
             //  Tell the user what's been done.
             if (li_return > 0)
-            {
-                //?Commit;
+            { //?Commit;
                 li_return = 1;
             }
             else
-            {
-                //?Rollback;
+            { //?Rollback;
                 MessageBox.Show("A frequency adjustment insert failed. \n" 
                                   + "The sql error code was " + li_return.ToString() + "\n" 
                                   + "The insert has been rolled back."
@@ -1042,150 +1101,280 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return li_return;
         }
 
-        public virtual int of_check_veh_override(int al_contract, int al_seq, DateTime ad_effective)
+        public virtual int of_check_veh_override_rate(int al_contract, int al_seq, DateTime ad_effective)
         {
+            // TJB  RPCR_099  Nov 2015
+            // Replaced FIND method with linear search 
+            //    (see note in of_check_nonveh_override_history for explanation) 
+            // Changed return value meanings.
+            // Returns
+            //   >=0	Record index found
+            //   -1     Record not found
+            //
             //  TJB  SR4695  Jan-2007
             //  Looks for a record in the vehicle_override_rate table
             //  Returns
             // 		-1		Error
             // 		 0		Record not found
             // 		>0		Record found
-            int ll_distance;
-            int ll_boxes;
-            int ll_rural;
-            int ll_other;
-            int ll_private;
-            int ll_POs;
-            int ll_cmbs;
-            int ll_cmb_custs;
-            int ll_del_hrs;
-            int ll_proc_hrs;
-            int ll_volume;
-            int ll_row;
-            int ll_rows;
-            string ls_search;
-            //ls_search = "vor_effective_date = " + String(ad_effective, "yyyy-mm-dd");
-            ll_rows = ids_vehicle_override_rate.RowCount;
-            ll_row = ids_vehicle_override_rate.Find(new KeyValuePair<string, object>("vor_effective_date", ad_effective));
-            //  ll_row will be -1 or -5 if an error occurs,
-            //  0 if the record was not found
-            if (ll_row < 0)
+            int nFoundRow;
+
+            nFoundRow = ids_vehicle_override_rate.Find(new KeyValuePair<string, object>("vor_effective_date", ad_effective));
+            //  ll_row will be -1 if the record was not found or -5 if an error occurs,
+
+            /********************* TJB 24-Nov-2015 Debugging **********************
+            int nRow, nRows, searchResult;
+            int vorContract, vorSequence;
+            DateTime vorEffectiveDate;
+            string msg;
+
+            nRows = ids_vehicle_override_rate.RowCount;
+            searchResult = -1;
+
+            msg = "vehicle_override_rate Rows = " + nRows.ToString() + "\n\n"
+                  + "Looking for \n"
+                       + "   Contract No " + al_contract.ToString() + "\n"
+                       + "   Contract Seq " + al_seq.ToString() + "\n"
+                       + "   Effective Date " + ad_effective.ToShortDateString() + "\n\n";
+
+            for (nRow = 0; nRow < nRows; nRow++)
             {
-                ll_row = -(1);
+                vorContract = Convert.ToInt32(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(nRow).ContractNo);
+                vorSequence = Convert.ToInt32(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(nRow).ContractSeqNumber);
+                vorEffectiveDate = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(nRow).VorEffectiveDate);
+
+                msg = msg + "Row " + nRow.ToString() + ": "
+                          + "Contract No = " + vorContract.ToString() + ", "
+                          + "Contract Seq = " + vorSequence.ToString() + ", "
+                          + "Effective Date = " + vorEffectiveDate.ToShortDateString() + "\n";
+
+                if (vorContract == al_contract
+                    && vorSequence == al_seq
+                    && vorEffectiveDate == ad_effective)
+                {
+                    searchResult = nRow;
+                }
             }
-            return ll_row;
+            msg = msg + "\nFIND result = " + nFoundRow.ToString();
+            msg = msg + "\nSearch result = " + searchResult.ToString();
+
+            MessageBox.Show(msg, "of_check_veh_override_rate");
+            
+            ***********************************************************************/
+
+            return nFoundRow;
         }
 
+        public virtual int of_check_nonveh_override_rate(int al_contract, int al_seq, DateTime ad_effective)
+        {
+            // TJB  RPCR_099  Jan-2016: New; derived from of_check_veh_override_rate
+            //
+            int nFoundRow;
+
+            nFoundRow = ids_non_vehicle_override_rate.Find(new KeyValuePair<string, object>("nvor_effective_date", ad_effective));
+            //  ll_row will be -1 if the record was not found or -5 if an error occurs,
+
+            /********************* TJB 24-Nov-2015 Debugging **********************
+            int nRow, nRows, searchResult;
+            int nvorContract, nvorSequence;
+            DateTime nvorEffectiveDate;
+            string msg;
+
+            nRows = ids_non_vehicle_override_rate.RowCount;
+            searchResult = -1;
+
+            msg = "nonvehicle_override_rate Rows = " + nRows.ToString() + "\n\n"
+                  + "Looking for \n"
+                       + "   Contract No " + al_contract.ToString() + "\n"
+                       + "   Contract Seq " + al_seq.ToString() + "\n"
+                       + "   Effective Date " + ad_effective.ToShortDateString() + "\n\n";
+
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                nvorContract = Convert.ToInt32(ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(nRow).ContractNo);
+                nvorSequence = Convert.ToInt32(ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(nRow).ContractSeqNumber);
+                nvorEffectiveDate = Convert.ToDateTime(ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(nRow).NvorEffectiveDate);
+
+                msg = msg + "Row " + nRow.ToString() + ": "
+                          + "Contract No = " + nvorContract.ToString() + ", "
+                          + "Contract Seq = " + nvorSequence.ToString() + ", "
+                          + "Effective Date = " + nvorEffectiveDate.ToShortDateString() + "\n";
+
+                if (nvorContract == al_contract
+                    && nvorSequence == al_seq
+                    && nvorEffectiveDate == ad_effective)
+                {
+                    searchResult = nRow;
+                }
+            }
+            msg = msg + "\nFIND result = " + nFoundRow.ToString();
+            msg = msg + "\nSearch result = " + searchResult.ToString();
+
+            MessageBox.Show(msg, "of_check_nonveh_override_rate");
+            
+            ***********************************************************************/
+
+            return nFoundRow;
+        }
+
+        // TJB  RPCR_099  Jan-2016: Now obsolete
+        /*******************************************************************************
         public virtual int of_check_nonveh_override_history(int al_contract, int al_seq, DateTime ad_effective)
         {
-            //  TJB  SR4695  Jan-2007
-            //  Looks for a record in the non_vehicle_override_rate_history table
-            //  Returns
-            // 		-1		Error
-            // 		 0		Record not found
-            // 		>0		Record found
-            int ll_distance;
-            int ll_boxes;
-            int ll_rural;
-            int ll_other;
-            int ll_private;
-            int ll_POs;
-            int ll_cmbs;
-            int ll_cmb_custs;
-            int ll_del_hrs;
-            int ll_proc_hrs;
-            int ll_volume;
+            // TJB  RPCR_099  Nov 2015
+            // Fixed FIND result interpretation
+            // Changed return value meanings.
+            //   >=0	Record index found
+            //   <0     Record not found or error
+            // Change date lookup to (new) nvorh_change_effective_date column
+            //
+            // TJB  SR4695  Jan-2007  NEW
+            // Looks for a record in the non_vehicle_override_rate_history table
+            // Returns
+            //   -1		Error
+            //    0		Record not found
+            //   >0		Record found
+
             int ll_row;
-            int ll_rows;
-            string ls_search;
-            //ls_search = "nvor_effective_date = " + String(ad_effective, "yyyy-mm-dd");
-            ll_rows = ids_non_vehicle_override_rate_history.RowCount;
-            ll_row = ids_non_vehicle_override_rate_history.Find(new KeyValuePair<string, object>("nvor_effective_date", ad_effective));
-            //  ll_row will be -1 or -5 if an error occurs,
-            //  0 if the record was not found
-            if (ll_row < 0)
+
+            ll_row = ids_non_vehicle_override_rate_history.Find(new KeyValuePair<string, object>
+                                          ("nvorh_change_effective_date", ad_effective));
+            //  nRow will be -1 if the record was not found or -5 if an error occurs,
+
+            /* TJB 24-Nov-2015 Debugging ********************************
+            int nRow, nRows, searchResult;
+            int nvorContract, nvorSequence;
+            DateTime nvorEffectiveDate;
+            DateTime nvorhChangeEffectiveDate;
+            string msg;
+
+            nRows = ids_non_vehicle_override_rate_history.RowCount;
+            searchResult = -1;
+
+            msg = "non_vehicle_override_rate_history Rows = " + nRows.ToString() + "\n\n"
+                  + "Looking for \n"
+                       + "   Contract No " + al_contract.ToString() + "\n"
+                       + "   Contract Seq " + al_seq.ToString() + "\n"
+                       + "   Effective Date " + ad_effective.ToShortDateString() + "\n\n";
+
+            for (nRow = 0; nRow < nRows; nRow++)
             {
-                ll_row = -(1);
+                nvorContract = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(nRow).ContractNo);
+                nvorSequence = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(nRow).ContractSeqNumber);
+                nvorEffectiveDate = Convert.ToDateTime(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(nRow).NvorEffectiveDate);
+                nvorhChangeEffectiveDate = Convert.ToDateTime(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(nRow).NvorhChangeEffectiveDate);
+
+                msg = msg + "Row " + nRow.ToString() + ": "
+                          + "Contract No = " + nvorContract.ToString() + ", "
+                          + "Contract Seq = " + nvorSequence.ToString() + ", "
+                          + "Effective Date = " + nvorEffectiveDate.ToShortDateString() + ", "
+                          + "Change Effective Date = " + nvorhChangeEffectiveDate.ToShortDateString() + "\n";
+
+                if (nvorContract == al_contract
+                    && nvorSequence == al_seq
+                    && nvorhChangeEffectiveDate == ad_effective)
+                {
+                    searchResult = nRow;
+                }
             }
+
+            msg = msg + "\nFIND result = " + ll_row.ToString();
+            msg = msg + "\nSearch result = " + searchResult.ToString();
+            MessageBox.Show(msg, "of_check_nonveh_override_history");
+            **** End Debugging ********************************************
+
             return ll_row;
         }
+        ********************************************************************************/
 
-        public virtual int of_copy_nvor(int al_nvorh_row, int al_nvor_row)
+        // TJB  RPCR_099  Jan-2016: Now obsolete
+        /*******************************************************************************
+        public virtual int of_copy_nvorh_to_nvor(int al_nvorh_row, int al_nvor_row)
         {
             //  TJB  SR4695  Jan-2007
-            // 
             //  Copy data from non_vehicle_override_rate_history 
             //       to non_vehicle_override_rate
             // 
-            //  If the nvorh row is 0  ( it won't be less), set the NVOR values to null 
-            //   ( because there wasn't a previous NVOR record before before an override 
+            //  If the nvorh row is 0 (it won't be less), set the NVOR values to null 
+            //  (because there wasn't a previous NVOR record before before an override 
             //   rate was added that is now being deleted).
-            int? ll_wage;
-            int? ll_public;
-            int? ll_carrier;
-            int? ll_acc;
-            int? ll_item;
-            string ls_frozen;
-            int? ll_accounting;
-            int? ll_telephone;
-            int? ll_sundries;
-            int? ll_acc_amount;
-            int? ll_uniform;
-            int? ll_delivery;
-            int? ll_processing;
-            if (al_nvorh_row < 1)
+
+            int? ll_item = null;
+            decimal? ld_wage = null;
+            decimal? ld_public = null;
+            decimal? ld_carrier = null;
+            decimal? ld_acc = null;
+            decimal? ld_accounting = null;
+            decimal? ld_telephone = null;
+            decimal? ld_sundries = null;
+            decimal? ld_acc_amount = null;
+            decimal? ld_uniform = null;
+            decimal? ld_delivery = null;
+            decimal? ld_processing = null;
+            decimal? ld_relief = null;
+            string ls_frozen = null;
+            DateTime? ldt_effective = null;
+            DateTime? ldt_change_effective = null;
+
+            // TJB 28-Nov-2015 Testing
+            int t_nvor_rows = ids_non_vehicle_override_rate.RowCount;
+            int t_nvorh_rows = ids_non_vehicle_override_rate_history.RowCount;
+            MessageBox.Show("Copying NVORH to NVOR \n\n" 
+                            + "al_nvor_row = " + al_nvor_row.ToString() + "\n"
+                            + "al_nvorh_row = " + al_nvorh_row.ToString() + "\n"
+                            + "t_nvor_rows = " + t_nvor_rows.ToString() + "\n"
+                            + "t_nvorh_rows = " + t_nvorh_rows.ToString() + "\n"
+                            , "of_copy_nvorh_to_nvor");
+
+            // Get NVORH values
+            if (al_nvorh_row >= 0)
             {
-                ll_wage = null;
-                ll_public = null;
-                ll_carrier = null;
-                ll_acc = null;
-                ll_item = null;
-                ls_frozen = null;
-                ll_accounting = null;
-                ll_telephone = null;
-                ll_sundries = null;
-                ll_acc_amount = null;
-                ll_uniform = null;
-                ll_delivery = null;
-                ll_processing = null;
-            }
-            else
-            {
-                ll_wage = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorWageHourlyRate);
-                ll_public = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorPublicLiabilityRate2);
-                ll_carrier = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorCarrierRiskRate);
-                ll_acc = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccRate);
-                ll_item = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorItemProcRatePerHour);
+                ld_wage = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorWageHourlyRate;
+                ld_public = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorPublicLiabilityRate2;
+                ld_carrier = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorCarrierRiskRate;
+                ld_acc = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccRate;
+                ll_item = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorItemProcRatePerHour;
                 ls_frozen = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorFrozen;
-                ll_accounting = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccounting);
-                ll_telephone = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorTelephone);
-                ll_sundries = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorSundries);
-                ll_acc_amount = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccRateAmount);
-                ll_uniform = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorUniform);
-                ll_delivery = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorDeliveryWageRate);
-                ll_processing = Convert.ToInt32(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorProcessingWageRate);
+                ld_accounting = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccounting;
+                ld_telephone = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorTelephone;
+                ld_sundries = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorSundries;
+                ld_acc_amount = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorAccRateAmount;
+                ld_uniform = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorUniform;
+                ld_delivery = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorDeliveryWageRate;
+                ld_processing = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorProcessingWageRate;
+                ld_relief = ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorReliefWeeks;
+
+                ldt_effective = Convert.ToDateTime(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorEffectiveDate);
+                ldt_change_effective = Convert.ToDateTime(ids_non_vehicle_override_rate_history.GetItem<NonVehicleOverrideRateHistory>(al_nvorh_row).NvorhChangeEffectiveDate);
             }
 
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorWageHourlyRate = ll_wage;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorPublicLiabilityRate2 = ll_public;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorCarrierRiskRate = ll_carrier;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccRate = ll_acc;
+            // Update the NVOR record
+            // NOTE: the NVOR table has no effective date; the effective dates from the NVORH table aren't used
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorWageHourlyRate = ld_wage;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorPublicLiabilityRate2 = ld_public;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorCarrierRiskRate = ld_carrier;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccRate = ld_acc;
             ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorItemProcRatePerHour = ll_item;
             ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorFrozen = ls_frozen;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccounting = ll_accounting;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorTelephone = ll_telephone;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorSundries = ll_sundries;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccRateAmount = ll_acc_amount;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorUniform = ll_uniform;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorDeliveryWageRate = ll_delivery;
-            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorProcessingWageRate = ll_processing;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccounting = ld_accounting;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorTelephone = ld_telephone;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorSundries = ld_sundries;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorAccRateAmount = ld_acc_amount;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorUniform = ld_uniform;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorDeliveryWageRate = ld_delivery;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorProcessingWageRate = ld_processing;
+            ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(al_nvor_row).NvorReliefWeeks = ld_relief;
+
+            ib_nvor_modified = true;
+
             return SUCCESS;
         }
+        ********************************************************************************/
 
         public virtual int of_update_route_frequency(System.Decimal adc_distance)
         {
-            //   TJB  SR4695  Feb-2007			New
-            //  Update the route_frequency table  ( via its datastore), by subtracting
+            //  TJB  SR4695  Feb-2007			New
+            //  Update the route_frequency table (via its datastore), by subtracting
             //  the adc_distance from its rf_distance.
             //  This is called when a frequency_distances record is deleted.
             //  Global values for the contract, sf_key and rf_delivery_days are used 
@@ -1195,56 +1384,68 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 		-1		Error
             // 		 0		No matching row to update
             // 		>1		Route frequency datastore row updated
-            int ll_row;
-            int ll_rows;
+            int return_status;
+            int ll_row, ll_rows;
             System.Decimal? ldc_rf_distance;
             System.Decimal? ldc_new_distance;
-            string ls_find;
+
             //  The datastore will have been populated only with records for the 
             //  right contract so we don't need to include the contract number 
             //  in the search string.
-            ls_find = "sf_key = " + il_sfKey.ToString() + " and rf_delivery_days = \'" + is_delDays + '\'';
             ll_rows = ((DsRouteFrequency)ids_route_frequency).Retrieve(il_contract);
+
             if (ll_rows < 0)
             {
                 MessageBox.Show("No route_frequency data found for this contract.\n"
                                , "Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ll_row = -(1);
+                return_status = -(1);
             }
             else
             {
-                ll_row = ids_route_frequency.Find(new KeyValuePair<string, Object>("sf_key", il_sfKey), new KeyValuePair<string, object>("rf_delivery_days", is_delDays));//.Find( ls_find ).Length;
+                // TJB  RPCR_099 Nov/Dec 2015
+                // Fixed bug with updating route_frequency table
+                // FIND returns -1 when nothing found (was treating 0 as 'not found')
+                ll_row = ids_route_frequency.Find(new KeyValuePair<string, Object>("sf_key", il_sfKey), new KeyValuePair<string, object>("rf_delivery_days", is_delDays));
                 if (ll_row < 0)
-                {
-                    MessageBox.Show("Error finding route_frequency row to update.\n" 
-                                     + "Searching for\n" 
-                                     + "     sf_key        = " + (il_sfKey.ToString()) + '\n' 
-                                     + "     delivery_days = " + is_delDays
-                                   , "ERROR"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-                else if (ll_row == 0)
                 {
                     MessageBox.Show("No matching route_frequency row found to update.\n" 
                                      + "Searching for\n" 
-                                     + "     sf_key        = " + il_sfKey.ToString() + '\n' 
-                                     + "     delivery_days = " + is_delDays
+                                     + "  Contract        " + il_contract.ToString() + "\n"
+                                     + "  sf_key        = " + il_sfKey.ToString() + '\n' 
+                                     + "  delivery_days = " + is_delDays
                                    , "Warning"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return_status = -(1);
                 }
                 else
                 {
                     ldc_rf_distance = ids_route_frequency.GetItem<NZPostOffice.RDS.Entity.Ruralwin2.RouteFrequency>(ll_row).RfDistance;
                     ldc_new_distance = ldc_rf_distance - adc_distance;
                     ids_route_frequency.GetItem<NZPostOffice.RDS.Entity.Ruralwin2.RouteFrequency>(ll_row).RfDistance = ldc_new_distance;
+                    ib_rf_modified = true;
+                    
+                    return_status = ll_row;
                 }
             }
-            return ll_row;
+            return return_status;
         }
 
         public virtual int of_check_freq_distances(int al_contract, DateTime ad_effective, int al_sfkey, string as_deldays)
         {
+            // TJB RPCR_099 Nov-2015
+            // Modified: FIND method originally used returns 0 both when no match is found
+            //           and when the first (or only) record is matched.  Routine modified
+            //           to use a simple linear search instead.  
+            //Modified return values:
+            //  Returns
+            // 		-1		Record not found
+            // 		 1		Record found: has adjustment values
+            // 		 2		Record found: is a global adjustment
+            // 		 3		Record found: has no adjustment values
+            // 							(probably a vehicle or nonvehicle override)
+            //   il_fd_row  frequency_distances row found (index)
+            //
             //  TJB  SR4695  Jan-2007
             //  Looks for a record in the frequency_distances table
             //  Returns
@@ -1253,7 +1454,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // 		 1		Record found: has adjustment values
             // 		 2		Record found: is a global adjustment
             // 		 3		Record found: has no adjustment values
-            // 							 ( probably a vehicle or nonvehicle override)
+            // 							(probably a vehicle or nonvehicle override)
+            //   il_fd_row  frequency_distances row found (index)
+
             int? ll_distance;
             int? ll_boxes;
             int? ll_rural;
@@ -1265,21 +1468,62 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? ll_del_hrs;
             int? ll_proc_hrs;
             int? ll_volume;
-            int? ll_rows;
-            string ls_search;
-            //ls_search = "fd_effective_date = " + String(ad_effective, "yyyy-mm-dd") + " and sf_key = " + al_sfkey.ToString() + " and rf_delivery_days = \'" + as_deldays + '\'';
-            ll_rows = ids_frequency_distances.RowCount;
+
             il_fd_row = ids_frequency_distances.Find(new KeyValuePair<string, object>("fd_effective_date", ad_effective), new KeyValuePair<string, object>("sf_key", al_sfkey), new KeyValuePair<string, object>("rf_delivery_days", as_deldays));// ls_search ).Length;
-            //  il_fd_row will be -1 or -5 if an error occurs,
-            //  0 if the record was not found
-            if (il_fd_row == 0)
+            //  il_fd_row will be -1 if the record was not found or -5 if an error occurs,
+
+            /************************* TJB 24-Nov-2015 Debugging ************************
+            int nRow, nRows, searchResult;
+            int fdSfKey;
+            string fdDeliveryDays;
+            DateTime fdEffectiveDate;
+
+            nRows = ids_frequency_distances.RowCount;
+            searchResult = -1;
+
+            string msg;
+            msg = "frequency_distances Rows = " + nRows.ToString() + "\n\n"
+                  + "Looking for \n"
+                       + "   fd_effective_date " + ad_effective.ToShortDateString() + "\n"
+                       + "   sf_key " + al_sfkey.ToString() + "\n"
+                       + "   rf_delivery_days " + as_deldays + "\n\n";
+
+            for (nRow = 0; nRow < nRows; nRow++)
             {
-                return 0;
+                fdSfKey = Convert.ToInt32(ids_frequency_distances.GetItem<FrequencyDistances>(nRow).SfKey);
+                fdEffectiveDate = Convert.ToDateTime(ids_frequency_distances.GetItem<FrequencyDistances>(nRow).FdEffectiveDate);
+                fdDeliveryDays = ids_frequency_distances.GetItem<FrequencyDistances>(nRow).RfDeliveryDays;
+
+                msg = msg + "Row " + nRow.ToString() + ": " 
+                          + "SfKey = " + fdSfKey.ToString() + ", "
+                          + "Effective Date = " + fdEffectiveDate.ToShortDateString() + ", "
+                          + "Delivery Days = " + fdDeliveryDays+"\n";
+
+                if (fdSfKey == al_sfkey 
+                    && fdEffectiveDate == ad_effective 
+                    && fdDeliveryDays  == as_deldays)
+                {
+                    searchResult = nRow;
+                }
             }
-            else if (il_fd_row < 0)
+            msg = msg + "\nSearch result = " + searchResult.ToString();
+            msg = msg + "\nFIND result = " + il_fd_row.ToString();
+
+            MessageBox.Show(msg, "of_check_freq_distances");
+
+            // A matching record was found
+            // Set the il_fd_row value
+            il_fd_row = searchResult;
+
+            *****************************************************************************/
+
+            // If no matching record found, return -1
+            if (il_fd_row < 0)
             {
-                return -(1);
+                return il_fd_row;
             }
+
+            // Need to determine what sort of frequency adjustment this is
             ll_distance = Convert.ToInt32(ids_frequency_distances.GetItem<FrequencyDistances>(il_fd_row).FdDistance);
             ll_boxes = ids_frequency_distances.GetItem<FrequencyDistances>(il_fd_row).FdNoOfBoxes;
             ll_rural = ids_frequency_distances.GetItem<FrequencyDistances>(il_fd_row).FdNoRuralBags;
@@ -1296,7 +1540,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 is_reason = "null";
             }
-            if ((ll_distance == null) && (ll_boxes == null) && (ll_rural == null) && (ll_other == null) && (ll_private == null) && (ll_POs == null) && (ll_cmbs == null) && (ll_cmb_custs == null) && (ll_del_hrs == null) && (ll_proc_hrs == null) && (ll_volume == null))
+
+            if ((ll_cmb_custs == null)  && (ll_cmbs == null)
+                && (ll_boxes == null)   && (ll_rural == null)
+                && (ll_other == null)   && (ll_private == null) 
+                && (ll_POs == null)
+                && (ll_distance == null || ll_distance == 0)
+                && (ll_del_hrs == null  || ll_del_hrs == 0)
+                && (ll_proc_hrs == null || ll_proc_hrs == 0) 
+                && (ll_volume == null   || ll_volume == 0))
             {
                 if (is_reason.Substring(0, 6) == "Global")
                 {
@@ -1372,12 +1624,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             else
             {
                 ((DRenewalFreqAdjust)(dw_renewal_freq_adjust.DataObject)).StConfirmAccess.Text = "Y";
-            }//! EO added code
+            }
 
             idw_frequency_adjustment = dw_renewal_freq_adjust;
         }
 
-        //added by jlwang 
         public virtual void dw_renewal_freq_adjust_invoke()
         {
             dw_renewal_freq_adjust.of_set_createpriv(false);
@@ -1392,39 +1643,138 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             //  TJB  SR4695  Jan-2007
             //  If the frequency adjustment has been deleted OK, delete any 
-            //  corresponding frequency distances and override records  ( see pfs_preDeleteRow)
-            int ll_rc;
+            //  corresponding frequency distances and override records (see pfs_preDeleteRow)
+            int ll_rc = -1;
             System.Decimal? ldc_fd_distance;
 
-            //if (ancestorreturnvalue == 1) {
+            /*  string msg = "Deleted rows: "; // Debugging  */
+
             if (true)
             {
                 if (il_del_record >= 1)
                 {
+                    // TJB  RPCR_099  Nov-2015
+                    // Delete the frequency_adjustment record
+                    idw_frequency_adjustment.DeleteItemAt(il_fa_row);
+                    //idw_frequency_adjustment.ResetUpdate();
+                
+                    /* msg += "\nfrequency_adjustment   row " + il_fa_row.ToString(); // Debugging  */
+
                     //  If a frequency_distances record is deleted, the route_distances 
-                    //  table needs to be updated as well.
+                    //  table may need to be updated as well.
                     ldc_fd_distance = ids_frequency_distances.GetItem<FrequencyDistances>(il_fd_row).FdDistance;
-                    if (!((ldc_fd_distance == null)))
+                    ids_frequency_distances.DeleteItemAt(il_fd_row);
+
+                    /* msg += "\nfrequency_distances   row " + il_fd_row.ToString();  // Debugging  */
+
+                    if (!(ldc_fd_distance == null || ldc_fd_distance == 0))
                     {
                         ll_rc = of_update_route_frequency(ldc_fd_distance.Value);
                     }
-                    ids_frequency_distances.DeleteItemAt(il_fd_row);
-                }
-                if (il_del_record >= 2)
-                {
-                    if (il_vor_row > 0)
+                    if (ll_rc >= 0)
                     {
-                        ids_vehicle_override_rate.DeleteItemAt(il_vor_row.Value);
+                        /* msg += "\nroute_frequency   row " + ll_rc.ToString()+" modified";  // Debugging  */
                     }
                 }
-                if (il_del_record == 3 && il_nvorh_row > 0)
+
+                // TJB  RPCR_099: Simplified a bit: changed nested IFs to compound IF
+                if (il_del_record >= 2 && il_vor_row >= 0)
                 {
-                    of_copy_nvor(il_nvorh_row.Value - 1, il_nvor_row);
-                    ids_non_vehicle_override_rate_history.DeleteItemAt(il_nvorh_row.Value);
+                    /******************** Debugging *************************
+                    int nVorRows1 = ids_vehicle_override_rate.RowCount;
+                    DateTime vorEffectiveDate1 = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(il_vor_row.Value).VorEffectiveDate);
+                    *********************************************************/
+
+                    ids_vehicle_override_rate.DeleteItemAt(il_vor_row.Value);
+
+                    /******************** Debugging *************************
+                    int nVorRows2 = ids_vehicle_override_rate.RowCount;
+                    DateTime vorEffectiveDate2 = Convert.ToDateTime(ids_vehicle_override_rate.GetItem<VehicleOverrideRate>(il_vor_row.Value - 1).VorEffectiveDate);
+
+                    MessageBox.Show("ids_vehicle_override_rate \n"
+                                    + "pre-delete \n"
+                                    + "  il_vor_row = " + il_vor_row.Value.ToString() + "\n"
+                                    + "  nVorRows1 = " + nVorRows1.ToString() + "\n"
+                                    + "  vorEffectiveDate1= " + vorEffectiveDate1.ToShortDateString() + "\n"
+                                    + "post-delete: \n"
+                                    + "  nVorRows2 = " + nVorRows2.ToString() + "\n"
+                                    + "  vorEffectiveDate2= " + vorEffectiveDate2.ToShortDateString() + "\n"
+                                    , "dw_renewal_freq_adjust_pfc_deleterow");
+
+                    msg += "\nvehicle_override_rate   row " + il_vor_row.ToString();
+                    *********************************************************/
                 }
 
-                // modified by jlwang: pls check the logic of pb,make sure it the same to pb
-                this.pfc_save();         //iw_renewal.pfc_save();
+                // TJB  RPCR_099  Jan-2016
+                // The NVOR history table is no longer used, 
+                // and the NVOR table may contain >1 record for a contract/seq.
+                // Changed code to delete the relevent NVOR record.
+                if (il_del_record >= 3 && il_nvor_row >= 0)
+                {
+                    /******************** Debugging *************************
+                    int nNvorRows1 = ids_non_vehicle_override_rate.RowCount;
+                    DateTime nvorEffectiveDate1 = Convert.ToDateTime(ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(il_nvor_row.Value).NvorEffectiveDate);
+                    *********************************************************/
+
+                    ids_non_vehicle_override_rate.DeleteItemAt(il_nvor_row.Value);
+
+                    /******************** Debugging *************************
+                    int nNvorRows2 = ids_non_vehicle_override_rate.RowCount;
+                    DateTime nvorEffectiveDate2 = Convert.ToDateTime(ids_non_vehicle_override_rate.GetItem<NonVehicleOverrideRate>(il_nvor_row.Value - 1).NvorEffectiveDate);
+
+                    MessageBox.Show("ids_non_vehicle_override_rate \n"
+                                    + "pre-delete \n"
+                                    + "  il_nvor_row = " + il_nvor_row.Value.ToString() + "\n"
+                                    + "  nNvorRows1 = " + nNvorRows1.ToString() + "\n"
+                                    + "  nvorEffectiveDate1= " + nvorEffectiveDate1.ToShortDateString() + "\n"
+                                    + "post-delete: \n"
+                                    + "  nnVorRows2 = " + nNvorRows2.ToString() + "\n"
+                                    + "  nvorEffectiveDate2= " + nvorEffectiveDate2.ToShortDateString() + "\n"
+                                    , "dw_renewal_freq_adjust_pfc_deleterow");
+
+                    msg += "\nnon_vehicle_override_rate   row " + il_nvor_row.ToString();
+                    *********************************************************/
+                }
+                /******************************* Debugging *************************************
+                if (il_del_record == 3 && il_nvorh_row >= 0)
+                {
+                  int nVorhDelRow = ids_non_vehicle_override_rate_history.Find(new KeyValuePair<string, object>
+                                      ("nvor_effective_date", id_vor_original_effective_date));
+
+                  if (nVorhDelRow < 0)
+                  {
+                      MessageBox.Show("Unable to find NVOR history record for \n"
+                                     + "effective date " + id_vor_original_effective_date.ToShortDateString() + "\n"
+                                     + "Unable to reset NVOR record!"
+                                     , "Error!");
+
+                      msg += "\nERROR deleting nvehicle_override_rate_history record ";
+                  }
+                  else
+                  {
+                      int nNvorRows = ids_non_vehicle_override_rate.RowCount;
+                      if (nNvorRows < 1)
+                      {
+                          MessageBox.Show("No non_vehicle_override_rate table to update??"
+                                         , "Error!");
+                      }
+                      else
+                      {
+                          of_copy_nvorh_to_nvor(nVorhDelRow, 0);
+
+                          ids_non_vehicle_override_rate_history.DeleteItemAt(nVorhDelRow);
+
+                          msg += "\nvehicle_override_rate_history  row " + nVorhDelRow.ToString();
+                      }
+                  }
+                }
+                ********************************************************************************/
+
+                idw_frequency_adjustment.Save();
+
+                /* MessageBox.Show(msg, "freq_adjust pfc_deleterow");  // Debugging  */
+
+                /* TJB  RPCR_099: This clearly doesn't do anything useful ?? **************
                 ll_rc = 0;
                 if (ll_rc < 0)
                 {
@@ -1433,31 +1783,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return; //return FAILURE;
                 }
+                ***************************************************************************/
             }
-            return;//return SUCCESS;
+            return;
         }
 
         public virtual int dw_renewal_freq_adjust_pfc_predeleterow()
         {
-            //?base.pfc_predeleterow();
             //  TJB  SR4695  Jan-2007
             //  If deleting a frequency adjustment, validate the deletion and if OK, 
             //  check for related records in the frequency_distances and vehicle and 
-            //  non-vehicle override tables  ( implemented via datastores)
+            //  non-vehicle override tables (implemented via datastores)
             int ll_row;
             int ll_row2;
             int ll_rows;
             int? ll_seq;
             int? ll_adjustment;
             int? ll_rc;
-            int? ll_rc1;
-            int? ll_rc2;
             string ls_confirmed;
             string ls_user = string.Empty;
-            string ds_table;
             string ds_adjustment;
             string ds_msg = string.Empty;
             DateTime? ld_paid;
+
             ls_user = StaticVariables.gnv_app.of_getuserid();
             if (ls_user == null || !(ls_user == "sysadmin"))
             {
@@ -1465,21 +1813,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , "Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return -1;// PREVENT_ACTION;
-
             }
+
             il_del_record = 0;
             ll_row = idw_frequency_adjustment.GetSelectedRow(0);
             ll_row2 = idw_frequency_adjustment.GetSelectedRow(ll_row);
             ll_rows = idw_frequency_adjustment.RowCount;
+
             //  Check that a row has been selected
-            if ((ll_row == null) || ll_row < 0)
+            //if ((ll_row == null) || ll_row < 0)  // TJB  RPC_R099: ll_row isn't int? now so can't be null
+            if (ll_row < 0)
             {
                 MessageBox.Show("Please select an adjustment to be deleted \n"
                                , "Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return -1;// PREVENT_ACTION;
-
+                return -1;  // PREVENT_ACTION;
             }
+
             ll_seq = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).ContractSeqNumber;
             ll_adjustment = Convert.ToInt32(idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).FdAdjustmentAmount);
             ls_confirmed = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).FdConfirmed;
@@ -1487,8 +1837,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             id_effective = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).FdEffectiveDate;
             il_sfKey = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).SfKey;
             is_delDays = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row).RfDeliveryDays;
-            /*select con_active_sequence into :il_current_seq
-                    from contract where contract_no = :il_contract using SQLCA;*/
+
+            /* select con_active_sequence into :il_current_seq
+             *   from contract where contract_no = :il_contract */
             il_current_seq = RDSDataService.GetConActiveSequenceFromContract(il_contract);
 
             //  Check that we're dealing with the correct contract renewal
@@ -1501,13 +1852,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return -1;//PREVENT_ACTION;
             }
             //  Check to see if more than one row has been selected
-            if (!(ll_row2 == null) && ll_row2 > ll_row)
+            // if (!(ll_row2 == null) && ll_row2 > ll_row)  // TJB  RPC_R099: ll_row2 isn't int? now so can't be null
+            if (ll_row2 > ll_row)
             {
                 MessageBox.Show("Only one frequency adjustment may only be deleted at a time. \n" 
                                  + "Please select the frequency adjustment you want to delete."
                                , "Warning"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //  Unselect the rows
+                // Unselect the rows
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 while (ll_row2 > 0)
                 {
@@ -1515,8 +1867,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ll_row = ll_row2;
                     ll_row2 = idw_frequency_adjustment.GetSelectedRow(ll_row);
                 }
-                return -1;// PREVENT_ACTION;
-
+                return -1;  // PREVENT_ACTION;
             }
             //  Only the last row may be deleted
             if (!(ll_row == ll_rows - 1))
@@ -1537,7 +1888,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  Unselect the row
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 return -1;// PREVENT_ACTION;
-
             }
             //  Check that the frequency adjustment has not been paid
             if (!(ld_paid == null))
@@ -1548,13 +1898,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  Unselect the row
                 idw_frequency_adjustment.SelectRow(ll_row, false);
                 return -1;// PREVENT_ACTION;
-
             }
             //  Check that the selected row is the last unconfirmed adjustment.
             if (!(ll_row == ll_rows))
             {
                 //  If the last row isn't the selected row...
-                for (ll_row2 = ll_rows - 1; ll_row2 >= 0; ll_row2 -= 1)  //for (ll_row2 = ll_rows; ll_row2 >= 1; ll_row2 -= 1)
+                for (ll_row2 = ll_rows - 1; ll_row2 >= 0; ll_row2 -= 1)
                 {
                     //  Search back from the end to find the last un-confirmed adjustment.
                     ls_confirmed = idw_frequency_adjustment.GetItem<RenewalFreqAdjust>(ll_row2).FdConfirmed;
@@ -1565,11 +1914,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         break;
                     }
                 }
-                //  At this point, we've found the last unconfirmed adjustment  ( ll_row2).
-                //  If this isn't the selected row  ( ll_row), then don't allow
+                //  At this point, we've found the last unconfirmed adjustment (ll_row2).
+                //  If this isn't the selected row (ll_row), then don't allow
                 //  it to be deleted.  
                 //  We know there's at least one unconfirmed adjustment since the
-                //  selected row  ( ll_row) has already passed that test.  Thus we'll 
+                //  selected row (ll_row) has already passed that test.  Thus we'll 
                 //  never come out of the loop without ll_row2 referring to an 
                 //  unconfirmed adjustment.
                 if (!(ll_row == ll_row2))
@@ -1583,12 +1932,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 }
             }
+            // This frequency_adjustment row can be deleted
+            il_fa_row = ll_row;
+
+            //***************************************************************************
             //  Check for a matching frequency_distances record to also be deleted
-            ds_table = "";
             ll_rc = of_check_freq_distances(il_contract, id_effective.Value, il_sfKey.Value, is_delDays);
+
+            // TJB RPCR_099 Nov_2015
+            // Modified return value ll_rc interpretation (see function)
             //  Returns
-            // 	  -1	Error  ( already reported)
-            // 		0	No matching record: we won't delete these
+            // 	   -1	No matching record: we won't delete these
             // 		1	There was a matching adjustment: we'll delete it in the 
             // 				pfc_delete if the delete succeeds
             // 		2	There was a matching global adjustment: we can't delete those
@@ -1607,7 +1961,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  Flag that it and the frequency_adjustments records
                 //  can be deleted.
                 il_del_record = 1;
-                ds_table = "frequency_distances";
             }
             else if (ll_rc == 2)
             {
@@ -1617,52 +1970,49 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else if (ll_rc == 3)
             {
-                //  There was a null-valued frequency distances record; 
-                // 	check for matching vehicle override records
-                //  messagebox ( "Warning",  &
-                //  			"Override rate frequency adjustments cannot be deleted at this time. \n" )
-                ll_rc = of_check_veh_override(il_contract, il_current_seq, id_effective.Value);
-                if (ll_rc < 0)
-                {
-                    //  Error: already reported
-                    il_del_record = 0;
+                // There was a null-valued frequency distances record; 
+                // Check for a matching vehicle override record
+                ll_rc = of_check_veh_override_rate(il_contract, il_current_seq, id_effective.Value);
+                if (ll_rc >= 0)
+                { // There was a matching vehicle override record
+                  // Flag that it and the frequency_adjustments records can be deleted.
+                    il_del_record = 2;
+                    il_vor_row = ll_rc;
                 }
-                else if (ll_rc == 0)
-                {
-                    //  There wasn't a matching vehicle_override_rates record
+                // TJB  RPCR_099 Jan-2016
+                // Changed ckeck to check NVOR table; not its history table (no longer used)
+                //
+                // Check for a matching non-vehicle override record
+                ll_rc = of_check_nonveh_override_rate(il_contract, il_current_seq, id_effective.Value);
+                if (ll_rc >= 0)
+                { // There was a matching non-vehicle override record
+                    // Flag that it and the frequency_adjustments records can be deleted.
+                    il_del_record = 3;
+                    il_nvor_row = ll_rc;
+                }
+                /************ TJB  RPCR_099: the  history table is no longer used ***********
+                  // Check for matching non-vehicle override record (via its history table)
+                  ll_rc = of_check_nonveh_override_history(il_contract, il_current_seq, id_effective.Value);
+                  if (ll_rc >= 0)
+                  { //  There was a matching non-vehicle override history record
+                    // Flag that it and the frequency_adjustments records can be deleted.
+                    il_del_record = 3;
+                    il_nvorh_row = ll_rc;
+                  }
+                *****************************************************************************/
+                if (il_del_record < 2)
+                { // There weren't any matching vehicle_override_rates 
+                  // or non-vehicle_override_rates records
                     MessageBox.Show("This adjustment is not associated with either a vehicle or non-vehicle override. \n" 
                                      + "Unable to delete the adjustment."
                                    , "Warning"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else
-                {
-                    //  There was a matching vehicle override record
-                    //  Flag that it and the frequency_adjustments records
-                    //  can be deleted.
-                    il_del_record = 2;
-                    il_vor_row = ll_rc;
-                    ds_table = "vehicle_override_rate";
-                    ll_rc = of_check_nonveh_override_history(il_contract, il_current_seq, id_effective.Value);
-                    if (ll_rc < 0)
-                    {
-                        //  Error: already reported
-                        il_del_record = 0;
-                    }
-                    else if (ll_rc > 0)
-                    {
-                        //  There was a matching non-vehicle override history record
-                        //  Flag that it and the frequency_adjustments records
-                        //  can be deleted.
-                        il_del_record = 3;
-                        il_nvorh_row = ll_rc;
-                        ds_table = "non_vehicle_override_rate";
-                    }
-                }
             }
+
             if (il_del_record > 0)
             {
-                ds_adjustment = ll_adjustment.ToString();// String(ll_adjustment, "0.00");
+                ds_adjustment = ll_adjustment.ToString();
                 if (ll_adjustment == null)
                 {
                     ds_adjustment = "null";
@@ -1680,10 +2030,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ds_msg = ",\nvehicle_override_rate and \nnon_vehicle_override_rate records.";
                 }
                 DialogResult il_rc = MessageBox.Show("Please confirm the deletion:  \n" 
-                                                      + "     Renewal  " + il_contract.ToString() + '/' + il_sequence.ToString() + '\n' 
-                                                      + "  Adjustment  " + ds_adjustment + '\n' 
-                                                      + "      Reason  " + is_reason + "\n\n" 
-                                                      + "and associated frequency_distances" + ds_msg
+                                                      + "       Renewal  " + il_contract.ToString() + '/' + il_sequence.ToString() + '\n'
+                                                      + "Effective date  " + id_effective.Value.ToShortDateString()+ "\n"
+                                                      + "    Adjustment  $" + ds_adjustment + '\n'
+                                                      + "        Reason  " + is_reason + "\n\n"
+                                                     // + "and associated frequency_distances" + ds_msg
                                                     , "Confirm"
                                                     , MessageBoxButtons.OKCancel, MessageBoxIcon.Question
                                                     , MessageBoxDefaultButton.Button2);
@@ -1699,8 +2050,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return -1;// PREVENT_ACTION;
             }
             return SUCCESS;
-
-            //  return PREVENT_ACTION   // testing
         }
 
         public virtual void dw_renewal_cont_adjustments_constructor()
@@ -1926,38 +2275,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // String 	sRow
             // Long		lRow
             // 
-            // This.SetRedraw ( False)
+            // This.SetRedraw(False)
             // 
             // 
-            // sRow = This.Describe ( "DataWindow.FirstRowOnPage")
+            // sRow = This.Describe("DataWindow.FirstRowOnPage")
             // 
-            // If isNumber ( sRow) Then
-            // 	This.SetRow ( Metex.Common.Convert.ToInt32( sRow))
+            // If isNumber(sRow) Then
+            // 	This.SetRow(Metex.Common.Convert.ToInt32( sRow))
             // End If
             // 
-            // If idw_renewal.getitemstring ( 1, "con_acceptance_flag") = "Y" Then
-            // 	If idw_Vehicle.GetItemString ( This.GetRow ( ),"cv_vehical_status") = "N" 		&
-            // 	Or	gnv_App.of_IsEmpty ( idw_Vehicle.GetItemString ( This.GetRow ( ),"cv_vehical_status"))	Then
-            // 		idw_Vehicle.Modify ( "cv_vehical_status.Values='New~tN'")
+            // If idw_renewal.getitemstring(1, "con_acceptance_flag") = "Y" Then
+            // 	If idw_Vehicle.GetItemString(This.GetRow(),"cv_vehical_status") = "N" 		&
+            // 	Or	gnv_App.of_IsEmpty(idw_Vehicle.GetItemString(This.GetRow(),"cv_vehical_status"))	Then
+            // 		idw_Vehicle.Modify("cv_vehical_status.Values='New~tN'")
             // 	Else
-            // 		idw_Vehicle.Modify ( "cv_vehical_status.Values='New~tN/Current~tA/Old~tO'")
+            // 		idw_Vehicle.Modify("cv_vehical_status.Values='New~tN/Current~tA/Old~tO'")
             // 	End if
             // Else
-            // 	idw_Vehicle.Modify ( "cv_vehical_status.Values='New~tN/Current~tA/Old~tO'")
+            // 	idw_Vehicle.Modify("cv_vehical_status.Values='New~tN/Current~tA/Old~tO'")
             // End if
             // 
-            // This.TriggerEvent ( 'ue_setuprow')
+            // This.TriggerEvent('ue_setuprow')
         }
 
         public virtual void ue_deletestart()
         {
             //  PBY 12/06/2002 SR#4402
             //  Code commented out
-            // If  idw_Renewal.getitemstring ( 1, "con_acceptance_flag") = 'Y' &
-            // And This.getitemstring ( This.getrow ( ), "cv_vehical_status") = 'A' Then
-            // 	MessageBox ( 'Renewal', "This vehicle cannot be deleted because it is defined as being the current one on this renewal and the renewal has been accepted.")
+            // If  idw_Renewal.getitemstring(1, "con_acceptance_flag") = 'Y' &
+            // And This.getitemstring(This.getrow(), "cv_vehical_status") = 'A' Then
+            // 	MessageBox('Renewal', "This vehicle cannot be deleted because it is defined as being the current one on this renewal and the renewal has been accepted.")
             // 	message.returnvalue = 1
-            // ElseIf MessageBox ( "Delete Row", "Do you want to delete the current row?", Question!, YesNo!) = 2 Then
+            // ElseIf MessageBox("Delete Row", "Do you want to delete the current row?", Question!, YesNo!) = 2 Then
             // 	Message.ReturnValue = 1
             // End If
         }
@@ -1968,14 +2317,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Since status does not hold any meanings, it is not possible to protect the
             //  record based on the status. Instead, all but the latest row is protected.
             // 
-            // This.SetRedraw ( False)
+            // This.SetRedraw(False)
             // 
-            // If idw_Renewal.getitemstring ( 1, "con_acceptance_flag") = 'Y' &
-            // And This.getitemstring ( This.getrow ( ), "cv_vehical_status") = 'A' then
-            // 	This.modify ( "datawindow.readonly=yes")
+            // If idw_Renewal.getitemstring(1, "con_acceptance_flag") = 'Y' &
+            // And This.getitemstring(This.getrow(), "cv_vehical_status") = 'A' then
+            // 	This.modify("datawindow.readonly=yes")
             // End if
             // 
-            // This.ResumeLayout ( false )
+            // This.ResumeLayout(false )
             // 
         }
 
@@ -2040,9 +2389,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             }
             //  PBY 12/06/2002 SR#4402
-            // if Idw_Renewal.GetItemString ( 1, "con_acceptance_flag") = "Y" then
-            // 	idw_Vehicle.Modify ( "cv_vehical_status.Values='New~tN'")
-            // 	il_newvehicle = This.GetRow ( )
+            // if Idw_Renewal.GetItemString(1, "con_acceptance_flag") = "Y" then
+            // 	idw_Vehicle.Modify("cv_vehical_status.Values='New~tN'")
+            // 	il_newvehicle = This.GetRow()
             // end if
             // 
             // return 1
@@ -2116,7 +2465,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     ls_ErrorColumn = "ft_key";                          // "vehicle_ft_key";
                     //  PBY 12/06/2002 SR#4402
-                    // 	Elseif This.uf_not_entered ( ll_Row, "cv_vehical_status", "status") Then
+                    // 	Elseif This.uf_not_entered(ll_Row, "cv_vehical_status", "status") Then
                     // ls_ErrorColumn = "cv_vehical_status"
                 }
                 else if (dw_contract_vehicle.uf_not_entered(ll_Row, "v_purchased_date", "purchased date"))
@@ -2326,9 +2675,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ll_fd_rc = ((DsFrequencyDistances)ids_frequency_distances).Retrieve(il_contract, id_renewal_start);
                     ll_vor_rc = ((DsVehicleOverrideRate)ids_vehicle_override_rate).Retrieve(il_contract, il_sequence);
                     ll_nvor_rc = ((DsNonVehicleOverrideRate)ids_non_vehicle_override_rate).Retrieve(il_contract, il_sequence);
-                    ll_nvorh_rc = ((DsNonVehicleOverrideRateHistory)ids_non_vehicle_override_rate_history).Retrieve(il_contract, il_sequence);
+
+                    // TJB  RPCR_099: Code disabled
+                    // NVOR History table no longer used; il_nvor_row set elsewhere
+                    // ll_nvorh_rc = ((DsNonVehicleOverrideRateHistory)ids_non_vehicle_override_rate_history).Retrieve(il_contract, il_sequence);
                     //  NOTE: for any particular contract, there will only be one NVOR row
-                    il_nvor_row = ids_non_vehicle_override_rate.RowCount;
+                    // il_nvor_row = ids_non_vehicle_override_rate.RowCount;
                 }
                 if (idw_renewal.RowCount > 0)
                     idw_frequency_adjustment.DataObject.GetControlByName("st_title").Text = idw_renewal.GetItem<Renewal>(0).Contracttitle;
@@ -2392,6 +2744,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_Ret;
             int ll_Row;
             DialogResult di_ret;
+
+            if (StaticFunctions.IsDirty(ids_frequency_distances))
+            {
+                di_ret = MessageBox.Show("Table frequency_distances has changed.\n"
+                                        + "Do you want to update database?"
+                                        , "Renewal Update"
+                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (di_ret == DialogResult.Yes)
+                {
+                    ids_frequency_distances.Save();
+                    ll_Ret = ((DsFrequencyDistances)ids_frequency_distances).Retrieve(il_contract, id_renewal_start);
+                    if (ll_Ret < 0)
+                        return;
+                }
+                else
+                    idw_renewal.DataObject.Reset();
+            }
 
             //?idw_renewal.DataObject.AcceptText();
             //if (idw_renewal.DeletedCount() > 0 || idw_renewal.ModifiedCount() > 0) {
@@ -2653,7 +3022,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ContractContractor CC = dw_contract_contractor.DataObject.Current as ContractContractor;
                 lContractor = CC.ContractorSupplierNo;
 
-                /*SELECT contractor.c_surname_company || ifnull ( contractor.c_first_names,'',', ' || contractor.c_first_names)  
+                /*SELECT contractor.c_surname_company || ifnull(contractor.c_first_names,'',', ' || contractor.c_first_names)  
                     INTO :sContractorName FROM contractor WHERE contractor.contractor_supplier_no = :lContractor   ;*/
                 sContractorName = RDSDataService.GetContractorNameFormContractor(lContractor);
                 dw_contract_contractor.SetValue(dw_contract_contractor.GetRow(), "ccontractor_name", sContractorName);
@@ -2664,7 +3033,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (dw_contract_contractor.DataObject.GetValue(dw_contract_contractor.GetRow(), "ccontractor_name") != null)
                     sContractorName = dw_contract_contractor.DataObject.GetValue(dw_contract_contractor.GetRow(), "ccontractor_name").ToString();
                 /*SELECT contractor.contractor_supplier_no into :lContractor 
-                   FROM contractor WHERE contractor.c_surname_company || ifnull ( contractor.c_first_names,'',', ' || contractor.c_first_names) = :sContractorName;*/
+                   FROM contractor WHERE contractor.c_surname_company || ifnull(contractor.c_first_names,'',', ' || contractor.c_first_names) = :sContractorName;*/
                 lContractor = RDSDataService.GetContractorSupplierNoFormContractor(sContractorName);
                 dw_contract_contractor.SetValue(dw_contract_contractor.GetRow(), "contractor_supplier_no", lContractor);
             }
@@ -2674,23 +3043,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             dw_contract_contractor.URdsDw_GetFocus(null, null);
             // if g_security.u_usergroup = 'National Operations Manager' then
-            // 	wf_set_security ( 'insert','','update')
+            // 	wf_set_security('insert','','update')
             // elseif g_security.u_usergroup = 'Regional Contracts Managers' then
-            // 	wf_set_security ( 'insert','','update')		
+            // 	wf_set_security('insert','','update')		
             // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GROOMEJ" or g_security.userid = "DRYSDALEP" then
-            // 	wf_set_security ( 'insert','delete','update')
+            // 	wf_set_security('insert','delete','update')
             // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GARDINERE" then
-            // 	uf_protect ( )
-            // 	wf_set_security ( '','','update')
+            // 	uf_protect()
+            // 	wf_set_security('','','update')
             // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "SHOTTERI" then
-            // 	uf_protect ( )
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()
+            // 	wf_set_security('','','')
             // elseif g_security.u_usergroup = 'HO Staff' and g_security.userid = "MCKAYT" or g_security.userid = "HOCKLYJ" then
-            // 	uf_protect ( )	
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()	
+            // 	wf_set_security('','','')
             // else
-            // 	uf_protect ( )	
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()	
+            // 	wf_set_security('','','')
             // end if
         }
 
@@ -2813,30 +3182,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_renewal_artical_counts.URdsDw_GetFocus(null, null);
             //?base.getfocus();
             // if g_security.u_usergroup = 'National Operations Manager' then
-            // 	wf_set_security ( '','','update')		
+            // 	wf_set_security('','','update')		
             // end if
             // 
             // if g_security.u_usergroup = 'Regional Contracts Managers' then
-            // 	wf_set_security ( '','','update')
+            // 	wf_set_security('','','update')
             // end if
             // 
             // if g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GROOMEJ" or g_security.userid = "DRYSDALEP" then
-            // 	wf_set_security ( '','','update')
+            // 	wf_set_security('','','update')
             // end if
             // 
             // if g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GARDINERE" then
-            // 	uf_protect ( )
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()
+            // 	wf_set_security('','','')
             // end if			
             // 
             // if g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "SHOTTERI" then
-            // 	uf_protect ( )
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()
+            // 	wf_set_security('','','')
             // end if			
             // 
             // if g_security.u_usergroup = 'HO Staff' and g_security.userid = "MCKAYT" or g_security.userid = "HOCKLYJ" then
-            // 	uf_protect ( )
-            // 	wf_set_security ( '','','')
+            // 	uf_protect()
+            // 	wf_set_security('','','')
             // end if
         }
 
