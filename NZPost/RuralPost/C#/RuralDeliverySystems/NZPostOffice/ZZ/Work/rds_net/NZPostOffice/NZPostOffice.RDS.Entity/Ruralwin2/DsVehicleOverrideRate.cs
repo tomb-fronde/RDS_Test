@@ -8,7 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
-	// Mapping info for object fields to DB
+    // TJB  RPCR_099  Dec-2015
+    // Modified select statement: Added ORDER BY clause
+    // Cosmetic changes to UpdateEntity and DeleteEntity
+    
+    // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("contract_no", "_contract_no", "vehicle_override_rate")]
@@ -391,6 +395,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
 		[ServerMethod]
 		private void FetchEntity( int? contract, int? sequence )
 		{
+            // TJB  RPCR_099  Dec 2015
+            // Modified select statement: Added ORDER BY clause
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
@@ -415,9 +421,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                         "vehicle_override_rate.vor_consumption_rate,"+   
                         "vehicle_override_rate.vor_livery,"+   
                         "vehicle_override_rate.vor_effective_date "+
-                        " FROM vehicle_override_rate "+
-                        " WHERE (vehicle_override_rate.contract_no = @contract ) AND  "+
-                        "(vehicle_override_rate.contract_seq_number = @sequence )";
+                        "  FROM vehicle_override_rate "+
+                        " WHERE vehicle_override_rate.contract_no = @contract "+
+                        "   AND vehicle_override_rate.contract_seq_number = @sequence"+
+                        " ORDER BY vehicle_override_rate.vor_effective_date";
 
 					List<VehicleOverrideRate> _list = new List<VehicleOverrideRate>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -458,16 +465,18 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
+				ParameterCollection pList = new ParameterCollection();
+
 				if (GenerateUpdateCommandText(cm, "vehicle_override_rate", ref pList))
 				{
-					cm.CommandText += " WHERE  vehicle_override_rate.contract_no = @contract_no AND " + 
-						"vehicle_override_rate.contract_seq_number = @contract_seq_number AND " + 
-						"vehicle_override_rate.vor_effective_date = @vor_effective_date ";
+					cm.CommandText += " WHERE  vehicle_override_rate.contract_no = @contract_no " +
+                                      "   AND vehicle_override_rate.contract_seq_number = @contract_seq_number " +
+                                      "   AND vehicle_override_rate.vor_effective_date = @vor_effective_date ";
 
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
 					pList.Add(cm, "vor_effective_date", GetInitialValue("_vor_effective_date"));
+
 					DBHelper.ExecuteNonQuery(cm, pList);
 				}
 				// reinitialize original key/value list
@@ -498,16 +507,19 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
 				{
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
-					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"contract_no", GetInitialValue("_contract_no"));
 					pList.Add(cm,"contract_seq_number", GetInitialValue("_contract_seq_number"));
 					pList.Add(cm,"vor_effective_date", GetInitialValue("_vor_effective_date"));
-						cm.CommandText = "DELETE FROM vehicle_override_rate WHERE " +
-						"vehicle_override_rate.contract_no = @contract_no AND " + 
-						"vehicle_override_rate.contract_seq_number = @contract_seq_number AND " + 
-						"vehicle_override_rate.vor_effective_date = @vor_effective_date ";
-					DBHelper.ExecuteNonQuery(cm, pList);
+
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "DELETE FROM vehicle_override_rate " 
+                                    + "WHERE vehicle_override_rate.contract_no = @contract_no "
+                                    + "  AND vehicle_override_rate.contract_seq_number = @contract_seq_number "
+                                    + "  AND vehicle_override_rate.vor_effective_date = @vor_effective_date ";
+					
+                    DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
 			}

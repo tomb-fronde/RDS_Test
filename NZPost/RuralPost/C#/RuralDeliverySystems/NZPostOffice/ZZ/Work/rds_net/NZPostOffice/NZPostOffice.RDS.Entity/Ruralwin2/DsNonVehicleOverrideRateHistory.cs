@@ -8,6 +8,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB  RPCR_099  Jan_2016: OBSOLETE
+    // non_vehicle_override_rate_history table no longer used
+    //
+    // TJB  RPCR_099  Dec-2015
+    // Added nvorh_change_effective_date
+    //
     // TJB  RPCR_041  Nov-2012
     // Added nvor_relief_weeks
     //
@@ -31,6 +37,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
     [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "non_vehicle_override_rate_history")]
     [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate_history")]
     [MapInfo("nvor_relief_weeks", "_nvor_relief_weeks", "non_vehicle_override_rate_history")]
+    [MapInfo("nvorh_change_effective_date", "_nvorh_change_effective_date", "non_vehicle_override_rate_history")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRateHistory : Entity<NonVehicleOverrideRateHistory>
@@ -87,6 +94,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         [DBField()]
         private decimal? _nvor_relief_weeks;
 
+        [DBField()]
+        private DateTime? _nvorh_change_effective_date;
+
+        //----------------------------------------------------------------------------------------
         public virtual int? ContractNo
         {
             get
@@ -393,6 +404,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
+        public virtual DateTime? NvorhChangeEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("NvorhChangeEffectiveDate", true);
+                return _nvorh_change_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("NvorhChangeEffectiveDate", true);
+                if (_nvorh_change_effective_date != value)
+                {
+                    _nvorh_change_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}/{2}", _contract_no, _contract_seq_number, _nvor_effective_date);
@@ -438,10 +468,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                            "non_vehicle_override_rate_history.nvor_acc_rate_amount," +
                            "non_vehicle_override_rate_history.nvor_uniform," +
                            "non_vehicle_override_rate_history.nvor_delivery_wage_rate," +
-                           "non_vehicle_override_rate_history.nvor_processing_wage_rate " +
+                           "non_vehicle_override_rate_history.nvor_processing_wage_rate," +
+                           "non_vehicle_override_rate_history.nvor_relief_weeks," +
+                           "non_vehicle_override_rate_history.nvorh_change_effective_date" +
                            " FROM non_vehicle_override_rate_history " +
-                           " WHERE (non_vehicle_override_rate_history.contract_no = @al_contract ) And " +
-                           "(non_vehicle_override_rate_history.contract_seq_number = @al_sequence )   ";
+                           " WHERE non_vehicle_override_rate_history.contract_no = @al_contract " +
+                           "   AND non_vehicle_override_rate_history.contract_seq_number = @al_sequence";
 
                     List<NonVehicleOverrideRateHistory> _list = new List<NonVehicleOverrideRateHistory>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -465,6 +497,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._nvor_uniform = GetValueFromReader<decimal?>(dr, 13);
                             instance._nvor_delivery_wage_rate = GetValueFromReader<decimal?>(dr, 14);
                             instance._nvor_processing_wage_rate = GetValueFromReader<decimal?>(dr, 15);
+                            instance._nvor_relief_weeks = GetValueFromReader<decimal?>(dr, 16);
+                            instance._nvorh_change_effective_date = GetValueFromReader<DateTime?>(dr, 17);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
