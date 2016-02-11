@@ -63,19 +63,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4B19DFD69549429DA9EB434CEB433972"
-        "OwnerKey" = "8:_0EF44BEF77DA4B5EA78FA1799B80208D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4BE5125FD02F44E49D754DAA3B0B4513"
-        "OwnerKey" = "8:_4B19DFD69549429DA9EB434CEB433972"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4BE5125FD02F44E49D754DAA3B0B4513"
+        "MsmKey" = "8:_35DB3FB19A36461D9A5FF593EA2A095E"
         "OwnerKey" = "8:_0EF44BEF77DA4B5EA78FA1799B80208D"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,6 +77,18 @@
         {
         "MsmKey" = "8:_659227990E0D930CF89146A31D85A7F4"
         "OwnerKey" = "8:_1AB56B03CA8A420593BC9C124A78EDE4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_74097291CD3B4594B4304ACF87885DAB"
+        "OwnerKey" = "8:_35DB3FB19A36461D9A5FF593EA2A095E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_74097291CD3B4594B4304ACF87885DAB"
+        "OwnerKey" = "8:_0EF44BEF77DA4B5EA78FA1799B80208D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -149,6 +149,12 @@
         {
         "MsmKey" = "8:_83DD5B3FFA33782CD9E4DC52FB1BF159"
         "OwnerKey" = "8:_1AB56B03CA8A420593BC9C124A78EDE4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8A5CD3BDB4594C4F976E19DE80B93A1F"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -607,6 +613,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8A5CD3BDB4594C4F976E19DE80B93A1F"
+            {
+            "SourcePath" = "8:..\\NZPost.RDSAdmin\\bin\\Release\\RDSAdmin_UAT.config"
+            "TargetName" = "8:RDSAdmin_UAT.config"
+            "Tag" = "8:"
+            "Folder" = "8:_D8DB68F9C3B94AA9BE6565275EE1CAD1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9D62A268CFD9DA56B05D14124E837FB2"
@@ -1335,7 +1361,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4B19DFD69549429DA9EB434CEB433972"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_35DB3FB19A36461D9A5FF593EA2A095E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1349,7 +1375,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4BE5125FD02F44E49D754DAA3B0B4513"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_74097291CD3B4594B4304ACF87885DAB"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
