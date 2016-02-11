@@ -8,6 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_099  Jan-2016
+    // Added nvor_effective_date
+    // Added nvor_effective_date to returned values in FetchEntity
+    // Added nvor_effective_date to UpdateEntity WHERE clause
+    //
     // TJB  RPCR_041  Nov-2012
     // Added column nvor_relief_weeks
 
@@ -32,6 +37,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("nvor_delivery_wage_rate", "_nvor_delivery_wage_rate", "non_vehicle_override_rate")]
     [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate")]
     [MapInfo("nvor_relief_weeks", "_nvor_relief_weeks", "non_vehicle_override_rate")]
+    [MapInfo("nvor_effective_date", "_nvor_effective_date", "non_vehicle_override_rate")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRates : Entity<NonVehicleOverrideRates>
@@ -87,7 +93,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private decimal? _nvor_relief_weeks;
 
-
+        [DBField()]
+        private DateTime? _nvor_effective_date;
+        //--------------------------------------------------------------------
         public virtual int? ContractNo
         {
             get
@@ -376,6 +384,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual DateTime? NvorEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("NvorEffectiveDate", true);
+                return _nvor_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("NvorEffectiveDate", true);
+                if (_nvor_effective_date != value)
+                {
+                    _nvor_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+        //-----------------------------------------------------------------------------
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}", _contract_no, _contract_seq_number);
@@ -410,10 +436,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_get_non_vehicle_override_rates";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "incontract_no", incontract_no);
                     pList.Add(cm, "incontract_seq_no", incontract_seq_no);
-                    cm.CommandText = "rd.sp_get_non_vehicle_override_rates";
                     List<NonVehicleOverrideRates> _list = new List<NonVehicleOverrideRates>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -436,6 +462,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._nvor_delivery_wage_rate = GetValueFromReader<Decimal?>(dr,13);
                             instance._nvor_processing_wage_rate = GetValueFromReader<Decimal?>(dr, 14);
                             instance._nvor_relief_weeks = GetValueFromReader<Decimal?>(dr, 15);
+                            instance._nvor_effective_date = GetValueFromReader<DateTime?>(dr, 16);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
@@ -445,7 +472,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
-        
+
         // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
         [ServerMethod()]
         private void InsertEntity()
@@ -470,6 +497,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        // TJB  RPCR_099  Jan-2016
+        // Added nvor_effective_date to where clause
+        //
         // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
         [ServerMethod()]
         private void UpdateEntity()
@@ -482,9 +512,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (GenerateUpdateCommandText(cm, "non_vehicle_override_rate", ref pList))
                 {
                     cm.CommandText += " WHERE contract_no = @contract_no"
-                                      + " AND contract_seq_number = @contract_seq_number";
+                                      + " AND contract_seq_number = @contract_seq_number"
+                                      + " AND nvor_effective_date = @nvor_effective_date";
                     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
                     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
+                    pList.Add(cm, "nvor_effective_date", GetInitialValue("_nvor_effective_date"));
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
