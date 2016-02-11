@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Metex.Windows;
 using NZPostOffice.Shared;
 using NZPostOffice.Shared.VisualComponents;
@@ -13,6 +14,15 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_099  Jan-2016
+    // Changed handling of NVOR table
+    // Now treated like VOR table: New record added with 
+    //       effective date when either VOR or NVOR changes made
+    // NVOR History table no longer used
+    //
+    // TJB  8-Jan-2016: Bug fix
+    // Changed GetVovEffectiveDate to GetVorEffectiveDate
+    //
     // TJB  Apr-2014
     // Several minor tidying changes
     //
@@ -24,30 +34,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         #region Define
 
         public int? il_contract;
-
         public int? il_sequence;
-
         public int? il_economiclife;
+        public int  il_inserted = 0;
 
-        public int il_inserted;
+        private string senderName = string.Empty;
 
-        private string senderName = string.Empty; //ygu
-
-        public decimal? idc_original_benchmark;
-
+        public decimal?  idc_original_benchmark;
         public DateTime? id_previous_effective_date = DateTime.MinValue;
+        public DateTime? id_effective_date;
 
-        public URdsDw idw_vehiclerates;
-
-        public URdsDw idw_nonvehiclerates;
-
+        public URdsDw idw_vehicleoverriderates;
+        public URdsDw idw_nonvehicleoverriderates;
         public URdsDw idw_otherrates;
 
+        // TJB  RPCR_099  Jan-2016: NVOR History table no longer used
         //  TJB  SR4695  Jan-2007
         //  TJB  RD7_0038  Jan-2009: Changed ids_nonvehiclerateshistory to ids_nonvehicleratehistory
-        public DsNonVehicleOverrideRateHistory ids_nonvehicleratehistory;
+        //public DsNonVehicleOverrideRateHistory ids_nonvehicleratehistory;
 
-        // tempory variable
+        // Tempory variable
         private NZPostOffice.RDS.DataService.RDSDataService dataService = new NZPostOffice.RDS.DataService.RDSDataService();
 
         #endregion
@@ -66,12 +72,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_vehicle_rates.PfcValidation += new UserEventDelegate1(dw_vehicle_rates_pfc_validation);
             dw_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_vehicle_rates_getfocus);
             ((DVehicleOverrideRates)dw_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_vehicle_rates_itemchanged);
+            //dw_renewal_freq_adjust.PfcDeleteRow += new UserEventDelegate(dw_renewal_freq_adjust_pfc_deleterow);
+            dw_vehicle_rates.PfcPreDeleteRow += new UserEventDelegate1(dw_vehicle_rates_pfc_predeleterow);
+            dw_vehicle_rates.PfcDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_vehicle_rates_pfc_deleterow);
 
             dw_non_vehicle_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_ratesconstructor);
             dw_non_vehicle_rates.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_rates_pfc_postupdate);
             dw_non_vehicle_rates.DataObject.GotFocus += new EventHandler(dw_non_vehicle_rates_getfocus);
             //dw_non_vehicle_rates.ItemChanged += new EventHandler(dw_non_vehicle_rates_itemchanged);
             ((DNonVehicleOverrideRates)dw_non_vehicle_rates.DataObject).TextBoxLostFocus += new EventHandler(dw_non_vehicle_rates_itemchanged);
+            dw_non_vehicle_rates.PfcPreDeleteRow += new UserEventDelegate1(dw_non_vehicle_rates_pfc_predeleterow);
+            dw_non_vehicle_rates.PfcDeleteRow += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_non_vehicle_rates_pfc_deleterow);
 
             dw_other_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_other_rates_constructor);
             dw_other_rates.URdsDwEditChanged += new NZPostOffice.RDS.Controls.EventDelegate(dw_other_rateseditchanged);
@@ -94,34 +105,39 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             il_sequence = StaticVariables.gnv_app.of_get_parameters().integerparm;
 
             // Retrieve rates
-            idw_vehiclerates.Retrieve(new object[] { il_contract, il_sequence });
-            idw_nonvehiclerates.Retrieve(new object[] { il_contract, il_sequence });
+            idw_vehicleoverriderates.Retrieve(new object[] { il_contract, il_sequence });
+            idw_nonvehicleoverriderates.Retrieve(new object[] { il_contract, il_sequence });
             idw_otherrates.Retrieve(new object[] { il_contract, il_sequence });
             // Insert a blank row if no rows were retrieved
-            if (idw_vehiclerates.RowCount == 0)
+            if (idw_vehicleoverriderates.RowCount == 0)
             {
-                ll_row = idw_vehiclerates.RowCount;
-                idw_vehiclerates.InsertItem<VehicleOverrideRates>(ll_row);
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(ll_row).ContractNo = il_contract;
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(ll_row).VorEffectiveDate = System.DateTime.Today;
+                ll_row = idw_vehicleoverriderates.RowCount;
+                idw_vehicleoverriderates.InsertItem<VehicleOverrideRates>(ll_row);
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(ll_row).ContractNo = il_contract;
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(ll_row).VorEffectiveDate = System.DateTime.Today;
                 id_previous_effective_date = null;
             }
             else
             {
-                id_previous_effective_date = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
+                id_previous_effective_date = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
             }
-            if (idw_nonvehiclerates.RowCount == 0)
+            if (idw_nonvehicleoverriderates.RowCount == 0)
             {
-                idw_nonvehiclerates.InsertItem<NonVehicleOverrideRates>(0);
-                ll_row = 0;
+                // TJB  RPCR_099  Jan-2015
+                // Added initial values for contract_no, etc
+                ll_row = idw_nonvehicleoverriderates.RowCount;
+                idw_nonvehicleoverriderates.InsertItem<NonVehicleOverrideRates>(ll_row);
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo = il_contract;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).NvorEffectiveDate = System.DateTime.Today;
             }
 
             //  Make the heading of the datawindows = to the Contract_no, contract_seq_no and Contract name
             ls_heading = StaticMessage.StringParm;
             ls_heading = StaticVariables.gnv_app.of_get_parameters().stringparm;
-            //?idw_vehiclerates.DataObject.GetControlByName("st_renewal").Text = ls_heading;
-            //?idw_nonvehiclerates.GetControlByName("st_renewal").Text = ls_heading;
+            //?idw_vehicleoverriderates.DataObject.GetControlByName("st_renewal").Text = ls_heading;
+            //?idw_nonvehicleoverriderates.GetControlByName("st_renewal").Text = ls_heading;
 
             // Make the columns read only if the contract has been accepted
             // If gnv_App.of_Get_Parameters().booleanparm Then
@@ -138,7 +154,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  otherwise, if no changes were made, the user would be asked
             //  whether to save them.  We only want to save them if the 
             //  user makes changes.
-            idw_vehiclerates.ResetUpdate();
+            idw_vehicleoverriderates.ResetUpdate();
+            idw_nonvehicleoverriderates.ResetUpdate();    // TJB  RPCR_099  Jan-2015: Added
 
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
@@ -156,10 +173,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
+            // TJB  RPCR_099  Jan-2015
+            // Removed: non_vehicle_override_rate_history no longer used
+            //
             //  TJB  SR4695  Jan-2007
             //  Create a datastore for the (new) Non-vehicle_override_rate_history table
-            ids_nonvehicleratehistory = new DsNonVehicleOverrideRateHistory();
-            //  ids_nonvehicleratehistory.retrieve(il_contract, il_sequence)
+            // ids_nonvehicleratehistory = new DsNonVehicleOverrideRateHistory();
         }
 
         #region Methods
@@ -177,8 +196,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public override int pfc_preclose()
         {
-            decimal? ldc_temp;
-
             base.pfc_preclose();
             //  TJB  SR4661  May 2005
             //  Added update of nvor_wage_hourly_rate from (new)
@@ -189,9 +206,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  catches updates triggered when the user closes the
             //  window with the window-close button  ( which doesn't
             //  go through pfc_default).
-            idw_nonvehiclerates.AcceptText();
-            idw_nonvehiclerates.AcceptText();
-            idw_nonvehiclerates.AcceptText();
+            idw_nonvehicleoverriderates.AcceptText();
+            idw_nonvehicleoverriderates.AcceptText();
+            idw_nonvehicleoverriderates.AcceptText();
             //  Only do the update if the row is marked modified 
             //  (whether or not the processing wage was changed).
             //  If you copy the processing wage to the hourly wage
@@ -200,10 +217,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  always be asked about saving because the vehicle 
             //  windows has been modified with today's date as the
             //  'new' effective date).
-            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
+            if (StaticFunctions.IsDirty(idw_nonvehicleoverriderates))
             {
-                ldc_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
-                idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorWageHourlyRate = ldc_temp;
+                decimal? ldc_temp;
+                ldc_temp = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorWageHourlyRate = ldc_temp;
             }
             return SUCCESS;
         }
@@ -333,7 +351,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void dw_vehicle_constructor()
         {
-            idw_vehiclerates = dw_vehicle_rates;
+            idw_vehicleoverriderates = dw_vehicle_rates;
         }
 
         public virtual void dw_vehicle_pfc_prermbmenu()
@@ -352,13 +370,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             NFrequencyAdjustment n_freq;
             int li_return = 1;
 
-            idw_vehiclerates.AcceptText();
-            ld_effective_date = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
+            idw_vehicleoverriderates.AcceptText();
+            ld_effective_date = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
             // TJB  RD7_0038  Nov-2009
             // Removed nonvehiclerates save at this point; the save is done in the cb_ok_clicked event.
-            //            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
+            //            if (StaticFunctions.IsDirty(idw_nonvehicleoverriderates))
             //            {
-            //                idw_nonvehiclerates.Save();
+            //                idw_nonvehicleoverriderates.Save();
             //                ll_return = SUCCESS; //?
             //                if (ll_return != SUCCESS)
             //                {
@@ -474,12 +492,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     //? return -(1);
                 }
+                // TJB  8-Jan-2016: Bug fix
+                // Changed GetVovEffectiveDate to GetVorEffectiveDate
+                //
                 // select vor_effective_date into :id_date_exists 
                 //   from vehicle_override_rate
                 //  where contract_no = :il_contract 
                 //    and contract_seq_number = :il_sequence
                 //    and vor_effective_date = :ld_effective_date
-                RDSDataService dataService = RDSDataService.GetVovEffectiveDate(ld_effective_date, il_sequence, il_contract);
+                RDSDataService dataService = RDSDataService.GetVorEffectiveDate(ld_effective_date, il_sequence, il_contract);
                 id_date_exists = dataService.dtVal;
                 if (id_date_exists != null)
                 {
@@ -493,6 +514,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return li_return;
         }
 
+        public virtual int dw_vehicle_rates_pfc_predeleterow()
+        {
+            // MessageBox.Show("dw_vehicle_rates_pfc_predeletedow");  // Debugging
+            return 1;
+        }
+
+        public virtual void dw_vehicle_rates_pfc_deleterow()
+        {
+            // MessageBox.Show("dw_vehicle_rates_pfc_deletedow");  // Debugging
+        }
+
+        public virtual int dw_non_vehicle_rates_pfc_predeleterow()
+        {
+            // MessageBox.Show("dw_non_vehicle_rates_pfc_predeletedow");  // Debugging
+            return 1;
+        }
+
+        public virtual void dw_non_vehicle_rates_pfc_deleterow()
+        {
+            // MessageBox.Show("dw_non_vehicle_rates_pfc_deletedow");  // Debugging
+        }
+
         public virtual void pfc_preupdate()
         {
             //? return CONTINUE_ACTION;
@@ -500,97 +543,133 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void dw_non_vehicle_ratesconstructor()
         {
-            idw_nonvehiclerates = dw_non_vehicle_rates;
+            idw_nonvehicleoverriderates = dw_non_vehicle_rates;
         }
 
         public virtual void dw_non_vehicle_rates_pfc_prermbmenu()
         {
-            // Override ancestor to prevent pop menu
+            // Override ancestor to prevent pop-up menu
         }
 
-        public virtual void dw_non_vehicle_rates_pfc_postupdate()
+        /************** TJB  RPCR_099  Jan-2016: Now obsolete ******************
+        // NVOR History table no longer used
+        //
+        public virtual void copy_nvor_to_nvorh(DateTime? ad_prev_effective_date)
         {
+            // TJB  RPCR_099  Dec 2015: New
+            // Bulk of code moved from dw_non_vehicle_rates_pfc_postupdate
+            // to allow it to be used to copy the nvor record pre-change 
+            // as well as post-change.
+            // NOTE: 
+            // - This copy is done AFTER the VOR table's effective date has 
+            //   been updated with the current effective date!
+            // - The NVOR table holds only one record for each renewal and here, 
+            //   only the current renewal's record has been retrieved, hence the
+            //   index of 0 refers to the current renewal's record.
+            // - The VOR record's effective_date is used in place of the non-
+            //   existent NVOR effective date
+            // - The NVORH table holds a copy of the NVOR table prior to any 
+            //   changes being made, along with the pre-change effective date
+            //   and the current change effective date (usually Today()).
+            // - The nvor_effective_date in the NVORH table is the pre-change
+            //   VOR effective date, and the nvorh_change_effective_date is the 
+            //   current effective date (date the changes are being made).
+
             int ll_row;
-            int? ll_rc = null;
             int ll_vor_rows;
             int ll_nvor_rows;
+            int ll_nvorh_rows;
+            int? ll_rc = null;
             DateTime? ld_effective = null;
-            decimal? ldc_hourly = 0;
-            decimal? ldc_public = 0;
-            decimal? ldc_carrier = 0;
-            decimal? ldc_acc = 0;
-            decimal? ldc_item = 0;
-            decimal? ldc_accounting = 0;
-            decimal? ldc_telephone = 0;
-            decimal? ldc_sundries = 0;
-            decimal? ldc_acc_amount = 0;
-            decimal? ldc_uniform = 0;
-            decimal? ldc_delivery = 0;
-            decimal? ldc_processing = 0;
-            decimal? ldc_reliefweeks = 0;
+            decimal? ldc_hourly = null;
+            decimal? ldc_public = null;
+            decimal? ldc_carrier = null;
+            decimal? ldc_acc = null;
+            decimal? ldc_item = null;
+            decimal? ldc_accounting = null;
+            decimal? ldc_telephone = null;
+            decimal? ldc_sundries = null;
+            decimal? ldc_acc_amount = null;
+            decimal? ldc_uniform = null;
+            decimal? ldc_delivery = null;
+            decimal? ldc_processing = null;
+            decimal? ldc_reliefweeks = null;
             string ls_frozen = null;
 
-            ll_vor_rows = idw_vehiclerates.RowCount;
-            ll_nvor_rows = idw_nonvehiclerates.RowCount;
+            ll_vor_rows = idw_vehicleoverriderates.RowCount;
             if (ll_vor_rows >= 1)
             {
-                ld_effective = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
+                // This is the date the changes are being made (same as id_effective_date)
+                ld_effective = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
             }
+            // Get the NVOR record's values
+            // If there isn't an NVOR record, NULLs will be used
+            ll_nvor_rows = idw_nonvehicleoverriderates.RowCount;
             if (ll_nvor_rows >= 1)
             {
-                ldc_hourly = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorWageHourlyRate;
-                ldc_public = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorPublicLiabilityRate2;
-                ldc_carrier = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorCarrierRiskRate;
-                ldc_acc = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorAccRate;
-                ldc_item = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorItemProcRatePerHour;
-                ls_frozen = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorFrozen;
-                ldc_accounting = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorAccounting;
-                ldc_telephone = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorTelephone;
-                ldc_sundries = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorSundries;
-                ldc_acc_amount = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorAccRateAmount;
-                ldc_uniform = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorUniform;
-                ldc_delivery = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorDeliveryWageRate;
-                ldc_processing = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
-                ldc_reliefweeks = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).NvorReliefWeeks;
+                ldc_hourly = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorWageHourlyRate;
+                ldc_public = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorPublicLiabilityRate2;
+                ldc_carrier = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorCarrierRiskRate;
+                ldc_acc = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorAccRate;
+                ldc_item = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorItemProcRatePerHour;
+                ls_frozen = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorFrozen;
+                ldc_accounting = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorAccounting;
+                ldc_telephone = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorTelephone;
+                ldc_sundries = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorSundries;
+                ldc_acc_amount = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorAccRateAmount;
+                ldc_uniform = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorUniform;
+                ldc_delivery = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorDeliveryWageRate;
+                ldc_processing = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorProcessingWageRate;
+                ldc_reliefweeks = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorReliefWeeks;
             }
 
-            ll_row = ids_nonvehicleratehistory.RowCount;
-            ids_nonvehicleratehistory.InsertItem<NonVehicleOverrideRateHistory>(ll_row);
+            // Check to see if the NVORH table already contains a history record for
+            // the current renewal.
+            ll_row = ids_nonvehicleratehistory.Find(new KeyValuePair<string, object>("nvorh_change_effective_date", ld_effective));
             if (ll_row < 0)
-            {
-                MessageBox.Show("Error creating new entry for non_vehicle_override_rate_history table."
-                               , "Error"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractNo = il_contract;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).ContractSeqNumber = il_sequence;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorEffectiveDate = ld_effective;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorWageHourlyRate = ldc_hourly;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorPublicLiabilityRate2 = ldc_public;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorCarrierRiskRate = ldc_carrier;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRate = ldc_acc;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorItemProcRatePerHour = (int?)ldc_item;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorFrozen = ls_frozen;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccounting = ldc_accounting;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorTelephone = ldc_telephone;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorSundries = ldc_sundries;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorAccRateAmount = ldc_acc_amount;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorUniform = ldc_uniform;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorDeliveryWageRate = ldc_delivery;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorProcessingWageRate = ldc_processing;
-                ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_row).NvorReliefWeeks = ldc_reliefweeks;
-                ids_nonvehicleratehistory.Save();     // NOTE: Save doesn't return a return code!
-                ll_rc = (ll_rc == null) ? 0 : ll_rc;   //       This and following ll_rc stuff is irrelevant
-                if (ll_rc < 0)
+            {// Effective date not found: create a new NVORH record
+                ll_nvorh_rows = ids_nonvehicleratehistory.RowCount;
+                ids_nonvehicleratehistory.InsertItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows);
+                if (ll_nvorh_rows < 0)
                 {
-                    MessageBox.Show("Error inserting new entry into non_vehicle_override_rate_history table. \n" 
-                                     + "Row = " + ll_row + ", RC = " + ll_rc
+                    MessageBox.Show("Error creating new entry for non_vehicle_override_rate_history table."
                                    , "Error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
+                else
+                { // Populate it with the NVOR table's values
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).ContractNo = il_contract;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).ContractSeqNumber = il_sequence;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorWageHourlyRate = ldc_hourly;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorPublicLiabilityRate2 = ldc_public;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorCarrierRiskRate = ldc_carrier;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorAccRate = ldc_acc;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorItemProcRatePerHour = (int?)ldc_item;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorFrozen = ls_frozen;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorAccounting = ldc_accounting;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorTelephone = ldc_telephone;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorSundries = ldc_sundries;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorAccRateAmount = ldc_acc_amount;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorUniform = ldc_uniform;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorDeliveryWageRate = ldc_delivery;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorProcessingWageRate = ldc_processing;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorReliefWeeks = ldc_reliefweeks;
+
+                    // This is the tricky bit: the nvor_effective_date is the OLD effective date
+                    // and the nvorh_change_effective_date is the new one.
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorEffectiveDate = id_previous_effective_date ;
+                    ids_nonvehicleratehistory.GetItem<NonVehicleOverrideRateHistory>(ll_nvorh_rows).NvorhChangeEffectiveDate = ld_effective;
+
+                    
+                    ids_nonvehicleratehistory.Save();      // NOTE: Save doesn't return a return code!
+                }
             }
+        }
+        ************************************************************************/
+
+        public virtual void dw_non_vehicle_rates_pfc_postupdate()
+        {
+            /* copy_nvor_to_nvorh();  // TJB  RPCR_099: NVOR History table no loger used  */
         }
 
         public virtual void dw_other_rates_constructor()
@@ -610,8 +689,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void dw_vehicle_rates_getfocus(object sender, EventArgs e)
         {
             dw_vehicle_rates.URdsDw_GetFocus(sender, e);
-            // if the datawindow retrieves a record make the datawindow readonly
-            if (dw_vehicle_rates.RowCount > 0 && il_inserted != 1 && dw_vehicle_rates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate != null/*System.Convert.ToDateTime("00/00/0000")*/)
+            // If the datawindow retrieves a record make the datawindow readonly
+            if (dw_vehicle_rates.RowCount > 0 
+                && il_inserted != 1 
+                && dw_vehicle_rates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate != null)
             {
                 foreach (Control var in dw_vehicle_rates.DataObject.Controls)
                 {
@@ -648,19 +729,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Set the contract_no and the contract_seq_no
             // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem(1, "Contract_no", il_contract)
             // tab_override_rates.tabpage_vehicle_rates.dw_vehicle_rates.SetItem(1, "Contract_seq_number", il_sequence)
-            idw_vehiclerates.GetItem<VehicleOverrideRates>(0).ContractNo = il_contract;
-            idw_vehiclerates.GetItem<VehicleOverrideRates>(0).ContractSeqNumber = il_sequence;
+            idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).ContractNo = il_contract;
+            idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).ContractSeqNumber = il_sequence;
             // calculate allowance
             decimal? ldec_SalvageRatio;
             decimal? ldec_NominalVehical;
             dw_vehicle_rates.AcceptText();
-            Metex.Core.EntityBase row = idw_vehiclerates.GetItem<VehicleOverrideRates>(0);
+            Metex.Core.EntityBase row = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0);
             if (row.IsDirty)
             {
-                ldec_SalvageRatio = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorSalvageRatio;
-                ldec_NominalVehical = idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorNominalVehicleValue;
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorVehicalAllowanceRate = ldec_SalvageRatio == null ? ldec_SalvageRatio : System.Math.Round(((1 - ldec_SalvageRatio / 100) * ldec_NominalVehical * 1000 / il_economiclife).GetValueOrDefault(), 2);
-                idw_vehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
+                ldec_SalvageRatio = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorSalvageRatio;
+                ldec_NominalVehical = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorNominalVehicleValue;
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorVehicalAllowanceRate = ldec_SalvageRatio == null ? ldec_SalvageRatio : System.Math.Round(((1 - ldec_SalvageRatio / 100) * ldec_NominalVehical * 1000 / il_economiclife).GetValueOrDefault(), 2);
+                idw_vehicleoverriderates.DataObject.BindingSource.CurrencyManager.Refresh();
             }
         }
 
@@ -725,11 +806,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Added update of nvor_wage_hourly_rate from (new)
             //  nvor_processing_wage_rate 'just in case' the user
             //  has changed it (they're supposed to be identical)
-            int ll_rc, ll_row;
+            int ll_vor_rc = 0, ll_nvor_rc = 0, ll_row;
             int? ll_temp;
 
-            idw_vehiclerates.AcceptText();
-            idw_nonvehiclerates.AcceptText();
+            idw_vehicleoverriderates.AcceptText();
+            idw_nonvehicleoverriderates.AcceptText();
             idw_otherrates.AcceptText();
             //  Only do the update if the row is marked modified (whether or not 
             //  the processing wage was changed). If you copy the processing wage 
@@ -738,39 +819,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  about saving because the vehicle override window has been modified 
             //  with today's date as the 'new' effective date).
 
-            ll_rc = 0;
-            if (StaticFunctions.IsDirty(idw_nonvehiclerates))
+            // TJB  Release 7.1.1 fixup  Dec-2009
+            // The idw_vehicleoverriderates.Save() creates the frequency adjustment record 
+            // and must go last, otherwise any non-vehicle rate changes won't be reflected
+            // in the frequency adjustments.
+
+            // TJB  RPCR_099: Moved to follow the NVOR Save
+            // (see 7.1.1 fixup comment above)
+            if (StaticFunctions.IsDirty(idw_vehicleoverriderates)
+                || StaticFunctions.IsDirty(idw_nonvehicleoverriderates))
             {
-                ll_row = idw_nonvehiclerates.GetRow();
-                ll_temp = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo;
-                if (ll_temp == null)
-                {
-                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo = il_contract;
-                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
-                }
-                // TJB  Release 7.1.1 fixup  Dec-2009
-                // The idw_vehiclerates.Save() creates the frequency adjustment record and
-                // must go last, otherwise any non-vehicle rate changes won't be reflected
-                // in the frequency adjustments.
-                ll_rc = idw_nonvehiclerates.Save();
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).marknew();
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).marknew();
+
+                ll_nvor_rc = idw_nonvehicleoverriderates.Save();
+                ll_vor_rc = idw_vehicleoverriderates.Save();
             }
 
-            if (StaticFunctions.IsDirty(idw_vehiclerates))
-            {
-                ll_rc = idw_vehiclerates.Save();
-            }
-            if (ll_rc >= 0)
-            {
-                senderName = "OK";
-                this.Close(); // close(parent)
-            }
+            // Tell the caller we made changes
+            if (ll_vor_rc > 0 || ll_nvor_rc > 0)
+                StaticVariables.gnv_app.of_get_parameters().booleanparm = true;
+            else
+                StaticVariables.gnv_app.of_get_parameters().booleanparm = false;
+
+            senderName = "OK";
+            this.Close();
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
         {
             // //Save Changes
-            // If idw_vehiclerates.Update() >0 Then
-            // 	If idw_nonvehiclerates.Update() > 0 Then
+            // If idw_vehicleoverriderates.Update() >0 Then
+            // 	If idw_nonvehicleoverriderates.Update() > 0 Then
             //  		If tab_override_rates.tabpage_other_rates.dw_other_rates.Update()>0 Then
             // 		End If 
             // 	End If
@@ -781,9 +861,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Clear any changes before closing to stop the 
             //  pfc function asking if you'd like to save them.
             senderName = "Cancel";
-            idw_vehiclerates.Reset();
-            idw_nonvehiclerates.Reset();
+            idw_vehicleoverriderates.Reset();
+            idw_nonvehicleoverriderates.Reset();
             idw_otherrates.Reset();
+            StaticVariables.gnv_app.of_get_parameters().booleanparm = false;
             this.Close();
         }
 
@@ -803,6 +884,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string ls_msg;
             string ls_rc;
             DateTime? ld_effective_date;
+
             //  TJB  SR4695  Jan-2007
             //  updating override rates is allowed only for non-terminated contracts
             if (of_isterminated(il_contract))
@@ -813,9 +895,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
+            // TJB  RPCR_099  Dec 2015
+            // If the newrates button has already been pressed, ignore
+            if (il_inserted != 0)
+            {
+                return;
+            }
+
             //  TJB SR4632 29-Jul-2004
             //  Added 'Note:' to message.
-            ls_msg = "Inserting new Vehicle Override Rates will effect the Benchmark Calculation. \n";
+            ls_msg = "Inserting new Vehicle Override Rates will affect the Benchmark Calculation. \n";
             ls_msg = ls_msg + "Note: the resulting frequency adjustment needs to be confirmed separately. \n";
             ls_msg = ls_msg + "Do you wish to continue?";
             DialogResult answer;
@@ -824,13 +914,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (answer == DialogResult.Yes)
             {
+                // Flag that new rates have been enabled
                 il_inserted = 1;
+
                 /*  
                     13-Feb-2002 PBY commented out
-                    idw_vehiclerates.reset()
-                    idw_vehiclerates.InsertRow(1)
-                    idw_vehiclerates.setitem(1, "vor_effective_date", today())
+                    idw_vehicleoverriderates.reset()
+                    idw_vehicleoverriderates.InsertRow(1)
+                    idw_vehicleoverriderates.setitem(1, "vor_effective_date", today())
                  */
+                // TJB  RPCR_099  Jan-2016: Changed strategy: see below
+                //
                 //  TJB  SR4695  Feb-2007
                 //  If there's no previous VOR for today the effective date 
                 //  defaults to today.
@@ -847,15 +941,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  and NVOR_history tables' effective dates can all be the same.  If
                 //  this date is not the same as the default VOR effective date, 
                 //  warn the user.
+                //
+                // TJB  RPCR_099
+                // The NVOR history table is no longer used.  Now, the NVOR table is 
+                // treated the same as the VOR table (eg new row added when changes made
+                // to either VOR or NVOR tables). Changes below reflect this.
+
                 DateTime? ld_default_eff_date;
                 DateTime? ld_next_eff_date;
-                ll_rc = idw_vehiclerates.ResetUpdate();
-                // * IF IsNull(id_previous_effective_date) OR today() > id_previous_effective_date THEN
-                // *	ll_rc = idw_vehiclerates.setitem(1,"vor_effective_date",today())
-                // * ELSE
-                // *	ll_rc = idw_vehiclerates.setitem(1,"vor_effective_date",StaticMethods.RelativeDate( id_previous_effective_date,1))
-                // * END IF
-                if (id_previous_effective_date == null || System.DateTime.Today > id_previous_effective_date)
+
+                ll_rc = idw_vehicleoverriderates.ResetUpdate();
+                ll_rc = idw_nonvehicleoverriderates.ResetUpdate();  // TJB  RPCR_099: Added
+                if (id_previous_effective_date == null 
+                    || System.DateTime.Today > id_previous_effective_date)
                 {
                     ld_default_eff_date = System.DateTime.Today;
                 }
@@ -868,27 +966,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     return;
                 }
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate = ld_next_eff_date;
-                idw_vehiclerates.GetItem<VehicleOverrideRates>(0).marknew(); // new!
-                idw_vehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
+
+                // Save the new effective date in the global 
+                id_effective_date = ld_next_eff_date;
+
+                int nRow, nRow1;
+
+                nRow = idw_vehicleoverriderates.RowCount;
+                nRow1 = nRow;
+                // Mark the VOR table row new with the new effective date
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate = ld_next_eff_date;
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).marknew(); // new!
+                idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).MarkClean();
+                idw_vehicleoverriderates.DataObject.BindingSource.CurrencyManager.Refresh();
+
+                nRow = idw_nonvehicleoverriderates.RowCount;
+                nRow1 = nRow;
+                // TJB  RPCR_099: Added
+                // Mark the NVOR table row new too
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorEffectiveDate = ld_next_eff_date;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).marknew();
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).MarkClean();
+                idw_nonvehicleoverriderates.DataObject.BindingSource.CurrencyManager.Refresh();
+
                 //  Re-activate the datawindow for input
-                idw_vehiclerates.Enabled = true;
+                idw_vehicleoverriderates.Enabled = true;
+                idw_nonvehicleoverriderates.Enabled = true;  // TJB  RPCR_099: Added
+
                 // TJB SR4586 28-July-2004
-                //        Add management of non-vehicle overrides
-                //  Set up the non-vehicle override rates for update
+                //   Add management of non-vehicle overrides
+                //   Set up the non-vehicle override rates for update
                 // TJB  RD7_0038  Nov-2009
                 //   Add code to set up an insert or update of the non_vehicle_override_rate table
-                int? t_contract = idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).ContractNo;
-                if (t_contract == null)
-                {
-                    idw_nonvehiclerates.GetItem<NonVehicleOverrideRates>(0).marknew();
-                    idw_nonvehiclerates.DataObject.BindingSource.CurrencyManager.Refresh();
-                }
-                else
-                {
-                    idw_nonvehiclerates.ResetUpdate();
-                } 
-                idw_nonvehiclerates.Enabled = true;
+
+                // TJB  RPCR_099  Dec-2015
+                // Save the current state of the non_vehicle_override_rates table 
+                //      in the non_vehicle_override_rates_history table
+                // The non_vehicle_override_rates table has a single row per contract with no
+                //    effective date. Use the effective date from the vehicle_override_rates table
+                //    for the non_vehicle_override_rates_history table; create a new record 
+                //    with the previous state of the non_vehicle_override_rates table.
+
+                // TJB RPCR_099 Jan-2016: Disabled; the NVOR history table is no longer used
+                // copy_nvor_to_nvorh(id_previous_effective_date);  
+
+                // TJB RPCR_099 Jan-2016: This is no longer needed here - see above
+                /* 
+                  int? t_contract = idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).ContractNo;
+                  if (t_contract == null)
+                  {
+                      idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).marknew();
+                      idw_nonvehicleoverriderates.DataObject.BindingSource.CurrencyManager.Refresh();
+                  }
+                  else
+                  {
+                      idw_nonvehicleoverriderates.ResetUpdate();
+                  } 
+                  idw_nonvehicleoverriderates.Enabled = true;
+                */
             }
             cb_ok.Focus();
         }
@@ -898,7 +1033,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (senderName == "")
             {
                 // TJB  RD7_0038  Nov-2009:  Added warning when user closes window
-                if (StaticFunctions.IsDirty(idw_vehiclerates) || StaticFunctions.IsDirty(idw_nonvehiclerates))
+                if (StaticFunctions.IsDirty(idw_vehicleoverriderates) 
+                    || StaticFunctions.IsDirty(idw_nonvehicleoverriderates))
                 {
                     MessageBox.Show("Changes have not been saved.","Warning"
                                    ,MessageBoxButtons.OK,MessageBoxIcon.Information);
