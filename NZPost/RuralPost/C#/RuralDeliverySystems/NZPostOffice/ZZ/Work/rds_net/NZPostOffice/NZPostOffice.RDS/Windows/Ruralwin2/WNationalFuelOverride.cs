@@ -12,6 +12,9 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  RPCR_099  8-Jan-2016:  Name change
+    // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+
     public partial class WNationalFuelOverride : WMaster
     {
         #region Define
@@ -274,17 +277,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //PP! seems null values in calculation return null in Powerbuilder too
                     ldc_new_override_fuel_rate = (ldc_overridden_fuel_rate - ldc_original_fuel_rate) + ldc_new_standard_fuel_rate;
 
-                    /*UPDATE	vehicle_override_rate vor1
-                    SET		vor1.vor_fuel_rate = :ldc_new_override_fuel_rate
-                    WHERE		vor1.contract_no = :ll_contract_no
-                    AND		vor1.contract_seq_number = :ll_sequence_no
-                    AND		vor1.vor_effective_date >= :ld_rates_effective_date
-                    AND		vor1.vor_effective_date =  ( SELECT	max ( vor2.vor_effective_date) 
-                    FROM		vehicle_override_rate vor2 
-                    WHERE		vor2.contract_no = vor1.contract_no
-                    AND		vor2.contract_seq_number = vor1.contract_seq_number)
-                    USING		itr_tran_obj; */
-                    RDSDataService.UpdateVehicleOverrideRate(ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
+                    /*UPDATE vehicle_override_rate vor1
+                         SET vor1.vor_fuel_rate = :ldc_new_override_fuel_rate
+                       WHERE vor1.contract_no = :ll_contract_no
+                         AND vor1.contract_seq_number = :ll_sequence_no
+                         AND vor1.vor_effective_date >= :ld_rates_effective_date
+                         AND vor1.vor_effective_date 
+                                 = (SELECT max(vor2.vor_effective_date) 
+                                      FROM vehicle_override_rate vor2 
+                                     WHERE vor2.contract_no = vor1.contract_no
+                                       AND vor2.contract_seq_number = vor1.contract_seq_number)
+                    */
+                    // TJB  RPCR_099  8-Jan-2016:  Name change: UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+                    RDSDataService.UpdateVehicleOverrideFuelRate(ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
                         MessageBox.Show("Unable to update vehicle_override_rate table. \r\n" +
@@ -1077,17 +1082,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     // An override rate exist for this contract and needs to be re-adjusted
                     ldc_new_override_ruc_rate = (ldc_overridden_ruc_rate.GetValueOrDefault() - ldc_original_ruc_rate.GetValueOrDefault()) + 
                         ldc_new_standard_ruc_rate.GetValueOrDefault();
-                    /*UPDATE	vehicle_override_rate vor1
-                    SET		vor1.vor_ruc = :ldc_new_override_ruc_rate
-                    WHERE		vor1.contract_no = :ll_contract_no
-                    AND		vor1.contract_seq_number = :ll_sequence_no
-                    AND		vor1.vor_effective_date >= :ld_rates_effective_date
-                    AND		vor1.vor_effective_date =  ( SELECT	max ( vor2.vor_effective_date) 
-                    FROM		vehicle_override_rate vor2 
-                    WHERE		vor2.contract_no = vor1.contract_no
-                    AND		vor2.contract_seq_number = vor1.contract_seq_number)
-                    USING		itr_tran_obj;*/
-                    RDSDataService.UpdateVehicleOverrideRate(ldc_new_override_ruc_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, 
+                    /*UPDATE vehicle_override_rate vor1
+                         SET vor1.vor_ruc = :ldc_new_override_ruc_rate
+                       WHERE vor1.contract_no = :ll_contract_no
+                         AND vor1.contract_seq_number = :ll_sequence_no
+                         AND vor1.vor_effective_date >= :ld_rates_effective_date
+                         AND vor1.vor_effective_date 
+                                    = (SELECT max(vor2.vor_effective_date) 
+                                         FROM vehicle_override_rate vor2 
+                                        WHERE vor2.contract_no = vor1.contract_no
+                                          AND vor2.contract_seq_number = vor1.contract_seq_number)
+                    */
+                    // TJB  RPCR_099  8-Jan-2016:  Name change: UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+                    RDSDataService.UpdateVehicleOverrideFuelRate(ldc_new_override_ruc_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, 
                         ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
