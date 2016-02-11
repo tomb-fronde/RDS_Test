@@ -10,6 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_101  Feb 2016
+    // Changed "Livery" to "Vehicle Allowance"
+    // Changed "$ pa" to "$ p/a"
+
 	public partial class DVehicleRates2001 : Metex.Windows.DataUserControl
 	{
 		public DVehicleRates2001()

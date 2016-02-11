@@ -89,15 +89,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_nominal_vehicle_value.BackColor = System.Drawing.Color.White;
             this.vr_nominal_vehicle_value.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VrNominalVehicleValue", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.vr_nominal_vehicle_value.EditMask = "###,##0.00";
-            this.vr_nominal_vehicle_value.DataBindings[0].FormatString = "###,##0.00";
             this.vr_nominal_vehicle_value.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.vr_nominal_vehicle_value.Location = new System.Drawing.Point(231, 13);
             this.vr_nominal_vehicle_value.Name = "vr_nominal_vehicle_value";
             this.vr_nominal_vehicle_value.PromptChar = ' ';
             this.vr_nominal_vehicle_value.Size = new System.Drawing.Size(78, 20);
             this.vr_nominal_vehicle_value.TabIndex = 10;
+            this.vr_nominal_vehicle_value.Text = "0.00";
             this.vr_nominal_vehicle_value.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_nominal_vehicle_value.Value = "";
+            this.vr_nominal_vehicle_value.Value = "0.00";
             // 
             // vr_repairs_maintenance_rate
             // 
@@ -110,8 +110,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_repairs_maintenance_rate.PromptChar = ' ';
             this.vr_repairs_maintenance_rate.Size = new System.Drawing.Size(55, 20);
             this.vr_repairs_maintenance_rate.TabIndex = 20;
+            this.vr_repairs_maintenance_rate.Text = "0.00";
             this.vr_repairs_maintenance_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_repairs_maintenance_rate.Value = "";
+            this.vr_repairs_maintenance_rate.Value = "0.00";
             // 
             // vr_tyre_tubes_rate
             // 
@@ -124,8 +125,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_tyre_tubes_rate.PromptChar = ' ';
             this.vr_tyre_tubes_rate.Size = new System.Drawing.Size(55, 20);
             this.vr_tyre_tubes_rate.TabIndex = 30;
+            this.vr_tyre_tubes_rate.Text = "0.00";
             this.vr_tyre_tubes_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_tyre_tubes_rate.Value = "";
+            this.vr_tyre_tubes_rate.Value = "0.00";
             // 
             // vr_licence_rate
             // 
@@ -138,8 +140,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_licence_rate.PromptChar = ' ';
             this.vr_licence_rate.Size = new System.Drawing.Size(55, 20);
             this.vr_licence_rate.TabIndex = 40;
+            this.vr_licence_rate.Text = "0.00";
             this.vr_licence_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_licence_rate.Value = "";
+            this.vr_licence_rate.Value = "0.00";
             // 
             // vr_vehicle_rate_of_return_pct
             // 
@@ -152,8 +155,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_vehicle_rate_of_return_pct.PromptChar = ' ';
             this.vr_vehicle_rate_of_return_pct.Size = new System.Drawing.Size(55, 20);
             this.vr_vehicle_rate_of_return_pct.TabIndex = 50;
+            this.vr_vehicle_rate_of_return_pct.Text = "0.00";
             this.vr_vehicle_rate_of_return_pct.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_vehicle_rate_of_return_pct.Value = "";
+            this.vr_vehicle_rate_of_return_pct.Value = "0.00";
             // 
             // vr_salvage_ratio
             // 
@@ -166,8 +170,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_salvage_ratio.PromptChar = ' ';
             this.vr_salvage_ratio.Size = new System.Drawing.Size(55, 20);
             this.vr_salvage_ratio.TabIndex = 60;
+            this.vr_salvage_ratio.Text = "0.00";
             this.vr_salvage_ratio.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_salvage_ratio.Value = "";
+            this.vr_salvage_ratio.Value = "0.00";
             // 
             // vr_ruc
             // 
@@ -180,8 +185,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_ruc.PromptChar = ' ';
             this.vr_ruc.Size = new System.Drawing.Size(63, 20);
             this.vr_ruc.TabIndex = 70;
+            this.vr_ruc.Text = "0.00";
             this.vr_ruc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_ruc.Value = "";
+            this.vr_ruc.Value = "0.00";
             // 
             // vr_sundries_k
             // 
@@ -194,8 +200,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_sundries_k.PromptChar = ' ';
             this.vr_sundries_k.Size = new System.Drawing.Size(63, 20);
             this.vr_sundries_k.TabIndex = 80;
+            this.vr_sundries_k.Text = "0.00";
             this.vr_sundries_k.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_sundries_k.Value = "";
+            this.vr_sundries_k.Value = "0.00";
             // 
             // vr_vehicle_value_insurance_pct
             // 
@@ -208,8 +215,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_vehicle_value_insurance_pct.PromptChar = ' ';
             this.vr_vehicle_value_insurance_pct.Size = new System.Drawing.Size(63, 20);
             this.vr_vehicle_value_insurance_pct.TabIndex = 90;
+            this.vr_vehicle_value_insurance_pct.Text = "0.00";
             this.vr_vehicle_value_insurance_pct.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_vehicle_value_insurance_pct.Value = "";
+            this.vr_vehicle_value_insurance_pct.Value = "0.00";
             // 
             // vr_livery
             // 
@@ -222,14 +230,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_livery.PromptChar = ' ';
             this.vr_livery.Size = new System.Drawing.Size(63, 20);
             this.vr_livery.TabIndex = 100;
+            this.vr_livery.Text = "0.00";
             this.vr_livery.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_livery.Value = "";
+            this.vr_livery.Value = "0.00";
             // 
             // vr_vehicle_allowance_rate
             // 
             this.vr_vehicle_allowance_rate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.vr_vehicle_allowance_rate.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VrVehicleAllowanceRate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.vr_vehicle_allowance_rate.EditMask = null;
+            this.vr_vehicle_allowance_rate.EditMask = "";
             this.vr_vehicle_allowance_rate.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
             this.vr_vehicle_allowance_rate.Location = new System.Drawing.Point(231, 225);
             this.vr_vehicle_allowance_rate.Name = "vr_vehicle_allowance_rate";
@@ -237,8 +246,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_vehicle_allowance_rate.ReadOnly = true;
             this.vr_vehicle_allowance_rate.Size = new System.Drawing.Size(63, 20);
             this.vr_vehicle_allowance_rate.TabIndex = 101;
+            this.vr_vehicle_allowance_rate.Text = "0";
             this.vr_vehicle_allowance_rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vr_vehicle_allowance_rate.Value = "";
+            this.vr_vehicle_allowance_rate.Value = "0";
             // 
             // vr_nominal_vehicle_value_t
             // 
@@ -285,7 +295,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_licence_rate_t.Name = "vr_licence_rate_t";
             this.vr_licence_rate_t.Size = new System.Drawing.Size(117, 13);
             this.vr_licence_rate_t.TabIndex = 105;
-            this.vr_licence_rate_t.Text = "Relicensing ($ pa)";
+            this.vr_licence_rate_t.Text = "Relicensing ($ p/a)";
             this.vr_licence_rate_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vr_vehicle_rate_of_return_pct_t
@@ -369,7 +379,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(179, 13);
             this.t_1.TabIndex = 112;
-            this.t_1.Text = "Livery ($ pa)";
+            this.t_1.Text = "Vehicle Allowance ($ p.a)";
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DVehicleRates2001

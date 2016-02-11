@@ -99,14 +99,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // vor_effective_date
             // 
             this.vor_effective_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VorEffectiveDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.vor_effective_date.EditMask = null;
             this.vor_effective_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.vor_effective_date.Location = new System.Drawing.Point(241, 2);
             this.vor_effective_date.Mask = "00/00/0000";
-            this.vor_effective_date.DataBindings[0].FormatString = "dd/MM/yyyy";
             this.vor_effective_date.Name = "vor_effective_date";
             this.vor_effective_date.Size = new System.Drawing.Size(77, 20);
             this.vor_effective_date.TabIndex = 10;
+            this.vor_effective_date.Text = "00000000";
             this.vor_effective_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.vor_effective_date.Value = null;
             // 
             // vor_nominal_vehicle_value_t
             // 
@@ -195,7 +197,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_licence_rate_t.Name = "vor_licence_rate_t";
             this.vor_licence_rate_t.Size = new System.Drawing.Size(232, 13);
             this.vor_licence_rate_t.TabIndex = 0;
-            this.vor_licence_rate_t.Text = "Relicensing ($ pa)";
+            this.vor_licence_rate_t.Text = "Relicensing ($ p/a)";
             this.vor_licence_rate_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_licence_rate
@@ -247,7 +249,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_salvage_ratio.Size = new System.Drawing.Size(77, 20);
             this.vor_salvage_ratio.TabIndex = 80;
             this.vor_salvage_ratio.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.vor_salvage_ratio.Validating += new System.ComponentModel.CancelEventHandler(TextBox_Validating);
+            this.vor_salvage_ratio.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
             // 
             // vor_ruc_t
             // 
@@ -296,7 +298,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_vehicle_insurance_base_premium_t.Name = "vor_vehicle_insurance_base_premium_t";
             this.vor_vehicle_insurance_base_premium_t.Size = new System.Drawing.Size(232, 13);
             this.vor_vehicle_insurance_base_premium_t.TabIndex = 0;
-            this.vor_vehicle_insurance_base_premium_t.Text = "Vehicle Insurance ($ pa)";
+            this.vor_vehicle_insurance_base_premium_t.Text = "Vehicle Insurance ($ p/a)";
             this.vor_vehicle_insurance_base_premium_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_vehicle_insurance_premium
@@ -356,7 +358,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_2.Name = "t_2";
             this.t_2.Size = new System.Drawing.Size(232, 13);
             this.t_2.TabIndex = 0;
-            this.t_2.Text = "Livery";
+            this.t_2.Text = "Vehicle Allowance ($ p/a)";
             this.t_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_livery
@@ -408,7 +410,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            //!ActiveEvent(); - moved to constructor
+
         }
 
         //void Value_Validated(object sender, System.EventArgs e)
