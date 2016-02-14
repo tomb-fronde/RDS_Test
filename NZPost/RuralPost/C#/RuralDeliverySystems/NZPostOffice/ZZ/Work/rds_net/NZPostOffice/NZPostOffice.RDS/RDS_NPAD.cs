@@ -12,6 +12,10 @@ using System.Reflection;
 
 namespace NZPostOffice.RDS
 {
+    // TJB  14-Feb-2016
+    // Added TESTING MessageBoxes to trace handling of alternate config file
+    // under Windows 10
+    //
     // TJB  Feb 2016 (assisted by Richard Renouf)
     // Added startup option: parameter references an alternate config file, 
     // used to provide an alternate database connection.  No parameter reverts 
@@ -27,6 +31,7 @@ namespace NZPostOffice.RDS
             string msg;
             string arg1 = null;
             Configuration config = null;
+            bool TESTING = false;
 
             StaticVariables.CurAppContext = this;
             Cursor.Current = Cursors.WaitCursor;
@@ -36,7 +41,7 @@ namespace NZPostOffice.RDS
             if (args.Length > 1)
             {
                 arg1 = args[1];
-//                MessageBox.Show("Arg1 = " + arg1 + "\n","Get parameter(s)");
+                if (TESTING) MessageBox.Show("Arg1 = " + arg1 + "\n", "Get parameter(s)");
             }
 
             // Check to see if the file exists
@@ -52,7 +57,7 @@ namespace NZPostOffice.RDS
 
             if (arg1 != null && arg1.Length > 0)
             {
-//                MessageBox.Show("Using config file " + arg1,"Parameter startup");
+                if (TESTING) MessageBox.Show("Using config file " + arg1, "Parameter startup");
                 try
                 {
                     //config = System.Configuration.ConfigurationManager.OpenExeConfiguration(
@@ -136,26 +141,40 @@ namespace NZPostOffice.RDS
         private void UpdateConfiguration(string configFilePath, ref Configuration config)
         {
             // Author: Richard Renouf from David Gardiner blog
+            bool TESTING = false;
+            if (TESTING) MessageBox.Show("Get ConnectionStringSettingsCollection conns", "Testing");
+
             // force access/load of config
             ConnectionStringSettingsCollection conns = ConfigurationManager.ConnectionStrings;
+
+            if (TESTING) 
+                MessageBox.Show("New ExeConfigurationFileMap configFileMap", "Testing");
 
             // get our input config
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
             configFileMap.ExeConfigFilename = configFilePath;
 
+            if (TESTING) MessageBox.Show("Get the mapped configuration file\n", "Testing");
             // Get the mapped configuration file.
             //Configuration config = ConfigurationManager.OpenMappedExeConfiguration(
             config = ConfigurationManager.OpenMappedExeConfiguration(
                 configFileMap, ConfigurationUserLevel.None);
 
+            if (TESTING) MessageBox.Show("Now change the mapped configuration file\n"
+                             + "Get ConnectionStringSettings settings", "Testing");
             // now change it
             ConnectionStringSettings settings = ConfigurationManager.ConnectionStrings["NZPO"];
-            FieldInfo fi = typeof(ConfigurationElement).GetField("_bReadOnly", BindingFlags.Instance | BindingFlags.NonPublic );
+            if (TESTING) MessageBox.Show("Get FieldInfo fi", "Testing");
+            FieldInfo fi = typeof(ConfigurationElement).GetField("_bReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (TESTING) MessageBox.Show("Make FieldInfo fi writeable", "Testing");
             // make writeable
             fi.SetValue(settings, false);
+            if (TESTING) MessageBox.Show("Set settings.ConnectionString", "Testing");
             // set new value
             settings.ConnectionString = config.ConnectionStrings.ConnectionStrings["NZPO"].ConnectionString;
 
+            string connString = ConfigurationManager.ConnectionStrings["NZPO"].ConnectionString;
+            if (TESTING) MessageBox.Show("ConfigurationManager.ConnectionStrings[\"NZPO\"].ConnectionString = "+connString,"TESTING");
             // check our new value
             //System.Diagnostics.Debug.Print(ConfigurationManager.ConnectionStrings["NZPO"].ConnectionString);
         }
