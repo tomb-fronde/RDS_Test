@@ -6,6 +6,9 @@ using System.Collections;
 
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB  Feb 2016
+    // Commented out closing each form separately in m_exit_clicked()
+
     // Extension/Example of frame menu
     public class MFrame : MenuBuilder
     {
@@ -1188,13 +1191,18 @@ namespace NZPostOffice.Shared.VisualComponents
             dRst = MessageBox.Show("Are you sure you want to exit", StaticVariables.DisplayName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dRst == DialogResult.Yes)
             {
-                if (StaticVariables.MainMDI.ActiveMdiChild != null)
-                {
-                    foreach (Form frm in StaticVariables.MainMDI.MdiChildren)
-                    {
-                        frm.Close();
-                    }
-                }
+                // TJB  Feb 2016
+                // Commented out closing each form separately
+                // - File-->Exit under Windows 10 didn't close properly
+                //    - Got message that app "stopped" and OS was looking for the reason
+                //    - System.Environment.Exit(0) closes all forms anyway
+            //    if (StaticVariables.MainMDI.ActiveMdiChild != null)
+            //    {
+            //        foreach (Form frm in StaticVariables.MainMDI.MdiChildren)
+            //        {
+            //            frm.Close();
+            //        }
+            //    }
                 System.Environment.Exit(0);
             }
         }
