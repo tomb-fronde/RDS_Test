@@ -8,7 +8,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	partial class DVehicleRates2001
 	{
-
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -295,7 +294,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vr_licence_rate_t.Name = "vr_licence_rate_t";
             this.vr_licence_rate_t.Size = new System.Drawing.Size(117, 13);
             this.vr_licence_rate_t.TabIndex = 105;
-            this.vr_licence_rate_t.Text = "Relicensing ($ p/a)";
+            this.vr_licence_rate_t.Text = "Relicensing ($ pa)";
             this.vr_licence_rate_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vr_vehicle_rate_of_return_pct_t
@@ -379,7 +378,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_1.Name = "t_1";
             this.t_1.Size = new System.Drawing.Size(179, 13);
             this.t_1.TabIndex = 112;
-            this.t_1.Text = "Vehicle Allowance ($ p.a)";
+            this.t_1.Text = "Vehicle Allowance ($ pa)";
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DVehicleRates2001

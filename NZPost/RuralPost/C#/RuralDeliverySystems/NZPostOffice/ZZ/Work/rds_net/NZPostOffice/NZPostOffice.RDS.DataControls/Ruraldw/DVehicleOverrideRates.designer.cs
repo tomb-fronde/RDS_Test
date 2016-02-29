@@ -197,7 +197,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_licence_rate_t.Name = "vor_licence_rate_t";
             this.vor_licence_rate_t.Size = new System.Drawing.Size(232, 13);
             this.vor_licence_rate_t.TabIndex = 0;
-            this.vor_licence_rate_t.Text = "Relicensing ($ p/a)";
+            this.vor_licence_rate_t.Text = "Relicensing ($ pa)";
             this.vor_licence_rate_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_licence_rate
@@ -298,7 +298,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vor_vehicle_insurance_base_premium_t.Name = "vor_vehicle_insurance_base_premium_t";
             this.vor_vehicle_insurance_base_premium_t.Size = new System.Drawing.Size(232, 13);
             this.vor_vehicle_insurance_base_premium_t.TabIndex = 0;
-            this.vor_vehicle_insurance_base_premium_t.Text = "Vehicle Insurance ($ p/a)";
+            this.vor_vehicle_insurance_base_premium_t.Text = "Vehicle Insurance ($ pa)";
             this.vor_vehicle_insurance_base_premium_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_vehicle_insurance_premium
@@ -358,7 +358,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_2.Name = "t_2";
             this.t_2.Size = new System.Drawing.Size(232, 13);
             this.t_2.TabIndex = 0;
-            this.t_2.Text = "Vehicle Allowance ($ p/a)";
+            this.t_2.Text = "Vehicle Allowance ($ pa)";
             this.t_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // vor_livery
