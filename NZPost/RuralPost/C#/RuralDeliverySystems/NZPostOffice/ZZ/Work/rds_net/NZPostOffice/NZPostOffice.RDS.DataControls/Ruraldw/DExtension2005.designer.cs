@@ -489,7 +489,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.del_hrs_t.Name = "del_hrs_t";
             this.del_hrs_t.Size = new System.Drawing.Size(110, 13);
             this.del_hrs_t.TabIndex = 4;
-            this.del_hrs_t.Text = "Delivery Hrs/ Week";
+            this.del_hrs_t.Text = "Delivery Hrs/Week";
             this.del_hrs_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // con_title_t
@@ -1028,7 +1028,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_29.Name = "t_29";
             this.t_29.Size = new System.Drawing.Size(60, 15);
             this.t_29.TabIndex = 0;
-            this.t_29.Text = "Livery $";
+            this.t_29.Text = "Vehicle Allowance $pa";
             this.t_29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // nlivery
@@ -1232,7 +1232,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_5.Name = "t_5";
             this.t_5.Size = new System.Drawing.Size(99, 13);
             this.t_5.TabIndex = 119;
-            this.t_5.Text = "Volume/ Customer";
+            this.t_5.Text = "Volume/Customer";
             this.t_5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // volume_customer
@@ -1260,7 +1260,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.t_7.Name = "t_7";
             this.t_7.Size = new System.Drawing.Size(152, 13);
             this.t_7.TabIndex = 125;
-            this.t_7.Text = "Volume Increase/ Decrease";
+            this.t_7.Text = "Volume Increase/Decrease";
             this.t_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // volume_change
