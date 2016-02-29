@@ -70,7 +70,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.st_1.Name = "st_1";
             this.st_1.Size = new System.Drawing.Size(117, 16);
             this.st_1.TabIndex = 1;
-            this.st_1.Text = "WContractRrate2001";
+            this.st_1.Text = "WContractRate2001";
             this.st_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tab_override_rates
