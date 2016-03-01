@@ -13,6 +13,9 @@ using NZPostOffice.RDS.Windows.Ruralwin2;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Mar-2016
+    // Changed window to allow resizing (to see BM more easily)
+    //
     // TJB Release 7.1.10 Fixups  Aug-2013
     // Added call to TruncateTBmPiecerates (in wf_addextn)
     //

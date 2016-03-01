@@ -44,24 +44,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
-            //this.tab_1.SuspendLayout();
-            //this.tabpage_1.SuspendLayout();
-            //this.dw_ext.SuspendLayout();
-            //this.tabpage_2.SuspendLayout();
-
+            this.cb_search = new System.Windows.Forms.Button();
+            this.tab_1 = new System.Windows.Forms.TabControl();
+            this.tabpage_1 = new System.Windows.Forms.TabPage();
+            this.dw_ext = new NZPostOffice.RDS.Controls.URdsDw();
+            this.st_showcalcs = new System.Windows.Forms.Label();
+            this.tabpage_2 = new System.Windows.Forms.TabPage();
+            this.dw_bm = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_print = new System.Windows.Forms.Button();
+            this.dw_contract = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_1.SuspendLayout();
+            this.tabpage_1.SuspendLayout();
+            this.dw_ext.SuspendLayout();
+            this.tabpage_2.SuspendLayout();
             this.SuspendLayout();
             // 
             // st_label
             // 
-
             this.st_label.Location = new System.Drawing.Point(5, 507);
             this.st_label.Size = new System.Drawing.Size(171, 15);
             this.st_label.Text = "WExtentions2001";
-            this.st_label.Visible = true;
             // 
             // cb_search
             // 
-            this.cb_search = new Button();
             this.cb_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cb_search.Location = new System.Drawing.Point(393, 9);
             this.cb_search.Name = "cb_search";
@@ -72,9 +77,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // tab_1
             // 
-            this.tab_1 = new TabControl();
-            this.tabpage_1 = new TabPage();
-            this.tabpage_2 = new TabPage();
+            this.tab_1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tab_1.Controls.Add(this.tabpage_1);
             this.tab_1.Controls.Add(this.tabpage_2);
             this.tab_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -82,46 +87,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tab_1.Name = "tab_1";
             this.tab_1.SelectedIndex = 0;
             this.tab_1.Size = new System.Drawing.Size(638, 360);
-            this.tab_1.SelectedIndexChanged += new EventHandler(tab_1_SelectedIndexChanged);
             this.tab_1.TabIndex = 0;
+            this.tab_1.SelectedIndexChanged += new System.EventHandler(this.tab_1_SelectedIndexChanged);
             // 
             // tabpage_1
             // 
-
-            //?this.tabpage_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
-            this.dw_ext = new URdsDw();
             this.tabpage_1.Controls.Add(this.dw_ext);
             this.tabpage_1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_1.Location = new System.Drawing.Point(4, 22);
             this.tabpage_1.Name = "tabpage_1";
-            this.tabpage_1.Size = new System.Drawing.Size(630, 403);
+            this.tabpage_1.Size = new System.Drawing.Size(630, 334);
             this.tabpage_1.TabIndex = 0;
             this.tabpage_1.Text = "Extension Parameters";
             this.tabpage_1.ToolTipText = "Tabpage for entering extension parameters";
-            this.tabpage_1.Width = 0;
             // 
             // dw_ext
             // 
-
-            //!this.dw_ext.DataObject = new DExtension2005();
             this.dw_ext.Controls.Add(this.st_showcalcs);
+            this.dw_ext.DataObject = null;
+            this.dw_ext.FireConstructor = false;
             this.dw_ext.Location = new System.Drawing.Point(0, 0);
             this.dw_ext.Name = "dw_ext";
             this.dw_ext.Size = new System.Drawing.Size(627, 325);
             this.dw_ext.TabIndex = 5;
-            //!this.dw_ext.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            //this.dw_ext.GotFocus += new System.EventHandler(this.dw_ext_getfocus);
-            //this.dw_ext.ItemChanged += new EventHandler(this.dw_ext_itemchanged);
-
-            //this.dw_ext.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_constructor);
-            //this.dw_ext.PfcUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate1(this.dw_ext_pfc_update);
-            //this.dw_ext.PfcPostUpdate += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_pfc_postupdate);
-            //this.dw_ext.UpdateStart += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_ext_updatestart);
-            //((DExtension2005)this.dw_ext.DataObject).TextBoxLostFocus += new EventHandler(this.dw_ext_itemchanged);
             // 
             // st_showcalcs
             // 
-            this.st_showcalcs = new Label();
             this.st_showcalcs.BackColor = System.Drawing.Color.SkyBlue;
             this.st_showcalcs.Font = new System.Drawing.Font("Arial", 8F);
             this.st_showcalcs.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -135,33 +126,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // tabpage_2
             // 
-
-            //? this.tabpage_2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.dw_bm = new URdsDw();
             this.tabpage_2.Controls.Add(this.dw_bm);
             this.tabpage_2.Controls.Add(this.cb_print);
             this.tabpage_2.Enabled = false;
             this.tabpage_2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_2.Location = new System.Drawing.Point(4, 22);
             this.tabpage_2.Name = "tabpage_2";
-            this.tabpage_2.Size = new System.Drawing.Size(580, 403);
+            this.tabpage_2.Size = new System.Drawing.Size(630, 334);
             this.tabpage_2.TabIndex = 1;
             this.tabpage_2.Text = "Benchmark Report";
             this.tabpage_2.ToolTipText = "Benchmark report - enabled only when extension is successful";
             // 
             // dw_bm
             // 
-
-            //!this.dw_bm.DataObject = new NZPostOffice.RDS.DataControls.Ruralrpt.RBenchmarkReport2006();
+            this.dw_bm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_bm.DataObject = null;
+            this.dw_bm.FireConstructor = false;
             this.dw_bm.Location = new System.Drawing.Point(3, 7);
             this.dw_bm.Name = "dw_bm";
             this.dw_bm.Size = new System.Drawing.Size(572, 283);
             this.dw_bm.TabIndex = 3;
-            //this.dw_bm.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_bm_constructor);
             // 
             // cb_print
             // 
-            this.cb_print = new Button();
+            this.cb_print.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_print.Font = new System.Drawing.Font("Arial", 8F);
             this.cb_print.Location = new System.Drawing.Point(499, 296);
             this.cb_print.Name = "cb_print";
@@ -172,39 +162,33 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // dw_contract
             // 
-            this.dw_contract = new URdsDw();
-            //!this.dw_contract.DataObject = new DContractNoEntry2001();
+            this.dw_contract.DataObject = null;
+            this.dw_contract.FireConstructor = false;
             this.dw_contract.Location = new System.Drawing.Point(8, 4);
             this.dw_contract.Name = "dw_contract";
-            //!this.dw_contract.DataObject.BorderStyle = BorderStyle.Fixed3D;
             this.dw_contract.Size = new System.Drawing.Size(373, 62);
             this.dw_contract.TabIndex = 1;
-            //this.dw_contract.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_contract_constructor);
             // 
             // WExtentions2001
             // 
-            //this.AcceptButton = this.cb_search;
             this.ClientSize = new System.Drawing.Size(652, 435);
             this.Controls.Add(this.tab_1);
             this.Controls.Add(this.cb_search);
             this.Controls.Add(this.dw_contract);
-
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
             this.Name = "WExtentions2001";
             this.Text = "Extension Process";
             this.DoubleClick += new System.EventHandler(this.doubleclicked);
-            //this.Controls.SetChildIndex(this.dw_contract, 0);
-            //this.Controls.SetChildIndex(this.tab_1, 0);
-            //this.Controls.SetChildIndex(this.cb_search, 0);
-            //this.Controls.SetChildIndex(this.st_label, 0);
+            this.Controls.SetChildIndex(this.dw_contract, 0);
+            this.Controls.SetChildIndex(this.cb_search, 0);
+            this.Controls.SetChildIndex(this.tab_1, 0);
+            this.Controls.SetChildIndex(this.st_label, 0);
+            this.tab_1.ResumeLayout(false);
+            this.tabpage_1.ResumeLayout(false);
+            this.dw_ext.ResumeLayout(false);
+            this.tabpage_2.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            //this.tab_1.ResumeLayout(false);
-            //this.tabpage_1.ResumeLayout(false);
-            //this.dw_ext.ResumeLayout(false);
-            //this.tabpage_2.ResumeLayout(false);
-            //this.ResumeLayout(false);
-            //this.PerformLayout();
         }
 
         /// <summary>
