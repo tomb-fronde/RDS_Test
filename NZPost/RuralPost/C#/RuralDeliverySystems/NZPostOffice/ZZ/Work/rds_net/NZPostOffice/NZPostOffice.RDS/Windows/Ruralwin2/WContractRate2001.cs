@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Mar-2016: Bug fix
+    // Ensure the NVOR effective date saved is the same as the VOR effective date
+    //
     // TJB  RPCR_099  Jan-2016
     // Changed handling of NVOR table
     // Now treated like VOR table: New record added with 
@@ -42,7 +45,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public decimal?  idc_original_benchmark;
         public DateTime? id_previous_effective_date = DateTime.MinValue;
-        public DateTime? id_effective_date;
 
         public URdsDw idw_vehicleoverriderates;
         public URdsDw idw_nonvehicleoverriderates;
@@ -832,6 +834,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).marknew();
                 idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).marknew();
 
+                // TJB  Mar-2016: Bug fix
+                // Ensure the NVOR effective date saved is the same as the VOR effective date
+                DateTime? vor_effective_date = idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(0).VorEffectiveDate;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(0).NvorEffectiveDate = vor_effective_date;
+
                 ll_nvor_rc = idw_nonvehicleoverriderates.Save();
                 ll_vor_rc = idw_vehicleoverriderates.Save();
             }
@@ -966,9 +973,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     return;
                 }
-
-                // Save the new effective date in the global 
-                id_effective_date = ld_next_eff_date;
 
                 int nRow, nRow1;
 
