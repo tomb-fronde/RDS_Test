@@ -7,9 +7,18 @@ using System.Data.SqlClient;
 
 using Metex.Core;
 using Metex.Core.Security;
+
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_105  May-2016
+    // NEW: GetNumPostCodeContracts
+    //      Get the number of contracts that have the same post_code as this contract.
+    // NEW: GetAddressPostCode
+    //      Get post_code for address adr_id
+    // NEW: UpdateAddrContractNo
+    //      Update an address with a (different) contract_no
+    //
     // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
     // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
     // Changed GetVoVEffectiveDate to GetVorEffectiveDate
@@ -502,6 +511,13 @@ namespace NZPostOffice.RDS.DataService
             return obj;
         }
 
+        // TJB  RPCR_105  May-2016: New
+        public static RDSDataService GetAddressPostCode(int? al_adr_id)
+        {
+            RDSDataService obj = Execute("_GetAddressPostCode", al_adr_id);
+            return obj;
+        }
+
         public static RDSDataService GetCustomerAddressMovesByCustId(int? al_custID)
         {
             RDSDataService obj = Execute("_GetCustomerAddressMovesByCustId", al_custID);
@@ -637,6 +653,14 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService UpdateAddressContractNo(int? ll_newcontractno, int? il_oldcontractno)
         {
             RDSDataService obj = Execute("_UpdateAddressContractNo", ll_newcontractno, il_oldcontractno);
+            return obj;
+        }
+
+        // TJB  RPCR_105  May-2016: NEW
+        // Update the contract_no for a specific address.
+        public static RDSDataService UpdateAddrContractNo(int nAdrId, int nContractNo)
+        {
+            RDSDataService obj = Execute("_UpdateAddrContractNo", nAdrId, nContractNo);
             return obj;
         }
 
@@ -1493,7 +1517,7 @@ namespace NZPostOffice.RDS.DataService
         public static int? GetCmbAddressCmbIdFirst(int? il_contract, int? ll_pcid, string ls_box_no)
         {
             RDSDataService obj = Execute("_GetCmbAddressCmbIdFirst", il_contract, ll_pcid, ls_box_no);
-            return obj.intVal; ;
+            return obj.intVal;
         }
 
         /// <summary> 
@@ -1502,7 +1526,7 @@ namespace NZPostOffice.RDS.DataService
         public static int? GetCmbAddressCmbIdFirst1(int? il_contract, int? ll_pcid, string ls_box_no, int? ll_cmb_id)
         {
             RDSDataService obj = Execute("_GetCmbAddressCmbIdFirst1", il_contract, ll_pcid, ls_box_no, ll_cmb_id);
-            return obj.intVal; ;
+            return obj.intVal;
         }
 
         /// <summary> 
@@ -1511,7 +1535,7 @@ namespace NZPostOffice.RDS.DataService
         public static int? GetAddressAdrRdNoFirst(int? al_contract, int? al_pcid)
         {
             RDSDataService obj = Execute("_GetAddressAdrRdNoFirst", al_contract, al_pcid);
-            return obj.intVal; ;
+            return obj.intVal;
         }
 
         /// <summary> 
@@ -1520,7 +1544,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetRegion(int? ll_regionId)
         {
             RDSDataService obj = Execute("_GetRegion", ll_regionId);
-            return obj.strVal; ;
+            return obj.strVal;
         }
 
         /// <summary> 
@@ -1529,7 +1553,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetOutletId(int? lOutlet)
         {
             RDSDataService obj = Execute("_GetOutletId", lOutlet);
-            return obj.strVal; ;
+            return obj.strVal;
         }
 
         /// <summary> 
@@ -1538,7 +1562,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetCtKey(int? lContractType)
         {
             RDSDataService obj = Execute("_GetCtKey", lContractType);
-            return obj.strVal; ;
+            return obj.strVal;
         }
 
         /// <summary> 
@@ -1547,7 +1571,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetRenewalGroup(int? ll_rgCode)
         {
             RDSDataService obj = Execute("_GetRenewalGroup", ll_rgCode);
-            return obj.strVal; ;
+            return obj.strVal;
         }
 
         /// <summary> 
@@ -1556,7 +1580,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetContractType(int? ll_ctKey)
         {
             RDSDataService obj = Execute("_GetContractType", ll_ctKey);
-            return obj.strVal; ;
+            return obj.strVal;
         }
 
         /// <summary> 
@@ -1565,7 +1589,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetTowncityTcName(int? al_tcid)
         {
             RDSDataService obj = Execute("_GetTowncityTcName", al_tcid);
-            return obj.dataObject; ;
+            return obj.dataObject;
         }
 
         /// <summary> 
@@ -1574,7 +1598,7 @@ namespace NZPostOffice.RDS.DataService
         public static string GetPostCodePostCode(int? al_pcid)
         {
             RDSDataService obj = Execute("_GetPostCodePostCode", al_pcid);
-            return obj.dataObject; ;
+            return obj.dataObject;
         }
 
         // TJB  RD7_CR001  Nov-2009: Added
@@ -1584,7 +1608,19 @@ namespace NZPostOffice.RDS.DataService
         public static int GetPostCodeContractNo(string as_postcode)
         {
             RDSDataService obj = Execute("_GetPostCodeContractNo", as_postcode);
-            return obj.intVal; ;
+            return obj.intVal;
+        }
+
+        // TJB  RPCR_105  May-2016: Added
+        // Get the number of contracts that have the same post_code as this contract.
+        /// <summary> 
+        /// select count(distinct(contract_no))from post_code 
+        /// where post_code = (select post_code from rd.post_code where contract_no = @al_contractNo;
+        /// </summary>
+        public static int GetNumPostCodeContracts(int al_ContractNo)
+        {
+            RDSDataService obj = Execute("_GetNumPostCodeContracts", al_ContractNo);
+            return obj.intVal;
         }
 
         /// <summary>
@@ -4564,6 +4600,41 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  RPCR_105  May-2016: New
+        [ServerMethod]
+        private void _GetAddressPostCode(int? al_adr_id)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select pc.post_code "
+                                   + "  from rd.address adr, rd.post_code pc "
+                                   + " where adr.adr_id = @al_adr_id "
+                                   + "   and pc.post_code_id = adr.post_code_id ";
+                    pList.Add(cm, "al_adr_id", al_adr_id);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                strVal = GetValueFromReader<String>(dr, 0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
         [ServerMethod]
         private void _GetCustomerAddressMovesByCustId(int? al_custID)
         {
@@ -5413,6 +5484,38 @@ namespace NZPostOffice.RDS.DataService
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ll_newcontractno", ll_newcontractno);
                     pList.Add(cm, "il_oldcontractno", il_oldcontractno);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        ret = true;
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_105  May-2016: New
+        [ServerMethod]
+        private void _UpdateAddrContractNo(int nAdrId, int nContractNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "UPDATE rd.Address " 
+                                   + "   SET contract_no = @nContractNo " 
+                                   + " WHERE adr_id = @nAdrId";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "nAdrId", nAdrId);
+                    pList.Add(cm, "nContractNo", nContractNo);
                     _sqlcode = -1;
                     try
                     {
@@ -9906,6 +10009,47 @@ namespace NZPostOffice.RDS.DataService
                     intVal = sequence;
                     ;
                 }
+            }
+        }
+
+        // TJB  RPCR_105  May-2016:  Added
+        // Get the number of contracts that have the same post_code
+        // as this contract.
+        [ServerMethod]
+        private void _GetNumPostCodeContracts(int al_ContractNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int nContracts = 0;
+                    cm.CommandText = "select count(distinct(contract_no)) "
+                                   + "  from rd.post_code "
+                                   + " where post_code "
+                                   + "          = (select post_code from rd.post_code "
+                                   + "              where contract_no = @al_ContractNo)";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "al_ContractNo", al_ContractNo);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                nContracts = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                                _sqlcode = 100;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                    intVal = nContracts;
+                 }
             }
         }
 
