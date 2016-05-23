@@ -8,7 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    //-------------------------------------------------------------------------------------
+    // TJB  RPCR_103  May-2016
+    // Added cust_vr_number
+    //
     // TJB Feb-2011 bugfix
     // Changed GetAllCustomerDetails2 to GetAllCustomerDetails
     //
@@ -18,7 +20,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // TJB RPI_011 6-Sept-2010
     // Changed CustMoveInDate.Get to remove the time from the DateTime value
     // to fix a problem displaying the move_in_date on the WCustomer form.
-    //-------------------------------------------------------------------------------------
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -46,6 +47,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("cust_slot_allocation", "_cust_slot_allocation", "rds_customer")]
     [MapInfo("dp_id", "_cust_dpid", "customer_address_moves")]
     [MapInfo("move_in_date", "_cust_move_in_date", "customer_address_moves")]
+    [MapInfo("cust_vr_number", "_cust_vr_number", "rds_customer")]
     [System.Serializable()]
 
     public class CustomerDetails : Entity<CustomerDetails>
@@ -122,6 +124,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _cust_slot_allocation=2;
+
+        [DBField()]
+        private string _cust_vr_number;
 
         public virtual int SQLCode
         {
@@ -604,6 +609,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual string CustVRNumber
+        {
+            get
+            {
+                CanReadProperty("CustVRNumber", true);
+                return _cust_vr_number;
+            }
+            set
+            {
+                CanWriteProperty("CustVRNumber", true);
+                if (_cust_vr_number != value)
+                {
+                    _cust_vr_number = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return string.Format("{0}", _cust_id);
@@ -653,7 +676,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                      +      "customer_address_moves.dp_id, "
                                      +      "customer_address_moves.move_in_date, "
                                      +      "rds_customer.cust_case_name, "
-                                     +      "rds_customer.cust_slot_allocation "
+                                     +      "rds_customer.cust_slot_allocation, "
+                                     +      "rds_customer.cust_vr_number "
                                      + "FROM {oj rds_customer LEFT OUTER JOIN customer_address_moves "
                                      +                       "ON customer_address_moves.cust_id = rds_customer.cust_id} "
                                      + "WHERE rds_customer.cust_id = @al_cust_id "
@@ -697,6 +721,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
                             instance._cust_case_name = GetValueFromReader<String>(dr, 21);
                             instance._cust_slot_allocation = GetValueFromReader<Int32?>(dr, 22);
+
+                            instance._cust_vr_number = GetValueFromReader<string>(dr, 23);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
