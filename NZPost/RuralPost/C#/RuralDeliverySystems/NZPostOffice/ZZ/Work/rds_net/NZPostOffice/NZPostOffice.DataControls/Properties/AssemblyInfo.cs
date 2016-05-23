@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Metex Inc.")]
 [assembly: AssemblyProduct("NZPostOffice.DataControls")]
-[assembly: AssemblyCopyright("Copyright © Metex Inc. 2007")]
+[assembly: AssemblyCopyright("Copyright © 2016 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
