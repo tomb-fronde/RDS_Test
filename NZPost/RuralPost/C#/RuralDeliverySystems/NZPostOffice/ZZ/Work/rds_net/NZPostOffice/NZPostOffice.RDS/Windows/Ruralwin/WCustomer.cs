@@ -13,22 +13,26 @@ using System.Collections.Generic;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_103  May-2016
+    // Added VR_Number to Customer window
+    // Hide when customer isn't the Primary
+    //
+    // TJB  Dec-2014  RPCR_091
+    // Resized window to fit all occupations
+    //
+    // TJB  Feb-2011  RPCR_023
+    // Changed Occupations and Interests datawindows 
+    //    from DCustomerOccupation to DCustomerOccupations
+    //     and DCustomerInterest   to DCustomerInterests
+    // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
+    // and cb_clearOccupations buttons and their click events
+
+    // TJB  Jan-2011  Sequencing Review
+    // Resized screen to make room
+    // Added Case name and Slot allocation fields (see DCustomerDetails)
+
     public partial class WCustomer : WMaster
     {
-        // TJB  Dec-2014  RPCR_091
-        // Resized window to fit all occupations
-        //
-        // TJB  Feb-2011  RPCR_023
-        // Changed Occupations and Interests datawindows 
-        //    from DCustomerOccupation to DCustomerOccupations
-        //     and DCustomerInterest   to DCustomerInterests
-        // Added cb_allInterests, cb_clearInterests, cb_allOccupations 
-        // and cb_clearOccupations buttons and their click events
-
-        // TJB  Jan-2011  Sequencing Review
-        // Resized screen to make room
-        // Added Case name and Slot allocation fields (see DCustomerDetails)
-
         #region Define
         public USt st_label;
 
@@ -372,6 +376,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ls_CustTitle = (ls_CustTitle == null) ? "" : ls_CustTitle.Trim();
             ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.Text = ls_CustTitle;
             ((DCustomerDetails)(dw_generic.DataObject)).CustTitleCombo.SelectedValue = ls_CustTitle;
+
+            if (dw_generic.GetItem<CustomerDetails>(ll_row).MasterCustId == null)
+            {
+                dw_generic.GetControlByName("VR_number_t").Visible = true;
+                dw_generic.GetControlByName("VR_number").Visible = true;
+            }
+            else
+            {
+                dw_generic.GetControlByName("VR_number_t").Visible = false;
+                dw_generic.GetControlByName("VR_number").Visible = false;
+            }
 
             //  Clear any update flags that may have been applied to fields
             //  - the system thinks it may have to (and asks for permission 
