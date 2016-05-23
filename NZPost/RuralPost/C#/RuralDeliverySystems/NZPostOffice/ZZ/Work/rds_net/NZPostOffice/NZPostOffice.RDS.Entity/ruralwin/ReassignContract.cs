@@ -9,6 +9,9 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB  RPCR_105  May-2016: New
+    // Finds contract numbers from the post_code table where
+    // a specific post_code has more than one contract; the
+    // contract number passed to the fetch routine is excluded.
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
