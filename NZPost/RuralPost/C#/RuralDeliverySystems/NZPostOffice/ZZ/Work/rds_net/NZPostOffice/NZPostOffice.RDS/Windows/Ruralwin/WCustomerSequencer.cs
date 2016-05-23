@@ -15,6 +15,11 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_105  May-2016
+    // Add the ability to change the contract number associated with an 
+    // address in the unsequenced panel.  
+    // See cb_reassign_Click and WReassignContractNo
+    //
     // TJB  RPCR_026  Aug-2011: Fixup
     // If the address number includes a flat number, put the value in quotes
     //
@@ -42,6 +47,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     {
         #region Define
         public int? il_contract_no;
+        public string is_post_code;  // TJB RPCR_105 May-2016: Added
 
         public int? il_sf_key;
 
@@ -49,6 +55,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public int il_sequence = 0;
         public int ig_sequence = 0;
+
+        public int ib_multiple_contracts;  // TJB  RPCR_105 May-2016: added
 
         //  Stripmaker output files directory 
         public string is_filedir = String.Empty;
@@ -113,6 +121,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_up_arrow.Click += new System.EventHandler(this.cb_up_arrow_Click);
             this.cb_down_arrow.Click += new System.EventHandler(this.cb_down_arrow_Click);
             this.cb_stripmaker.Click += new System.EventHandler(this.cb_stripmaker_clicked);
+
+            this.cb_reassign.Click += new System.EventHandler(this.cb_reassign_Click);
         }
 
         public void this_form_closing(Object s, System.ComponentModel.CancelEventArgs e)
@@ -183,6 +193,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 frozen_ind.Enabled = true;
             else
                 frozen_ind.Enabled = false;
+
+            // TJB  RPCR_105  May-2016
+            // If there are any unsequenced addresses ...
+            // Check to see if this any other contracts share the same post code
+            // If so, check to see if any of the addresses could potentially be 
+            // in either contract (this address may have been newly added and 
+            // automatically assigned to the wrong contract).
+            // If so, set a flag to say so.  This is used when an address is selected 
+            // to check for potentially being in either contract (again) and 
+            // making the cb_reassign button visible (and thus allowing the address 
+            // to be reassigned to the other contract).
+            cb_reassign.Enabled = false;
+            if (idw_unseq.RowCount > 0)
+            {
+                int n = RDSDataService.GetNumPostCodeContracts((int)il_contract_no);
+                if (n > 1)
+                {
+                    cb_reassign.Enabled = true;
+                    for (int nRow = 0; nRow < idw_unseq.RowCount; nRow++)
+                    {
+                        int nAdrId = this.dw_unseq.GetValue<int?>(nRow, "AdrId").GetValueOrDefault();
+                        RDSDataService dataService = RDSDataService.GetAddressPostCode(nAdrId);
+                        is_post_code = dataService.strVal;
+                        /************************** Testing ******************************
+                        MessageBox.Show("Row " + nRow.ToString() + "\n"
+                                       + "AdrID  " + nAdrId.ToString() + "\n"
+                                       + "Contract " + il_contract_no.ToString() + "\n"
+                                       + "Post Code " + is_post_code
+                                       , "Testing: pfc_postopen");
+                        /************************** Testing ******************************/
+                        break;
+                    }
+                }
+            }
         }
 
         public override int pfc_save()
@@ -699,14 +743,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         #region Events
         public void dw_unseq_Click(object sender, EventArgs e)
         {
-            DataGridViewSelectedRowCollection rowsSelected
-                         = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
-            int n1 = rowsSelected.Count;
-
             if (dw_unseq.RowCount == 0)
             {
                 return;
             }
+
+            DataGridViewSelectedRowCollection rowsSelected
+                         = ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows;
+            int n1 = rowsSelected.Count;
+            int t1 = n1;
+            int t2 = t1;
         }
 
         public virtual void dw_unseq_clicked(object sender, EventArgs e)
@@ -2292,6 +2338,103 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             // Set the 'next sequence' number
             il_sequence = newseq - 1;
+        }
+
+        // TJB  RPCR_105  May-2016
+        // Open WReassignContract for the user to select a new contract number
+        // for the selected customer(s)
+        private void cb_reassign_Click(object sender, EventArgs e)
+        {
+            int n = 0;
+            int rowIndex, nAdrId = 0;
+            string sRoadName = "", sCustomer = "";
+            Dictionary<int, int> dUnSeqSelectedRows = new Dictionary<int, int>();
+
+            // Build a list of the selected customers/addresses from the unsequenced addresses
+            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
+            {
+                n++;
+            }
+            if (n <= 0)
+            {
+                MessageBox.Show("Select an address to reassign", "WCustomerSequencer");
+                return;
+            }
+            foreach (DataGridViewRow row in ((Metex.Windows.DataEntityGrid)(this.dw_unseq.GetControlByName("grid"))).SelectedRows)
+            {
+                rowIndex = row.Index;
+                nAdrId = this.dw_unseq.GetValue<int?>(rowIndex, "AdrId").GetValueOrDefault();
+                sRoadName = this.dw_unseq.GetValue<string>(rowIndex, "RoadName");
+                sCustomer = this.dw_unseq.GetValue<string>(rowIndex, "Customer");
+                dUnSeqSelectedRows.Add(rowIndex, nAdrId);
+            }
+
+            /************************ Testing ****************************
+            sRoadName = (sRoadName == null) ? "Null" : sRoadName;
+            sCustomer = (sCustomer == null) ? "Null" : sCustomer;
+            MessageBox.Show("Rows selected = " + n.ToString() + "\n"
+                           + "AdrID = " + nAdrId.ToString() + "\n"
+                           + "Road = " + sRoadName + "\n"
+                           + "Customer = " + sCustomer + "\n\n"
+                           + "Open WReassignContract", "cb_reassign_Click");
+            /************************ Testing ****************************/
+
+            // Open WReassignContractNo
+            // WReassignContractNo will only offer the alternate contract numbers;
+            // not the current one.
+            StaticVariables.gnv_app.of_get_parameters().integerparm = il_contract_no;
+            StaticVariables.gnv_app.of_get_parameters().stringparm = is_post_code;
+            Cursor.Current = Cursors.WaitCursor;
+
+            WReassignContract w_reassign_contract = new WReassignContract();
+            w_reassign_contract.ShowDialog();
+
+            // Get the selected contract_no
+            // 0 indicates a cancel
+            int nContractNo = (int)StaticVariables.gnv_app.of_get_parameters().integerparm;
+            if (nContractNo == 0) // || nContractNo == il_contract_no)
+            {
+                MessageBox.Show("WReassignContract returned " + nContractNo.ToString() + "\n"
+                                + "No contracts will be reassigned");
+                ((DUnseqAddresses)idw_unseq.DataObject).ResetUpdate();
+                return;
+            }
+
+            //Step through the selected customers/addresses, updating their contract_no
+            bool rc = false;
+            string msg = "Customers " + "\n\n" ;
+
+            Cursor.Current = Cursors.WaitCursor;
+            foreach (KeyValuePair<int, int> entry in dUnSeqSelectedRows)
+            {
+                rowIndex = entry.Key;
+                nAdrId = entry.Value;
+                this.dw_unseq.SetValue(rowIndex, "Contract_no", nContractNo);
+                sCustomer = this.dw_unseq.GetValue<string>(rowIndex, "Customer");
+                int nContract = (int)this.dw_unseq.GetValue<int?>(rowIndex, "ContractNo");
+                msg += sCustomer + "\n";
+                RDSDataService dataService = RDSDataService.UpdateAddrContractNo(nAdrId, nContractNo);
+                rc = dataService.ret;
+                if (!rc)
+                {
+                    MessageBox.Show("Error updating address table with new contract number. \n"
+                                    + "\nError message: " + dataService.SQLErrText
+                                    + "\n\nNo customers reassigned."
+                                    ,"Error");
+                    break;
+                }
+            }
+            // Tell the user what was done (if successful)
+            if (!rc)
+            {
+                ((DUnseqAddresses)idw_unseq.DataObject).ResetUpdate();
+                return;
+            }
+            MessageBox.Show(msg + "\nReassigned to contract " + nContractNo.ToString());
+
+            // Clear dw_unseq and re-populate it with any remaining addresses
+            ((DUnseqAddresses)idw_unseq.DataObject).Reset();
+            ((DUnseqAddresses)idw_unseq.DataObject).Retrieve(il_contract_no);
         }
     }
 }

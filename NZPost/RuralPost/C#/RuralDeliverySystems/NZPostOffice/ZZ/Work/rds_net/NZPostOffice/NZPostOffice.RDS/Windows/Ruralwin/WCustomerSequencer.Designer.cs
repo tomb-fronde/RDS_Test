@@ -62,6 +62,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.leftarrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.uparrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.downarrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.cb_reassign = new System.Windows.Forms.Button();
             this.gb_unseq.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -238,12 +239,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.downarrow_tooltip.SetToolTip(this.cb_down_arrow, "Move down");
             this.cb_down_arrow.UseVisualStyleBackColor = true;
             // 
+            // cb_reassign
+            // 
+            this.cb_reassign.Location = new System.Drawing.Point(180, 498);
+            this.cb_reassign.Name = "cb_reassign";
+            this.cb_reassign.Size = new System.Drawing.Size(110, 23);
+            this.cb_reassign.TabIndex = 15;
+            this.cb_reassign.Text = "Re-assign contract";
+            this.cb_reassign.UseVisualStyleBackColor = true;
+            // 
             // WCustomerSequencer
             // 
             this.AcceptButton = this.cb_save;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.cb_close;
             this.ClientSize = new System.Drawing.Size(833, 533);
+            this.Controls.Add(this.cb_reassign);
             this.Controls.Add(this.cb_down_arrow);
             this.Controls.Add(this.cb_up_arrow);
             this.Controls.Add(this.cb_unsequence);
@@ -275,6 +286,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.st_label, 0);
             this.Controls.SetChildIndex(this.cb_up_arrow, 0);
             this.Controls.SetChildIndex(this.cb_down_arrow, 0);
+            this.Controls.SetChildIndex(this.cb_reassign, 0);
             this.gb_unseq.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -307,6 +319,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private ToolTip uparrow_tooltip;
         private ToolTip downarrow_tooltip;
         private Button cb_reverse;
+        private Button cb_reassign;
 
     }
 }
