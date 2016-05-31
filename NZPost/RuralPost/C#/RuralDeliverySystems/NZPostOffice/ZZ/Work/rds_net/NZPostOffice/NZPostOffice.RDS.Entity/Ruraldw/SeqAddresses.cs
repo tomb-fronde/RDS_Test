@@ -8,6 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_077  May-2016
+    // Added cust_id and cust_stripmaker_seq to retrieved values.
+    // Removed UpdateEntity, DeleteEntity and InsertEntity (they are unused)
+    // Changed fetch to use (new) stored procedure rd.sp_getSeqAddresses
+    //
     // TJB  RPCR_026  Aug-2011: Release fixups
     // Missed changing unit/number character from "/" to "-"
     //
@@ -33,8 +38,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("adr_unit", "_adr_unit", "address")]
     [MapInfo("adr_no", "_adr_no", "address")]
     [MapInfo("contract_no", "_contract_no", "address")]
-    [MapInfo("cust_case_name", "_cust_case_name", "")]
-    [MapInfo("cust_slot_allocation", "_cust_slot_allocation", "")]
+    [MapInfo("cust_case_name", "_cust_case_name", "rds_customer")]
+    [MapInfo("cust_slot_allocation", "_cust_slot_allocation", "rds_customer")]
+    [MapInfo("cust_id", "_cust_id", "rds_customer")]
+    [MapInfo("cust_stripmaker_seq", "_cust_stripmaker_seq", "rds_customer")]
 
     [System.Serializable()]
 
@@ -88,6 +95,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _cust_slot_allocation;
+
+        [DBField()]
+        private int? _cust_id;
+
+        [DBField()]
+        private int? _cust_stripmaker_seq;
 
 
         public virtual int? AdrId
@@ -341,11 +354,22 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
+
         public virtual string CustCaseName
         {
             get
             {
+                CanReadProperty("CustCaseName", true);
                 return _cust_case_name;
+            }
+            set
+            {
+                CanWriteProperty("CustCaseName", true);
+                if (_cust_case_name != value)
+                {
+                    _cust_case_name = value;
+                    PropertyHasChanged();
+                }
             }
         }
 
@@ -353,11 +377,58 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             get
             {
+                CanReadProperty("CustSlotAllocation", true);
                 return _cust_slot_allocation;
+            }
+            set
+            {
+                CanWriteProperty("CustSlotAllocation", true);
+                if (_cust_slot_allocation != value)
+                {
+                    _cust_slot_allocation = value;
+                    PropertyHasChanged();
+                }
             }
         }
 
-        // needs to implement compute expression manually:
+        public virtual int? CustId
+        {
+            get
+            {
+                CanReadProperty("CustId", true);
+                return _cust_id;
+            }
+            set
+            {
+                CanWriteProperty("CustId", true);
+                if (_cust_id != value)
+                {
+                    _cust_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CustStripmakerSeq
+        {
+            get
+            {
+                CanReadProperty("CustStripmakerSeq", true);
+                return _cust_stripmaker_seq;
+            }
+            set
+            {
+                CanWriteProperty("CustStripmakerSeq", true);
+                if (_cust_stripmaker_seq != value)
+                {
+                    _cust_stripmaker_seq = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+//------------------------------------------------------------------------
+        // Need to implement compute expression manually:
         // compute control name=[sequence_no]
         private int _sequence_no;
         public virtual int SequenceNo
@@ -377,6 +448,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             return "";
         }
+
         #endregion
 
         #region Factory Methods
@@ -407,91 +479,16 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    cm.CommandType = CommandType.Text;
                     // TJB  RD7_0039  Sept2009:  Added timeout
                     cm.CommandTimeout = 120;
-                    cm.CommandText = "select adr.adr_id, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
-                                   + "             + adr.adr_no as adr_num, "
-                                   + "       adr.adr_alpha as adr_alpha, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
-                                   + "             + adr.adr_no + isnull(adr.adr_alpha,'') as adr_num_alpha, "
-                                   + "       road.road_name "
-                                   + "               + (CASE WHEN road_type.rt_name is null   THEN '' ELSE ' '+road_type.rt_name end)  "
-                                   + "               + (CASE WHEN road_suffix.rs_name is null THEN '' ELSE ' '+road_suffix.rs_name END) "
-                                   + "            as road_name, "
-                                   + "       (CASE WHEN rc.cust_surname_company is null "
-                                   + "             THEN rc.cust_initials "
-                                   + "             ELSE (CASE WHEN rc.cust_initials is null  OR rc.cust_initials = ''  "
-                                   + "                        THEN rc.cust_surname_company  "
-                                   + "                        ELSE rc.cust_surname_company + ', '+rc.cust_initials END)  "
-                                   + "             END)   as customer, "
-                                   + "       rc.cust_surname_company as cust_surname_company, "
-                                   + "       rc.cust_initials as cust_initials, "
-                                   + "       adr.seq_num as seq_num, "
-                                   + "       sequence = null, "
-                                   + "       0 as road_name_id, "
-                                   + "       adr.adr_unit as adr_unit, "
-                                   + "       convert(int,adr.adr_no) as adr_no, "
-                                   + "       adr.contract_no as contract_no "
-                                   + "     , rc.cust_case_name "
-                                   + "     , rc.cust_slot_allocation "
-                                   + "  from address adr  "
-                                   + "               left outer join customer_address_moves cam "
-                                   + "                    on cam.adr_id = adr.adr_id "
-                                   + "                   and cam.move_out_date is null "
-                                   + "               left outer join rds_customer rc "
-                                   + "                    on rc.cust_id = cam.cust_id "
-                                   + "      , road LEFT OUTER JOIN road_type "
-                                   + "                  ON road_type.rt_id = road.rt_id "
-                                   + "             LEFT OUTER JOIN road_suffix "
-                                   + "                  ON road_suffix.rs_id = road.rs_id "
-                                   + " where adr.seq_num is not null "
-                                   + "   and adr.road_id = road.road_id "
-                                   + "   and (cam.cust_id is not null  "
-                                   + "        and (rc.cust_surname_company != 'Dummy' OR rc.cust_initials is not null)) "
-                                   + "   and rc.master_cust_id is null "
-                                   + "   and adr.contract_no = @al_contract_no "
-                                   + "UNION "
-                                   + "select adr.adr_id, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
-                                   + "             + adr.adr_no as adr_num, "
-                                   + "       adr.adr_alpha as adr_alpha, "
-                                   + "       (CASE WHEN adr.adr_unit is null THEN '' ELSE adr.adr_unit+'-' END)  "
-                                   + "             + adr.adr_no + isnull(adr.adr_alpha,'') as adr_num_alpha, "
-                                   + "       road.road_name "
-                                   + "               + (CASE WHEN road_type.rt_name is null   THEN '' ELSE ' '+road_type.rt_name end)  "
-                                   + "               + (CASE WHEN road_suffix.rs_name is null THEN '' ELSE ' '+road_suffix.rs_name END) "
-                                   + "            as road_name, "
-                                   + "       null as customer, "
-                                   + "       rc.cust_surname_company as cust_surname_company, "
-                                   + "       rc.cust_initials as cust_initials, "
-                                   + "       adr.seq_num as seq_num, "
-                                   + "       sequence = null, "
-                                   + "       0 as road_name_id, "
-                                   + "       adr.adr_unit as adr_unit, "
-                                   + "       convert(int,adr.adr_no) as adr_no, "
-                                   + "       adr.contract_no as contract_no "
-                                   + "     , rc.cust_case_name "
-                                   + "     , rc.cust_slot_allocation "
-                                   + "  from address adr  "
-                                   + "               left outer join customer_address_moves cam "
-                                   + "                    on cam.adr_id = adr.adr_id "
-                                   + "                   and cam.move_out_date is null "
-                                   + "               left outer join rds_customer rc "
-                                   + "                    on rc.cust_id = cam.cust_id "
-                                   + "      , road LEFT OUTER JOIN road_type "
-                                   + "                  ON road_type.rt_id = road.rt_id "
-                                   + "             LEFT OUTER JOIN road_suffix "
-                                   + "                  ON road_suffix.rs_id = road.rs_id "
-                                   + " where adr.seq_num is not null "
-                                   + "   and adr.road_id = road.road_id "
-                                   + "   and (cam.cust_id is null or rc.cust_surname_company = 'Dummy') "
-                                   + "   and adr.contract_no = @al_contract_no "
-                        ;
+                    
+                    // TJB  RPCR_077  May-2016
+                    // Changed fetch to use (new) stored procedure rd.sp_getSeqAddresses
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_getSeqAddresses";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_contract_no", al_contract_no);
-
+                    
                     List<SeqAddresses> _list = new List<SeqAddresses>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -517,6 +514,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
                             instance._cust_case_name = GetValueFromReader<String>(dr, 14);
                             instance._cust_slot_allocation = GetValueFromReader<Int32?>(dr, 15);
+                            instance._cust_id = GetValueFromReader<Int32?>(dr, 16);
+                            instance._cust_stripmaker_seq = GetValueFromReader<Int32?>(dr, 17);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
@@ -524,72 +523,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                         }
                         list = _list.ToArray();
                     }
-                }
-            }
-        }
-
-        [ServerMethod()]
-        private void UpdateEntity()
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                int? t1 = _adr_id;
-                int? t2 = t1;
-                DbCommand cm = cn.CreateCommand();
-                cm.CommandType = CommandType.Text;
-                ParameterCollection pList = new ParameterCollection();
-                if (GenerateUpdateCommandText(cm, "address", ref pList))
-                {
-                    cm.CommandText += " WHERE  address.contract_no = @adr_id ";
-
-                    pList.Add(cm, "adr_id", GetInitialValue("_adr_id"));
-//                    DBHelper.ExecuteNonQuery(cm, pList);
-                }
-                // reinitialize original key/value list
-                StoreInitialValues();
-                MarkOld();
-            }
-        }
-
-        [ServerMethod()]
-        private void InsertEntity()
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                int? t1 = _adr_id;
-                int? t2 = t1;
-
-                DbCommand cm = cn.CreateCommand();
-                cm.CommandType = CommandType.Text;
-                ParameterCollection pList = new ParameterCollection();
-                if (GenerateInsertCommandText(cm, "address", pList))
-                {
-//                    DBHelper.ExecuteNonQuery(cm, pList);
-                }
-                StoreInitialValues();
-            }
-        }
-        [ServerMethod()]
-        private void DeleteEntity()
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                int? t1 = _adr_id;
-                int? t2 = t1;
-                using (DbTransaction tr = cn.BeginTransaction())
-                {
-                    DbCommand cm = cn.CreateCommand();
-                    cm.Transaction = tr;
-
-                    cm.CommandType = CommandType.Text;
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "adr_id", GetInitialValue("_adr_id"));
-
-                    cm.CommandText = "DELETE FROM address "
-                                    + "WHERE address.contract_no = @adr_id ";
-
-//                    DBHelper.ExecuteNonQuery(cm, pList);
-                    tr.Commit();
                 }
             }
         }
