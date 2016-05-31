@@ -8,11 +8,17 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_077  May-2016
+    // Added variables to match those in SeqAddresses
+    // Replaced Fetch query with adapted one from SeqAddresses
+    // Changed fetch to use (new) stored procedure rd.sp_getUnseqAddresses
+    //    based on the SeqAddresses query.
+    //
     // TJB  Jan-2011  Sequencing review
     // Modified GetAllUnseqAddresses, FetchEntity
     // Remove reference to address_frequency_sequence table
     // Add seq_num from address table
-
+    
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -22,12 +28,18 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("adr_num_alpha", "_adr_num_alpha", "address")]
     [MapInfo("road_name", "_road_name", "address")]
     [MapInfo("customer", "_customer", "address")]
+    [MapInfo("cust_surname_company", "_cust_surname_company", "address")]
+    [MapInfo("cust_initials", "_cust_initials", "address")]
     [MapInfo("seq_num", "_seq_num", "address")]
     [MapInfo("sequence", "_sequence", "address")]
     [MapInfo("road_name_id", "_road_name_id", "address")]
     [MapInfo("adr_unit", "_adr_unit", "address")]
     [MapInfo("adr_no", "_adr_no", "address")]
     [MapInfo("contract_no", "_contract_no", "address")]
+    [MapInfo("cust_case_name", "_cust_case_name", "rds_customer")]
+    [MapInfo("cust_slot_allocation", "_cust_slot_allocation", "rds_customer")]
+    [MapInfo("cust_id", "_cust_id", "rds_customer")]
+    [MapInfo("cust_stripmaker_seq", "_cust_stripmaker_seq", "rds_customer")]
     [System.Serializable()]
 
     public class UnseqAddresses : Entity<UnseqAddresses>
@@ -52,6 +64,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _customer;
 
         [DBField()]
+        private string _cust_surname_company;
+
+        [DBField()]
+        private string _cust_initials;
+
+        [DBField()]
         private int? _seq_num;
 
         [DBField()]
@@ -67,14 +85,21 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _adr_no;
 
         [DBField()]
-        private int? _sf_key;
-
-        [DBField()]
-        private string _rf_delivery_days;
-
-        [DBField()]
         private int? _contract_no;
 
+        [DBField()]
+        private string _cust_case_name;
+
+        [DBField()]
+        private int? _cust_slot_allocation;
+
+        [DBField()]
+        private int? _cust_id;
+
+        [DBField()]
+        private int? _cust_stripmaker_seq;
+
+//----------------------------------------------------------------------------
 
         public virtual int? AdrId
         {
@@ -179,6 +204,42 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_customer != value)
                 {
                     _customer = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string CustSurnameCompany
+        {
+            get
+            {
+                CanReadProperty("CustSurnameCompany", true);
+                return _cust_surname_company;
+            }
+            set
+            {
+                CanWriteProperty("CustSurnameCompany", true);
+                if (_cust_surname_company != value)
+                {
+                    _cust_surname_company = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string CustInitials
+        {
+            get
+            {
+                CanReadProperty("CustInitials", true);
+                return _cust_initials;
+            }
+            set
+            {
+                CanWriteProperty("CustInitials", true);
+                if (_cust_initials != value)
+                {
+                    _cust_initials = value;
                     PropertyHasChanged();
                 }
             }
@@ -292,7 +353,81 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        // needs to implement compute expression manually:
+        public virtual string CustCaseName
+        {
+            get
+            {
+                CanReadProperty("CustCaseName", true);
+                return _cust_case_name;
+            }
+            set
+            {
+                CanWriteProperty("CustCaseName", true);
+                if (_cust_case_name != value)
+                {
+                    _cust_case_name = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CustSlotAllocation
+        {
+            get
+            {
+                CanReadProperty("CustSlotAllocation", true);
+                return _cust_slot_allocation;
+            }
+            set
+            {
+                CanWriteProperty("CustSlotAllocation", true);
+                if (_cust_slot_allocation != value)
+                {
+                    _cust_slot_allocation = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CustId
+        {
+            get
+            {
+                CanReadProperty("CustId", true);
+                return _cust_id;
+            }
+            set
+            {
+                CanWriteProperty("CustId", true);
+                if (_cust_id != value)
+                {
+                    _cust_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CustStripmakerSeq
+        {
+            get
+            {
+                CanReadProperty("CustStripmakerSeq", true);
+                return _cust_stripmaker_seq;
+            }
+            set
+            {
+                CanWriteProperty("CustStripmakerSeq", true);
+                if (_cust_stripmaker_seq != value)
+                {
+                    _cust_stripmaker_seq = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+//------------------------------------------------------------------------------------
+
+        // Need to implement compute expression manually:
         // compute control name=[adr_no_numeric]
         //?if(isNumber(adr_no), integer(adr_no), 0)
         public virtual int? AdrNoNumeric
@@ -342,58 +477,22 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    cm.CommandType = CommandType.Text;
                     cm.CommandTimeout = 120;
 
-                    cm.CommandText = " SELECT address.adr_id as adr_id,"
-                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'-' END) "
-                                + "       + address.adr_no as adr_num,"
-                                + " address.adr_alpha as adr_alpha,"
-                                + " (CASE WHEN address.adr_unit is null THEN '' ELSE address.adr_unit+'-' END) "
-                                + "       + address.adr_no + isnull(address.adr_alpha,'') as adr_num_alpha,"
-                                + " road.road_name + (CASE WHEN road_type.rt_name is null THEN '' ELSE ' '+road_type.rt_name end) "
-                                + "                + (CASE WHEN road_suffix.rs_name is null THEN '' ELSE ' '+road_suffix.rs_name END) as road_name,"
-                                + " max(rds_customer.cust_surname_company "
-                                + "                + (CASE WHEN rds_customer.cust_initials is null THEN '' ELSE ', '+cust_initials END)) as customer,"
-                                + " address.seq_num as seq_num,"
-                                + " sequence = null,"
-                                + " 0 as road_name_id,"
-                                + " address.adr_unit as adr_unit,"
-                                + " address.adr_no as adr_no,"
-                                + " @al_contract_no as contract_no"
-                           + " FROM address LEFT OUTER JOIN road"
-                                + "   ON address.road_id = road.road_id"
-                                + " LEFT OUTER JOIN road_type"
-                                + "   ON road_type.rt_id = road.rt_id"
-                                + " LEFT OUTER JOIN road_suffix"
-                                + "   ON road_suffix.rs_id = road.rs_id"
-                                + " LEFT OUTER JOIN customer_address_moves"
-                                + "   ON customer_address_moves.adr_id = address.adr_id "
-                                + "   AND customer_address_moves.move_out_date is null "
-                                + "   AND (customer_address_moves.move_in_date is null "
-                                + "        OR customer_address_moves.move_in_date "
-                                + "              = (SELECT max(move_in_date) FROM customer_address_moves cam"
-                                + "                  WHERE cam.cust_id = customer_address_moves.cust_id ))"
-                                + " LEFT OUTER JOIN rds_customer"
-                                + "   ON rds_customer.cust_id = customer_address_moves.cust_id "
-                                + "   AND rds_customer.master_cust_id is null"
-                            + " WHERE address.contract_no = @al_contract_no"
-                            + "   AND address.seq_num is null "
-                            + " GROUP BY address.adr_id, address.adr_unit, address.adr_no, address.adr_alpha, "
-                            + "   road.road_name + (CASE WHEN road_type.rt_name is null THEN '' ELSE ' '+road_type.rt_name END) "
-                            + "                  + (CASE WHEN road_suffix.rs_name is null THEN '' ELSE ' '+road_suffix.rs_name END), "
-                            + "   address.seq_num "
-                            ;
-
+                    // TJB  RPCR_077  May-2016
+                    // Changed fetch to use (new) stored procedure rd.sp_getUnseqAddresses
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_getUnseqAddresses";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_contract_no", al_contract_no);
-
+                    
                     List<UnseqAddresses> _list = new List<UnseqAddresses>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
                         while (dr.Read())
                         {
                             UnseqAddresses instance = new UnseqAddresses();
+
                             instance._adr_id = GetValueFromReader<Int32?>(dr, 0);
                             instance._adr_num = GetValueFromReader<String>(dr, 1);
                             instance._adr_alpha = GetValueFromReader<String>(dr, 2);
@@ -401,13 +500,20 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._road_name = GetValueFromReader<String>(dr, 4);
 
                             instance._customer = GetValueFromReader<String>(dr, 5);
-                            instance._seq_num = GetValueFromReader<Int32?>(dr, 6);
-                            instance._sequence = GetValueFromReader<Int32?>(dr, 7);
-                            instance._road_name_id = GetValueFromReader<Int32?>(dr, 8);
-                            instance._adr_unit = GetValueFromReader<String>(dr, 9);
+                            instance._cust_surname_company = GetValueFromReader<String>(dr, 6);
+                            instance._cust_initials = GetValueFromReader<String>(dr, 7);
+                            instance._seq_num = GetValueFromReader<Int32?>(dr, 8);
+                            instance._sequence = GetValueFromReader<Int32?>(dr, 9);
+                            instance._road_name_id = GetValueFromReader<Int32?>(dr, 10);
+                            instance._adr_unit = GetValueFromReader<String>(dr, 11);
 
-                            instance._adr_no = GetValueFromReader<String>(dr, 10);
-                            instance._contract_no = GetValueFromReader<Int32?>(dr, 11);
+                            instance._adr_no = GetValueFromReader<String>(dr, 12);
+                            instance._contract_no = GetValueFromReader<Int32?>(dr, 13);
+
+                            instance._cust_case_name = GetValueFromReader<String>(dr, 14);
+                            instance._cust_slot_allocation = GetValueFromReader<Int32?>(dr, 15);
+                            instance._cust_id = GetValueFromReader<Int32?>(dr, 16);
+                            instance._cust_stripmaker_seq = GetValueFromReader<Int32?>(dr, 17);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
