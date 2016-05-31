@@ -11,6 +11,9 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_077  May-2016: NEW
+    // NEW: UpdateCustStripmakerSeq
+    //
     // TJB  RPCR_105  May-2016
     // NEW: GetNumPostCodeContracts
     //      Get the number of contracts that have the same post_code as this contract.
@@ -715,6 +718,14 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService ClearAddressSeq(int? contract_no)
         {
             RDSDataService obj = Execute("_ClearAddressSeq", contract_no);
+            return obj;
+        }
+
+        // TJB  RPCR_077  May-2016: NEW
+        // Update cust_stripmaker_seq when changed in WCustomerSequencer
+        public static RDSDataService UpdateCustStripmakerSeq(int? cust_stripmaker_seq, int? cust_id)
+        {
+            RDSDataService obj = Execute("_UpdateCustStripmakerSeq", cust_stripmaker_seq, cust_id);
             return obj;
         }
 
@@ -5835,6 +5846,37 @@ namespace NZPostOffice.RDS.DataService
                     catch (Exception e)
                     {
                         ret = false;
+                        _sqlcode = -1;
+                        _sqlerrtext = e.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_077  May-2016
+        // Update cust_stripmaker_seq when changed in WCustomerSequencer
+        [ServerMethod]
+        private void _UpdateCustStripmakerSeq(int? cust_stripmaker_seq, int? cust_id)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = cm.CommandText = "update rd.rds_customer"
+                                                    + "   set cust_stripmaker_seq = @cust_stripmaker_seq "
+                                                    + "where cust_id = @cust_id";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "cust_stripmaker_seq", cust_stripmaker_seq);
+                    pList.Add(cm, "cust_id", cust_id);
+                    _sqlcode = -1;
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
                         _sqlcode = -1;
                         _sqlerrtext = e.Message;
                     }
