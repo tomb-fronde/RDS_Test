@@ -10,12 +10,15 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_077  May-2016
+    // Added cust_stripmaker_seq to sort string
+    //
+    // TJB  Jan-2011  Sequencing Review
+    // Modified retrieval - removed frequency details (since now sequencing
+    // is by contract, not contract+frequency.
+
     public partial class DSeqAddresses : Metex.Windows.DataUserControl
     {
-        // TJB  Jan-2011  Sequencing Review
-        // Modified retrieval - removed frequency details (since now sequencing
-        // is by contract, not contract+frequency.
-
         public DSeqAddresses()
         {
             InitializeComponent();
@@ -36,12 +39,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 CellClick(sender, e);
         }
 
+        // TJB  RPCR_077  May-2016
+        // Added cust_stripmaker_seq to sort string
         public int Retrieve(int? al_contract_no)
         {
             int rowCount = RetrieveCore<SeqAddresses>(new List<SeqAddresses>
                             (SeqAddresses.GetAllSeqAddresses(al_contract_no)));
             if (rowCount > 0)
-                this.SortString = "seq_num A, customer A";
+                this.SortString = "seq_num A, cust_stripmaker_seq A, customer A";
             this.Sort<SeqAddresses>();
             return rowCount;
         }
