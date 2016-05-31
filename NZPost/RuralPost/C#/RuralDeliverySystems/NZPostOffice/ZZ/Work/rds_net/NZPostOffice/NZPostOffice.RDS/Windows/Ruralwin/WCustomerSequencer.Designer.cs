@@ -61,8 +61,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.rightarrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.leftarrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.uparrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.cb_cust_seq_up = new System.Windows.Forms.Button();
             this.downarrow_tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.cb_cust_seq_down = new System.Windows.Forms.Button();
             this.cb_reassign = new System.Windows.Forms.Button();
+            this.CustSeq_t = new System.Windows.Forms.Label();
+            this.cb_debug = new System.Windows.Forms.Button();
             this.gb_unseq.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -239,6 +243,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.downarrow_tooltip.SetToolTip(this.cb_down_arrow, "Move down");
             this.cb_down_arrow.UseVisualStyleBackColor = true;
             // 
+            // cb_cust_seq_up
+            // 
+            this.cb_cust_seq_up.Enabled = false;
+            this.cb_cust_seq_up.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_cust_seq_up.Location = new System.Drawing.Point(666, 502);
+            this.cb_cust_seq_up.Name = "cb_cust_seq_up";
+            this.cb_cust_seq_up.Size = new System.Drawing.Size(30, 23);
+            this.cb_cust_seq_up.TabIndex = 17;
+            this.cb_cust_seq_up.Text = "٨";
+            this.uparrow_tooltip.SetToolTip(this.cb_cust_seq_up, "Move customer up");
+            this.cb_cust_seq_up.UseVisualStyleBackColor = true;
+            this.cb_cust_seq_up.Click += new System.EventHandler(this.cb_cust_seq_up_Click);
+            // 
+            // cb_cust_seq_down
+            // 
+            this.cb_cust_seq_down.Enabled = false;
+            this.cb_cust_seq_down.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_cust_seq_down.Location = new System.Drawing.Point(701, 502);
+            this.cb_cust_seq_down.Name = "cb_cust_seq_down";
+            this.cb_cust_seq_down.Size = new System.Drawing.Size(30, 23);
+            this.cb_cust_seq_down.TabIndex = 18;
+            this.cb_cust_seq_down.Text = "v";
+            this.downarrow_tooltip.SetToolTip(this.cb_cust_seq_down, "Move customer down");
+            this.cb_cust_seq_down.UseVisualStyleBackColor = true;
+            this.cb_cust_seq_down.Click += new System.EventHandler(this.cb_cust_seq_down_Click);
+            // 
             // cb_reassign
             // 
             this.cb_reassign.Location = new System.Drawing.Point(180, 498);
@@ -248,12 +278,36 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_reassign.Text = "Re-assign contract";
             this.cb_reassign.UseVisualStyleBackColor = true;
             // 
+            // CustSeq_t
+            // 
+            this.CustSeq_t.AutoSize = true;
+            this.CustSeq_t.Enabled = false;
+            this.CustSeq_t.Location = new System.Drawing.Point(531, 508);
+            this.CustSeq_t.Name = "CustSeq_t";
+            this.CustSeq_t.Size = new System.Drawing.Size(123, 13);
+            this.CustSeq_t.TabIndex = 19;
+            this.CustSeq_t.Text = "Move selected customer";
+            // 
+            // cb_debug
+            // 
+            this.cb_debug.Location = new System.Drawing.Point(442, 501);
+            this.cb_debug.Name = "cb_debug";
+            this.cb_debug.Size = new System.Drawing.Size(75, 23);
+            this.cb_debug.TabIndex = 20;
+            this.cb_debug.Text = "Debug";
+            this.cb_debug.UseVisualStyleBackColor = true;
+            this.cb_debug.Click += new System.EventHandler(this.cb_debug_Click);
+            // 
             // WCustomerSequencer
             // 
             this.AcceptButton = this.cb_save;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.cb_close;
             this.ClientSize = new System.Drawing.Size(833, 533);
+            this.Controls.Add(this.cb_debug);
+            this.Controls.Add(this.CustSeq_t);
+            this.Controls.Add(this.cb_cust_seq_down);
+            this.Controls.Add(this.cb_cust_seq_up);
             this.Controls.Add(this.cb_reassign);
             this.Controls.Add(this.cb_down_arrow);
             this.Controls.Add(this.cb_up_arrow);
@@ -287,6 +341,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.cb_up_arrow, 0);
             this.Controls.SetChildIndex(this.cb_down_arrow, 0);
             this.Controls.SetChildIndex(this.cb_reassign, 0);
+            this.Controls.SetChildIndex(this.cb_cust_seq_up, 0);
+            this.Controls.SetChildIndex(this.cb_cust_seq_down, 0);
+            this.Controls.SetChildIndex(this.CustSeq_t, 0);
+            this.Controls.SetChildIndex(this.cb_debug, 0);
             this.gb_unseq.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -320,6 +378,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private ToolTip downarrow_tooltip;
         private Button cb_reverse;
         private Button cb_reassign;
+        private Button cb_cust_seq_up;
+        private Button cb_cust_seq_down;
+        private Label CustSeq_t;
+        private Button cb_debug;
 
     }
 }
