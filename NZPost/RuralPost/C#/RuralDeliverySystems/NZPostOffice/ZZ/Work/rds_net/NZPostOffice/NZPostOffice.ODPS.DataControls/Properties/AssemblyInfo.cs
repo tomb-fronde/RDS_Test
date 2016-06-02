@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ccf")]
 [assembly: AssemblyProduct("NZPostOffice.ODPS.DataControls")]
-[assembly: AssemblyCopyright("Copyright © ccf 2007")]
+[assembly: AssemblyCopyright("Copyright © ccf 20016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
