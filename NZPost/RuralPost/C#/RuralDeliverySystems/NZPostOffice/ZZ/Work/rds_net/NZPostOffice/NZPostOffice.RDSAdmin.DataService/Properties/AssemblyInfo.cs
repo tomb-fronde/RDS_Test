@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Metex Inc.")]
 [assembly: AssemblyProduct("NZPostOffice.RDSAdmin.DataService")]
-[assembly: AssemblyCopyright("Copyright © Metex Inc. 2007")]
+[assembly: AssemblyCopyright("Copyright © Metex Inc. 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
