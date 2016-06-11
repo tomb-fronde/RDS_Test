@@ -370,6 +370,7 @@
     <Compile Include="ruralwin\DddwCustTitle.cs" />
     <Compile Include="ruralwin\DddwSuburbNames.cs" />
     <Compile Include="ruralwin\DddwSuburbs.cs" />
+    <Compile Include="ruralwin\ReassignContract.cs" />
     <Compile Include="ruralwin\RestoreCust.cs" />
     <Compile Include="ruralwin\RestoreCusts.cs" />
     <Compile Include="ruralwin\RoadList.cs" />

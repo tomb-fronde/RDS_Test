@@ -26,7 +26,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationVersion>7.1.13.3</ApplicationVersion>
+    <ApplicationVersion>7.1.14.0</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,7 +43,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -91,6 +91,12 @@
     <Compile Include="Menus\MOdpsMaster.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\OdpsLib\WPTDImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\OdpsLib\WPTDImport.Designer.cs">
+      <DependentUpon>WPTDImport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\OdpsLib\UDrilldownList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -208,6 +214,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>WInvoiceSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\OdpsLib\WPTDImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WPTDImport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\OdpsPayrun\WNegativePayReport.resx">
       <DependentUpon>WNegativePayReport.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -258,6 +268,9 @@
     </Compile>
     <None Include="App.config" />
     <None Include="ClassDiagramODPS.cd" />
+    <None Include="ODPS_UAT.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

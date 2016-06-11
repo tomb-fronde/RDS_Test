@@ -2746,6 +2746,12 @@
     <Compile Include="Ruraldw\DDailyArticalCounts.Designer.cs">
       <DependentUpon>DDailyArticalCounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruralwin\DReassignContract.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DReassignContract.Designer.cs">
+      <DependentUpon>DReassignContract.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralwin\DDuplicateDrivers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3454,6 +3460,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DSeqAddresses.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DUnseqAddresses.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DUnseqAddresses.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DVehicleOverrideRates.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DVehicleOverrideRates.cs</DependentUpon>
@@ -3594,6 +3604,10 @@
     <EmbeddedResource Include="Ruralwin\DDriverInfo.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DDriverInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DReassignContract.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DReassignContract.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DSearchAddressResultsV2b.resx">
       <SubType>Designer</SubType>

@@ -70,6 +70,7 @@
     <Compile Include="OdpsInvoice\InvoiceHeaderv5.cs" />
     <Compile Include="OdpsInvoice\InvoiceSearch.cs" />
     <Compile Include="OdpsInvoice\InvoiceSearchResults.cs" />
+    <Compile Include="OdpsLib\PTDImport.cs" />
     <Compile Include="OdpsLib\PassWord.cs" />
     <Compile Include="OdpsLib\ShellImport.cs" />
     <Compile Include="OdpsLib\ShellImportBackup.cs" />

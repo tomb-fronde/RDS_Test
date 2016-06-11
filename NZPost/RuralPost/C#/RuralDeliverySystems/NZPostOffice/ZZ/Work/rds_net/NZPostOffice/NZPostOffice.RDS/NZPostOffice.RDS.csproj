@@ -34,7 +34,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>file:\\C\tmp\RuralPost.publish\RDS\</InstallUrl>
-    <ApplicationVersion>7.1.13.%2a</ApplicationVersion>
+    <ApplicationVersion>7.1.14.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -282,6 +282,10 @@
       <DependentUpon>WMaintainAddress.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin\WReassignContract.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WReassignContract.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin\WRestoreCusts.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WRestoreCusts.cs</DependentUpon>
@@ -313,6 +317,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RDS_UAT1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>RDS_UAT.config</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Ruralrpt\WGenericReportPreviewWithMthYr.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -341,6 +350,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin2\WRenewalProcess2006.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Ruralwin\WReassignContract.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Windows\Ruralwin\WDailyArticalCounts.cs">
@@ -1003,6 +1015,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RDSYSTAB.ICO" />
+    <None Include="RDS_UAT.config">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>RDS_UAT1.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Properties\DataSources\NZPostOffice.RDS.DataControls.Ruraldw.DDddwPieceRates.datasource" />
     <None Include="Properties\DataSources\NZPostOffice.RDS.Entity.Ruraldw.DddwPieceRates.datasource" />
     <None Include="Resources\star1d.ico" />

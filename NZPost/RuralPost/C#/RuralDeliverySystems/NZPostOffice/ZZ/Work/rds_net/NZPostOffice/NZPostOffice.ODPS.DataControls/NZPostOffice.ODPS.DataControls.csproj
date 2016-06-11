@@ -217,6 +217,12 @@
     <Compile Include="OdpsInvoice\DwInvoiceSearchResults.Designer.cs">
       <DependentUpon>DwInvoiceSearchResults.cs</DependentUpon>
     </Compile>
+    <Compile Include="OdpsLib\DPTDImport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DPTDImport.Designer.cs">
+      <DependentUpon>DPTDImport.cs</DependentUpon>
+    </Compile>
     <Compile Include="OdpsLib\DPassword.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1007,6 +1013,10 @@
     <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsLib\DPTDImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPTDImport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OdpsPayrun\DwPaymentManualAdjustment.resx">
       <SubType>Designer</SubType>
