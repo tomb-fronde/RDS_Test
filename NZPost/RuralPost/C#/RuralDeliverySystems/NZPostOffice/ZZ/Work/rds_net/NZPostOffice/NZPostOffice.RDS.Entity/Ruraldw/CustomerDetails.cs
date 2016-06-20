@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_103  May-2016 Bug fix
+    // Trim VR number 
+    //
     // TJB  RPCR_103  May-2016
     // Added cust_vr_number
     //
@@ -619,9 +622,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             set
             {
                 CanWriteProperty("CustVRNumber", true);
-                if (_cust_vr_number != value)
+                if (_cust_vr_number != value.Trim())
                 {
-                    _cust_vr_number = value;
+                    _cust_vr_number = value.Trim();
                     PropertyHasChanged();
                 }
             }
