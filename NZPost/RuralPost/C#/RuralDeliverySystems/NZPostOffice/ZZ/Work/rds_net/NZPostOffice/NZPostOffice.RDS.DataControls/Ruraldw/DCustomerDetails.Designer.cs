@@ -103,6 +103,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cust_slot_allocation_t = new System.Windows.Forms.Label();
             this.cust_slot_allocation = new System.Windows.Forms.TextBox();
             this.case_name_max_size = new System.Windows.Forms.Label();
+            this.VR_number_t = new System.Windows.Forms.Label();
+            this.VR_number = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -521,10 +523,33 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.case_name_max_size.TabIndex = 148;
             this.case_name_max_size.Text = "(Max 25 characters)";
             // 
+            // VR_number_t
+            // 
+            this.VR_number_t.AutoSize = true;
+            this.VR_number_t.Location = new System.Drawing.Point(260, 194);
+            this.VR_number_t.Name = "VR_number_t";
+            this.VR_number_t.Size = new System.Drawing.Size(62, 13);
+            this.VR_number_t.TabIndex = 149;
+            this.VR_number_t.Text = "VR Number";
+            // 
+            // VR_number
+            // 
+            this.VR_number.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CustVRNumber", true));
+            this.VR_number.Location = new System.Drawing.Point(251, 213);
+            this.VR_number.Mask = "9999999999";
+            this.VR_number.Name = "VR_number";
+            this.VR_number.PromptChar = ' ';
+            this.VR_number.Size = new System.Drawing.Size(81, 20);
+            this.VR_number.TabIndex = 150;
+            this.VR_number.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.VR_number.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals;
+            // 
             // DCustomerDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.VR_number);
+            this.Controls.Add(this.VR_number_t);
             this.Controls.Add(this.case_name_max_size);
             this.Controls.Add(this.cust_slot_allocation_t);
             this.Controls.Add(this.cust_slot_allocation);
@@ -579,6 +604,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private Label cust_slot_allocation_t;
         private TextBox cust_slot_allocation;
         private Label case_name_max_size;
+        private Label VR_number_t;
+        private MaskedTextBox VR_number;
 
     }
 }

@@ -12,17 +12,20 @@ using NZPostOffice.RDS.DataControls.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  June-2016  RPCR_103  Bug fix
+    // Added VR_number field in Designer (lost in release)
+    //
+    // TJB  Jan 2015  RPCR_092
+    // Changed 'Date Commenced' property to read-only with no border (in designer)
+    //
+    // TJB  Jan-2011  Bug fix
+    // Changed call to GetAllCustomerDetails2 to call to GetAllCustomerDetails
+    //
+    // TJB  Jan-2011  Sequencing review
+    // Added Case name and Slot allocation fields
+
     public partial class DCustomerDetails : Metex.Windows.DataUserControl
 	{
-        // TJB  Jan 2015  RPCR_092
-        // Changed 'Date Commenced' property to read-only with no border (in designer)
-        //
-        // TJB  Jan-2011  Bug fix
-        // Changed call to GetAllCustomerDetails2 to call to GetAllCustomerDetails
-        //
-        // TJB  Jan-2011  Sequencing review
-        // Added Case name and Slot allocation fields
-
 		public DCustomerDetails()
 		{
 			InitializeComponent();
