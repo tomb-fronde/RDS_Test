@@ -20,6 +20,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB  Oct-2017
+        // Bug fix: Fixed calculation of Sundries total for >1 contract.  
+        //          See store_group_report
+        //
         // TJB  Aug-2013
         // Tidyup - removed irrelevant comments and other similar changes
         //
@@ -727,7 +731,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         idw_report.GetItem<WhatifCalculatorReport2005>(k).Stelephone = l_Stelephone / (i - j);
                         idw_report.GetItem<WhatifCalculatorReport2005>(k).Ssundries = l_Ssundries / (i - j);
                     }
+                    // TJB Oct 2017  Bug fix: Added Sundries line
                     l_Stelephone = idw_report.GetItem<WhatifCalculatorReport2005>(i).Telephone;
+                    l_Ssundries = idw_report.GetItem<WhatifCalculatorReport2005>(i).Sundries;
                     j = i;
                 }
             }
