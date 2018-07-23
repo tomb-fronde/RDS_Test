@@ -103,31 +103,40 @@ namespace NZPostOffice.RDSAdmin.Menus
         private void m_testing_Click(object sender, EventArgs e)
         {
             
-                        //  TWC 06/10/2003 
+            //  TWC 06/10/2003 
             //  call 4567 - will clean up town_suburb table
-           /*delete from town_suburb*/
+            /*delete from town_suburb*/
               int SQLCode=0;
               string SQLErrText=string.Empty;
-//!StaticVariables.ServiceInterface.MMainMenu_m_testing_Click_2(ref SQLErrText,ref SQLCode);
+            //!StaticVariables.ServiceInterface.MMainMenu_m_testing_Click_2(ref SQLErrText,ref SQLCode);
             if (SQLCode != 0) 
             {
-                MessageBox.Show("There was an error deleting Town/Suburb entries. Cleanup will not proceed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("There was an error deleting Town/Suburb entries. " 
+                               + "Cleanup will not proceed."
+                               , "Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-          /*  insert into town_suburb
-             ( select distinct tc_id, sl_id from address
-            where tc_id is not null
-            and sl_id is not null)
-              int SQLCode=0;
-string SQLErrText=string.Empty;*/
-//!StaticVariables.ServiceInterface.MMainMenu_m_testing_Click_1(ref SQLErrText,ref SQLCode);
+            /*  insert into town_suburb
+             *     (select distinct tc_id, sl_id from address
+             *       where tc_id is not null
+             *         and sl_id is not null)
+             *  int SQLCode=0;
+             *  string SQLErrText=string.Empty;
+             */
+            //!StaticVariables.ServiceInterface.MMainMenu_m_testing_Click_1(ref SQLErrText,ref SQLCode);
             if (SQLCode != 0) 
             {
-                MessageBox.Show("There was an error inserting Town/Suburb entries. Cleanup will not proceed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("There was an error inserting Town/Suburb entries. " 
+                              + "Cleanup will not proceed."
+                              , "Error"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else 
             {
-                MessageBox.Show("Clean up process for Town/Suburb entries in the database has completed successful" +"ly.", "Success");
+                MessageBox.Show("Clean up process for Town/Suburb entries in the database " 
+                              + "has completed successfully."
+                              , "Success");
             }
              
         }
