@@ -7,6 +7,10 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.Shared.Ruralsec
 {
+    // TJB  RPCR_117  July-2018
+    // Changed of_get_phone to of_get_email
+    // and reference to ids_UserDetails.Phone to ids_UserDetails.UEmail
+
     public class NRdsUser
     {
         public readonly int SUCCESS = 1;
@@ -43,11 +47,11 @@ namespace NZPostOffice.Shared.Ruralsec
             return ls_Location;
         }
 
-        public virtual string of_get_phone()
+        public virtual string of_get_email()    //of_get_phone()
         {
-            string ls_Phone;
-            ls_Phone = ids_UserDetails.GetItem<UserDetails>(0).Phone;
-            return ls_Phone;
+            string ls_Email;
+            ls_Email = ids_UserDetails.GetItem<UserDetails>(0).UEmail;  // Phone;
+            return ls_Email;
         }
 
         public virtual string of_get_mobile()
