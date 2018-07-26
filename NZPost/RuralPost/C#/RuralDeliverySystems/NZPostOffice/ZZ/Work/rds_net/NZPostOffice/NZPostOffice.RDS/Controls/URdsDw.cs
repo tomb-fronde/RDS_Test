@@ -14,6 +14,8 @@ using System.Text;
 
 namespace NZPostOffice.RDS.Controls
 {
+    // TJB July-2018: Minor cosmetic change
+    //
     // TJB  RPCR_026  July-2011
     // Added SortString
     //
@@ -1307,8 +1309,10 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual void URdsDw_Itemchanged(object sender, EventArgs e)
         {
-            //if (this.DataObject != null)
-            //    Console.WriteLine("++++ URdsDw_ItemChanged: " + this.DataObject.ToString());
+            if (this.DataObject != null)
+                MessageBox.Show("===== URdsDw_ItemChanged =====\n" 
+                    + "DataObject = " + this.DataObject.ToString()+"\n"
+                    , "URdsDw_ItemChanged");
 
             //?this.ue_PostItemChanged(row, dwo, data);
         }
