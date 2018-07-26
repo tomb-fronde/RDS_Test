@@ -8,11 +8,17 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
+    // TJB  RPCR_113  1 July 2018
+    // Add pbu_email_1, pbu_email_2, pbu_email_3 definitions and retrieval
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
     [MapInfo("pbu_code", "_pbu_code", "pbu_code")]
     [MapInfo("pbu_description", "_pbu_description", "pbu_code")]
+    [MapInfo("pbu_email_1", "_pbu_email_1", "pbu_code")]
+    [MapInfo("pbu_email_2", "_pbu_email_2", "pbu_code")]
+    [MapInfo("pbu_email_3", "_pbu_email_3", "pbu_code")]
     [MapInfo("pbu_id", "_pbu_id", "pbu_code", true)]
     [System.Serializable()]
 
@@ -24,6 +30,15 @@ namespace NZPostOffice.ODPS.Entity.Odps
 
         [DBField()]
         private string _pbu_description;
+
+        [DBField()]
+        private string _pbu_email_1;
+
+        [DBField()]
+        private string _pbu_email_2;
+
+        [DBField()]
+        private string _pbu_email_3;
 
         [DBField()]
         private int? _pbu_id;
@@ -59,6 +74,60 @@ namespace NZPostOffice.ODPS.Entity.Odps
                 if (_pbu_description != value)
                 {
                     _pbu_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PbuEmail1
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _pbu_email_1;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_pbu_email_1 != value)
+                {
+                    _pbu_email_1 = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PbuEmail2
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _pbu_email_2;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_pbu_email_2 != value)
+                {
+                    _pbu_email_2 = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PbuEmail3
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _pbu_email_3;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_pbu_email_3 != value)
+                {
+                    _pbu_email_3 = value;
                     PropertyHasChanged();
                 }
             }
@@ -110,8 +179,9 @@ namespace NZPostOffice.ODPS.Entity.Odps
                 {
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
-                    //GenerateSelectCommandText(cm, "odps.pbu_code");
-                    cm.CommandText = @"  SELECT odps.pbu_code.pbu_code,odps.pbu_code.pbu_description,odps.pbu_code.pbu_id  FROM odps.pbu_code";
+                    cm.CommandText = "SELECT pbu_code,pbu_description,pbu_code.pbu_id "
+                                   + "     , pbu_email_1, pbu_email_2, pbu_email_3"
+                                   + "  FROM odps.pbu_code";
 
                     List<PbuCode> _list = new List<PbuCode>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -122,6 +192,9 @@ namespace NZPostOffice.ODPS.Entity.Odps
                             instance.Pbucode = GetValueFromReader<string>(dr, 0);
                             instance.PbuDescription = GetValueFromReader<string>(dr, 1);
                             instance.PbuId = GetValueFromReader<Int32?>(dr, 2);
+                            instance.PbuEmail1 = GetValueFromReader<string>(dr, 3);
+                            instance.PbuEmail2 = GetValueFromReader<string>(dr, 4);
+                            instance.PbuEmail3 = GetValueFromReader<string>(dr, 5);
                             //instance.StoreFieldValues(dr, "odps.pbu_code");
                             instance.MarkOld();
                             instance.StoreInitialValues();
@@ -170,6 +243,8 @@ namespace NZPostOffice.ODPS.Entity.Odps
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateInsertCommandText(cm, "pbu_code", pList))
                 {
+                    string test1 = cm.CommandText;
+                    string test2 = test1;
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -197,7 +272,15 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     pList.Add(cm, "pbu_id", GetInitialValue("_pbu_id"));
                     cm.CommandText = "DELETE FROM pbu_code WHERE pbu_code.pbu_id = @pbu_id ";
                     DBHelper.ExecuteNonQuery(cm, pList);
-                    tr.Commit();
+                    try
+                    {
+                        tr.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        this.sqlCode = -1;
+                        this.sqlErrText = ex.Message.ToString();
+                    }
                 }
             }
         }
