@@ -11,6 +11,10 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_122  July-2018
+    // Added PBU_Id dropdown assignment here
+    // Added PBUCode label and dropdown select element in Designer
+
     public partial class DContractSearch : Metex.Windows.DataUserControl
 	{
 		public DContractSearch()
@@ -24,7 +28,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 		{
 			ct_key.AssignDropdownType<DDddwContractTypes>();
 			region_id.AssignDropdownType<DDddwRegions>();
-		}
+            pbu_id.AssignDropdownType<DDddwPbuCodes>();
+        }
 
 		public override int Retrieve( )
 		{
