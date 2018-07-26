@@ -8,13 +8,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralsec
 {
+    // TJB  RPCR_117  July-2018
+    // Changed u_phone to u_email, and Phone to Email
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
     [MapInfo("u_id", "_id", "rds_user")]
     [MapInfo("u_name", "_name", "rds_user")]
     [MapInfo("u_location", "_location", "rds_user")]
-    [MapInfo("u_phone", "_phone", "rds_user")]
+    [MapInfo("u_email", "_email", "rds_user")]   // u_phone, _phone
     [MapInfo("u_mobile", "_mobile", "rds_user")]
     [MapInfo("region_id", "_region_id", "rds_user")]
     [MapInfo("rgn_name", "_region_name", "oj")]
@@ -46,7 +49,7 @@ namespace NZPostOffice.RDS.Entity.Ruralsec
         private string _location;
 
         [DBField()]
-        private string _phone;
+        private string _email;     // _phone;
 
         [DBField()]
         private string _mobile;
@@ -151,19 +154,19 @@ namespace NZPostOffice.RDS.Entity.Ruralsec
             }
         }
 
-        public virtual string Phone
+        public virtual string Email      // Phone
         {
             get
             {
-                CanReadProperty("Phone", true);
-                return _phone;
+                CanReadProperty("Email", true);
+                return _email;
             }
             set
             {
-                CanWriteProperty("Phone", true);
-                if (_phone != value)
+                CanWriteProperty("Email", true);
+                if (_email != value)
                 {
-                    _phone = value;
+                    _email = value;
                     PropertyHasChanged();
                 }
             }
@@ -484,7 +487,7 @@ namespace NZPostOffice.RDS.Entity.Ruralsec
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT rds_user.u_id,  rds_user.u_name, rds_user.u_location, rds_user.u_phone, " +
+                    cm.CommandText = "SELECT rds_user.u_id,  rds_user.u_name, rds_user.u_location, rds_user.u_email, " +
                         "rds_user.u_mobile, rds_user.region_id,  isNull(region.rgn_name,'National User') as rgn_name, " +
                         "rds_user_id.ui_userid, rds_user_id.ui_password, rds_user_id.ui_last_login_date, " +
                         "rds_user_id.ui_last_login_time, rds_user_id.ui_created_date, rds_user_id.ui_created_by," +
@@ -492,7 +495,7 @@ namespace NZPostOffice.RDS.Entity.Ruralsec
                         "rds_user_id.ui_grace_logins, rds_user_id.ui_locked_date, rds_user_id.ui_can_change_password," +
                         "rds_user_id.ui_id " +
                         "FROM {oj rd.rds_user LEFT OUTER JOIN rd.region ON rds_user.region_id = region.region_id}, rd.rds_user_id " +
-                        "WHERE ( rds_user_id.u_id = rds_user.u_id ) and ((rds_user_id.ui_userid = @as_username ))";
+                        "WHERE rds_user_id.u_id = rds_user.u_id and rds_user_id.ui_userid = @as_username";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "as_username", as_username);
@@ -506,7 +509,7 @@ namespace NZPostOffice.RDS.Entity.Ruralsec
                             instance._id = GetValueFromReader<int?>(dr, 0);
                             instance._name = GetValueFromReader<string>(dr, 1);
                             instance._location = GetValueFromReader<string>(dr, 2);
-                            instance._phone = GetValueFromReader<string>(dr, 3);
+                            instance._email = GetValueFromReader<string>(dr, 3);
                             instance._mobile = GetValueFromReader<string>(dr, 4);
                             instance._region_id = GetValueFromReader<int?>(dr, 5);
                             instance._region_name = GetValueFromReader<string>(dr, 6);
