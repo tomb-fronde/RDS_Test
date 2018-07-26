@@ -7,6 +7,10 @@ using NZPostOffice.Shared;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
+    // TJB  RPCR_117  July-2018
+    // Changed rds_user_u_phone to rds_user_u_email
+    // and RdsUserUPhone to RdsUserUEmail
+
 	partial class DwUserDetails
 	{
 
@@ -34,8 +38,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		private System.Windows.Forms.Label   rds_user_id_ui_userid_t;
 		private System.Windows.Forms.TextBox   rds_user_id_ui_password;
 		private System.Windows.Forms.TextBox   rds_user_u_name;
-		private System.Windows.Forms.TextBox   rds_user_u_phone;
-		private System.Windows.Forms.Label   rds_user_u_phone_t;
+		private System.Windows.Forms.TextBox   rds_user_u_email;
+		private System.Windows.Forms.Label   rds_user_u_email_t;
 		private System.Windows.Forms.TextBox   rds_user_id_ui_userid;
 		private System.Windows.Forms.Label   rds_user_u_name_t;
 
@@ -59,8 +63,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.rds_user_id_ui_password = new System.Windows.Forms.TextBox();
             this.rds_user_u_location_t = new System.Windows.Forms.Label();
             this.rds_user_u_location = new System.Windows.Forms.TextBox();
-            this.rds_user_u_phone_t = new System.Windows.Forms.Label();
-            this.rds_user_u_phone = new System.Windows.Forms.TextBox();
+            this.rds_user_u_email_t = new System.Windows.Forms.Label();
+            this.rds_user_u_email = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -193,8 +197,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.rds_user_id_ui_password.PasswordChar = '*';
             this.rds_user_id_ui_password.Size = new System.Drawing.Size(125, 20);
             this.rds_user_id_ui_password.TabIndex = 30;
-            this.rds_user_id_ui_password.KeyDown += new KeyEventHandler(rds_user_id_ui_password_KeyDown);
-            this.rds_user_id_ui_password.MouseDoubleClick += new MouseEventHandler(rds_user_id_ui_password_MouseDoubleClick);
+            this.rds_user_id_ui_password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rds_user_id_ui_password_KeyDown);
+            this.rds_user_id_ui_password.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.rds_user_id_ui_password_MouseDoubleClick);
             // 
             // rds_user_u_location_t
             // 
@@ -221,29 +225,29 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.rds_user_u_location.Size = new System.Drawing.Size(125, 48);
             this.rds_user_u_location.TabIndex = 50;
             // 
-            // rds_user_u_phone_t
+            // rds_user_u_email_t
             // 
-            this.rds_user_u_phone_t.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.rds_user_u_phone_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.rds_user_u_phone_t.ForeColor = System.Drawing.Color.Black;
-            this.rds_user_u_phone_t.Location = new System.Drawing.Point(1, 137);
-            this.rds_user_u_phone_t.Name = "rds_user_u_phone_t";
-            this.rds_user_u_phone_t.Size = new System.Drawing.Size(45, 13);
-            this.rds_user_u_phone_t.TabIndex = 75;
-            this.rds_user_u_phone_t.Text = "Phone:";
-            this.rds_user_u_phone_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rds_user_u_email_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.rds_user_u_email_t.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rds_user_u_email_t.ForeColor = System.Drawing.Color.Black;
+            this.rds_user_u_email_t.Location = new System.Drawing.Point(1, 137);
+            this.rds_user_u_email_t.Name = "rds_user_u_email_t";
+            this.rds_user_u_email_t.Size = new System.Drawing.Size(68, 13);
+            this.rds_user_u_email_t.TabIndex = 75;
+            this.rds_user_u_email_t.Text = "Email:";
+            this.rds_user_u_email_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // rds_user_u_phone
+            // rds_user_u_email
             // 
-            this.rds_user_u_phone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(224)))), ((int)(((byte)(216)))));
-            this.rds_user_u_phone.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RdsUserUPhone", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.rds_user_u_phone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.rds_user_u_phone.ForeColor = System.Drawing.Color.Black;
-            this.rds_user_u_phone.Location = new System.Drawing.Point(89, 137);
-            this.rds_user_u_phone.MaxLength = 25;
-            this.rds_user_u_phone.Name = "rds_user_u_phone";
-            this.rds_user_u_phone.Size = new System.Drawing.Size(125, 20);
-            this.rds_user_u_phone.TabIndex = 60;
+            this.rds_user_u_email.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(224)))), ((int)(((byte)(216)))));
+            this.rds_user_u_email.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RdsUserUEmail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.rds_user_u_email.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rds_user_u_email.ForeColor = System.Drawing.Color.Black;
+            this.rds_user_u_email.Location = new System.Drawing.Point(89, 137);
+            this.rds_user_u_email.MaxLength = 50;
+            this.rds_user_u_email.Name = "rds_user_u_email";
+            this.rds_user_u_email.Size = new System.Drawing.Size(125, 20);
+            this.rds_user_u_email.TabIndex = 60;
             // 
             // DwUserDetails
             // 
@@ -262,10 +266,10 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.Controls.Add(this.rds_user_id_ui_password);
             this.Controls.Add(this.rds_user_u_location_t);
             this.Controls.Add(this.rds_user_u_location);
-            this.Controls.Add(this.rds_user_u_phone_t);
-            this.Controls.Add(this.rds_user_u_phone);
+            this.Controls.Add(this.rds_user_u_email_t);
+            this.Controls.Add(this.rds_user_u_email);
             this.Name = "DwUserDetails";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(650, 463);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
