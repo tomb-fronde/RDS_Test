@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 using NZPostOffice.ODPS.Controls;
 using NZPostOffice.ODPS.Menus;
@@ -12,7 +13,11 @@ using NZPostOffice.ODPS.Entity.Odps;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
-    // TJB  RPCR_o54  June-2013
+    // TJB  RPCR_113  July 2018
+    // Added event handler dw_selection_ItemChanged
+    // and PbuCode_validation to validate email addresses as entered.
+    //
+    // TJB  RPCR_054  June-2013
     // Added code to manipulate visibility of uo_1.cb_save
 
     public partial class WCodeTableMaintenance : WMaster
@@ -48,6 +53,17 @@ namespace NZPostOffice.ODPS.Windows.Odps
 
             //? m_odps_maintenance_menu.SetFunctionalPart(m_odps_maintenance);
             //? m_odps_maintenance_toolbar.SetFunctionalPart(m_odps_maintenance);
+
+            uo_2.dw_selection.ItemChanged += new EventHandler(dw_selection_ItemChanged);
+        }
+
+        // TJB  RPCR_113  July 2018  New
+        void dw_selection_ItemChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("WCodeTableMaintenance.dw_selection_itemchanged\n");
+            int rc = PbuCode_validation();
+            //MessageBox.Show("WCodeTableMaintenance.dw_selection_itemchanged\n"
+            //               + " PbuCode_validation returned " + rc.ToString() + "\n");
         }
 
         public override void pfc_preopen()
@@ -100,22 +116,22 @@ namespace NZPostOffice.ODPS.Windows.Odps
             //  from where it is redirected to the required tab
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
             int TestExpr = tab_folder.SelectedIndex + 1;
-            if (TestExpr == 1)
+            if (TestExpr == 1) // Account code
             {
                 //tab_folder.tabpage_account_code.uo_1.triggerevent("ue_delete");
                 uo_1.ue_delete();
             }
-            else if (TestExpr == 2)
+            else if (TestExpr == 2)  // PBU code
             {
                 //tab_folder.tabpage_pbu_code.uo_2.triggerevent("ue_delete");
                 uo_2.ue_delete();
             }
-            else if (TestExpr == 3)
+            else if (TestExpr == 3)  //PCT
             {
                 //tab_folder.tabpage_pct.uo_3.triggerevent("ue_delete");
                 uo_3.ue_delete();
             }
-            else if (TestExpr == 4)
+            else if (TestExpr == 4)  // National
             {
                 //tab_folder.tabpage_national.uo_4.triggerevent("ue_delete");
                 uo_4.ue_delete();
@@ -146,10 +162,105 @@ namespace NZPostOffice.ODPS.Windows.Odps
             return 1;
         }
 
-        //jlwang:validate 
+        // TJB  RPCR_113  July 2018  New
+        // Validates each email address as entered 
+        // (also validates during save in UoPbuCode)
+        public virtual int PbuCode_validation()
+        {
+            int iRet = 1;
+            string pbu_email_1 = "", pbu_email_2 = "", pbu_email_3 = "";
+            string email_error = "";
+            string sError = "";
+
+            //this.ProcessDialogKey(Keys.Tab);
+            int nRow = uo_2.dw_selection.GetRow();
+
+            /* Debugging
+                string pbu_row = " ";
+                string spbu_email_1 = "", spbu_email_2 = "", spbu_email_3 = "";
+                pbu_row += (uo_2.dw_selection.GetItem<PbuCode>(nRow).IsDirty) 
+                             ? "is dirty"
+                             : "is not dirty";
+
+                pbu_email_1 = uo_2.dw_selection.GetItem<PbuCode>(nRow).PbuEmail1;
+                pbu_email_2 = uo_2.dw_selection.GetItem<PbuCode>(nRow).PbuEmail2;
+                pbu_email_3 = uo_2.dw_selection.GetItem<PbuCode>(nRow).PbuEmail3;
+
+                spbu_email_1 = NullOrEmpty(pbu_email_1);
+                spbu_email_2 = NullOrEmpty(pbu_email_2);
+                spbu_email_3 = NullOrEmpty(pbu_email_3);
+                
+                MessageBox.Show("WCodeTableMaintenance.PbuCode_validation\n"
+                                + "Row = " + nRow.ToString() + pbu_row + "\n"
+                                + "pbu_email_1 = " + spbu_email_1 + "\n"
+                                + "pbu_email_2 = " + spbu_email_2 + "\n"
+                                + "pbu_email_3 = " + spbu_email_3 + "\n"
+                                );
+            */
+            if (uo_2.dw_selection.GetItem<PbuCode>(nRow).IsDirty)
+            {
+                email_error = "";
+                if (!string.IsNullOrEmpty(pbu_email_1)) // && !string.IsNullOrEmpty(pbu_email_1.Trim()))
+                {
+                    if (!Regex.IsMatch(pbu_email_1, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
+                    {
+                        sError = NullOrEmpty(pbu_email_1);
+                        email_error += "pbu_email_1 = " + sError + "\n";
+                        //email_error += spbu_email_1 + "\n";
+                    }
+                }
+                if (!string.IsNullOrEmpty(pbu_email_2)) // && !string.IsNullOrEmpty(pbu_email_2.Trim()))
+                {
+                    if (!Regex.IsMatch(pbu_email_2, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
+                    {
+                        sError = NullOrEmpty(pbu_email_2);
+                        email_error += "pbu_email_2 = " + sError + "\n";
+                        //email_error += spbu_email_2 + "\n";
+                    }
+                }
+                if (!string.IsNullOrEmpty(pbu_email_3)) // && !string.IsNullOrEmpty(pbu_email_2.Trim()))
+                {
+                    if (!Regex.IsMatch(pbu_email_3, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
+                    {
+                        sError = NullOrEmpty(pbu_email_3);
+                        email_error += "pbu_email_3 = " + sError + "\n";
+                        //email_error += spbu_email_3 + "\n";
+                    }
+                }
+                if (email_error != "")
+                {
+                    MessageBox.Show("Incorrect format for email address.\n"
+                                    + "Format should be name@address with no spaces\n\n"
+                                    + email_error + "\n"
+                                    + "Please correct before saving."
+                                    , "Validation Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    iRet = -1;
+                }
+            }
+            return iRet;
+        }
+
+        // TJB  RPCR_113  July 2018  New
+        string NullOrEmpty(string pTemp)
+        {
+            string sTemp;
+
+            sTemp = pTemp;
+            if (pTemp == null)
+                sTemp = "null";
+            else if (pTemp.Trim() == "")
+                sTemp = "empty";
+
+            return sTemp;
+        }
+
         public virtual int tab_pfc_validation()
         {
             int iRet = 1;
+            string pbu_email_1 = "", pbu_email_2 = "", pbu_email_3 = "";
+            string email_error;
+
             this.ProcessDialogKey(Keys.Tab);
 
             for (int i = 0; i < uo_1.dw_selection.RowCount; i++)
@@ -201,7 +312,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             {
                 if (uo_3.dw_selection.GetItem<NZPostOffice.ODPS.Entity.OdpsRep.PaymentComponentType>(i).IsDirty)
                 {
-                    if (uo_3.dw_selection.GetItem<NZPostOffice.ODPS.Entity.OdpsRep.PaymentComponentType>(i).PctDescription == null)// ||                            uo_2.dw_selection.GetItem<NZPostOffice.ODPS.Entity.OdpsRep.PaymentComponentType>(i).AcDescription == null)
+                    if (uo_3.dw_selection.GetItem<NZPostOffice.ODPS.Entity.OdpsRep.PaymentComponentType>(i).PctDescription == null)// || uo_2.dw_selection.GetItem<NZPostOffice.ODPS.Entity.OdpsRep.PaymentComponentType>(i).AcDescription == null)
                     {
                         //store the error information for display
                         iRet = -1;
