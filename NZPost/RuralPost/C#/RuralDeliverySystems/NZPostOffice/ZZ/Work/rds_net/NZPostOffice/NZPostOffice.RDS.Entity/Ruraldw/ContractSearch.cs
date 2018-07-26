@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_122  July-2018
+    // Added pbu_id and PbuId
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -22,6 +25,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("con_last_work_msr_2", "_con_last_work_msr_2", "")]
     [MapInfo("con_old_mail_service_no", "_con_old_mail_service_no", "")]
     [MapInfo("ct_key", "_ct_key", "")]
+    [MapInfo("pbu_id", "_pbu_id", "")]
+
     [System.Serializable()]
 
     public class ContractSearch : Entity<ContractSearch>
@@ -59,6 +64,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _ct_key;
+
+        [DBField()]
+        private int? _pbu_id;
 
         public virtual int? RegionId
         {
@@ -277,6 +285,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_ct_key != value)
                 {
                     _ct_key = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? PbuId
+        {
+            get
+            {
+                CanReadProperty("PbuId", true);
+                return _pbu_id;
+            }
+            set
+            {
+                CanWriteProperty("PbuId", true);
+                if (_pbu_id != value)
+                {
+                    _pbu_id = value;
                     PropertyHasChanged();
                 }
             }
