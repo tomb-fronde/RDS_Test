@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 using Metex.Core;
 using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.DataService
 {
+    // TJB  RPCR_117  July-2018
+    // Added CheckEmailAddress(string p_email) to validate email address format
+    // Returns "OK", "null" if null, "empty" if it contains only spaces, 
+    // or the address if there's an error.
+    //
     // TJB  RPCR_060  Mar_2014
     // GetMaxHstId:  NEW
 
@@ -226,7 +232,7 @@ namespace NZPostOffice.RDSAdmin.DataService
         }
         
         /// <summary> 
-        ///  SELECT	count(*)	INTO		:ll_count	FROM		rds_user	WHERE		u_name = :ls_name
+        ///  SELECT	count(*) INTO :ll_count FROM rds_user WHERE u_name = :ls_name
         /// </summary>
         /// 
         public static bool GetCountFormRdsUser(string ls_name,ref int returnMessage)
@@ -237,7 +243,7 @@ namespace NZPostOffice.RDSAdmin.DataService
         }
         
         /// <summary> 
-        ///  SELECT	count(*)	INTO		:ll_count	FROM		rds_user_id		WHERE		ui_userid = :ls_user_id
+        ///  SELECT	count(*) INTO :ll_count	FROM rds_user_id WHERE ui_userid = :ls_user_id
         /// </summary>
         /// 
         public static bool GetUiUseridCountFormRdsUser(string ls_user_id, ref int returnMessage)
@@ -248,7 +254,7 @@ namespace NZPostOffice.RDSAdmin.DataService
         }
         
         /// <summary> 
-        ///  Select up_password	Into :ls_used_password		From used_password		Where ui_id = :ll_id	and up_password = :ls_password
+        ///  Select up_password	Into :ls_used_password From used_password Where ui_id = :ll_id and up_password = :ls_password
         /// </summary>
         /// 
         public static bool GetUpPasswordFormRdsUser(int? ll_id, string ls_password, ref string returnMessage)
@@ -262,6 +268,29 @@ namespace NZPostOffice.RDSAdmin.DataService
         {
             MainMdiService obj = Execute("_GetNextSequence", sequenceName);
             return obj.intVal;
+        }
+
+        // TJB  RPCR_117  July-2018
+        // Check string for properly-formed email address
+        // Return  "OK" 
+        // or the string itself if not OK
+        //         "null" if null
+        //         "empty" if string only contains spaces
+        public static string CheckEmailAddress(string p_email)
+        {
+            string result = "OK";
+
+            result = "OK";
+            if (!string.IsNullOrEmpty(p_email))
+            {
+                if (!Regex.IsMatch(p_email, @"^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$"))
+                {
+                    result = p_email;
+                    if (p_email == null) result = "null";
+                    else if (p_email.Trim() == "") result = "empty"; 
+                }
+            }
+            return result;
         }
 
  #endregion
@@ -814,14 +843,16 @@ namespace NZPostOffice.RDSAdmin.DataService
         [ServerMethod()]
         private void _GetRdsUserGroupDataObject(string ug_name)
         {
+            ll_count = -1;
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT count(*) FROM rds_user_group  WHERE ug_name = @ls_ug_id";
+                    cm.CommandText = "SELECT count(*) FROM rds_user_group " 
+                                   + "WHERE ug_name = @ug_name";
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "ls_ug_id", ug_name);
+                    pList.Add(cm, "ug_name", ug_name);
                     
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {

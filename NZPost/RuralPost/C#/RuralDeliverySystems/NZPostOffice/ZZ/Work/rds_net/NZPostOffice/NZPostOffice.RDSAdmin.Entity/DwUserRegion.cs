@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  July-2018
+    // Reformatted fetch select statement for clarity
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -118,11 +121,13 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "user_id", user_id);
-                    cm.CommandText = "SELECT  region.rgn_name , " +
-                             "region.region_id , " +
-                             " 0 compute_0003 FROM region ,  rds_user     " +
-                             "WHERE ( region.region_id <> rds_user.region_id ) and " +
-                             "( ( rds_user.u_id = @user_id ) )";
+                    cm.CommandText = "SELECT region.rgn_name" 
+                                    + "    , region.region_id" 
+                                    + "    , 0 compute_0003 " 
+                                    + " FROM region" 
+                                    + "    , rds_user " 
+                                    + "WHERE region.region_id <> rds_user.region_id" 
+                                    + "  and rds_user.u_id = @user_id";
 
                     List<UserRegion> list = new List<UserRegion>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

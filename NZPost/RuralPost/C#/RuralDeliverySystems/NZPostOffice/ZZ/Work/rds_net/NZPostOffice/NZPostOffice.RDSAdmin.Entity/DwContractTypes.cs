@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  July-2018
+    // Reformatted fetch select statement for clarity
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -133,7 +136,24 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT contract_type.ct_key,  contract_type.contract_type,  rds_user_contract_type.ui_id,  'Y' as dummy1  FROM contract_type,  rds_user_contract_type  WHERE ( rds_user_contract_type.ct_key = contract_type.ct_key ) and  ( ( rds_user_contract_type.ui_id = :al_ui_id) )   UNION  SELECT contract_type.ct_key,  contract_type.contract_type,  1,  'N'  FROM contract_type  WHERE		contract_type.ct_key NOT IN (SELECT ct_key  FROM 		rds_user_contract_type  WHERE		ui_id = :al_ui_id)";
+					cm.CommandText = "SELECT contract_type.ct_key"
+                                    + "    , contract_type.contract_type"
+                                    + "    , rds_user_contract_type.ui_id"
+                                    + "    , 'Y' as dummy1 "
+                                    + " FROM contract_type"
+                                    + "    , rds_user_contract_type "
+                                    + "WHERE rds_user_contract_type.ct_key = contract_type.ct_key"
+                                    + "  and rds_user_contract_type.ui_id = :al_ui_id "
+                                    + "UNION "
+                                    + "SELECT contract_type.ct_key"
+                                    + "    , contract_type.contract_type"
+                                    + "    , 1"
+                                    + "    , 'N'"
+                                    + " FROM contract_type "
+                                    + "WHERE contract_type.ct_key NOT IN "
+                                    + "            (SELECT ct_key "
+                                    + "               FROM rds_user_contract_type "
+                                    + "              WHERE ui_id = :al_ui_id)";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "al_ui_id", al_ui_id);
 

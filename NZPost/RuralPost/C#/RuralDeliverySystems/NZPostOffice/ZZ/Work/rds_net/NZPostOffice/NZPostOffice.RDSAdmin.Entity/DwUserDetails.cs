@@ -10,14 +10,18 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB  RPCR_117  July-2018
+    // Reformatted fetch select statement
+    // Changed u_phone to u_email and RdsUserUPhone to RdsUserUEmail
+    
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("u_id", "_rds_user_u_id", "rds_user")]
 	[MapInfo("u_name", "_rds_user_u_name", "rds_user")]
 	[MapInfo("u_location", "_rds_user_u_location", "rds_user")]
-	[MapInfo("u_phone", "_rds_user_u_phone", "rds_user")]
-	[MapInfo("u_mobile", "_rds_user_u_mobile", "rds_user")]
+    [MapInfo("u_email", "_rds_user_u_email", "rds_user")]
+    [MapInfo("u_mobile", "_rds_user_u_mobile", "rds_user")]
 	[MapInfo("region_id", "_rds_user_region_id", "rds_user")]
 	[MapInfo("ui_userid", "_rds_user_id_ui_userid", "rds_user_id")]
 	[MapInfo("ui_password", "_rds_user_id_ui_password", "rds_user_id")]
@@ -37,7 +41,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		private string  _rds_user_u_location;
 
 		[DBField()]
-		private string  _rds_user_u_phone;
+        private string _rds_user_u_email;   //_rds_user_u_phone
 
 		[DBField()]
 		private string  _rds_user_u_mobile;
@@ -109,19 +113,19 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			}
 		}
 
-		public virtual string RdsUserUPhone
+		public virtual string RdsUserUEmail  // RdsUserUPhone
 		{
 			get
 			{
 				CanReadProperty(true);
-				return _rds_user_u_phone;
+				return _rds_user_u_email;
 			}
 			set
 			{
 				CanWriteProperty(true);
-				if ( _rds_user_u_phone != value )
+				if ( _rds_user_u_email != value )
 				{
-					_rds_user_u_phone = value;
+					_rds_user_u_email = value;
 					PropertyHasChanged();
 				}
 			}
@@ -263,8 +267,21 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    // TJB  RPCR_117  July-2018: Reformatted Select statement for clarity
 					cm.CommandType = CommandType.Text;
-					cm.CommandText = "SELECT rds_user.u_id,  rds_user.u_name,  rds_user.u_location,  rds_user.u_phone,  rds_user.u_mobile,  rds_user.region_id,  rds_user_id.ui_userid,  rds_user_id.ui_password,  rds_user_id.ui_id  FROM rds_user,  rds_user_id  WHERE ( rds_user_id.u_id = rds_user.u_id ) and  ( ( rds_user_id.ui_id = :al_user_id ) )  ";
+					cm.CommandText = "SELECT rds_user.u_id"
+                                   + "     ,  rds_user.u_name"
+                                   + "     ,  rds_user.u_location"
+                                   + "     ,  rds_user.u_email"
+                                   + "     ,  rds_user.u_mobile"
+                                   + "     ,  rds_user.region_id"
+                                   + "     ,  rds_user_id.ui_userid"
+                                   + "     ,  rds_user_id.ui_password"
+                                   + "     ,  rds_user_id.ui_id "
+                                   + "  FROM rds_user"
+                                   + "     , rds_user_id  "
+                                   + " WHERE rds_user_id.u_id = rds_user.u_id"
+                                   + "   and rds_user_id.ui_id = :al_user_id";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "al_user_id", al_user_id);
 
@@ -275,8 +292,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 						{
                             UserDetails instance = new UserDetails();
 							instance.StoreFieldValues(dr, "rds_user");
-							instance.StoreFieldValues(dr, "rds_user_id");
-							instance.MarkOld();
+                            instance.StoreFieldValues(dr, "rds_user_id");
+                            instance.MarkOld();
 							list.Add(instance);
 						}
                         dataList = new UserDetails[list.Count];
@@ -294,21 +311,28 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-					ParameterCollection pList = new ParameterCollection();
-                    try
-                    {
-                        cm.CommandText = "update  rds_user set u_name=@u_name,u_location=@u_location,u_phone=@u_phone,u_mobile=@u_mobile,region_id=@region_id  where   rds_user.u_id = @u_id ";
-                        pList.Add(cm,"u_name",_rds_user_u_name);
-                        pList.Add(cm,"u_location",_rds_user_u_location);
-                        pList.Add(cm,"u_phone",_rds_user_u_phone);
-                        pList.Add(cm,"u_mobile",_rds_user_u_mobile);
-                        pList.Add(cm,"region_id",_rds_user_region_id);
-                        pList.Add(cm,"u_id",_rds_user_u_id);
+				ParameterCollection pList = new ParameterCollection();
+                cm.CommandText = "update  rds_user set u_name=@u_name,u_location=@u_location,u_email=@u_email,u_mobile=@u_mobile,region_id=@region_id  where   rds_user.u_id = @u_id ";
+                pList.Add(cm, "u_name", _rds_user_u_name);
+                pList.Add(cm, "u_location", _rds_user_u_location);
+                pList.Add(cm, "u_email", _rds_user_u_email);
+                pList.Add(cm, "u_mobile", _rds_user_u_mobile);
+                pList.Add(cm, "region_id", _rds_user_region_id);
+                pList.Add(cm, "u_id", _rds_user_u_id);
 
-                        DBHelper.ExecuteNonQuery(cm, pList);
+                // TJB  RPCR_117  July-2018:  Changed Catch
+                // Removed console.writeline; replaced with saving error
+                sqlCode = 1; // SUCCESS
+                try
+                {
+                    DBHelper.ExecuteNonQuery(cm, pList);
 
-                    }
-                    catch (Exception e) { Console.WriteLine(e.StackTrace); }
+                }
+                catch (Exception e) 
+                {
+                    sqlCode = -1;  // FAILURE
+                    sqlErrText = e.Message;
+                }
 				// reinitialize original key/value list
 				StoreInitialValues();
 			}
@@ -320,19 +344,21 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
-                //if (_rds_user_id_ui_id == null)
-                //{
-                //    _rds_user_id_ui_id = GetNextSequence(cm, "rdsUser");
-                //}
 				ParameterCollection pList = new ParameterCollection();
-                //_rds_user_u_id = _rds_user_id_ui_id;
 				if (GenerateInsertCommandText(cm, "rds_user",pList))
 				{
+                    // TJB  RPCR_117  July-2018:  Changed Catch
+                    // Removed console.writeline; replaced with saving error
+                    sqlCode = -1;  // SUCCESS
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
                     }
-                    catch (Exception e) { Console.WriteLine(e.StackTrace); }
+                    catch (Exception e) 
+                    {
+                        sqlCode = -1;  // FAILURE
+                        sqlErrText = e.Message;
+                    }
 				}
 				StoreInitialValues();
 			}
@@ -347,10 +373,10 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					DbCommand cm=cn.CreateCommand();
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
-						ParameterCollection pList = new ParameterCollection();
+					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"u_id", GetInitialValue("_rds_user_u_id"));
-						cm.CommandText = "DELETE FROM rds_user WHERE " +
-						"rds_user.u_id = @u_id ";
+					cm.CommandText = "DELETE FROM rds_user " 
+                                    + "WHERE rds_user.u_id = @u_id ";
 					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
