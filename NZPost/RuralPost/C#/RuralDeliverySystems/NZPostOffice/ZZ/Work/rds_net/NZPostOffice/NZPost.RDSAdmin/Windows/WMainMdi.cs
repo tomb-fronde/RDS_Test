@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
+
 using Metex.Windows;
+
 using NZPostOffice.Shared;
 using NZPostOffice.Shared.VisualComponents;
 using NZPostOffice.RDSAdmin.DataService;
@@ -14,14 +16,36 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin
 {
+    // TJB  RPCR_117 July-2018 
+    // Changed width of dw_user_region, dw_contract_types
+    // to give room for height scrollbar
+    // Changed anchor for dw_detail and gb_details
+    // to avoid user details being cut off if window size changed (smaller).
+    // Changed RdsUserUPhone to RdsUserUEmail
+    // Changed SelectionChanged/Save/Validation: Saving on exit or selection 
+    // change is blocked by validation errors, but the user can choose to exit 
+    // or change selection without saving (see note below).
+    // NOTES
+    // 1. Group and user list details handling: The lists of group and user names 
+    //    are separate from their details.  The details are retrieved as needed, 
+    //    so only the displayed details are loaded at any one time.  It is not as
+    //    though all details are loaded and selected from in-memory cache for display.
+    //    Thus, in pfc_validation, where the code appears to loop through an array
+    //    of details, actually the datawindow rowcount is only = 1.  If an item had
+    //    an error and exit or selection change was allowed to proceed without saving,
+    //    returning to the item later will retrieve the "old" values.
+    // 2. (Bug) If a new group is added, the group list is not updated automatically.
+    //    The group list can be updated with File-->Refresh or (equivalently F5).  
+    //    Note that the user list is updated automatically when a new user is added.
+    // 3. (Another bug) Saving new group names explicitly (File-->Save or ^S) doesn't work .  
+    //    Selecting an existing group or user triggers the save.
+    //
     // TJB  RPCR_060  Mar-2014
     // Added insert code for hs_type table (see m_insert_click)
     //
     // TJB  RPCR_054  12-Aug-2013
     // Added additional validations for new piece rate types and suppliers
     // (see pfc_validation())
-    //
-    // TJB  RPCR_054  July-2013
     // Added check for duplicate payment component type 
     //    when creating new piece rate supplier
     // Changed how new piece rate suppliers are added 
@@ -38,7 +62,6 @@ namespace NZPostOffice.RDSAdmin
         int id = 0;
 
         private const string is_LABEL_GROUPS = "Groups";
-
         private const string is_LABEL_USERS = "Users";
 
         // TJB 18-Oct-2004 SR4642 
@@ -49,35 +72,23 @@ namespace NZPostOffice.RDSAdmin
 
         /// Methods of the PowerBuilder menu
         private MMainMenu m_main_menu;
-
         private DwUserRegion dw_user_region;
-
         private DataUserControlContainer dw_detail;
-
         private USt st_1;
-
         private Controls.USecurityTvs tv_1;
-
         public DataUserControlContainer dw_header;
-
         private DwContractTypes dw_contract_type;
-
         private GroupBox gb_details;
-
         private DUiIdDetails dw_user_details;
-
         private DwGroupDetails dw_1;
-
         private ImageList MainMdiImageList;
-
         private MSecurityTvs m_SecTvs;
-
         private MRdsDw mRdsDw;
 
         public WMainMdi()
         {
             this.InitializeComponent();
-
+            
             this.dw_detail.DataObject = new DwGroupDetails();
 
             dw_detail.DoubleClick += new EventHandler(dw_detail_DoubleClick);
@@ -237,7 +248,7 @@ namespace NZPostOffice.RDSAdmin
             dw_detail.DataObject.ItemChanged += new EventHandler(dw_detail_ItemChanged);
             dw_detail.DataObject.BindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(dw_detail_ListChanged);
 
-            // TJB  RD7_CR001  Nov-2009: Add next line
+            // TJB  RD7_CR001  Nov-2009: Add "dw_detail.Size =" line
             dw_detail.Size = dw_detail.DataObject.Size;
         }
 
@@ -839,6 +850,7 @@ namespace NZPostOffice.RDSAdmin
         }
 
         private int? rds_user_id_ui_id = 0;
+/*   TJB  July-2018: commented out as it is no longer referenced
         public override int pfc_save()
         {
             base.pfc_save();
@@ -850,8 +862,8 @@ namespace NZPostOffice.RDSAdmin
                  rds_user_id_ui_id = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
                 //rds_user_id_ui_id = (int?) StaticFunctions.GetValueUsingReflection(dw_detail.DataObject, 0, "RdsUserIdUiId");
             }
-            int of_save_falg = this.of_save(false);
-            if (of_save_falg == SUCCESS)
+            int of_save_flag = this.of_save(false);
+            if (of_save_flag == SUCCESS)
             {
                 //ll_rc = tv_1.FindItem(currenttreeitem!, ll_current_item);
                 //of_refreshbranch(ll_rc);
@@ -861,11 +873,36 @@ namespace NZPostOffice.RDSAdmin
                 RefreshNode(tv_1.SelectedNode);
 
             }
-            return SUCCESS;
+            // TJB  RPCR_117  July-2018
+            return of_save_flag;  // SUCCESS;
         }
-
+*/
+        // TJB  RPCR_117  July-2018
+        // Added check for and handling of unsaved changes
+        // If the <save> throws up validation errors, don't exit
         public override void pfc_exit()
         {
+            if (StaticFunctions.IsDirty(dw_header.DataObject)
+                || StaticFunctions.IsDirty(dw_detail.DataObject)
+                || dw_detail.DataObject.DeletedCount > 0
+                || StaticFunctions.IsDirty(dw_user_region)
+                || StaticFunctions.IsDirty(dw_contract_type)
+                || StaticFunctions.IsDirty(dw_user_region))
+            {
+                DialogResult ans = MessageBox.Show("There are unsaved changes.\n"
+                                                 + "Do you want to save them?"
+                                                 , "Warning"
+                                                 , MessageBoxButtons.YesNo
+                                                 , MessageBoxIcon.Question);
+                if (ans == DialogResult.Yes)
+                {
+                    if (of_save(false) == FAILURE)
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (MessageBox.Show("Are you sure you want to exit?"
                                , Application.ProductName
                                , MessageBoxButtons.YesNo, MessageBoxIcon.Question)
@@ -895,18 +932,14 @@ namespace NZPostOffice.RDSAdmin
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WMainMdi));
             this.dw_user_region = new NZPostOffice.RDSAdmin.DataControls.Security.DwUserRegion();
             this.dw_detail = new Metex.Windows.DataUserControlContainer();
-            //!this.dw_detail.DataObject = new DwGroupDetails();
             this.dw_1 = new NZPostOffice.RDSAdmin.DataControls.Security.DwGroupDetails();
             this.st_1 = new NZPostOffice.Shared.VisualComponents.USt();
             this.tv_1 = new NZPostOffice.RDSAdmin.Controls.USecurityTvs();
             this.MainMdiImageList = new System.Windows.Forms.ImageList(this.components);
             this.dw_header = new Metex.Windows.DataUserControlContainer();
             this.dw_contract_type = new NZPostOffice.RDSAdmin.DataControls.Security.DwContractTypes();
-            //this.dw_contract_type.ItemChanged+=new EventHandler(dw_contract_type_ItemChanged);
-            this.dw_contract_type.CellClick += new EventHandler(dw_contract_type_ItemChanged);
             this.gb_details = new System.Windows.Forms.GroupBox();
             this.dw_user_details = new NZPostOffice.RDSAdmin.DataControls.Security.DUiIdDetails();
-            this.dw_user_details.lockClick += new EventHandler(dw_user_details_lockClick);
             this.dw_detail.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -916,21 +949,19 @@ namespace NZPostOffice.RDSAdmin
             this.dw_user_region.FilterString = "";
             this.dw_user_region.Location = new System.Drawing.Point(456, 260);
             this.dw_user_region.Name = "dw_user_region";
-            this.dw_user_region.Size = new System.Drawing.Size(175, 180);
+            this.dw_user_region.Size = new System.Drawing.Size(192, 180);
             this.dw_user_region.SortString = "";
             this.dw_user_region.TabIndex = 5;
             this.dw_user_region.Visible = false;
             this.dw_user_region.LostFocus += new System.EventHandler(this.dw_user_region_losefocus);
-            //this.dw_user_region.CellClick += new EventHandler(dw_user_region_ItemChanged);
             // 
             // dw_detail
             // 
             this.dw_detail.Controls.Add(this.dw_1);
-            this.dw_detail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                       | System.Windows.Forms.AnchorStyles.Left)));
+            this.dw_detail.DataObject = null;
             this.dw_detail.Location = new System.Drawing.Point(212, 160);
             this.dw_detail.Name = "dw_detail";
-            this.dw_detail.Size = new System.Drawing.Size(552, 320);
+            this.dw_detail.Size = new System.Drawing.Size(558, 320);
             this.dw_detail.TabIndex = 5;
             this.dw_detail.Visible = false;
             // 
@@ -964,15 +995,15 @@ namespace NZPostOffice.RDSAdmin
             this.tv_1.SelectedImageIndex = 0;
             this.tv_1.Size = new System.Drawing.Size(192, 504);
             this.tv_1.TabIndex = 6;
-            this.tv_1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_1_DragDrop);
-            this.tv_1.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_1_DragOver);
-            this.tv_1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_1_AfterSelect);
             this.tv_1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseUp);
+            this.tv_1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_1_DragDrop);
+            this.tv_1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_1_AfterSelect);
             this.tv_1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseMove);
+            this.tv_1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseDown);
             this.tv_1.DragEnter += new System.Windows.Forms.DragEventHandler(this.tv_1_DragEnter);
             this.tv_1.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_1_BeforeSelect);
-            this.tv_1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseDown);
-            this.tv_1.ItemDrag += new ItemDragEventHandler(tv_1_ItemDrag);
+            this.tv_1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tv_1_ItemDrag);
+            this.tv_1.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_1_DragOver);
             // 
             // MainMdiImageList
             // 
@@ -987,9 +1018,9 @@ namespace NZPostOffice.RDSAdmin
             // dw_header
             // 
             this.dw_header.DataObject = null;
-            this.dw_header.Location = new System.Drawing.Point(213, 37);
+            this.dw_header.Location = new System.Drawing.Point(212, 46);
             this.dw_header.Name = "dw_header";
-            this.dw_header.Size = new System.Drawing.Size(552, 174);
+            this.dw_header.Size = new System.Drawing.Size(475, 165);
             this.dw_header.TabIndex = 3;
             this.dw_header.Visible = false;
             // 
@@ -999,16 +1030,15 @@ namespace NZPostOffice.RDSAdmin
             this.dw_contract_type.FilterString = "";
             this.dw_contract_type.Location = new System.Drawing.Point(456, 37);
             this.dw_contract_type.Name = "dw_contract_type";
-            this.dw_contract_type.Size = new System.Drawing.Size(175, 228);
-            //this.dw_contract_type.SortString = "";
+            this.dw_contract_type.Size = new System.Drawing.Size(192, 228);
+            this.dw_contract_type.SortString = "contract_type_contract_type A";
             this.dw_contract_type.TabIndex = 2;
             this.dw_contract_type.Visible = false;
+            this.dw_contract_type.CellClick += new System.EventHandler(this.dw_contract_type_ItemChanged);
             // 
             // gb_details
             // 
-            this.gb_details.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gb_details.Cursor = System.Windows.Forms.Cursors.Cross;
             this.gb_details.Location = new System.Drawing.Point(205, 27);
             this.gb_details.Name = "gb_details";
             this.gb_details.Size = new System.Drawing.Size(571, 516);
@@ -1026,6 +1056,7 @@ namespace NZPostOffice.RDSAdmin
             this.dw_user_details.SortString = "";
             this.dw_user_details.TabIndex = 4;
             this.dw_user_details.Visible = false;
+            this.dw_user_details.lockClick += new System.EventHandler(this.dw_user_details_lockClick);
             // 
             // WMainMdi
             // 
@@ -1042,8 +1073,17 @@ namespace NZPostOffice.RDSAdmin
             this.Text = "Rural Delivery System Administration";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WMainMdi_FormClosed);
+            this.Controls.SetChildIndex(this.dw_contract_type, 0);
+            this.Controls.SetChildIndex(this.dw_user_region, 0);
+            this.Controls.SetChildIndex(this.dw_user_details, 0);
+            this.Controls.SetChildIndex(this.gb_details, 0);
+            this.Controls.SetChildIndex(this.dw_header, 0);
+            this.Controls.SetChildIndex(this.tv_1, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.Controls.SetChildIndex(this.dw_detail, 0);
             this.dw_detail.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1309,12 +1349,6 @@ namespace NZPostOffice.RDSAdmin
         //    return ll_Id;
         //}
 
-        public int of_save()
-        {
-            // Overloaded - save with user prompt
-            return this.of_save(true);
-        }
-
         public int of_deletegroup(int al_group_id)
         {
             int SQLCode = 0;
@@ -1428,8 +1462,9 @@ namespace NZPostOffice.RDSAdmin
         }
 
         public int of_save(bool ab_prompt)
-        {
-            int li_rc = 0;
+        {   // Saves with (true) or without (false) user prompt
+            // about changes.
+            int li_rc = SUCCESS;  // 0;
             DialogResult li_response = DialogResult.None;
             string ls_msg;
             string ls_title;
@@ -1444,7 +1479,7 @@ namespace NZPostOffice.RDSAdmin
                 if (StaticFunctions.IsDirty(dw_header.DataObject)
                     || StaticFunctions.IsDirty(dw_detail.DataObject)
                     || dw_detail.DataObject.DeletedCount > 0
-                    || StaticFunctions.IsDirty(dw_user_region)
+                    //  || StaticFunctions.IsDirty(dw_user_region)
                     || StaticFunctions.IsDirty(dw_contract_type)
                     || StaticFunctions.IsDirty(dw_user_region))
                 {                    
@@ -1479,7 +1514,13 @@ namespace NZPostOffice.RDSAdmin
                 }
                 if (li_response == DialogResult.No)
                 {
-                    return 1;     //?return SUCCESS
+                    // TJB  RPCR_117  July-2018
+                    // Returning FAILURE (-1) should stop switching users 
+                    // when there's a validation error
+                    // NOTE: NOTSAVED used by selectionchanging()to allow selection 
+                    //       to change in spite of errors. See note at top re group 
+                    //       and user list handling.
+                    return NOTSAVED;  // return 1;     //?return SUCCESS
                 }
             }
             //  Saves the header dw if modified
@@ -1492,7 +1533,9 @@ namespace NZPostOffice.RDSAdmin
                     GroupHeader header = dw_header.DataObject.Current as GroupHeader;
                     //if(header!=null &&( header.UgName==null||header.UgName.Length<=0))
                     //{
-                    //    MessageBox.Show("A group name must be specified.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //    MessageBox.Show("A group name must be specified."
+                    //                   , "Validation Error"
+                    //                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     //    return FAILURE;
                     //}
                     if (header != null && !header.IsNew)
@@ -1504,21 +1547,21 @@ namespace NZPostOffice.RDSAdmin
                         header.UgId = MainMdiService.GetNextSequence("rdsUserGroup").GetValueOrDefault();
                     }
                 }
-                //idw = new DwGroupHeader();
-                idw = dw_header.DataObject;  //? as code logic needs change idw to dw_header.DataObject (maybe with some bugs for other DW)
+                idw = dw_header.DataObject;
                 if (this.pfc_validation(idw) == SUCCESS)
                 {
                     dw_header.DataObject.Save();
                 }
             }
-            if (li_rc < 0)
+            if (li_rc != SUCCESS)   //< 0)
             {
                 return li_rc;
             }
             /* ***********************************
+            (TJB July-2018: these appear to be no longer relevant)
                 Checks the save result
-                1  Success
-                0  No pending updates
+                 1  Success
+                 0  No pending updates
                 -1  Accept text error
                 -2  Updates pending error
                 -3  Validation error
@@ -1528,7 +1571,7 @@ namespace NZPostOffice.RDSAdmin
                 -7  End transaction error
                 -8  Post save error
                 -9  Update prep error
-                *********************************** */
+            *//************************************ */
             //  Saves the detail dw if modified
             if (StaticFunctions.IsDirty(dw_detail.DataObject) 
                 || dw_detail.DataObject.DeletedCount > 0)
@@ -1571,41 +1614,35 @@ namespace NZPostOffice.RDSAdmin
                         dw_detail.DataObject.GetItem<GroupDetails>(i).UgId = dw_header.DataObject.GetItem<GroupHeader>(0).UgId;
                     }
                 }
+                string errtype = "Change";
                 if (dw_detail.DataObject is DwUserDetails)
                 {
-                    dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUser");
-                    dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                    int? UId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId;
+                    int? UiId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                    if (UId == null || UId < 1 || UiId == null || UiId < 1)
+                    {
+                        errtype = "Add";
+                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUser");
+                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                    }
                 }
                 if (this.pfc_validation(dw_detail.DataObject) == SUCCESS)
                 {
                     dw_detail.DataObject.Save();
+                    if ( dw_detail.DataObject.SQLCode> 0 )
+                    {
+                        MessageBox.Show("SQL Error \n"
+                            + dw_detail.DataObject.SQLErrText + "\n"
+                            + errtype + " not saved"
+                            , "WMainMidi.of_save"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
                     return FAILURE;
                 }
             }
-            // TJB  RPCR_054  July-2013
-            // We've saved a dw_detail object successfully. 
-            // If it was a PieceRateType, we need to update the ODPS.PaymentComponentType
-            // table with the type's PieceRateSupplier ID (prs_key).
-            //if (dw_detail.DataObject is DPieceRateType)
-            //{
-            //    int? nPrsKey = dw_detail.DataObject.GetItem<PieceRateType>(0).PrsKey;
-            //    int? nPrtKey = dw_detail.DataObject.GetItem<PieceRateType>(0).PrtKey;
-            //    MessageBox.Show("PrsKey = " + (nPrsKey == null ? "null" : nPrsKey.ToString()) + "\n"
-            //                   + "PrtKey = " + (nPrtKey == null ? "null" : nPrtKey.ToString())
-            //                   , "PieceRateType");
-            //}
-            //if (dw_detail.DataObject is DPieceRateSupplier)
-            //{
-            //    int? iPctId = dw_detail.DataObject.GetItem<PieceRateSupplier>(0).PctId;
-            //    int? iPrsKey = dw_detail.DataObject.GetItem<PieceRateSupplier>(0).PrsKey;
-            //    MessageBox.Show("PrsKey = " + (iPrsKey == null ? "null" : iPrsKey.ToString()) + "\n"
-            //                   + "PctId = " + (iPctId == null ? "null" : iPctId.ToString())
-            //                   , "PieceRateSupplier");
-            //}
-
             //  TJB  SR4598  April 2005
             //  Save the alternate regions if changed
             li_rc = 1;
@@ -1658,43 +1695,6 @@ namespace NZPostOffice.RDSAdmin
                 }
                 dw_contract_type.GetItem<ContractTypes>(i).MarkClean();
             }
-
-
-            //            //Remove all before inserting
-            //Delete rds_user_contract_type
-            //Where ui_id = :ll_ui_id
-            //Using SQLCA;
-
-            //IF SQLCA.SQLCODE <> 0 THEN
-            //    MessageBox("Database Error",  &
-            //                "Unable to create contract types for the user.  " + &
-            //                "~n~nError Code: " + String(sqlca.sqlcode)        + &
-            //                "~n~nError Text: " + SQLCA.sqlerrtext)
-            //    RollBack;
-            //    RETURN FAILURE
-            //End If
-
-            ////If the save was successful save the contract_types selected using the ll_ui_id
-            //For ll_Row = 1 to ll_RowCount
-
-            //    ll_ct_key = dw_contract_type.GetItemNumber(ll_row,"contract_type_ct_key")
-            //    ls_Selected	= dw_contract_type.GetItemString(ll_Row,"dummy1")
-
-            //    If ls_Selected = 'Y' Then
-            //        INSERT INTO rds_user_contract_type ("ct_key", "ui_id")
-            //        VALUES (:ll_ct_key, :ll_ui_id)
-            //        USING SQLCA;
-
-            //        IF SQLCA.SQLCODE <> 0 THEN
-            //            MessageBox("Database Error",  &
-            //                        "Unable to create contract types for the user.  " + &
-            //                        "~n~nError Code: " + String(sqlca.sqlcode)        + &
-            //                        "~n~nError Text: " + SQLCA.sqlerrtext)
-            //            RollBack;
-            //            RETURN FAILURE
-            //        End If
-            //    End If
-            //Next
         }
 
         public int of_get_altregions(int al_id)
@@ -1757,10 +1757,8 @@ namespace NZPostOffice.RDSAdmin
                                + "Error Code: " + SQLCode.ToString() + "\n\n" 
                                + "Error Text: " + SQLErrText
                                , "Database Error");
-                // rollback;
                 return -(1);
             }
-            //  commit;
 
             //DataSet ds = new DataSet();
             //ds.Tables.Add(dw_user_region.Table.Copy());
@@ -1857,8 +1855,13 @@ namespace NZPostOffice.RDSAdmin
         {
         }
 
-        private void dw_detail_ue_validate(int al_row)
+        private int dw_detail_ue_validate(int al_row)
         {
+            // TJB  RPCR_117  July-2018
+            // Changed subroutine to return SUCCESS or FAILURE depending on validations
+
+            int rc = SUCCESS;
+
             // if create modify or delete have been check, check read.
             if (dw_detail.DataObject is DwGroupDetails)
             {
@@ -1906,9 +1909,32 @@ namespace NZPostOffice.RDSAdmin
                     {
                         MessageBox.Show("Error determining new road suffix ID " + "(max(rs_id)=" + ll_rs_max + ")"
                                         , "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        rc = FAILURE;
                     }
                 }
             }
+
+            // TJB  RPCR_117  July-2018: Added
+            // Validate email address
+            if (dw_detail.DataObject is DwUserDetails)
+            {
+                UserDetails userdetails = dw_detail.DataObject.Current as UserDetails;
+                string u_email, result;
+                u_email = userdetails.RdsUserUEmail;
+                if ( u_email != null)
+                    if ((result = MainMdiService.CheckEmailAddress( u_email )) != "OK" )
+                    {
+                        MessageBox.Show("Incorrect format for email address.\n"
+                                    + "Format should be name@address with no spaces\n\n"
+                                    + "<" + result + ">\n\n"
+                                    + "Please correct before saving."
+                                    , "Validation Error"
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        rc = FAILURE;
+                    }
+                
+            }
+            return rc;
         }
 
         private void dw_detail_clicked(int row, DataColumn dwo)
@@ -2288,13 +2314,24 @@ namespace NZPostOffice.RDSAdmin
             return 1;
         }
        
+        // TJB  RPCR_117  July-2018
+        // Removed old code and added pfc_validate.
+        // Displays error messages
         public void dw_detail_ItemChanged(object sender, EventArgs args)
         {
-            //!base.itemchanged(row, dwo, data);            
-            int row = dw_detail.DataObject.GetRow();
-            if(row >= 0)
-                dw_detail_ue_validate(row);
-            //? return 1;
+            pfc_validation(dw_detail.DataObject);
+            /*
+                //!base.itemchanged(row, dwo, data);            
+                int rc = SUCCESS;
+                int row = dw_detail.DataObject.GetRow();
+                if (row >= 0)
+                {
+                    rc = dw_detail_ue_validate(row);
+                    if ( rc == FAILURE )
+                    {
+                    }
+                }
+            */
         }
 
         private void dw_contract_type_ItemChanged(object sender, EventArgs args)
@@ -2498,8 +2535,9 @@ namespace NZPostOffice.RDSAdmin
                         dw_user_details.Visible = true;
                         dw_contract_type.BringToFront();
                         dw_user_details.BringToFront();
+
                         //  TJB  SR4598  April 2005
-                        //  If the user has a default region  ( isn't a 'national' user)
+                        //  If the user has a default region (isn't a 'national' user)
                         //  display the alternate regions list.
                         int? ll_regionId = null;
                         if(dw_detail.DataObject.RowCount > 0)
@@ -2776,77 +2814,80 @@ namespace NZPostOffice.RDSAdmin
         public virtual void selectionchanging(TreeViewCancelEventArgs e)
         {
             //base.selectionchanging();
-            int li_retain_focus = 1;
-            int li_LOOSE_FOCUS = 0;
             int li_rc = 100;
-            int li_return_result = 0;//! ancestorreturnvalue;
+
             //  TJB SR4642 1 Nov 2004
             //  Added if condition around save.
             //  Prevents confirmation messagebox re user detail changes
             //  when looking at/changing outlets.
             if (!(dw_detail.DataObject is DOutletList))
             {
-                li_rc = of_save();
+                li_rc = of_save(true);
             }
-            if (li_rc < 0)
+            // TJB  RPCR_117  July-2018
+            // Replaced commented-out code which didn't actually do anything. "e.Cancel=true"
+            // prevents focus changing if the save fails (usually a validation error)
+            // NOTE: of_save() now may return NOTSAVED (errors found; user said not 
+            //       to save them).  NOTSAVED has same effect here as SUCCESS: selection 
+            //       change allowed to proceed.
+            if (li_rc == FAILURE)
             {
-                li_return_result = li_retain_focus;
+                e.Cancel = true;
             }
-            else if (li_rc == 1)
-            {
-                //!of_refreshbranch(oldhandle);
-            }
+
             return;
         }
 
         public virtual void itemcollapsing()
         {
             /*! base.itemcollapsing();
-             TreeViewItem tvi_temp;
-             GetItem(Handle, tvi_temp);
-             if (tvi_temp.Level == 1)
-             {
-                 tvi_temp.SelectedPictureIndex = 1;
-                 tvi_temp.PictureIndex = 1;
-                 SetItem(Handle, tvi_temp);
-             }*/
+            * TreeViewItem tvi_temp;
+            * GetItem(Handle, tvi_temp);
+            * if (tvi_temp.Level == 1)
+            * {
+            *     tvi_temp.SelectedPictureIndex = 1;
+            *     tvi_temp.PictureIndex = 1;
+            *     SetItem(Handle, tvi_temp);
+            * }
+            */
         }
 
         public virtual void itemexpanding()
         {
             /*! base.itemexpanding();
-             TreeViewItem tvi_temp;
-             // Get all the info from the tree
-             GetItem(Handle, tvi_temp);
-             if (tvi_temp.Level == 1)
-             {
-                 tvi_temp.SelectedPictureIndex = 4;
-                 tvi_temp.PictureIndex = 4;
-                 SetItem(Handle, tvi_temp);
-             }*/
+            * TreeViewItem tvi_temp;
+            * // Get all the info from the tree
+            * GetItem(Handle, tvi_temp);
+            * if (tvi_temp.Level == 1)
+            * {
+            *     tvi_temp.SelectedPictureIndex = 4;
+            *     tvi_temp.PictureIndex = 4;
+            *     SetItem(Handle, tvi_temp);
+            * }
+            */
         }
 
         public virtual void pfc_preinsertitem()
         {
             /*! base.pfc_preinsertitem();
-             if (al_parent == 3)
-             {
-                 if (ads_obj.GetItemNumber(al_row, "id") != 1)
-                 {
-                     atvi_item.Children = false;
-                 }
-             }*/
+            * if (al_parent == 3)
+            *     if (ads_obj.GetItemNumber(al_row, "id") != 1)
+            *         atvi_item.Children = false;
+            */
         }
 
         public virtual int pfc_validation(DataUserControl adw)
         {
             //  base.pfc_validation();
-            string ls_ug_id;
+            //string ls_ug_id;
             int ll_c = SUCCESS;
             int ll_count = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
-            // pfc_u_dw.pfc_validation
+
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DNpadParameters               +
+            //+++++++++++++++++++++++++++++++++++++++++
             if (adw is DNpadParameters)
             {
                 for (int i = 0; i < adw.RowCount; i++)
@@ -2861,12 +2902,21 @@ namespace NZPostOffice.RDSAdmin
                     }
                 }
             }
-            // if (this.PBName == "dw_group_header")
+
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DwGroupHeader                 +
+            //+++++++++++++++++++++++++++++++++++++++++
             if (adw is DwGroupHeader)
             {
+                // TJB  RPCR_117  July-2018
+                // Added isNew and InitialValue to handle failed group name lookup 
+                // when adding a new group. If the name doesn't exist and this is
+                // a new group, it isn't an error.
+
+                bool isNew = (dw_header.DataObject.Current as GroupHeader).IsNew;
                 // ls_ug_id = this.GetItemString(1, "ug_name");
-                ls_ug_id = dw_header.GetValue<string>(0, "ug_name");
-                if (ls_ug_id == null)
+                string UgName = dw_header.GetValue<string>(0, "ug_name");
+                if (UgName == null)
                 {
                     // MessageBox("Validation Error", "A group name must be specified.", exclamation);
                     MessageBox.Show( "A group name must be specified."
@@ -2877,21 +2927,26 @@ namespace NZPostOffice.RDSAdmin
                     //this.SetFocus();
                     dw_header.Focus();
                     ll_c = FAILURE;
+                    return FAILURE;
                 }
                   
                 //if (dw_header.DataObject.GetItem<GroupHeader>(0).IsNew || dw_header.DataObject.GetItem<GroupHeader>(0).IsDirty)
-                if (dw_header.DataObject.GetItem<GroupHeader>(0).UgName != dw_header.DataObject.GetItem<GroupHeader>(0).GetInitialValue<string>("_ug_name"))
+                UgName = dw_header.DataObject.GetItem<GroupHeader>(0).UgName;
+                string InitialValue = dw_header.DataObject.GetItem<GroupHeader>(0).GetInitialValue<string>("_ug_name");
+                //if (dw_header.DataObject.GetItem<GroupHeader>(0).UgName != dw_header.DataObject.GetItem<GroupHeader>(0).GetInitialValue<string>("_ug_name"))
+                if (UgName != InitialValue)
                 {
-                    /* SELECT count(*) INTO :ll_count FROM rds_user_group WHERE ug_name = :ls_ug_id*/
-                    if (!MainMdiService.GetRdsUserGroupDataObject(ls_ug_id, ref ll_count))
+                    // SELECT count(*) INTO :ll_count FROM rds_user_group WHERE ug_name = :ls_ug_id
+                    if (!MainMdiService.GetRdsUserGroupDataObject(UgName, ref ll_count))
                     {
                         MessageBox.Show("Unable to validate group name. \n\n" 
                                         + "Error Code: " + SQLCode.ToString() + "\n\n" 
                                         + "Error Text: " + SQLErrText
                                         , "Database Error");
                         ll_c = FAILURE;
+                        return FAILURE;
                     }
-                    if (ll_count > 0)
+                    if (ll_count > 0 && !isNew)
                     {
                         MessageBox.Show("The group name specified already exists in the database."
                                         , "Validation Error"
@@ -2900,83 +2955,136 @@ namespace NZPostOffice.RDSAdmin
                         //this.SetFocus();
                         dw_header.Focus();
                         ll_c = FAILURE;
-                    }
-                }
-            }        
-            if(adw is DwUserDetails)
-            {  
-                UserDetails userdetails = dw_detail.DataObject.Current as UserDetails;
-                if (userdetails == null) return ll_c;
-                if (userdetails.RdsUserUName == null || userdetails.RdsUserUName.Length <= 0)
-                {
-                    MessageBox.Show("A user name must be specified"
-                                   , "Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
-                    return FAILURE;
-                }
-                if (userdetails.RdsUserUName != dw_detail.DataObject.GetItem<UserDetails>(dw_detail.DataObject.GetRow()).GetInitialValue<string>("_rds_user_u_name"))
-                {
-                    MainMdiService.GetCountFormRdsUser(userdetails.RdsUserUName, ref ll_count);
-                    if (ll_count > 0)
-                    {
-                        MessageBox.Show("The user name specified already exists in the database."
-                                       , "Validation Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
                         return FAILURE;
                     }
-                }
-                if (userdetails.RdsUserIdUiUserid == null || userdetails.RdsUserIdUiUserid.Length<=0)
-                {
-                    MessageBox.Show("A userid must be specified."
-                                   , "Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
-                    return FAILURE;
-                }
-                if (userdetails.RdsUserIdUiUserid != userdetails.GetInitialValue<string>("_rds_user_id_ui_userid"))
-                {
-                    MainMdiService.GetUiUseridCountFormRdsUser(userdetails.RdsUserIdUiUserid, ref ll_count);
-                    if (ll_count > 0)
-                    {
-                        MessageBox.Show("The user id specified already exists in the database."
-                                       , "Validation Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
-                        return FAILURE;
-                    }
-                }
-                if (userdetails.RdsUserIdUiPassword == null || userdetails.RdsUserIdUiPassword.Length <= 0)
-                {
-                    MessageBox.Show("A password must be specified."
-                                    , "Validation Error"
-                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
-                    return FAILURE;
-                }
-                if (userdetails.RdsUserIdUiPassword != userdetails.GetInitialValue<string>("_rds_user_id_ui_password"))
-                {
-                    string returnMessage = string.Empty;
-                    MainMdiService.GetUpPasswordFormRdsUser(userdetails.RdsUserIdUiId, userdetails.RdsUserIdUiPassword, ref returnMessage);
-                    if (returnMessage != null && returnMessage != "")
-                    {
-                        MessageBox.Show("The password specified has already been used. Please select another."
-                                       , "Validation Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
-                        return FAILURE;
-                    }
-                }
-                if (userdetails.RdsUserRegionId == null)
-                {
-                    MessageBox.Show("A region must be specified."
-                                   , "Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    dw_detail.DataObject.GetControlByName("rds_user_region_id").Focus();
-                    return FAILURE;
                 }
             }
+
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DwUserDetails                 +
+            //+++++++++++++++++++++++++++++++++++++++++
+            if (adw is DwUserDetails)
+            {
+                int nRows = adw.RowCount;
+                for (int i = 0; i < nRows; i++)
+                {
+                    UserDetails userdetails = adw.Current as UserDetails;
+                    if (adw.GetItem<UserDetails>(i).IsNew || adw.GetItem<UserDetails>(i).IsDirty)
+                    {
+                        string UName = adw.GetItem<UserDetails>(i).RdsUserUName;
+                        if (UName == null || UName.Length <= 0)
+                        {
+                            MessageBox.Show("A user name must be specified.\n"
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            adw.GetControlByName("rds_user_u_name").Focus();
+                            //dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
+                            ll_c = FAILURE;
+                            //return FAILURE;
+                        }
+                        if (UName != adw.GetItem<UserDetails>(i).GetInitialValue<string>("_rds_user_u_name"))
+                        {
+                            MainMdiService.GetCountFormRdsUser(UName, ref ll_count);
+                            if (ll_count > 0)
+                            {
+                                MessageBox.Show("The user name " + UName + " already exists in the database."
+                                               , "Validation Error"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                adw.GetControlByName("rds_user_u_name").Focus();
+                                //dw_detail.DataObject.GetControlByName("rds_user_u_name").Focus();
+                                ll_c = FAILURE;
+                                //return FAILURE;
+                            }
+                        }
+                        string UiUserid = adw.GetItem<UserDetails>(i).RdsUserIdUiUserid;
+                        if (UiUserid == null || UiUserid.Length <= 0)
+                        {
+                            MessageBox.Show("A userid must be specified.\n"
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            adw.GetControlByName("rds_user_id_ui_userid").Focus();
+                            //dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
+                            ll_c = FAILURE;
+                            //return FAILURE;
+                        }
+                        if (UiUserid != userdetails.GetInitialValue<string>("_rds_user_id_ui_userid"))
+                        {
+                            MainMdiService.GetUiUseridCountFormRdsUser(UiUserid, ref ll_count);
+                            if (ll_count > 0)
+                            {
+                                MessageBox.Show("The user id " + UiUserid + " already exists in the database."
+                                               , "Validation Error"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                adw.GetControlByName("rds_user_id_ui_userid").Focus();
+                                //dw_detail.DataObject.GetControlByName("rds_user_id_ui_userid").Focus();
+                                ll_c = FAILURE;
+                                //return FAILURE;
+                            }
+                        }
+                        string UiPassword = adw.GetItem<UserDetails>(i).RdsUserIdUiPassword;
+                        if (UiPassword == null || UiPassword.Length <= 0)
+                        {
+                            MessageBox.Show("A password must be specified.\n"
+                                            , "Validation Error"
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            adw.GetControlByName("rds_user_id_ui_password").Focus();
+                            //dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
+                            ll_c = FAILURE;
+                            //return FAILURE;
+                        }
+                        if (UiPassword != userdetails.GetInitialValue<string>("_rds_user_id_ui_password"))
+                        {
+                            string returnMessage = string.Empty;
+                            MainMdiService.GetUpPasswordFormRdsUser(userdetails.RdsUserIdUiId, userdetails.RdsUserIdUiPassword, ref returnMessage);
+                            if (returnMessage != null && returnMessage != "")
+                            {
+                                MessageBox.Show("The password specified has already been used. Please select another."
+                                               , "Validation Error"
+                                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                adw.GetControlByName("rds_user_id_ui_password").Focus();
+                                //dw_detail.DataObject.GetControlByName("rds_user_id_ui_password").Focus();
+                                ll_c = FAILURE;
+                                //return FAILURE;
+                            }
+                        }
+                        int? Regionid = adw.GetItem<UserDetails>(i).RdsUserRegionId;
+                        if (Regionid == null)
+                        {
+                            MessageBox.Show("A region must be specified.\n"
+                                           , "Validation Error"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            adw.GetControlByName("rds_user_region_id").Focus();
+                            //dw_detail.DataObject.GetControlByName("rds_user_region_id").Focus();
+                            ll_c = FAILURE;
+                            //return FAILURE;
+                        }
+                        // TJB  RPCR_117  July-2018: Added
+                        // Validate email address
+                        string UEmail, result;
+                        UEmail = adw.GetItem<UserDetails>(i).RdsUserUEmail;
+                        if (UEmail != null)
+                        {
+                            result = MainMdiService.CheckEmailAddress(UEmail);
+                            if (result != "OK")
+                            {
+                                MessageBox.Show("Incorrect format for email address.\n"
+                                            + "Format should be name@address with no spaces\n\n"
+                                            + "<" + result + ">\n\n"
+                                            + "Please correct before saving."
+                                            , "Validation Error"
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                                ll_c = FAILURE;
+                                //return FAILURE;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DwPieceRateType               +
+            //+++++++++++++++++++++++++++++++++++++++++
             // TJB  RPCR_054  12-Aug-2013: Added
             // Validate new piece_rate_types
             if (adw is DPieceRateType)
@@ -3036,6 +3144,10 @@ namespace NZPostOffice.RDSAdmin
                     }
                 }
             }
+
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DPieceRateSupplier            +
+            //+++++++++++++++++++++++++++++++++++++++++
             // TJB RPCR_054 April-2013: Added
             // Validate new piece_rate_suppliers
             if (adw is DPieceRateSupplier)
