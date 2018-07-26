@@ -97,7 +97,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsLib
                         | System.Windows.Forms.AnchorStyles.Right)));
             dw_selection.Location = new System.Drawing.Point(3, 3);
             dw_selection.Size = new System.Drawing.Size(190, 140);
-            dw_selection.DoubleClick += new EventHandler(dw_selection_doubleclicked);
+            //dw_selection.DoubleClick += new EventHandler(dw_selection_doubleclicked);
             //?dw_selection.DbError += new DbEventHandler(dw_selection_dberror);
          
     
