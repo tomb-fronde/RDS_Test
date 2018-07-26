@@ -1309,10 +1309,12 @@ namespace NZPostOffice.RDS.Controls
 
         public virtual void URdsDw_Itemchanged(object sender, EventArgs e)
         {
+            /*
             if (this.DataObject != null)
                 MessageBox.Show("===== URdsDw_ItemChanged =====\n" 
                     + "DataObject = " + this.DataObject.ToString()+"\n"
                     , "URdsDw_ItemChanged");
+            */
 
             //?this.ue_PostItemChanged(row, dwo, data);
         }
