@@ -18,6 +18,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
     public partial class WInvoiceSearch : WCriteriaSearch
     {
+        // TJB  RPCR_111 28-Jun-2018
+        // Added ls_contractor_email_addr to cb_export_clicked and
+        // to contractor details in invoice file.
+        //
         // TJB  Release Fixup Aug-2013
         // Copied allowance breakdown retrieval to cb_export_clicked from 
         // cb_open_clicked
@@ -1763,6 +1767,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             int? ll_contractor_no;
             string ls_contractor_name = string.Empty;
             string ls_contractor_addr;
+            string ls_contractor_email_addr;
             string ls_contractor_gst;
             string ls_contract_title;
             string ls_invoice_no;
@@ -1875,6 +1880,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 ls_contractor_name = ids_invoice.GetItem<InvoiceHeaderOnly>(ll_row).Compute4;
 
                 ls_contractor_addr = ids_invoice.GetItem<InvoiceHeaderOnly>(ll_row).CAddress;
+                ls_contractor_email_addr = ids_invoice.GetItem<InvoiceHeaderOnly>(ll_row).CEmailAddress;
                 ls_contractor_gst = ids_invoice.GetItem<InvoiceHeaderOnly>(ll_row).CGstNumber;
                 ls_message = ids_invoice.GetItem<InvoiceHeaderOnly>(ll_row).Cinvmessage;
 
@@ -1897,7 +1903,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                               + "|" + of_output(ld_end_date)    
                               + "|" + of_output(ld_issue_date) 
                               + "|" + of_output(ls_invoice_no)  
-                              + "|" + of_output(ls_message);
+                              + "|" + of_output(ls_message)
+                              + "|" + ls_contractor_email_addr;
                 /*  ----------------------- Debugging ----------------------- //
                 string ds_address = (ls_address == null) ? "NULL" : ls_address;
                 MessageBox.Show("========== New Invoice ==========\n"  
