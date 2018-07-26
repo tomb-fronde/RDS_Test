@@ -8,19 +8,23 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsInvoice
 {
+    // TJB RPCR_111 28-Jun-2018
+    // Added CEmailAddress (and _c_email_address) to values retreived
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
     [MapInfo("start_date", "_contract_start_date", "contract")]
     [MapInfo("contract_no", "_contract_no", "contract")]
+    [MapInfo("contractor_supplier_no", "_contractor_contractor_supplier_no", "contractor")]
     [MapInfo("c_gst_number", "_c_gst_number", "contractor")]
     [MapInfo("con_title", "_con_title", "contract")]
     [MapInfo("c_surname_company", "_c_surname_company", "contractor")]
     [MapInfo("c_first_names", "_c_first_names", "contractor")]
     [MapInfo("c_address", "_c_address", "contractor")]
+    [MapInfo("c_email_address", "_c_email_address", "contractor")]
     [MapInfo("invoice_no", "_cinvoice_no", "odps.national")]
     [MapInfo("invoice_id", "_payment_invoice_id", "payment")]
-    [MapInfo("contractor_supplier_no", "_contractor_contractor_supplier_no", "contractor")]
     [MapInfo("compute_0011", "_prc", "odps.national")]
     [MapInfo("compute_0012", "_compute_0012", "odps.national")]
     [MapInfo("ds_no", "_ds_no", "odps.national")]
@@ -60,6 +64,9 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
 
         [DBField()]
         private int? _contractor_contractor_supplier_no;
+
+        [DBField()]
+        private string _c_email_address;
 
         [DBField()]
         private string _prc;
@@ -205,6 +212,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                 if (_c_address != value)
                 {
                     _c_address = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string CEmailAddress
+        {
+            get
+            {
+                CanReadProperty("CEmailAddress", true);
+                return _c_email_address;
+            }
+            set
+            {
+                CanWriteProperty("CEmailAddress", true);
+                if (_c_email_address != value)
+                {
+                    _c_email_address = value;
                     PropertyHasChanged();
                 }
             }
@@ -442,6 +467,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                                                         end) FROM rd.contractor_ds  WHERE contractor_ds.contractor_supplier_no = contractor.contractor_supplier_no ),'RD0'+convert(varchar(20),contractor.contractor_supplier_no)) as DS_NO,   
                                          (isnull(message_for_invoice , (select nat_message_for_invoice from odps.[national] where nat_id=odps.od_blf_getwhichnational(:end_date)))) as  invmessage,   
                                          (select count(*) from odps.payment_component_piece_rates, odps.payment_component, odps.payment_component_type  where payment_component_type.pct_id= payment_component.pct_id and pct_description like 'XP%' and payment_component.pc_id=payment_component_piece_rates.pc_id and payment_component.invoice_id=payment.invoice_id) xpc
+                                        ,contractor.c_email_address
                                     FROM odps.payment,   
                                          rd.[contract],   
                                          rd.contractor,   
@@ -465,8 +491,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                                      AND ( (types_for_contract.ct_key = :ctKey AND :ctKey <> 0) OR :ctKey = 0 ) 
                                      AND types_for_contract.contract_no = [contract].contract_no
                                    ORDER BY [contract].contract_no ASC   ";
-
-
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "start_date", start_date);
@@ -498,6 +522,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsInvoice
                             instance._ds_no = GetValueFromReader<string>(dr,12);
                             instance._cinvmessage = GetValueFromReader<string>(dr,13);
                             instance._cxpc = GetValueFromReader<Int32?>(dr,14);
+                            instance._c_email_address = GetValueFromReader<string>(dr, 15);
                             //instance.StoreFieldValues(dr, "odps.national");
                             instance.MarkOld();
                             instance.StoreInitialValues();
