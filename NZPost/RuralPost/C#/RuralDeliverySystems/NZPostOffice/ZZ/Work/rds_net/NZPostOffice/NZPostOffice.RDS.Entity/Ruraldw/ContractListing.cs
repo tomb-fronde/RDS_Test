@@ -8,6 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  RPCR_122  July-2018
+    // Added in_pbu_id parameter in fetch parameter list and
+    // in parameters for called stored procedure.
+    // Changed called stored procedure to sp_SearchForContract4
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -105,27 +110,42 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		#endregion
 
 		#region Factory Methods
-		public static ContractListing NewContractListing( int? in_Region, int? in_Contract, string in_ContractTitle, string in_ConMSN, DateTime? in_LastServiceStart, DateTime? in_LastServiceEnd, DateTime? in_LastDelStart, DateTime? in_LastDelEnd, DateTime? in_LastWorkStart, DateTime? in_LastWorkEnd, int? in_ContractType )
+		public static ContractListing NewContractListing( int? in_Region, int? in_Contract, string in_ContractTitle
+                                     , string in_ConMSN, DateTime? in_LastServiceStart, DateTime? in_LastServiceEnd
+                                     , DateTime? in_LastDelStart, DateTime? in_LastDelEnd, DateTime? in_LastWorkStart
+                                     , DateTime? in_LastWorkEnd, int? in_ContractType, int? in_PbuId )
 		{
-			return Create(in_Region, in_Contract, in_ContractTitle, in_ConMSN, in_LastServiceStart, in_LastServiceEnd, in_LastDelStart, in_LastDelEnd, in_LastWorkStart, in_LastWorkEnd, in_ContractType);
+			return Create(in_Region, in_Contract, in_ContractTitle, in_ConMSN, in_LastServiceStart, in_LastServiceEnd
+                        , in_LastDelStart, in_LastDelEnd, in_LastWorkStart, in_LastWorkEnd, in_ContractType, in_PbuId);
 		}
 
-		public static ContractListing[] GetAllContractListing( int? in_Region, int? in_Contract, string in_ContractTitle, string in_ConMSN, DateTime? in_LastServiceStart, DateTime? in_LastServiceEnd, DateTime? in_LastDelStart, DateTime? in_LastDelEnd, DateTime? in_LastWorkStart, DateTime? in_LastWorkEnd, int? in_ContractType )
+		public static ContractListing[] GetAllContractListing( int? in_Region, int? in_Contract, string in_ContractTitle
+                                     , string in_ConMSN, DateTime? in_LastServiceStart, DateTime? in_LastServiceEnd
+                                     , DateTime? in_LastDelStart, DateTime? in_LastDelEnd, DateTime? in_LastWorkStart
+                                     , DateTime? in_LastWorkEnd, int? in_ContractType, int? in_PbuId )
 		{
-			return Fetch(in_Region, in_Contract, in_ContractTitle, in_ConMSN, in_LastServiceStart, in_LastServiceEnd, in_LastDelStart, in_LastDelEnd, in_LastWorkStart, in_LastWorkEnd, in_ContractType).list;
+			return Fetch(in_Region, in_Contract, in_ContractTitle, in_ConMSN, in_LastServiceStart, in_LastServiceEnd
+                       , in_LastDelStart, in_LastDelEnd, in_LastWorkStart, in_LastWorkEnd, in_ContractType, in_PbuId).list;
 		}
 		#endregion
 
 		#region Data Access
 		[ServerMethod]
-		private void FetchEntity( int? in_Region, int? in_Contract, string in_ContractTitle, string in_ConMSN, DateTime? in_LastServiceStart, DateTime? in_LastServiceEnd, DateTime? in_LastDelStart, DateTime? in_LastDelEnd, DateTime? in_LastWorkStart, DateTime? in_LastWorkEnd, int? in_ContractType )
+		private void FetchEntity( int? in_Region, int? in_Contract, string in_ContractTitle
+                                , string in_ConMSN, DateTime? in_LastServiceStart
+                                , DateTime? in_LastServiceEnd, DateTime? in_LastDelStart
+                                , DateTime? in_LastDelEnd, DateTime? in_LastWorkStart
+                                , DateTime? in_LastWorkEnd, int? in_ContractType
+                                , int? in_PbuId )
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.StoredProcedure;
-					ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "rd.sp_SearchForContract4";
+
+                    ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "in_Region", in_Region);
 					pList.Add(cm, "in_Contract", in_Contract);
 					pList.Add(cm, "in_ContractTitle", in_ContractTitle);
@@ -136,8 +156,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					pList.Add(cm, "in_LastDelEnd", in_LastDelEnd);
 					pList.Add(cm, "in_LastWorkStart", in_LastWorkStart);
 					pList.Add(cm, "in_LastWorkEnd", in_LastWorkEnd);
-					pList.Add(cm, "in_ContractType", in_ContractType);
-                    cm.CommandText = "rd.sp_SearchForContract3";
+                    pList.Add(cm, "in_ContractType", in_ContractType);
+                    pList.Add(cm, "in_PbuId", in_PbuId);
 
 					List<ContractListing> _list = new List<ContractListing>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
