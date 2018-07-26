@@ -29,16 +29,16 @@ namespace NZPostOffice.ODPS.Windows.Odps
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-           
-            // 
+
+            //
             // dw_selection
-            // 
+            //
             dw_selection.DataObject = new NZPostOffice.ODPS.DataControls.Odps.DwPbuCode();
             dw_selection.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-           
-            // 
+
+            //
             // cb_open
-            // 
+            //
             cb_open.Enabled = false;
         }
 
