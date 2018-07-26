@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB  RPCR_117  July-2018
+    // Added NOTSAVED and changed CANCLE to CANCEL
+
     /// <summary>
     /// Application windows ancester class
     /// </summary>
@@ -17,7 +20,8 @@ namespace NZPostOffice.Shared.VisualComponents
 
         public const int SUCCESS = 1;
         public const int FAILURE = -1;
-        public const int CANCLE = 3;
+        public const int NOTSAVED = 2;
+        public const int CANCEL = 3;
 
         // Component associated with the window 
         public string is_ComponentName = String.Empty;
