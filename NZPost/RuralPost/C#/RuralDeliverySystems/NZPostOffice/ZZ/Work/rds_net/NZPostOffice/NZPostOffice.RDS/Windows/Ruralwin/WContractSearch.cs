@@ -12,6 +12,12 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_122  July-2018
+    // Changed size of contract search window and dw_criteria sub-window
+    // Added PBUCode element (dropdown select list) to Designer 
+    // And search logic to WContractSearch (see references to PbuId 
+    // in pb_search_clicked)
+
     public partial class WContractSearch : WGenericSearch
     {
         public WContractSearch()
@@ -22,18 +28,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_criteria.DataObject = new DContractSearch();
             this.dw_criteria.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            //jlwang: moved from InitializeComponent
             dw_results.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_results_constructor);
             ((DContractListing)dw_results.DataObject).CellDoubleClick += new EventHandler(this.dw_results_doubleclicked);
             dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(this.dw_criteria_constructor);
             ((DContractSearch)this.dw_criteria.DataObject).ChildControlClick += new EventHandler(ChildControl_Click);
-            //jlwang:end
         }
 
         public override void pfc_preopen()
         {
             base.pfc_preopen();
-            // dw_criteria.Modify ( "region_id.initial='" + string ( gnv_app.of_Get_SecurityManager ( ).of_Get_User ( ).of_Get_RegionId ( )) + "'")
+            // dw_criteria.Modify("region_id.initial='" + string(gnv_app.of_Get_SecurityManager().of_Get_User().of_Get_RegionId()) + "'")
             this.of_set_componentname("Contract");
         }
 
@@ -103,7 +107,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //added by jlwang
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
             dw_criteria.URdsDw_GetFocus(null, null);
-
         }
 
         private delegate void delegateInvoke();
@@ -113,7 +116,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_criteria.GetItem<ContractSearch>(0).CtKey = 1; //dw_criteria.DataObject.SetValue(0, "ct_key", 1);
             //dw_criteria.SetCurrent(0);
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
-
         }
 
         public virtual int of_clear()
@@ -254,12 +256,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DateTime? dDelStart;
             DateTime? dDelEnd;
             int? ll_contract_type;
+            int? lPbuId;
+
             dw_criteria.AcceptText();
             lRegion = dw_criteria.GetItem<ContractSearch>(0).RegionId;
-            if (dw_criteria.ll_row == -99) //jlwang
+            if (dw_criteria.ll_row == -99)
                 lRegion = -99;
 
             lContract = dw_criteria.GetItem<ContractSearch>(0).ContractNo;
+            // TJB  RPCR_122  July-2018: Added
+            // Prevents "0" displayed as contract numberwhen previous number deleted
+            if (lContract == 0)
+                dw_criteria.GetItem<ContractSearch>(0).ContractNo = null;
             sConTitle = dw_criteria.GetItem<ContractSearch>(0).ConTitle;
             sMSN = (dw_criteria.GetItem<ContractSearch>(0).ConOldMailServiceNo == null ? null : dw_criteria.GetItem<ContractSearch>(0).ConOldMailServiceNo.Trim());
             dWorkStart = dw_criteria.GetItem<ContractSearch>(0).ConLastWorkMsr1;
@@ -269,6 +277,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dDelStart = dw_criteria.GetItem<ContractSearch>(0).ConLastDeliveryCheck1;
             dDelEnd = dw_criteria.GetItem<ContractSearch>(0).ConLastDeliveryCheck2;
             ll_contract_type = dw_criteria.GetItem<ContractSearch>(0).CtKey;
+            lPbuId = dw_criteria.GetItem<ContractSearch>(0).PbuId;
             if (lRegion == null)
             {
                 lRegion = 0;
@@ -289,13 +298,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 sMSN = "";
             }
+            if (lPbuId == null)
+            {
+                lPbuId = 0;
+            }
 
             Cursor.Current = Cursors.WaitCursor;
 
-            ((DContractListing)dw_results.DataObject).Retrieve(lRegion, lContract, sConTitle, sMSN, dServiceStart, dServiceEnd, dDelStart, dDelEnd, dWorkStart, dWorkEnd, ll_contract_type);
+            ((DContractListing)dw_results.DataObject).Retrieve(lRegion, lContract, sConTitle, sMSN
+                                      , dServiceStart, dServiceEnd, dDelStart, dDelEnd, dWorkStart
+                                      , dWorkEnd, ll_contract_type, lPbuId);
             if (dw_results.RowCount == 0)
             {
-                MessageBox.Show("There are no contracts that satisfy the search criteria entered.", "Unsuccessful Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("There are no contracts that satisfy the search criteria entered."
+                               , "Unsuccessful Search"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dw_criteria.Focus();
             }
             else
@@ -333,7 +350,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_row = dw_results.GetSelectedRow(0);
             if (ll_row < 0)
             {
-                MessageBox.Show("Please search for a contract before trying to open one.", "Contract Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Please search for a contract before trying to open one."
+                              , "Contract Search"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             // Get contract no
@@ -344,7 +363,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("contract_no", ll_contractno);
             lnv_msg.of_addcriteria(lnv_Criteria);
             // Build title
-            ls_title = "Contract: (" + ll_contractno + ") " + dw_results.GetItem<ContractListing>(dw_results.GetSelectedRow(0)).ConTitle;
+            string ConTitle = dw_results.GetItem<ContractListing>(dw_results.GetSelectedRow(0)).ConTitle;
+            ls_title = "Contract: (" + ll_contractno + ") " + ConTitle;
             // Open contract window if contract with title=ls_title not open
             if (!(StaticVariables.gnv_app.of_findwindow(ls_title, "w_contract2001") != null))
             {
