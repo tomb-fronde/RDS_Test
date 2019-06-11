@@ -7,6 +7,9 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
+    // TJB  RPCR_140  June-2019
+    // Added contract_no and rg_code dropdown
+
     partial class DwPaymentRunPeriod
     {
 
@@ -30,6 +33,10 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
         private System.Windows.Forms.Label owner_driver_t;
         private System.Windows.Forms.Label start_date_t;
         private System.Windows.Forms.Label t_1;
+        private System.Windows.Forms.Label contract_no_t;
+        private System.Windows.Forms.Label rg_code_t;
+        private NumericalMaskedTextBox contract_no;
+        private Metex.Windows.DataEntityCombo rg_code;
 
         #region Component Designer generated code
         /// <summary> 
@@ -40,19 +47,21 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
         private void InitializeComponent()
         {
             this.start_date_t = new System.Windows.Forms.Label();
-            this.start_date = new DateTimeMaskedTextBox();
-            this.end_date = new DateTimeMaskedTextBox();
+            this.start_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
+            this.end_date = new NZPostOffice.Shared.VisualComponents.DateTimeMaskedTextBox();
             this.owner_driver = new System.Windows.Forms.TextBox();
             this.owner_driver_t = new System.Windows.Forms.Label();
             this.t_1 = new System.Windows.Forms.Label();
+            this.contract_no_t = new System.Windows.Forms.Label();
+            this.rg_code_t = new System.Windows.Forms.Label();
+            this.contract_no = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.rg_code = new Metex.Windows.DataEntityCombo();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
-           
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.ODPS.Entity.OdpsPayrun.PaymentRunPeriod);
-           
             // 
             // start_date_t
             // 
@@ -65,35 +74,34 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             this.start_date_t.TabIndex = 0;
             this.start_date_t.Text = "From:";
             this.start_date_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            
             // 
             // start_date
             // 
-            this.start_date.BackColor = System.Drawing.SystemColors.ButtonFace; 
-            this.start_date.Mask = "00/00/0000";
+            this.start_date.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.start_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "StartDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.start_date.EditMask = "";
             this.start_date.Location = new System.Drawing.Point(96, 9);
+            this.start_date.Mask = "00/00/0000";
             this.start_date.Name = "start_date";
-            this.start_date.DataBindings[0].FormatString = "dd/MM/yyyy";
-            this.start_date.DataBindings[0].DataSourceNullValue = null;
             this.start_date.ReadOnly = true;
             this.start_date.Size = new System.Drawing.Size(70, 20);
             this.start_date.TabIndex = 1;
-           
+            this.start_date.Text = "00000000";
+            this.start_date.Value = null;
             // 
             // end_date
             // 
             this.end_date.BackColor = System.Drawing.Color.White;
-            this.end_date.Mask = "00/00/0000";
             this.end_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "EndDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.end_date.EditMask = "";
             this.end_date.Location = new System.Drawing.Point(199, 9);
+            this.end_date.Mask = "00/00/0000";
             this.end_date.Name = "end_date";
-            this.end_date.DataBindings[0].FormatString = "dd/MM/yyyy";
-            this.end_date.DataBindings[0].DataSourceNullValue = null;
             this.end_date.Size = new System.Drawing.Size(70, 20);
             this.end_date.TabIndex = 10;
+            this.end_date.Text = "00000000";
             this.end_date.ValidatingType = typeof(System.DateTime);
-
+            this.end_date.Value = null;
             // 
             // owner_driver
             // 
@@ -106,7 +114,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             this.owner_driver.Name = "owner_driver";
             this.owner_driver.Size = new System.Drawing.Size(173, 20);
             this.owner_driver.TabIndex = 20;
-           
             // 
             // owner_driver_t
             // 
@@ -119,7 +126,6 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             this.owner_driver_t.TabIndex = 21;
             this.owner_driver_t.Text = "Owner Driver:";
             this.owner_driver_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-         
             // 
             // t_1
             // 
@@ -132,13 +138,66 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             this.t_1.TabIndex = 34;
             this.t_1.Text = "to:";
             this.t_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-          
+            // 
+            // contract_no_t
+            // 
+            this.contract_no_t.AutoSize = true;
+            this.contract_no_t.Location = new System.Drawing.Point(10, 64);
+            this.contract_no_t.Name = "contract_no_t";
+            this.contract_no_t.Size = new System.Drawing.Size(64, 13);
+            this.contract_no_t.TabIndex = 35;
+            this.contract_no_t.Text = "Contract No";
+            // 
+            // rg_code_t
+            // 
+            this.rg_code_t.AutoSize = true;
+            this.rg_code_t.Location = new System.Drawing.Point(10, 90);
+            this.rg_code_t.Name = "rg_code_t";
+            this.rg_code_t.Size = new System.Drawing.Size(81, 13);
+            this.rg_code_t.TabIndex = 36;
+            this.rg_code_t.Text = "Renewal Group";
+            // 
+            // contract_no
+            // 
+            this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.contract_no.EditMask = "######";
+            this.contract_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.contract_no.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.contract_no.Location = new System.Drawing.Point(96, 62);
+            this.contract_no.Name = "contract_no";
+            this.contract_no.PromptChar = ' ';
+            this.contract_no.Size = new System.Drawing.Size(56, 20);
+            this.contract_no.TabIndex = 30;
+            this.contract_no.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.contract_no.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
+            this.contract_no.Value = "";
+            // 
+            // rg_code
+            // 
+            this.rg_code.AutoRetrieve = true;
+            this.rg_code.BackColor = System.Drawing.Color.White;
+            this.rg_code.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RgCode", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.rg_code.DisplayMember = "RgDescription";
+            this.rg_code.DropDownHeight = 150;
+            this.rg_code.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.rg_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rg_code.IntegralHeight = false;
+            this.rg_code.Location = new System.Drawing.Point(96, 87);
+            this.rg_code.Name = "rg_code";
+            this.rg_code.Size = new System.Drawing.Size(187, 21);
+            this.rg_code.TabIndex = 40;
+            this.rg_code.Value = null;
+            this.rg_code.ValueMember = "RgCode";
             // 
             // DwPaymentRunPeriod
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Controls.Add(this.contract_no_t);
+            this.Controls.Add(this.contract_no);
+            this.Controls.Add(this.rg_code_t);
+            this.Controls.Add(this.rg_code);
             this.Controls.Add(this.start_date_t);
             this.Controls.Add(this.start_date);
             this.Controls.Add(this.end_date);
@@ -146,7 +205,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             this.Controls.Add(this.owner_driver_t);
             this.Controls.Add(this.t_1);
             this.Name = "DwPaymentRunPeriod";
-            this.Size = new System.Drawing.Size(650, 300);
+            this.Size = new System.Drawing.Size(286, 144);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
