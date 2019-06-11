@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
+    // TJB  RPCR_140  June-2019
+    // Added ContractNo, RgCode and associated _contract_no and _rg_code variables
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -28,6 +31,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 
         [DBField()]
         private string _owner_driver;
+
+        [DBField()]
+        private int? _contract_no;
+
+        [DBField()]
+        private int? _rg_code;
 
         public virtual DateTime? StartDate
         {
@@ -78,6 +87,42 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
                 if (_owner_driver != value)
                 {
                     _owner_driver = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? ContractNo
+        {
+            get
+            {
+                CanReadProperty("ContractNo", true);
+                return _contract_no;
+            }
+            set
+            {
+                CanWriteProperty("ContractNo", true);
+                if (_contract_no != value)
+                {
+                    _contract_no = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? RgCode
+        {
+            get
+            {
+                CanReadProperty("RgCode", true);
+                return _rg_code;
+            }
+            set
+            {
+                CanWriteProperty("RgCode", true);
+                if (_rg_code != value)
+                {
+                    _rg_code = value;
                     PropertyHasChanged();
                 }
             }
