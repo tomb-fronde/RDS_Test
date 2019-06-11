@@ -11,7 +11,9 @@ using NZPostOffice.ODPS.Entity.OdpsCodes;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsCodes
 {
-    // TJB RPCR_140 June-2019: Copied from RDS.DataControls.Ruraldw
+    // TJB RPCR_140 June-2019
+    // Renewal group dropdown for Payrun
+    // [Copied from RDS.DataControls.Ruraldw]
 
 	public partial class DDddwRenewalgroup : Metex.Windows.DataUserControl
 	{
