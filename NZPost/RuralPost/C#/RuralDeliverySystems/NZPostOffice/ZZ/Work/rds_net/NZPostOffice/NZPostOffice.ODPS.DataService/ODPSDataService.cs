@@ -9,6 +9,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
+    // TJB  RPCR_140  June-2019
+    // GetOdBlfMainrun and _GetOdBlfMainrun: New 
+    // - copied from GetOdBlfMainrunFromDummy with RgCode parameter added
+    // ValidateContract and _ValidateContract: new
+    // GetRgDescription and _GetRgDescription: new
+    //
     // TJB  RPCR_098  Jan-2016
     // Created InsertPTDs()
     //
@@ -158,6 +164,15 @@ namespace NZPostOffice.ODPS.DataService
             get
             {
                 return dc_hashtotal;
+            }
+        }
+
+        private string _text;
+        public string Text
+        {
+            get
+            {
+                return _text;
             }
         }
 
@@ -472,6 +487,15 @@ namespace NZPostOffice.ODPS.DataService
             return obj._rowCount;
         }
 
+        // TJB  RPCR_140 June-2019: New
+        // Copied from GetOdBlfMainrunFromDummy
+        // Added nRgCode to stored proc call (and simplified the name)
+        public static ODPSDataService GetOdBlfMainrun(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend, int? nRgCode)
+        {
+            ODPSDataService obj = Execute("_GetOdBlfMainrun", lcontract, lcontractor, dstart, dend, nRgCode);
+            return obj;
+        }
+
         public static ODPSDataService GetOdBlfMainrunFromDummy(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend)
         {
             ODPSDataService obj = Execute("_GetOdBlfMainrunFromDummy", lcontract, lcontractor, dstart, dend);
@@ -504,6 +528,23 @@ namespace NZPostOffice.ODPS.DataService
 //            ODPSDataService obj = Execute("_GetAkeyFromRdsAudit", tStart, gs_UserID, lcontract, lcontractor);
 //            return obj;
 //        }
+
+        // TJB  RPCR_140  June-2019
+        // Validate the contract number
+        /// Validate the contract number
+        public static ODPSDataService ValidateContract(int? nContractNo)
+        {
+            ODPSDataService obj = Execute("_ValidateContract", nContractNo);
+            return obj;
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Look up the renewal group description
+        public static ODPSDataService GetRgDescription(int? nRgCode)
+        {
+            ODPSDataService obj = Execute("_GetRgDescription", nRgCode);
+            return obj;
+        }
 
         /// <summary>
         /// select count(*) into :li_contract_types from rd.contract_type
@@ -1572,6 +1613,48 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_140  June-2019: New
+        [ServerMethod]
+        private void _GetOdBlfMainrun(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend, int? nRgCode)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "odps.od_blf_mainrun";
+                    cm.CommandTimeout = 1500;
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "incontract_no", lcontract);
+                    pList.Add(cm, "inContractor_No", lcontractor);
+                    pList.Add(cm, "inPayPeriod_Start", dstart);
+                    pList.Add(cm, "inPayPeriod_End", dend);
+                    pList.Add(cm, "inRenewalGroup", nRgCode);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                dataObject = dr.GetString(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
         [ServerMethod]
         private void _GetOdBlfMainrunFromDummy(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend)
         {
@@ -1806,6 +1889,93 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
+        // TJB  RPCR_140  June-2019
+        // Validate the contract number
+        [ServerMethod]
+        private void _ValidateContract(int? nContractNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int count = 0;
+
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select count(*) from rd.contract"
+                                   + " where contract_no = @nContractNo"
+                                   + "   and con_date_terminated is null";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "nContractNo", nContractNo);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                count = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                    _count = count;
+                }
+            }
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Look up the renewal group description
+        [ServerMethod]
+        private void _GetRgDescription(int? nRgCode)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    string description = "";
+
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select rg_description from rd.renewal_group"
+                                   + " where rg_code = @nRgCode";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "nRgCode", nRgCode);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                description = dr.GetString(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                    _text = description;
+                }
+            }
+        }
+
         [ServerMethod]
         private void _SelectContractType()
         {
@@ -1852,7 +2022,8 @@ namespace NZPostOffice.ODPS.DataService
                     contractType = new ContractType();
 
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "select contract_type from rd.contract_type where ct_key = @li_ct_key";
+                    cm.CommandText = "select contract_type from rd.contract_type " 
+                                   + " where ct_key = @li_ct_key";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "li_ct_key", ct_key);
