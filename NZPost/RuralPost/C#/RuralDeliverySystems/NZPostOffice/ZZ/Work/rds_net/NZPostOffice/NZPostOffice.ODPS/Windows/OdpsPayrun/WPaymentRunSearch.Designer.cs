@@ -2,6 +2,8 @@ using NZPostOffice.ODPS.DataControls.OdpsPayrun;
 using System.Windows.Forms;
 using NZPostOffice.ODPS.Controls;
 using System;
+using NZPostOffice.Shared.VisualComponents;
+
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
     partial class WPaymentRunSearch
@@ -30,68 +32,83 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         /// </summary>
         private void InitializeComponent()
         {
+            this.pb_1 = new System.Windows.Forms.Button();
+            this.cb_clear = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            this.pb_1 = new Button();
-            pb_1.BringToFront();
-            Controls.Add(pb_1);
-
-            //!this.dw_search.DataObject = new DwPaymentRunPeriod();
-            //!this.dw_results.DataObject = new DwPaymentRunContractors();
-            this.Text = "Payment Run";
-            this.Size = new System.Drawing.Size(392, 310);
             // 
             // dw_search
             // 
-
-            //!dw_search.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_search.Location = new System.Drawing.Point(3, 8);
-            dw_search.Size = new System.Drawing.Size(302, 64);
-            dw_search.ItemChanged += new EventHandler(dw_search_itemchanged);
-            dw_search.LostFocus += new EventHandler(dw_search_losefocus);
-
+            this.dw_search.FireConstructor = true;
+            this.dw_search.Location = new System.Drawing.Point(3, 8);
+            this.dw_search.Size = new System.Drawing.Size(302, 126);
+            this.dw_search.ItemChanged += new System.EventHandler(this.dw_search_itemchanged);
+            this.dw_search.LostFocus += new System.EventHandler(this.dw_search_losefocus);
             // 
             // cb_search
             // 
-            cb_search.Location = new System.Drawing.Point(323, 49);
-            cb_search.Visible = false;
+            this.cb_search.Location = new System.Drawing.Point(319, 49);
+            this.cb_search.Visible = false;
             // 
             // cb_open
             // 
-            cb_open.TabIndex = 5;
-            cb_open.Location = new System.Drawing.Point(316, 83);
-
+            this.cb_open.Location = new System.Drawing.Point(319, 87);
+            this.cb_open.TabIndex = 5;
             // 
             // dw_results
             // 
-            dw_results.TabIndex = 4;
-            //!dw_results.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_results.Location = new System.Drawing.Point(3, 80);
-            dw_results.Size = new System.Drawing.Size(302, 188);
-            dw_results.DoubleClick += new EventHandler(dw_results_doubleclicked);
-
+            this.dw_results.FireConstructor = true;
+            this.dw_results.Location = new System.Drawing.Point(3, 140);
+            this.dw_results.Size = new System.Drawing.Size(302, 201);
+            this.dw_results.TabIndex = 4;
+            this.dw_results.DoubleClick += new System.EventHandler(this.dw_results_doubleclicked);
             // 
             // cb_cancel
             // 
-            cb_cancel.TabIndex = 6;
-            cb_cancel.Location = new System.Drawing.Point(323, 125);
-            cb_cancel.Visible = false;
-
+            this.cb_cancel.Location = new System.Drawing.Point(319, 125);
+            this.cb_cancel.TabIndex = 6;
+            this.cb_cancel.Visible = false;
             // 
             // pb_1
             // 
-            pb_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.AcceptButton = pb_1;
-            pb_1.Text = "?";
-            pb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            pb_1.TabIndex = 3;
-            pb_1.Location = new System.Drawing.Point(280, 46);
-            pb_1.Size = new System.Drawing.Size(17, 21);
-            pb_1.Click += new EventHandler(pb_1_clicked);
+            this.pb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.pb_1.Location = new System.Drawing.Point(280, 46);
+            this.pb_1.Name = "pb_1";
+            this.pb_1.Size = new System.Drawing.Size(17, 21);
+            this.pb_1.TabIndex = 3;
+            this.pb_1.Text = "?";
+            this.pb_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.pb_1.Click += new System.EventHandler(this.pb_1_clicked);
+            // 
+            // cb_clear
+            // 
+            this.cb_clear.Location = new System.Drawing.Point(321, 155);
+            this.cb_clear.Name = "cb_clear";
+            this.cb_clear.Size = new System.Drawing.Size(56, 23);
+            this.cb_clear.TabIndex = 7;
+            this.cb_clear.Text = "Clear";
+            this.cb_clear.UseVisualStyleBackColor = true;
+            this.cb_clear.Click += new System.EventHandler(this.cb_clear_Click);
+            // 
+            // WPaymentRunSearch
+            // 
+            this.AcceptButton = this.pb_1;
+            this.ClientSize = new System.Drawing.Size(384, 344);
+            this.Controls.Add(this.cb_clear);
+            this.Controls.Add(this.pb_1);
+            this.Name = "WPaymentRunSearch";
+            this.Text = "Payment Run";
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.dw_results, 0);
+            this.Controls.SetChildIndex(this.cb_open, 0);
+            this.Controls.SetChildIndex(this.cb_search, 0);
+            this.Controls.SetChildIndex(this.dw_search, 0);
             this.Controls.SetChildIndex(this.pb_1, 0);
+            this.Controls.SetChildIndex(this.cb_clear, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-            this.ResumeLayout();
         }
-
         private Button pb_1;
+        private Button cb_clear;
     }
 }
