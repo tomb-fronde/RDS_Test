@@ -9,6 +9,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
+    // TJB  RPCR_140  June-2019
+    // Added rg_code and contract_no parameters to Fetch and
+    // associated changes to OD_DWS_OwnerDriver_Search
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -122,15 +126,23 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
             return Create(inOwnerDriver, sdate, edate);
         }
 
-        public static PaymentRunContractors[] GetAllPaymentRunContractors(string inOwnerDriver, DateTime? sdate, DateTime? edate)
+        // TJB  RPCR_140  June-2019
+        // Added rg_code and contract_no parameters
+        public static PaymentRunContractors[] GetAllPaymentRunContractors(
+            string inOwnerDriver, DateTime? sdate, DateTime? edate 
+            , int? rg_code, int? contract_no)
         {
-            return Fetch(inOwnerDriver, sdate, edate).list;
+            return Fetch(inOwnerDriver, sdate, edate, rg_code, contract_no).list;
         }
         #endregion
 
         #region Data Access
+        // TJB  RPCR_140  June-2019
+        // Added rg_code and contract_no parameters
         [ServerMethod]
-        private void FetchEntity(string inOwnerDriver, DateTime? sdate, DateTime? edate)
+        private void FetchEntity(
+            string inOwnerDriver, DateTime? sdate, DateTime? edate, 
+            int? rg_code, int? contract_no)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -142,6 +154,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
                     pList.Add(cm, "inOwnerDriver", inOwnerDriver);
                     pList.Add(cm, "sdate", sdate);
                     pList.Add(cm, "edate", edate);
+                    pList.Add(cm, "inRgCode", rg_code);
+                    pList.Add(cm, "inContractNo", contract_no);
 
                     List<PaymentRunContractors> _list = new List<PaymentRunContractors>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
