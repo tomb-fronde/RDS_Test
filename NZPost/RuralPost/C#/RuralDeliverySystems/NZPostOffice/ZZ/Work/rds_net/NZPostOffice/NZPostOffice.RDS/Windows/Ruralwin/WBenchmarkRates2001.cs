@@ -10,8 +10,15 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_126  July-2018
+    // Change "cb_1" to "cb_search"
+    // Added count of selected contracts
+    // Check to see if the selected rates match the contracts' renewal group 
+    // and if not, ask if the user wants to use the current rates selected 
+    // when doing whatif calc.
+    //
     // TJB  Jan-2014
-    // Added Try/Catch to pfc_postopen to try to troubleshoot problem at Rural Pust testing
+    // Added Try/Catch to pfc_postopen to try to troubleshoot problem at Rural Post testing
     // Disabled for 7.1.11 release
 
     public class WBenchmarkRates2001 : WAncestorWindow
@@ -51,7 +58,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public Button cb_showrates;
 
-        public Button cb_1;
+        public Button cb_search;
+        private Label nContracts;
 
         public Button cb_newrates;
 
@@ -98,8 +106,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_deselectall = new System.Windows.Forms.Button();
             this.cb_runwhatif = new System.Windows.Forms.Button();
             this.cb_showrates = new System.Windows.Forms.Button();
-            this.cb_1 = new System.Windows.Forms.Button();
+            this.cb_search = new System.Windows.Forms.Button();
             this.cb_newrates = new System.Windows.Forms.Button();
+            this.nContracts = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // st_label
@@ -272,17 +281,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_showrates.Text = "Show Rates...";
             this.cb_showrates.Click += new System.EventHandler(this.cb_showrates_clicked);
             // 
-            // cb_1
+            // cb_search
             // 
-            this.cb_1.Enabled = false;
-            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_1.Location = new System.Drawing.Point(565, 33);
-            this.cb_1.Name = "cb_1";
-            this.cb_1.Size = new System.Drawing.Size(54, 22);
-            this.cb_1.TabIndex = 9;
-            this.cb_1.Tag = "ComponentName=Run What-If;";
-            this.cb_1.Text = "&Search";
-            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
+            this.cb_search.Enabled = false;
+            this.cb_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_search.Location = new System.Drawing.Point(565, 33);
+            this.cb_search.Name = "cb_search";
+            this.cb_search.Size = new System.Drawing.Size(54, 22);
+            this.cb_search.TabIndex = 9;
+            this.cb_search.Tag = "ComponentName=Run What-If;";
+            this.cb_search.Text = "&Search";
+            this.cb_search.Click += new System.EventHandler(this.cb_search_clicked);
             // 
             // cb_newrates
             // 
@@ -296,10 +305,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_newrates.Text = "New Rates...";
             this.cb_newrates.Click += new System.EventHandler(this.cb_newrates_clicked);
             // 
+            // nContracts
+            // 
+            this.nContracts.Location = new System.Drawing.Point(315, 376);
+            this.nContracts.Name = "nContracts";
+            this.nContracts.Size = new System.Drawing.Size(170, 17);
+            this.nContracts.TabIndex = 17;
+            // 
             // WBenchmarkRates2001
             // 
-            this.AcceptButton = this.cb_1;
+            this.AcceptButton = this.cb_search;
             this.ClientSize = new System.Drawing.Size(632, 408);
+            this.Controls.Add(this.nContracts);
             this.Controls.Add(this.rb_last_article_count);
             this.Controls.Add(this.rb_last_but_one_article_count);
             this.Controls.Add(this.rb_average_article_count);
@@ -308,7 +325,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.Add(this.cb_deselectall);
             this.Controls.Add(this.cb_runwhatif);
             this.Controls.Add(this.cb_showrates);
-            this.Controls.Add(this.cb_1);
+            this.Controls.Add(this.cb_search);
             this.Controls.Add(this.cb_newrates);
             this.Controls.Add(this.dw_renewals);
             this.Controls.Add(this.dw_criteria);
@@ -328,7 +345,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.dw_criteria, 0);
             this.Controls.SetChildIndex(this.dw_renewals, 0);
             this.Controls.SetChildIndex(this.cb_newrates, 0);
-            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.cb_search, 0);
             this.Controls.SetChildIndex(this.cb_showrates, 0);
             this.Controls.SetChildIndex(this.cb_runwhatif, 0);
             this.Controls.SetChildIndex(this.cb_deselectall, 0);
@@ -337,6 +354,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.rb_average_article_count, 0);
             this.Controls.SetChildIndex(this.rb_last_but_one_article_count, 0);
             this.Controls.SetChildIndex(this.rb_last_article_count, 0);
+            this.Controls.SetChildIndex(this.nContracts, 0);
             this.Controls.SetChildIndex(this.st_label, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -536,6 +554,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return 0;
             }
+            // TJB  RPCR_126  July-2018
+            // Check to see if the selected rates match the contracts' renewal group 
+            // and if not, ask if the user wants to use the current rates selected.
+            // Also, if no renewal group was specified for the contracts, warn the 
+            // user that the group of contracts found may not all be for one renewal
+            // group and the selected rates may then not be appropriate.
+            int? contract_RgCode = dw_criteria.GetItem<BenchmarkCalcCriteria>(0).RgCode;
+            int? renewals_RgCode = dw_renewals.GetItem<RenewalDates2001a>(ll_Row).RgCode;
+            if (contract_RgCode == null) contract_RgCode = 0;
+            if (renewals_RgCode == null) renewals_RgCode = 0;
+            DialogResult ans = DialogResult.Yes;
+            if (contract_RgCode == 0)
+            {
+                ans = MessageBox.Show("The contracts selected may be for a mixture of renewal groups \n"
+                                + "and the rates selected may not be appropriate.\n\n"
+                                + "Do you want to continue with the selected rates? \n"
+                                , "Warning"
+                                , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            else if (contract_RgCode != renewals_RgCode)
+            {
+                ans = MessageBox.Show("The type of rates selected do not match the contracts' renewal group.\n\n"
+                                + "Do you want to use the selected rates? \n"            
+                                , "Warning"
+                                , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            if (ans == DialogResult.No)
+            {
+                MessageBox.Show("Please select the renewal rates to use"
+                                , ""
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return 0;
+            }
+            
             Cursor.Current = Cursors.WaitCursor;
             ld_Date = dw_renewals.GetItem<RenewalDates2001a>(ll_Row).RrRatesEffectiveDate.GetValueOrDefault().Date;
             ll_RgCode = dw_renewals.GetItem<RenewalDates2001a>(ll_Row).RgCode;
@@ -647,7 +699,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
-        public virtual void cb_1_clicked(object sender, EventArgs e)
+        public virtual void cb_search_clicked(object sender, EventArgs e)
         {
             int? lRegion;
             int? lRGCode;
@@ -668,6 +720,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             ((DWhatifContractSelection)dw_listing.DataObject).Retrieve(lRegion, lRGCode, lRegion, lRGCode);
             dw_listing.SelectRow(0, false);
+            int nRows = dw_listing.RowCount;
+            nContracts.Text = nRows.ToString() + " contracts";
         }
 
         public virtual void cb_newrates_clicked(object sender, EventArgs e)
