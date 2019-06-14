@@ -9,7 +9,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added rg_code and contract_no parameters to Fetch and
     // associated changes to OD_DWS_OwnerDriver_Search
 
@@ -126,7 +126,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
             return Create(inOwnerDriver, sdate, edate);
         }
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Added rg_code and contract_no parameters
         public static PaymentRunContractors[] GetAllPaymentRunContractors(
             string inOwnerDriver, DateTime? sdate, DateTime? edate 
@@ -137,7 +137,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
         #endregion
 
         #region Data Access
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Added rg_code and contract_no parameters
         [ServerMethod]
         private void FetchEntity(

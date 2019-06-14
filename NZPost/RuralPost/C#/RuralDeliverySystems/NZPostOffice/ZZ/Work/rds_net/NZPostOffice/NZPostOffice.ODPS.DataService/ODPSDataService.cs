@@ -9,7 +9,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.DataService
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // GetOdBlfMainrun and _GetOdBlfMainrun: New 
     // - copied from GetOdBlfMainrunFromDummy with RgCode parameter added
     // ValidateContract and _ValidateContract: new
@@ -487,7 +487,7 @@ namespace NZPostOffice.ODPS.DataService
             return obj._rowCount;
         }
 
-        // TJB  RPCR_140 June-2019: New
+        // TJB  RPCR_141 June-2019: New
         // Copied from GetOdBlfMainrunFromDummy
         // Added nRgCode to stored proc call (and simplified the name)
         public static ODPSDataService GetOdBlfMainrun(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend, int? nRgCode)
@@ -529,7 +529,7 @@ namespace NZPostOffice.ODPS.DataService
 //            return obj;
 //        }
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Validate the contract number
         /// Validate the contract number
         public static ODPSDataService ValidateContract(int? nContractNo)
@@ -538,7 +538,7 @@ namespace NZPostOffice.ODPS.DataService
             return obj;
         }
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Look up the renewal group description
         public static ODPSDataService GetRgDescription(int? nRgCode)
         {
@@ -1613,7 +1613,7 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
-        // TJB  RPCR_140  June-2019: New
+        // TJB  RPCR_141  June-2019: New
         [ServerMethod]
         private void _GetOdBlfMainrun(int? lcontract, int? lcontractor, DateTime? dstart, DateTime? dend, int? nRgCode)
         {
@@ -1889,7 +1889,7 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Validate the contract number
         [ServerMethod]
         private void _ValidateContract(int? nContractNo)
@@ -1933,7 +1933,7 @@ namespace NZPostOffice.ODPS.DataService
             }
         }
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Look up the renewal group description
         [ServerMethod]
         private void _GetRgDescription(int? nRgCode)

@@ -17,7 +17,7 @@ using Metex.Windows;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added Contract_no and rg_code dropdown to DwPaymentRunPeriod, and
     // associated changes here and in OD_BLF_Mainrun to allow a user to 
     // specify a contract or renewal group for the payment run.  Also 
@@ -60,7 +60,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             ldt_edate = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).EndDate;
             ls_name = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).OwnerDriver;
 
-            // TJB  RPCR_140  June-2019 
+            // TJB  RPCR_141  June-2019 
             // Added nRgCode and nContractNo to parameter lists
             nRgCode = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).RgCode;
             nContractNo = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).ContractNo;
@@ -255,7 +255,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             string t_dedID = null;
             string t_ded_description = null;
 
-            // TJB  RPCR_140  June-2019:  Added
+            // TJB  RPCR_141  June-2019:  Added
             // See various references to these below.
             // Added messages about what pay runs specified
             // nRgCode and nContractNo values would produce.
@@ -407,7 +407,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             Cursor.Current = Cursors.WaitCursor;
             tStart = System.DateTime.Now;
 
-            //  TJB  RPCR_140  June-2019
+            //  TJB  RPCR_141  June-2019
             // Added GetOdBlfMainrun to include nRgCode parameter
             ODPSDataService dataservice;
             if (nRgCode > 0)
@@ -575,7 +575,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             DateTime? ldt_edate = null;
             string ls_name;
 
-            // TJB  RPCR_140  June-2019
+            // TJB  RPCR_141  June-2019
             // Added nContractNo and nRgCode here and associated 
             // logic in OD_DWS_OwnerDriver_Search
             int? nContractNo;
@@ -587,7 +587,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             if (dw_search.GetItem<PaymentRunPeriod>(0).EndDate != null)
                 ldt_edate = ((DateTime)dw_search.GetItem<PaymentRunPeriod>(0).EndDate).AddDays(19);
             ls_name = dw_search.GetItem<PaymentRunPeriod>(0).OwnerDriver;
-            // TJB  RPCR_140  June-2019:  Get rg_code and contract_no and add to parameter list
+            // TJB  RPCR_141  June-2019:  Get rg_code and contract_no and add to parameter list
             nRgCode = dw_search.GetItem<PaymentRunPeriod>(0).RgCode;
             nContractNo = dw_search.GetItem<PaymentRunPeriod>(0).ContractNo;
 
@@ -596,7 +596,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         }
         #endregion
 
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Added cb_clear_click and of_clear
         private void cb_clear_Click(object sender, EventArgs e)
         {
@@ -617,9 +617,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             dwChild.Reset();
             dw_search.GetItem<PaymentRunPeriod>(0).RgCode = null;
             dwChild.Retrieve();
-            //dw_search.SetValue(0, "rg_code", null);
-            int nRows = dwChild.RowCount;
-            int t = nRows;
             dw_search.DataObject.BindingSource.CurrencyManager.Refresh();
 
             //  clear the results box

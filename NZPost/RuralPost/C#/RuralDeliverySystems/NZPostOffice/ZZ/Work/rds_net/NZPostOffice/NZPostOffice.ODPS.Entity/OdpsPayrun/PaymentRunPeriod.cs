@@ -8,7 +8,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added ContractNo, RgCode and associated _contract_no and _rg_code variables
 
     // Mapping info for object fields to DB

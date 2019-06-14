@@ -7,7 +7,7 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added contract_no and rg_code dropdown
 
     partial class DwPaymentRunPeriod

@@ -10,7 +10,7 @@ using NZPostOffice.ODPS.Entity.OdpsPayrun;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added rg_code and contract_no to parameter lists
 
     public partial class DwPaymentRunContractors : Metex.Windows.DataUserControl
@@ -19,7 +19,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
         {
             InitializeComponent();
         }
-        // TJB  RPCR_140  June-2019
+        // TJB  RPCR_141  June-2019
         // Added rg_code and contract_no to parameter lists
         public int Retrieve(string inOwnerDriver, DateTime? sdate, DateTime? edate
                            , int? rg_code, int? contract_no)

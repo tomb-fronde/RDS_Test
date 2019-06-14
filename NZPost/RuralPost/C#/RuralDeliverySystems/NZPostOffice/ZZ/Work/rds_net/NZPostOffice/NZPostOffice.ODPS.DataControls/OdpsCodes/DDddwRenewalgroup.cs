@@ -11,7 +11,7 @@ using NZPostOffice.ODPS.Entity.OdpsCodes;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsCodes
 {
-    // TJB RPCR_140 June-2019
+    // TJB RPCR_141 June-2019
     // Renewal group dropdown for Payrun
     // [Copied from RDS.DataControls.Ruraldw]
 

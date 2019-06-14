@@ -12,7 +12,7 @@ using NZPostOffice.ODPS.DataControls.OdpsCodes;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
-    // TJB  RPCR_140  June-2019
+    // TJB  RPCR_141  June-2019
     // Added OnHandleCreated and InitializeDropdown for rg_code dropdown
 
     public partial class DwPaymentRunPeriod : Metex.Windows.DataUserControl
@@ -40,7 +40,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             int rc = RetrieveCore<PaymentRunPeriod>(new List<PaymentRunPeriod>
                 (PaymentRunPeriod.GetAllPaymentRunPeriod()));
 
-            // TJB  RPCR_140  June-2019
+            // TJB  RPCR_141  June-2019
             // This ensures the rg_code dropdown starts showing the blank entry
             // (otherwise sorted alphabetically)
             if (rg_code.Items.Count > 0)

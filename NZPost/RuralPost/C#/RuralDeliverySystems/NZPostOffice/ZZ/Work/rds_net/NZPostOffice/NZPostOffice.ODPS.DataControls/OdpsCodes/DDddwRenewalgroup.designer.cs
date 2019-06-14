@@ -8,7 +8,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsCodes
 {
 	partial class DDddwRenewalgroup
 	{
-        // TJB RPCR_140 June-2019: Copied from RDS.DataControls.Ruraldw
+        // TJB RPCR_141 June-2019: Copied from RDS.DataControls.Ruraldw
 
         private System.ComponentModel.IContainer components = null;
         private Metex.Windows.DataEntityListBox listBox;
