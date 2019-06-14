@@ -12,6 +12,9 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // THB  RPCR_140  June-2019
+    // Added Unsuccessful Search message matching contract search's
+
     public class WContractorSearch : WGenericSearch
     {
         #region Define
@@ -373,6 +376,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Cursor = Cursors.Arrow;
             if (dw_results.RowCount == 0)
             {
+                // THB  RPCR_140  June-2019: Added Unsuccessful Search message
+                MessageBox.Show("There are no contracts that satisfy the search criteria entered."
+                               , "Unsuccessful Search"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dw_criteria.Focus();
             }
             else
