@@ -9,9 +9,17 @@ using NZPostOffice.Shared;
 using System.Collections.Generic;
 using Metex.Core;
 using NZPostOffice.Entity;
+using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPCR_140 June-2019
+    // Alter search: screen and action.  If a contract number is specified, 
+    // and the contract type doesn't match the contract's type, change the 
+    // type on the screen, and in the search parameters.
+    // Disabled explicitly setting default contract type when starting and 
+    // when clearing criteria
+    //
     // TJB  RPCR_122  July-2018
     // Changed size of contract search window and dw_criteria sub-window
     // Added PBUCode element (dropdown select list) to Designer 
@@ -20,6 +28,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
     public partial class WContractSearch : WGenericSearch
     {
+        private int? default_ct_key = 0;  // 1was 1 (November Renewals)
+
         public WContractSearch()
         {
             this.InitializeComponent();
@@ -79,7 +89,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //bindingSource.Insert(0, ContractTypesObj);
             //#endregion
 
-            if (lds_user_contract_types.RowCount == StaticVariables.gnv_app.of_gettotalcontracttypes())
+           if (lds_user_contract_types.RowCount == StaticVariables.gnv_app.of_gettotalcontracttypes())
             {//add by mkwang
                 int? Null;
                 Null = null;
@@ -91,14 +101,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 insertRow(dwChild, 0);
                 dwChild.DeleteItemAt(0);
             }
-
-            ll_row = dwChild.Find("ct_key", 1);
+            // TJB  RPCR_140  June-2019
+            // Disabled explicitly setting default contract type
+/*
+            // NOTE: hard-coded default ct_key = 1 (November Renewals)
+            ll_row = dwChild.Find("ct_key", default_ct_key);
             if (ll_row > 0)
             {
                 //dw_criteria.GetItem<ContractSearch>(0).CtKey = 1;
                 BeginInvoke(new delegateInvoke(afterDel));
             }
-
+*/
             //jlwang: for different user 
             if (dw_criteria.ll_row >= 0)
                 dw_criteria.SetValue(0, "region_id", dw_criteria.ll_row);
@@ -106,6 +119,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_criteria.SetValue(0, "region_id", -99);
             //added by jlwang
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+
             dw_criteria.URdsDw_GetFocus(null, null);
         }
 
@@ -113,7 +127,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void afterDel()
         {
-            dw_criteria.GetItem<ContractSearch>(0).CtKey = 1; //dw_criteria.DataObject.SetValue(0, "ct_key", 1);
+            // TJB  RPCR_140  June-2019
+            // Disabled explicitly setting default contract type
+/*
+            // NOTE: hard-coded default ct_key = 1 (November Renewals)
+            dw_criteria.GetItem<ContractSearch>(0).CtKey = default_ct_key; 
+            //dw_criteria.DataObject.SetValue(0, "ct_key", 1);
+            */
             //dw_criteria.SetCurrent(0);
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
         }
@@ -139,9 +159,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_criteria.GetItem<ContractSearch>(0).ContractNo = ll_null; ;
             dw_criteria.GetItem<ContractSearch>(0).ConTitle = ls_null;
             dw_criteria.GetItem<ContractSearch>(0).ConOldMailServiceNo = ls_null;
-            //  no longer want to undo contract type selections
-            dw_criteria.GetItem<ContractSearch>(0).CtKey = ll_ct;
 
+            // TJB  RPCR_140  June-2019
+            // Disabled explicitly setting default contract type
+/*
+            // put the contract type back to what it was before the clear
+            dw_criteria.GetItem<ContractSearch>(0).CtKey = ll_ct;
+*/
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh(); //added by jlwang
             //  clear the results box
             dw_results.of_Reset();
@@ -302,7 +326,46 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 lPbuId = 0;
             }
+            // TJB RPCR_140 June-2019
+            // If a contract number has been specified as well as a contract type
+            // ensure the contract type is correct for the contract specified
+            if (lContract > 0 && ll_contract_type > 0)
+            {
+                int nCtKey;
 
+                // Get the ct_key for the contract
+                RDSDataService Service = RDSDataService.GetContractTypeKey(lContract);
+                if (Service.SQLCode == 0)
+                {
+                    nCtKey = Service.intVal;
+
+                    // If the contract's c t_key is different than the one in the 
+                    // search screen, change the screen to match the contract's
+                    if (nCtKey != ll_contract_type)
+                    {   // There may be a better way to do this, but this works ...
+                        DataUserControl dwChild;  // Get the ct_key object
+                        dwChild = dw_criteria.GetChild("ct_key");
+                        dwChild.Reset();  // Clear it, then Set the Bounds value ToolBar the element we want
+                        dw_criteria.GetItem<ContractSearch>(0).CtKey = nCtKey;
+                        dwChild.Retrieve();  // Now re-retrieve the dropdown's values
+                                             // then refersh the screen to show the new contract type
+                        dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+
+                        // Don't forget to change the type that will be used in the search!
+                        ll_contract_type = nCtKey;
+                    }
+                }
+                else
+                {// "This shouldn't ever happen
+                    MessageBox.Show("Error looking up the contract's type \n"
+                                   + Service.SQLErrText + "\n"
+                                   + "(the contract number may not be valid)"
+                                   , "Warning - SQL Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+
+            }
             Cursor.Current = Cursors.WaitCursor;
 
             ((DContractListing)dw_results.DataObject).Retrieve(lRegion, lContract, sConTitle, sMSN
