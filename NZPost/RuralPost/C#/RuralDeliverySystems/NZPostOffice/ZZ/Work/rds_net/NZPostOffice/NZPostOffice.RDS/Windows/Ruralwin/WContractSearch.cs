@@ -17,8 +17,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Alter search: screen and action.  If a contract number is specified, 
     // and the contract type doesn't match the contract's type, change the 
     // type on the screen, and in the search parameters.
-    // Disabled explicitly setting default contract type when starting and 
-    // when clearing criteria
+    // Modify Open behaviour: Allow Open to work if a contract_no is specified
+    // whether or not a search was done.
     //
     // TJB  RPCR_122  July-2018
     // Changed size of contract search window and dw_criteria sub-window
@@ -28,8 +28,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
     public partial class WContractSearch : WGenericSearch
     {
-        private int? default_ct_key = 0;  // 1was 1 (November Renewals)
-
         public WContractSearch()
         {
             this.InitializeComponent();
@@ -101,17 +99,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 insertRow(dwChild, 0);
                 dwChild.DeleteItemAt(0);
             }
-            // TJB  RPCR_140  June-2019
-            // Disabled explicitly setting default contract type
-/*
-            // NOTE: hard-coded default ct_key = 1 (November Renewals)
-            ll_row = dwChild.Find("ct_key", default_ct_key);
-            if (ll_row > 0)
-            {
-                //dw_criteria.GetItem<ContractSearch>(0).CtKey = 1;
-                BeginInvoke(new delegateInvoke(afterDel));
-            }
-*/
+
             //jlwang: for different user 
             if (dw_criteria.ll_row >= 0)
                 dw_criteria.SetValue(0, "region_id", dw_criteria.ll_row);
@@ -127,13 +115,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void afterDel()
         {
-            // TJB  RPCR_140  June-2019
-            // Disabled explicitly setting default contract type
-/*
-            // NOTE: hard-coded default ct_key = 1 (November Renewals)
-            dw_criteria.GetItem<ContractSearch>(0).CtKey = default_ct_key; 
-            //dw_criteria.DataObject.SetValue(0, "ct_key", 1);
-            */
+
             //dw_criteria.SetCurrent(0);
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
         }
@@ -232,7 +214,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public void ChildControl_Click(object sender, EventArgs e)
         {
-            this.AcceptButton = this.pb_search;
+            //this.AcceptButton = this.pb_search;
         }
 
         public virtual void dw_results_doubleclicked(object sender, EventArgs e)
@@ -264,7 +246,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_criteria_getfocus(object sender, EventArgs e)
         {
             dw_criteria.URdsDw_GetFocus(sender, e);
-            this.AcceptButton = pb_search;
+            //this.AcceptButton = pb_search;
+        }
+
+        // TJB RPCR_140 June-2019
+        // If a contract number has been specified as well as a contract type
+        // ensure the contract type is correct for the contract specified
+        // If the contract type is different, return the correct one in the
+        // ref pCtKey parameter.  If there's a database error, return that
+        // as the function value.
+        private int of_verify_contract_type(int? pContractNo, ref int? pCtKey)
+        {
+            int nCtKey = -1;
+
+            // Get the ct_key for the contract
+            RDSDataService Service = RDSDataService.GetContractTypeKey(pContractNo);
+            if (Service.SQLCode == 0)
+            {
+                nCtKey = Service.intVal;
+
+                // If the contract's ct_key is different than the one in the 
+                // search screen, change the screen to match the contract's
+                if (nCtKey != pCtKey)
+                {   // There may be a better way to do this, but this works ...
+                    DataUserControl dwChild;  // Get the ct_key object
+                    dwChild = dw_criteria.GetChild("ct_key");
+                    dwChild.Reset();  // Clear it, then Set the Bounds value ToolBar the element we want
+                    dw_criteria.GetItem<ContractSearch>(0).CtKey = nCtKey;
+                    dwChild.Retrieve();  // Now re-retrieve the dropdown's values
+                    // then refersh the screen to show the new contract type
+                    dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+
+                    // Don't forget to change the type that will be used in the search!
+                    pCtKey = nCtKey;
+                }
+            }
+            else
+            {// "This shouldn't ever happen
+                MessageBox.Show("Error looking up the contract's type \n"
+                               + Service.SQLErrText + "\n"
+                               + "(the contract number may not be valid)"
+                               , "Warning - SQL Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return -1;
+            }
+            return 0;
         }
 
         public virtual void pb_search_clicked(object sender, EventArgs e)
@@ -289,7 +315,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             lContract = dw_criteria.GetItem<ContractSearch>(0).ContractNo;
             // TJB  RPCR_122  July-2018: Added
-            // Prevents "0" displayed as contract numberwhen previous number deleted
+            // Prevents "0" displayed as contract number when previous number deleted
             if (lContract == 0)
                 dw_criteria.GetItem<ContractSearch>(0).ContractNo = null;
             sConTitle = dw_criteria.GetItem<ContractSearch>(0).ConTitle;
@@ -326,45 +352,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 lPbuId = 0;
             }
+
             // TJB RPCR_140 June-2019
             // If a contract number has been specified as well as a contract type
             // ensure the contract type is correct for the contract specified
             if (lContract > 0 && ll_contract_type > 0)
             {
-                int nCtKey;
-
-                // Get the ct_key for the contract
-                RDSDataService Service = RDSDataService.GetContractTypeKey(lContract);
-                if (Service.SQLCode == 0)
-                {
-                    nCtKey = Service.intVal;
-
-                    // If the contract's c t_key is different than the one in the 
-                    // search screen, change the screen to match the contract's
-                    if (nCtKey != ll_contract_type)
-                    {   // There may be a better way to do this, but this works ...
-                        DataUserControl dwChild;  // Get the ct_key object
-                        dwChild = dw_criteria.GetChild("ct_key");
-                        dwChild.Reset();  // Clear it, then Set the Bounds value ToolBar the element we want
-                        dw_criteria.GetItem<ContractSearch>(0).CtKey = nCtKey;
-                        dwChild.Retrieve();  // Now re-retrieve the dropdown's values
-                                             // then refersh the screen to show the new contract type
-                        dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
-
-                        // Don't forget to change the type that will be used in the search!
-                        ll_contract_type = nCtKey;
-                    }
-                }
-                else
-                {// "This shouldn't ever happen
-                    MessageBox.Show("Error looking up the contract's type \n"
-                                   + Service.SQLErrText + "\n"
-                                   + "(the contract number may not be valid)"
-                                   , "Warning - SQL Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-
+                int err = of_verify_contract_type(lContract, ref ll_contract_type);
+                if (err != 0) return;
             }
             Cursor.Current = Cursors.WaitCursor;
 
@@ -408,25 +403,65 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             WContract2001 lw_contract2001;
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
-            Cursor.Current = Cursors.WaitCursor;
+
+            // TJB  RPCR_120  June-2019
+            // Modify behaviour: Allow Open to work if a contract_no is specified
+            // whether or not a search was done.
+            dw_criteria.AcceptText();
             // Get selected row
             ll_row = dw_results.GetSelectedRow(0);
-            if (ll_row < 0)
+            // Get contract no from search criteria
+            ll_contractno = dw_criteria.GetItem<ContractSearch>(0).ContractNo;
+            if (ll_row < 0  // No search results selected
+                && (ll_contractno == null || ll_contractno <= 0))  // and no contrct specified
             {
                 MessageBox.Show("Please search for a contract before trying to open one."
                               , "Contract Search"
                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            // Get contract no
-            ll_contractno = dw_results.GetItem<ContractListing>(ll_row).ContractNo;
+            if (ll_row > 0)  // A result row was selected; use that row's contract number
+            {
+                ll_contractno = dw_results.GetItem<ContractListing>(ll_row).ContractNo;
+            }
+
+            // TJB RPCR_140 June-2019
+            // If a contract number has been specified as well as a contract type
+            // ensure the contract type is correct for the contract specified
+            int? ll_contract_type;
+            ll_contract_type = dw_criteria.GetItem<ContractSearch>(0).CtKey;
+            if (ll_contractno > 0 && ll_contract_type > 0)
+            {
+                int err = of_verify_contract_type(ll_contractno, ref ll_contract_type);
+                if (err != 0) return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
             // Create criteria
             lnv_Criteria = new NCriteria();
             lnv_msg = new NRdsMsg();
             lnv_Criteria.of_addcriteria("contract_no", ll_contractno);
             lnv_msg.of_addcriteria(lnv_Criteria);
-            // Build title
-            string ConTitle = dw_results.GetItem<ContractListing>(dw_results.GetSelectedRow(0)).ConTitle;
+
+            // Build title - Modified TJB RPCR_120 June-2019
+            string ConTitle;
+            if (ll_row > 0)  // A result row was selected - use that row's contract title
+            {
+                ConTitle = dw_results.GetItem<ContractListing>(ll_row).ConTitle;
+            }
+            else  // No result row was selected but a contract was 
+            {     // - we need to look up the contract title directly
+                int sqlCode = -1;
+                string sqlErrText = "";
+                ConTitle = RDSDataService.GetContractValue(ll_contractno, ref sqlCode, ref sqlErrText);
+                if (sqlCode < 0)
+                {
+                    MessageBox.Show(sqlErrText
+                                   , "Error in database query"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+            }
             ls_title = "Contract: (" + ll_contractno + ") " + ConTitle;
             // Open contract window if contract with title=ls_title not open
             if (!(StaticVariables.gnv_app.of_findwindow(ls_title, "w_contract2001") != null))
