@@ -10,10 +10,13 @@ using Metex.Core.Security;
 namespace NZPostOffice.ODPS.DataService
 {
     // TJB  RPCR_141  June-2019
-    // GetOdBlfMainrun and _GetOdBlfMainrun: New 
-    // - copied from GetOdBlfMainrunFromDummy with RgCode parameter added
-    // ValidateContract and _ValidateContract: new
-    // GetRgDescription and _GetRgDescription: new
+    // NEW: GetOdBlfMainrun and _GetOdBlfMainrun
+    //      - copied from GetOdBlfMainrunFromDummy with RgCode parameter added
+    // NEW: ValidateContract and _ValidateContract
+    // NEW: GetRgDescription and _GetRgDescription
+    //
+    // TJB  RPCR_140  June-2019
+    // NEW: GetContractTypeKey and _GetContractTypeKey (from RDSDataservice)
     //
     // TJB  RPCR_098  Jan-2016
     // Created InsertPTDs()
@@ -164,6 +167,15 @@ namespace NZPostOffice.ODPS.DataService
             get
             {
                 return dc_hashtotal;
+            }
+        }
+
+        private int? _number;
+        public int? Number
+        {
+            get
+            {
+                return _number;
             }
         }
 
@@ -531,10 +543,18 @@ namespace NZPostOffice.ODPS.DataService
 
         // TJB  RPCR_141  June-2019
         // Validate the contract number
-        /// Validate the contract number
+        /// Validate the contract number; returns 1 in Count
         public static ODPSDataService ValidateContract(int? nContractNo)
         {
             ODPSDataService obj = Execute("_ValidateContract", nContractNo);
+            return obj;
+        }
+
+        // TJB  RPCR_141  June-2019
+        // Get the renewal group (rg_code, rg_description) relevant to a contract
+        public static ODPSDataService GetContractRenewalGroup(int? nContractNo)
+        {
+            ODPSDataService obj = Execute("_GetContractRenewalGroup", nContractNo);
             return obj;
         }
 
@@ -543,6 +563,14 @@ namespace NZPostOffice.ODPS.DataService
         public static ODPSDataService GetRgDescription(int? nRgCode)
         {
             ODPSDataService obj = Execute("_GetRgDescription", nRgCode);
+            return obj;
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Return ct_key in intVal and contract_type in strVal
+        public static ODPSDataService GetContractTypeKey(int? al_contract)
+        {
+            ODPSDataService obj = Execute("_GetContractTypeKey", al_contract);
             return obj;
         }
 
@@ -1934,6 +1962,54 @@ namespace NZPostOffice.ODPS.DataService
         }
 
         // TJB  RPCR_141  June-2019
+        // Get the renewal group (rg_code, rg_description) relevant to a contract
+        [ServerMethod]
+        private void _GetContractRenewalGroup(int? nContractNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? rg_code = null;
+                    string rg_description = "";
+
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select rg.rg_code, rg.rg_description "
+                                   + " from rd.[contract] c, rd.renewal_group rg"
+                                   + " where c.contract_no = @nContractNo "
+                                   + "   and rg.rg_code = c.rg_code ";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "nContractNo", nContractNo);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                rg_code = dr.GetInt32(0);
+                                rg_description = dr.GetString(1);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqlcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                    _number = rg_code;
+                    _text = rg_description;
+                }
+            }
+        }
+
+        // TJB  RPCR_141  June-2019
         // Look up the renewal group description
         [ServerMethod]
         private void _GetRgDescription(int? nRgCode)
@@ -1972,6 +2048,43 @@ namespace NZPostOffice.ODPS.DataService
                         _sqlcode = -1;
                     }
                     _text = description;
+                }
+            }
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Get ct_key and contract_type for contract
+        [ServerMethod]
+        private void _GetContractTypeKey(int? al_contract)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select ct.ct_key, ct.contract_type "
+                                   + "  from rd.types_for_contract tfc, rd.contract_type ct "
+                                   + " where tfc.contract_no = @al_contract "
+                                   + "   and ct.ct_key = tfc.ct_key ";
+                    pList.Add(cm, "al_contract", al_contract);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _number = dr.GetInt32(0);
+                                _text = dr.GetString(1);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
                 }
             }
         }
