@@ -13,36 +13,42 @@ using NZPostOffice.ODPS.DataControls.OdpsInvoice;
 using System.IO;
 using NZPostOffice.ODPS.DataService;
 using NZPostOffice.ODPS.Controls;
+using NZPostOffice.DataService;
 
 namespace NZPostOffice.ODPS.Windows.OdpsInvoice
 {
+    // TJB  RPCR_141  June-2019
+    // If a contract number was specified and a contract type has also been specified
+    // ensure the type specified is appropriate for the contract; if not change the 
+    // contract type
+    //
+    // TJB  RPCR_111 28-Jun-2018
+    // Added ls_contractor_email_addr to cb_export_clicked and
+    // to contractor details in invoice file.
+    //
+    // TJB  Release Fixup Aug-2013
+    // Copied allowance breakdown retrieval to cb_export_clicked from 
+    // cb_open_clicked
+    //
+    // TJB  RPCR_054 June-2013: NEW
+    // of_process_detail_piecerates adapted from of_process_detail_km
+    // Consolidate code to simplify of_process_detail_piecerates
+    //   output_piecerate_detail
+    //   output_piecerate_total
+    //
+    // TJB  RPCR_056  July-2013  NEW
+    // of_process_allowance_breakdown
+    // Process the allowance breakdown for this invoice
+    //
+    // TJB  RPCR_056  June-2013
+    // Get invoice allowance details into temporary file
+    // (ODPSDataService.GetODDWSInvoiceAllowanceDetail)
+    //
+    // TJB  RPCR_012 July-2010
+    // Added sSupplier code to of_process_detail{km,cp,pp,xp}
+
     public partial class WInvoiceSearch : WCriteriaSearch
     {
-        // TJB  RPCR_111 28-Jun-2018
-        // Added ls_contractor_email_addr to cb_export_clicked and
-        // to contractor details in invoice file.
-        //
-        // TJB  Release Fixup Aug-2013
-        // Copied allowance breakdown retrieval to cb_export_clicked from 
-        // cb_open_clicked
-        //
-        // TJB  RPCR_054 June-2013: NEW
-        // of_process_detail_piecerates adapted from of_process_detail_km
-        // Consolidate code to simplify of_process_detail_piecerates
-        //   output_piecerate_detail
-        //   output_piecerate_total
-        //
-        // TJB  RPCR_056  July-2013  NEW
-        // of_process_allowance_breakdown
-        // Process the allowance breakdown for this invoice
-        //
-        // TJB  RPCR_056  June-2013
-        // Get invoice allowance details into temporary file
-        // (ODPSDataService.GetODDWSInvoiceAllowanceDetail)
-        //
-        // TJB  RPCR_012 July-2010
-        // Added sSupplier code to of_process_detail{km,cp,pp,xp}
-
         #region Define
 
         public FileStream ii_file;
@@ -191,6 +197,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             ldt_edate = dw_search.GetValue<DateTime?>(0, "end_date");
             ls_name = dw_search.GetValue<string>(0, "owner_driver");
             ll_region = dw_search.GetValue<int?>(0, "region_id");
+            ll_ctKey = dw_search.GetValue<int?>(0, "ct_key");
             //  TJB SR4639
             //  Added contract number and type to selcetion criteria
             //  See stored procedure
@@ -207,13 +214,31 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
                 }
                 else
                 {
-                    MessageBox.Show("Contract No must be a number", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Contract No must be a number"
+                                  , "Error"
+                                  , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     dw_search.SetValue(0, "contract_no", "");
                     return;
                 }
             }
 
-            ll_ctKey = dw_search.GetValue<int?>(0, "ct_key");
+            // TJB  RPCR_141  June-2019
+            // If a contract number was specified and a contract type has also been specified
+            // ensure the type specified is appropriate for the contract; if not change the 
+            // contract type
+            if (ls_contractNo != null && ll_ctKey > 0)
+            {
+                ODPSDataService Service;
+                Service = ODPSDataService.GetContractTypeKey(ll_contractNo);
+                int nCtKey = (Service.Number == null) ? 0 : (int)Service.Number;
+                if (nCtKey > 0 && nCtKey != ll_ctKey)
+                {
+                    dw_search.SetValue(0, "ct_key", nCtKey);
+                    dw_search.DataObject.BindingSource.CurrencyManager.Refresh();
+                    ll_ctKey = nCtKey;
+                }
+            }                
+
             ((DwInvoiceSearchResults)dw_results.DataObject).Retrieve(ls_name, ll_region, ldt_sdate, ldt_edate, ll_contractNo, ll_ctKey);
             ll_resultRows = dw_results.RowCount;
             if (ll_resultRows == 1)
@@ -1518,11 +1543,11 @@ namespace NZPostOffice.ODPS.Windows.OdpsInvoice
             }
             /*  ----------------------- Debugging ----------------------- //
             MessageBox.Show ('sdate        = '+of_display(sdate)+'\n'
-                             +'edate        = '+of_display ( edate)+'\n'
-                             +'alregion     = '+of_display ( alregion)+'\n'
-                             +'sname        = '+of_display ( sname)+'\n'
-                             +'alcontractor = '+of_display ( alcontractor)+'\n'
-                             +'alcontract   = '+of_display ( alcontract)+'\n'
+                             +'edate        = '+of_display(edate)+'\n'
+                             +'alregion     = '+of_display(alregion)+'\n'
+                             +'sname        = '+of_display(sname)+'\n'
+                             +'alcontractor = '+of_display(alcontractor)+'\n'
+                             +'alcontract   = '+of_display(alcontract)+'\n'
                              ,'w_invoice.cb_open.clicked' )
             // ---------------------------------------------------------  */
             //  TJB SR4639
