@@ -2293,7 +2293,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // trying I haven't found out why this happens.
                 // This hack "fixes" the problem by replacing the displayed value with the new vehicle's
                 // correct value.
-                decimal? nvv = (decimal)iuo_vehiclerates.DataObject.GetItem<VehicleRates2001>(0).VrNominalVehicleValue;
+                decimal? nvv = (decimal?)iuo_vehiclerates.DataObject.GetItem<VehicleRates2001>(0).VrNominalVehicleValue;
                 nvv = (nvv == null) ? 0.00m : nvv;
                 string s2 = nvv.ToString();
                 s2 = (s2.Length > 6) ? s2.Substring(0, s2.Length - 6) + "," + s2.Substring(s2.Length - 6) : s2;
