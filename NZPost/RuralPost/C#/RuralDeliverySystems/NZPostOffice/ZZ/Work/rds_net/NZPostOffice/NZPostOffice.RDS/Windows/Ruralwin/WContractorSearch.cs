@@ -7,13 +7,18 @@ using NZPostOffice.RDS.Menus;
 using NZPostOffice.RDS.Controls;
 using NZPostOffice.Shared;
 using NZPostOffice.RDS.Entity.Ruralsec;
+using NZPostOffice.RDS.DataService;
 using NZPostOffice.Entity;
 using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    // THB  RPCR_140  June-2019
+    // TJB  RPCR_140  June-2019
     // Added Unsuccessful Search message matching contract search's
+    // Had to explicitly set initial contract type dropdown to <blank>.
+    // If the user specifies a contractor, allow <Open> to work without 
+    // requiring a search first.
+    // Fixed a bug in of_clear.
 
     public class WContractorSearch : WGenericSearch
     {
@@ -232,16 +237,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //added by jlwang
             //?dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
             DataUserControl lds_user_contract_types;
-            DataUserControl dwc_contract_type;
+            //DataUserControl dwc_contract_type;
             lds_user_contract_types = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_contract_types();
-            dwc_contract_type = dw_criteria.GetChild("ct_key");//sObject);
+            //dwc_contract_type = dw_criteria.GetChild("ct_key");//sObject);
             if (lds_user_contract_types.RowCount == StaticVariables.gnv_app.of_gettotalcontracttypes())
             {
                 ((Metex.Windows.DataEntityCombo)dw_criteria.GetControlByName("ct_key")).SelectedIndex = 0;
             }
             else
             {
-                this.dw_criteria.DataObject.SetValue(0, "ct_key", 1);
+                // TJB  RPCR_140 June 2019
+                // Have to explicitly set initial contract type dropdown to <blank>
+                //this.dw_criteria.DataObject.SetValue(0, "ct_key", 1);
+                ((Metex.Windows.DataEntityCombo)dw_criteria.GetControlByName("ct_key")).SelectedIndex = 0;
+
                 this.dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
             }
         }
@@ -262,6 +271,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string ls_null;
             ll_null = null;
             ls_null = null;
+
+            //  clear the results box
+            //dw_results.of_reset();
+            dw_results.Reset();
+
             //  clear the dw_criteria fields
             //dw_criteria.uf_resetrows();
             dw_criteria.Reset();
@@ -269,19 +283,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_criteria.InsertItem<ContractorSearch>(0);
             // dw_criteria.of_retrieve (  )
             dw_criteria.SetValue(0, "contractor_supplier_no", ll_null);
-
             dw_criteria.SetValue(0, "contract_no", ll_null);
-            ((DataEntityCombo)dw_criteria.GetControlByName("ct_key")).SelectedIndex = 0;//jlwang
-            dw_criteria.SetValue(0, "ct_key", ll_null);
             dw_criteria.SetValue(0, "region_id", ll_null);
             dw_criteria.SetValue(0, "c_surname_company", ls_null);
             dw_criteria.SetValue(0, "c_first_names", ls_null);
             dw_criteria.SetValue(0, "c_phone_day", ls_null);
+            // TJB  RPCR_140  June-2019
+            // For some reason, these don't clear the contract type in all cases
+/*            ((DataEntityCombo)dw_criteria.GetControlByName("ct_key")).SelectedIndex = 0;//jlwang
+            dw_criteria.SetValue(0, "ct_key", ll_null);
+            dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
             dw_criteria.SetCurrent(0);
-
-            //  clear the results box
-            //dw_results.of_reset();
-            dw_results.Reset();
+*/
+            // but this does??
+            of_Set_Contract_Type(0);
             return 1;
         }
 
@@ -341,7 +356,71 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.AcceptButton = pb_search;
         }
 
+        // TJB RPCR_140 June-2019
+        // If a contract number has been specified as well as a contract type
+        // ensure the contract type is correct for the contract specified
+        // If the contract type is different, return the correct one in the
+        // ref pCtKey parameter.  If there's a database error, return that
+        // as the function value.
+        private int of_verify_contract_type(int? pContractNo, ref int? pCtKey)
+        {
+            int nCtKey = -1;
+
+            // Get the ct_key for the contract
+            RDSDataService Service = RDSDataService.GetContractTypeKey(pContractNo);
+            if (Service.SQLCode == 0)
+            {
+                nCtKey = Service.intVal;
+
+                // If the contract's ct_key is different than the one in the 
+                // search screen, change the screen to match the contract's
+                if (nCtKey != pCtKey)
+                {   
+                    of_Set_Contract_Type(nCtKey);
+/*                    // There may be a better way to do this, but this works ...
+                    DataUserControl dwChild;  // Get the ct_key object
+                    dwChild = dw_criteria.GetChild("ct_key");
+                    dwChild.Reset();  // Clear it, then set to the element we want
+                    dw_criteria.GetItem<ContractorSearch>(0).CtKey = nCtKey;
+                    dwChild.Retrieve();  // Now re-retrieve the dropdown's values
+                    // then refersh the screen to show the new contract type
+                    dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+*/
+                    // Don't forget to change the type that will be used in the search!
+                    pCtKey = nCtKey;
+                }
+            }
+            else
+            {// "This shouldn't ever happen
+                MessageBox.Show("Error looking up the contract's type \n"
+                               + Service.SQLErrText + "\n"
+                               + "(the contract number may not be valid)"
+                               , "Warning - SQL Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return -1;
+            }
+            return 0;
+        }
+
+        // TJB  RPCR_140  June-2019: Added
+        // There may be a better way to do this, but this works ...
+        private void of_Set_Contract_Type(int pCtKey)
+        {
+            DataUserControl dwChild;  // Get the ct_key object
+            dwChild = dw_criteria.GetChild("ct_key");
+            dwChild.Reset();  // Clear it, then set it to the value we want
+            dw_criteria.GetItem<ContractorSearch>(0).CtKey = pCtKey;
+            dwChild.Retrieve();  // Now re-retrieve the dropdown's values
+            // and refresh the screen to show the new contract type
+            dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
+        }
+
         public void pb_search_clicked(object sender, EventArgs e)
+        {
+            of_search();
+        }
+
+        private void of_search()
         {
             int? lContractor, lContract, lContractType, lRegion;
             string sSurname, sFirstName, sPhone;
@@ -371,12 +450,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (sPhone == null)
                 sPhone = "";
 
+            // TJB RPCR_140  June-2019
+            // If a contract is specified, and a contract type is present
+            // (the type seems to be automatically set to Rural Delivery) 
+            // check that the type corresponds to the contract's type and 
+            // change the search criteria if not.
+            if (lContract > 0 && lContractType > 0)
+            {
+                int err = of_verify_contract_type( lContract, ref lContractType);
+                if (err != 0)
+                    return;
+            }
+
+            // TJB  RPCR_140  June-2019
+            // If a contractor has been specified and a contract type is specified 
+            // but no contract, clear the contract type (it may have been automatically 
+            // populated and not for a type the contractor has - the contractor may
+            // have more than one contract type).
+            if (lContractor > 0 && lContractType > 0 && lContract == 0)
+            {
+                of_Set_Contract_Type(0);
+                lContractType = 0;
+            }
+
             this.Cursor = Cursors.WaitCursor;//SetPointer(HourGlass!);
             dw_results.Retrieve(new Object[] { lContractor, lContract, lContractType, lRegion, sSurname, sFirstName, sPhone });
             this.Cursor = Cursors.Arrow;
             if (dw_results.RowCount == 0)
             {
-                // THB  RPCR_140  June-2019: Added Unsuccessful Search message
+                // TJB  RPCR_140  June-2019: Added Unsuccessful Search message
                 MessageBox.Show("There are no contracts that satisfy the search criteria entered."
                                , "Unsuccessful Search"
                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -411,25 +513,67 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             string ls_Title;
             WContractor2001 lw_contractor2001;
+            int? lContractor;
             int ll_Row;
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
+
             Cursor.Current = Cursors.WaitCursor;
             lnv_Criteria = new NCriteria();
             lnv_msg = new NRdsMsg();
             pb_open.Focus();
+
+            // TJB  RPCR_140  June-2019
+            // Allow immediate Open if a contractor has been specified in the
+            // search criteria.
+            dw_criteria.AcceptText();
+            lContractor = dw_criteria.GetItem<ContractorSearch>(0).ContractorSupplierNo;
+
             // Did user select a contractor?
-            if (dw_results.GetRow() < 0)
+            if (lContractor == null || lContractor <= 0)  // No; check for a search result
             {
-                MessageBox.Show("Please search for a contractor before trying to open one.", "Contractor Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                if (dw_results.GetRow() < 0)  // NO: tell the user to do a search first
+                {
+                    MessageBox.Show("Please search for a contractor before trying to open one."
+                                   , "Contractor Search"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
             }
+
             // Get contractor no and add it to criteria object
             ll_Row = dw_results.GetRow();
-            lnv_Criteria.of_addcriteria("contractor_supplier_no", dw_results.GetItem<ContractorList>(ll_Row).ContractorSupplierNo);
+            if (ll_Row >= 0)  // if there was a search result selected, use that contractor number
+            {
+                lContractor = dw_results.GetItem<ContractorList>(ll_Row).ContractorSupplierNo;
+                ls_Title = "Owner Driver: " + dw_results.GetItem<ContractorList>(dw_results.GetRow()).ContractorName;
+            }
+            else  // TJB  RPCR_140  June-2019
+            {     // We're using the contractor number from the search criteria
+                  // for which there is no contractor name; we have to look it up.
+                int sqlErr = 0;
+                string sqlErrText = "";
+                ls_Title = RDSDataService.GetContractorName(lContractor, ref sqlErr, ref sqlErrText);
+                if (sqlErr != 0)
+                {
+                    if (sqlErr == 100)
+                        MessageBox.Show("Contractor not found"
+                                       , "Database lookup failure"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    else
+                        MessageBox.Show("Error getting the contractor's name \n"
+                                       + sqlErrText
+                                       , "Database lookup error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                ls_Title = "Owner Driver: " + ls_Title;
+            }
+
+            //lnv_Criteria.of_addcriteria("contractor_supplier_no", dw_results.GetItem<ContractorList>(ll_Row).ContractorSupplierNo);
+            lnv_Criteria.of_addcriteria("contractor_supplier_no", lContractor);
             lnv_msg.of_addcriteria(lnv_Criteria);
             // Build title
-            ls_Title = "Owner Driver: " + dw_results.GetItem<ContractorList>(dw_results.GetRow()).ContractorName;
             // Open the contractor window if title not found
             if (!((StaticVariables.gnv_app.of_findwindow(ls_Title, "w_contractor2001") != null)))
             {
