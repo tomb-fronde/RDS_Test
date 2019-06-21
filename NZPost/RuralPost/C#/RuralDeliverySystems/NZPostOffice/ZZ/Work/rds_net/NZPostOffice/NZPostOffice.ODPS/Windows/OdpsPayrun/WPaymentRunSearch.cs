@@ -265,11 +265,17 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 
             dw_search.DataObject.AcceptText();
 
+            // TJB RPCR_141 June-2016
+            // Note:  nRgCode and nContractNo are the relevant values
+            // specified in dw_search.  lcontract and lcontractor
+            // are values found in dw_results after a search.
             nRgCode = dw_search.GetItem<PaymentRunPeriod>(0).RgCode;
             nContractNo = dw_search.GetItem<PaymentRunPeriod>(0).ContractNo;
 
             //  Validate contract
             lRow = dw_results.GetSelectedRow(0);
+            // If neither a contract or renewal group were specified for
+            // a search, and no search result was selected, tell the user.
             if (nRgCode == null && nContractNo == null && lRow == -1)
             {
                 MessageBox.Show("You must select a contract from the search results\n" 
@@ -279,9 +285,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 return;
             }
 
-            lcontract = 0;
-            lcontractor = 0;
-            // Get contract/contractor details from search results
+            lcontract = null;
+            lcontractor = null;
             // (lRow will be < 0 if nothing is selected from in dw_results)
             if (lRow >= 0)
             {
@@ -289,9 +294,10 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 lcontractor = dw_results.DataObject.GetItem<PaymentRunContractors>(lRow).ContractorNo;
             }
 
-            // if a contract was specified ...
-            if (nContractNo > 0)
-            {   // Check that the specified value is valid 
+            // If no result was selected and a contract was specified 
+            // check that the specified value is valid 
+            if (lRow < 0 && nContractNo > 0)
+            {
                 ODPSDataService service = ODPSDataService.ValidateContract(nContractNo);
                 nContracts = service.Count;
                 if (nContracts == 0)
@@ -301,23 +307,46 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                                 , MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+            }
 
-                // If a contract hasn't been selected from dw_results use the specified one
-                if (lcontract == 0)
+            // If a search contract was specified and either the all contracts/contractors 
+            // have been selected from dw_results, or nothing was selected
+            // tell the user what we're going to do.
+            // NOTE: A specified contract has priority over a specified renewal group
+            if (nContractNo > 0 && (lcontract == 0 || lcontract == null))
+            {
+                if (MessageBox.Show("This payrun will be for all contractors holding "
+                            + "contract " + nContractNo.ToString()
+                            + " in this pay period."
+                        , this.Text
+                        , MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
+                    == DialogResult.Cancel)
+                    return;
+
+                lcontract = nContractNo;  // lcontract is what's passed to OD_BLF_Mainrun
+
+                // If a renewal group was specified too, check to see if it is appropriate
+                // for the contract.  If not change the displayed group.
+                if (nRgCode > 0)
                 {
-                    if (MessageBox.Show("This payrun will be for all contractors holding "
-                                + "contract " + nContractNo.ToString()
-                                + " in this pay period."
-                            , this.Text
-                            , MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
-                        == DialogResult.Cancel)
-                        return;
+                    ODPSDataService service = ODPSDataService.GetContractRenewalGroup(nContractNo);
+                    int? cRgCode = service.Number;
+                    if (cRgCode != nRgCode)
+                    {
+                        dw_search.GetItem<PaymentRunPeriod>(0).RgCode = cRgCode;
 
-                    lcontract = nContractNo;
+                        dw_search.DataObject.BindingSource.CurrencyManager.Refresh();
+
+                        nRgCode = dw_search.GetItem<PaymentRunPeriod>(0).RgCode;
+                    }
                 }
             }
-            // If no contract has been selected or specified, and a renewal group was specified ...
-            if (lcontract == 0 && nRgCode > 0)
+
+            // If no contract has been selected or specified, 
+            // and a renewal group was specified we'll do a payrun
+            // for the whole renewal group.  Tell the user.
+            if ((lcontract == 0 || lcontract == null) 
+                && nContractNo <=0 && nRgCode > 0)
             {
                 // Lookup renewal group description for the MessageBox
                 string rgDescription;
@@ -325,9 +354,9 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 rgDescription = service.Text;
 
                 if (MessageBox.Show("This payrun will be for all contracts in renewal group "
-                                + rgDescription
-                            , this.Text
-                            , MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
+                                   + rgDescription
+                                   , this.Text
+                                   , MessageBoxButtons.OKCancel, MessageBoxIcon.Information)
                     == DialogResult.Cancel)
                     return;
             }
@@ -360,7 +389,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             }
 
             // Get number of other users logged on
-            //select db_property('conncount') into  :lLoggedOnUsers from sys.dummy;
+            //select db_property('conncount') into :lLoggedOnUsers from sys.dummy;
             lLoggedOnUsers = ODPSDataService.GetDbPropertyFromDummy(); ;
             if (lLoggedOnUsers > 1)
             {
@@ -386,12 +415,12 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 return;
             }
 
+            /* -------------------------------- Debugging -------------------------------- */
             string sContract = (lcontract == null) ? "null" : lcontract.ToString();
             string sContractor = (lcontractor == null) ? "null" : lcontractor.ToString();
             string sContractNo = (nContractNo == null) ? "null" : nContractNo.ToString();
             string sRgCode = (nRgCode == null) ? "null" : nRgCode.ToString();
 
-            /* -------------------------------- Debugging -------------------------------- //
             if (MessageBox.Show( "Parameters for OD_BLF_Mainrun \n"
                           + "Contract    " + sContract + "\n"
                           + "Contractor  " + sContractor + "\n"
@@ -403,6 +432,15 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 return;
             /* --------------------------------------------------------------------------- */
 
+            // TJB  RPCR_141  June-2019
+            // At this point we're about to do the payrun
+            // If a specific contract is to be used (lcontract > 0) and a renewal group 
+            // is showing in the search area (nRgCode > 0), and the displayed renewal group
+            // isn't correct for the contract, change the displayed group to the correct one.
+            if (lcontract > 0 && nRgCode > 0)
+            {
+            }
+            
             // Run! Call stored procedures!
             Cursor.Current = Cursors.WaitCursor;
             tStart = System.DateTime.Now;
@@ -582,6 +620,8 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             int? nRgCode;
 
             dw_search.DataObject.AcceptText();
+            dw_search.DataObject.BindingSource.CurrencyManager.Refresh();
+
             ldt_sdate = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).StartDate;
             //ldt_edate = StaticMethods.RelativeDate(dw_search.GetItemDateTime(1, "end_date").Date, 19);
             if (dw_search.GetItem<PaymentRunPeriod>(0).EndDate != null)
@@ -590,6 +630,23 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // TJB  RPCR_141  June-2019:  Get rg_code and contract_no and add to parameter list
             nRgCode = dw_search.GetItem<PaymentRunPeriod>(0).RgCode;
             nContractNo = dw_search.GetItem<PaymentRunPeriod>(0).ContractNo;
+
+            // TJB  RPCR_141  June-2019
+            // If both a contract number and renewal group have been specified
+            // make sure the renewal group is correct for the contract.
+            if (nContractNo != null && nContractNo > 0 
+                && nRgCode != null && nRgCode > 0)
+            {
+                ODPSDataService service = ODPSDataService.GetContractRenewalGroup(nContractNo);
+                int? cRgCode = service.Number;
+                if (cRgCode != nRgCode)
+                {
+                    dw_search.GetItem<PaymentRunPeriod>(0).RgCode = cRgCode;
+
+                    dw_search.DataObject.AcceptText();
+                    dw_search.DataObject.BindingSource.CurrencyManager.Refresh();
+                }
+            }
 
             //((DwPaymentRunContractors)dw_results.DataObject).Retrieve(ls_name, ldt_sdate, ldt_edate);
             ((DwPaymentRunContractors)dw_results.DataObject).Retrieve(ls_name, ldt_sdate, ldt_edate, nRgCode, nContractNo);
@@ -612,6 +669,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             dStart = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).StartDate;
             dEnd = dw_search.DataObject.GetItem<PaymentRunPeriod>(0).EndDate;
 
+            dw_search.GetItem<PaymentRunPeriod>(0).ContractNo = null;
             DataUserControl dwChild;
             dwChild = dw_search.GetChild("rg_code");
             dwChild.Reset();
