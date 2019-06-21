@@ -14,6 +14,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
     // TJB  RPCR_141  June-2019
     // Added OnHandleCreated and InitializeDropdown for rg_code dropdown
+    // Added this.contract_no.CausesValidation = false in designer
 
     public partial class DwPaymentRunPeriod : Metex.Windows.DataUserControl
     {

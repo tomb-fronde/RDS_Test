@@ -9,6 +9,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
     // TJB  RPCR_141  June-2019
     // Added contract_no and rg_code dropdown
+    // Added this.contract_no.CausesValidation = false;
 
     partial class DwPaymentRunPeriod
     {
@@ -159,6 +160,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
             // 
             // contract_no
             // 
+            this.contract_no.CausesValidation = false;
             this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_no.EditMask = "######";
             this.contract_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
