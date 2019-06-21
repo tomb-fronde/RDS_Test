@@ -11,6 +11,10 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // Modifications
+    // TJB  RPCR_140  June-2019
+    // NEW: GetContractTypeKey - Get ct_key, contract_type for contract
+    // NEW: GetContractorName
+    //
     // TJB  RPCR_077  May-2016: NEW
     // NEW: UpdateCustStripmakerSeq
     //
@@ -805,6 +809,14 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService GetContractDateTerminated(int? al_contract)
         {
             RDSDataService obj = Execute("_GetContractDateTerminated", al_contract);
+            return obj;
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Return ct_key in intVal and contract_type in strVal
+        public static RDSDataService GetContractTypeKey(int? al_contract)
+        {
+            RDSDataService obj = Execute("_GetContractTypeKey", al_contract);
             return obj;
         }
 
@@ -2292,6 +2304,16 @@ namespace NZPostOffice.RDS.DataService
         public static string GetContractValue(int? lContract, ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_GetContractValue", lContract);
+            sqlCode = obj.SQLCode;
+            sqlErrText = obj.SQLErrText;
+            return obj.strVal;
+        }
+
+        // TJB  RPCR_140  June-2019
+        /// Get the name of a contractor
+        public static string GetContractorName(int? lContractor, ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_GetContractorName", lContractor);
             sqlCode = obj.SQLCode;
             sqlErrText = obj.SQLErrText;
             return obj.strVal;
@@ -6305,6 +6327,43 @@ namespace NZPostOffice.RDS.DataService
                                 _FirstRouteFrequenctSfKeyList.Add(item);
                                 item._sf_key = dr.GetInt32(0);
                                 item._rf_delivery_days = dr.GetString(1);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Get ct_key and contract_type for contract
+        [ServerMethod]
+        private void _GetContractTypeKey(int? al_contract)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select ct.ct_key, ct.contract_type "
+                                   + "  from rd.types_for_contract tfc, contract_type ct "
+                                   + " where tfc.contract_no = @al_contract "
+                                   + "   and ct.ct_key = tfc.ct_key ";
+                    pList.Add(cm, "al_contract", al_contract);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                                strVal = dr.GetString(1);
                             }
                             _sqlcode = 0;
                         }
@@ -11151,7 +11210,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     string sequence = string.Empty;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT contract.con_title FROM rd.contract WHERE contract.contract_no = @lContract ";
+                    cm.CommandText = "SELECT contract.con_title "
+                                   + "  FROM rd.contract "
+                                   + " WHERE contract.contract_no = @lContract ";
                     pList.Add(cm, "lContract", lContract);
                     try
                     {
@@ -11172,6 +11233,50 @@ namespace NZPostOffice.RDS.DataService
                         _sqlerrtext = ex.Message;
                     }
                     strVal = sequence;
+                }
+            }
+        }
+
+        // TJB  RPCR_140  June-2019
+        // Get a contractor's name (as in the contractor search results)
+        [ServerMethod]
+        private void _GetContractorName(int? lContractor)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    string name = string.Empty;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select cor.c_surname_company "
+                                   + "        + case when cor.c_first_names is null "
+                                   + "               then case when cor.c_initials is null "
+                                   + "                         then '' else ', ' + cor.c_initials "
+                                   + "                     end "
+                                   + "               else ', ' + cor.c_first_names "
+                                   + "           end "
+                                   + "  from rd.contractor cor "
+                                   + " where cor.contractor_supplier_no = @lContractor ";
+                    pList.Add(cm, "lContractor", lContractor);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _sqlcode = 0;
+                                name = dr.GetString(0);
+                            }
+                            else
+                                _sqlcode = 100;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                    strVal = name;
                 }
             }
         }
