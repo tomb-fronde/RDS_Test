@@ -82,6 +82,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // contract_no
             // 
+            this.contract_no.CausesValidation = false;
             this.contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "ContractNo", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_no.EditMask = "######";
             this.contract_no.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -94,6 +95,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.contract_no.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.contract_no.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.contract_no.Value = "";
+            this.contract_no.Leave += new System.EventHandler(this.contract_no_Leave);
             // 
             // region_id_t
             // 
@@ -333,9 +335,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // pbu_id
             // 
+            this.pbu_id.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.pbu_id.AutoRetrieve = true;
             this.pbu_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "PbuId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.pbu_id.DisplayMember = "PbuCode";
+            this.pbu_id.DropDownWidth = 240;
             this.pbu_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.pbu_id.Location = new System.Drawing.Point(146, 110);
             this.pbu_id.Name = "pbu_id";
@@ -343,11 +347,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.pbu_id.TabIndex = 102;
             this.pbu_id.Value = null;
             this.pbu_id.ValueMember = "PbuId";
-            this.pbu_id.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.pbu_id.DropDownWidth = 240;
-            this.pbu_id.SelectedIndexChanged += new System.EventHandler(pbu_id_SelectedIndexChanged);//add by ybfan
-            this.pbu_id.Click += new System.EventHandler(pbu_id_Click);
-            this.pbu_id.LostFocus += new System.EventHandler(pbu_id_LostFocus);
+            this.pbu_id.LostFocus += new System.EventHandler(this.pbu_id_LostFocus);
+            this.pbu_id.SelectedIndexChanged += new System.EventHandler(this.pbu_id_SelectedIndexChanged);
+            this.pbu_id.Click += new System.EventHandler(this.pbu_id_Click);
             // 
             // pbu_id_t
             // 

@@ -11,6 +11,9 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_140  June-2019
+    // contract_no_Leave event handler added
+    //
     // TJB  RPCR_122  July-2018
     // Added PBU_Id dropdown assignment here
     // Added PBUCode label and dropdown select element in Designer
@@ -51,6 +54,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             {
                 ChildControlClick(sender, e);
             }
+        }
+
+        // TJB  RPCR_140  June-2019: Added
+        // Appears necessary to ensure ContractNo in ContractSearch entity
+        // (its bindingsource) is updated .
+        // - a bindingsource refresh might have the same effect?
+        private void contract_no_Leave(object sender, EventArgs e)
+        {
+            this.AcceptText();
         }
 	}
 }
