@@ -20,9 +20,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
-        // TJB  Oct-2017
-        // Bug fix: Fixed calculation of Sundries total for >1 contract.  
-        //          See store_group_report
+        // TJB  RPCR_126  July-2018 (Formerly Oct-2017 Bug fix:)
+        // Fixed calculation of Sundries total for >1 contract.  
+        // (see store_group_report).
+        // [these changes are specific to RPCR_126]
+        // Disabled scaling of Sundries and Wardrobe values in full Whatif report
+        // (see REDWhatifCalculatorReport2005.rpt - tsundries in Formula Fields)
+        // also for Benchmark report (see sp_getBenchmarkRpt2013)
         //
         // TJB  Aug-2013
         // Tidyup - removed irrelevant comments and other similar changes
@@ -731,7 +735,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         idw_report.GetItem<WhatifCalculatorReport2005>(k).Stelephone = l_Stelephone / (i - j);
                         idw_report.GetItem<WhatifCalculatorReport2005>(k).Ssundries = l_Ssundries / (i - j);
                     }
-                    // TJB Oct 2017  Bug fix: Added Sundries line
+                    // TJB  RPCR_126  July-2018: Formal Change request
+                    // Originally: Oct 2017  Bug fix: Added Sundries line
                     l_Stelephone = idw_report.GetItem<WhatifCalculatorReport2005>(i).Telephone;
                     l_Ssundries = idw_report.GetItem<WhatifCalculatorReport2005>(i).Sundries;
                     j = i;
@@ -1411,8 +1416,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             idw_summary.Width = this.Width - 70;
             idw_summary.Height = this.Height - 114;
             idw_report.Height = idw_summary.Height;
-            idw_dist.Height = idw_summary.Height;
             idw_report.Width = idw_summary.Width;
+            idw_dist.Height = idw_summary.Height;
             idw_dist.Width = idw_summary.Width;
             cb_print.Top = tab_1.Height + tab_1.Location.Y + 6;
             cb_close.Top = cb_print.Location.Y;
