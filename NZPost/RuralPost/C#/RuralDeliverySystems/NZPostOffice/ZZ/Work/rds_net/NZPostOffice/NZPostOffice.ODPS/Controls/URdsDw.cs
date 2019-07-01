@@ -13,6 +13,11 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.ODPS.Controls
 {
+    // TJB  RPCR_128 June-2019: AppendToCSV new
+    // Coded specifically for csv files, but could easily be modified
+    // to append to text files.  Adapted from SaveAs().
+    // Cleaned out some very large commented-out blocks.
+    //
     // TJB  July 2018
     // Removed some long commented-out sections of code
     //
@@ -979,54 +984,6 @@ namespace NZPostOffice.ODPS.Controls
                 {
                     throw new Exception("Save As type XLS not implemented.");
 
-                    //Microsoft.Office.Interop.Excel.Application m_Excel = new Microsoft.Office.Interop.Excel.Application();
-                    //m_Excel.SheetsInNewWorkbook = 1;
-                    //Microsoft.Office.Interop.Excel._Workbook m_Book = (Microsoft.Office.Interop.Excel._Workbook)(m_Excel.Workbooks.Add(Missing.Value));
-                    //Microsoft.Office.Interop.Excel._Worksheet m_Sheet = (Microsoft.Office.Interop.Excel._Worksheet)(m_Book.Worksheets.get_Item(1));
-                    //m_Sheet.Name = EntityType.Name;
-                    //int j = 0;
-                    //foreach (PropertyInfo p in this.EntityType.GetProperties())
-                    //{
-                    //    j++;
-                    //    if (p.Name == "SQLCode" || p.Name == "SQLErrText" || p.Name == "IsNew" || p.Name == "IsDeleted" || p.Name == "IsDirty" || p.Name == "IsSavable")
-                    //    {
-                    //    }
-                    //    else
-                    //    {
-                    //        m_Sheet.Cells[1, j] = reversemigrateName(p.Name);
-                    //    }
-                    //}
-
-                    //for (int i = 0; i < this.RowCount; i++)
-                    //{
-                    //    j = 0;
-                    //    EntityBase sResult = this.GetItem<EntityBase>(i);
-                    //    foreach (PropertyInfo p in sResult.GetType().GetProperties())
-                    //    {
-                    //        if (p.Name == "SQLCode" || p.Name == "SQLErrText" || p.Name == "IsNew" || p.Name == "IsDeleted" || p.Name == "IsDirty" || p.Name == "IsSavable")
-                    //        {
-                    //        }
-                    //        else
-                    //        {
-                    //            j++;
-                    //            if (p.PropertyType == typeof(string))
-                    //            {
-                    //                m_Sheet.Cells[2 + i, j] = "'" + p.GetValue(sResult, null);
-                    //            }
-                    //            else
-                    //            {
-                    //                m_Sheet.Cells[2 + i, j] = p.GetValue(sResult, null);
-                    //            }
-                    //        }
-                    //    }
-                    //    m_Sheet.Cells.WrapText = false;
-                    //    m_Book.SaveAs(filename, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange, Missing.Value, Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-                    //    m_Book.Close(false, Missing.Value, Missing.Value);
-                    //    m_Excel.Quit();
-                    //    m_Book = null;
-                    //    m_Sheet = null;
-                    //    m_Excel = null;
-                    //}
                 }
                 else
                 {
@@ -1102,63 +1059,113 @@ namespace NZPostOffice.ODPS.Controls
             }
             GC.Collect();
             return 0;
-            //if (filename == null || filename == "")
-            //{
-            //    DialogResult i_return;
-            //    SaveFileDialog file_dia = new SaveFileDialog();
-            //    file_dia.Title = "Save As";
-            //    file_dia.DefaultExt = "txt";
-            //    file_dia.Filter = "Text|*.txt|CSV|*.csv";
-            //    i_return = file_dia.ShowDialog();
-            //    if (i_return == DialogResult.Cancel)
-            //        return 0;
-            //    filename = file_dia.FileName;
-            //}
-            //StreamWriter sw = null;
-            //try
-            //{
-            //    // set separator charatcer
-            //    char sep;
-            //    if (saveastype.ToLower() == "text")
-            //        sep = '\t';
-            //    else if (saveastype.ToLower() == "csv")
-            //        sep = ',';
-            //    else
-            //        throw new Exception("Unsupported save as type.");
-            //    // get field info from entity type
-            //    System.Reflection.FieldInfo[] column_fields = new System.Reflection.FieldInfo[this.column_name_list.Count];
-            //    for (int i = 0; i < column_name_list.Count; i++)
-            //    {
-            //        column_fields[i] = EntityType.GetField("_" + column_name_list[i], System.Reflection.BindingFlags.GetField | System.Reflection.BindingFlags.SetField | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            //    }
-
-            //    sw = new StreamWriter(filename);
-            //    for (int r = 0; r < DataObject.RowCount; r++)
-            //    {
-
-            //        for (int i = 0; i < column_fields.Length; i++)
-            //        {
-            //            sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
-            //            if (i != column_fields.Length - 1)
-            //                sw.Write(sep);
-            //        }
-            //        if (r != DataObject.RowCount - 1)
-            //            sw.Write("\r\n");
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return -1;
-            //}
-            //finally
-            //{
-            //    if (sw != null)
-            //    {
-            //        sw.Close();
-            //    }
-            //}
             //GC.Collect();
             //return DataObject.RowCount;
+        }
+
+        // TJB  RPCR_128 June-2019: AppendToCSV new
+        // Coded specifically for csv files, but could easily be modified
+        // to append to text files.
+        public int AppendToCSV(string filename, bool headline)
+        {
+            // TJB  RPCR_128 June-2019
+            // Append additional data to a file (assumed to be a CSV file)
+            try
+            {
+                // If we weren't given a filename, ask for one
+                if (filename.Length <= 0)
+                {
+                    SaveFileDialog savedlg = new SaveFileDialog();
+                    savedlg.Title = "Append to CSV file...";
+                    savedlg.Filter = "CSV files (*.csv)| *.csv";
+                    if (savedlg.ShowDialog() == DialogResult.OK)
+                    {
+                        filename = savedlg.FileName;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                string filetype = filename.Substring(filename.Length - 3);
+                if (filetype.ToLower() != "csv")
+                {
+                    throw new Exception("Can only append to CSV format files.");
+                }
+                else
+                {
+                    StreamWriter sw = null;
+                    try
+                    {
+                        // set separator charatcer
+                        string sep;
+                        if (filetype.ToLower() == "text")
+                            sep = "\t";
+                        else if (filetype.ToLower() == "csv")
+                            sep = ",";
+                        else if (filetype.ToLower() == "fixed")
+                            sep = "";
+                        else
+                            throw new Exception("Unsupported save as type.");
+
+                        // get field info from entity type
+                        System.Reflection.FieldInfo[] column_fields = new System.Reflection.FieldInfo[this.column_name_list.Count];
+                        for (int i = 0; i < column_name_list.Count; i++)
+                        {
+                            column_fields[i] = EntityType.GetField("_" + column_name_list[i],
+                                System.Reflection.BindingFlags.GetField |
+                                System.Reflection.BindingFlags.SetField |
+                                System.Reflection.BindingFlags.Instance |
+                                System.Reflection.BindingFlags.NonPublic);
+                        }
+
+                        sw = new StreamWriter(filename, true);
+                        sw.WriteLine();
+                        if (headline)
+                        {
+                            for (int i = 0; i < column_name_list.Count; i++)
+                            {
+                                sw.Write(column_name_list[i] + sep);
+                            }
+                            sw.Write("\r\n");
+                        }
+                        for (int r = 0; r < DataObject.RowCount; r++)
+                        {
+                            for (int i = 0; i < column_fields.Length; i++)
+                            {
+                                //sw.Write(ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r])));
+                                string field_value = ValidateExportValue(column_fields[i].GetValue(DataObject.BindingSource.List[r]));
+                                sw.Write(field_value);
+                                if (i != column_fields.Length - 1)
+                                    sw.Write(sep);
+                            }
+                            if (r != DataObject.RowCount - 1)
+                                sw.Write("\r\n");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        GC.Collect();
+                        return -1;
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                    }
+                    GC.Collect();
+                    return DataObject.RowCount;
+                }
+                return 1;
+            }
+            catch
+            {
+                return -1;
+            }
+            GC.Collect();
+            return 0;
         }
 
         private string ValidateExportValue(object value)
@@ -1166,7 +1173,8 @@ namespace NZPostOffice.ODPS.Controls
             // TJB  RPI_005  June 2010
             // Changed to allow " " strings to pass untrimmed
 
-            System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("[,\"\\t\\r\\n]");
+            System.Text.RegularExpressions.Regex rx 
+                = new System.Text.RegularExpressions.Regex("[,\"\\t\\r\\n]");
             if (value == null)
             {
                 return "";
@@ -1187,12 +1195,12 @@ namespace NZPostOffice.ODPS.Controls
             {
                 if (rx.Match((string)value).Success)
                     return '"' + ((string)value).Replace("\"", "\"\"") + '"';
+
+                // TJB RPI_005 June-2010: Added length condition so " " would be untrimmed
+                if (((string)value).Length > 1)
+                    return ((string)value).Trim();
                 else
-                    // TJB RPI_005 June-2010: Added length condition so " " would be untrimmed
-                    if (((string)value).Length > 1)
-                        return ((string)value).Trim();
-                    else
-                        return ((string)value);
+                    return ((string)value);
             }
         }
     }
