@@ -20,24 +20,29 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128  June-2019
+    // Added IRD Payday Interface processing - see Export_IRDpayday_Interface
+    // Added checkbox to select including column headers in CSV file
+    // Always combined header line with detail lines
+    // Exception file produced only if there are exceptions
+    //
+    // TJB  30-Oct-2013  New AP Export file format
+    // Added export_AP_GL07_format(), SaveGL07
+    //
+    // TJB  RPI_004  June-2010
+    // Changed decimal? fields to strings in object definition (Ir348Detail)
+    // Changed related variables below to non-nullable decimals.
+    // Added str2dec() function above to convert the strings.
+    //
+    // TJB  RPI_005  June 2010
+    // Changed AP Interface filename prompt and removed unnecessary check 
+    // for existing filename.
+    //
+    // TJB  RPI_003  June 2010
+    // Change filename for GL Payments and GL Accruals
+
     public partial class WExportCriteria : WMaster
     {
-        // TJB  30-Oct-2013  New AP Export file format
-        // Added export_AP_GL07_format(), SaveGL07
-        //
-        // TJB  RPI_004  June-2010
-        // Changed decimal? fields to strings in object definition (Ir348Detail)
-        // Changed related variables below to non-nullable decimals.
-        // Added str2dec() function above to convert the strings.
-        //
-        // TJB  RPI_005  June 2010
-        // Changed AP Interface filename prompt and removed unnecessary check 
-        // for existing filename.
-        //
-        // TJB  RPI_003  June 2010
-        // Change filename for GL Payments and GL Accruals
-
-
         public WExportCriteria()
         {
             InitializeComponent();
@@ -57,8 +62,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
             DateTime dt_edate;
             DateTime ldt_fsdate;
             DateTime ldt_fedate;
+
             ls_report_name = StaticMessage.StringParm;
             dt_edate = DateTime.Now;// Today();
+            this.checkBox1.Visible = false;  // Visible only for Payday Interface
+            
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
             string TestExpr = ls_report_name;
             if (TestExpr == "GL Interface-Payments")
@@ -105,6 +113,19 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 dw_primary.DataObject = new DwIr348Header();
                 dw_secondary.DataObject = new DwIr348Detail();
                 dw_tertiary.DataObject = new DwIr348DetailException();
+            }
+                // TJB RPCR_128 June-2019
+                // Payday Interface added
+            else if (TestExpr == "IRD Payday Interface")
+            {
+                dw_1.Height = 72;
+                
+                this.checkBox1.Visible = true;  // Visible only for Payday Interface
+
+                this.Text = "IRD Payday Interface";
+                dw_primary.DataObject = new DwIrdPaydayHeader();
+                dw_secondary.DataObject = new DwIrdPaydayDetail();
+                dw_tertiary.DataObject = new DwIrdPaydayDetailException();
             }
             else if (TestExpr == "Updated Contractors")
             {
@@ -157,9 +178,20 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 dw_1.SetValue(0, "fedate", ldt_fedate);
 
             }
-            cb_ok.Location = new Point(cb_ok.Left, 8 + dw_1.Height);
-            cb_cancel.Location = new Point(cb_cancel.Left, cb_ok.Top);
-            this.Height = cb_ok.Top + cb_ok.Height + 35;
+            // TJB RPCR_128 June-2019
+            // Adjust things so the checkbox fits nicely for the Payday interface
+            // Leave the adjustments for the others as they were.
+
+            if (TestExpr == "IRD Payday Interface")
+            {
+                checkBox1.Left = cb_ok.Left;
+                this.Height = cb_ok.Top + cb_ok.Height + 24;
+            }
+            {
+                cb_ok.Location = new Point(cb_ok.Left, 8 + dw_1.Height);
+                cb_cancel.Location = new Point(cb_cancel.Left, cb_ok.Top);
+                this.Height = cb_ok.Top + cb_ok.Height + 35;
+            }
         }
 
         public override int closequery()
@@ -361,9 +393,10 @@ namespace NZPostOffice.ODPS.Windows.Odps
             DateTime dt_edate;
             string smonth_prefix = "";
             string sReturnedFIleName = "";
+            string sReportFIleName = "";
             string sInitFileName;
+
             dw_1.AcceptText();
-            // PowerBuilder 'Choose Case' statement converted into 'if' statement
             String TestExpr = this.Text;
             if (TestExpr == "Updated Contractors Export")
             {
@@ -718,39 +751,16 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 sInitFileName = "IR348header_" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2) + ".csv";
                 if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year, "CSV Files  ( *.CSV)|*.CSV|All Files  ( *.*)|*.*"))
                 {
-                    //if (FileExists(sReturnedFIleName)) {
-                    //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1) {
-                    //        dw_primary.saveas(sReturnedFIleName, csv!, true);
-                    //    }
-                    //}
-                    //else {
-                    //    dw_primary.saveas(sReturnedFIleName, csv!, true);
-                    //}
                     dw_primary.SaveAs(sReturnedFIleName, "csv");//!, true);
 
                     sInitFileName = "IR348detail_" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2) + ".csv";
                     if (GetFileSaveName("Save Detail to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "CSV Files  ( *.CSV)|*.CSV|All Files  ( *.*)| *.*"))
                     {
-                        //if (FileExists(sReturnedFIleName))
-                        //{
-                        //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1)
-                        //    {
                         dw_secondary.SaveAs(sReturnedFIleName, "csv");//!, true);
 
                         sInitFileName = "IR348detail_exception" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2) + ".csv";
                         if (GetFileSaveName("Save detail exception to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "CSV Files  ( *.CSV)|*.CSV| All Files  ( *.*)|*.*"))
                         {
-                            //if (FileExists(sReturnedFIleName)) 
-                            //{
-                            //    if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1) 
-                            //    {
-                            //        dw_tertiary.saveas(sReturnedFIleName, csv!, true);
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    dw_tertiary.saveas(sReturnedFIleName, csv!, true);
-                            //}
                             dw_tertiary.SaveAs(sReturnedFIleName, "csv");
 
                         }
@@ -761,30 +771,222 @@ namespace NZPostOffice.ODPS.Windows.Odps
                                         "4) Do not forget to archive all files"
                                         , "IR348"
                                         , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //    }
-                        //}
-                        //else 
-                        //{
-                        //    dw_secondary.saveas(sReturnedFIleName, csv!, true);
-                        //    sInitFileName = "IR348detail_exception" + Month(dt_edate).ToString() +  TextUtil.Right(Year(dt_edate).ToString(), 2) + ".csv";
-                        //    if (GetFileSaveName("Save detail exception to File", sInitFileName, sReturnedFIleName, smonth_prefix +  TextUtil.Right(Year(dt_sdate).ToString(), 2), "CSV Files  ( *.CSV),*.CSV," + " All Files  ( *.*), *.*") == 1) 
-                        //    {
-                        //        if (FileExists(sReturnedFIleName)) 
-                        //        {
-                        //            if (MessageBox("Save to File", "Do you want to replace the existing file " + sReturnedFIleName + '?', question!, yesno!, 2) == 1)
-                        //            {
-                        //                dw_tertiary.saveas(sReturnedFIleName, csv!, true);
-                        //            }
-                        //        }
-                        //        else 
-                        //        {
-                        //            dw_tertiary.saveas(sReturnedFIleName, csv!, true);
-                        //        }
-                        //    }
-                        //    MessageBox.Show ( @"Please combine the header and detail records into one file.\r~n1) Copy the second line of the header file into the clipboard\r~n2) Paste it into the first line  ( replace) of the detail file\r~n3) Save the file using another filename then send it to IRFile\r~n4) Do not forget to archive all files", "IR348" );
-                        //}
                     }
                 }
+            }
+            else if (TestExpr == "IRD Payday Interface")
+            {
+                export_IRDpayday_interface();
+            }
+        }
+
+        public virtual void export_IRDpayday_interface()
+        {
+            string ls_Gross = string.Empty;
+            string ls_NotLiable = string.Empty;
+            string ls_FamilyAssistance = string.Empty;
+            string ls_StudentLoan = string.Empty;
+            string ls_ChildSupport = string.Empty;
+            string ls_PAYE = string.Empty;
+            string ls_Name = string.Empty;
+            string ls_CleanName = string.Empty;
+
+            decimal? i_Gross = 0;
+            decimal? i_NotLiable = 0;
+            decimal? i_FamilyAssistance = 0;
+            decimal? i_StudentLoan = 0;
+            decimal? i_ChildSupport = 0;
+            decimal? i_PAYE = 0;
+
+            // RPCR_128  TJB  June-2019: added
+            string ls_KsDeductions = "";
+            string ls_KsEmpContrib = "";
+            string ls_EsctDeductions = "";
+            string ls_TaxCredits = "";
+            string ls_TotalLines = "";
+            string ls_TotalDeducted = "";
+
+            decimal? i_KsDeductions = 0;
+            decimal? i_KsEmpContrib = 0;
+            decimal? i_EsctDeductions = 0;
+            decimal? i_TaxCredits = 0;
+            decimal? i_TotalDeducted = 0;
+            //--------------------------------
+
+            string sInitFileName = "";
+            string sReportFileName = "";
+            string sReturnedFileName = "";
+            DateTime dt_sdate, dt_edate;
+            string smonth_prefix = "";
+
+            dt_sdate = dw_1.GetValue<DateTime>(0, "sdate");
+            dt_edate = dw_1.GetValue<DateTime>(0, "edate");
+            ((DwIrdPaydayHeader)dw_primary.DataObject).Retrieve(dt_sdate, dt_edate);
+            ((DwIrdPaydayDetail)dw_secondary.DataObject).Retrieve(dt_sdate, dt_edate);
+            ((DwIrdPaydayDetailException)dw_tertiary.DataObject).Retrieve(dt_sdate, dt_edate);
+            // Strip all special characters from the names of the contractors
+            // Easy! If you know what to do
+
+            for (int ll_Ctr = 0; ll_Ctr < dw_secondary.RowCount; ll_Ctr++)
+            {
+                ls_Name = dw_secondary.GetValue<string>(ll_Ctr, "employee_full_name");
+                ls_CleanName = of_translate(ls_Name, "&", "");
+                ls_CleanName = of_translate(ls_CleanName, "-", "");
+                ls_CleanName = of_translate(ls_CleanName, "/", "");
+                ls_CleanName = of_translate(ls_CleanName, "(", "");
+                ls_CleanName = of_translate(ls_CleanName, ")", "");
+                ls_CleanName = of_translate(ls_CleanName, "\"", "");
+                ls_CleanName = of_translate(ls_CleanName, "\"", "");
+                dw_secondary.SetValue(ll_Ctr, "employee_full_name", ls_CleanName);
+
+                i_Gross += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).GrossEarnings);
+                i_NotLiable += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).NotLiable);
+                i_FamilyAssistance += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).FamilyAssistance);
+                i_StudentLoan += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).SlDeductions);
+                i_ChildSupport += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).CsDeductions);
+                i_PAYE += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).TotalPaye);
+
+                // RPCR_128  TJB  June-2019: added
+                i_KsDeductions += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).KsDeductions);
+                i_KsEmpContrib += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).KsEmpContrib);
+                i_EsctDeductions += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).EsctDeductions);
+                i_TaxCredits += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).TaxCredits);
+                //--------------------------------
+            }
+            ls_Gross = i_Gross == null ? "0" : i_Gross.ToString();
+            ls_NotLiable = i_NotLiable == null ? "0" : i_NotLiable.ToString();
+            ls_FamilyAssistance = i_FamilyAssistance == null ? "0" : i_FamilyAssistance.ToString();
+            ls_StudentLoan = i_StudentLoan == null ? "0" : i_StudentLoan.ToString();
+            ls_ChildSupport = i_ChildSupport == null ? "0" : i_ChildSupport.ToString();
+            ls_PAYE = i_PAYE == null ? "0" : i_PAYE.ToString();
+
+            // RPCR_128  TJB  June-2019: added
+            ls_TotalLines = (dw_secondary.RowCount).ToString();
+            i_TotalDeducted = i_PAYE + i_ChildSupport + i_StudentLoan + i_FamilyAssistance + i_KsDeductions + i_EsctDeductions;
+            ls_KsDeductions = i_KsDeductions == null ? "0" : i_KsDeductions.ToString();
+            ls_KsEmpContrib = i_KsEmpContrib == null ? "0" : i_KsEmpContrib.ToString();
+            ls_EsctDeductions = i_EsctDeductions == null ? "0" : i_EsctDeductions.ToString();
+            ls_TaxCredits = i_TaxCredits == null ? "0" : i_TaxCredits.ToString();
+            ls_TotalDeducted = i_TotalDeducted == null ? "0" : i_TotalDeducted.ToString();
+            //--------------------------------
+
+            if (ls_Gross == "!" || ls_NotLiable == "!" || ls_FamilyAssistance == "!" || ls_StudentLoan == "!" || ls_ChildSupport == "!" || ls_PAYE == "!")
+            {
+                MessageBox.Show("Error processing detail record \n"
+                               + "Gross = " + ls_Gross + " NotLiable= " + ls_NotLiable + "\n"
+                               + "FamilyAssistance = " + ls_FamilyAssistance + " StudentLoan = " + ls_StudentLoan
+                               , "IRD Payday Intreface"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (ls_Gross != "" && StaticFunctions.IsNumber(ls_Gross))
+            {
+                dw_primary.SetValue(0, "gross", ls_Gross);
+            }
+            if (ls_NotLiable != "" && StaticFunctions.IsNumber(ls_NotLiable))
+            {
+                dw_primary.SetValue(0, "not_liable", ls_NotLiable);
+            }
+            if (ls_FamilyAssistance != "" && StaticFunctions.IsNumber(ls_FamilyAssistance))
+            {
+                dw_primary.SetValue(0, "family_assistance", ls_FamilyAssistance);
+            }
+            if (ls_StudentLoan != "" && StaticFunctions.IsNumber(ls_StudentLoan))
+            {
+                dw_primary.SetValue(0, "student_loan", ls_StudentLoan);
+            }
+            if (ls_ChildSupport != "" && StaticFunctions.IsNumber(ls_ChildSupport))
+            {
+                dw_primary.SetValue(0, "child_support", ls_ChildSupport);
+            }
+            if (ls_PAYE != "" && StaticFunctions.IsNumber(ls_PAYE))
+            {
+                dw_primary.SetValue(0, "total_paye", ls_PAYE);
+            }
+
+            // TJB RPCR_128 June-2019: populate additional fields in the header
+            if (ls_TotalLines != "" && StaticFunctions.IsNumber(ls_TotalLines))
+            {
+                dw_primary.SetValue(0, "total_lines", ls_TotalLines);
+            }
+            if (ls_TotalDeducted != "" && StaticFunctions.IsNumber(ls_TotalDeducted))
+            {
+                dw_primary.SetValue(0, "total_deducted", ls_TotalDeducted);
+            }
+            if (ls_TaxCredits != "" && StaticFunctions.IsNumber(ls_TaxCredits))
+            {
+                dw_primary.SetValue(0, "total_credits", ls_TaxCredits);
+            }
+            if (ls_KsDeductions != "" && StaticFunctions.IsNumber(ls_KsDeductions))
+            {
+                dw_primary.SetValue(0, "kiwi_deducted", ls_KsDeductions);
+            }
+            if (ls_KsEmpContrib != "" && StaticFunctions.IsNumber(ls_KsEmpContrib))
+            {
+                dw_primary.SetValue(0, "kiwi_emp_contrib", ls_KsEmpContrib);
+            }
+            if (ls_EsctDeductions != "" && StaticFunctions.IsNumber(ls_EsctDeductions))
+            {
+                dw_primary.SetValue(0, "esct_deducted", ls_EsctDeductions);
+            }
+            // ----------------------------------------
+
+            // TJB RPCR_128 June-2019 Change filename for interface file (containing both header and detail)
+            //sInitFileName = "IRDPaydayHeader_" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2) + ".csv";
+            //if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year, "CSV Files  ( *.CSV)|*.CSV|All Files  ( *.*)|*.*"))
+            string paydate, paymonth, payyear;
+            paymonth = dt_edate.Month.ToString();
+            payyear = dt_edate.Year.ToString().Substring(2, 2);
+            paydate = (paymonth.Length == 1 ? "0"+paymonth : paymonth) + payyear;
+            //sInitFileName = "IRDPayday_" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2);
+            sInitFileName = "IRDPayday_" + paydate;
+            sInitFileName += checkBox1.Checked ? "_withHeaders.csv" : ".csv";
+            if (GetFileSaveName("Save Header + Detail to File"
+                , sInitFileName
+                , ref sReportFileName
+                , smonth_prefix + dt_sdate.Year
+                , "CSV Files (*.CSV)|*.CSV|All Files (*.*)|*.*"))
+            {
+                /* Save header record */
+                dw_primary.SaveAs(sReportFileName, "csv", checkBox1.Checked);   // TJB RPCR_128 June-2019 made column headers optional
+
+                /* Append detail records */
+                // dw_secondary.SaveAs(sReturnedFIleName, "csv");//!, true);  // TJB RPCR_128 June-2019: changed to AppendToCSV
+                dw_secondary.AppendToCSV(sReportFileName, checkBox1.Checked);
+
+                /* Exception file */
+                // If exceptions were found, add a count of them to the message 
+                // asking for the filename to use.
+                string Msg = dw_tertiary.RowCount.ToString() + " exceptions found!";
+                //sInitFileName = "IRDPaydayDetail_Exception_"
+                //              + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2)
+                //              + ".csv";
+                sInitFileName = "IRDPaydayDetail_Exception_" + payyear + ".csv";
+                //if (GetFileSaveName("Save detail exception to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2), "CSV Files  ( *.CSV)|*.CSV| All Files  ( *.*)|*.*"))
+                if (dw_tertiary.RowCount > 0
+                   && GetFileSaveName(Msg + " Save to File?"
+                                     , sInitFileName
+                                     , ref sReturnedFileName
+                                     , smonth_prefix + dt_sdate.Year.ToString().Substring(2, 2)
+                                     , "CSV Files (*.CSV)|*.CSV| All Files (*.*)|*.*"))
+                {
+                    dw_tertiary.SaveAs(sReturnedFileName, "csv", true);
+                }
+                //MessageBox.Show("Please combine the header and detail records into one file.\n" +
+                //                "1) Copy the second line of the header file into the clipboard\n" +
+                //                "2) Paste it into the first line (replace) of the detail file\n" +
+                //                "3) Save the file using another filename then send it to IRFile\n" +
+                //                "4) Do not forget to archive all files"
+                Msg = "";
+                if (dw_tertiary.RowCount == 0)
+                    Msg = "\n\n" + "No exceptions were found; no exception report was produced.";
+
+                MessageBox.Show("Send the " + sReportFileName + " file to IRFile.\n"
+                                + "Do not forget to archive all files."
+                                + Msg
+                                , "IRD Payday Interface"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1114,7 +1316,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
 
         public virtual void cb_1_clicked(object sender, EventArgs e)
         {
-            int imoveres;
+            //int imoveres;
             //?imoveres = dw_secondary.rowscopy(1, dw_secondary.RowCount, primary!, dw_primary, 1, primary!);
             //?dw_primary.SortString = "invoice_no_4,column_7 d";
             //?dw_primary.Sort();

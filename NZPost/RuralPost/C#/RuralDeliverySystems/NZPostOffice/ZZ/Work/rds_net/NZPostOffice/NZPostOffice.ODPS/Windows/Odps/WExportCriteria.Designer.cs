@@ -7,6 +7,10 @@ using Metex.Windows;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128  June-2019
+    // Added checkbox1
+    // Changed anchors for buttons to lower right
+
     partial class WExportCriteria
     {
         /// <summary>
@@ -38,6 +42,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.cb_ok = new NZPostOffice.Shared.VisualComponents.UCb();
             this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
             this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.dw_gl07records = new NZPostOffice.ODPS.Controls.URdsDw();
             this.dw_primary = new NZPostOffice.ODPS.Controls.URdsDw();
             this.dw_secondary = new NZPostOffice.ODPS.Controls.URdsDw();
@@ -47,7 +52,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // cb_ok
             // 
-            this.cb_ok.Location = new System.Drawing.Point(50, 72);
+            this.cb_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_ok.Location = new System.Drawing.Point(50, 90);
             this.cb_ok.Name = "cb_ok";
             this.cb_ok.Size = new System.Drawing.Size(60, 23);
             this.cb_ok.TabIndex = 2;
@@ -56,7 +62,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // cb_cancel
             // 
-            this.cb_cancel.Location = new System.Drawing.Point(130, 72);
+            this.cb_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_cancel.Location = new System.Drawing.Point(126, 90);
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(60, 23);
             this.cb_cancel.TabIndex = 7;
@@ -72,6 +79,17 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.dw_1.Size = new System.Drawing.Size(250, 65);
             this.dw_1.TabIndex = 1;
             this.dw_1.ItemChanged += new System.EventHandler(this.dw_1_itemchanged);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(50, 67);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(142, 17);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Include Column Headers";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // dw_gl07records
             // 
@@ -104,10 +122,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // cb_1
             // 
+            this.cb_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_1.Location = new System.Drawing.Point(195, 71);
+            this.cb_1.Location = new System.Drawing.Point(195, 89);
             this.cb_1.Name = "cb_1";
-            this.cb_1.Size = new System.Drawing.Size(62, 27);
+            this.cb_1.Size = new System.Drawing.Size(60, 23);
             this.cb_1.TabIndex = 3;
             this.cb_1.Text = "Copy rows";
             this.cb_1.Visible = false;
@@ -126,13 +145,14 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // WExportCriteria
             // 
             this.AcceptButton = this.cb_ok;
-            this.ClientSize = new System.Drawing.Size(263, 103);
+            this.ClientSize = new System.Drawing.Size(263, 117);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.cb_1);
             this.Controls.Add(this.cb_ok);
             this.Controls.Add(this.cb_cancel);
             this.Controls.Add(this.dw_1);
             this.Controls.Add(this.dw_primary);
             this.Controls.Add(this.dw_secondary);
-            this.Controls.Add(this.cb_1);
             this.Controls.Add(this.dw_tertiary);
             this.Location = new System.Drawing.Point(31, 116);
             this.MaximizeBox = false;
@@ -140,12 +160,13 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.Name = "WExportCriteria";
             this.Text = "Payment";
             this.Controls.SetChildIndex(this.dw_tertiary, 0);
-            this.Controls.SetChildIndex(this.cb_1, 0);
             this.Controls.SetChildIndex(this.dw_secondary, 0);
             this.Controls.SetChildIndex(this.dw_primary, 0);
             this.Controls.SetChildIndex(this.dw_1, 0);
             this.Controls.SetChildIndex(this.cb_cancel, 0);
             this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.checkBox1, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,5 +186,6 @@ namespace NZPostOffice.ODPS.Windows.Odps
         public URdsDw dw_secondary;
         public Button cb_1;
         public URdsDw dw_tertiary;
+        private CheckBox checkBox1;
     }
 }
