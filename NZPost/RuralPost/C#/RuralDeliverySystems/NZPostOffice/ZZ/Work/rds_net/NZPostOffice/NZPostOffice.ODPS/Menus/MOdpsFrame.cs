@@ -15,6 +15,9 @@ using CrystalDecisions.Windows.Forms;
 
 namespace NZPostOffice.ODPS.Menus
 {
+    // TJB  RPCR_128  Jun-2019
+    // Added m_irdPaydayInterface and m_irdPaydayInterface_clicked
+    //
     // TJB  RPCR_098  Jan-2016
     // Added m_ptdimport and m_ptdimport_clicked()
 
@@ -43,6 +46,7 @@ namespace NZPostOffice.ODPS.Menus
         public ToolStripMenuItem m_accountspayableinterface;
         public ToolStripMenuItem m_ir3interfacereport;
         public ToolStripMenuItem m_ir348interface;
+        public ToolStripMenuItem m_irdPaydayInterface;
         public ToolStripMenuItem m_updatedcontractorsexport;
         public ToolStripMenuItem m_shellimport;
         public ToolStripMenuItem m_telecomimport;
@@ -233,6 +237,7 @@ namespace NZPostOffice.ODPS.Menus
             m_accountspayableinterface = new ToolStripMenuItem();
             m_ir3interfacereport = new ToolStripMenuItem();
             m_ir348interface = new ToolStripMenuItem();
+            m_irdPaydayInterface = new ToolStripMenuItem();
             m_updatedcontractorsexport = new ToolStripMenuItem();
             m_shellimport = new ToolStripMenuItem();
             m_telecomimport = new ToolStripMenuItem();
@@ -248,6 +253,7 @@ namespace NZPostOffice.ODPS.Menus
             m_odps.DropDownItems.Add(m_accountspayableinterface);
             m_odps.DropDownItems.Add(m_ir3interfacereport);
             m_odps.DropDownItems.Add(m_ir348interface);
+            m_odps.DropDownItems.Add(m_irdPaydayInterface);
             m_odps.DropDownItems.Add(m_updatedcontractorsexport);
             m_odps.DropDownItems.Add(m_shellimport);
             m_odps.DropDownItems.Add(m_telecomimport);
@@ -341,6 +347,15 @@ namespace NZPostOffice.ODPS.Menus
 
             m_ir348interface.Tag = "ComponentName=ODPS Financials;";
             m_ir348interface.Click += new EventHandler(m_ir348interface_clicked);
+            // 
+            // m_irdPaydayInterface
+            // 
+            m_irdPaydayInterface.Text = "IRD Payday Interface";
+            m_irdPaydayInterface.Enabled = false;
+            m_irdPaydayInterface.Visible = false;
+
+            m_irdPaydayInterface.Tag = "ComponentName=ODPS Financials;";
+            m_irdPaydayInterface.Click += new EventHandler(m_irdPaydayInterface_clicked);
             // 
             // m_updatedcontractorsexport
             // 
@@ -812,6 +827,18 @@ namespace NZPostOffice.ODPS.Menus
                 //OpenSheetWithParm(w_window, "IR348 Interface", ParentWindow, 0, original!);
                 Cursor.Current = Cursors.WaitCursor;
                 StaticMessage.StringParm = "IR348 Interface";
+                OpenSheetAll<WExportCriteria>(StaticVariables.MainMDI);
+            }
+        }
+
+        public virtual void m_irdPaydayInterface_clicked(object sender, EventArgs e)
+        {
+            WExportCriteria w_window;
+            if (!(mf_check_window("IRD Payday Interface")))
+            {
+                //OpenSheetWithParm(w_window, "IRD Payday Interface", ParentWindow, 0, original!);
+                Cursor.Current = Cursors.WaitCursor;
+                StaticMessage.StringParm = "IRD Payday Interface";
                 OpenSheetAll<WExportCriteria>(StaticVariables.MainMDI);
             }
         }
