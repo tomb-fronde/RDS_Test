@@ -11,7 +11,7 @@ using NZPostOffice.ODPS.Entity.OdpsRep;
 namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
-    // Derived from DwIr348Header
+    // Derived from DwIr348Header, otherwise unchanged
 
     public partial class DwIrdPaydayHeader : Metex.Windows.DataUserControl
     {

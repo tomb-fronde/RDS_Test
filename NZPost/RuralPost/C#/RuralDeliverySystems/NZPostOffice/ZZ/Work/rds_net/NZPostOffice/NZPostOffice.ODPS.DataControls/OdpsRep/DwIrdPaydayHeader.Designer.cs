@@ -2,6 +2,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
     // Derived from DwIr348Header.designer
+    // Unchanged except changed name 'form_version_no' to 'form_version'
 
     partial class DwIrdPaydayHeader
     {
@@ -31,7 +32,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         private System.Windows.Forms.DataGridViewTextBoxColumn gross;
         private System.Windows.Forms.DataGridViewTextBoxColumn not_liable;
         private System.Windows.Forms.DataGridViewTextBoxColumn package;
-        private System.Windows.Forms.DataGridViewTextBoxColumn form_version_no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn form_version;
 
 
         protected override void Dispose(bool disposing)
@@ -442,19 +443,19 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
 
 
             //
-            // form_version_no
+            // form_version
             //
-            form_version_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.form_version_no.DataPropertyName = "FormVersionNo";
-            this.form_version_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.form_version_no.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.form_version_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.form_version_no.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.form_version_no.HeaderText = "Form Version No";
-            this.form_version_no.Name = "form_version_no";
-            this.form_version_no.ReadOnly = true;
-            this.form_version_no.Width = 115;
-            this.grid.Columns.Add(form_version_no);
+            form_version = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.form_version.DataPropertyName = "FormVersion";
+            this.form_version.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.form_version.DefaultCellStyle.BackColor = System.Drawing.Color.White;
+            this.form_version.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.form_version.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.form_version.HeaderText = "Form Version";
+            this.form_version.Name = "form_version";
+            this.form_version.ReadOnly = true;
+            this.form_version.Width = 115;
+            this.grid.Columns.Add(form_version);
 
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
