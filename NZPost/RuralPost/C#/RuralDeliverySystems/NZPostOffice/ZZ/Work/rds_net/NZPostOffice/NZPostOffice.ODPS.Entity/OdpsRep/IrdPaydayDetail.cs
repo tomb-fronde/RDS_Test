@@ -11,7 +11,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
     // Adapted from Ir348Detail
-
+    // Added new fields and stored procedure
+    //
     // TJB  RPI_004  June-2010
     // Changed decimal? fields to strings so that, when saved to a csv file
     // the decimal places (.00) are not included.
@@ -19,8 +20,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
-    [MapInfo("dtl", "_dtl", "")]
-    [MapInfo("c_ird_no", "_c_ird_no", "")]
+    [MapInfo("hdr", "_hdr", "")]
+    [MapInfo("ird_no", "_ird_no", "")]
     [MapInfo("employee_full_name", "_employee_full_name", "")]
 
     [MapInfo("tax_code", "_tax_code", "")]
@@ -34,23 +35,36 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     [MapInfo("total_paye", "_total_paye", "")]
     [MapInfo("cs_deductions", "_cs_deductions", "")]
     [MapInfo("cs_deductioncode", "_cs_deductioncode", "")]
-
     [MapInfo("sl_deductions", "_sl_deductions", "")]
     [MapInfo("family_assistance", "_family_assistance", "")]
 
+    // TJB  RPCR_128  June-2019: added
+    [MapInfo("pay_start_date", "_pay_start_date", "")]
+    [MapInfo("pay_end_date", "_pay_end_date", "")]
+    [MapInfo("pay_cycle", "_pay_cycle", "")]
+    [MapInfo("ks_deductions", "_ks_deductions", "")]
+    [MapInfo("ks_emp_contrib", "_ks_emp_contrib", "")]
+    [MapInfo("esct_deductions", "_esct_deductions", "")]
+    [MapInfo("tax_credits", "_tax_credits", "")]
+    //-----------------------------------
+
+    // TJB  RPCR_128  June-2019: added new fields to MapInfoIndex
     [MapInfoIndex(new string[] {
-        "dtl","c_ird_no","employee_full_name",
+        "hdr","c_ird_no","employee_full_name",
         "tax_code","start_date","end_date",
+        "pay_start_date","pay_end_date","pay_cycle",
         "gross_earnings","not_liable","lump_sum",
         "total_paye","cs_deductions","cs_deductioncode", 
-        "sl_deductions","family_assistance"})]
+        "sl_deductions","ks_deductions","ks_emp_contrib",
+        "esct_deductions","tax_credits","family_assistance"})]
+
     [System.Serializable()]
 
     public class IrdPaydayDetail : Entity<IrdPaydayDetail>
     {
         #region Business Methods
         [DBField()]
-        private string _dtl;
+        private string _hdr;
 
         [DBField()]
         private string _c_ird_no;
@@ -68,49 +82,65 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _end_date;
 
         [DBField()]
-        //private decimal? _gross_earnings;
         private string _gross_earnings;
 
         [DBField()]
-        //private decimal? _not_liable;
         private string _not_liable;
 
         [DBField()]
-        //private decimal? _lump_sum;
         private string _lump_sum;
 
         [DBField()]
-        //private decimal? _total_paye;
         private string _total_paye;
 
         [DBField()]
-        //private decimal? _cs_deductions;
         private string _cs_deductions;
 
         [DBField()]
         private string _cs_deductioncode;
 
         [DBField()]
-        //private decimal? _sl_deductions;
         private string _sl_deductions;
 
         [DBField()]
-        //private decimal? _family_assistance;
         private string _family_assistance;
 
-        public virtual string Dtl
+        // TJB  RPCR_128 June-2019: Added new variables
+        [DBField()]
+        private string _pay_start_date;
+
+        [DBField()]
+        private string _pay_end_date;
+
+        [DBField()]
+        private string _pay_cycle;
+
+        [DBField()]
+        private string _ks_deductions;
+
+        [DBField()]
+        private string _ks_emp_contrib;
+
+        [DBField()]
+        private string _esct_deductions;
+
+        [DBField()]
+        private string _tax_credits;
+        //---------------------------------------
+
+        public virtual string Hdr
         {
             get
             {
-                CanReadProperty("Dtl", true);
-                return _dtl;
+                CanReadProperty("Hdr", true);
+                return _hdr;
             }
             set
             {
-                CanWriteProperty("Dtl", true);
-                if (_dtl != value)
+                CanWriteProperty("Hdr", true);
+                if (_hdr != value)
                 {
-                    _dtl = value;
+                    _hdr = value;
                     PropertyHasChanged();
                 }
             }
@@ -206,7 +236,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? GrossEarnings
         public virtual string GrossEarnings
         {
             get
@@ -225,7 +254,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? NotLiable
         public virtual string NotLiable
         {
             get
@@ -244,7 +272,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? LumpSum
         public virtual string LumpSum
         {
             get
@@ -263,7 +290,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? TotalPaye
         public virtual string TotalPaye
         {
             get
@@ -282,7 +308,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? CsDeductions
         public virtual string CsDeductions
         {
             get
@@ -319,7 +344,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? SlDeductions
         public virtual string SlDeductions
         {
             get
@@ -338,7 +362,6 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        //public virtual decimal? FamilyAssistance
         public virtual string FamilyAssistance
         {
             get
@@ -356,6 +379,134 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 }
             }
         }
+
+        // TJB  RPCR_128 June-2019: Added new variables
+        public virtual string PayStartDate
+        {
+            get
+            {
+                CanReadProperty("PayStartDate", true);
+                return _pay_start_date;
+            }
+            set
+            {
+                CanWriteProperty("PayStartDate", true);
+                if (_pay_start_date != value)
+                {
+                    _pay_start_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PayEndDate
+        {
+            get
+            {
+                CanReadProperty("PayEndDate", true);
+                return _pay_end_date;
+            }
+            set
+            {
+                CanWriteProperty("PayEndDate", true);
+                if (_pay_end_date != value)
+                {
+                    _pay_end_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PayCycle
+        {
+            get
+            {
+                CanReadProperty("PayCycle", true);
+                return _pay_cycle;
+            }
+            set
+            {
+                CanWriteProperty("PayCycle", true);
+                if (_pay_cycle != value)
+                {
+                    _pay_cycle = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string KsDeductions
+        {
+            get
+            {
+                CanReadProperty("KsDeductions", true);
+                return _ks_deductions;
+            }
+            set
+            {
+                CanWriteProperty("KsDeductions", true);
+                if (_ks_deductions != value)
+                {
+                    _ks_deductions = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string KsEmpContrib
+        {
+            get
+            {
+                CanReadProperty("KsEmpContrib", true);
+                return _ks_emp_contrib;
+            }
+            set
+            {
+                CanWriteProperty("KsEmpContrib", true);
+                if (_ks_emp_contrib != value)
+                {
+                    _ks_emp_contrib = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string EsctDeductions
+        {
+            get
+            {
+                CanReadProperty("EsctDeductions", true);
+                return _esct_deductions;
+            }
+            set
+            {
+                CanWriteProperty("EsctDeductions", true);
+                if (_esct_deductions != value)
+                {
+                    _esct_deductions = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string TaxCredits
+        {
+            get
+            {
+                CanReadProperty("TaxCredits", true);
+                return _tax_credits;
+            }
+            set
+            {
+                CanWriteProperty("TaxCredits", true);
+                if (_tax_credits != value)
+                {
+                    _tax_credits = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+        //---------------------------------------
 
         protected override object GetIdValue()
         {
@@ -394,28 +545,30 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                     {
                         while (dr.Read())
                         {
+                            // TJB  RPCR_128 June-2019
+                            // Changed amount strings back to decimal and added new fields
                             IrdPaydayDetail instance = new IrdPaydayDetail();
-                            instance._dtl = GetValueFromReader<string>(dr, 0);
+                            instance._hdr = GetValueFromReader<string>(dr, 0);
                             instance._c_ird_no = GetValueFromReader<string>(dr, 1);
                             instance._employee_full_name = GetValueFromReader<string>(dr, 2);
                             instance._tax_code = GetValueFromReader<string>(dr, 3);
                             instance._start_date = GetValueFromReader<string>(dr, 4);
                             instance._end_date = GetValueFromReader<string>(dr, 5);
-                            //instance._gross_earnings = GetValueFromReader<decimal?>(dr, 6);
-                            //instance._not_liable = GetValueFromReader<decimal?>(dr, 7);
-                            //instance._lump_sum = GetValueFromReader<decimal?>(dr, 8);
-                            //instance._total_paye = GetValueFromReader<decimal?>(dr, 9);
-                            //instance._cs_deductions = GetValueFromReader<decimal?>(dr, 10);
-                            instance._gross_earnings = GetValueFromReader<string>(dr, 6);
-                            instance._not_liable = GetValueFromReader<string>(dr, 7);
-                            instance._lump_sum = GetValueFromReader<string>(dr, 8);
-                            instance._total_paye = GetValueFromReader<string>(dr, 9);
-                            instance._cs_deductions = GetValueFromReader<string>(dr, 10);
-                            instance._cs_deductioncode = GetValueFromReader<string>(dr, 11);
-                            //instance._sl_deductions = GetValueFromReader<decimal?>(dr, 12);
-                            //instance._family_assistance = GetValueFromReader<decimal?>(dr, 13);
-                            instance._sl_deductions = GetValueFromReader<string>(dr, 12);
-                            instance._family_assistance = GetValueFromReader<string>(dr, 13);
+                            instance._pay_start_date = GetValueFromReader<string>(dr, 6);
+                            instance._pay_end_date = GetValueFromReader<string>(dr, 7);
+                            instance._pay_cycle = GetValueFromReader<string>(dr, 8);
+                            instance._gross_earnings = GetValueFromReader<string>(dr, 9);
+                            instance._not_liable = GetValueFromReader<string>(dr, 10);
+                            instance._lump_sum = GetValueFromReader<string>(dr, 11);
+                            instance._total_paye = GetValueFromReader<string>(dr, 12);
+                            instance._cs_deductions = GetValueFromReader<string>(dr, 13);
+                            instance._cs_deductioncode = GetValueFromReader<string>(dr, 14);
+                            instance._sl_deductions = GetValueFromReader<string>(dr, 15);
+                            instance._ks_deductions = GetValueFromReader<string>(dr, 16);
+                            instance._ks_emp_contrib = GetValueFromReader<string>(dr, 17);
+                            instance._esct_deductions = GetValueFromReader<string>(dr, 18);
+                            instance._tax_credits = GetValueFromReader<string>(dr, 19);
+                            instance._family_assistance = GetValueFromReader<string>(dr, 20);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
