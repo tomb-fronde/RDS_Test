@@ -11,6 +11,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
     // Adapted from Ir348Header
+    // Changed 'form_version_no' to 'Form_version'; stored procedure called
+    // Otherwise unchanged
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -43,7 +45,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     [MapInfo("gross", "_gross", "")]
     [MapInfo("not_liable", "_not_liable", "")]
     [MapInfo("package", "_package", "")]
-    [MapInfo("form_version_no", "_form_version_no", "")]
+    [MapInfo("form_version", "_form_version", "")]
 
 
     [MapInfoIndex(new string[] { 
@@ -54,7 +56,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         "student_loan", "kiwi_deducted", "kiwi_emp_contrib",
         "esct_deducted", "total_deducted", "total_credits",
         "family_assistance", "gross", "not_liable",
-        "Package", "form_version_no" })]
+        "package", "form_version" })]
 
     [System.Serializable()]
 
@@ -128,7 +130,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _package;
 
         [DBField()]
-        private string _form_version_no;
+        private string _form_version;
 
         public virtual string Hdr
         {
@@ -526,19 +528,19 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual string FormVersionNo
+        public virtual string FormVersion
         {
             get
             {
-                CanReadProperty("FormVersionNo", true);
-                return _form_version_no;
+                CanReadProperty("FormVersion", true);
+                return _form_version;
             }
             set
             {
-                CanWriteProperty("FormVersionNo", true);
-                if (_form_version_no != value)
+                CanWriteProperty("FormVersion", true);
+                if (_form_version != value)
                 {
-                    _form_version_no = value;
+                    _form_version = value;
                     PropertyHasChanged();
                 }
             }
@@ -604,7 +606,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                             instance._gross = GetValueFromReader<string>(dr, 19);
                             instance._not_liable = GetValueFromReader<string>(dr, 20);
                             instance._package = GetValueFromReader<string>(dr, 21);
-                            instance._form_version_no = GetValueFromReader<string>(dr, 22);
+                            instance._form_version = GetValueFromReader<string>(dr, 22);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
