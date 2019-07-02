@@ -11,6 +11,8 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
     // Adapted from Ir348DetailException
+    // Changed stored procedure; added timeout of 120 seconds
+    // otherwise unchanged
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -365,6 +367,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 {
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.od_rps_irdPaydayDetail_Exception";
+                    cm.CommandTimeout = 120;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "startdate", startdate);
                     pList.Add(cm, "enddate", enddate);
@@ -399,11 +402,10 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        #endregion
-
         [ServerMethod()]
         private void CreateEntity()
         {
         }
+        #endregion
     }
 }
