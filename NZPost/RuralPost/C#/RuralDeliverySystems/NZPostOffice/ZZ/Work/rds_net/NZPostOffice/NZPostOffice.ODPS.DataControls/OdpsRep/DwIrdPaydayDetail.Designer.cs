@@ -2,6 +2,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
     // Derived from DwIr348Header.designer
+    // Added new fields
 
     partial class DwIrdPaydayDetail
     {
@@ -11,7 +12,7 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.DataGridViewTextBoxColumn sl_deductions;
         private System.Windows.Forms.DataGridViewTextBoxColumn gross_earnings;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dtl;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hdr;
         private System.Windows.Forms.DataGridViewTextBoxColumn c_ird_no;
         private System.Windows.Forms.DataGridViewTextBoxColumn lump_sum;
         private System.Windows.Forms.DataGridViewTextBoxColumn start_date;
@@ -24,6 +25,14 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         private System.Windows.Forms.DataGridViewTextBoxColumn end_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn not_liable;
 
+        // TJB  RPCR_128  June-2019: added
+        private System.Windows.Forms.DataGridViewTextBoxColumn pay_start_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pay_end_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pay_cycle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ks_deductions;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ks_emp_contrib;
+        private System.Windows.Forms.DataGridViewTextBoxColumn esct_deductions;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tax_credits;
 
         protected override void Dispose(bool disposing)
         {
@@ -80,19 +89,19 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.grid.Size = new System.Drawing.Size(638, 252);
             this.grid.TabIndex = 0;
             //
-            // dtl
+            // hdr
             //
-            dtl = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dtl.DataPropertyName = "Dtl";
-            this.dtl.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dtl.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.dtl.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.dtl.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.dtl.HeaderText = "Dtl";
-            this.dtl.Name = "dtl";
-            this.dtl.ReadOnly = true;
-            this.dtl.Width = 60;
-            this.grid.Columns.Add(dtl);
+            hdr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hdr.DataPropertyName = "hdr";
+            this.hdr.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.hdr.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.hdr.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.hdr.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.hdr.HeaderText = "hdr";
+            this.hdr.Name = "hdr";
+            this.hdr.ReadOnly = true;
+            this.hdr.Width = 60;
+            this.grid.Columns.Add(hdr);
             //
             // c_ird_no
             //
@@ -163,6 +172,48 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.end_date.ReadOnly = true;
             this.end_date.Width = 88;
             this.grid.Columns.Add(end_date);
+            //
+            // pay_start_date
+            //
+            pay_start_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pay_start_date.DataPropertyName = "PayStartDate";
+            this.pay_start_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.pay_start_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.pay_start_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.pay_start_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.pay_start_date.HeaderText = "Pay Start_Date";
+            this.pay_start_date.Name = "pay_Start_date";
+            this.pay_start_date.ReadOnly = true;
+            this.pay_start_date.Width = 60;
+            this.grid.Columns.Add(pay_start_date);
+            //
+            // pay_end_date
+            //
+            pay_end_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pay_end_date.DataPropertyName = "PayEndDate";
+            this.pay_end_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.pay_end_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.pay_end_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.pay_end_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.pay_end_date.HeaderText = "Pay End Date";
+            this.pay_end_date.Name = "pay_end_date";
+            this.pay_end_date.ReadOnly = true;
+            this.pay_end_date.Width = 60;
+            this.grid.Columns.Add(pay_end_date);
+            //
+            // pay_cycle
+            //
+            pay_cycle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pay_cycle.DataPropertyName = "PayCycle";
+            this.pay_cycle.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.pay_cycle.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.pay_cycle.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.pay_cycle.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.pay_cycle.HeaderText = "Pay Cycle";
+            this.pay_cycle.Name = "pay_cycle";
+            this.pay_cycle.ReadOnly = true;
+            this.pay_cycle.Width = 60;
+            this.grid.Columns.Add(pay_cycle);
             //
             // gross_earnings
             //
@@ -261,6 +312,63 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
             this.sl_deductions.ReadOnly = true;
             this.sl_deductions.Width = 88;
             this.grid.Columns.Add(sl_deductions);
+
+            //
+            // ks_deductions
+            //
+            ks_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ks_deductions.DataPropertyName = "KsDeductions";
+            this.ks_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ks_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ks_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.ks_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.ks_deductions.HeaderText = "KS Deductions";
+            this.ks_deductions.Name = "ks_deductions";
+            this.ks_deductions.ReadOnly = true;
+            this.ks_deductions.Width = 60;
+            this.grid.Columns.Add(ks_deductions);
+            //
+            // ks_emp_contrib
+            //
+            ks_emp_contrib = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ks_emp_contrib.DataPropertyName = "KsEmpContrib";
+            this.ks_emp_contrib.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ks_emp_contrib.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ks_emp_contrib.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.ks_emp_contrib.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.ks_emp_contrib.HeaderText = "KS Emp Contrib";
+            this.ks_emp_contrib.Name = "ks_emp_contrib";
+            this.ks_emp_contrib.ReadOnly = true;
+            this.ks_emp_contrib.Width = 60;
+            this.grid.Columns.Add(ks_emp_contrib);
+            //
+            // esct_deductions
+            //
+            esct_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.esct_deductions.DataPropertyName = "EsctDeductions";
+            this.esct_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.esct_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.esct_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.esct_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.esct_deductions.HeaderText = "ESCT Deductions";
+            this.esct_deductions.Name = "esct_deductions";
+            this.esct_deductions.ReadOnly = true;
+            this.esct_deductions.Width = 60;
+            this.grid.Columns.Add(esct_deductions);
+            //
+            // tax_credits
+            //
+            tax_credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tax_credits.DataPropertyName = "TaxCredits";
+            this.tax_credits.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.tax_credits.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.tax_credits.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+            this.tax_credits.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            this.tax_credits.HeaderText = "Tax Credits";
+            this.tax_credits.Name = "tax_credits";
+            this.tax_credits.ReadOnly = true;
+            this.tax_credits.Width = 60;
+            this.grid.Columns.Add(tax_credits);
             //
             // family_assistance
             //
