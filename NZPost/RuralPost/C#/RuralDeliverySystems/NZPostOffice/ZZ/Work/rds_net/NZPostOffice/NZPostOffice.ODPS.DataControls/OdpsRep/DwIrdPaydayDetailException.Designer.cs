@@ -1,7 +1,7 @@
 namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
     // TJB  RPCR_128  June-2019: New
-    // Derived from DwIr348DetailException.desginer
+    // Derived from DwIr348DetailException.desginer, otherwise unchanged
 
     partial class DwIrdPaydayDetailException
     {
