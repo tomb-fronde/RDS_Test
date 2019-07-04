@@ -13,6 +13,10 @@ using NZPostOffice.ODPS.Entity.Odps;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128 July-2019
+    // Disabled <delete> for National tab (ue_4)
+    // - appeared to work but didn't?
+    //
     // TJB  RPCR_113  July 2018
     // Added event handler dw_selection_ItemChanged
     // and PbuCode_validation to validate email addresses as entered.
@@ -394,6 +398,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 ib_national_retrieve = true;
                 // tabpage_national.uo_4.of_show(tabpage_national.uo_4.cb_delete,false)
                 uo_4.cb_save.Visible = false;
+                uo_4.cb_delete.Visible = false;  // TJB  RPCR_128 July-2019: Added - appeared to, but didn't work!
             }
         }
     }
