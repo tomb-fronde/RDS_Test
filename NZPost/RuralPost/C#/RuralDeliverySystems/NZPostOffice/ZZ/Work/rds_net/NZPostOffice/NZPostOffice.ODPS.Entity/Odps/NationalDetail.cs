@@ -1,4 +1,3 @@
-//qtdong
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +10,15 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
+
+    // TJB  RPCR_128  July-2019: Added
+    //    ird_contact_phone
+    //    ird_contact_email
+    //    ird_contact_name
+    //    cp_courierpost_defaultcomptype
+    //    cp_reachmedia_defaultcomptype
+    //    cp_publishing_defaultcomptype
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -60,10 +68,19 @@ namespace NZPostOffice.ODPS.Entity.Odps
 
     [MapInfo("nat_contallow_defaultcomptype", "_nat_contallow_defaultcomptype", "odps.[national]")]
     [MapInfo("nat_deductions_defaultcomptype", "_nat_deductions_defaultcomptype", "odps.[national]")]
+    
     [MapInfo("nat_courierpost_defaultcomptype", "_nat_courierpost_defaultcomptype", "odps.[national]")]
-
     [MapInfo("nat_xp_defaultcomptype", "_nat_xp_defaultcomptype", "odps.[national]")]
     [MapInfo("nat_pp_defaultcomptype", "_nat_pp_defaultcomptype", "odps.[national]")]
+
+    [MapInfo("cp_courierpost_defaultcomptype", "_cp_courierpost_defaultcomptype", "odps.[national]")]
+    [MapInfo("cp_reachmedia_defaultcomptype", "_cp_reachmedia_defaultcomptype", "odps.[national]")]
+    [MapInfo("cp_publishing_defaultcomptype", "_cp_publishing_defaultcomptype", "odps.[national]")]
+
+    // TJB  RPCR_128  June-2019: Added
+    [MapInfo("ird_contact_phone", "_ird_contact_phone", "odps.[national]")]
+    [MapInfo("ird_contact_email", "_ird_contact_email", "odps.[national]")]
+    [MapInfo("ird_contact_name", "_ird_contact_name", "odps.[national]")]
 
     [System.Serializable()]
 
@@ -184,8 +201,28 @@ namespace NZPostOffice.ODPS.Entity.Odps
         [DBField()]
         private int? _nat_pp_defaultcomptype;
 
+        [DBField()]
         private int? _nat_pbu_code_accrualbalance_gl;
 
+        [DBField()]
+        private int? _cp_courierpost_defaultcomptype;
+
+        [DBField()]
+        private int? _cp_reachmedia_defaultcomptype;
+
+        [DBField()]
+        private int? _cp_publishing_defaultcomptype;
+
+        [DBField()]
+        private string _ird_contact_phone;
+
+        [DBField()]
+        private string _ird_contact_email;
+
+        [DBField()]
+        private string _ird_contact_name;
+
+        //-----------------------------------------------------------------------//
         public virtual int? NatId
         {
             get
@@ -888,6 +925,115 @@ namespace NZPostOffice.ODPS.Entity.Odps
             }
         }
 
+        public virtual int? CpCourierpostDefaultcomptype
+        {
+            get
+            {
+                CanReadProperty("CpCourierpostDefaultcomptype", true);
+                return _cp_courierpost_defaultcomptype;
+            }
+            set
+            {
+                CanWriteProperty("CpCourierpostDefaultcomptype", true);
+                if (_cp_courierpost_defaultcomptype != value)
+                {
+                    _cp_courierpost_defaultcomptype = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CpReachmediaDefaultcomptype
+        {
+            get
+            {
+                CanReadProperty("CpReachmediaDefaultcomptype", true);
+                return _cp_reachmedia_defaultcomptype;
+            }
+            set
+            {
+                CanWriteProperty("CpReachmediaDefaultcomptype", true);
+                if (_cp_reachmedia_defaultcomptype != value)
+                {
+                    _cp_reachmedia_defaultcomptype = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? CpPublishingDefaultcomptype
+        {
+            get
+            {
+                CanReadProperty("CpPublishingDefaultcomptype", true);
+                return _cp_publishing_defaultcomptype;
+            }
+            set
+            {
+                CanWriteProperty("CpPublishingDefaultcomptype", true);
+                if (_cp_publishing_defaultcomptype != value)
+                {
+                    _cp_publishing_defaultcomptype = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string IrdContactPhone
+        {
+            get
+            {
+                CanReadProperty("IrdContactPhone", true);
+                return _ird_contact_phone;
+            }
+            set
+            {
+                CanWriteProperty("IrdContactPhone", true);
+                if (_ird_contact_phone != value)
+                {
+                    _ird_contact_phone = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string IrdContactEmail
+        {
+            get
+            {
+                CanReadProperty("IrdContactEmail", true);
+                return _ird_contact_email;
+            }
+            set
+            {
+                CanWriteProperty("IrdContactEmail", true);
+                if (_ird_contact_email != value)
+                {
+                    _ird_contact_email = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string IrdContactName
+        {
+            get
+            {
+                CanReadProperty("IrdContactName", true);
+                return _ird_contact_name;
+            }
+            set
+            {
+                CanWriteProperty("IrdContactName", true);
+                if (_ird_contact_name != value)
+                {
+                    _ird_contact_name = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        /*****************************************************************************/
         protected override object GetIdValue()
         {
             return _nat_id + " ";
@@ -917,19 +1063,52 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "a_national_id", a_national_id);
-                    cm.CommandText = @"SELECT odps.[national].nat_od_tax_rate_ir13, odps.[national].ap_net_pay_clearing_account,
-                                        odps.[national].nat_effective_date, odps.[national].nat_xp_defaultcomptype, odps.[national].nat_id, odps.[national].ac_id, odps.[national].nat_ac_id_gst_gl,
-                                        odps.[national].nat_ac_id_whtax_gl, odps.[national].nat_ac_id_postax_adj_gl, odps.[national].nat_rural_post_gst_no, odps.[national].nat_gst_rate, 
-                                        odps.[national].nat_ird_no, odps.[national].nat_rural_post_address, odps.[national].nat_rural_post_payer_name, odps.[national].nat_acc_percentage, 
-                                        odps.[national].nat_standard_tax_rate, odps.[national].nat_day_of_month, odps.[national].nat_message_for_invoice, odps.[national].nat_net_pct_change_warn, 
-                                        odps.[national].nat_seq_no_for_keys, odps.[national].nat_od_standard_gst_rate, odps.[national].nat_od_tax_rate_no_ir13,
-                                        odps.[national].nat_ac_id_contprice_gl, odps.[national].nat_ac_id_netpay_gl, odps.[national].nat_ac_id_accrualbalance_gl, odps.[national].nat_pbu_code_postax_gl,
-                                        odps.[national].nat_pbu_code_whtax_gl, odps.[national].nat_pbu_code_gst_gl, odps.[national].nat_pbu_code_netpay_gl, odps.[national].nat_invoice_number_prefix,
-                                        odps.[national].nat_pbu_code_accrualbalance_gl, odps.[national].nat_freqadj_defaultcomptype, odps.[national].nat_adpost_defaultcomptype, 
-                                        odps.[national].nat_contadj_defaultcomptype, odps.[national].nat_contallow_defaultcomptype, odps.[national].nat_deductions_defaultcomptype, 
-                                        odps.[national].nat_courierpost_defaultcomptype, odps.[national].nat_pp_defaultcomptype
-                                        FROM odps.[national]
-                                        WHERE ( odps.[national].nat_id = :a_national_id )";
+                    cm.CommandText = "SELECT nat_od_tax_rate_ir13 "
+                                    + "    , ap_net_pay_clearing_account "
+                                    + "    , nat_effective_date "
+                                    + "    , nat_xp_defaultcomptype "
+                                    + "    , nat_id "
+                                    + "    , ac_id "
+                                    + "    , nat_ac_id_gst_gl "
+                                    + "    , nat_ac_id_whtax_gl "
+                                    + "    , nat_ac_id_postax_adj_gl "
+                                    + "    , nat_rural_post_gst_no "
+                                    + "    , nat_gst_rate "
+                                    + "    , nat_ird_no "
+                                    + "    , nat_rural_post_address "
+                                    + "    , nat_rural_post_payer_name "
+                                    + "    , nat_acc_percentage "
+                                    + "    , nat_standard_tax_rate "
+                                    + "    , nat_day_of_month "
+                                    + "    , nat_message_for_invoice "
+                                    + "    , nat_net_pct_change_warn "
+                                    + "    , nat_seq_no_for_keys "
+                                    + "    , nat_od_standard_gst_rate "
+                                    + "    , nat_od_tax_rate_no_ir13 "
+                                    + "    , nat_ac_id_contprice_gl "
+                                    + "    , nat_ac_id_netpay_gl "
+                                    + "    , nat_ac_id_accrualbalance_gl "
+                                    + "    , nat_pbu_code_postax_gl "
+                                    + "    , nat_pbu_code_whtax_gl "
+                                    + "    , nat_pbu_code_gst_gl "
+                                    + "    , nat_pbu_code_netpay_gl "
+                                    + "    , nat_invoice_number_prefix "
+                                    + "    , nat_pbu_code_accrualbalance_gl "
+                                    + "    , nat_freqadj_defaultcomptype "
+                                    + "    , nat_adpost_defaultcomptype "
+                                    + "    , nat_contadj_defaultcomptype "
+                                    + "    , nat_contallow_defaultcomptype "
+                                    + "    , nat_deductions_defaultcomptype "
+                                    + "    , nat_courierpost_defaultcomptype "
+                                    + "    , nat_pp_defaultcomptype "
+                                    + "    , cp_courierpost_defaultcomptype "
+                                    + "    , cp_reachmedia_defaultcomptype "
+                                    + "    , cp_publishing_defaultcomptype "
+                                    + "    , ird_contact_phone "
+                                    + "    , ird_contact_email "
+                                    + "    , ird_contact_name "
+                                    + " FROM odps.[national] "
+                                    + " WHERE nat_id = :a_national_id";
                     //GenerateSelectCommandText(cm, "national");
 
                     List<NationalDetail> _list = new List<NationalDetail>();
@@ -977,6 +1156,12 @@ namespace NZPostOffice.ODPS.Entity.Odps
                             instance._nat_deductions_defaultcomptype = GetValueFromReader<Int32?>(dr, 35);
                             instance._nat_courierpost_defaultcomptype = GetValueFromReader<Int32?>(dr, 36);
                             instance._nat_pp_defaultcomptype = GetValueFromReader<Int32?>(dr, 37);
+                            instance._cp_courierpost_defaultcomptype = GetValueFromReader<Int32?>(dr, 38);
+                            instance._cp_reachmedia_defaultcomptype = GetValueFromReader<Int32?>(dr, 39);
+                            instance._cp_publishing_defaultcomptype = GetValueFromReader<Int32?>(dr, 40);
+                            instance._ird_contact_phone = GetValueFromReader<string>(dr, 41);
+                            instance._ird_contact_email = GetValueFromReader<string>(dr, 42);
+                            instance._ird_contact_name = GetValueFromReader<string>(dr, 43);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
@@ -1000,82 +1185,7 @@ namespace NZPostOffice.ODPS.Entity.Odps
                 if (GenerateUpdateCommandText(cm, "odps.[national]", ref pList))
                 {
                     cm.CommandText += "Where [national].nat_id = @nat_id ";
-                    //" WHERE  [national].ac_id = @ac_id AND " +
-                    //"[national].nat_ac_id_gst_gl = @nat_ac_id_gst_gl AND " +
-                    //"[national].nat_ac_id_whtax_gl = @nat_ac_id_whtax_gl AND " +
-                    //"[national].nat_ac_id_postax_adj_gl = @nat_ac_id_postax_adj_gl AND " +
-                    //"[national].nat_rural_post_gst_no = @nat_rural_post_gst_no AND " +
-                    //"[national].nat_gst_rate = @nat_gst_rate AND " +
-                    //"[national].nat_ird_no = @nat_ird_no AND " +
-                    //"[national].nat_rural_post_address = @nat_rural_post_address AND " +
-                    //"[national].nat_rural_post_payer_name = @nat_rural_post_payer_name AND " +
-                    //"[national].nat_acc_percentage = @nat_acc_percentage AND " +
-                    //"[national].nat_standard_tax_rate = @nat_standard_tax_rate AND " +
-                    //"[national].nat_day_of_month = @nat_day_of_month AND " +
-                    //"[national].nat_message_for_invoice = @nat_message_for_invoice AND " +
-                    //"[national].nat_net_pct_change_warn = @nat_net_pct_change_warn AND " +
-                    //"[national].nat_seq_no_for_keys = @nat_seq_no_for_keys AND " +
-                    //"[national].nat_od_standard_gst_rate = @nat_od_standard_gst_rate AND " +
-                    //"[national].nat_od_tax_rate_ir13 = @nat_od_tax_rate_ir13 AND " +
-                    //"[national].nat_od_tax_rate_no_ir13 = @nat_od_tax_rate_no_ir13 AND " +
-                    //"[national].ap_net_pay_clearing_account = @ap_net_pay_clearing_account AND " +
-                    //"[national].nat_effective_date = @nat_effective_date AND " +
-                    //"[national].nat_ac_id_contprice_gl = @nat_ac_id_contprice_gl AND " +
-                    //"[national].nat_ac_id_netpay_gl = @nat_ac_id_netpay_gl AND " +
-                    //"[national].nat_ac_id_accrualbalance_gl = @nat_ac_id_accrualbalance_gl AND " +
-                    //"[national].nat_pbu_code_postax_gl = @nat_pbu_code_postax_gl AND " +
-                    //"[national].nat_pbu_code_whtax_gl = @nat_pbu_code_whtax_gl AND " +
-                    //"[national].nat_pbu_code_gst_gl = @nat_pbu_code_gst_gl AND " +
-                    //"[national].nat_pbu_code_netpay_gl = @nat_pbu_code_netpay_gl AND " +
-                    //"[national].nat_invoice_number_prefix = @nat_invoice_number_prefix AND " +
-                    //"[national].nat_pbu_code_accrualbalance_gl = @nat_pbu_code_accrualbalance_gl AND " +
-                    //"[national].nat_freqadj_defaultcomptype = @nat_freqadj_defaultcomptype AND " +
-                    //"[national].nat_adpost_defaultcomptype = @nat_adpost_defaultcomptype AND " +
-                    //"[national].nat_contadj_defaultcomptype = @nat_contadj_defaultcomptype AND " +
-                    //"[national].nat_contallow_defaultcomptype = @nat_contallow_defaultcomptype AND " +
-                    //"[national].nat_deductions_defaultcomptype = @nat_deductions_defaultcomptype AND " +
-                    //"[national].nat_courierpost_defaultcomptype = @nat_courierpost_defaultcomptype AND " +
-                    //"[national].nat_xp_defaultcomptype = @nat_xp_defaultcomptype ";
-                    //"[national].nat_pp_defaultcomptype = @nat_pp_defaultcomptype ";
                     pList.Add(cm, "nat_id", GetInitialValue("_nat_id"));
-
-                    //pList.Add(cm, "ac_id", GetInitialValue("_ac_id"));
-                    //pList.Add(cm, "nat_ac_id_gst_gl", GetInitialValue("_nat_ac_id_gst_gl"));
-                    //pList.Add(cm, "nat_ac_id_whtax_gl", GetInitialValue("_nat_ac_id_whtax_gl"));
-                    //pList.Add(cm, "nat_ac_id_postax_adj_gl", GetInitialValue("_nat_ac_id_postax_adj_gl"));
-                    //pList.Add(cm, "nat_rural_post_gst_no", GetInitialValue("_nat_rural_post_gst_no"));
-                    //pList.Add(cm, "nat_gst_rate", GetInitialValue("_nat_gst_rate"));
-                    //pList.Add(cm, "nat_ird_no", GetInitialValue("_nat_ird_no"));
-                    //pList.Add(cm, "nat_rural_post_address", GetInitialValue("_nat_rural_post_address"));
-                    //pList.Add(cm, "nat_rural_post_payer_name", GetInitialValue("_nat_rural_post_payer_name"));
-                    //pList.Add(cm, "nat_acc_percentage", GetInitialValue("_nat_acc_percentage"));
-                    //pList.Add(cm, "nat_standard_tax_rate", GetInitialValue("_nat_standard_tax_rate"));
-                    //pList.Add(cm, "nat_day_of_month", GetInitialValue("_nat_day_of_month"));
-                    //pList.Add(cm, "nat_message_for_invoice", GetInitialValue("_nat_message_for_invoice"));
-                    //pList.Add(cm, "nat_net_pct_change_warn", GetInitialValue("_nat_net_pct_change_warn"));
-                    //pList.Add(cm, "nat_seq_no_for_keys", GetInitialValue("_nat_seq_no_for_keys"));
-                    //pList.Add(cm, "nat_od_standard_gst_rate", GetInitialValue("_nat_od_standard_gst_rate"));
-                    //pList.Add(cm, "nat_od_tax_rate_ir13", GetInitialValue("_nat_od_tax_rate_ir13"));
-                    //pList.Add(cm, "nat_od_tax_rate_no_ir13", GetInitialValue("_nat_od_tax_rate_no_ir13"));
-                    //pList.Add(cm, "ap_net_pay_clearing_account", GetInitialValue("_ap_net_pay_clearing_account"));
-                    //pList.Add(cm, "nat_effective_date", GetInitialValue("_nat_effective_date"));
-                    //pList.Add(cm, "nat_ac_id_contprice_gl", GetInitialValue("_nat_ac_id_contprice_gl"));
-                    //pList.Add(cm, "nat_ac_id_netpay_gl", GetInitialValue("_nat_ac_id_netpay_gl"));
-                    //pList.Add(cm, "nat_ac_id_accrualbalance_gl", GetInitialValue("_nat_ac_id_accrualbalance_gl"));
-                    //pList.Add(cm, "nat_pbu_code_postax_gl", GetInitialValue("_nat_pbu_code_postax_gl"));
-                    //pList.Add(cm, "nat_pbu_code_whtax_gl", GetInitialValue("_nat_pbu_code_whtax_gl"));
-                    //pList.Add(cm, "nat_pbu_code_gst_gl", GetInitialValue("_nat_pbu_code_gst_gl"));
-                    //pList.Add(cm, "nat_pbu_code_netpay_gl", GetInitialValue("_nat_pbu_code_netpay_gl"));
-                    //pList.Add(cm, "nat_invoice_number_prefix", GetInitialValue("_nat_invoice_number_prefix"));
-                    //pList.Add(cm, "nat_pbu_code_accrualbalance_gl", GetInitialValue("_nat_pbu_code_accrualbalance_gl"));
-                    //pList.Add(cm, "nat_freqadj_defaultcomptype", GetInitialValue("_nat_freqadj_defaultcomptype"));
-                    //pList.Add(cm, "nat_adpost_defaultcomptype", GetInitialValue("_nat_adpost_defaultcomptype"));
-                    //pList.Add(cm, "nat_contadj_defaultcomptype", GetInitialValue("_nat_contadj_defaultcomptype"));
-                    //pList.Add(cm, "nat_contallow_defaultcomptype", GetInitialValue("_nat_contallow_defaultcomptype"));
-                    //pList.Add(cm, "nat_deductions_defaultcomptype", GetInitialValue("_nat_deductions_defaultcomptype"));
-                    //pList.Add(cm, "nat_courierpost_defaultcomptype", GetInitialValue("_nat_courierpost_defaultcomptype"));
-                    //pList.Add(cm, "nat_xp_defaultcomptype", GetInitialValue("_nat_xp_defaultcomptype"));
-                    //pList.Add(cm, "nat_pp_defaultcomptype", GetInitialValue("_nat_pp_defaultcomptype"));
                     DBHelper.ExecuteNonQuery(cm, pList);
                 }
                 // reinitialize original key/value list
@@ -1110,10 +1220,12 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     DbCommand cm = cn.CreateCommand();
                     cm.Transaction = tr;
                     cm.CommandType = CommandType.Text;
+                    cm.CommandText = "DELETE FROM [national] "
+                                      + "WHERE " + "[national].nat_id = @nat_id ";
+
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "nat_id", GetInitialValue("_nat_id"));
-                    cm.CommandText = "DELETE FROM [national] " 
-                                      + "WHERE " + "[national].nat_id = @nat_id ";
+
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
