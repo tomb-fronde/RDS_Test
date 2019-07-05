@@ -11,6 +11,9 @@ using NZPostOffice.ODPS.DataControls.OdpsCodes;
 
 namespace NZPostOffice.ODPS.DataControls.Odps
 {
+    // TJB  July-2019: This appears to be unused
+    // Now incomplete; copy/mirror of DwNationalDetail
+
 	public partial class DwNationalDetailDs : Metex.Windows.DataUserControl
 	{
 		public DwNationalDetailDs()
