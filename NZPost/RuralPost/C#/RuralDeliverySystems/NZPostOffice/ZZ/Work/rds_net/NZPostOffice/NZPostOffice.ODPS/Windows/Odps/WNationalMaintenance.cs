@@ -18,6 +18,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128  July-2019
+    // Minor tweaks: changed button names (cb_1 -> cb_ok, cb_2 -> cb_cancel)
+
     public partial class WNationalMaintenance : WMaster
     {
         #region Define
@@ -327,7 +330,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
         }
 
        #region Events
-        public virtual void cb_1_clicked(object sender, EventArgs e)
+        public virtual void cb_ok_clicked(object sender, EventArgs e)
         {
             if (this.pfc_save() >= 0)
             {
@@ -335,7 +338,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
             }
         }
 
-        public virtual void cb_2_clicked(object sender, EventArgs e)
+        public virtual void cb_cancel_clicked(object sender, EventArgs e)
         {
             //parent.TriggerEvent("pfc_close");
             this.Close();
@@ -346,7 +349,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
         private void InsertRecord()
         {
             // Whole method added, based on InsertEntity and FetchEntity - TJB Aug 2008
-            // Called via cb_1.clicked (OK) event when a new record has been selected.
+            // Called via cb_ok.clicked (OK) event when a new record has been selected.
             // There's probably a more elegant way to do this within the Metex 
             // libraries, but this will do (for now).
             // Reverse-engineered Metex library calls are used since the actual 
@@ -356,8 +359,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    // Create the command to be executed.  The "@<name>" items are names for values in 
-                    // the 'pList' parameter collection
+                    // Create the command to be executed.  The "@<name>" items are names for 
+                    // values in the 'pList' parameter collection
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "INSERT INTO odps.[national] "

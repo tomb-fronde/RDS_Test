@@ -7,6 +7,10 @@ using NZPostOffice.ODPS.Menus;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128  July-2019
+    // Minor tweaks: changed button names (cb_1 -> cb_ok, cb_2 -> cb_cancel)
+    // Changed size
+
     partial class WNationalMaintenance
     {
         /// <summary>
@@ -36,43 +40,42 @@ namespace NZPostOffice.ODPS.Windows.Odps
         private void InitializeComponent()
         {
             this.dw_single = new NZPostOffice.ODPS.Controls.URdsDw();
-            this.cb_1 = new NZPostOffice.Shared.VisualComponents.UCb();
-            this.cb_2 = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_ok = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
             this.dw_1 = new NZPostOffice.ODPS.Controls.URdsDw();
             this.SuspendLayout();
             // 
             // dw_single
             // 
-            //!this.dw_single.DataObject = new DwNationalDetail();
-            //!this.dw_single.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dw_single.DataObject = null;
             this.dw_single.FireConstructor = true;
             this.dw_single.Location = new System.Drawing.Point(3, 4);
             this.dw_single.Name = "dw_single";
-            this.dw_single.Size = new System.Drawing.Size(795, 492);
+            this.dw_single.Size = new System.Drawing.Size(795, 553);
             this.dw_single.TabIndex = 1;
             this.dw_single.Tag = "resize=scale;color=window;";
             // 
-            // cb_1
+            // cb_ok
             // 
-            this.cb_1.Location = new System.Drawing.Point(11, 499);
-            this.cb_1.Name = "cb_1";
-            this.cb_1.Size = new System.Drawing.Size(60, 23);
-            this.cb_1.TabIndex = 2;
-            this.cb_1.Text = "&Ok";
-            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
+            this.cb_ok.Location = new System.Drawing.Point(10, 563);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(60, 23);
+            this.cb_ok.TabIndex = 2;
+            this.cb_ok.Text = "&Ok";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
-            // cb_2
+            // cb_cancel
             // 
-            this.cb_2.Location = new System.Drawing.Point(79, 499);
-            this.cb_2.Name = "cb_2";
-            this.cb_2.Size = new System.Drawing.Size(60, 23);
-            this.cb_2.TabIndex = 3;
-            this.cb_2.Text = "Ca&ncel";
-            this.cb_2.Click += new System.EventHandler(this.cb_2_clicked);
+            this.cb_cancel.Location = new System.Drawing.Point(78, 563);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(60, 23);
+            this.cb_cancel.TabIndex = 3;
+            this.cb_cancel.Text = "Ca&ncel";
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // dw_1
             // 
-            //!this.dw_1.DataObject = new DwNationalDetail();
+            this.dw_1.DataObject = null;
             this.dw_1.FireConstructor = true;
             this.dw_1.Location = new System.Drawing.Point(338, 443);
             this.dw_1.Name = "dw_1";
@@ -82,11 +85,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // 
             // WNationalMaintenance
             // 
-            this.AcceptButton = this.cb_1;
-            this.ClientSize = new System.Drawing.Size(802, 528);
+            this.AcceptButton = this.cb_ok;
+            this.ClientSize = new System.Drawing.Size(802, 591);
             this.Controls.Add(this.dw_single);
-            this.Controls.Add(this.cb_1);
-            this.Controls.Add(this.cb_2);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_cancel);
             this.Controls.Add(this.dw_1);
             this.Location = new System.Drawing.Point(114, 128);
             this.MaximizeBox = false;
@@ -94,8 +97,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
             this.Tag = "color=window;";
             this.Text = "National Maintenance";
             this.Controls.SetChildIndex(this.dw_1, 0);
-            this.Controls.SetChildIndex(this.cb_2, 0);
-            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
             this.Controls.SetChildIndex(this.dw_single, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -105,8 +108,8 @@ namespace NZPostOffice.ODPS.Windows.Odps
         #endregion
 
         public URdsDw dw_single;
-        public UCb cb_1;
-        public UCb cb_2;
+        public UCb cb_ok;
+        public UCb cb_cancel;
         public URdsDw dw_1;
     }
 }
