@@ -13,6 +13,12 @@ namespace NZPostOffice.ODPS.DataControls.Odps
 {
     public partial class DwNationalDetail : Metex.Windows.DataUserControl
     {
+        // TJB  RPCR_128  July-2019
+        // Added dropdowns for (should have been done for RPCR_124)
+        //    cp_courierpost_defaultcomptype
+        //    cp_reachmediapost_defaultcomptype
+        //    cp_publishingpost_defaultcomptype
+
         public DwNationalDetail()
         {
             InitializeComponent();
@@ -46,7 +52,10 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             nat_adpost_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
             nat_xp_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
             nat_pp_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
-         
+
+            cp_courierpost_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
+            cp_reachmedia_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
+            cp_publishing_defaultcomptype.AssignDropdownType<DddwPaymentComponentType>();
         }
 
         public int Retrieve(int? a_national_id)

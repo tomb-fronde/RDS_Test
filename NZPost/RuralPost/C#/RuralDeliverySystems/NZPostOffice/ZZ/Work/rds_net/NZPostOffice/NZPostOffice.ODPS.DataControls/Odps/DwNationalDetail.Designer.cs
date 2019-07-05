@@ -3,6 +3,16 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.ODPS.DataControls.Odps
 {
+    // TJB  RPCR_128  July-2019
+    // Added with labels
+    //    cp_courierpost_defaultcomptype
+    //    cp_reachmediapost_defaultcomptype
+    //    cp_publishingpost_defaultcomptype
+    //    ird_contact_email
+    //    ird_contact_phone
+    //    ird_contact_name
+    // Changed sizes of window and group boxes
+
     partial class DwNationalDetail
     {
         /// <summary> 
@@ -107,6 +117,18 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_acc_percentage_t = new System.Windows.Forms.Label();
             this.nat_standard_tax_rate_t = new System.Windows.Forms.Label();
             this.nat_day_of_month_t = new System.Windows.Forms.Label();
+            this.cp_courierpost_defaultcomptype = new Metex.Windows.DataEntityCombo();
+            this.cp_reachmedia_defaultcomptype = new Metex.Windows.DataEntityCombo();
+            this.cp_publishing_defaultcomptype = new Metex.Windows.DataEntityCombo();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.ird_contact_name = new System.Windows.Forms.TextBox();
+            this.ird_contact_phone = new System.Windows.Forms.TextBox();
+            this.ird_contact_email = new System.Windows.Forms.TextBox();
+            this.ird_contact_name_t = new System.Windows.Forms.Label();
+            this.ird_contact_phone_t = new System.Windows.Forms.Label();
+            this.ird_contact_email_t = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.n_59450129.SuspendLayout();
             this.n_45050067.SuspendLayout();
@@ -164,8 +186,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_gst_gl.TabIndex = 10;
             this.nat_ac_id_gst_gl.Value = null;
             this.nat_ac_id_gst_gl.ValueMember = "AcId";
-            this.nat_ac_id_gst_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_gst_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_gst_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_gst_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_ac_id_whtax_gl
@@ -182,8 +204,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_whtax_gl.TabIndex = 20;
             this.nat_ac_id_whtax_gl.Value = null;
             this.nat_ac_id_whtax_gl.ValueMember = "AcId";
-            this.nat_ac_id_whtax_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_whtax_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_whtax_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_whtax_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_ac_id_postax_adj_gl
@@ -200,8 +222,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_postax_adj_gl.TabIndex = 30;
             this.nat_ac_id_postax_adj_gl.Value = null;
             this.nat_ac_id_postax_adj_gl.ValueMember = "AcId";
-            this.nat_ac_id_postax_adj_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_postax_adj_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_postax_adj_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_postax_adj_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_ac_id_contprice_gl
@@ -218,8 +240,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_contprice_gl.TabIndex = 40;
             this.nat_ac_id_contprice_gl.Value = null;
             this.nat_ac_id_contprice_gl.ValueMember = "AcId";
-            this.nat_ac_id_contprice_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_contprice_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_contprice_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_contprice_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_ac_id_netpay_gl
@@ -236,8 +258,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_netpay_gl.TabIndex = 50;
             this.nat_ac_id_netpay_gl.Value = null;
             this.nat_ac_id_netpay_gl.ValueMember = "AcId";
-            this.nat_ac_id_netpay_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_netpay_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_netpay_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_netpay_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_ac_id_accrualbalance_gl
@@ -254,8 +276,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_ac_id_accrualbalance_gl.TabIndex = 60;
             this.nat_ac_id_accrualbalance_gl.Value = null;
             this.nat_ac_id_accrualbalance_gl.ValueMember = "AcId";
-            this.nat_ac_id_accrualbalance_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_accrualbalance_gl.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.nat_ac_id_accrualbalance_gl.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.nat_ac_id_accrualbalance_gl.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_pbu_code_postax_gl
@@ -272,8 +294,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_pbu_code_postax_gl.TabIndex = 70;
             this.nat_pbu_code_postax_gl.Value = null;
             this.nat_pbu_code_postax_gl.ValueMember = "PbuId";
-            this.nat_pbu_code_postax_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_postax_gl.LostFocus += new System.EventHandler(this.PbuCodes_LostFocus);
+            this.nat_pbu_code_postax_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_postax_gl.Click += new System.EventHandler(this.PbuCodes_Click);
             // 
             // nat_pbu_code_whtax_gl
@@ -290,8 +312,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_pbu_code_whtax_gl.TabIndex = 80;
             this.nat_pbu_code_whtax_gl.Value = null;
             this.nat_pbu_code_whtax_gl.ValueMember = "PbuId";
-            this.nat_pbu_code_whtax_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_whtax_gl.LostFocus += new System.EventHandler(this.PbuCodes_LostFocus);
+            this.nat_pbu_code_whtax_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_whtax_gl.Click += new System.EventHandler(this.PbuCodes_Click);
             // 
             // nat_pbu_code_gst_gl
@@ -308,8 +330,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_pbu_code_gst_gl.TabIndex = 90;
             this.nat_pbu_code_gst_gl.Value = null;
             this.nat_pbu_code_gst_gl.ValueMember = "PbuId";
-            this.nat_pbu_code_gst_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_gst_gl.LostFocus += new System.EventHandler(this.PbuCodes_LostFocus);
+            this.nat_pbu_code_gst_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_gst_gl.Click += new System.EventHandler(this.PbuCodes_Click);
             // 
             // nat_pbu_code_netpay_gl
@@ -326,8 +348,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_pbu_code_netpay_gl.TabIndex = 100;
             this.nat_pbu_code_netpay_gl.Value = null;
             this.nat_pbu_code_netpay_gl.ValueMember = "PbuId";
-            this.nat_pbu_code_netpay_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_netpay_gl.LostFocus += new System.EventHandler(this.PbuCodes_LostFocus);
+            this.nat_pbu_code_netpay_gl.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_netpay_gl.Click += new System.EventHandler(this.PbuCodes_Click);
             // 
             // nat_pbu_code_accrualbal
@@ -344,8 +366,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_pbu_code_accrualbal.TabIndex = 110;
             this.nat_pbu_code_accrualbal.Value = null;
             this.nat_pbu_code_accrualbal.ValueMember = "PbuId";
-            this.nat_pbu_code_accrualbal.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_accrualbal.LostFocus += new System.EventHandler(this.PbuCodes_LostFocus);
+            this.nat_pbu_code_accrualbal.SelectedIndexChanged += new System.EventHandler(this.PbuCodes_SelectedIndexChanged);
             this.nat_pbu_code_accrualbal.Click += new System.EventHandler(this.PbuCodes_Click);
             // 
             // nat_ac_id_gst_gl_t
@@ -460,6 +482,12 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             // 
             // n_45050067
             // 
+            this.n_45050067.Controls.Add(this.label4);
+            this.n_45050067.Controls.Add(this.label3);
+            this.n_45050067.Controls.Add(this.label2);
+            this.n_45050067.Controls.Add(this.cp_publishing_defaultcomptype);
+            this.n_45050067.Controls.Add(this.cp_reachmedia_defaultcomptype);
+            this.n_45050067.Controls.Add(this.cp_courierpost_defaultcomptype);
             this.n_45050067.Controls.Add(this.label1);
             this.n_45050067.Controls.Add(this.nat_freqadj_defaultcomptype);
             this.n_45050067.Controls.Add(this.nat_contadj_defaultcomptype);
@@ -479,9 +507,9 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.n_45050067.Controls.Add(this.n_15934359);
             this.n_45050067.Controls.Add(this.n_66186103);
             this.n_45050067.Font = new System.Drawing.Font("Arial", 8F);
-            this.n_45050067.Location = new System.Drawing.Point(9, 263);
+            this.n_45050067.Location = new System.Drawing.Point(9, 265);
             this.n_45050067.Name = "n_45050067";
-            this.n_45050067.Size = new System.Drawing.Size(333, 220);
+            this.n_45050067.Size = new System.Drawing.Size(333, 285);
             this.n_45050067.TabIndex = 220;
             this.n_45050067.TabStop = false;
             this.n_45050067.Text = "Default Payment Components";
@@ -552,8 +580,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_deductions_defaultcomptype.TabIndex = 260;
             this.nat_deductions_defaultcomptype.Value = null;
             this.nat_deductions_defaultcomptype.ValueMember = "PctId";
-            this.nat_deductions_defaultcomptype.SelectedIndexChanged += new System.EventHandler(this.PaymentComponents_SelectedIndexChanged);
             this.nat_deductions_defaultcomptype.LostFocus += new System.EventHandler(this.PaymentComponents_LostFocus);
+            this.nat_deductions_defaultcomptype.SelectedIndexChanged += new System.EventHandler(this.PaymentComponents_SelectedIndexChanged);
             this.nat_deductions_defaultcomptype.Click += new System.EventHandler(this.PaymentComponents_Click);
             // 
             // nat_courierpost_defaultcomptype
@@ -570,8 +598,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_courierpost_defaultcomptype.TabIndex = 270;
             this.nat_courierpost_defaultcomptype.Value = null;
             this.nat_courierpost_defaultcomptype.ValueMember = "PctId";
-            this.nat_courierpost_defaultcomptype.SelectedIndexChanged += new System.EventHandler(this.PaymentComponents_SelectedIndexChanged);
             this.nat_courierpost_defaultcomptype.LostFocus += new System.EventHandler(this.PaymentComponents_LostFocus);
+            this.nat_courierpost_defaultcomptype.SelectedIndexChanged += new System.EventHandler(this.PaymentComponents_SelectedIndexChanged);
             this.nat_courierpost_defaultcomptype.Click += new System.EventHandler(this.PaymentComponents_Click);
             // 
             // ac_id
@@ -588,8 +616,8 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.ac_id.TabIndex = 291;
             this.ac_id.Value = null;
             this.ac_id.ValueMember = "AcId";
-            this.ac_id.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.ac_id.LostFocus += new System.EventHandler(this.AccountCodes_LostFocus);
+            this.ac_id.SelectedIndexChanged += new System.EventHandler(this.AccountCodes_SelectedIndexChanged);
             this.ac_id.Click += new System.EventHandler(this.AccountCodes_Click);
             // 
             // nat_adpost_defaultcomptype
@@ -719,6 +747,12 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             // 
             // n_47730883
             // 
+            this.n_47730883.Controls.Add(this.ird_contact_email_t);
+            this.n_47730883.Controls.Add(this.ird_contact_phone_t);
+            this.n_47730883.Controls.Add(this.ird_contact_name_t);
+            this.n_47730883.Controls.Add(this.ird_contact_email);
+            this.n_47730883.Controls.Add(this.ird_contact_phone);
+            this.n_47730883.Controls.Add(this.ird_contact_name);
             this.n_47730883.Controls.Add(this.nat_rural_post_gst_no);
             this.n_47730883.Controls.Add(this.nat_gst_rate);
             this.n_47730883.Controls.Add(this.nat_ird_no);
@@ -740,7 +774,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.n_47730883.Font = new System.Drawing.Font("Arial", 8F);
             this.n_47730883.Location = new System.Drawing.Point(348, 0);
             this.n_47730883.Name = "n_47730883";
-            this.n_47730883.Size = new System.Drawing.Size(444, 273);
+            this.n_47730883.Size = new System.Drawing.Size(444, 337);
             this.n_47730883.TabIndex = 120;
             this.n_47730883.TabStop = false;
             this.n_47730883.Text = "NZ Post Information";
@@ -946,7 +980,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.n_62824461.Controls.Add(this.nat_standard_tax_rate_t);
             this.n_62824461.Controls.Add(this.nat_day_of_month_t);
             this.n_62824461.Font = new System.Drawing.Font("Arial", 8F);
-            this.n_62824461.Location = new System.Drawing.Point(348, 276);
+            this.n_62824461.Location = new System.Drawing.Point(348, 343);
             this.n_62824461.Name = "n_62824461";
             this.n_62824461.Size = new System.Drawing.Size(444, 207);
             this.n_62824461.TabIndex = 300;
@@ -986,6 +1020,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             // nat_effective_date
             // 
             this.nat_effective_date.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "NatEffectiveDate", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged, null, "dd/MM/yyyy"));
+            this.nat_effective_date.EditMask = null;
             this.nat_effective_date.Font = new System.Drawing.Font("Arial", 8F);
             this.nat_effective_date.Location = new System.Drawing.Point(214, 83);
             this.nat_effective_date.Mask = "00/00/0000";
@@ -1096,6 +1131,141 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.nat_day_of_month_t.Text = "Day of Month for Pay Period:";
             this.nat_day_of_month_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cp_courierpost_defaultcomptype
+            // 
+            this.cp_courierpost_defaultcomptype.AutoRetrieve = true;
+            this.cp_courierpost_defaultcomptype.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CpCourierpostDefaultcomptype", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cp_courierpost_defaultcomptype.DisplayMember = "PctDescription";
+            this.cp_courierpost_defaultcomptype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cp_courierpost_defaultcomptype.DropDownWidth = 273;
+            this.cp_courierpost_defaultcomptype.Font = new System.Drawing.Font("Arial", 8F);
+            this.cp_courierpost_defaultcomptype.Location = new System.Drawing.Point(198, 214);
+            this.cp_courierpost_defaultcomptype.Name = "cp_courierpost_defaultcomptype";
+            this.cp_courierpost_defaultcomptype.Size = new System.Drawing.Size(124, 22);
+            this.cp_courierpost_defaultcomptype.TabIndex = 301;
+            this.cp_courierpost_defaultcomptype.Value = null;
+            this.cp_courierpost_defaultcomptype.ValueMember = "PctId";
+            // 
+            // cp_reachmedia_defaultcomptype
+            // 
+            this.cp_reachmedia_defaultcomptype.AutoRetrieve = true;
+            this.cp_reachmedia_defaultcomptype.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CpReachmediaDefaultcomptype", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cp_reachmedia_defaultcomptype.DisplayMember = "PctDescription";
+            this.cp_reachmedia_defaultcomptype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cp_reachmedia_defaultcomptype.DropDownWidth = 273;
+            this.cp_reachmedia_defaultcomptype.Font = new System.Drawing.Font("Arial", 8F);
+            this.cp_reachmedia_defaultcomptype.Location = new System.Drawing.Point(198, 236);
+            this.cp_reachmedia_defaultcomptype.Name = "cp_reachmedia_defaultcomptype";
+            this.cp_reachmedia_defaultcomptype.Size = new System.Drawing.Size(124, 22);
+            this.cp_reachmedia_defaultcomptype.TabIndex = 301;
+            this.cp_reachmedia_defaultcomptype.Value = null;
+            this.cp_reachmedia_defaultcomptype.ValueMember = "PctId";
+            // 
+            // cp_publishing_defaultcomptype
+            // 
+            this.cp_publishing_defaultcomptype.AutoRetrieve = true;
+            this.cp_publishing_defaultcomptype.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "CpPublishingDefaultcomptype", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cp_publishing_defaultcomptype.DisplayMember = "PctDescription";
+            this.cp_publishing_defaultcomptype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cp_publishing_defaultcomptype.DropDownWidth = 273;
+            this.cp_publishing_defaultcomptype.Font = new System.Drawing.Font("Arial", 8F);
+            this.cp_publishing_defaultcomptype.Location = new System.Drawing.Point(198, 259);
+            this.cp_publishing_defaultcomptype.Name = "cp_publishing_defaultcomptype";
+            this.cp_publishing_defaultcomptype.Size = new System.Drawing.Size(124, 22);
+            this.cp_publishing_defaultcomptype.TabIndex = 301;
+            this.cp_publishing_defaultcomptype.Value = null;
+            this.cp_publishing_defaultcomptype.ValueMember = "PctId";
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Arial", 8F);
+            this.label2.Location = new System.Drawing.Point(20, 219);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(174, 14);
+            this.label2.TabIndex = 301;
+            this.label2.Text = "CP Courierpost:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.Font = new System.Drawing.Font("Arial", 8F);
+            this.label3.Location = new System.Drawing.Point(21, 242);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(174, 14);
+            this.label3.TabIndex = 302;
+            this.label3.Text = "CP ReachMedia:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Arial", 8F);
+            this.label4.Location = new System.Drawing.Point(20, 262);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(174, 14);
+            this.label4.TabIndex = 302;
+            this.label4.Text = "CP Publishing:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ird_contact_name
+            // 
+            this.ird_contact_name.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "IrdContactName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ird_contact_name.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_name.Location = new System.Drawing.Point(214, 271);
+            this.ird_contact_name.MaxLength = 200;
+            this.ird_contact_name.Name = "ird_contact_name";
+            this.ird_contact_name.Size = new System.Drawing.Size(210, 20);
+            this.ird_contact_name.TabIndex = 211;
+            // 
+            // ird_contact_phone
+            // 
+            this.ird_contact_phone.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "IrdContactPhone", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ird_contact_phone.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_phone.Location = new System.Drawing.Point(214, 292);
+            this.ird_contact_phone.MaxLength = 200;
+            this.ird_contact_phone.Name = "ird_contact_phone";
+            this.ird_contact_phone.Size = new System.Drawing.Size(124, 20);
+            this.ird_contact_phone.TabIndex = 212;
+            // 
+            // ird_contact_email
+            // 
+            this.ird_contact_email.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "IrdContactEmail", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ird_contact_email.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_email.Location = new System.Drawing.Point(214, 313);
+            this.ird_contact_email.MaxLength = 200;
+            this.ird_contact_email.Name = "ird_contact_email";
+            this.ird_contact_email.Size = new System.Drawing.Size(210, 20);
+            this.ird_contact_email.TabIndex = 213;
+            // 
+            // ird_contact_name_t
+            // 
+            this.ird_contact_name_t.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_name_t.Location = new System.Drawing.Point(19, 274);
+            this.ird_contact_name_t.Name = "ird_contact_name_t";
+            this.ird_contact_name_t.Size = new System.Drawing.Size(190, 14);
+            this.ird_contact_name_t.TabIndex = 214;
+            this.ird_contact_name_t.Text = "IRD Contact Name:";
+            this.ird_contact_name_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ird_contact_phone_t
+            // 
+            this.ird_contact_phone_t.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_phone_t.Location = new System.Drawing.Point(19, 295);
+            this.ird_contact_phone_t.Name = "ird_contact_phone_t";
+            this.ird_contact_phone_t.Size = new System.Drawing.Size(190, 14);
+            this.ird_contact_phone_t.TabIndex = 215;
+            this.ird_contact_phone_t.Text = "IRD Contact Phone:";
+            this.ird_contact_phone_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ird_contact_email_t
+            // 
+            this.ird_contact_email_t.Font = new System.Drawing.Font("Arial", 8F);
+            this.ird_contact_email_t.Location = new System.Drawing.Point(19, 317);
+            this.ird_contact_email_t.Name = "ird_contact_email_t";
+            this.ird_contact_email_t.Size = new System.Drawing.Size(190, 14);
+            this.ird_contact_email_t.TabIndex = 216;
+            this.ird_contact_email_t.Text = "IRD Contact Email:";
+            this.ird_contact_email_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // DwNationalDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1105,7 +1275,7 @@ namespace NZPostOffice.ODPS.DataControls.Odps
             this.Controls.Add(this.n_45050067);
             this.Controls.Add(this.n_62824461);
             this.Name = "DwNationalDetail";
-            this.Size = new System.Drawing.Size(880, 499);
+            this.Size = new System.Drawing.Size(880, 563);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.n_59450129.ResumeLayout(false);
             this.n_45050067.ResumeLayout(false);
@@ -1294,6 +1464,18 @@ namespace NZPostOffice.ODPS.DataControls.Odps
         private System.Windows.Forms.Label nat_standard_tax_rate_t;
         private System.Windows.Forms.Label nat_day_of_month_t;
         private System.Windows.Forms.Label label1;
+        private Metex.Windows.DataEntityCombo cp_publishing_defaultcomptype;
+        private Metex.Windows.DataEntityCombo cp_reachmedia_defaultcomptype;
+        private Metex.Windows.DataEntityCombo cp_courierpost_defaultcomptype;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label ird_contact_email_t;
+        private System.Windows.Forms.Label ird_contact_phone_t;
+        private System.Windows.Forms.Label ird_contact_name_t;
+        private System.Windows.Forms.TextBox ird_contact_email;
+        private System.Windows.Forms.TextBox ird_contact_phone;
+        private System.Windows.Forms.TextBox ird_contact_name;
     }
 }
 
