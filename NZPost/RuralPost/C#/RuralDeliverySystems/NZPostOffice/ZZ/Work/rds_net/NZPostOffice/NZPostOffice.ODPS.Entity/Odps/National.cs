@@ -8,6 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
+    // This gets the data for the 'National' tab in odps.WCodeTableMaintenance
+    //
+    // TJB  RPCR_129 July-2019
+    // Reformatted fetch query and sorted with newest first
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -158,7 +163,12 @@ namespace NZPostOffice.ODPS.Entity.Odps
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
                     //GenerateSelectCommandText(cm, "odps.national");
-                    cm.CommandText = @"SELECT odps.[national].nat_id, odps.[national].ac_id, odps.[national].nat_ird_no, odps.[national].nat_effective_date FROM odps.[national]";
+                    cm.CommandText = "SELECT nat_id"
+                                   + "     , ac_id"
+                                   + "     , nat_ird_no"
+                                   + "     , nat_effective_date " 
+                                   + "  FROM odps.[national]"
+                                   + " ORDER BY nat_id desc";
 
                     List<National> _list = new List<National>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
