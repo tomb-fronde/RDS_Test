@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.Odps
 {
+    // TJB  July-2019: This appears to be unused
+    // Now incomplete (see NationalDetail): entity for DwNationalDetailDs
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
