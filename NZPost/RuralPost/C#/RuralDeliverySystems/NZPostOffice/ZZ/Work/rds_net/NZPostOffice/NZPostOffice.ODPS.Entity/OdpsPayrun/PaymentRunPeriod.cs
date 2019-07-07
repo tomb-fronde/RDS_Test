@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.ODPS.Entity.OdpsPayrun
 {
+    // TJB  RPCR_139 Bugfix July-2019
+    // Changed contract_no et al to string
+    //
     // TJB  RPCR_141  June-2019
     // Added ContractNo, RgCode and associated _contract_no and _rg_code variables
 
@@ -17,6 +20,9 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
     [MapInfo("start_date", "_start_date", "")]
     [MapInfo("end_date", "_end_date", "")]
     [MapInfo("owner_driver", "_owner_driver", "")]
+    [MapInfo("contract_no", "_contract_no", "")]
+    [MapInfo("rg_code", "_rg_code", "")]
+
     [System.Serializable()]
 
     public class PaymentRunPeriod : Entity<PaymentRunPeriod>
@@ -33,7 +39,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
         private string _owner_driver;
 
         [DBField()]
-        private int? _contract_no;
+        private string _contract_no;
 
         [DBField()]
         private int? _rg_code;
@@ -92,7 +98,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsPayrun
             }
         }
 
-        public virtual int? ContractNo
+        public virtual string ContractNo
         {
             get
             {
