@@ -12,6 +12,13 @@ using NZPostOffice.ODPS.DataControls.OdpsCodes;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsPayrun
 {
+    // TJB  RPCR_139 Bugfix July-2019 [In designer]
+    // Changed contract_no to string (was numericmasked)
+    //
+    // TJB  RPCR_141  June-2019  [In designer]
+    // Added contract_no and rg_code dropdown
+    // Added this.contract_no.CausesValidation = false;
+
     // TJB  RPCR_141  June-2019
     // Added OnHandleCreated and InitializeDropdown for rg_code dropdown
     // Added this.contract_no.CausesValidation = false in designer
