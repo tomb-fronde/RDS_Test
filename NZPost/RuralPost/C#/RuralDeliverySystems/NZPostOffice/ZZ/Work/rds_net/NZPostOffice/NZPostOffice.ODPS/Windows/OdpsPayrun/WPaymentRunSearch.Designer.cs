@@ -47,7 +47,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // cb_search
             // 
             this.cb_search.Location = new System.Drawing.Point(319, 49);
-            this.cb_search.Visible = false;
+            this.cb_search.Click += new System.EventHandler(this.cb_search_Click);
             // 
             // cb_open
             // 
@@ -70,6 +70,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             // 
             // pb_1
             // 
+            this.pb_1.Enabled = false;
             this.pb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.pb_1.Location = new System.Drawing.Point(280, 46);
             this.pb_1.Name = "pb_1";
@@ -77,6 +78,7 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             this.pb_1.TabIndex = 3;
             this.pb_1.Text = "?";
             this.pb_1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.pb_1.Visible = false;
             this.pb_1.Click += new System.EventHandler(this.pb_1_clicked);
             // 
             // cb_clear
