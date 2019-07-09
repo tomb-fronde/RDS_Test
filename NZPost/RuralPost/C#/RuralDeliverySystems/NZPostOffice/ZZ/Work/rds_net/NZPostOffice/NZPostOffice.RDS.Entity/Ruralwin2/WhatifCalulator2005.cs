@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB  RPCR_133 July-2019 Replace activity ratio with 100%
+    // Implemented by removing (DeliveryDays/MaxDeliveryDays) scaling
+    // 
     // TJB Release 7.1.10 Aug-2013 Hack/Workaround
     // Trying to get ReliefWeeks into WhatifReport
     // Try using _rrrate_itemprocrate (appears unused)
@@ -2064,11 +2067,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //if(isNull( publiclia * ( deliverydays / maxdeliverydays )),0, publiclia * ( deliverydays /  maxdeliverydays ))
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                return Convert.ToDecimal(Publiclia * (Deliverydays / Maxdeliverydays));
+                else   // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Publiclia * (Deliverydays / Maxdeliverydays));
+                    return Publiclia;
             }
         }
 
@@ -2077,11 +2080,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //if( IsNull( vehicalinsure * ( deliverydays / maxdeliverydays ) ),0, vehicalinsure * ( deliverydays / maxdeliverydays ) )
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                    return Convert.ToDecimal(Vehicalinsure * (Deliverydays / Maxdeliverydays));
+                else  // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Vehicalinsure * (Deliverydays / Maxdeliverydays));
+                    return Vehicalinsure;
             }
         }
 
@@ -2090,11 +2093,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //If( IsNull( licence * ( deliverydays / maxdeliverydays )),0, licence * ( deliverydays / maxdeliverydays ))
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                return Convert.ToDecimal(Licence * (Deliverydays / Maxdeliverydays));
+                else  // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Licence * (Deliverydays / Maxdeliverydays));
+                    return Licence;
             }
         }
 
@@ -2103,11 +2106,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //If( IsNull( carrierrisk * ( deliverydays / maxdeliverydays )),0, carrierrisk * ( deliverydays / maxdeliverydays ))
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                return Convert.ToDecimal(Carrierrisk * (Deliverydays / Maxdeliverydays));
+                else  // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Carrierrisk * (Deliverydays / Maxdeliverydays));
+                    return Carrierrisk;
             }
         }
 
@@ -2116,11 +2119,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //If( IsNull( telephone * ( deliverydays / maxdeliverydays) ),0, telephone * ( deliverydays / maxdeliverydays))
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                return Convert.ToDecimal(Telephone * (Deliverydays / Maxdeliverydays));
+                else  // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Telephone * (Deliverydays / Maxdeliverydays));
+                    return Telephone;
             }
         }
 
@@ -2129,11 +2132,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //If( IsNull( accounting * (deliverydays / maxdeliverydays)),0, accounting * (deliverydays / maxdeliverydays))
                 if (Maxdeliverydays == 0)
                     return 0;
-                else
-                return Convert.ToDecimal(Accounting * (Deliverydays / Maxdeliverydays));
+                else  // TJB  RPCR_133  July-2019 Remove activity ratio
+                    //return Convert.ToDecimal(Accounting * (Deliverydays / Maxdeliverydays));
+                    return Accounting;
             }
         }
 
