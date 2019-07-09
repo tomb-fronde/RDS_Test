@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB  RPCR_133 July-2019 Replace activity ratio with 100%
+    // Implemented by removing (DeliveryDays/MaxDeliveryDays) scaling
+    // [Note: this doesn't seem to be used anywhere now]
+    //
     // TJB  RPCR_041 Jan-2013
     // Changed Proccosts and Reliefcosts calculations: round calculated processing hours part
     // - this fixed the values displayed on the Whatif report
@@ -360,6 +364,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         [DBField()]
         private decimal? _relief_weeks;
 
+/*-------------------------------------------------------*/
         public virtual decimal? ReliefWeeks
         {
             get
@@ -377,8 +382,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 }
             }
         }
-
-
 
         public virtual int? ContractNo
         {
@@ -2728,13 +2731,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
+        // TJB  RPCR_133 July-2019
+        // Removed activity ratio scaling
         public virtual decimal? Calcpl
         {
             get
             {
                 CanReadProperty(true);
-                // publiclia * ( deliverydays /  maxdeliverydays )
-                return Publiclia * (Deliverydays / Maxdeliverydays);
+                // return Publiclia * ( deliverydays /  maxdeliverydays )
+                return Publiclia;
             }
         }
 
@@ -2748,23 +2753,27 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
+        // TJB  RPCR_133 July-2019
+        // Removed activity ratio scaling
         public virtual decimal? Calcvi
         {
             get
             {
                 CanReadProperty(true);
-                // vehicalinsure * ( deliverydays /  maxdeliverydays )
-                return Vehicalinsure * (Deliverydays / Maxdeliverydays);
+                // return Vehicalinsure * ( deliverydays /  maxdeliverydays )
+                return Vehicalinsure;
             }
         }
 
+        // TJB  RPCR_133 July-2019
+        // Removed activity ratio scaling
         public virtual decimal? Calclic
         {
             get
             {
                 CanReadProperty(true);
-                // licence * ( deliverydays  /  maxdeliverydays )
-                return Licence * (Deliverydays / Maxdeliverydays);
+                // return Licence * ( deliverydays  /  maxdeliverydays )
+                return Licence;
             }
         }
 
@@ -2868,13 +2877,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
+        // TJB  RPCR_133 July-2019
+        // Removed activity ratio scaling
         public virtual decimal? Calccrr
         {
             get
             {
                 CanReadProperty(true);
-                // carrierrisk * ( deliverydays  /  maxdeliverydays )
-                return Carrierrisk * (Deliverydays / Maxdeliverydays);
+                // return Carrierrisk * ( deliverydays  /  maxdeliverydays )
+                return Carrierrisk;
             }
         }
 
