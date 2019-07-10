@@ -12,6 +12,9 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB 10-July-2019
+    // Cosmetic changes: re-formatted MessageBox.Show for readability
+    //
     // TJB  RPCR_099  8-Jan-2016:  Name change
     // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
 
@@ -119,7 +122,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (ld_effective_date < DateTime.Today.Date)
                 {
-                    MessageBox.Show("The specified effective date must either be today or in the future.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("The specified effective date must either be today or in the future."
+                                  , "Validation Error"
+                                  , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     dw_criteria.GetControlByName("ad_effective_date").Focus();
                     dw_criteria.Focus();
                     this.Focus();
@@ -128,7 +133,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else
             {
-                MessageBox.Show("You must specify an effective date.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You must specify an effective date."
+                              , "Validation Error"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 dw_criteria.Controls["ad_effective_date"].Focus();
                 dw_criteria.Focus();
                 this.Focus();
@@ -137,7 +144,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_selected_rg_code = dw_criteria.GetItem<FuelOverrideFields>(0).AlRenewalGroup;
             if (ll_selected_rg_code == null)
             {
-                MessageBox.Show("You must select a renewal group from the list.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You must select a renewal group from the list."
+                              , "Validation Error"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 dw_criteria.GetControlByName("al_renewal_group").Focus();
                 dw_criteria.Focus();
                 this.Focus();
@@ -204,14 +213,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             if (!lb_go)
             {
-                MessageBox.Show("You must specify at least one new fuel rate.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You must specify at least one new fuel rate."
+                              , "Validation Error"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 this.Focus();
                 return li_return;
             }
             // Prompt for confirmation
-            if (MessageBox.Show("Are you sure you want to proceed? \r\n" +
-            "The change will impact on all currently active contracts \r\n" +
-            "and benchmarks for the selected renewal group.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+            if (MessageBox.Show("Are you sure you want to proceed? \r\n" 
+                              + "The change will impact on all currently active contracts \r\n" 
+                              + "and benchmarks for the selected renewal group."
+                              , "Warning"
+                              , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                              , MessageBoxDefaultButton.Button2) 
+                == DialogResult.No)
             {
                 this.Focus();
                 return li_return;
@@ -292,9 +307,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     RDSDataService.UpdateVehicleOverrideFuelRate(ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
-                        MessageBox.Show("Unable to update vehicle_override_rate table. \r\n" +
-                            "The global update process will be aborted.\r\n\r\n" +
-                            "Error Code: " + /*?string(itr_tran_obj.SQLDBCode) + */"\r\nError Text: " + SQLErrText, "Database Error");
+                        MessageBox.Show("Unable to update vehicle_override_rate table. \r\n" 
+                                      + "The global update process will be aborted.\r\n\r\n" 
+                                      + "Error Code: " + SQLCode.ToString() + "\n"     // /*?string(itr_tran_obj.SQLDBCode) + */"\r\n" 
+                                      + "Error Text: " + SQLErrText
+                                      , "Database Error");
                         lb_continue = false;
                         break;
                     }
@@ -326,7 +343,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     }
                     else
                     {
-                        MessageBox.Show("row must exist", "double check!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Row must exist"
+                                      , "double check!!"
+                                      , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -474,8 +493,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //    int li_return = -1;
         //    int SQLCode = 0;
         //    string SQLErrText = string.Empty;
-
-
+        //
+        //
         //    /*
         //    This override process will impact on all contracts with the following matching criteria:
         //    * Its an RD contract type
@@ -528,15 +547,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //    }
         //    if (!lb_go)
         //    {
-        //        MessageBox.Show("You must specify at least one new fuel rate.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        //        MessageBox.Show("You must specify at least one new fuel rate."
+        //                      , "Validation Error"
+        //                      , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         //        this.Focus();
         //        return li_return;
         //    }
         //    // Prompt for confirmation
-        //    if (MessageBox.Show("Are you sure you want to proceed? \r\n" +
-        //    "The change will impact on all currently active contracts \r\n" +
-        //    "and benchmarks for the selected renewal group.", "Warning",
-        //    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+        //    if (MessageBox.Show("Are you sure you want to proceed? \r\n" 
+        //                      + "The change will impact on all currently active contracts \r\n" 
+        //                      + "and benchmarks for the selected renewal group."
+        //                      , "Warning"
+        //                      , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+        //                      , MessageBoxDefaultButton.Button2) 
+        //         == DialogResult.No)
         //    {
         //        this.Focus();
         //        return li_return;
@@ -606,7 +630,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //            RDSDataService.UpdateVehicleOverrideRate(ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
         //            if (SQLCode != 0/* itr_tran_obj.SQLCode != 0 */)
         //            {
-        //                MessageBox.Show (  "Unable to update vehicle_override_rate table. \r\n"  + "The global update process will be aborted.\r\n\n"     + "Error Code: " + /*?String ( itr_tran_obj.SQLDBCode)*/""+ "\nError Text: " + SQLErrText ,  "Database Error" );
+        //                MessageBox.Show("Unable to update vehicle_override_rate table. \r\n"  
+        //                              + "The global update process will be aborted.\r\n\n" 
+        //                              + "Error Code: " + SQLCode.ToString() + "\n" 
+        //                              + "Error Text: " + SQLErrText 
+        //                              , "Database Error" );
         //                lb_continue = false;
         //                break;
         //            }
@@ -864,14 +892,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //    ldc_new_standard_ruc_rate = dw_rates.GetItem<NationalRatesOverrideFields>(0).RucRate;//, 'ruc_rate' )
         //    if (ldc_new_standard_ruc_rate == null || ldc_new_standard_ruc_rate == 0)
         //    {
-        //        MessageBox.Show("You must specify a Road User Charge rate.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        //        MessageBox.Show("You must specify a Road User Charge rate."
+        //                      , "Validation Error"
+        //                      , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         //        this.Focus();
         //        return li_RETURN;
         //    }
         //    // Prompt for confirmation
         //    DialogResult dlg = DialogResult.None;
-        //    dlg = MessageBox("Warning", "Are you sure you want to proceed? \n The change will impact on all currently active contracts \n and benchmarks for the selected renewal group.", MessageBoxIcon.Question, MessageBoxButtons.YesNo);
-
+        //    dlg = MessageBox.Show("Are you sure you want to proceed? \n " 
+        //                        + "The change will impact on all currently active contracts \n " 
+        //                        + "and benchmarks for the selected renewal group." 
+        //                        , "Warning"
+        //                        , MessageBoxIcon.Question, MessageBoxButtons.YesNo);
         //    if (dlg == DialogResult.None)
         //    {
         //        this.Focus();
@@ -912,7 +945,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //             */
         //            if (false)//itr_tran_obj.SQLCode <> 0 )
         //            {
-        //                //?MessageBox.Show("Unable to update vehicle_override_rate table. \n The global update process will be aborted.\n\n Error Code: " + String ( itr_tran_obj.SQLDBCode) + & '\nError Text: ' + itr_tran_obj.SQLERRTEXT,  'Database Error' )
+        //                MessageBox.Show("Unable to update vehicle_override_rate table. \n " 
+        //                              + "The global update process will be aborted.\n\n " 
+        //                              + "Error Code: " + SQLCode.ToString() + "\n" 
+        //                              + "Error Text: " + SQLEerrText
+        //                              , "Database Error" )
         //                lb_continue = false;
         //                continue;//EXIT
         //            }
@@ -926,7 +963,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //        //? USING		itr_tran_obj;
         //        if (false) // itr_tran_obj.SQLCode <> 0 THEN
         //        {
-        //            //?MessageBox.Show ( 'Unable to update vehicle_rate table. \n' + & 'The global update process will be aborted.\n\n' + &  'Error Code: ' + String ( itr_tran_obj.SQLDBCode) + & '\nError Text: ' + itr_tran_obj.SQLERRTEXT,  'Database Error' )
+        //            MessageBox.Show("Unable to update vehicle_rate table. \n" 
+        //                          + "The global update process will be aborted.\n\n" 
+        //                          + "Error Code: " + SQLCode.ToString() + "\n" 
+        //                          + "Error Text: " + SQLEerrText
+        //                          , "Database Error" )
         //            lb_continue = false;
         //            continue;//EXIT
         //        }
@@ -948,7 +989,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //            // Find the new rate for this 
         //            ll_found = ids_original.Find(new KeyValuePair<string, object>("contract_no", ll_contract_no.ToString())
         //                , new KeyValuePair<string, object>("sequence_no", ll_sequence_no.ToString()));// "contract_no = " , ll_contract_no.ToString() + " and sequence_no = " + ll_sequence_no.ToString(), 1, ids_original.RowCount);
-
+        //
         //            if (ll_found > 0)
         //            {
         //                ldc_original_benchmark = ids_original.GetValue(ll_found, "bench_mark");
@@ -1043,12 +1084,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ldc_new_standard_ruc_rate = dw_rates.GetItem<NationalRatesOverrideFields>(0).RucRate;
             if (ldc_new_standard_ruc_rate == null || ldc_new_standard_ruc_rate == 0)
             {
-                MessageBox.Show("You must specify a Road User Charge rate.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("You must specify a Road User Charge rate."
+                              , "Validation Error"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 this.Focus();
                 return li_RETURN;
             }
             // Prompt for confirmation
-            if (MessageBox.Show("Are you sure you want to proceed? \n" + "The change will impact on all currently active contracts \n" + "and benchmarks for the selected renewal group.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+            if (MessageBox.Show("Are you sure you want to proceed? \n" 
+                              + "The change will impact on all currently active contracts \n" 
+                              + "and benchmarks for the selected renewal group."
+                              , "Warning"
+                              , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                              , MessageBoxDefaultButton.Button2) 
+                == DialogResult.No)
             {
                 this.Focus();
                 return li_RETURN;
@@ -1098,9 +1147,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         ref SQLCode, ref SQLErrText);
                     if (SQLCode != 0)
                     {
-                        MessageBox.Show("nable to update vehicle_override_rate table. \n" + "The global update process will be aborted.\n\n" + 
-                            "Error Code:" + /*?String(itr_tran_obj.SQLDBCode) +*/ "\nError Text:" + SQLErrText, "Database Error", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Unable to update vehicle_override_rate table. \n" 
+                                      + "The global update process will be aborted.\n\n" 
+                                      + "Error Code:" + SQLCode.ToString() + "\n"     // /*?String(itr_tran_obj.SQLDBCode) +*/ "\n" 
+                                      + "Error Text:" + SQLErrText
+                                      , "Database Error"
+                                      , MessageBoxButtons.OK, MessageBoxIcon.Information);
                         lb_continue = false;
                         break;
                     }
@@ -1117,9 +1169,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 RDSDataService.UpdateVehicleRate(ldc_new_standard_ruc_rate, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
-                    MessageBox.Show("Unable to update vehicle_rate table. \n" + "The global update process will be aborted.\n\n" + 
-                        "Error Code: " + /*?String ( itr_tran_obj.SQLDBCode) +*/ "\nError Text: " + SQLErrText, "Database Error", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Unable to update vehicle_rate table. \n" 
+                                  + "The global update process will be aborted.\n\n" 
+                                  + "Error Code: " + SQLCode.ToString() + "\n"    // /*?String(itr_tran_obj.SQLDBCode) +*/ "\n" 
+                                  + "Error Text: " + SQLErrText
+                                  , "Database Error"
+                                  , MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lb_continue = false;
                     break;
                 }
@@ -1241,7 +1296,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  that the Petrol override is really a diesel equivalent.
             if (tab_rates.SelectedIndex == 0)
             {
-                li_rc = MessageBox.Show("Please confirm that the rates entered are correct, and\n" + "especially that the Petrol rate is a diesel equivalent.", "Confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                li_rc = MessageBox.Show("Please confirm that the rates entered are correct, and\n" 
+                                      + "especially that the Petrol rate is a diesel equivalent."
+                                      , "Confirm"
+                                      , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+                                      , MessageBoxDefaultButton.Button2);
                 if (li_rc == DialogResult.No || li_rc == DialogResult.Cancel)
                 {
                     idw_details.Focus();
@@ -1272,7 +1331,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ldw_temp.AcceptText();
             if (ldw_temp.DataObject.DeletedCount > 0 && ldw_temp.ModifiedCount() > 0)
             {
-                li_rc = MessageBox.Show("The changes you made will be lost if you switch to \n" + "the other tabpage.  Do you want to continue?", "Tabpage focus change", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                li_rc = MessageBox.Show("The changes you made will be lost if you switch to \n" 
+                                      + "the other tabpage.  Do you want to continue?"
+                                      , "Tabpage focus change"
+                                      , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                                      , MessageBoxDefaultButton.Button2);
                 if (li_rc == DialogResult.No)
                 {
                     //  Return 1 to prevent focus from changing
