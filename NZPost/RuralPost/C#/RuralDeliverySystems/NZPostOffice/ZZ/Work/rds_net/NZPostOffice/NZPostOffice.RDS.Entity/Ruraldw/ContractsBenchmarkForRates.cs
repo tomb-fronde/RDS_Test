@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB RPCR_134 July-2019
+    // Removed contract_type restriction to November Renewals
+    // Reformatted Fetch query for readability
+    //
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -241,20 +245,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT cr.contract_no,  cr.contract_seq_number,  cr.con_start_date,  cr.con_rates_effective_date, " + 
-                    " cr.con_expiry_date,  cr.con_rg_code_at_renewal,  (SELECT	vor_ruc  FROM	vehicle_override_rate vor  " + 
-                    " WHERE	vor.contract_no = cr.contract_no  AND	vor.contract_seq_number = cr.contract_seq_number  AND 	" + 
-                    " vor.vor_effective_date = (	SELECT	max(vor2.vor_effective_date)  FROM	vehicle_override_rate vor2  " + 
-                    " WHERE	vor2.contract_no = vor.contract_no  AND	vor2.contract_seq_number = vor.contract_seq_number  )  " + 
-                    " AND	vor.vor_effective_date >= cr.con_rates_effective_date) as override_ruc_rate,  " + 
-                    " (SELECT	vr_ruc  FROM	vehicle_rate vr  WHERE	vr.vt_key = v.vt_key  AND	vr.vr_rates_effective_date = cr.con_rates_effective_date) " + 
-                    " as original_ruc_rate,  rd.BenchmarkCalc2005(cr.contract_no, cr.contract_seq_number) as bench_mark  " + 
-                    " FROM	contract_renewals cr,  contract				c,  contract_vehical	cv,  vehicle				v,  fuel_type			ft  " + 
-                    " WHERE	c.contract_no = cr.contract_no  AND	cr.contract_no = cv.contract_no  AND	cr.contract_seq_number = cv.contract_seq_number  " + 
-                    " AND	v.vehicle_number = cv.vehicle_number  AND 	v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number)  " + 
-                    " AND	ft.ft_key = v.ft_key  AND   ft.ft_description like '%diesel%'  AND	(c.rg_code = @al_rg_code OR @al_rg_code = -1)  " + 
-                    " AND	c.con_base_cont_type = 1  AND	cr.contract_seq_number = c.con_active_sequence  AND	c.con_date_terminated is null  " + 
-                    " AND	cr.con_acceptance_flag = 'Y'  AND	cr.con_expiry_date >= getdate()  Order By cr.contract_no";
+                    cm.CommandText = "SELECT cr.contract_no, " 
+                                   + "       cr.contract_seq_number, "
+                                   + "       cr.con_start_date, "
+                                   + "       cr.con_rates_effective_date, "
+                                   + "       cr.con_expiry_date, "
+                                   + "       cr.con_rg_code_at_renewal, "
+                                   + "       (SELECT vor_ruc FROM vehicle_override_rate vor "
+                                   + "         WHERE vor.contract_no = cr.contract_no "
+                                   + "           AND vor.contract_seq_number = cr.contract_seq_number "
+                                   + "           AND vor.vor_effective_date " 
+                                   + "                  = (SELECT max(vor2.vor_effective_date) " 
+                                   + "                       FROM vehicle_override_rate vor2 " 
+                                   + "                      WHERE vor2.contract_no = vor.contract_no " 
+                                   + "                        AND vor2.contract_seq_number = vor.contract_seq_number) " 
+                                   + "                        AND vor.vor_effective_date >= cr.con_rates_effective_date) as override_ruc_rate, "
+                                   + "       (SELECT vr_ruc FROM vehicle_rate vr "
+                                   + "         WHERE vr.vt_key = v.vt_key "
+                                   + "           AND vr.vr_rates_effective_date = cr.con_rates_effective_date) as original_ruc_rate, "
+                                   + "       rd.BenchmarkCalc2005(cr.contract_no, " 
+                                   + "       cr.contract_seq_number) as bench_mark " 
+                                   + "  FROM contract_renewals cr, contract c, contract_vehical cv,  vehicle v,  fuel_type ft "
+                                   + " WHERE c.contract_no = cr.contract_no "
+                                   + "   AND cr.contract_no = cv.contract_no " 
+                                   + "   AND cr.contract_seq_number = cv.contract_seq_number "
+                                   + "   AND v.vehicle_number = cv.vehicle_number " 
+                                   + "   AND v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number) "
+                                   + "   AND ft.ft_key = v.ft_key "
+                                   + "   AND ft.ft_description like '%diesel%' " 
+                                   + "   AND (c.rg_code = @al_rg_code OR @al_rg_code = -1) "
+/* TJB RPCR_134 July-2019: disabled  + "   AND c.con_base_cont_type = 1 "  */
+                                   + "   AND cr.contract_seq_number = c.con_active_sequence " 
+                                   + "   AND c.con_date_terminated is null  "
+                                   + "   AND cr.con_acceptance_flag = 'Y' "
+                                   + "   AND cr.con_expiry_date >= getdate() " 
+                                   + " ORDER BY cr.contract_no";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "al_rg_code", al_rg_code);
