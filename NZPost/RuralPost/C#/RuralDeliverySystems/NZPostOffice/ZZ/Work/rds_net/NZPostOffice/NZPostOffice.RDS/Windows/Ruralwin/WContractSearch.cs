@@ -13,6 +13,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPCR_140 Bug July-2019
+    // Was not recognising first result row as selected; added "=" to test
+    //
     // TJB RPCR_140 June-2019
     // Alter search: screen and action.  If a contract number is specified, 
     // and the contract type doesn't match the contract's type, change the 
@@ -420,7 +423,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                               , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            if (ll_row > 0)  // A result row was selected; use that row's contract number
+            // TJB RPCR_140 Bug July-2019
+            // Was not recognising first result row as selected; added "=" to test
+            if (ll_row >= 0)  // A result row was selected; use that row's contract number
             {
                 ll_contractno = dw_results.GetItem<ContractListing>(ll_row).ContractNo;
             }
