@@ -13,6 +13,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_122 Bug  July-2018
+    // Lost Region dropdown size change - reinstated
+    //
     // TJB RPCR_140 Bug July-2019
     // Was not recognising first result row as selected; added "=" to test
     //

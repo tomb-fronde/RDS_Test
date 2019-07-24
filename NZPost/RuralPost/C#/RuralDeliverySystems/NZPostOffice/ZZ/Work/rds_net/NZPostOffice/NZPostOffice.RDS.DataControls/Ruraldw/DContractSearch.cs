@@ -11,6 +11,9 @@ using NZPostOffice.DataControls;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  RPCR_122 Bug  July-2018
+    // Lost Region dropdown size change - reinstated (in designer)
+    //
     // TJB  RPCR_140  June-2019
     // contract_no_Leave event handler added
     //

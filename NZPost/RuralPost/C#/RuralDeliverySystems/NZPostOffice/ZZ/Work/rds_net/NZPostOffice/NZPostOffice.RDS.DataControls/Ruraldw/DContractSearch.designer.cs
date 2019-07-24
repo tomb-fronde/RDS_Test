@@ -3,6 +3,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
     partial class DContractSearch
     {
+        // TJB  RPCR_122 Bug  July-2018
+        // Lost Region dropdown size change - reinstated
+        // Changed Height 180 -> 220 and Maxitems 8 -> 12
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -145,8 +149,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.region_id.DisplayMember = "RgnName";
             this.region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.region_id.DropDownWidth = 220;
             this.region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.region_id.Location = new System.Drawing.Point(146, 40);
+            this.region_id.MaxDropDownItems = 12;
             this.region_id.Name = "region_id";
             this.region_id.Size = new System.Drawing.Size(185, 21);
             this.region_id.TabIndex = 11;
@@ -170,6 +176,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.ct_key.DisplayMember = "ContractType";
             this.ct_key.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ct_key.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.ct_key.IntegralHeight = false;
             this.ct_key.Location = new System.Drawing.Point(146, 83);
             this.ct_key.Name = "ct_key";
             this.ct_key.Size = new System.Drawing.Size(185, 21);
