@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB July-2019
+    // Changed object name from DwContractTypes to ContractTypes
+    // to match naming conventions
+
     // TJB  July-2018
     // Reformatted fetch select statement for clarity
 
