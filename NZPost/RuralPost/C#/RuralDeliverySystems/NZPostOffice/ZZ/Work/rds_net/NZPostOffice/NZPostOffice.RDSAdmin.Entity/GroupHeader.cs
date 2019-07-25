@@ -9,7 +9,11 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
-	// Mapping info for object fields to DB
+    // TJB July-2019
+    // Changed object name from DwGroupHeader to GroupHeader 
+    // to match naming conventions
+    
+    // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("ug_id", "_ug_id", "rds_user_group")]
