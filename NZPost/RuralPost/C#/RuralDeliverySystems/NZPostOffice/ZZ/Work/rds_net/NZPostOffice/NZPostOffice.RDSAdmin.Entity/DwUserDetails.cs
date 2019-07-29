@@ -10,6 +10,11 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB Bugfix July-2019 
+    // Added Mapinfo u_id line for table rds_user_id to help fix
+    // failure to properly save new users.
+    // Added code to InsertEntity to save changes to rds_user_id.
+    //
     // TJB  RPCR_117  July-2018
     // Reformatted fetch select statement
     // Changed u_phone to u_email and RdsUserUPhone to RdsUserUEmail
@@ -26,7 +31,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 	[MapInfo("ui_userid", "_rds_user_id_ui_userid", "rds_user_id")]
 	[MapInfo("ui_password", "_rds_user_id_ui_password", "rds_user_id")]
 	[MapInfo("ui_id", "_rds_user_id_ui_id", "rds_user_id")]
-	[System.Serializable()]
+    [MapInfo("u_id", "_rds_user_u_id", "rds_user_id")]
+    [System.Serializable()]
 
     public class UserDetails : RDSEntityBase<UserDetails>
 	{
@@ -345,6 +351,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
+                sqlErrText = "";
 				if (GenerateInsertCommandText(cm, "rds_user",pList))
 				{
                     // TJB  RPCR_117  July-2018:  Changed Catch
@@ -357,9 +364,27 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                     catch (Exception e) 
                     {
                         sqlCode = -1;  // FAILURE
-                        sqlErrText = e.Message;
+                        sqlErrText = "rds_user: " + e.Message;
                     }
 				}
+                // TJB  Bugfix July-2019
+                // Save failed to update rds_user_id
+                DbCommand cm2 = cn.CreateCommand();
+				cm2.CommandType = CommandType.Text;
+				ParameterCollection pList2 = new ParameterCollection();
+                if (GenerateInsertCommandText(cm2, "rds_user_id", pList2))
+                {
+                    sqlCode = -1;  // SUCCESS
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm2, pList2);
+                    }
+                    catch (Exception e)
+                    {
+                        sqlCode = -1;  // FAILURE
+                        sqlErrText += "\nrds_user_id: " + e.Message;
+                    }
+                }
 				StoreInitialValues();
 			}
 		}
