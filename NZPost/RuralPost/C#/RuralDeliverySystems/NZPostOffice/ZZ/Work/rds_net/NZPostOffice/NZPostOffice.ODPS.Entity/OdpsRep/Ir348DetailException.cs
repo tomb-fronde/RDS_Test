@@ -9,6 +9,8 @@ using NZPostOffice.Shared.LogicUnits;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
+    // TJB  july-2019: Set Fetch timeout to 0 (never)
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -362,6 +364,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 {
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "odps.od_rps_ir348detail_exception";
+                    cm.CommandTimeout = 0;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "startdate", startdate);
                     pList.Add(cm, "enddate", enddate);
