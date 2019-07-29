@@ -11,6 +11,8 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
+    // TJB July-2019 Cosmetic: Increased height of region dropdown
+    //
     // TJB  RPCR_117  July-2018 (in Designer)
     // Changed rds_user_u_phone to rds_user_u_email
     // and RdsUserUPhone to RdsUserUEmail

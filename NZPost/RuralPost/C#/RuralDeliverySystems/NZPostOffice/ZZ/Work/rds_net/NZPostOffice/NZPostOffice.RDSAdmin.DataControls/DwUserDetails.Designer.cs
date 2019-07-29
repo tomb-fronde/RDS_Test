@@ -102,11 +102,14 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.rds_user_region_id.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(224)))), ((int)(((byte)(216)))));
             this.rds_user_region_id.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "RdsUserRegionId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rds_user_region_id.DisplayMember = "RgnName";
+            this.rds_user_region_id.DropDownHeight = 230;
             this.rds_user_region_id.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.rds_user_region_id.DropDownWidth = 125;
             this.rds_user_region_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.rds_user_region_id.ForeColor = System.Drawing.Color.Black;
+            this.rds_user_region_id.IntegralHeight = false;
             this.rds_user_region_id.Location = new System.Drawing.Point(89, 63);
+            this.rds_user_region_id.MaxDropDownItems = 12;
             this.rds_user_region_id.Name = "rds_user_region_id";
             this.rds_user_region_id.Size = new System.Drawing.Size(125, 21);
             this.rds_user_region_id.TabIndex = 40;
