@@ -16,6 +16,13 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin
 {
+    // TJB July-2019 Bug: File.Save didn't do anything
+    // Fixed: added pfc_save override calling of_save
+    // Found of_save didn't work for new users 
+    //    (didn't update both rds_user and rds_user_id): fixed
+    // - numerous changes in of_save; most identified
+    // Found known issue that contract types couldn't be selected: fixed
+    // 
     // TJB  RPCR_117 July-2018 
     // Changed width of dw_user_region, dw_contract_types
     // to give room for height scrollbar
@@ -849,6 +856,13 @@ namespace NZPostOffice.RDSAdmin
             //!of_setlogicalunitofwork(true);
         }
 
+        // TJB Bugfix July 2019: added
+        // Fixed file.save bug (didn't work)
+        public override int pfc_save()
+        {
+            int rc = of_save(false);
+            return rc;
+        }
         private int? rds_user_id_ui_id = 0;
 /*   TJB  July-2018: commented out as it is no longer referenced
         public override int pfc_save()
@@ -1461,15 +1475,14 @@ namespace NZPostOffice.RDSAdmin
             return ls_dataobject;
         }
 
+        // TJB BUGFIX July-2019: numerous changes 
+        // (some not identified)
         public int of_save(bool ab_prompt)
-        {   // Saves with (true) or without (false) user prompt
-            // about changes.
+        {   // Saves with (true) or without (false) user prompt about changes.
             int li_rc = SUCCESS;  // 0;
             DialogResult li_response = DialogResult.None;
             string ls_msg;
             string ls_title;
-            int li_YES = 1;
-            int li_NO = 2;
             DataUserControl idw;
    
             //  Checks if datawindows are modified
@@ -1510,24 +1523,23 @@ namespace NZPostOffice.RDSAdmin
                                            , ls_title
                                            , MessageBoxButtons.YesNo, MessageBoxIcon.Question
                                            , MessageBoxDefaultButton.Button1);
+
+                        if (li_response == DialogResult.No)
+                        {
+                            // TJB  RPCR_117  July-2018
+                            // Returning FAILURE (-1) should stop switching users 
+                            // when there's a validation error
+                            // NOTE: NOTSAVED used by selectionchanging()to allow selection 
+                            //       to change in spite of errors. See note at top re group 
+                            //       and user list handling.
+                            return NOTSAVED;  // return 1;     //?return SUCCESS
+                        }
                     }
-                }
-                if (li_response == DialogResult.No)
-                {
-                    // TJB  RPCR_117  July-2018
-                    // Returning FAILURE (-1) should stop switching users 
-                    // when there's a validation error
-                    // NOTE: NOTSAVED used by selectionchanging()to allow selection 
-                    //       to change in spite of errors. See note at top re group 
-                    //       and user list handling.
-                    return NOTSAVED;  // return 1;     //?return SUCCESS
                 }
             }
             //  Saves the header dw if modified
             if (StaticFunctions.IsDirty(dw_header.DataObject))
             {
-                // 	dw_header.Event Pfc_Update ( True, True)
-                //li_rc = inv_luw.of_save(dw_header, sqlca);
                 if (dw_header.DataObject is DwGroupHeader)
                 {
                     GroupHeader header = dw_header.DataObject.Current as GroupHeader;
@@ -1553,30 +1565,11 @@ namespace NZPostOffice.RDSAdmin
                     dw_header.DataObject.Save();
                 }
             }
-            if (li_rc != SUCCESS)   //< 0)
-            {
-                return li_rc;
-            }
-            /* ***********************************
-            (TJB July-2018: these appear to be no longer relevant)
-                Checks the save result
-                 1  Success
-                 0  No pending updates
-                -1  Accept text error
-                -2  Updates pending error
-                -3  Validation error
-                -4  Pre-update error
-                -5  Begin transaction error
-                -6  Update error
-                -7  End transaction error
-                -8  Post save error
-                -9  Update prep error
-            *//************************************ */
+
             //  Saves the detail dw if modified
             if (StaticFunctions.IsDirty(dw_detail.DataObject) 
                 || dw_detail.DataObject.DeletedCount > 0)
             {               
-                //li_rc = inv_luw.of_save(dw_detail, sqlca);
                 if (dw_detail.DataObject is DwGroupDetails)
                 { 
                     //?support validate added by jlwang
@@ -1622,8 +1615,12 @@ namespace NZPostOffice.RDSAdmin
                     if (UId == null || UId < 1 || UiId == null || UiId < 1)
                     {
                         errtype = "Add";
-                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUser");
-                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                        // TJB Bugfix July-2019
+                        // Fixed next ID's
+                        //dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUserId");
+                        //dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserUId = MainMdiService.GetNextSequence("rdsUser");
+                        dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUserId");
                     }
                 }
                 if (this.pfc_validation(dw_detail.DataObject) == SUCCESS)
@@ -1654,7 +1651,9 @@ namespace NZPostOffice.RDSAdmin
             //  Saves the header dw if modified
             if (StaticFunctions.IsDirty(dw_contract_type))
             {
-                dw_contract_type_save();
+                // TJB Bugfix July-2019: Added UiId lookup and parameter
+                int? UiId = dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId;
+                dw_contract_type_save(UiId);
             }
             if (li_rc < 0)
             {
@@ -1668,9 +1667,13 @@ namespace NZPostOffice.RDSAdmin
             throw new Exception("The method or operation is not implemented.");
         }
 
-        private void dw_contract_type_save()
+        // TJB Bugfix July-2019: added parameter
+        private void dw_contract_type_save(int? ui_id)
         {
-            int? ui_id = id;
+            // TJB Bugfix July-2019
+            // id was not set so ui_id was wrong causume attempts to save
+            // contract types to fail.  Parameter provides correct ui_id.
+            //int? ui_id = id;
             int? ct_key;
             string ErrorMessage = "";
             if (!MainMdiService.DeleteRdsUserContractType(ui_id, ref ErrorMessage))
