@@ -20,6 +20,10 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB  RPCR_128 Bugfix 25July2019
+    // Total_paye should be as originally coded but found other bug: 
+    // tax credits weren't included.
+    //
     // TJB  RPCR_128  June-2019
     // Added IRD Payday Interface processing - see Export_IRDpayday_Interface
     // Added checkbox to select including column headers in CSV file
@@ -860,13 +864,14 @@ namespace NZPostOffice.ODPS.Windows.Odps
             ls_ChildSupport = i_ChildSupport == null ? "0" : i_ChildSupport.ToString();
             ls_PAYE = i_PAYE == null ? "0" : i_PAYE.ToString();
 
-            // RPCR_128  TJB  June-2019: added
+            // TJB  RPCR_128  June-2019: added
             ls_TotalLines = (dw_secondary.RowCount).ToString();
-            i_TotalDeducted = i_PAYE + i_ChildSupport + i_StudentLoan + i_FamilyAssistance + i_KsDeductions + i_EsctDeductions;
             ls_KsDeductions = i_KsDeductions == null ? "0" : i_KsDeductions.ToString();
             ls_KsEmpContrib = i_KsEmpContrib == null ? "0" : i_KsEmpContrib.ToString();
             ls_EsctDeductions = i_EsctDeductions == null ? "0" : i_EsctDeductions.ToString();
             ls_TaxCredits = i_TaxCredits == null ? "0" : i_TaxCredits.ToString();
+            // TJB  RPCR_128 Bugfix 25July2019: Forgot to add tax credits to total deductions
+            i_TotalDeducted = i_PAYE + i_ChildSupport + i_StudentLoan + i_FamilyAssistance + i_KsDeductions + i_EsctDeductions - i_TaxCredits;
             ls_TotalDeducted = i_TotalDeducted == null ? "0" : i_TotalDeducted.ToString();
             //--------------------------------
 
