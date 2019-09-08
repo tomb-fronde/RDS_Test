@@ -5,11 +5,14 @@ using NZPostOffice.Shared;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_143 Sep-2019
+    // Removed references to cb_print
+    //
+    // TJB 22-Feb-2012 Release 7.1.7 fixups
+    // [pfc_postopen] Made cb_open and cb_select settings explicit.
+
     public class WAddressSearchSelect : WAddressSearch
     {
-        // TJB 22-Feb-2012 Release 7.1.7 fixups
-        // [pfc_postopen] Made cb_open and cb_select settings explicit.
-
         #region Define
         public int? il_rdContractSelect;
 
@@ -74,10 +77,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             this.st_count.Location = new System.Drawing.Point(454, 386);
             // 
-            // cb_print
-            // 
-            this.cb_print.Location = new System.Drawing.Point(802, 362);
-            // 
             // st_label
             // 
             this.st_label.Location = new System.Drawing.Point(5, 392);
@@ -93,7 +92,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Name = "WAddressSearchSelect";
             this.Controls.SetChildIndex(this.st_count, 0);
             this.Controls.SetChildIndex(this.cb_select, 0);
-            this.Controls.SetChildIndex(this.cb_print, 0);
             this.Controls.SetChildIndex(this.idw_results, 0);
             this.Controls.SetChildIndex(this.cb_new, 0);
             this.Controls.SetChildIndex(this.cb_open, 0);
