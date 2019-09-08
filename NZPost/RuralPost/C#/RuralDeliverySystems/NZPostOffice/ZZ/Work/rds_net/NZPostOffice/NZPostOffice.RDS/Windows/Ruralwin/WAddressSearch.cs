@@ -15,6 +15,10 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  RPCR_143 Sep-2019
+    // Removed print function: cb_print button, cb_print_clicked function,
+    // and functions generating the print pages.
+    //
     // TJB  RPCR_052  Feb-2013
     // Add address alpha (if any) to returned address
     //
@@ -76,8 +80,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public UCb cb_cancel;
 
         public USt st_count;
-
-        public Button cb_print;
 
         // TJB  RPCR_026  July-2011
         private Button cb_sortseq;
@@ -142,7 +144,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_select = new NZPostOffice.Shared.VisualComponents.UCb();
             this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
             this.st_count = new NZPostOffice.Shared.VisualComponents.USt();
-            this.cb_print = new System.Windows.Forms.Button();
             this.cb_sortseq = new System.Windows.Forms.Button();
             this.cb_sortaddr = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -253,17 +254,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.st_count.TabIndex = 0;
             this.st_count.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cb_print
-            // 
-            this.cb_print.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cb_print.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_print.Location = new System.Drawing.Point(686, 355);
-            this.cb_print.Name = "cb_print";
-            this.cb_print.Size = new System.Drawing.Size(77, 23);
-            this.cb_print.TabIndex = 7;
-            this.cb_print.Text = "Print";
-            this.cb_print.Click += new System.EventHandler(this.cb_print_clicked);
-            // 
             // cb_sortseq
             // 
             this.cb_sortseq.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -302,13 +292,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.Add(this.cb_new);
             this.Controls.Add(this.st_count);
             this.Controls.Add(this.dw_results);
-            this.Controls.Add(this.cb_print);
             this.Controls.Add(this.cb_select);
             this.Location = new System.Drawing.Point(1, 1);
             this.Name = "WAddressSearch";
             this.Text = "Address Search";
             this.Controls.SetChildIndex(this.cb_select, 0);
-            this.Controls.SetChildIndex(this.cb_print, 0);
             this.Controls.SetChildIndex(this.dw_results, 0);
             this.Controls.SetChildIndex(this.st_count, 0);
             this.Controls.SetChildIndex(this.cb_new, 0);
@@ -909,428 +897,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        #region Printing the DataGridView
-
-        System.Drawing.StringFormat oStringFormat;
-
-        System.Drawing.StringFormat  oStringFormatComboBox;
-
-        Button oButton;
-        CheckBox oCheckbox;
-
-        ComboBox oComboBox;
-        int nTotalWidth;
-        int nRowPos;
-        bool NewPage;
-        int nPageNo;
-        string Header = "Header Test";
-        string sUserName = "Will";
-
-        public virtual void cb_print_clicked(object sender, EventArgs e)
-        {
-            PrintDialog lw = new PrintDialog();//PrintSetup();            
-            if (lw.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }         
-  
-            //! Render lines to printer here            
-            try
-            {               
-                System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
-                pd.BeginPrint += new System.Drawing.Printing.PrintEventHandler(PrintDocument1_BeginPrint);
-                pd.PrintPage += new System.Drawing.Printing.PrintPageEventHandler
-                   (this.PrintDocument1_PrintPage);
-                pd.Print();                
-            }           
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }                    
-        }
-
-        private void PrintDocument1_BeginPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
-        {
-            oStringFormat = new StringFormat();
-            oStringFormat.Alignment = StringAlignment.Near;
-            oStringFormat.LineAlignment = StringAlignment.Center;
-            oStringFormat.Trimming = StringTrimming.EllipsisCharacter;
-            oStringFormatComboBox = new StringFormat();
-            oStringFormatComboBox.LineAlignment = StringAlignment.Center;
-            oStringFormatComboBox.FormatFlags = StringFormatFlags.NoWrap;
-            oStringFormatComboBox.Trimming = StringTrimming.EllipsisCharacter;
-            oButton = new Button();
-            oCheckbox = new CheckBox();
-            oComboBox = new ComboBox();
-            nTotalWidth = 0;
-
-            DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
-
-            foreach (DataGridViewColumn oColumn in DataGridView1.Columns)
-            {
-                nTotalWidth = (nTotalWidth + oColumn.Width);
-            }
-            nPageNo = 1;
-            NewPage = true;
-            nRowPos = 0;
-        }
-
-        private void DrawFooter(System.Drawing.Printing.PrintPageEventArgs e, int RowsPerPage)        
-        {
-            DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
-
-            //string sPageNo = nPageNo.ToString() + " of " + Math.Ceiling((double)(DataGridView1.Rows.Count / RowsPerPage));     
-
-            //! Right Align - User Name
-
-            //!e.Graphics.DrawString(sUserName, DataGridView1.Font, System.Drawing.Brushes.Black, e.MarginBounds.Left + 
-            //!    (e.MarginBounds.Width - e.Graphics.MeasureString(sPageNo, DataGridView1.Font, e.MarginBounds.Width).Width), 
-            //!    e.MarginBounds.Top + e.MarginBounds.Height + 7);
-
-            //e.Graphics.DrawString(sPageNo, DataGridView1.Font, System.Drawing.Brushes.Black, e.MarginBounds.Left + 
-            //    (e.MarginBounds.Width - e.Graphics.MeasureString(sPageNo, DataGridView1.Font, e.MarginBounds.Width).Width) / 2, 
-            //    e.MarginBounds.Top + e.MarginBounds.Height + 31);    
-
-        }
-
-        System.Collections.ArrayList oColumnLefts = new System.Collections.ArrayList();
-        System.Collections.ArrayList oColumnWidths = new System.Collections.ArrayList();
-        System.Collections.ArrayList oColumnTypes = new System.Collections.ArrayList();
-        int nHeight = 0;
-        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
-        {                      
-            //!int nHeight = 0;
-            int nWidth = 0;
-            int i = 0;
-            int nRowsPerPage = 0;
-            int nTop = e.MarginBounds.Top;
-            int nLeft = e.MarginBounds.Left;
-
-            decimal dTotalWidth = nTotalWidth;
-            decimal dColumnWidth;
-            decimal dMarginWidth = e.MarginBounds.Width;
-
-            DataGridView DataGridView1 = dw_results.DataObject.GetControlByName("grid") as DataGridView;
-
-            if(nPageNo == 1)
-            {
-                foreach (DataGridViewColumn oColumn in DataGridView1.Columns)
-                {
-                    // TJB  RPI_033  Apr-2012
-                    // Divide by 0 error calculating nWidth in commented-out line
-                    dColumnWidth = oColumn.Width;
-                    //nWidth = Convert.ToInt16(Math.Floor((decimal)(oColumn.Width / (nTotalWidth * (nTotalWidth * (e.MarginBounds.Width / nTotalWidth))))));
-                    nWidth = Convert.ToInt16(Math.Floor((dColumnWidth /(dTotalWidth * (dMarginWidth / dTotalWidth)))));
-                    nHeight = (int)(e.Graphics.MeasureString(oColumn.HeaderText, oColumn.InheritedStyle.Font, nWidth).Height) + 11;
-                    oColumnLefts.Add(nLeft);
-                    oColumnWidths.Add(oColumn.Width);
-                    oColumnTypes.Add(oColumn.GetType());
-                    nLeft += oColumn.Width;
-                }
-            }
-
-            while(nRowPos <= dw_results.DataObject.RowCount - 1)
-            {
-                DataGridViewRow oRow = DataGridView1.Rows[nRowPos]; 
-
-                if(nTop + nHeight >= e.MarginBounds.Height + e.MarginBounds.Top)
-                {
-                    DrawFooter(e, nRowsPerPage);                    
-                    NewPage = true;
-                    nPageNo += 1;
-                    e.HasMorePages = true;
-                    return;
-                }
-                else
-                {
-                    if(NewPage)
-                    {                                      
-                        //!Draw Columns
-                        nTop = e.MarginBounds.Top;
-                        i = 0;
-                        Font fontToUse = DataGridView1.Columns[3].InheritedStyle.Font;
-                        foreach(DataGridViewColumn oColumn in DataGridView1.Columns)
-                        {
-                            e.Graphics.FillRectangle(new System.Drawing.SolidBrush(System.Drawing.Color.LightGray), 
-                                new System.Drawing.Rectangle((int)oColumnLefts[i], nTop, (int)oColumnWidths[i], nHeight));
-
-                            e.Graphics.DrawRectangle(System.Drawing.Pens.Black, new System.Drawing.Rectangle((int)oColumnLefts[i], nTop, (int)oColumnWidths[i], nHeight));
-
-                            e.Graphics.DrawString(oColumn.HeaderText, 
-                                fontToUse, new System.Drawing.SolidBrush(oColumn.InheritedStyle.ForeColor), 
-                                new System.Drawing.RectangleF(Convert.ToSingle(oColumnLefts[i]), nTop, Convert.ToSingle(oColumnWidths[i]), nHeight), oStringFormat);
-
-                            i += 1;
-                        }
-                        NewPage = false;
-                    }                    
-                    nTop += nHeight;
-                    i = 0;
-                    foreach(DataGridViewCell oCell in oRow.Cells)
-                    {                        
-                        //!if(oColumnTypes[i] is DataGridViewTextBoxColumn || oColumnTypes[i] is DataGridViewLinkColumn)
-                        //! if (oCell.ColumnIndex != 4 && oCell.ColumnIndex != 4)//! 4 and 6 are ComboCells
-                        {
-                            e.Graphics.DrawString(oCell.EditedFormattedValue + "", oCell.InheritedStyle.Font, 
-                                new System.Drawing.SolidBrush(oCell.InheritedStyle.ForeColor), 
-                                new System.Drawing.RectangleF(Convert.ToSingle(oColumnLefts[i]), nTop, Convert.ToSingle(oColumnWidths[i]), nHeight), oStringFormat);
- 
-                        }
-                        e.Graphics.DrawRectangle(Pens.Black, new Rectangle(Convert.ToInt32(oColumnLefts[i]), nTop, Convert.ToInt32(oColumnWidths[i]), nHeight));                       
-                        i += 1;
-                    }
-                } 
-                nRowPos += 1;
-                nRowsPerPage += 1; 
-             } 
-            DrawFooter(e, nRowsPerPage); 
-            e.HasMorePages = false;
-        }
-        #endregion 
-
-
-        private System.Drawing.Font printFont;        
-        List<string> lines = new List<string>();
-
-        public virtual void cb_print1_clicked(object sender, EventArgs e)
-        {
-            PrintDialog lw = new PrintDialog();//PrintSetup();            
-            if(lw.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-            
-            //?dw_results.Print(true);
-            string rowBorder = string.Empty;
-            //!for (int i = 0; i < 98; i++)
-            //{
-            //    rowBorder += "-";
-            //!}
-
-            //! header row and one underline row moved to print function for every page in order
-            //!lines.Add("__________________________________________________________________________________________________________");
-            //!lines.Add("|Cus_|Adr_|St No__|Street/Road__________|Suburb/Locality_|RD__|Town/City________|Primary Customer_________|");
-            
-            //!lines.Add(rowBorder);
-            this.Cursor = Cursors.WaitCursor;
-
-            DataGridView records = dw_results.DataObject.GetControlByName("grid") as DataGridView;
-            foreach (DataGridViewRow row in records.Rows)
-            {
-                string line = String.Empty;
-               
-                foreach(DataGridViewCell cell in row.Cells)
-                {                   
-                    line += "|";
-                    //! used to fix spacing
-                    switch(cell.ColumnIndex)
-                    {
-                        //! columns Customer, Adr, St No, RD - length 6 character
-                        case 0:
-                            if (cell.EditedFormattedValue != null)
-                            {
-                                if (!string.IsNullOrEmpty(cell.EditedFormattedValue.ToString()))
-                                {
-                                    line += "PB._";//!cell.EditedFormattedValue.ToString();
-                                }
-                                else {
-                                    line += "" + "____";
-                                }                                
-                            }
-                            else
-                            {
-                                line += "" + "____";
-                            }
-                            break;
-                        case 1:
-                        case 5:
-                            if (cell.EditedFormattedValue != null)
-                            {
-                                if (cell.EditedFormattedValue.ToString().Length > 3)
-                                {
-                                    line += cell.EditedFormattedValue.ToString().Substring(0, 4);
-                                }
-                                else
-                                {
-                                    line += cell.EditedFormattedValue.ToString();
-                                    for (int i = 0; i <= 3 - cell.EditedFormattedValue.ToString().Length; i++)
-                                    {
-                                        line += "_";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                line += "" + "___";
-                            }
-                            break;
-                        case 2:
-                            if (cell.EditedFormattedValue != null)
-                            {
-                                if (cell.EditedFormattedValue.ToString().Length > 6)
-                                {
-                                    line += cell.EditedFormattedValue.ToString().Substring(0, 7);
-                                }
-                                else
-                                {
-                                    line += cell.EditedFormattedValue.ToString();
-                                    for (int i = 0; i <= 6 - cell.EditedFormattedValue.ToString().Length; i++)
-                                    {
-                                        line += "_";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                line += "" + "______";
-                            }
-                            break;
-                        //! columns Street, Road, Suburb/Locality, Town/City, Primary Customer - length 20
-                        case 3:
-                            if (cell.EditedFormattedValue != null)
-                            {
-                                if (cell.EditedFormattedValue.ToString().Length > 20)
-                                {
-                                    line += cell.EditedFormattedValue.ToString().Substring(0, 21);
-                                }
-                                else
-                                {
-                                    line += cell.EditedFormattedValue.ToString();
-                                    for (int i = 0; i <= 20 - cell.EditedFormattedValue.ToString().Length; i++)
-                                    {
-                                        line += "_";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                line += "" + "____________________";
-                            }
-                            break;
-                        case 4:
-                        case 6:
-                            if (cell.EditedFormattedValue != null)
-                            {
-                                if (cell.EditedFormattedValue.ToString().Length > 16)
-                                {
-                                    line += cell.EditedFormattedValue.ToString().Substring(0, 17);
-                                }
-                                else
-                                {
-                                    line += cell.EditedFormattedValue.ToString();
-                                    for (int i = 0; i <= 16 - cell.EditedFormattedValue.ToString().Length; i++)
-                                    {
-                                        line += "_";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                line += "" + "________________";
-                            }
-                            break;
-                        case 7:
-                            if (cell.EditedFormattedValue != null)
-                            {                                
-                                if (cell.EditedFormattedValue.ToString().Length > 23)
-                                {
-                                    line += cell.EditedFormattedValue.ToString().Substring(0, 24);
-                                }
-                                else
-                                {
-                                    line += cell.EditedFormattedValue.ToString();
-                                    for (int i = 0; i <= 23 - cell.EditedFormattedValue.ToString().Length; i++)
-                                    {
-                                        line += "_";
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                line += "" + "____________________";
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                lines.Add(line + "|");               
-                //!lines.Add(rowBorder);
-            }
-            //! Render lines to printer here            
-            try
-            {
-                //!printFont = new System.Drawing.Font("Courier New", 8f, System.Drawing.FontStyle.Underline);
-                //!printFont = new System.Drawing.Font("Courier", 8f, System.Drawing.FontStyle.Underline);
-                System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
-                pd.PrintPage += new System.Drawing.Printing.PrintPageEventHandler
-                   (this.pd_PrintPage);
-                pd.Print();                
-            }           
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            lines.Clear();            
-            linesPrinted = 0;
-            this.Cursor = Cursors.Default;
-        }
-
-        // The PrintPage event is raised for each page to be printed.
-        int linesPrinted = 0;       
-        private void pd_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs ev)
-        {
-            float linesPerPage = 0;
-            float yPos = 0;
-            int count = 0;
-            float leftMargin = 10;//!ev.MarginBounds.Left - 10;
-            float topMargin = ev.MarginBounds.Top - 30;
-            printFont = new System.Drawing.Font("Courier New", 8f, System.Drawing.FontStyle.Underline);      
-
-            // Calculate the number of lines per page.
-            linesPerPage = ev.MarginBounds.Height /
-               printFont.GetHeight(ev.Graphics);
-                              
-            //! print header per page            
-            //!lines.Add("__________________________________________________________________________________________________________");
-            string header1 = "___________________________________________________________________________________________________________";
-            yPos = topMargin + (-2 *
-                 printFont.GetHeight(ev.Graphics));
-            ev.Graphics.DrawString(header1, printFont, System.Drawing.Brushes.Black,
-            leftMargin, yPos, new System.Drawing.StringFormat());
-            ev.Graphics.DrawString(header1, printFont, System.Drawing.Brushes.Black,
-            leftMargin, yPos, new System.Drawing.StringFormat());
-            ///!lines.Add("|Cus_|Adr_|St No__|Street/Road__________|Suburb/Locality_|RD__|Town/City________|Primary Customer_________|");
-            string header2 = "|Cus_|Adr_|St No__|Street/Road__________|Suburb/Locality__|RD__|Town/City________|Primary Customer________|";
-            yPos = topMargin + (-1 *
-                 printFont.GetHeight(ev.Graphics));
-            ev.Graphics.DrawString(header1, printFont, System.Drawing.Brushes.Black,
-            leftMargin, yPos, new System.Drawing.StringFormat());
-            ev.Graphics.DrawString(header2, printFont, System.Drawing.Brushes.Black,
-            leftMargin, yPos, new System.Drawing.StringFormat());
-            //! EOF header per page
-            
-            // Print each line of the file.            
-            while (count < linesPerPage && linesPrinted < lines.Count)
-            {
-                yPos = topMargin + (count *
-                   printFont.GetHeight(ev.Graphics));                    
-                                
-                ev.Graphics.DrawString(lines[linesPrinted], printFont, System.Drawing.Brushes.Black,
-                   leftMargin, yPos, new System.Drawing.StringFormat());
-                count++;
-                linesPrinted++;
-            }
-
-            // If more lines exist, print another page.
-            if (linesPrinted < lines.Count)
-                ev.HasMorePages = true;
-            else
-            {
-                ev.HasMorePages = false;                
-            }
         }
 
         // TJB  RPCR_026  July-2011: Added
