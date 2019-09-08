@@ -15,6 +15,10 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
+    // TJB  RPCR_143  Sep-2019
+    // Removed cb_print button and associated references
+    // here and in designer
+    //
     // TJB  RPCR_094  Mar-2015
     // Fix negative pay reporting. See pfc_postopen.
 
@@ -176,18 +180,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
                 //CloseWithReturn(parent, -(1));
                 StaticMessage.IntegerParm = -1;
                 this.Close();
-            }
-        }
-
-        public virtual void cb_print_clicked(object sender, EventArgs e)
-        {
-            if (dw_1.Visible)
-            {
-                //dw_1.Print();
-            }
-            if (dw_2.Visible)
-            {
-                //dw_2.Print();
             }
         }
 

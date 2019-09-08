@@ -5,6 +5,9 @@ using NZPostOffice.ODPS.Controls;
 using System;
 namespace NZPostOffice.ODPS.Windows.OdpsPayrun
 {
+    // TJB  RPCR_143  Sep-2019
+    // Removed cb_print button and associated references
+
     partial class WPaymentRunResults
     {
         /// <summary>
@@ -31,7 +34,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             this.cb_accept = new Button();
             this.cb_reject = new Button();
             this.st_processingtime = new Label();
-            this.cb_print = new Button();
             this.cb_details = new Button();
             this.cb_deduct = new Button();
             dw_1 = new URdsDw();
@@ -44,7 +46,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             Controls.Add(cb_accept);
             Controls.Add(cb_reject);
             Controls.Add(st_processingtime);
-            Controls.Add(cb_print);
             Controls.Add(cb_details);
             Controls.Add(cb_deduct);
             Controls.Add(dw_2);
@@ -85,17 +86,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
             st_processingtime.Font = new System.Drawing.Font("Arial Narrow", 8, System.Drawing.FontStyle.Regular);
             st_processingtime.Size = new System.Drawing.Size(203, 32);
             st_processingtime.Location = new System.Drawing.Point(5, 313);
-
-            // 
-            // cb_print
-            // 
-            this.AcceptButton = cb_print;
-            cb_print.Text = "&Print";
-            cb_print.Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Regular);
-            cb_print.TabIndex = 5;
-            cb_print.Size = new System.Drawing.Size(51, 23);
-            cb_print.Location = new System.Drawing.Point(534, 320);
-            cb_print.Click += new EventHandler(cb_print_clicked);
 
             // 
             // cb_details
@@ -151,8 +141,6 @@ namespace NZPostOffice.ODPS.Windows.OdpsPayrun
         private Button cb_reject;
 
         private Label st_processingtime;
-
-        private Button cb_print;
 
         private Button cb_details;
 
