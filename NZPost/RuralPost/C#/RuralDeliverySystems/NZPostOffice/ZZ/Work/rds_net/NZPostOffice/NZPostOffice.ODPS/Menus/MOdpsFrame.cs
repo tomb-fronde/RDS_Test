@@ -15,7 +15,10 @@ using CrystalDecisions.Windows.Forms;
 
 namespace NZPostOffice.ODPS.Menus
 {
-    // TJB  RPCR_128  Jun-2019
+    // TJB RPCR_142  Sep-2019
+    // m_pots - added componentname restriction
+    //
+    // TJB RPCR_128  Jun-2019
     // Added m_irdPaydayInterface and m_irdPaydayInterface_clicked
     //
     // TJB  RPCR_098  Jan-2016
@@ -266,7 +269,6 @@ namespace NZPostOffice.ODPS.Menus
             m_paymentrun.Text = "&Payment Run";
             m_paymentrun.Enabled = false;
             m_paymentrun.Visible = false;
-
             m_paymentrun.Tag = "ComponentName=ODPS Payrun;";
             //?m_paymentrun.EnabledChanged += new EventHandler(m_paymentrun_EnabledChanged);
             m_paymentrun.Click += new EventHandler(m_paymentrun_clicked);
@@ -394,7 +396,10 @@ namespace NZPostOffice.ODPS.Menus
             //m_pots
             //
             m_pots.Text = "POTS";
-            m_pots.Tag = "Payments outside the system";
+            m_pots.Enabled = false;
+            m_pots.Visible = false;
+            //m_pots.Tag = "Payments outside the system";
+            m_pots.Tag = "ComponentName=ODPS Payrun;";   // TJB RPCR_142  Sep-2019
             m_pots.Click += new EventHandler(m_pots_clicked);
             #endregion
 
