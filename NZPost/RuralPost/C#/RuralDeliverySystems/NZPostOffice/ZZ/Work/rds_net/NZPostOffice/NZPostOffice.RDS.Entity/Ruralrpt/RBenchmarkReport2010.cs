@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB RPCR_147  May-2020
+    // Changed stored procedure called
+    // Added freqdesc, freqdays,freqdist 6 - 12
+    //
     // TJB RPCR_054  July-2013
     // Changed stored proc name to reflect change in piece rate handling
     // 
@@ -103,6 +107,29 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
     [MapInfo("FreqDays5", "_freqdays5", "")]
     [MapInfo("FreqDist5", "_freqdist5", "")]
     // TJB Sept-2010 ----------- Add end ------------------
+    // TJB May-2020  -----------  Added  ------------------
+    [MapInfo("FreqDesc6", "_freqdesc6", "")]
+    [MapInfo("FreqDays6", "_freqdays6", "")]
+    [MapInfo("FreqDist6", "_freqdist6", "")]
+    [MapInfo("FreqDesc7", "_freqdesc7", "")]
+    [MapInfo("FreqDays7", "_freqdays7", "")]
+    [MapInfo("FreqDist7", "_freqdist7", "")]
+    [MapInfo("FreqDesc8", "_freqdesc8", "")]
+    [MapInfo("FreqDays8", "_freqdays8", "")]
+    [MapInfo("FreqDist8", "_freqdist8", "")]
+    [MapInfo("FreqDesc9", "_freqdesc9", "")]
+    [MapInfo("FreqDays9", "_freqdays9", "")]
+    [MapInfo("FreqDist9", "_freqdist9", "")]
+    [MapInfo("FreqDesc10", "_freqdesc10", "")]
+    [MapInfo("FreqDays10", "_freqdays10", "")]
+    [MapInfo("FreqDist10", "_freqdist10", "")]
+    [MapInfo("FreqDesc11", "_freqdesc11", "")]
+    [MapInfo("FreqDays11", "_freqdays11", "")]
+    [MapInfo("FreqDist11", "_freqdist11", "")]
+    [MapInfo("FreqDesc12", "_freqdesc12", "")]
+    [MapInfo("FreqDays12", "_freqdays12", "")]
+    [MapInfo("FreqDist12", "_freqdist12", "")]
+    // TJB May-2020  ----------- Add end ------------------
     
     [System.Serializable()]
 
@@ -365,6 +392,70 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
         [DBField()]
         private decimal? _freqdist5;
         // TJB Sept-2010 ----------- Add end ------------------
+        // TJB May-2020  -----------  Added  ------------------
+        [DBField()]
+        private string _freqdesc6;
+
+        [DBField()]
+        private string _freqdays6;
+
+        [DBField()]
+        private decimal? _freqdist6;
+
+        [DBField()]
+        private string _freqdesc7;
+
+        [DBField()]
+        private string _freqdays7;
+
+        [DBField()]
+        private decimal? _freqdist7;
+
+        [DBField()]
+        private string _freqdesc8;
+
+        [DBField()]
+        private string _freqdays8;
+
+        [DBField()]
+        private decimal? _freqdist8;
+
+        [DBField()]
+        private string _freqdesc9;
+
+        [DBField()]
+        private string _freqdays9;
+
+        [DBField()]
+        private decimal? _freqdist9;
+
+        [DBField()]
+        private string _freqdesc10;
+
+        [DBField()]
+        private string _freqdays10;
+
+        [DBField()]
+        private decimal? _freqdist10;
+
+        [DBField()]
+        private string _freqdesc11;
+
+        [DBField()]
+        private string _freqdays11;
+
+        [DBField()]
+        private decimal? _freqdist11;
+
+        [DBField()]
+        private string _freqdesc12;
+
+        [DBField()]
+        private string _freqdays12;
+
+        [DBField()]
+        private decimal? _freqdist12;
+        // TJB May-2020  ----------- Add end ------------------
 
         public virtual int? ContractNo
 		{
@@ -1890,6 +1981,196 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
         }
 
         // TJB Sept-2010 ----------- Add end ------------------
+        // TJB May-2020  -----------  Added  ------------------
+        public virtual string FreqDesc6
+        {
+            get
+            {
+                CanReadProperty("FreqDesc6", true);
+                return _freqdesc6;
+            }
+        }
+
+        public virtual string FreqDays6
+        {
+            get
+            {
+                CanReadProperty("FreqDays6", true);
+                return _freqdays6;
+            }
+        }
+
+        public virtual Decimal? FreqDist6
+        {
+            get
+            {
+                CanReadProperty("FreqDist6", true);
+                return _freqdist6;
+            }
+        }
+
+        public virtual string FreqDesc7
+        {
+            get
+            {
+                CanReadProperty("FreqDesc7", true);
+                return _freqdesc7;
+            }
+        }
+
+        public virtual string FreqDays7
+        {
+            get
+            {
+                CanReadProperty("FreqDays7", true);
+                return _freqdays7;
+            }
+        }
+
+        public virtual Decimal? FreqDist7
+        {
+            get
+            {
+                CanReadProperty("FreqDist7", true);
+                return _freqdist7;
+            }
+        }
+
+        public virtual string FreqDesc8
+        {
+            get
+            {
+                CanReadProperty("FreqDesc8", true);
+                return _freqdesc8;
+            }
+        }
+
+        public virtual string FreqDays8
+        {
+            get
+            {
+                CanReadProperty("FreqDays8", true);
+                return _freqdays8;
+            }
+        }
+
+        public virtual Decimal? FreqDist8
+        {
+            get
+            {
+                CanReadProperty("FreqDist8", true);
+                return _freqdist8;
+            }
+        }
+
+        public virtual string FreqDesc9
+        {
+            get
+            {
+                CanReadProperty("FreqDesc9", true);
+                return _freqdesc9;
+            }
+        }
+
+        public virtual string FreqDays9
+        {
+            get
+            {
+                CanReadProperty("FreqDays9", true);
+                return _freqdays9;
+            }
+        }
+
+        public virtual Decimal? FreqDist9
+        {
+            get
+            {
+                CanReadProperty("FreqDist9", true);
+                return _freqdist9;
+            }
+        }
+
+        public virtual string FreqDesc10
+        {
+            get
+            {
+                CanReadProperty("FreqDesc10", true);
+                return _freqdesc10;
+            }
+        }
+
+        public virtual string FreqDays10
+        {
+            get
+            {
+                CanReadProperty("FreqDays10", true);
+                return _freqdays10;
+            }
+        }
+
+        public virtual Decimal? FreqDist10
+        {
+            get
+            {
+                CanReadProperty("FreqDist10", true);
+                return _freqdist10;
+            }
+        }
+
+        public virtual string FreqDesc11
+        {
+            get
+            {
+                CanReadProperty("FreqDesc11", true);
+                return _freqdesc11;
+            }
+        }
+
+        public virtual string FreqDays11
+        {
+            get
+            {
+                CanReadProperty("FreqDays11", true);
+                return _freqdays11;
+            }
+        }
+
+        public virtual Decimal? FreqDist11
+        {
+            get
+            {
+                CanReadProperty("FreqDist11", true);
+                return _freqdist11;
+            }
+        }
+
+        public virtual string FreqDesc12
+        {
+            get
+            {
+                CanReadProperty("FreqDesc12", true);
+                return _freqdesc12;
+            }
+        }
+
+        public virtual string FreqDays12
+        {
+            get
+            {
+                CanReadProperty("FreqDays12", true);
+                return _freqdays12;
+            }
+        }
+
+        public virtual Decimal? FreqDist12
+        {
+            get
+            {
+                CanReadProperty("FreqDist12", true);
+                return _freqdist12;
+            }
+        }
+        // TJB May-2020  ----------- Add end ------------------
 
         // needs to implement compute expression manually:
 			// compute control name=[compute_1]
@@ -1947,18 +2228,22 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
 		[ServerMethod]
 		private void FetchEntity( int? inContract, int? inSequence )
 		{
+            // TJB RPCR_147 May-2020 Changed prcedure name
+            //     Added FreqDesc,FreqDays,FreqDist 6 - 12
+            // TJB Sept-2010 Changed prcedure name
             // TJB RPCR_054  July-2013: Changed stored proc name
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.StoredProcedure;
-                    // TJB Sept-2010 Changed prcedure name
+                    // TJB May-2020 Changed prcedure name
                     // New proc includes frequency information (description, days and distance)
-                    // for up to 5 frequencies per contract.
+                    // for up to 12 frequencies per contract.
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2006";
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2010";
-                    cm.CommandText = "rd.sp_GetBenchmarkRpt2013";
+                    //cm.CommandText = "rd.sp_GetBenchmarkRpt2013";
+                    cm.CommandText = "rd.sp_GetBenchmarkRpt2020";
                     ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContract", inContract);
 					pList.Add(cm, "inSequence", inSequence);
@@ -2059,6 +2344,29 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                                 instance._freqdays5 = GetValueFromReader<string>(dr, 83);
                                 instance._freqdist5 = GetValueFromReader<decimal?>(dr, 84);
                                 // TJB Sept-2010 ----------- Add end ------------------
+                                // TJB May-2020  -----------  Added  ------------------
+                                instance._freqdesc6 = GetValueFromReader<string>(dr, 85);
+                                instance._freqdays6 = GetValueFromReader<string>(dr, 86);
+                                instance._freqdist6 = GetValueFromReader<decimal?>(dr,87);
+                                instance._freqdesc7 = GetValueFromReader<string>(dr, 88);
+                                instance._freqdays7 = GetValueFromReader<string>(dr, 89);
+                                instance._freqdist7 = GetValueFromReader<decimal?>(dr, 90);
+                                instance._freqdesc8 = GetValueFromReader<string>(dr, 91);
+                                instance._freqdays8 = GetValueFromReader<string>(dr, 92);
+                                instance._freqdist8 = GetValueFromReader<decimal?>(dr, 93);
+                                instance._freqdesc9 = GetValueFromReader<string>(dr, 94);
+                                instance._freqdays9 = GetValueFromReader<string>(dr, 95);
+                                instance._freqdist9 = GetValueFromReader<decimal?>(dr, 96);
+                                instance._freqdesc10 = GetValueFromReader<string>(dr, 97);
+                                instance._freqdays10 = GetValueFromReader<string>(dr, 98);
+                                instance._freqdist10 = GetValueFromReader<decimal?>(dr, 99);
+                                instance._freqdesc11 = GetValueFromReader<string>(dr, 100);
+                                instance._freqdays11 = GetValueFromReader<string>(dr, 101);
+                                instance._freqdist11 = GetValueFromReader<decimal?>(dr, 102);
+                                instance._freqdesc12 = GetValueFromReader<string>(dr, 103);
+                                instance._freqdays12 = GetValueFromReader<string>(dr, 104);
+                                instance._freqdist12 = GetValueFromReader<decimal?>(dr, 105);
+                                // TJB May-2020  ----------- Add end ------------------
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
