@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB RPCR_148 May-2020 Added
+    // Added uniform allowance to opcost
+    //
     // TJB  RPCR_133 July-2019 Replace activity ratio with 100%
     // Implemented by removing (DeliveryDays/MaxDeliveryDays) scaling
     // 
@@ -1930,7 +1933,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                                       + Caclacct.GetValueOrDefault()
                                       + Sundriesk.GetValueOrDefault() 
                                               * (Calcroutedistance.GetValueOrDefault() / 1000)
-                                      + Rateofreturn1.GetValueOrDefault() 
+                                      + Nuniform.GetValueOrDefault()  // TJB RPCR_148 May-2020 Added
+                                      + Rateofreturn1.GetValueOrDefault()
                                       + Convert.ToDecimal(0.5)
                                      ), 0);
                 return dResult; 
@@ -2145,8 +2149,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             get
             {
                 CanReadProperty(true);
-                //calcvd + calcfc + calcrep + calctt + calcdc + calcpc + calcrc + calcacc + calcvi + calclic + calccrr  + calcpl + if( isnull(sundries),0,sundries)+  if(isnull(telephone),0,telephone)+  if(isnull(ruc),0,ruc* nmultiplier) + if(isnull(accounting),0,accounting) + if(isnull(rateofreturn_1),0,rateofreturn_1)
-                return Calcvd + Calcfc + Calcrep + Calctt + Calcdc + Calcpc + Calcrc + Calcacc + Calcvi + Calclic + Calccrr + Calcpl + Convert.ToDecimal(Sundries) + Convert.ToDecimal(Telephone) + Convert.ToDecimal(Ruc) * Nmultiplier + Convert.ToDecimal(Accounting) + Convert.ToDecimal(Rateofreturn1);
+                //calcvd + calcfc + calcrep + calctt + calcdc + calcpc + calcrc + calcacc 
+                //+ calcvi + calclic + calccrr  + calcpl + if( isnull(sundries),0,sundries)
+                //+ if(isnull(telephone),0,telephone)+  if(isnull(ruc),0,ruc* nmultiplier) 
+                //+ if(isnull(accounting),0,accounting) + if(isnull(rateofreturn_1),0,rateofreturn_1)
+                return Calcvd + Calcfc + Calcrep + Calctt + Calcdc + Calcpc + Calcrc 
+                     + Calcacc + Calcvi + Calclic + Calccrr + Calcpl 
+                     + Convert.ToDecimal(Sundries) + Convert.ToDecimal(Telephone) 
+                     + Convert.ToDecimal(Ruc) * Nmultiplier + Convert.ToDecimal(Accounting) 
+                     + Convert.ToDecimal(Rateofreturn1);
             }
         }
 
