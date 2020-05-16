@@ -6,6 +6,8 @@ using NZPostOffice.RDS.Entity.Ruralrpt;
 
 namespace NZPostOffice.RDS.DataControls.Report
 {
+    // TJB RPCR_147  May-2020
+    // Added freqdesc,freqdays,freqdist 6 - 12
 
     public class RBenchmarkReport2010
     {
@@ -563,115 +565,270 @@ namespace NZPostOffice.RDS.DataControls.Report
             }
         }
 
-    // TJB Sept-2010 --------------- Added ----------------
-	public string FreqDesc1
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public string FreqDays1
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public decimal FreqDist1
-	{
-	    get
-	    {
-		return 0;
-	    }
-	}
-	public string FreqDesc2
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public string FreqDays2
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public decimal FreqDist2
-	{
-	    get
-	    {
-		return 0;
-	    }
-	}
-	public string FreqDesc3
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public string FreqDays3
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public decimal FreqDist3
-	{
-	    get
-	    {
-		return 0;
-	    }
-	}
-	public string FreqDesc4
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public string FreqDays4
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public decimal FreqDist4
-	{
-	    get
-	    {
-		return 0;
-	    }
-	}
-	public string FreqDesc5
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public string FreqDays5
-	{
-	    get
-	    {
-		return string.Empty;
-	    }
-	}
-	public decimal FreqDist5
-	{
-	    get
-	    {
-		return 0;
-	    }
-	}
-    // TJB Sept-2010 -------------- Add end ---------------
+        // TJB Sept-2010 --------------- Added ----------------
+        public string FreqDesc1
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays1
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist1
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public string FreqDesc2
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays2
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist2
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public string FreqDesc3
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays3
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist3
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public string FreqDesc4
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays4
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist4
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        public string FreqDesc5
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays5
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist5
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        // TJB Sept-2010 -------------- Add end ---------------
+        // TJB May-2020 ---------------  Added  ----------------
+        public string FreqDesc6
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays6
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist6
+        {
+            get
+            {
+                return 0;
+            }
+        }
 
+        public string FreqDesc7
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays7
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist7
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public string FreqDesc8
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays8
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist8
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public string FreqDesc9
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays9
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist9
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public string FreqDesc10
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays10
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist10
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public string FreqDesc11
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays11
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist11
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public string FreqDesc12
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public string FreqDays12
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+        public decimal FreqDist12
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        // TJB May-2020 --------------- Add end ----------------
     }
+
     public class BenchmarkReport2010DataSet : ReportDataSet<BenchmarkReport2010>
     {
         public DataColumn ContractNo = new DataColumn("ContractNo", typeof(int));
@@ -863,6 +1020,50 @@ namespace NZPostOffice.RDS.DataControls.Report
 
         public DataColumn FreqDist5 = new DataColumn("FreqDist5", typeof(decimal));
     // TJB Sept-2010 -------------- Add end ---------------
+    // TJB May-2020  --------------  Added  ---------------
+        public DataColumn FreqDesc6 = new DataColumn("FreqDesc6", typeof(string));
+
+        public DataColumn FreqDays6 = new DataColumn("FreqDays6", typeof(string));
+
+        public DataColumn FreqDist6 = new DataColumn("FreqDist6", typeof(decimal));
+
+        public DataColumn FreqDesc7 = new DataColumn("FreqDesc7", typeof(string));
+
+        public DataColumn FreqDays7 = new DataColumn("FreqDays7", typeof(string));
+
+        public DataColumn FreqDist7 = new DataColumn("FreqDist7", typeof(decimal));
+
+        public DataColumn FreqDesc8 = new DataColumn("FreqDesc8", typeof(string));
+
+        public DataColumn FreqDays8 = new DataColumn("FreqDays8", typeof(string));
+
+        public DataColumn FreqDist8 = new DataColumn("FreqDist8", typeof(decimal));
+
+        public DataColumn FreqDesc9 = new DataColumn("FreqDesc9", typeof(string));
+
+        public DataColumn FreqDays9 = new DataColumn("FreqDays9", typeof(string));
+
+        public DataColumn FreqDist9 = new DataColumn("FreqDist9", typeof(decimal));
+
+        public DataColumn FreqDesc10 = new DataColumn("FreqDesc10", typeof(string));
+
+        public DataColumn FreqDays10 = new DataColumn("FreqDays10", typeof(string));
+
+        public DataColumn FreqDist10 = new DataColumn("FreqDist10", typeof(decimal));
+
+        public DataColumn FreqDesc11 = new DataColumn("FreqDesc11", typeof(string));
+
+        public DataColumn FreqDays11 = new DataColumn("FreqDays11", typeof(string));
+
+        public DataColumn FreqDist11 = new DataColumn("FreqDist11", typeof(decimal));
+
+        public DataColumn FreqDesc12 = new DataColumn("FreqDesc12", typeof(string));
+
+        public DataColumn FreqDays12 = new DataColumn("FreqDays12", typeof(string));
+
+        public DataColumn FreqDist12 = new DataColumn("FreqDist12", typeof(decimal));
+
+        // TJB May-2020  -------------- Add end ---------------
 
         public BenchmarkReport2010DataSet()
         {
@@ -872,7 +1073,28 @@ namespace NZPostOffice.RDS.DataControls.Report
 	//			});
 
             this.Columns.AddRange(new DataColumn[]{
-                ContractNo,ContractSeqNumber,ConTitle,Rdfile,Rcmfile,Nominalvehical,Wagehourlyrate,Repairsmaint,Tyrestubes,Vehicalallow,Vehicalinsure,Publiclia,Carrierrisk,Accrate,Licence,Rateofreturn,Salvageratio,Itemshour,Fuel,Consumption,Routedistance,Deliveryhours,Processinghours,Volume,Deliverydays,Maxdeliverydays,Numbercustomers,Routedistanceperday,Vehicledepreciation,Fuelcostperannum,Repairsperannum,Tyrestubesperannum,Deliverycost,Processingcost,Publicliabilitycost,Accperannum,Vehicleinsurance,Licensing,Carrierriskrate,Benchmark,Rateofreturncost,Finalbenchmark,Retainedallowances,Currentpayment,PrsSupplier1,PrsCost1,PrsSupplier2,PrsCost2,PrsSupplier3,PrsCost3,PrsSupplier4,PrsCost4,PrsSupplier5,PrsCost5,Renewalgroup,Renewaldate,Accounting,Telephone,Sundries,Ruc,Sundriesk,Nliveryperannum,Nuniformperannum,Deliverydaysforreport,Reliefcost,Dstartdate,Denddate,Prstartdate,Prenddate,Dexpirydate,Compute1,Compute3,Prtotal,Totalfloor,Compute4,Compute5,PprojectedHourlyRate,DEnddate,Compute6,FreqDesc1,FreqDays1,FreqDist1,FreqDesc2,FreqDays2,FreqDist2,FreqDesc3,FreqDays3,FreqDist3,FreqDesc4,FreqDays4,FreqDist4,FreqDesc5,FreqDays5,FreqDist5
+                 ContractNo,ContractSeqNumber,ConTitle,Rdfile,Rcmfile,Nominalvehical
+                ,Wagehourlyrate,Repairsmaint,Tyrestubes,Vehicalallow,Vehicalinsure
+                ,Publiclia,Carrierrisk,Accrate,Licence,Rateofreturn,Salvageratio
+                ,Itemshour,Fuel,Consumption,Routedistance,Deliveryhours,Processinghours
+                ,Volume,Deliverydays,Maxdeliverydays,Numbercustomers,Routedistanceperday
+                ,Vehicledepreciation,Fuelcostperannum,Repairsperannum,Tyrestubesperannum
+                ,Deliverycost,Processingcost,Publicliabilitycost,Accperannum,Vehicleinsurance
+                ,Licensing,Carrierriskrate,Benchmark,Rateofreturncost,Finalbenchmark
+                ,Retainedallowances,Currentpayment,PrsSupplier1,PrsCost1,PrsSupplier2
+                ,PrsCost2,PrsSupplier3,PrsCost3,PrsSupplier4,PrsCost4,PrsSupplier5
+                ,PrsCost5,Renewalgroup,Renewaldate,Accounting,Telephone,Sundries,Ruc
+                ,Sundriesk,Nliveryperannum,Nuniformperannum,Deliverydaysforreport
+                ,Reliefcost,Dstartdate,Denddate,Prstartdate,Prenddate,Dexpirydate
+                ,Compute1,Compute3,Prtotal,Totalfloor,Compute4,Compute5,PprojectedHourlyRate
+                ,DEnddate,Compute6,FreqDesc1,FreqDays1,FreqDist1,FreqDesc2,FreqDays2
+                ,FreqDist2,FreqDesc3,FreqDays3,FreqDist3,FreqDesc4,FreqDays4,FreqDist4
+                ,FreqDesc5,FreqDays5,FreqDist5
+         // TJB MAY-2020 Added FreqDesc, FreqDays, FreqDist 6 - 12
+                ,FreqDesc6,FreqDays6,FreqDist6,FreqDesc7,FreqDays7,FreqDist7
+                ,FreqDesc8,FreqDays8,FreqDist8,FreqDesc9,FreqDays9,FreqDist9
+                ,FreqDesc10,FreqDays10,FreqDist10,FreqDesc11,FreqDays11,FreqDist11
+                ,FreqDesc12,FreqDays12,FreqDist12
                 });
     // TJB Sept-2010 -------------- Change end ---------------
 
@@ -962,7 +1184,29 @@ namespace NZPostOffice.RDS.DataControls.Report
             FreqDays5.AllowDBNull = true;
             FreqDist5.AllowDBNull = true;
     // TJB Sept-2010 -------------- Add end ---------------
-
+    // TJB May-2020  --------------  Added  ---------------
+            FreqDesc6.AllowDBNull = true;
+            FreqDays6.AllowDBNull = true;
+            FreqDist6.AllowDBNull = true;
+            FreqDesc7.AllowDBNull = true;
+            FreqDays7.AllowDBNull = true;
+            FreqDist7.AllowDBNull = true;
+            FreqDesc8.AllowDBNull = true;
+            FreqDays8.AllowDBNull = true;
+            FreqDist8.AllowDBNull = true;
+            FreqDesc9.AllowDBNull = true;
+            FreqDays9.AllowDBNull = true;
+            FreqDist9.AllowDBNull = true;
+            FreqDesc10.AllowDBNull = true;
+            FreqDays10.AllowDBNull = true;
+            FreqDist10.AllowDBNull = true;
+            FreqDesc11.AllowDBNull = true;
+            FreqDays11.AllowDBNull = true;
+            FreqDist11.AllowDBNull = true;
+            FreqDesc12.AllowDBNull = true;
+            FreqDays12.AllowDBNull = true;
+            FreqDist12.AllowDBNull = true;
+            // TJB May-2020  -------------- Add end ---------------
         }
 
         public BenchmarkReport2010DataSet(object dataSource)
@@ -1093,6 +1337,29 @@ namespace NZPostOffice.RDS.DataControls.Report
             row["FreqDays5"] = GetFieldValue(data.FreqDays5);
             row["FreqDist5"] = GetFieldValue(data.FreqDist5);
     // TJB Sept-2010 -------------- Add end ---------------
+    // TJB May-2020  --------------  Added  ---------------
+            row["FreqDesc6"] = GetFieldValue(data.FreqDesc6);
+            row["FreqDays6"] = GetFieldValue(data.FreqDays6);
+            row["FreqDist6"] = GetFieldValue(data.FreqDist6);
+            row["FreqDesc7"] = GetFieldValue(data.FreqDesc7);
+            row["FreqDays7"] = GetFieldValue(data.FreqDays7);
+            row["FreqDist7"] = GetFieldValue(data.FreqDist7);
+            row["FreqDesc8"] = GetFieldValue(data.FreqDesc8);
+            row["FreqDays8"] = GetFieldValue(data.FreqDays8);
+            row["FreqDist8"] = GetFieldValue(data.FreqDist8);
+            row["FreqDesc9"] = GetFieldValue(data.FreqDesc9);
+            row["FreqDays9"] = GetFieldValue(data.FreqDays9);
+            row["FreqDist9"] = GetFieldValue(data.FreqDist9);
+            row["FreqDesc10"] = GetFieldValue(data.FreqDesc10);
+            row["FreqDays10"] = GetFieldValue(data.FreqDays10);
+            row["FreqDist10"] = GetFieldValue(data.FreqDist10);
+            row["FreqDesc11"] = GetFieldValue(data.FreqDesc11);
+            row["FreqDays11"] = GetFieldValue(data.FreqDays11);
+            row["FreqDist11"] = GetFieldValue(data.FreqDist11);
+            row["FreqDesc12"] = GetFieldValue(data.FreqDesc12);
+            row["FreqDays12"] = GetFieldValue(data.FreqDays12);
+            row["FreqDist12"] = GetFieldValue(data.FreqDist12);
+            // TJB May-2020  -------------- Add end ---------------
             return row;
         }
     }
