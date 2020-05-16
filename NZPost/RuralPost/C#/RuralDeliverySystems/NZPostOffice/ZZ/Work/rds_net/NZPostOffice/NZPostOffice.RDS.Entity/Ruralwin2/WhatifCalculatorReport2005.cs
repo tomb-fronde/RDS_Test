@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB RPCR_148 May-2020  Repurposed Compute6
+    // Added _Compute6 variable
+    // Modified Compute6 function: Added 'set' clause and returned previously set value
+    //
     // TJB  RPCR_133 July-2019 Replace activity ratio with 100%
     // Implemented by removing (DeliveryDays/MaxDeliveryDays) scaling
     // [Note: this doesn't seem to be used anywhere now]
@@ -2946,13 +2950,23 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
             }
         }
 
+        // TJB RPCR_148 May-2020  Repurposed Compute6
+        // Originally the 'sum(...' line was commented out and get returned null.
+        // Added the 'set' clause and _Compute6 variable
+        private decimal? _Compute6;
         public virtual decimal? Compute6
         {
             get
             {
                 CanReadProperty(true);
                 //sum( if(firstrow = "Y", routedistanceperday, 0) for all )
-                return null;
+                //return null;
+                return _Compute6;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                _Compute6 = value;
             }
         }
 
