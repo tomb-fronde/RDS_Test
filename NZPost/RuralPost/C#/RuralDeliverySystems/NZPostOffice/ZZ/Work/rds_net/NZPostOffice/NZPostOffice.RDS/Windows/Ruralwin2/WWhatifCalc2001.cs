@@ -20,6 +20,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB  RPCR_148 May-2020
+        // Added new section for additional Vehicle rates to REDWhatifCalculatorReport2005.rpt
+        // Changes here to add between 4 and 11 vehicle rates to report
+        // Changed use of variable Compute6 to pass number of distinct vehicle rates to
+        //    report; in report, this used to make added section visible if needed
+        //    It didn't appear to be used for anything previously
+        //    (see of_showreport).
+        //
         // TJB  RPCR_126  July-2018 (Formerly Oct-2017 Bug fix:)
         // Fixed calculation of Sundries total for >1 contract.  
         // (see store_group_report).
@@ -558,6 +566,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             idw_report.Reset();
 
+            // TJB RPCR_148 May-2020  Get number of distinct vehicle types (for vehicle rates)
+            int numVtKeys = of_countuniquevtkeys();
+
             for (int i = 0; i < idw_summary.RowCount; i++)
             {
                 WhatifCalulator2005 data = idw_summary.GetItem<WhatifCalulator2005>(i);
@@ -656,9 +667,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 l_temp.RrrateProcWage = data.RrrateProcWage;
                 l_temp.Calcroutedistance = data.Calcroutedistance;
                 l_temp.ReliefWeeks = data.ReliefWeeks;
+                // TJB RPCR_148 May-2020  Changed usage of Compute6
+                //     It appears to have to be set for all instances (hense within this loop)
+                l_temp.Compute6 = Convert.ToDecimal(numVtKeys);   
                 idw_report.InsertItem<WhatifCalculatorReport2005>(i, l_temp);
             }
-            store_group_report();
+            //store_group_report();
+            // TJB RPCR_148 May-2020  
+            // Added parameter to store_group_report to pass number of distinct vehicle types
+            // (saves recalculating it)
+            store_group_report(numVtKeys);
             if (dwc2 != null)
             {
                 dwc1.ShareData(dwc2);
@@ -668,7 +686,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return 1;
         }
 
-        public virtual void store_group_report()
+        // TJB RPCR_148 May-2020  
+        // Added parameter to store_group_report to pass number of distinct vehicle types
+        public virtual void store_group_report(int nVtKeys)
         {
             int? l_contract_no_old;
             int? l_contract_no;
@@ -772,7 +792,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         continue;
                     }
 
+                    // TJB  RPCR_148  May 2020
+                    // ll_ctr counts the number of vehicle rates to display.
+                    // Previousle, the form only had space for 4, and skipped any beyond that.
+                    // Added a new section to the report for another 7 rates allowing for a 
+                    // total of 11 now.
                     ll_Ctr++;
+                    if (ll_Ctr > 11)   // TJB RPCR_148 May-2020  Increased from 4 to 11
+                        continue;
                     WhatifCalculatorReport2005 item = idw_report.GetItem<WhatifCalculatorReport2005>(k);
 
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_nvv" + ll_Ctr.ToString()] as TextObject).Text)
@@ -862,8 +889,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_sk" + ll_Ctr.ToString()] as TextObject).Text =
                             item.RERrrateSundriesk.GetValueOrDefault().ToString("#,##0.00");
                     }
-                }
-            }
+                    // TJB RPCR_148 May-2020
+                    // Within the report, the display of the added section's headings can be supressed
+                    // if not needed (determined via the count passed via Compute6).  But the line around
+                    // the added section (box6) cannot be supressed in the same way.  Using this code, 
+                    // the line is "hidden" by making it the same colour as the report's (assumed) paper.
+                    if (nVtKeys <= 4)
+                    {
+                        (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["Box6"] as BoxObject).LineColor = System.Drawing.Color.White;
+                    }
+                } // end vtList.Count loop
+            }  // end idw_report.RowCount loop
+
             ((CrystalDecisions.Windows.Forms.CrystalReportViewer)idw_report.GetControlByName("viewer")).RefreshReport();
         }
 
@@ -1108,12 +1145,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     continue;
                 }
-                if (ll_Ctr == 4)
+                ll_Ctr++;  // Counter for distinct vehicle types encountered
+
+                if (ll_Ctr > 11)  // TJB RPCR_148 May-2020  Changed '== 4' to >11
                 {
-                    ((TextObject)(((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_cannotdisplay"])).Text = "Some rates cannot be displayed due to space limitations";
+                    // TJB RPCR_148 May-2020
+                    // Changed message text from "Some rates cannot be..."
+                    ((TextObject)(((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_cannotdisplay"])).Text 
+                        = "Some vehicle rates have not been displayed due to space limitations";
+                    // Note: added field st_cannotdisplay to report so message could be displayed
+                    //       Previously the field was not in the report and this code line was commented out
                     break;
                 }
-                ll_Ctr++;
 
                 ((TextObject)(((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_title" + ll_Ctr.ToString()])).Text = ls_vt;
 
@@ -1315,6 +1358,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             return false;
+        }
+
+        // TJB RPC_148 May-2020: New
+        // Count the number of distinct vehicle types in the full report
+        // (used to decide whether to make the second set of types visible)
+        // Adapted from of_cachevtkeys (which doesn't appear to be used)
+        public virtual int of_countuniquevtkeys()
+        {
+            int ll_Ctr = 0;
+            int ll_vtkey = 0;
+
+            List<VehicleTypeItem> vtList = new List<VehicleTypeItem>();
+            RDSDataService rService = RDSDataService.GetVehicleTypeList();
+            vtList = rService.VehicleTypeList;
+
+            for (int i = 0; i < vtList.Count; i++)
+            {
+                ll_vtkey = vtList[i].VtKey;
+
+                if (!(of_isvtkeyinlist(ll_vtkey)))
+                {
+                    continue;
+                }
+                ll_Ctr++;
+            }
+            return ll_Ctr;
         }
 
         public virtual int of_cachevtkeys()
