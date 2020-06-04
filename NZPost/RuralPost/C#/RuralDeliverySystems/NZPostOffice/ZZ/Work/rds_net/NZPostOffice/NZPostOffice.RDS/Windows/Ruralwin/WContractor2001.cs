@@ -14,31 +14,39 @@ using System.Text.RegularExpressions;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPCR_151 May-2020
+    // Display a message when any fields in the pay-related group change.
+    // See also datacontrol DContractorFull and entity ContractorFull.
+    // of_save_pay_related: NEW
+    // of_check_pay_related: NEW
+    // of_displayMessage: NEW
+    // dw_owner_driver_ItemFocusChanged: NEW
+    //
+    // TJB  RPCR_060  Jun-2014 bug fix
+    // "sTitle" changed to "pTitle" in bSplitTitle
+    // Null check added to bSplitTitle and bSplitFirstnames
+    // Added explicit check for company name to bSplitOwnerNames
+    //
+    // TJB  RPCR_060  Mar-2014
+    // Refinements to View/Edit, Add driver,and Remove button functionality
+    //
+    // TJB  RPCR_060  Feb-2014
+    // Moved View/Edit, Add driver, Remove (driver) buttons and functionality
+    //
+    // TJB  RPCR_060  Jan-2014
+    // Added tabpage_drivers and associated dw_driversHSInfo.
+    // (Disabled for 7.1.11.3 release)
+    //
+    // TJB  Dec-2013  RPCR057b (New AP file format)
+    // Change 'DS Numbers" tab title to 'Supplier Numbers'
+    // Add new supplier number to tab
+    // Make editable only by administrators
+    //
+    // TJB  Jan 2011  RPI_026
+    // Fix email address validation bug (of_validate)
+
     public class WContractor2001 : WAncestorWindow
     {
-        // TJB  RPCR_060  Jun-2014 bug fix
-        // "sTitle" changed to "pTitle" in bSplitTitle
-        // Null check added to bSplitTitle and bSplitFirstnames
-        // Added explicit check for company name to bSplitOwnerNames
-        //
-        // TJB  RPCR_060  Mar-2014
-        // Refinements to View/Edit, Add driver,and Remove button functionality
-        //
-        // TJB  RPCR_060  Feb-2014
-        // Moved View/Edit, Add driver, Remove (driver) buttons and functionality
-        //
-        // TJB  RPCR_060  Jan-2014
-        // Added tabpage_drivers and associated dw_driversHSInfo.
-        // (Disabled for 7.1.11.3 release)
-        //
-        // TJB  Dec-2013  RPCR057b (New AP file format)
-        // Change 'DS Numbers" tab title to 'Supplier Numbers'
-        // Add new supplier number to tab
-        // Make editable only by administrators
-        //
-        // TJB  Jan 2011  RPI_026
-        // Fix email address validation bug (of_validate)
-
         #region Define
         public URdsDw dw_owner_driver;
         public URdsDw dw_contract_types;
@@ -103,6 +111,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Button cb_AddOwner;
         private ToolTip tt_RemoveDriver;
 
+        // TJB RPCR_151 May-2020: Added
+        bool IsInPayRelated;  // true when focus is on one of pay-related fields
+        bool showMessage;     // display message only when showMessage == true
+
         #endregion
 
         private delegate void delegateInvoke();
@@ -141,9 +153,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_owner_driver.URdsDwEditChanged += new EventDelegate(dw_owner_driver_editchanged);
             dw_owner_driver.PfcInsertRow += new UserEventDelegate(dw_owner_driver_pfc_insertrow);
             dw_owner_driver.PfcValidation += new UserEventDelegate1(dw_owner_driver_pfc_validation);
+            dw_owner_driver.PfcPostUpdate += new UserEventDelegate(dw_owner_driver_pfc_postupdate);
             //((DContractorFull)dw_owner_driver.DataObject).TextBoxLostFocus += new EventHandler(dw_owner_driver_itemchanged);
             dw_owner_driver.GotFocus += new EventHandler(dw_owner_driver_getfocus);
             dw_owner_driver.LostFocus += new EventHandler(dw_owner_driver_losefocus);
+            dw_owner_driver.URdsDwItemFocuschanged += new EventDelegate(dw_owner_driver_ItemFocusChanged);
+            //dw_owner_driver.GetControlByName("checkBox1").Visible = false;
 
             dw_contract_types.Constructor += new UserEventDelegate(dw_contract_types_constructor);
             dw_contract_types.PfcValidation += new UserEventDelegate1(dw_contract_types_pfc_validation);
@@ -546,14 +561,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((MaskedTextBox)idw_owner_driver.GetControlByName("c_phone_night")).Mask = "(00) 000-00009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
+                
                 //+++++ TJB  RD7_0007  Sept 2008 ++++++
                 string ls_IrdNo, ls_GstNo;
-                string ls_IrdNo_Mask, ls_GstNo_Mask;
                 ls_IrdNo = idw_owner_driver.GetItem<ContractorFull>(0).CIrdNo;
                 ls_GstNo = idw_owner_driver.GetItem<ContractorFull>(0).CGstNumber;
+/*
+                string ls_IrdNo_Mask, ls_GstNo_Mask;
                 ls_IrdNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_ird_no")).Mask;
                 ls_GstNo_Mask = ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask;
-/*
                 MessageBox.Show( "CIrdNo = <" + ls_IrdNo + ">, Length = " + ls_IrdNo.Length.ToString() + ", Mask = <" + ls_IrdNo_Mask + ">\r"
                                + "CGstNo = <" + ls_GstNo + ">, Length = " + ls_GstNo.Length.ToString() + ", Mask = <" + ls_GstNo_Mask + ">\r"
                                , "Testing: WContractor2001.pfc_postopen"
@@ -579,7 +595,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask = "00-000-0009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
-                //++++++++++++++++++++++++++++++++++++++++++
+                
+                // TJB RPCR_151 May-2020
+                // Initialise 'in pay-related' tracking
+                IsInPayRelated = false;
+                of_save_pay_related(idw_owner_driver.GetRow());
             }
             else
             {
@@ -637,8 +657,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                 }
             }
+
             //return ancestorreturnvalue;
-            return 0;
+            return ALLOW_CLOSE;
         }
 
         #region Methods
@@ -651,6 +672,55 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void ue_set_security()
         {
             ib_Opening = false;
+        }
+
+        // TJB RPCR_151 May-2020
+        // variables only used by of_save_pay_related and of_check_pay_related
+        string sBankAccountNo, sIrdNo, sGstNumber, sTaxCertificate;
+        decimal? sTaxRate;
+
+        // TJB RPCR_151 May-2020: NEW
+        public virtual void of_save_pay_related(int arow)
+        {  
+            // Save current values of pay-related items
+            sBankAccountNo = idw_owner_driver.GetItem<ContractorFull>(arow).CBankAccountNo;
+            sIrdNo = idw_owner_driver.GetItem<ContractorFull>(arow).CIrdNo;
+            sGstNumber = idw_owner_driver.GetItem<ContractorFull>(arow).CGstNumber;
+            sTaxRate = idw_owner_driver.GetItem<ContractorFull>(arow).CTaxRate;  //Note: this is a double, not string
+            sTaxCertificate = idw_owner_driver.GetItem<ContractorFull>(arow).CWitholdingTaxCertificate;
+            // Set showMessage to 'true' so that any changed can be detected 
+            // and the 'Attention' message displayed.
+            showMessage = true;
+        }
+
+        // TJB RPCR_151 May-2020: NEW
+        public virtual bool of_check_pay_related(int arow)
+        {
+            // Check to see if any field's values have changed
+            // Return 'true' if so; 'false' otherwise
+            string tBankAccountNo, tIrdNo, tGstNumber, tTaxCertificate;
+            decimal? tTaxRate;
+            bool isModified;
+
+            // Get current values
+            tBankAccountNo = idw_owner_driver.GetItem<ContractorFull>(arow).CBankAccountNo;
+            tIrdNo = idw_owner_driver.GetItem<ContractorFull>(arow).CIrdNo;
+            tGstNumber = idw_owner_driver.GetItem<ContractorFull>(arow).CGstNumber;
+            tTaxRate = idw_owner_driver.GetItem<ContractorFull>(arow).CTaxRate;
+            tTaxCertificate = idw_owner_driver.GetItem<ContractorFull>(arow).CWitholdingTaxCertificate;
+
+            // See if any have changed
+            isModified = false;
+            if (tBankAccountNo != sBankAccountNo
+                || tIrdNo != sIrdNo
+                || tGstNumber != sGstNumber
+                || tTaxRate != sTaxRate
+                || tTaxCertificate != sTaxCertificate)
+                isModified = true;
+
+            // Return result 
+            // what to do about it is done in tab_contractor_selectionchanging
+            return isModified;
         }
 
         public virtual string of_validate(int arow)
@@ -675,6 +745,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 sReturn = "c_prime_contact";
             }
+
             //  Validate the email address
             string ls_email_address;
             ls_email_address = idw_owner_driver.GetItem<ContractorFull>(arow).CEmailAddress;
@@ -917,6 +988,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //?return ancestorreturnvalue;
         }
 
+        public virtual void dw_owner_driver_pfc_postupdate()
+        {
+            int aRow = dw_owner_driver.GetRow();
+            of_save_pay_related(aRow);
+        }
+
         public virtual int dw_owner_driver_pfc_validation()
         {
             is_ErrorColumn = of_validate(dw_owner_driver.GetRow());
@@ -925,10 +1002,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 return FAILURE;
             }
-            else
+
+            // TJB RPCR_151 May-2020
+            // Check for any changes to pay-related items
+            bool pay_related_modified;
+            pay_related_modified = of_check_pay_related(dw_owner_driver.GetRow());
+            if (pay_related_modified)
             {
-                return SUCCESS;
+                of_displayMessage();
             }
+            return SUCCESS;
+        }
+
+        // TJB RPCR_151 May-2020: NEW
+        public virtual void of_displayMessage()
+        {
+            // Only show the message if 'showMessage' is true, 
+            // then set showMessage to 'false' to limit its display
+            // to once for any change - save cycle.
+            if (showMessage)
+            {
+                MessageBox.Show("Attention\n\n"
+                    + "You must advise the Contractor Payments Team of the "
+                    + "pay-related changes in order to have them actioned.\n"
+                    + "Submit all Pay-related changes through a "
+                    + "'Rural Contractor Pays Online Form'"
+                    , "ATTENTION!"
+                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            showMessage = false;
         }
 
         public virtual void dw_owner_driver_updateend()
@@ -1247,7 +1349,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 this.dw_owner_driver_getfocus(null, null);
                 if (idw_owner_driver.RowCount == 0)
                 {
-                    idw_owner_driver.Retrieve(new object[] { ii_contractor });
+                    idw_owner_driver.Retrieve(new object[]{ii_contractor});
+                    of_save_pay_related(idw_owner_driver.GetRow());
                 }
             }
             else if (str == "contract types")//(TestExpr == 2)
@@ -1398,7 +1501,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_AddOwner.Visible = false;
             cb_AddOwner.Enabled = false;
 
-            // Check for any changes to idw_owner_driver
             if (idw_owner_driver.DataObject.DeletedCount > 0 
                 || idw_owner_driver.ModifiedCount() > 0)
             {
@@ -1407,18 +1509,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                          , MessageBoxButtons.YesNo
                                          , MessageBoxIcon.Question) 
                           == DialogResult.Yes ? 1 : 2);
-                ll_Row = idw_owner_driver.GetRow();
-                if (ll_Ret == 1)
+                if (ll_Ret == 1) // Yes
                 {
-                    ll_Ret = idw_owner_driver.Save();
+                    idw_owner_driver.Save();
                     if (ll_Ret < 0)
                     {
                         return;
                     }
                 }
-                else
+                else  // No, don't save
                 {
                     idw_owner_driver.Reset();
+                    //of_save_pay_related(idw_contract_types.GetRow());
                 }
             }
             if (idw_contract_types.DataObject.DeletedCount > 0 
@@ -1522,6 +1624,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 idw_post_tax_deductions.URdsDw_GetFocus(null, null);
             }
+        }
+        // TJB RPCR_151 May-2020: Added
+        public virtual void dw_owner_driver_ItemFocusChanged(object sender, EventArgs e)
+        {
+            // Check to see if focus is on one of the pay-related fields and 
+            // whether there has been a change.  If we've left the group of 
+            // fields, and one or more have changed, display the 'attention' message.
+            //
+            // NOTE: Enter and Leave events in DContractorFull set/clear checkBox1. 
+            // Checkbox1 is bound to InPayRelated in the ContractorFull entity.  This 
+            // is a bit of a kludge to let WContractor2001 know when focus is in the
+            // pay-related group of fields.
+            
+            bool isModified;
+            bool NowInPayRelated;
+            int aRow = dw_owner_driver.GetRow();
+
+            NowInPayRelated = dw_owner_driver.GetItem<ContractorFull>(aRow).InPayRelated;
+            // If we were in thr pay-related group of fields (IsInPayRelated == true)
+            // but now we're not (NowInPayRelated == false), we've left the group.
+            if (NowInPayRelated == false && IsInPayRelated == true)
+            {
+                // Check to see if any fields have changed
+                // If so, display the 'Attention' message
+                isModified = of_check_pay_related(aRow);
+                if (isModified)
+                {
+                        of_displayMessage();
+                }
+            }
+            // Save the current in/out focus
+            IsInPayRelated = NowInPayRelated;
         }
 
         public virtual void dw_owner_driver_editchanged(object sender, EventArgs e)
