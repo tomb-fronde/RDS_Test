@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB RPCR_152 June-2020
+    // Added Renewal Type column to Renewals tab.  No significant changes to 
+    // WContract2001 but may have ben minor changes to dimensions of window.
+    //
     // TJB  RPCR_096  May-2015
     // Changed frozen indicator lookup to use non_vehicle_rate table (was renewal_rate table)
     // (see of_validate_contract)
@@ -653,7 +657,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tab_contract.Multiline = true;
             this.tab_contract.Name = "tab_contract";
             this.tab_contract.SelectedIndex = 0;
-            this.tab_contract.Size = new System.Drawing.Size(558, 344);
+            this.tab_contract.Size = new System.Drawing.Size(560, 344);
             this.tab_contract.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tab_contract.TabIndex = 1;
             this.tab_contract.Tag = "ComponentName=Contract;";
@@ -665,7 +669,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_contract.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_contract.Location = new System.Drawing.Point(4, 40);
             this.tabpage_contract.Name = "tabpage_contract";
-            this.tabpage_contract.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_contract.Size = new System.Drawing.Size(552, 300);
             this.tabpage_contract.TabIndex = 0;
             this.tabpage_contract.Tag = "ComponentName=Contract;";
             this.tabpage_contract.Text = "Contract";
@@ -678,7 +682,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_contract.FireConstructor = false;
             this.dw_contract.Location = new System.Drawing.Point(0, 0);
             this.dw_contract.Name = "dw_contract";
-            this.dw_contract.Size = new System.Drawing.Size(550, 300);
+            this.dw_contract.Size = new System.Drawing.Size(552, 300);
             this.dw_contract.TabIndex = 2;
             // 
             // tabpage_customers
@@ -693,7 +697,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_customers.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_customers.Location = new System.Drawing.Point(4, 40);
             this.tabpage_customers.Name = "tabpage_customers";
-            this.tabpage_customers.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_customers.Size = new System.Drawing.Size(581, 300);
             this.tabpage_customers.TabIndex = 1;
             this.tabpage_customers.Tag = "ComponentName=Address;";
             this.tabpage_customers.Text = "Addresses";
@@ -780,7 +784,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_renewals.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_renewals.Location = new System.Drawing.Point(4, 40);
             this.tabpage_renewals.Name = "tabpage_renewals";
-            this.tabpage_renewals.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_renewals.Size = new System.Drawing.Size(581, 300);
             this.tabpage_renewals.TabIndex = 2;
             this.tabpage_renewals.Tag = "ComponentName=Renewal;";
             this.tabpage_renewals.Text = "Renewals";
@@ -792,7 +796,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_renewals.FireConstructor = false;
             this.dw_renewals.Location = new System.Drawing.Point(3, 7);
             this.dw_renewals.Name = "dw_renewals";
-            this.dw_renewals.Size = new System.Drawing.Size(542, 276);
+            this.dw_renewals.Size = new System.Drawing.Size(662, 276);
             this.dw_renewals.TabIndex = 1;
             // 
             // tabpage_frequencies
@@ -803,7 +807,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_frequencies.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_frequencies.Location = new System.Drawing.Point(4, 40);
             this.tabpage_frequencies.Name = "tabpage_frequencies";
-            this.tabpage_frequencies.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_frequencies.Size = new System.Drawing.Size(581, 300);
             this.tabpage_frequencies.TabIndex = 3;
             this.tabpage_frequencies.Tag = "ComponentName=Frequency;";
             this.tabpage_frequencies.Text = "Frequencies";
@@ -820,7 +824,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // cb_showAll
             // 
-            this.cb_showAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.00F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_showAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cb_showAll.Location = new System.Drawing.Point(429, 281);
             this.cb_showAll.Name = "cb_showAll";
             this.cb_showAll.Size = new System.Drawing.Size(116, 19);
@@ -836,7 +840,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_route_audit.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_route_audit.Location = new System.Drawing.Point(4, 40);
             this.tabpage_route_audit.Name = "tabpage_route_audit";
-            this.tabpage_route_audit.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_route_audit.Size = new System.Drawing.Size(581, 300);
             this.tabpage_route_audit.TabIndex = 4;
             this.tabpage_route_audit.Tag = "ComponentName=Route Audit;";
             this.tabpage_route_audit.Text = "Route Audit";
@@ -858,7 +862,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_types.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_types.Location = new System.Drawing.Point(4, 40);
             this.tabpage_types.Name = "tabpage_types";
-            this.tabpage_types.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_types.Size = new System.Drawing.Size(581, 300);
             this.tabpage_types.TabIndex = 5;
             this.tabpage_types.Tag = "ComponentName=Contract Type;";
             this.tabpage_types.Text = "Types";
@@ -880,7 +884,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_allowances.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_allowances.Location = new System.Drawing.Point(4, 40);
             this.tabpage_allowances.Name = "tabpage_allowances";
-            this.tabpage_allowances.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_allowances.Size = new System.Drawing.Size(581, 300);
             this.tabpage_allowances.TabIndex = 6;
             this.tabpage_allowances.Tag = "ComponentName=Allowance;";
             this.tabpage_allowances.Text = "Allowances";
@@ -903,7 +907,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_article_count.Location = new System.Drawing.Point(4, 40);
             this.tabpage_article_count.Name = "tabpage_article_count";
-            this.tabpage_article_count.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_article_count.Size = new System.Drawing.Size(581, 300);
             this.tabpage_article_count.TabIndex = 7;
             this.tabpage_article_count.Tag = "ComponentName=Article Count;";
             this.tabpage_article_count.Text = "Article Count";
@@ -925,7 +929,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_piece_rates.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_piece_rates.Location = new System.Drawing.Point(4, 40);
             this.tabpage_piece_rates.Name = "tabpage_piece_rates";
-            this.tabpage_piece_rates.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_piece_rates.Size = new System.Drawing.Size(581, 300);
             this.tabpage_piece_rates.TabIndex = 8;
             this.tabpage_piece_rates.Tag = "ComponentName=Piece Rate;";
             this.tabpage_piece_rates.Text = "Piece Rates";
@@ -949,7 +953,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_fixed_assets.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_fixed_assets.Location = new System.Drawing.Point(4, 40);
             this.tabpage_fixed_assets.Name = "tabpage_fixed_assets";
-            this.tabpage_fixed_assets.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_fixed_assets.Size = new System.Drawing.Size(581, 300);
             this.tabpage_fixed_assets.TabIndex = 9;
             this.tabpage_fixed_assets.Tag = "ComponentName=Fixed Asset;";
             this.tabpage_fixed_assets.Text = "Fixed Assets";
@@ -1076,7 +1080,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_cmb.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_cmb.Location = new System.Drawing.Point(4, 40);
             this.tabpage_cmb.Name = "tabpage_cmb";
-            this.tabpage_cmb.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_cmb.Size = new System.Drawing.Size(581, 300);
             this.tabpage_cmb.TabIndex = 10;
             this.tabpage_cmb.Tag = "ComponentName=Contract;";
             this.tabpage_cmb.Text = "CMBs";
@@ -1099,7 +1103,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_freight_allocations.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_freight_allocations.Location = new System.Drawing.Point(4, 40);
             this.tabpage_freight_allocations.Name = "tabpage_freight_allocations";
-            this.tabpage_freight_allocations.Size = new System.Drawing.Size(550, 300);
+            this.tabpage_freight_allocations.Size = new System.Drawing.Size(581, 300);
             this.tabpage_freight_allocations.TabIndex = 11;
             this.tabpage_freight_allocations.Tag = "ComponentName=Freight Allocations;";
             this.tabpage_freight_allocations.Text = "Freight Allocations";
@@ -1117,7 +1121,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // WContract2001
             // 
-            this.ClientSize = new System.Drawing.Size(567, 368);
+            this.ClientSize = new System.Drawing.Size(566, 368);
             this.Controls.Add(this.tab_contract);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Location = new System.Drawing.Point(1, 6);
