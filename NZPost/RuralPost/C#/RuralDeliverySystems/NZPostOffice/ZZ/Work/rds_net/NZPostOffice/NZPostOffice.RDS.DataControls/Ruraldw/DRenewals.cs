@@ -10,6 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB RPCR_152 June-2020
+    // Add Renewal Type column to Renewals tab.  
+    // Shorten Owner-Driver field to fit it in.
+    // 
 	public partial class DRenewals : Metex.Windows.DataUserControl
 	{
 		public DRenewals()
