@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB RPCR_151 May-2020
+    // Added InPayRelated and related in_pay_relate and _in_pay_relate variables
+    // InPayRelated is bound to by checkbox1 in datacontrol DContractorFull.
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -32,7 +36,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 	[MapInfo("c_mobile2", "_c_mobile2", "contractor")]
 	[MapInfo("c_notes", "_c_notes", "contractor")]
 	[MapInfo("c_prime_contact", "_c_prime_contact", "contractor")]
-	[System.Serializable()]
+    [MapInfo("in_pay_related", "_in_pay_related", "")]
+    [System.Serializable()]
 
 	public class ContractorFull : Entity<ContractorFull>
 	{
@@ -100,6 +105,27 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		[DBField()]
 		private int?  _c_prime_contact;
 
+        [DBField()]
+        private bool _in_pay_related;
+
+        // TJB RPCR_151 May-2020: NEW
+        public virtual bool InPayRelated
+        {
+            get
+            {
+                CanReadProperty("InPayRelated", true);
+                return _in_pay_related;
+            }
+            set
+            {
+                CanWriteProperty("InPayRelated", true);
+                if (_in_pay_related != value)
+                {
+                    _in_pay_related = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
 
 		public virtual int? ContractorSupplierNo
 		{
@@ -651,7 +677,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._c_mobile2 = GetValueFromReader<String>(dr,18);
                             instance._c_notes = GetValueFromReader<String>(dr,19);
                             instance._c_prime_contact = GetValueFromReader<Int32?>(dr,20);
-	
+
+                            instance._in_pay_related = false;
+
 							instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
