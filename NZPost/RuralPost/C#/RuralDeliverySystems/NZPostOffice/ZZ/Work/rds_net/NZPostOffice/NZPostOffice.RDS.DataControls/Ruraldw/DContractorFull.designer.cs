@@ -33,6 +33,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.nz_post_employee = new System.Windows.Forms.CheckBox();
             this.nz_post_employee_t = new System.Windows.Forms.Label();
             this.gb_1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.c_surname_company_t = new System.Windows.Forms.Label();
             this.c_surname_company = new System.Windows.Forms.TextBox();
             this.c_first_names_t = new System.Windows.Forms.Label();
@@ -40,7 +42,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_initials_t = new System.Windows.Forms.Label();
             this.c_initials = new System.Windows.Forms.TextBox();
             this.c_salutation_t = new System.Windows.Forms.Label();
-            this.c_salutation = new System.Windows.Forms.TextBox();
             this.c_address_t = new System.Windows.Forms.Label();
             this.c_address = new System.Windows.Forms.TextBox();
             this.contractor_supplier_no_t = new System.Windows.Forms.Label();
@@ -78,6 +79,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_email_address_t = new System.Windows.Forms.Label();
             this.c_email_address = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
+            this.gb_1.SuspendLayout();
             this.SuspendLayout();
             // 
             // bindingSource
@@ -117,12 +119,38 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             // gb_1
             // 
+            this.gb_1.Controls.Add(this.label1);
             this.gb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.gb_1.Location = new System.Drawing.Point(5, 5);
             this.gb_1.Name = "gb_1";
             this.gb_1.Size = new System.Drawing.Size(281, 199);
             this.gb_1.TabIndex = 1;
             this.gb_1.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Arial", 8F);
+            this.label1.Location = new System.Drawing.Point(92, 93);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(96, 13);
+            this.label1.TabIndex = 151;
+            this.label1.Text = "NZ Post Employee";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.checkBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "InPayRelated", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBox1.Font = new System.Drawing.Font("Arial", 8F);
+            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBox1.Location = new System.Drawing.Point(420, 314);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(13, 13);
+            this.checkBox1.TabIndex = 158;
+            this.checkBox1.ThreeState = true;
+            this.checkBox1.UseVisualStyleBackColor = false;
             // 
             // c_surname_company_t
             // 
@@ -193,17 +221,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_salutation_t.TabIndex = 69;
             this.c_salutation_t.Text = "Salutation";
             this.c_salutation_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // c_salutation
-            // 
-            this.c_salutation.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "CSalutation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.c_salutation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.c_salutation.Location = new System.Drawing.Point(105, 95);
-            this.c_salutation.MaxLength = 40;
-            this.c_salutation.Name = "c_salutation";
-            this.c_salutation.Size = new System.Drawing.Size(174, 20);
-            this.c_salutation.TabIndex = 5;
-            this.c_salutation.WordWrap = false;
             // 
             // c_address_t
             // 
@@ -615,6 +632,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.c_surname_company_t);
             this.Controls.Add(this.c_surname_company);
             this.Controls.Add(this.c_first_names_t);
@@ -622,7 +640,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.c_initials_t);
             this.Controls.Add(this.c_initials);
             this.Controls.Add(this.c_salutation_t);
-            this.Controls.Add(this.c_salutation);
             this.Controls.Add(this.c_address_t);
             this.Controls.Add(this.c_address);
             this.Controls.Add(this.contractor_supplier_no_t);
@@ -666,6 +683,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Name = "DContractorFull";
             this.Size = new System.Drawing.Size(660, 344);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
+            this.gb_1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -733,7 +751,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.TextBox c_initials;
         private System.Windows.Forms.Label c_salutation_t;
         //private System.Windows.Forms.RichTextBox c_salutation;
-        private System.Windows.Forms.TextBox c_salutation;
         private System.Windows.Forms.Label c_address_t;
         //private System.Windows.Forms.RichTextBox c_address;
         private System.Windows.Forms.TextBox c_address;
@@ -744,5 +761,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.RadioButton c_prime_contact_3;
         private System.Windows.Forms.RadioButton c_prime_contact_2;
         private System.Windows.Forms.RadioButton c_prime_contact_1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

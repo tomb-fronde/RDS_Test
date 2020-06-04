@@ -10,6 +10,15 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB RPCR_151 May-2020
+    // Added pay_related_Enter() and pay_related_Leave()
+    // These set/clear the checkBox1 which is bound to InPayRelated in entity ContractorFull
+    // The state of this checkbox is examined by dw_owner_driver_ItemFocusChanged 
+    // in WContractor2001 to determine if focus is on the pay-related group of fields.
+    // NOTE:
+    // CheckBox1 added in designer.  It's 'visible' property must be 'true', but it
+    // is hidded by placing it off the displayed part of the DContractorFull window.
+
     public partial class DContractorFull : Metex.Windows.DataUserControl
     {
         public DContractorFull()
@@ -20,6 +29,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_phone_night.LostFocus += new System.EventHandler(this.c_phone_night_LostFocus);
             this.c_ird_no.LostFocus += new System.EventHandler(this.c_ird_no_LostFocus);
             this.c_gst_number.LostFocus += new System.EventHandler(this.c_gst_number_LostFocus);
+
+            this.c_bank_account_no.Enter += new EventHandler(pay_related_Enter);
+            this.c_bank_account_no.Leave += new EventHandler(pay_related_Leave);
+            this.c_ird_no.Enter += new EventHandler(pay_related_Enter);
+            this.c_ird_no.Leave += new EventHandler(pay_related_Leave);
+            this.c_gst_number.Enter += new EventHandler(pay_related_Enter);
+            this.c_gst_number.Leave += new EventHandler(pay_related_Leave);
+            this.c_tax_rate.Enter += new EventHandler(pay_related_Enter);
+            this.c_tax_rate.Leave += new EventHandler(pay_related_Leave);
+            this.c_witholding_tax_certificate.Enter += new EventHandler(pay_related_Enter);
+            this.c_witholding_tax_certificate.Leave += new EventHandler(pay_related_Leave);
+
             // TJB  RD7_0034   21-July-2009
             //    Changed type of c_salutation and c_address controls to Textbox from RichTextbos
             //    - done to enable cut/copy/paste right-click menu
@@ -73,7 +94,21 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             return rc;
         }
 
-        private void c_ird_no_LostFocus(object sender, System.EventArgs e)
+        // TJB RPCR_151 May-2020: NEW
+        private void pay_related_Enter(object sender, System.EventArgs e)
+        {
+            //MessageBox.Show("pay_related_Enter");
+            this.checkBox1.Checked = true;
+        }
+
+        // TJB RPCR_151 May-2020: NEW
+        private void pay_related_Leave(object sender, System.EventArgs e)
+        {
+            //MessageBox.Show("pay_related_Leave");
+            this.checkBox1.Checked = false;
+        }
+
+       private void c_ird_no_LostFocus(object sender, System.EventArgs e)
         {
             string ls_temp = this.c_ird_no.Text;
             if (ls_temp.Length > 8)
