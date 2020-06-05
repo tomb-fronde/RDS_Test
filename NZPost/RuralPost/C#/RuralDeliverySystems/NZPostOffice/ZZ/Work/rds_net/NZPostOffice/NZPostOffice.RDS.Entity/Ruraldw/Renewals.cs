@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB RPCR_152 June-2020
+    // Added column renewal_type
+    //
     // TJB  RPCR_093  Feb-2015
     // Added note about _st_active_sequence
 
@@ -20,6 +23,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("con_expiry_date", "_con_expiry_date", "")]
     [MapInfo("con_acceptance_flag", "_con_acceptance_flag", "")]
     [MapInfo("contractor", "_contractor", "")]
+    [MapInfo("renewal_type", "_renewal_type", "")]
     [System.Serializable()]
 
     public class Renewals : Entity<Renewals>
@@ -42,6 +46,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _contractor;
+
+        [DBField()]
+        private string _renewal_type;
 
 
         public virtual int? ContractNo
@@ -151,6 +158,25 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
+
+        public virtual string RenewalType
+        {
+            get
+            {
+                CanReadProperty("RenewalType", true);
+                return _renewal_type;
+            }
+            set
+            {
+                CanWriteProperty("RenewalType", true);
+                if (_renewal_type != value)
+                {
+                    _renewal_type = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         // needs to implement compute expression manually:
         // compute control name=[status]
         //?IF( contract_seq_number >;0,if(long(describe('st_active.text'))=contract_seq_number, 'Active', if(long(describe('st_active.text'))<;contract_seq_number, if(isnull(con_acceptance_flag) or con_acceptance_flag <;>; 'Y', 'Pending', 'Accepted'), 'Expired')),'')
@@ -238,9 +264,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "sp_GetRenewals";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_Contract", in_Contract);
-                    cm.CommandText = "sp_GetRenewals";
 
                     List<Renewals> _list = new List<Renewals>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -254,6 +280,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._con_expiry_date = GetValueFromReader<DateTime?>(dr,3);
                             instance._con_acceptance_flag = GetValueFromReader<String>(dr,4);
                             instance._contractor = GetValueFromReader<String>(dr,5);
+                            instance._renewal_type = GetValueFromReader<String>(dr, 6);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
