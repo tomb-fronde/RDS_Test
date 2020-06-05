@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  June-2020: Cosmetic
+    // See fetch select
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -497,7 +500,29 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT post_tax_deductions.ded_id,  post_tax_deductions.ded_description,  post_tax_deductions.ded_priority,  post_tax_deductions.pct_id,  post_tax_deductions.ded_reference,  post_tax_deductions.ded_type_period,  post_tax_deductions.ded_percent_gross,  post_tax_deductions.ded_percent_net,  post_tax_deductions.ded_percent_start_balance,  post_tax_deductions.ded_fixed_amount,  post_tax_deductions.ded_min_threshold_gross,  post_tax_deductions.ded_max_threshold_net_pct,  post_tax_deductions.ded_default_minimum,  post_tax_deductions.ded_start_balance,  post_tax_deductions.ded_end_balance,  post_tax_deductions.contractor_supplier_no,  (CASE WHEN ded_start_balance>0 then 1 else 0 end) startbal_flag,  post_tax_deductions.ded_pay_highest_value  FROM odps.post_tax_deductions  WHERE ( odps.post_tax_deductions.ded_id = :as_ded_id )";
+                    cm.CommandText = "SELECT post_tax_deductions.ded_id"
+                                        + ", post_tax_deductions.ded_description"
+                                        + ",  post_tax_deductions.ded_priority"
+                                        + ",  post_tax_deductions.pct_id"
+                                        + ",  post_tax_deductions.ded_reference"
+                                        + ",  post_tax_deductions.ded_type_period"
+                                        + ",  post_tax_deductions.ded_percent_gross"
+                                        + ",  post_tax_deductions.ded_percent_net"
+                                        + ",  post_tax_deductions.ded_percent_start_balance"
+                                        + ",  post_tax_deductions.ded_fixed_amount"
+                                        + ",  post_tax_deductions.ded_min_threshold_gross"
+                                        + ",  post_tax_deductions.ded_max_threshold_net_pct"
+                                        + ",  post_tax_deductions.ded_default_minimum"
+                                        + ",  post_tax_deductions.ded_start_balance"
+                                        + ",  post_tax_deductions.ded_end_balance"
+                                        + ",  post_tax_deductions.contractor_supplier_no"
+                                        + ",  (CASE WHEN ded_start_balance>0 " 
+                                                 + "THEN 1 "
+                                                 + "ELSE 0 "
+                                                 + "END) startbal_flag"
+                                        + ",  post_tax_deductions.ded_pay_highest_value  " 
+                                     + "FROM odps.post_tax_deductions  " 
+                                    + "WHERE odps.post_tax_deductions.ded_id = :as_ded_id ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "as_ded_id", as_ded_id);
 
