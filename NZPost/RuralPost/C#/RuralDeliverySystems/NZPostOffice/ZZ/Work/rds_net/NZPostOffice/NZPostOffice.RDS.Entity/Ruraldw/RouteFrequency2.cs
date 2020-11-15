@@ -8,11 +8,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Frequencies Changes 15-Nov-2020
+    // Checkin working version
+    // with DRouteFrequency2 and DRouteFrequency2Rows
+    //
     // TJB Frequencies Changes Nov-2020
     // Derived from RouteFrequency
-    //
-    // TJB Frequencies Changes 13-Nov-2020
-    // Checkin sort-of working version
 
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
@@ -283,6 +284,42 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_rf_sunday != value)
                 {
                     _rf_sunday = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string RfNms
+        {
+            get
+            {
+                CanReadProperty("RfNms", true);
+                return _rf_nms;
+            }
+            set
+            {
+                CanWriteProperty("RfNms", true);
+                if (_rf_nms != value)
+                {
+                    _rf_nms = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? RfDpcount
+        {
+            get
+            {
+                CanReadProperty("RfDpcount", true);
+                return _rf_dpcount;
+            }
+            set
+            {
+                CanWriteProperty("RfDpcount", true);
+                if (_rf_dpcount != value)
+                {
+                    _rf_dpcount = value;
                     PropertyHasChanged();
                 }
             }
