@@ -35,6 +35,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label rf_distance_t;
         private System.Windows.Forms.Label adjusted_t;
         private System.Windows.Forms.Label st_contract;
+        private TableLayoutPanel tbPanel;
 
         #region Component Designer generated code
 
@@ -238,10 +239,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 
                 for (int i = 0; i < tbPanel.Controls.Count; i++)
                 {
-                    if  (this.BindingSource.List.IndexOf(((DRouteFrequency2Rows)tbPanel.Controls[i]).DataSource) >= 0)
-                    {
-                    }
-                    else
+                    if  (this.BindingSource.List.IndexOf(((DRouteFrequency2Rows)tbPanel.Controls[i]).DataSource) < 0)
                     {
                         tbPanel.Controls.RemoveAt(i);
                         break;
@@ -310,7 +308,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 tbPanel.Controls.Add(ldw_temp, 0, i);
             }
         }
-        private TableLayoutPanel tbPanel;
 
         #endregion
     }
