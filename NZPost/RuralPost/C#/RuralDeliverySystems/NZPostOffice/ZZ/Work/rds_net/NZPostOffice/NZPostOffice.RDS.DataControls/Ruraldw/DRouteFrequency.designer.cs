@@ -312,13 +312,14 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.calc_deldays.Width = 125;
             this.calc_deldays.Visible = false;
             this.grid.Columns.Add(calc_deldays);
-
-
-                        st_contract = new System.Windows.Forms.Label();
-            st_contract.Size = new System.Drawing.Size(600, 14);
-            st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            st_contract.Name = "st_contract";
-            st_contract.Text = "text";
+            //
+            // st_contract
+            //
+            st_contract = new System.Windows.Forms.Label();
+            this.st_contract.Size = new System.Drawing.Size(600, 14);
+            this.st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.st_contract.Name = "st_contract";
+            this.st_contract.Text = "text";
             this.Controls.Add(st_contract);
 
 			((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();

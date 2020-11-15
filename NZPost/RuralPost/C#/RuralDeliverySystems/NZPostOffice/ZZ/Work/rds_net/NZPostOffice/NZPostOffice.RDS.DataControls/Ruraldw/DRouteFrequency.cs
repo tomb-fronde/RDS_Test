@@ -10,13 +10,17 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-	public partial class DRouteFrequency : Metex.Windows.DataUserControl
+    // TJB Frequencies Nov-2020
+    // Code tidyup
+    // See st_contract in DRouteFrequency.designer
+    //
+    // TJB  RPCR_044  Jan-2013
+    // Added in_showAll in Retrieve
+    //    == 0 select only active frequencies
+    //    == 1 select all
+
+    public partial class DRouteFrequency : Metex.Windows.DataUserControl
 	{
-        // TJB  RPCR_044  Jan-2013
-        // Added in_showAll in Retrieve
-        //    == 0 select only active frequencies
-        //    == 1 select all
-        
         public DRouteFrequency()
 		{
 			InitializeComponent();
