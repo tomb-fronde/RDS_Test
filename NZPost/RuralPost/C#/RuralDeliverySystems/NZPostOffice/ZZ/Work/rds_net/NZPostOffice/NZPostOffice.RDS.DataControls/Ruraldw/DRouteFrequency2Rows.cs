@@ -10,11 +10,11 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies Changes 15-Nov-2020
+    // Checkin working version witb DRouteFrequency2
+    //
     // TJB Frequencies Nov-2020
     // Created modelled on DContractFixedAssetsTest
-    //
-    // TJB Frequencies Changes 13-Nov-2020
-    // Checkin sort-of-working version
 
     public partial class DRouteFrequency2Rows : Metex.Windows.DataUserControl
 	{
@@ -191,8 +191,20 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 
         public int Retrieve(int? contract_no, int? in_showall)
         {
-            return RetrieveCore<RouteFrequency2>(new List<RouteFrequency2>
-                (RouteFrequency2.GetAllRouteFrequency2(contract_no, in_showall)));
+            int rc = 0;
+            string msg;
+            try
+            {
+                rc = RetrieveCore<RouteFrequency2>(new List<RouteFrequency2>
+                    (RouteFrequency2.GetAllRouteFrequency2(contract_no, in_showall)));
+            }
+            catch (Exception e)
+            {
+                msg = e.Message;
+            }
+            int nRows = this.RowCount;
+            int n = nRows;
+            return rc;
         }
     }
 }
