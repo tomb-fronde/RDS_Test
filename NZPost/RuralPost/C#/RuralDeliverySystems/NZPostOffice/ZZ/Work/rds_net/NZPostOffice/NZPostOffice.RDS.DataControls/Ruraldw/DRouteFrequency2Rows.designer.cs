@@ -43,7 +43,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_dpcount_t = new System.Windows.Forms.Label();
             this.rf_dpcount = new System.Windows.Forms.TextBox();
             this.rf_vehicle_name_t = new System.Windows.Forms.Label();
-            this.rf_vehicle_name = new System.Windows.Forms.TextBox();
             this.Line = new System.Windows.Forms.Label();
             this.rf_sunday = new System.Windows.Forms.CheckBox();
             this.rf_monday = new System.Windows.Forms.CheckBox();
@@ -54,6 +53,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_saturday = new System.Windows.Forms.CheckBox();
             this.rf_adjusted = new System.Windows.Forms.TextBox();
             this.sf_key = new Metex.Windows.DataEntityCombo();
+            this.vehicle_number = new Metex.Windows.DataEntityCombo();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +75,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.distance.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.distance.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Distance", true));
             this.distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.distance.Location = new System.Drawing.Point(324, 3);
+            this.distance.Location = new System.Drawing.Point(324, 1);
             this.distance.MaxLength = 40;
             this.distance.Name = "distance";
             this.distance.Size = new System.Drawing.Size(50, 13);
@@ -146,17 +146,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_vehicle_name_t.TabIndex = 64;
             this.rf_vehicle_name_t.Text = "Vehicle";
             // 
-            // rf_vehicle_name
-            // 
-            this.rf_vehicle_name.BackColor = System.Drawing.SystemColors.Control;
-            this.rf_vehicle_name.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rf_vehicle_name.Location = new System.Drawing.Point(325, 22);
-            this.rf_vehicle_name.Name = "rf_vehicle_name";
-            this.rf_vehicle_name.Size = new System.Drawing.Size(147, 13);
-            this.rf_vehicle_name.TabIndex = 65;
-            this.rf_vehicle_name.Text = "HFC768 Toyota Corolla";
-            this.rf_vehicle_name.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // Line
             // 
             this.Line.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -168,6 +157,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_sunday
             // 
             this.rf_sunday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfSundayChecked", true));
+            this.rf_sunday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_sunday.Location = new System.Drawing.Point(302, 3);
             this.rf_sunday.Name = "rf_sunday";
             this.rf_sunday.Size = new System.Drawing.Size(16, 13);
@@ -177,6 +167,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_monday
             // 
             this.rf_monday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfMondayChecked", true));
+            this.rf_monday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_monday.Location = new System.Drawing.Point(182, 3);
             this.rf_monday.Name = "rf_monday";
             this.rf_monday.Size = new System.Drawing.Size(16, 13);
@@ -186,6 +177,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_tuesday
             // 
             this.rf_tuesday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfTuesdayChecked", true));
+            this.rf_tuesday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_tuesday.Location = new System.Drawing.Point(202, 3);
             this.rf_tuesday.Name = "rf_tuesday";
             this.rf_tuesday.Size = new System.Drawing.Size(16, 13);
@@ -195,6 +187,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_wednesday
             // 
             this.rf_wednesday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfWednesdayChecked", true));
+            this.rf_wednesday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_wednesday.Location = new System.Drawing.Point(222, 3);
             this.rf_wednesday.Name = "rf_wednesday";
             this.rf_wednesday.Size = new System.Drawing.Size(16, 13);
@@ -204,6 +197,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_thursday
             // 
             this.rf_thursday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfThursdayChecked", true));
+            this.rf_thursday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_thursday.Location = new System.Drawing.Point(242, 3);
             this.rf_thursday.Name = "rf_thursday";
             this.rf_thursday.Size = new System.Drawing.Size(16, 13);
@@ -213,6 +207,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_friday
             // 
             this.rf_friday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfFridayChecked", true));
+            this.rf_friday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_friday.Location = new System.Drawing.Point(262, 3);
             this.rf_friday.Name = "rf_friday";
             this.rf_friday.Size = new System.Drawing.Size(16, 13);
@@ -222,6 +217,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // rf_saturday
             // 
             this.rf_saturday.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "RfSaturdayChecked", true));
+            this.rf_saturday.Font = new System.Drawing.Font("Arial", 8F);
             this.rf_saturday.Location = new System.Drawing.Point(282, 3);
             this.rf_saturday.Name = "rf_saturday";
             this.rf_saturday.Size = new System.Drawing.Size(16, 13);
@@ -233,7 +229,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_adjusted.BackColor = System.Drawing.SystemColors.Control;
             this.rf_adjusted.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rf_adjusted.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute2", true));
-            this.rf_adjusted.Location = new System.Drawing.Point(378, 3);
+            this.rf_adjusted.Location = new System.Drawing.Point(378, 1);
             this.rf_adjusted.Name = "rf_adjusted";
             this.rf_adjusted.Size = new System.Drawing.Size(142, 13);
             this.rf_adjusted.TabIndex = 74;
@@ -257,11 +253,30 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.sf_key.ValueMember = "SfKey";
             this.sf_key.SelectedIndexChanged += new System.EventHandler(this.sf_key_SelectedIndexChanged);
             // 
+            // vehicle_number
+            // 
+            this.vehicle_number.AutoRetrieve = true;
+            this.vehicle_number.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bindingSource, "VehicleNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.vehicle_number.DisplayMember = "VehicleName";
+            this.vehicle_number.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.vehicle_number.DropDownWidth = 156;
+            this.vehicle_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.vehicle_number.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.vehicle_number.FormattingEnabled = true;
+            this.vehicle_number.Location = new System.Drawing.Point(330, 15);
+            this.vehicle_number.Name = "vehicle_number";
+            this.vehicle_number.Size = new System.Drawing.Size(130, 21);
+            this.vehicle_number.TabIndex = 76;
+            this.vehicle_number.Value = null;
+            this.vehicle_number.ValueMember = "VehicleNumber";
+            this.vehicle_number.SelectedIndexChanged += new System.EventHandler(this.vehicle_name_SelectedIndexChanged);
+            // 
             // DRouteFrequency2Rows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.sf_key);
+            this.Controls.Add(this.vehicle_number);
             this.Controls.Add(this.rf_adjusted);
             this.Controls.Add(this.rf_saturday);
             this.Controls.Add(this.rf_friday);
@@ -271,7 +286,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.rf_monday);
             this.Controls.Add(this.rf_sunday);
             this.Controls.Add(this.Line);
-            this.Controls.Add(this.rf_vehicle_name);
             this.Controls.Add(this.rf_vehicle_name_t);
             this.Controls.Add(this.rf_dpcount);
             this.Controls.Add(this.rf_dpcount_t);
@@ -284,9 +298,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         void sf_key_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            this.AcceptText();
+        }
+
+        void vehicle_name_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             this.AcceptText();
         }
@@ -322,7 +342,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label rf_dpcount_t;
         private System.Windows.Forms.TextBox rf_dpcount;
         private System.Windows.Forms.Label rf_vehicle_name_t;
-        private System.Windows.Forms.TextBox rf_vehicle_name;
         private System.Windows.Forms.Label Line;
         private System.Windows.Forms.CheckBox rf_sunday;
         private System.Windows.Forms.CheckBox rf_monday;
@@ -333,5 +352,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.CheckBox rf_saturday;
         private System.Windows.Forms.TextBox rf_adjusted;
         private Metex.Windows.DataEntityCombo sf_key;
+        private Metex.Windows.DataEntityCombo vehicle_number;
     }
 }

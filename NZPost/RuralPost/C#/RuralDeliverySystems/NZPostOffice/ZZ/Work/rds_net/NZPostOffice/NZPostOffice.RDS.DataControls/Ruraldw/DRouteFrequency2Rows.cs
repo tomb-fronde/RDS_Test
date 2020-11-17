@@ -187,6 +187,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private void InitializeDropdown()
         {
             sf_key.AssignDropdownType<DDddwStandardFrequency>();
+            vehicle_number.AssignDropdownType<DDddwContractorVehicles>();
         }
 
         public int Retrieve(int? contract_no, int? in_showall)
@@ -201,6 +202,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             catch (Exception e)
             {
                 msg = e.Message;
+                MessageBox.Show("Retrieve error: " + msg, "DRouteFrequency2Rows");
             }
             int nRows = this.RowCount;
             int n = nRows;
