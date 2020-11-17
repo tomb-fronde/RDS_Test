@@ -289,6 +289,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual decimal? Distance
+        {
+            get
+            {
+                CanReadProperty("Distance", true);
+                return _distance;
+            }
+            set
+            {
+                CanWriteProperty("Distance", true);
+                if (_distance != value)
+                {
+                    _distance = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual string RfNms
         {
             get
@@ -325,19 +343,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual decimal? Distance
+        public virtual int? VehicleNumber
         {
             get
             {
-                CanReadProperty("Distance", true);
-                return _distance;
+                CanReadProperty("VehicleNumber", true);
+                return _vehicle_number;
             }
             set
             {
-                CanWriteProperty("Distance", true);
-                if (_distance != value)
+                CanWriteProperty("VehicleNumber", true);
+                if (_vehicle_number != value)
                 {
-                    _distance = value;
+                    _vehicle_number = value;
                     PropertyHasChanged();
                 }
             }
@@ -625,8 +643,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         {
             get
             {
+                string deldays;
                 CanReadProperty("CalcDeldays", true);
-                return _rf_monday + _rf_tuesday + _rf_wednesday + _rf_thursday + _rf_friday + _rf_saturday + _rf_sunday;
+                deldays = _rf_monday + _rf_tuesday + _rf_wednesday + _rf_thursday + _rf_friday + _rf_saturday + _rf_sunday;
+                return deldays;
             }
         }
 
