@@ -21,6 +21,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB Frequencies Nov-2020
     // Added tabpage Frequencies2
     // See dw_route_frequency2 and idw_frequencies2
+    // Added of_validate_frequencies2() and of_frequency2_unique()
     //
     // TJB RPCR_152 June-2020
     // Added Renewal Type column to Renewals tab.  No significant changes to 
@@ -1265,6 +1266,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual bool of_frequency2_unique(int arow)
         {
+            // TJB Frequencies Nov 2020
+            // Derived from of_frequency2_unique
+
             bool bReturn = true;
             int? lFrequency;
             int lRow;
@@ -1285,7 +1289,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         for (int i = arow + 1; i < idw_frequencies2.RowCount; i++)
                         {
                             lRow = -1;
-                            if (idw_frequencies2.GetItem<RouteFrequency2>(i).SfKey == lFrequency && idw_frequencies2.GetItem<RouteFrequency2>(i).RfDeliveryDays == sDeliveryDays)
+                            if (idw_frequencies2.GetItem<RouteFrequency2>(i).SfKey == lFrequency 
+                                && idw_frequencies2.GetItem<RouteFrequency2>(i).RfDeliveryDays == sDeliveryDays)
                             {
                                 lRow = i;
                                 break;
@@ -1427,6 +1432,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual bool of_validate_frequencies2()
         {
+            // TJB Frequencies Nov-2020 NEW
+            // Derived from of_validate_frequencies
+
             int ll_RowCount;
             int ll_Row;
             int lNumDays;
@@ -1453,7 +1461,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 else
                 {
                     idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDeliveryDays
-                                   = idw_frequencies.GetItem<RouteFrequency2>(ll_Row).CalcDeldays;
+                                   = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays;
                 }
                 if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey == null)
                     && idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays != "NNNNNNN")
@@ -1464,12 +1472,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ls_ErrorColumn = "sf_key";
                 }
                 sDaysDelivery = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays;
-                idw_frequencies.GetItem<RouteFrequency2>(ll_Row).RfDeliveryDays = sDaysDelivery;
+                idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDeliveryDays = sDaysDelivery;
 
                 if (of_frequency2_unique(ll_Row))
                 {
-                    lNumDays = idw_frequencies.GetItem<RouteFrequency2>(ll_Row).CalcNumdeldays.GetValueOrDefault();
-                    lSFKey = idw_frequencies.GetItem<RouteFrequency2>(ll_Row).SfKey.GetValueOrDefault();
+                    lNumDays = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcNumdeldays.GetValueOrDefault();
+                    lSFKey = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey.GetValueOrDefault();
 
                     dwChild = new DDddwStandardFrequency();
                     dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)(((Metex.Windows.DataEntityGrid)(idw_frequencies.GetControlByName("grid"))).Columns["sf_key"])).DataSource;
