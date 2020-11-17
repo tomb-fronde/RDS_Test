@@ -42,6 +42,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             catch (Exception e)
             {
                 msg = e.Message;
+                MessageBox.Show("Retrieve error: " + msg, "DRouteFrequency2");
             }
             int nRows = this.RowCount;
             int n = nRows;
