@@ -22,14 +22,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public DRouteFrequency2()
 		{
 			InitializeComponent();
-            //InitializeDropdown();
 		}
-/*
-        private void InitializeDropdown()
-        {
-            //sf_key.AssignDropdownType<DddwStandardFrequency>();
-        }
-*/
+
         public int Retrieve(int? contract_no, int? in_showall)
 		{
             int rc = 0;

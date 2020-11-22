@@ -103,7 +103,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_nms.Name = "rf_nms";
             this.rf_nms.Size = new System.Drawing.Size(61, 13);
             this.rf_nms.TabIndex = 60;
-            this.rf_nms.Text = "1234";
             // 
             // rf_active
             // 
@@ -129,11 +128,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.rf_dpcount.BackColor = System.Drawing.SystemColors.Control;
             this.rf_dpcount.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rf_dpcount.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RfDpcount", true));
             this.rf_dpcount.Location = new System.Drawing.Point(222, 22);
             this.rf_dpcount.Name = "rf_dpcount";
             this.rf_dpcount.Size = new System.Drawing.Size(53, 13);
             this.rf_dpcount.TabIndex = 63;
-            this.rf_dpcount.Text = "123";
             this.rf_dpcount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // rf_vehicle_name_t
@@ -295,6 +294,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.distance);
             this.Name = "DRouteFrequency2Rows";
             this.Size = new System.Drawing.Size(525, 41);
+//            this.DoubleClick += new System.EventHandler(this.DRouteFrequency2Rows_DoubleClick);
+//            this.Click += new System.EventHandler(this.DRouteFrequency2Rows_Click);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

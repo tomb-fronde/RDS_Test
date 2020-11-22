@@ -76,7 +76,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.tbPanel.Name = "tbPanel";
             this.tbPanel.RowCount = 1;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tbPanel.Size = new System.Drawing.Size(534, 234);
+            this.tbPanel.Size = new System.Drawing.Size(534, 218);
             this.tbPanel.TabIndex = 1;
             // 
             // sf_description_t
@@ -193,7 +193,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.st_contract.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.st_contract.Location = new System.Drawing.Point(0, 0);
             this.st_contract.Name = "st_contract";
-            this.st_contract.Size = new System.Drawing.Size(600, 14);
+            this.st_contract.Size = new System.Drawing.Size(533, 14);
             this.st_contract.TabIndex = 13;
             this.st_contract.Text = "text";
             // 
@@ -214,7 +214,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.st_contract);
             this.Controls.Add(this.tbPanel);
             this.Name = "DRouteFrequency2";
-            this.Size = new System.Drawing.Size(536, 270);
+            this.Size = new System.Drawing.Size(536, 252);
             this.RetrieveStart += new Metex.Windows.RetrieveEventHandler(this.DRouteFrequency2_RetrieveStart);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -278,17 +278,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
             TextBoxLostFocus(sender, e);
         }
-
+/*
         void DRouteFrequency2_Click(object sender, System.EventArgs e)
         {
-/*
             if (((DddwFixedAssetType)((Metex.Windows.DataEntityCombo)sender).Items[0]).FatId == null)
             {
                 ((Metex.Windows.DataEntityCombo)sender).InnerDataUserControl.DeleteItemAt(0);
             }
-*/
         }
-
+*/
         void ldw_temp_Click(object sender, System.EventArgs e)
         {
             this.SetCurrent(this.bindingSource.List.IndexOf(((DRouteFrequency2Rows)sender).DataSource as RouteFrequency2));
