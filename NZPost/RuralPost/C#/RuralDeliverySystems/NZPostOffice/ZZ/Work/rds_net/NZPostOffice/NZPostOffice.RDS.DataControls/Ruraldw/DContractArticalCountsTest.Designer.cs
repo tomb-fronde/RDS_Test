@@ -3,6 +3,9 @@ using System.Windows.Forms;
 using NZPostOffice.RDS.Entity.Ruraldw;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies Nov-2020  Cosmetic
+    // Changed "clearBanckColor" to "clearBackColour"
+
     partial class DContractArticalCounts
     {
         /// <summary> 
@@ -302,7 +305,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             }
         }
         
-        private void clearBanckColor()                  //added by ygu
+        private void clearBackColour()
         {
             for (int i = 0; i < resultCount; i++)
             {
@@ -351,7 +354,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         void ldw_temp_Click(object sender, System.EventArgs e)              //altered by ygu
         {
             this.SetCurrent(this.bindingSource.List.IndexOf(((DContractArticalCountsTest)sender).BindingSource.DataSource as ContractArticalCounts));
-            clearBanckColor();
+            clearBackColour();
             ((DContractArticalCountsTest)sender).BackColor = System.Drawing.SystemColors.Highlight;
             ((DContractArticalCountsTest)sender).GetControlByName("ac_w1_medium_letters").BackColor = System.Drawing.SystemColors.Highlight;
             ((DContractArticalCountsTest)sender).GetControlByName("ac_w1_other_envelopes").BackColor = System.Drawing.SystemColors.Highlight;
