@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // [Interim saves to recover from messups]
+    // 23-Nv-2020 dw_route_frequency_clicked and dw_route_frequency_DoubleClick triggered
+    //            (functional code for DoubleClick still to be implemented}
+    //
     // TJB Frequencies Nov-2020
     // Added tabpage Frequencies2
     // See dw_route_frequency2 and idw_frequencies2
@@ -2500,6 +2504,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_route_frequency2.URdsDw_Clicked(sender, e);
         }
 
+
+        private void dw_route_frequency2_DoubleClick(object sender, EventArgs e)
+        {
+            dw_route_frequency2.URdsDw_DoubleClick(sender, e);
+            int nRows = -1;
+            int nRow  = -1;
+
+            nRows = dw_route_frequency2.RowCount;
+            if (dw_route_frequency2.RowCount > 0)
+            {
+                //Cursor.Current = Cursors.WaitCursor;
+                nRow = dw_route_frequency2.GetRow();
+                //if (!((dw_route_frequency2.GetItem<route_frequency2>(nRow).   //.AcStartWeekPeriod.GetValueOrDefault().Date == null)))
+             }
+            MessageBox.Show("dw_route_frequency2_DoubleClick" + "\n"
+                            + "Rowcount = " + nRows.ToString() + "\n"
+                            + "Row      = " + nRow.ToString()
+                            );
+        }
+
         public virtual void dw_route_frequency_getfocus(object sender, EventArgs e)
         {
             dw_artical_counts.of_setautoinsert(true);
@@ -4622,10 +4646,5 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         #endregion
-
-        private void dw_route_frequency2_DoubleClick(object sender, EventArgs e)
-        {
-            MessageBox.Show("dw_route_frequency2_DoubleClick");
-        }
     }
 }
