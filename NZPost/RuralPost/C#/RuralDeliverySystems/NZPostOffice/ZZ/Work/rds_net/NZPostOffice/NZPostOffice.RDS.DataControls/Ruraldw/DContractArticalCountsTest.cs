@@ -9,6 +9,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies Nov-2020  Cosmetic in DContractArticleCountsTest.Designer
+    // Changed "clearBanckColor" to "clearBackColour"
+
     // TJB  RPCR_093  Feb 2015
     // Hide Large Parcels heading and note about large parcels
 
