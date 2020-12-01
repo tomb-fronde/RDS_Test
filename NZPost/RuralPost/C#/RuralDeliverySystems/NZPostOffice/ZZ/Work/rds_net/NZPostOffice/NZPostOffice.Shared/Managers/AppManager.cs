@@ -9,6 +9,11 @@ using System.IO;
 
 namespace NZPostOffice.Shared.Managers
 {
+    // TJB  NPAD2  December 2005  
+    // Added variables to specify the state of NPAD processing  
+    // Retrieved from NPAD_parameters table in database on login 
+    // of_get_npadenabled(), of_get_npaddirectory() New
+
     public class AppManager
     {
         #region For ODPS
