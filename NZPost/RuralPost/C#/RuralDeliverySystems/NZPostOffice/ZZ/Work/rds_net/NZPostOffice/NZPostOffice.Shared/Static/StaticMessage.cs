@@ -4,7 +4,10 @@ using System.Text;
 
 namespace NZPostOffice.Shared
 {
-	/// <summary>
+    // TJB Frequencies Nov-2020 
+    // Added ContractNoParm
+
+    /// <summary>
 	/// Summary description for StaticMessage.
 	/// </summary>
 	public class StaticMessage
@@ -127,6 +130,25 @@ namespace NZPostOffice.Shared
             {
                 _IntegerParm = value;
                 _LastSetVariable = "IntegerParm";
+            }
+        }
+
+        // TJB Frequencies Nov-2020 Added
+        // Created specific variable to avoid possible conflict
+        // with other uses (eg of IntegerParm). Used by 
+        // Frequencies (version 2) to pass the contract number
+        // to the retreival for the vehicle number dropdown
+        private static int _contract_no_parm = 0;
+        public static int ContractNoParm
+        {
+            get
+            {
+                return _contract_no_parm;
+            }
+            set
+            {
+                _contract_no_parm = value;
+                _LastSetVariable = "ContractNoParm";
             }
         }
 
