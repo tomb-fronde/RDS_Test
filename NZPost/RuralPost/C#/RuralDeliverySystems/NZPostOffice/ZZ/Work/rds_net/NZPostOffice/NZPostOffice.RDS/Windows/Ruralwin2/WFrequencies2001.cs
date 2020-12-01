@@ -13,6 +13,10 @@ using NZPostOffice.RDS.Windows.Ruralrpt;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies Nov-2020
+    // Added passed sf-description from Frequency2
+    // Retained Frequency method for backwards compatability
+
     public class WFrequencies2001 : WAncestorWindow
     {
         // TJB  Nov-2013  Bug fix
@@ -342,6 +346,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             base.pfc_postopen();
             int ll_Row;
             string ls_Title;
+            string sSfDescription;
             MMainMenu mCurrent;
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
@@ -351,6 +356,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             il_sf_key = Convert.ToInt32(lvn_Criteria.of_getcriteria("Sf_key"));
             is_delivery_days = lvn_Criteria.of_getcriteria("Rf_delivery_days").ToString();
             idw_route_freq = (URdsDw)lvn_Criteria.of_getcriteria("Dw_route_freq");
+            sSfDescription = lvn_Criteria.of_getcriteria("Sf_description").ToString();
             // Retrieve fisrt dw
             ((DFrequenceDistances)idw_extensions.DataObject).Retrieve(il_contract, il_sf_key, is_delivery_days);
             // Populate dw_header
@@ -361,7 +367,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_header.DataObject.GetItem<FrequencyTitle>(0).ContractNo = il_contract;//setitem(1, "contract_no", il_contract);
             dw_header.DataObject.GetControlByName("st_contract").Text = idw_route_freq.DataObject.GetControlByName("st_contract").Text;//.text") + '\'');
             //dw_header.DataObject.GetItem<FrequencyTitle>(0).SfDescription = idw_route_freq.DataObject.Describe("evaluate ( \'lookupdisplay ( sf_key)\'," + ll_Row.ToString() + ')'));
-            dw_header.DataObject.GetItem<FrequencyTitle>(0).SfDescription = Convert.ToString(((Metex.Windows.DataEntityGrid)(idw_route_freq.GetControlByName("grid"))).Rows[ll_Row].Cells[0].FormattedValue);
+            if (sSfDescription == "")
+            {
+                dw_header.DataObject.GetItem<FrequencyTitle>(0).SfDescription = Convert.ToString(((Metex.Windows.DataEntityGrid)(idw_route_freq.GetControlByName("grid"))).Rows[ll_Row].Cells[0].FormattedValue);
+            }
+            else
+            {
+                dw_header.DataObject.GetItem<FrequencyTitle>(0).SfDescription = sSfDescription;
+            }
 
             dw_header.DataObject.GetItem<FrequencyTitle>(0).Mon = Convert.ToString(idw_route_freq.DataObject.GetValue(ll_Row, "rf_monday")) == "Y" ? true : false;
             dw_header.DataObject.GetItem<FrequencyTitle>(0).Tue = Convert.ToString(idw_route_freq.DataObject.GetValue(ll_Row, "rf_tuesday")) == "Y" ? true : false;
