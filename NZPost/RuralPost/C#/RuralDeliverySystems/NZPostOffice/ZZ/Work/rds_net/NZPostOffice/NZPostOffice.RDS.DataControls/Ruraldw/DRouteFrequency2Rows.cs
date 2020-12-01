@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies Nov-2020
+    // Code tidied
+    //
     // TJB Frequencies Changes 15-Nov-2020
     // Checkin working version witb DRouteFrequency2
     //
@@ -65,20 +68,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 msg = e.Message;
                 MessageBox.Show("Retrieve error: " + msg, "DRouteFrequency2Rows");
             }
-            int nRows = this.RowCount;
-            int n = nRows;
             return rc;
         }
-/*
-        private void DRouteFrequency2Rows_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("DRouteFrequency2Rows_Click","DRouteFrequency2Rows");
-        }
-
-        private void DRouteFrequency2Rows_DoubleClick(object sender, EventArgs e)
-        {
-            MessageBox.Show("DRouteFrequency2Rows_DoubleClick", "DRouteFrequency2Rows");
-        }
-*/
     }
 }

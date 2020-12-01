@@ -54,6 +54,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_adjusted = new System.Windows.Forms.TextBox();
             this.sf_key = new Metex.Windows.DataEntityCombo();
             this.vehicle_number = new Metex.Windows.DataEntityCombo();
+            this.rf_contract_no = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,7 +112,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_active.Location = new System.Drawing.Point(150, 3);
             this.rf_active.Name = "rf_active";
             this.rf_active.Size = new System.Drawing.Size(16, 13);
-            this.rf_active.TabIndex = 61;
+            this.rf_active.TabIndex = 20;
             // 
             // rf_dpcount_t
             // 
@@ -120,7 +121,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_dpcount_t.Location = new System.Drawing.Point(157, 22);
             this.rf_dpcount_t.Name = "rf_dpcount_t";
             this.rf_dpcount_t.Size = new System.Drawing.Size(60, 13);
-            this.rf_dpcount_t.TabIndex = 62;
+            this.rf_dpcount_t.TabIndex = 0;
             this.rf_dpcount_t.Text = "DP Count";
             this.rf_dpcount_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -132,7 +133,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_dpcount.Location = new System.Drawing.Point(222, 22);
             this.rf_dpcount.Name = "rf_dpcount";
             this.rf_dpcount.Size = new System.Drawing.Size(53, 13);
-            this.rf_dpcount.TabIndex = 63;
+            this.rf_dpcount.TabIndex = 70;
             this.rf_dpcount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // rf_vehicle_name_t
@@ -142,7 +143,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_vehicle_name_t.Location = new System.Drawing.Point(282, 22);
             this.rf_vehicle_name_t.Name = "rf_vehicle_name_t";
             this.rf_vehicle_name_t.Size = new System.Drawing.Size(42, 13);
-            this.rf_vehicle_name_t.TabIndex = 64;
+            this.rf_vehicle_name_t.TabIndex = 0;
             this.rf_vehicle_name_t.Text = "Vehicle";
             // 
             // Line
@@ -160,7 +161,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_sunday.Location = new System.Drawing.Point(302, 3);
             this.rf_sunday.Name = "rf_sunday";
             this.rf_sunday.Size = new System.Drawing.Size(16, 13);
-            this.rf_sunday.TabIndex = 67;
+            this.rf_sunday.TabIndex = 36;
             this.rf_sunday.UseVisualStyleBackColor = true;
             // 
             // rf_monday
@@ -170,7 +171,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_monday.Location = new System.Drawing.Point(182, 3);
             this.rf_monday.Name = "rf_monday";
             this.rf_monday.Size = new System.Drawing.Size(16, 13);
-            this.rf_monday.TabIndex = 68;
+            this.rf_monday.TabIndex = 30;
             this.rf_monday.UseVisualStyleBackColor = true;
             // 
             // rf_tuesday
@@ -180,7 +181,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_tuesday.Location = new System.Drawing.Point(202, 3);
             this.rf_tuesday.Name = "rf_tuesday";
             this.rf_tuesday.Size = new System.Drawing.Size(16, 13);
-            this.rf_tuesday.TabIndex = 69;
+            this.rf_tuesday.TabIndex = 31;
             this.rf_tuesday.UseVisualStyleBackColor = true;
             // 
             // rf_wednesday
@@ -190,7 +191,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_wednesday.Location = new System.Drawing.Point(222, 3);
             this.rf_wednesday.Name = "rf_wednesday";
             this.rf_wednesday.Size = new System.Drawing.Size(16, 13);
-            this.rf_wednesday.TabIndex = 70;
+            this.rf_wednesday.TabIndex = 32;
             this.rf_wednesday.UseVisualStyleBackColor = true;
             // 
             // rf_thursday
@@ -200,7 +201,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_thursday.Location = new System.Drawing.Point(242, 3);
             this.rf_thursday.Name = "rf_thursday";
             this.rf_thursday.Size = new System.Drawing.Size(16, 13);
-            this.rf_thursday.TabIndex = 71;
+            this.rf_thursday.TabIndex = 33;
             this.rf_thursday.UseVisualStyleBackColor = true;
             // 
             // rf_friday
@@ -210,7 +211,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_friday.Location = new System.Drawing.Point(262, 3);
             this.rf_friday.Name = "rf_friday";
             this.rf_friday.Size = new System.Drawing.Size(16, 13);
-            this.rf_friday.TabIndex = 72;
+            this.rf_friday.TabIndex = 34;
             this.rf_friday.UseVisualStyleBackColor = true;
             // 
             // rf_saturday
@@ -220,7 +221,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_saturday.Location = new System.Drawing.Point(282, 3);
             this.rf_saturday.Name = "rf_saturday";
             this.rf_saturday.Size = new System.Drawing.Size(16, 13);
-            this.rf_saturday.TabIndex = 73;
+            this.rf_saturday.TabIndex = 35;
             this.rf_saturday.UseVisualStyleBackColor = true;
             // 
             // rf_adjusted
@@ -228,10 +229,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_adjusted.BackColor = System.Drawing.SystemColors.Control;
             this.rf_adjusted.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rf_adjusted.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute2", true));
-            this.rf_adjusted.Location = new System.Drawing.Point(378, 1);
+            this.rf_adjusted.Location = new System.Drawing.Point(436, 1);
             this.rf_adjusted.Name = "rf_adjusted";
-            this.rf_adjusted.Size = new System.Drawing.Size(142, 13);
-            this.rf_adjusted.TabIndex = 74;
+            this.rf_adjusted.Size = new System.Drawing.Size(37, 13);
+            this.rf_adjusted.TabIndex = 50;
             this.rf_adjusted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // sf_key
@@ -247,7 +248,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.sf_key.Location = new System.Drawing.Point(4, 0);
             this.sf_key.Name = "sf_key";
             this.sf_key.Size = new System.Drawing.Size(130, 21);
-            this.sf_key.TabIndex = 75;
+            this.sf_key.TabIndex = 10;
             this.sf_key.Value = null;
             this.sf_key.ValueMember = "SfKey";
             this.sf_key.SelectedIndexChanged += new System.EventHandler(this.sf_key_SelectedIndexChanged);
@@ -265,15 +266,28 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vehicle_number.Location = new System.Drawing.Point(330, 15);
             this.vehicle_number.Name = "vehicle_number";
             this.vehicle_number.Size = new System.Drawing.Size(130, 21);
-            this.vehicle_number.TabIndex = 76;
+            this.vehicle_number.TabIndex = 80;
             this.vehicle_number.Value = null;
             this.vehicle_number.ValueMember = "VehicleNumber";
             this.vehicle_number.SelectedIndexChanged += new System.EventHandler(this.vehicle_name_SelectedIndexChanged);
+            // 
+            // rf_contract_no
+            // 
+            this.rf_contract_no.BackColor = System.Drawing.SystemColors.Control;
+            this.rf_contract_no.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rf_contract_no.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "ContractNo", true));
+            this.rf_contract_no.Enabled = false;
+            this.rf_contract_no.Location = new System.Drawing.Point(480, 1);
+            this.rf_contract_no.Name = "rf_contract_no";
+            this.rf_contract_no.Size = new System.Drawing.Size(30, 13);
+            this.rf_contract_no.TabIndex = 81;
+            this.rf_contract_no.Visible = false;
             // 
             // DRouteFrequency2Rows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.rf_contract_no);
             this.Controls.Add(this.sf_key);
             this.Controls.Add(this.vehicle_number);
             this.Controls.Add(this.rf_adjusted);
@@ -294,8 +308,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.distance);
             this.Name = "DRouteFrequency2Rows";
             this.Size = new System.Drawing.Size(525, 41);
-//            this.DoubleClick += new System.EventHandler(this.DRouteFrequency2Rows_DoubleClick);
-//            this.Click += new System.EventHandler(this.DRouteFrequency2Rows_Click);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -354,5 +366,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.TextBox rf_adjusted;
         private Metex.Windows.DataEntityCombo sf_key;
         private Metex.Windows.DataEntityCombo vehicle_number;
+        private System.Windows.Forms.TextBox rf_contract_no;
     }
 }
