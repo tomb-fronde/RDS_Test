@@ -331,15 +331,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             this.dw_route_frequency2.Constructor += new UserEventDelegate(dw_route_frequency2_constructor);
             this.dw_route_frequency2.PfcValidation += new UserEventDelegate1(dw_route_frequency2_PfcValidation);
-            //this.dw_route_frequency2.GotFocus += new System.EventHandler(this.dw_route_frequency2_getfocus);
-            //this.dw_route_frequency2.Click += new System.EventHandler(dw_route_frequency2_clicked);
-            //this.dw_route_frequency2.DoubleClick += new System.EventHandler(dw_route_frequency2_doubleclicked);
-            //this.dw_route_frequency2.PfcPreInsertRow += new UserEventDelegate1(dw_route_frequency2_PfcPreInsertRow);
-            //this.dw_route_frequency2.PfcInsertRow += new UserEventDelegate(dw_route_frequency2_PfcInsertRow);
-            //this.dw_route_frequency2.PfcPreDeleteRow += new UserEventDelegate1(dw_route_frequency2_PfcPreDeleteRow);
-            //this.dw_route_frequency2.PfcPreUpdate += new UserEventDelegate1(dw_route_frequency2_PfcPreUpdate);
-            //this.dw_route_frequency2.PfcUpdate += new UserEventDelegate1(dw_route_frequency2_PfcUpdate);
-            //this.dw_route_frequency2.PfcPostUpdate += new UserEventDelegate(dw_route_frequency2_PfcPostUpdate);
+            this.dw_route_frequency2.PfcPreInsertRow += new UserEventDelegate1(dw_route_frequency2_PfcPreInsertRow);
 
             this.dw_route_audit.Constructor += new UserEventDelegate(dw_route_audit_constructor);
             ((DRouteAuditListing)dw_route_audit.DataObject).CellDoubleClick += new EventHandler(dw_route_audit_doubleclicked);
@@ -1444,10 +1436,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_Row;
             int lNumDays;
             int lSFKey;
-            int lrow;
+            int sfKey_Row;
             string sDaysDelivery;
-            string sSfDescription;
-            string ls_ErrorColumn = "";
+            string sSfDescription = "";
+            bool error_found = false;
             Metex.Windows.DataUserControl dwChild;
 
             ll_RowCount = idw_frequencies2.RowCount;
@@ -1462,10 +1454,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lSFKey = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey.GetValueOrDefault();
                 dwChild = new DDddwStandardFrequency();
                 dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)(((Metex.Windows.DataEntityGrid)(idw_frequencies.GetControlByName("grid"))).Columns["sf_key"])).DataSource;
-                lrow = dwChild.Find("sf_key", lSFKey);
-                sSfDescription = dwChild.GetItem<DddwStandardFrequency>(lrow).SfDescription;
-
-                if (!((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey) == null)
+                sfKey_Row = dwChild.Find("sf_key", lSFKey);
+                if (sfKey_Row >= 0)
+                {
+                    sSfDescription = dwChild.GetItem<DddwStandardFrequency>(sfKey_Row).SfDescription;
+                }
+                if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey == null)
+                    && idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays != "NNNNNNN")
+                {
+                    MessageBox.Show("Please select a frequency for row " + (ll_Row + 1).ToString()
+                                    , this.Text
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    error_found = true;
+                }
+                if (!(idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey == null)
                     && idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays == "NNNNNNN")
                 {
                     //MessageBox.Show("Please select the days that this frequency is delivered"
@@ -1473,47 +1475,33 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                     + " is delivered"
                                     , this.Text
                                     , MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    ls_ErrorColumn = "rf_monday";
+                    error_found = true;
                 }
                 else
                 {
                     idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDeliveryDays
                                    = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays;
                 }
-                if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey == null)
-                    && idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays != "NNNNNNN")
-                {
-                    MessageBox.Show("Please select a frequency"
-                                    , this.Text
-                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    ls_ErrorColumn = "sf_key";
-                }
                 sDaysDelivery = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcDeldays;
                 idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDeliveryDays = sDaysDelivery;
 
                 if (of_frequency2_unique(ll_Row))
                 {
-                    //lNumDays = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).CalcNumdeldays.GetValueOrDefault();
-                    //lSFKey = idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).SfKey.GetValueOrDefault();
-                    //dwChild = new DDddwStandardFrequency();
-                    //dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)(((Metex.Windows.DataEntityGrid)(idw_frequencies.GetControlByName("grid"))).Columns["sf_key"])).DataSource;
-                    //lrow = dwChild.Find("sf_key", lSFKey);
-                    //sSfDescription = dwChild.GetItem<DddwStandardFrequency>(lrow).SfDescription;
-                    if (lrow > 0)
+                    if (sfKey_Row > 0)
                     {
-                        if (dwChild.GetItem<DddwStandardFrequency>(lrow).SfDaysWeek.GetValueOrDefault() != lNumDays)
+                        if (dwChild.GetItem<DddwStandardFrequency>(sfKey_Row).SfDaysWeek.GetValueOrDefault() != lNumDays)
                         {
                             MessageBox.Show("The delivery days selected does not equal the number of days \n"
                                             + "specified for frequency " + sSfDescription
                                             , this.Text
                                             , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            ls_ErrorColumn = "rf_monday";
+                            error_found = true;
                         }
                     }
                 }
                 else
                 {
-                    ls_ErrorColumn = "rf_monday";
+                    error_found = true;
                 }
 
                 if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).Distance == null))
@@ -1522,7 +1510,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             idw_frequencies2.AcceptText();
-            return ls_ErrorColumn.Length == 0;
+            return error_found;
         }
 
         public virtual bool of_validate_fixed_assets()
@@ -2429,6 +2417,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("Sf_key", dw_route_frequency.GetItem<RouteFrequency>(row).SfKey.GetValueOrDefault());
             lnv_Criteria.of_addcriteria("Rf_delivery_days", dw_route_frequency.GetItem<RouteFrequency>(row).RfDeliveryDays);
             lnv_Criteria.of_addcriteria("Dw_route_freq", dw_route_frequency);
+            lnv_Criteria.of_addcriteria("Sf_description", "");
             lnv_msg.of_addcriteria(lnv_Criteria);
             ls_Title = " (" + dw_route_frequency.GetItem<RouteFrequency>(row).ContractNo.GetValueOrDefault().ToString() + ") ";
             if (((StaticVariables.gnv_app.of_findwindow(ls_Title, "w_Frequencies2001") == null)))
@@ -2440,8 +2429,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lw_Frequencies2001.Show();
             }
         }
-/*
-        public virtual void dw_route_frequency2_doubleclicked(object sender, EventArgs e)
+
+        public virtual void dw_route_frequency2_DoubleClick(object sender, EventArgs e)
         {   // TJB Frequencies Nov-2020  NEW
             // From dw_route_frequency_doubleclicked()
 
@@ -2452,20 +2441,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
             int row = dw_route_frequency2.GetRow();
-            // create uo
-            lnv_Criteria = new NCriteria();
-            lnv_msg = new NRdsMsg();
             if (row < 0)
             {
                 return;
             }
+            // create uo
+            lnv_Criteria = new NCriteria();
+            lnv_msg = new NRdsMsg();
             if (dw_route_frequency2.GetItem<RouteFrequency2>(row).RfActive == "N")
             {
                 MessageBox.Show("The Frequency you have selected is not Active. \n"
                                 + "You will not be able to sequence customers for this frequency."
                                 , "Contract"
                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;//return 1;
+                return;
             }
             if (dw_route_frequency2.GetItem<RouteFrequency2>(row).IsNew
                 || (dw_route_frequency2.GetItem<RouteFrequency2>(row).IsNew
@@ -2477,10 +2466,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                 , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            /***********************************************************************/
+            Metex.Windows.DataUserControl dwChild;
+            int nSFKey, childRow;
+            string sSfDescription;
+            nSFKey = idw_frequencies2.GetItem<RouteFrequency2>(row).SfKey.GetValueOrDefault();
+            dwChild = new DDddwStandardFrequency();
+            dwChild.BindingSource.DataSource = ((Metex.Windows.DataGridViewEntityComboColumn)
+                                                  (((Metex.Windows.DataEntityGrid)
+                                                 (idw_frequencies.GetControlByName("grid"))).Columns["sf_key"])).DataSource;
+            childRow = dwChild.Find("sf_key", nSFKey);
+            sSfDescription = dwChild.GetItem<DddwStandardFrequency>(childRow).SfDescription;
+            /***********************************************************************/
             lnv_Criteria.of_addcriteria("Contract_no", dw_route_frequency2.GetItem<RouteFrequency2>(row).ContractNo.GetValueOrDefault());
             lnv_Criteria.of_addcriteria("Sf_key", dw_route_frequency2.GetItem<RouteFrequency2>(row).SfKey.GetValueOrDefault());
             lnv_Criteria.of_addcriteria("Rf_delivery_days", dw_route_frequency2.GetItem<RouteFrequency2>(row).RfDeliveryDays);
             lnv_Criteria.of_addcriteria("Dw_route_freq", dw_route_frequency2);
+            lnv_Criteria.of_addcriteria("Sf_description", sSfDescription);
             lnv_msg.of_addcriteria(lnv_Criteria);
             ls_Title = " (" + dw_route_frequency2.GetItem<RouteFrequency2>(row).ContractNo.GetValueOrDefault().ToString() + ") ";
             if (((StaticVariables.gnv_app.of_findwindow(ls_Title, "w_Frequencies2001") == null)))
@@ -2492,7 +2494,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 lw_Frequencies2001.Show();
             }
         }
-*/
+
         public virtual void dw_route_frequency_clicked(object sender, EventArgs e)
         {
             dw_route_frequency.URdsDw_Clicked(sender, e);
@@ -2502,26 +2504,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {   // TJB Frequencies Nov-2020  NEW
             // From dw_route_frequency_clicked()
             dw_route_frequency2.URdsDw_Clicked(sender, e);
+            of_save_contract_no();
         }
 
-
-        private void dw_route_frequency2_DoubleClick(object sender, EventArgs e)
+        public virtual int dw_route_frequency2_PfcPreInsertRow()
         {
-            dw_route_frequency2.URdsDw_DoubleClick(sender, e);
-            int nRows = -1;
-            int nRow  = -1;
-
-            nRows = dw_route_frequency2.RowCount;
-            if (dw_route_frequency2.RowCount > 0)
-            {
-                //Cursor.Current = Cursors.WaitCursor;
-                nRow = dw_route_frequency2.GetRow();
-                //if (!((dw_route_frequency2.GetItem<route_frequency2>(nRow).   //.AcStartWeekPeriod.GetValueOrDefault().Date == null)))
-             }
-            MessageBox.Show("dw_route_frequency2_DoubleClick" + "\n"
-                            + "Rowcount = " + nRows.ToString() + "\n"
-                            + "Row      = " + nRow.ToString()
-                            );
+            //MessageBox.Show("dw_route_frequency2_PfcPreInsertRow");
+            of_save_contract_no();
+            return 1;
         }
 
         public virtual void dw_route_frequency_getfocus(object sender, EventArgs e)
@@ -2550,42 +2540,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_route_frequency2_ue_enabledistance();
         }
 */
-        public virtual int dw_route_frequency2_PfcPreInsertRow()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcPreInsertRow()","WContract2001");
-            return 1;
-        }
-
-        public virtual void dw_route_frequency2_PfcInsertRow()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcInsertRow()","WContract2001");
-            return;
-        }
-
-        public virtual int dw_route_frequency2_PfcPreUpdate()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcPreUpdate()", "WContract2001");
-            return SUCCESS;
-        }
-
-        public virtual int dw_route_frequency2_PfcUpdate()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcUpdate()", "WContract2001");
-            return SUCCESS;
-        }
-
-        public virtual void dw_route_frequency2_PfcPostUpdate()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcPostUpdate()", "WContract2001");
-            return;
-        }
-
-        public virtual int dw_route_frequency2_PfcPreDeleteRow()
-        {
-            MessageBox.Show("dw_route_frequency2_PfcPreDeleteRow()", "WContract2001");
-            return 0;
-        }
-
         public virtual int dw_route_frequency2_PfcValidation()
         {
             bool lb_result;
@@ -3231,10 +3185,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Place the contract number in the shared place to be 
             // retrieved by DDwwContractorVehicles (and perhaps others)
 
-            NParameters lnv_Parameters;
-            lnv_Parameters = new NParameters();
-            lnv_Parameters.longparm = il_Contract_no;
-            StaticMessage.PowerObjectParm = lnv_Parameters;
+            StaticMessage.ContractNoParm = il_Contract_no;
         }
         #endregion
 
