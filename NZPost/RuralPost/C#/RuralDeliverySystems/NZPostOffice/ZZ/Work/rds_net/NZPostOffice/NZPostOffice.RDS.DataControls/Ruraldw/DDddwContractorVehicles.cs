@@ -23,39 +23,32 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public DDddwContractorVehicles()
 		{
 			InitializeComponent();
-            get_contract_no();
 		}
 
         public virtual void get_contract_no()
         {
             // TJB Frequencies Nov-2020
-            // Get and save the contract number for use when retrieving 
+            // Get the saved contract number for use when retrieving 
             // the vehicle list.
 
-            NParameters lnv_Parameters;
-            lnv_Parameters = (NParameters)StaticMessage.PowerObjectParm;
-            contract_no = lnv_Parameters.longparm;
-            //il_sf_key = lnv_Parameters.integerparm;
-            //is_delivery_days = lnv_Parameters.stringparm;
+            contract_no = StaticMessage.ContractNoParm;
         }
 
 		public override int Retrieve()
         {
             //int? dummy_contract_no;
-            //dummy_contract_no = 5308;
             int rc = 0;
-            string msg;
+            get_contract_no();
             try
             {
                 rc = RetrieveCore<ContractorVehicles>(ContractorVehicles.GetAllContractorVehicles(contract_no));
             }
             catch (Exception e)
             {
-                msg = e.Message;
-                MessageBox.Show("Retrieve error: " + msg, "DDddwContractorVehicles");
+                string msg = e.Message;
+                MessageBox.Show("Retrieve error: " + msg
+                               ,"DDddwContractorVehicles");
             }
-            int nRows = this.RowCount;
-            int n = nRows;
             return rc;
         }
 	}
