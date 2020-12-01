@@ -269,39 +269,36 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             TextBoxLostFocus(sender, e);
         }
 
-        private void clearBackColour()
+        private void clearBackColour( object prevSender )
         {
-            int resultCount = this.RowCount;
-            for (int i = 0; i < resultCount; i++)
+            if (!(prevSender == null))
             {
-                if (((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).BackColor == System.Drawing.SystemColors.Highlight)
-                {
-                    // Note: rf_<weekdays> (rf_Sunday etc) and rf_active aren't mentioned
-                    //       here for colour changing, as they don't seem to be affected 
-                    //       by setting their BackColor and ForeColor properties.
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).BackColor = System.Drawing.SystemColors.ButtonFace;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("distance").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_nms").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_nms_t").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_dpcount").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_dpcount_t").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_vehicle_name_t").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("vehicle_number").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_adjusted").BackColor = System.Drawing.Color.Empty;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("sf_key").BackColor = System.Drawing.Color.Empty;
+                this.SetCurrent(this.bindingSource.List.IndexOf(((DRouteFrequency2Rows)prevSender).BindingSource.DataSource as RouteFrequency2));
+                ((DRouteFrequency2Rows)prevSender).BackColor = System.Drawing.SystemColors.ButtonFace;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("distance").BackColor = System.Drawing.SystemColors.Control;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms").BackColor = System.Drawing.SystemColors.Control;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms_t").BackColor = System.Drawing.Color.Empty;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount").BackColor = System.Drawing.SystemColors.Control;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount_t").BackColor = System.Drawing.Color.Empty;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_vehicle_name_t").BackColor = System.Drawing.Color.Empty;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("vehicle_number").BackColor = System.Drawing.Color.Empty;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_adjusted").BackColor = System.Drawing.SystemColors.Control;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("sf_key").BackColor = System.Drawing.Color.Empty;
 
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("distance").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_nms").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_nms_t").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_dpcount").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_dpcount_t").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_vehicle_name_t").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("vehicle_number").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("rf_adjusted").ForeColor = System.Drawing.Color.Black;
-                    ((DRouteFrequency2Rows)this.GetControlByName(i.ToString())).GetControlByName("sf_key").ForeColor = System.Drawing.Color.Black;
-                }
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("distance").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms_t").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount_t").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_vehicle_name_t").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("vehicle_number").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_adjusted").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("sf_key").ForeColor = System.Drawing.Color.Black;
             }
         }
+
+        private int thisSenderIndex, prevSenderIndex;  // TJB used during debugging to see which row sender refers to
+        private object prevSender;
 
         void ldw_temp_Click(object sender, System.EventArgs e)
         {
@@ -312,8 +309,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // Note: rf_<weekdays> (rf_Sunday etc) and rf_active aren't mentioned
             //       here for colour changing, as they don't seem to be affected 
             //       by setting their BackColor and ForeColor properties.
+            thisSenderIndex = this.bindingSource.List.IndexOf(((DRouteFrequency2Rows)sender).BindingSource.DataSource as RouteFrequency2);
             this.SetCurrent(this.bindingSource.List.IndexOf(((DRouteFrequency2Rows)sender).BindingSource.DataSource as RouteFrequency2));
-            clearBackColour();
+            clearBackColour(prevSender);
+            prevSender = sender;
+            prevSenderIndex = thisSenderIndex;
             ((DRouteFrequency2Rows)sender).BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("distance").BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_nms").BackColor = System.Drawing.SystemColors.Highlight;
@@ -334,10 +334,15 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             ((DRouteFrequency2Rows)sender).GetControlByName("vehicle_number").ForeColor = System.Drawing.Color.White;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_adjusted").ForeColor = System.Drawing.Color.White;
             ((DRouteFrequency2Rows)sender).GetControlByName("sf_key").ForeColor = System.Drawing.Color.White;
+
+            OnClick(new System.EventArgs());
         }
 
         void ldw_temp_DoubleClick(object sender, System.EventArgs e)
         {
+            // (TJB) I'd never have guessed that OnDoubleClick here would somehow 
+            //       link to dw_route_frequency2_DoubleClick in WContract2001!  
+            //       Derived from DContractArticleCountsTest
             OnDoubleClick(new System.EventArgs());
         }
 

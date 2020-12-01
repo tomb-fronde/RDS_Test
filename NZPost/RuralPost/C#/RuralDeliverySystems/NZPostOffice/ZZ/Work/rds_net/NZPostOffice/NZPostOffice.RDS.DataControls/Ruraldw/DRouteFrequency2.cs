@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies Nov-2020
+    // Fixed bug with clearBackColour
+    //
     // TJB Frequencies Changes 15-Nov-2020
     // Checkin working version witb DRouteFrequency2Rows
     //
