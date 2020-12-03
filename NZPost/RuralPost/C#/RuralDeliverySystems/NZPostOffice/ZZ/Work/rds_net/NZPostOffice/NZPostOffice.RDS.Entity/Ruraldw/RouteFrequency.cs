@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Frequencies 3-Dec-2020
+    // Now obsolete; replaced with RouteFrequency2
+    // Retained for backward compatability
+    //
     // TJB  Change Frequencies  Dec-2013
     // Added try-catch during debugging
     //
