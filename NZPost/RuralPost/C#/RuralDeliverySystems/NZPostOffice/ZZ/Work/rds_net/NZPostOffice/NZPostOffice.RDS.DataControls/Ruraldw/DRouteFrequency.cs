@@ -10,6 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies 3-Dec-2020
+    // Now obsolete; replaces with DRouteFrequency2 and DRouteFrequency2Rows
+    // Retained for backward compatability
+    //
     // TJB Frequencies Nov-2020
     // Code tidyup
     // See st_contract in DRouteFrequency.designer
