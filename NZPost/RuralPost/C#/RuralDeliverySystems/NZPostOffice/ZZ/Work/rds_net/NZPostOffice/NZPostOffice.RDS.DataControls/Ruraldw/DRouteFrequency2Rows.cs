@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies 3-Dec-2020
+    // Made 'Distance' field read-only
+    //
     // TJB Frequencies Nov-2020
     // Created modelled on DContractFixedAssetsTest
     // Displays the individual double-row entries in the Contract/Frequencies tab

@@ -79,6 +79,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.distance.Location = new System.Drawing.Point(324, 1);
             this.distance.MaxLength = 40;
             this.distance.Name = "distance";
+            this.distance.ReadOnly = true;
             this.distance.Size = new System.Drawing.Size(50, 13);
             this.distance.TabIndex = 30;
             this.distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
