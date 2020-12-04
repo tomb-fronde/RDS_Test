@@ -18,6 +18,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies 4-Dec-2020
+    // Bug-fix: validation of number of SF days to selected days
+    //
     // TJB Frequencies 2-Dec-2020
     // Fixed bug with SfDescription lookup in of_validate_frequencies2
     // and dw_route_frequency2_DoubleClick.
@@ -1268,7 +1271,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
                 if (of_frequency2_unique(ll_Row))
                 {
-                    if (sfKey_Row > 0)
+                    if (sfKey_Row >= 0)  // TJB Bugfix 4-Dec-2020 changed ">" to ">="
                     {
                         if (dwChild.GetItem<DddwStandardFrequency>(sfKey_Row).SfDaysWeek.GetValueOrDefault() != lNumDays)
                         {
@@ -1341,6 +1344,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return false;
             }
             if (!(of_validate_types()))
+            {
+                return false;
+            }
+            if (!(of_validate_frequencies2()))
             {
                 return false;
             }
