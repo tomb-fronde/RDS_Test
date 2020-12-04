@@ -232,6 +232,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_adjusted.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Compute2", true));
             this.rf_adjusted.Location = new System.Drawing.Point(436, 1);
             this.rf_adjusted.Name = "rf_adjusted";
+            this.rf_adjusted.ReadOnly = true;
             this.rf_adjusted.Size = new System.Drawing.Size(37, 13);
             this.rf_adjusted.TabIndex = 50;
             this.rf_adjusted.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
