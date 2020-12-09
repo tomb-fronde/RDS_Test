@@ -18,7 +18,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("vehicle_name", "_vehicle_name", "")]
 	[System.Serializable()]
 
-    public class ContractorVehicles : Entity<ContractorVehicles>
+    public class DddwContractorVehicles : Entity<DddwContractorVehicles>
 	{
 		#region Business Methods
 		[DBField()]
@@ -71,12 +71,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		#endregion
 
 		#region Factory Methods
-        public static ContractorVehicles NewContractorVehicles()
+        public static DddwContractorVehicles NewDddwContractorVehicles()
 		{
 			return Create();
 		}
 
-		public static ContractorVehicles[] GetAllContractorVehicles( int? in_Contract )
+		public static DddwContractorVehicles[] GetAllDddwContractorVehicles( int? in_Contract )
 		{
 			return Fetch(in_Contract).list;
 		}
@@ -86,7 +86,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		[ServerMethod]
 		private void FetchEntity( int? in_Contract )
 		{
-			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+			using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
@@ -95,12 +95,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "@InContractNo", in_Contract);
 
-					List<ContractorVehicles> _list = new List<ContractorVehicles>();
+					List<DddwContractorVehicles> _list = new List<DddwContractorVehicles>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
 						{
-							ContractorVehicles instance = new ContractorVehicles();
+							DddwContractorVehicles instance = new DddwContractorVehicles();
                             instance._vehicle_number = GetValueFromReader<int>(dr,0);
                             instance._vehicle_name = GetValueFromReader<String>(dr,1);
 							instance.MarkOld();
