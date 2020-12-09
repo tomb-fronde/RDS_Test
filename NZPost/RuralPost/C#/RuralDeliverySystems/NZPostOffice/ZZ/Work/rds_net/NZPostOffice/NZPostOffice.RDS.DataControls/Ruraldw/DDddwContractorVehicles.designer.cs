@@ -32,7 +32,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Name = "DDddwContractorVehicles";
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
-            this.bindingSource.DataSource = typeof(ContractorVehicles);
+            this.bindingSource.DataSource = typeof(DddwContractorVehicles);
             //
             // vehicle_name
             //

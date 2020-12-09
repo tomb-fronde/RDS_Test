@@ -13,8 +13,11 @@ using NZPostOffice.Shared.Managers;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    //TJB Frequencies Nov 2020 NEW
-    //Provides data for vehicle dropdown in DRouteFrequency2Rows
+    // TJB Frequencies & Vehicles  Dec-2020
+    // Changed the name of the associated entity from ContractorVehicles do DddwContractorVehicles
+    //
+    // TJB Frequencies Nov 2020 NEW
+    // Provides data for vehicle dropdown in DRouteFrequency2Rows
 
 	public partial class DDddwContractorVehicles : Metex.Windows.DataUserControl
 	{
@@ -41,7 +44,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             get_contract_no();
             try
             {
-                rc = RetrieveCore<ContractorVehicles>(ContractorVehicles.GetAllContractorVehicles(contract_no));
+                rc = RetrieveCore<DddwContractorVehicles>(DddwContractorVehicles.GetAllDddwContractorVehicles(contract_no));
             }
             catch (Exception e)
             {
