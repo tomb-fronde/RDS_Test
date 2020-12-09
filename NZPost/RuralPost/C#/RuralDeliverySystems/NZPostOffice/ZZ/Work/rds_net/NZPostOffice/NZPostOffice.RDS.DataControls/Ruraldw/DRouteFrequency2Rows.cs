@@ -10,6 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies & Values Dec-2020
+    // Changed vehicle dropdown from DDddwContractorVehicles to DDddwContractVehicles
+    // (see also DRouteFrequency2)
+    //
     // TJB Frequencies 3-Dec-2020
     // Made 'Distance' and Adjusted fields read-only
     //
@@ -30,9 +34,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         // The contract_no is included as a component, but is hidden.
         // Its a way to have the value available on each frequency
         // and is used to pass the contract_no to the vehicle_number 
-        // dropdown DDddwContractorVehicles.
+        // dropdown DDddwContractVehicles.
         //
-        // DDddwContractorVehicles finds all the vehicles owned/used by the contractor. 
+        // DDddwContractVehicles finds all the vehicles owned/used by the contractor. 
         // The contractor may hold other contracts; the vehicle list is made up of all 
         // the distinct vehicles from all the contractor’s current contracts.
         //
@@ -64,7 +68,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private void InitializeDropdown()
         {
             sf_key.AssignDropdownType<DDddwStandardFrequency>();
-            vehicle_number.AssignDropdownType<DDddwContractorVehicles>();
+            vehicle_number.AssignDropdownType<DDddwContractVehicles>();
         }
 
         public int Retrieve(int? contract_no, int? in_showall)

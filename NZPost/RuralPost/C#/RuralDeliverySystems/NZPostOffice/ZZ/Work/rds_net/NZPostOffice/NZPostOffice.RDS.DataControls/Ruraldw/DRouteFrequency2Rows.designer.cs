@@ -1,6 +1,10 @@
 using NZPostOffice.RDS.Entity.Ruraldw;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies & Values Dec-2020
+    // Changed vehicle dropdown from DDddwContractorVehicles to DDddwContractVehicles
+    // (see also DRouteFrequency2)
+    //
     // TJB Frequencies Nov-2020
     // Created modelled on DContractFixedAssetsTest.designer
     //
