@@ -10,7 +10,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 {
     // TJB Frequencies and Vehicles Dec-2020 NEW
     // Data for Frequencies tab's vehicle dropdown list
-    // (originally used sp_DDddw_contractorsp_vehicles)
+    // (originally used DddwContractorVehicles)
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -31,7 +31,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _vehicle_name;
 
         [DBField()]
-        private string _cv_vehicle_status;
+        private string _vehicle_status;
 
         [DBField()]
         private int _default_vehicle;
