@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Dec-2020
+    // Changed type of CvVehicalStatus to bool (was string)
+    //
     // TJB  RPCR_001  July-2010
     // Added _v_vehicle_safety, _v_vehicle_emissions, _v_vehicle_consumption_rate 
     // and related code.
@@ -423,20 +426,21 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual string CvVehicalStatus
+        public virtual bool CvVehicalStatus
         {
             get
             {
                 CanReadProperty("CvVehicalStatus", true);
-                return _cv_vehical_status;
+                return _cv_vehical_status == "A";
             }
             set
             {
                 CanWriteProperty("CvVehicalStatus", true);
-                if (_cv_vehical_status != value)
+                string new_value = value ? "A" : "N";
+                if (_cv_vehical_status != new_value)
                 {
-                    _cv_vehical_status = value;
-                    PropertyHasChanged();
+                    _cv_vehical_status = new_value;
+                    PropertyHasChanged("_cv_vehical_status");
                 }
             }
         }
@@ -708,39 +712,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "contract_no", contract_no);
                     pList.Add(cm, "contract_seq_number", contract_seq_number);
-                    cm.CommandText = "SELECT contract_vehical.vehicle_number, " +
-                        "contract_vehical.contract_no, " +
-                        "contract_vehical.contract_seq_number, " +
-                        "contract_vehical.start_kms, " +
-                        "contract_vehical.vehicle_allowance_paid_to_date, " +
-                        "vehicle.vt_key, " +
-                        "vehicle.ft_key, " +
-                        "vehicle.v_vehicle_make, " +
-                        "vehicle.v_vehicle_model, " +
-                        "vehicle.v_vehicle_registration_number, " +
-                        "vehicle.v_vehicle_year, " +
-                        "vehicle.v_vehicle_cc_rating, " +
-                        "vehicle.v_road_user_charges_indicator, " +
-                        "vehicle.v_purchased_date, " +
-                        "vehicle.v_purchase_value, " +
-                        "vehicle.v_leased, " +
-                        "contract_vehical.cv_vehical_status, " +
-                        "vehicle.v_vehicle_month, " +
-                        "vehicle.v_vehicle_transmission, " +
-                        "vehicle.v_remaining_economic_life, " +
-                        "vehicle.vs_key, " +
-                        "contract_vehical.signage_compliant, " +
-                        "vehicle.v_vehicle_speedo_kms, " +
-                        "vehicle.v_vehicle_speedo_date, " +
-                        "vehicle.v_salvage_value, " +
-                        "vehicle.v_vehicle_safety, " +
-                        "vehicle.v_vehicle_emissions, " +
-                        "vehicle.v_vehicle_consumption_rate " +
-                        "FROM contract_vehical, vehicle " +
-                        "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
-                        "AND contract_vehical.contract_no = @contract_no " +
-                        "AND contract_vehical.contract_seq_number = @contract_seq_number " +
-                        "ORDER BY vehicle.v_purchased_date DESC ";
+                    cm.CommandText = "SELECT " + 
+                                "contract_vehical.vehicle_number, " +
+                                "contract_vehical.contract_no, " +
+                                "contract_vehical.contract_seq_number, " +
+                                "contract_vehical.start_kms, " +
+                                "contract_vehical.vehicle_allowance_paid_to_date, " +
+                                "vehicle.vt_key, " +
+                                "vehicle.ft_key, " +
+                                "vehicle.v_vehicle_make, " +
+                                "vehicle.v_vehicle_model, " +
+                                "vehicle.v_vehicle_registration_number, " +
+                                "vehicle.v_vehicle_year, " +
+                                "vehicle.v_vehicle_cc_rating, " +
+                                "vehicle.v_road_user_charges_indicator, " +
+                                "vehicle.v_purchased_date, " +
+                                "vehicle.v_purchase_value, " +
+                                "vehicle.v_leased, " +
+                                "contract_vehical.cv_vehical_status, " +
+                                "vehicle.v_vehicle_month, " +
+                                "vehicle.v_vehicle_transmission, " +
+                                "vehicle.v_remaining_economic_life, " +
+                                "vehicle.vs_key, " +
+                                "contract_vehical.signage_compliant, " +
+                                "vehicle.v_vehicle_speedo_kms, " +
+                                "vehicle.v_vehicle_speedo_date, " +
+                                "vehicle.v_salvage_value, " +
+                                "vehicle.v_vehicle_safety, " +
+                                "vehicle.v_vehicle_emissions, " +
+                                "vehicle.v_vehicle_consumption_rate, " +
+                                "contract_vehical.cv_vehical_status " + 
+                          " FROM contract_vehical, vehicle " +
+                          "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
+                          "  AND contract_vehical.contract_no = @contract_no " +
+                          "  AND contract_vehical.contract_seq_number = @contract_seq_number " +
+                          "ORDER BY vehicle.v_purchased_date DESC ";
 
                     List<ContractVehicle> _list = new List<ContractVehicle>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
