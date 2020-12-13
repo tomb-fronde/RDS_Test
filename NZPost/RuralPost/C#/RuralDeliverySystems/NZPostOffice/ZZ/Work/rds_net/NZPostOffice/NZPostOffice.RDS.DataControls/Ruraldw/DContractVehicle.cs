@@ -18,6 +18,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         public DContractVehicleTest()
         {
             InitializeComponent();
+//            this.v_vehicle_registration_number.Click += new System.EventHandler(this.v_vehicle_registration_number_Click);
+//            this.v_vehicle_registration_number.Leave += new System.EventHandler(this.v_vehicle_registration_number_Leave);
 
             Consumption.DataBindings[0].FormatString = "###.0";
             this.v_purchase_value.DataBindings[0].FormatString = "$###,##0";
@@ -173,6 +175,26 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         {
             return RetrieveCore<ContractVehicle>(new List<ContractVehicle>
                 (ContractVehicle.GetAllContractVehicle(contract_no, contract_seq_number)));
+        }
+
+        private void v_vehicle_registration_number_Click(object sender, EventArgs e)
+        {
+            string sRego, sPurchaseDate;
+            sRego = this.v_vehicle_registration_number.Text;
+            sPurchaseDate = this.v_purchased_date.Text;
+            MessageBox.Show("Rego = "+sRego+"             \n"
+                            +"Purchased "+sPurchaseDate
+                            ,"rego.click");
+        }
+
+        private void v_vehicle_registration_number_Leave(object sender, EventArgs e)
+        {
+            string sRego, sPurchaseDate;
+            sRego = this.v_vehicle_registration_number.Text;
+            sPurchaseDate = this.v_purchased_date.Text;
+            MessageBox.Show("Rego = " + sRego + "             \n"
+                            + "Purchased " + sPurchaseDate
+                            , "rego.leave");
         }
     }
 }
