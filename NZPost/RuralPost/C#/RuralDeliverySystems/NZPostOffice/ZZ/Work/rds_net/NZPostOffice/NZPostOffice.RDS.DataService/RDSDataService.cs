@@ -10,6 +10,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB Frequencies and Vehicles Dec-2020
+    // Added CheckVehicleOwnership
+    //
     // Modifications
     // TJB  RPCR_140  June-2019
     // NEW: GetContractTypeKey - Get ct_key, contract_type for contract
@@ -2224,6 +2227,18 @@ namespace NZPostOffice.RDS.DataService
             RDSDataService obj = Execute("_GetVehicleList", sRegNo);
             sqlCode = obj.SQLCode;
             return obj;
+        }
+
+        /// <summary>
+        ///
+        /// 
+        /// </summary>
+        public static int CheckVehicleOwnership(string inRegNo, int? inContractNo, ref int SQLCode, ref string SQLErrText)
+        {
+            RDSDataService obj = Execute("_CheckVehicleOwnership", inRegNo, inContractNo);
+            SQLCode = obj.SQLCode;
+            SQLErrText = obj.SQLErrText;
+            return obj.intVal;
         }
 
         /// <summary>
@@ -7170,6 +7185,45 @@ namespace NZPostOffice.RDS.DataService
                         _sqlcode = -1;
                         _sqlerrtext = ex.Message;
                     }
+                }
+            }
+        }
+
+        [ServerMethod]
+        private void _CheckVehicleOwnership(string inRegNo, int? inContractNo)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int iReturnValue = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "EXEC rd.CheckVehicleOwnership @inRegNo, @inContractNo";
+                    pList.Add(cm, "inRegNo", inRegNo);
+                    pList.Add(cm, "inContractNo", inContractNo);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                iReturnValue = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                        iReturnValue = -1;
+                    }
+
+                    intVal = iReturnValue;
                 }
             }
         }
