@@ -14,6 +14,10 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies & Vehicles Dec 2020
+    // Added check of new vehicle validity to wf_validate_vehicle
+    // and dw_contract_vehicle_pfc_validation (need both)
+    //
     // TJB  RPCR_099  Jan-2016
     // Changed NVOR handling: Now treated like VOR (see WContractRate2001)
     // - NVOR History table no longer used
@@ -775,6 +779,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual string wf_validate_vehicle(int arow)
         {
+            // Returns either an empty string - meaning all is well
+            // or a column name - meaning there's a problem with that column
             string sReturn = "";
             string sMake;
             string sModel;
@@ -817,20 +823,36 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Added salvage value
             sNull = null;
 
+            // TJB Frequencies & Vehicles Dec-2020
+            // If the record is new, check the Rego to see if its OK to be added
+            sRegistration = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleRegistrationNumber;
+            if (idw_vehicle.GetItem<ContractVehicle>(arow).IsNew)
+            {
+                int iValue = RDSDataService.CheckVehicleOwnership(sRegistration, il_contract, ref sqlCode, ref sqlErrText);
+                string sVehicleOwnership = ownership_message(iValue);
+                if (iValue >= 2 || iValue < 0)
+                {
+                    MessageBox.Show(sVehicleOwnership, "Warning " 
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return "v_vehicle_registration_number";
+                }
+            }
+
             // TJB RPCR_001 July-2010
             // Moved these assignments from inside if/else blocks
+            sRegistration = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleRegistrationNumber;
             lVTKey = idw_vehicle.GetItem<ContractVehicle>(arow).VtKey;
             lFTKey = idw_vehicle.GetItem<ContractVehicle>(arow).FtKey;
             sMake = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleMake;
             sModel = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleModel;
             lYear = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleYear;
             lMonth = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleMonth;
-            sRegistration = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleRegistrationNumber;
             lCCRate = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleCcRating;
             sUserCharge = idw_vehicle.GetItem<ContractVehicle>(arow).VRoadUserChargesIndicator ? "Y" : "N";
             dPurchase = idw_vehicle.GetItem<ContractVehicle>(arow).VPurchasedDate;
             lPurchase = idw_vehicle.GetItem<ContractVehicle>(arow).VPurchaseValue;
             ll_salvage = idw_vehicle.GetItem<ContractVehicle>(arow).VSalvageValue;
+            sStatus = idw_vehicle.GetItem<ContractVehicle>(arow).CvVehicalStatus ? "A" : "N";
             sLeased = idw_vehicle.GetItem<ContractVehicle>(arow).VLeased ? "Y" : "N";
             ll_VSKey = idw_vehicle.GetItem<ContractVehicle>(arow).VsKey;
             ll_remaining_economic_life = idw_vehicle.GetItem<ContractVehicle>(arow).VRemainingEconomicLife;
@@ -2431,6 +2453,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VVehicleSafety = nStars;
         }
 
+        public virtual string ownership_message(int iValue)
+        {
+            if (iValue == 0)
+                return "Vehicle not known - OK to use";
+            else if (iValue == 1)
+                return "Vehicle owned by contract owner - OK to use";
+            else if (iValue == 2)
+                return "Vehicle owned by another contract owner - NOT OK to use";
+            else if (iValue == 3)
+                return "Vehicle already associated with contract - NOT OK to use";
+            return "";
+        }
+
         public virtual int dw_contract_vehicle_pfc_validation()
         {
             int ll_RowCount;
@@ -2453,7 +2488,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     ls_ErrorColumn = "v_vehicle_registration_number";    //"vehicle_v_vehicle_registration_number";
                 }
-                else if (dw_contract_vehicle.uf_not_entered(ll_Row, "vt_key", "vehicle type"))
+                else if (dw_contract_vehicle.GetItem<ContractVehicle>(ll_Row).IsNew)
+                {
+                    // TJB Frequencies & Vehicles Dec-2020
+                    // If the record is new, check the Rego to see if its OK to be added
+                    int    sqlCode    = 0;
+                    string sqlErrText = "";
+                    string sRegistration = dw_contract_vehicle.GetItem<ContractVehicle>(ll_Row).VVehicleRegistrationNumber;
+                    if (idw_vehicle.GetItem<ContractVehicle>(ll_Row).IsNew)
+                    {
+                        int iValue = RDSDataService.CheckVehicleOwnership(sRegistration, il_contract, ref sqlCode, ref sqlErrText);
+                        if (sqlCode != 0)
+                        {
+                            MessageBox.Show("Database error checking vehicle ownership\n"
+                                           + "SQLCode    = " + sqlCode.ToString() + "\n"
+                                           + "SQLErrText = " + sqlErrText
+                                           , "WRenewal2001.dw_contract_vehicle_pfc_validation"
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                        string sVehicleOwnership = ownership_message(iValue);
+                        if (iValue >= 2 || iValue < 0)
+                        {
+                            MessageBox.Show(sVehicleOwnership , "Warning "
+                                            , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            ls_ErrorColumn = "v_vehicle_registration_number";
+                        }
+                    }
+                }
+
+                if (dw_contract_vehicle.uf_not_entered(ll_Row, "vt_key", "vehicle type"))
                 {
                     ls_ErrorColumn = "vt_key";                          //"vehicle_vt_key"
                 }
@@ -2482,6 +2545,42 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             return 1;
+        }
+
+        private void clear_dw_contract_vehicle(int arow)
+        {
+            dw_contract_vehicle.SetValue(arow, "v_vehicle_registration_number", null);
+            dw_contract_vehicle.SetValue(arow, "vt_key", null);
+            dw_contract_vehicle.SetValue(arow, "ft_key", null);
+            dw_contract_vehicle.SetValue(arow, "v_vehicle_make", null);
+            dw_contract_vehicle.SetValue(arow, "v_vehicle_year", null);
+            dw_contract_vehicle.SetValue(arow, "v_vehicle_month", null);
+            dw_contract_vehicle.SetValue(arow, "v_vehicle_cc_rating", null);
+            //dw_contract_vehicle.SetValue(arow, "v_purchased_date", null);
+            //dw_contract_vehicle.SetValue(arow, "v_purchased_value", null);
+            //dw_contract_vehicle.SetValue(arow, "v_salvage_value", null);
+
+            /*
+            sRegistration = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleRegistrationNumber;
+            lVTKey = idw_vehicle.GetItem<ContractVehicle>(arow).VtKey;
+            lFTKey = idw_vehicle.GetItem<ContractVehicle>(arow).FtKey;
+            sMake = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleMake;
+            sModel = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleModel;
+            lYear = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleYear;
+            lMonth = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleMonth;
+            lCCRate = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleCcRating;
+            sUserCharge = idw_vehicle.GetItem<ContractVehicle>(arow).VRoadUserChargesIndicator ? "Y" : "N";
+            dPurchase = idw_vehicle.GetItem<ContractVehicle>(arow).VPurchasedDate;
+            lPurchase = idw_vehicle.GetItem<ContractVehicle>(arow).VPurchaseValue;
+            ll_salvage = idw_vehicle.GetItem<ContractVehicle>(arow).VSalvageValue;
+            sStatus = idw_vehicle.GetItem<ContractVehicle>(arow).CvVehicalStatus ? "A" : "N";
+            sLeased = idw_vehicle.GetItem<ContractVehicle>(arow).VLeased ? "Y" : "N";
+            ll_VSKey = idw_vehicle.GetItem<ContractVehicle>(arow).VsKey;
+            ll_remaining_economic_life = idw_vehicle.GetItem<ContractVehicle>(arow).VRemainingEconomicLife;
+            sTransmission = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleTransmission;
+            lSpeedoKms = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleSpeedoKms;
+            dSpeedoDate = idw_vehicle.GetItem<ContractVehicle>(arow).VVehicleSpeedoDate;
+*/
         }
 
         public virtual int dw_contract_vehicle_pfc_predeleterow()
@@ -3081,13 +3180,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string sLeased = string.Empty;
             DateTime? dPurchase = new DateTime();
             int SQLCode = 0;
+            string SQLErrText = "";
 
             string column_name = ((Control)sender).Name;
             if (column_name == "v_vehicle_registration_number")
             {
                 //int nRow = idw_vehicle.GetRow();
                 int nRow = dw_contract_vehicle.GetRow();
-                //sRegNo = Convert.ToString(dw_contract_vehicle.DataObject.GetValue(nRow, "v_vehicle_registration_number"));
                 sRegNo = (string)dw_contract_vehicle.DataObject.GetValue(nRow, "v_vehicle_registration_number");
                 List<VehicleItem> list = new List<VehicleItem>();
                 RDSDataService dataService = RDSDataService.GetVehicleList(sRegNo, ref SQLCode);
