@@ -8,6 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Jan 2021
+    // Add inVehicleNo parameter to CreateEntity, FetchEntity and GetIdValue
+    // and vehicle_number to retreived values
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -27,6 +31,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("vor_consumption_rate", "_vor_consumption_rate", "vehicle_override_rate")]
     [MapInfo("vor_livery", "_vor_livery", "vehicle_override_rate")]
     [MapInfo("vor_effective_date", "_vor_effective_date", "vehicle_override_rate")]
+    [MapInfo("vehicle_number", "_vehicle_number", "vehicle_override_rate")]
     [System.Serializable()]
 
     public class VehicleOverrideRates : Entity<VehicleOverrideRates>
@@ -37,6 +42,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _contract_seq_number;
+
+        [DBField()]
+        private int? _vehicle_number;
 
         [DBField()]
         private decimal? _vor_nominal_vehicle_value;
@@ -112,6 +120,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 if (_contract_seq_number != value)
                 {
                     _contract_seq_number = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? VehicleNumber
+        {
+            get
+            {
+                CanReadProperty("VehicleNumber", true);
+                return _vehicle_number;
+            }
+            set
+            {
+                CanWriteProperty("VehicleNumber", true);
+                if (_vehicle_number != value)
+                {
+                    _vehicle_number = value;
                     PropertyHasChanged();
                 }
             }
@@ -371,19 +397,23 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         protected override object GetIdValue()
         {
-            return string.Format("{0}/{1}/{2}", _contract_no, _contract_seq_number, _vor_effective_date);
+            return string.Format("{0}/{1}/{2}/{3}", _contract_no, _contract_seq_number, _vehicle_number, _vor_effective_date);
         }
         #endregion
 
         #region Factory Methods
-        public static VehicleOverrideRates NewVehicleOverrideRates(int? incontract_no, int? incontract_seq_no)
+        public static VehicleOverrideRates NewVehicleOverrideRates(int? incontract_no, int? incontract_seq_no, int? inVehicleNo, DateTime? ineffective_date)
         {
-            return Create(incontract_no, incontract_seq_no);
+            // TJB  Frequencies & Vehicles  Jan 2021
+            // Add inVehicleNo and ineffective_date parameters
+            return Create(incontract_no, incontract_seq_no, inVehicleNo, ineffective_date);
         }
 
-        public static VehicleOverrideRates[] GetAllVehicleOverrideRates(int? incontract_no, int? incontract_seq_no)
+        public static VehicleOverrideRates[] GetAllVehicleOverrideRates(int? incontract_no, int? incontract_seq_no, int? inVehicleNo)
         {
-            return Fetch(incontract_no, incontract_seq_no).list;
+            // TJB  Frequencies & Vehicles  Jan 2021
+            // Add inVehicleNo parameter
+            return Fetch(incontract_no, incontract_seq_no, inVehicleNo).list;
         }
 
         public virtual void marknew()
@@ -395,45 +425,58 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         #region Data Access
         [ServerMethod()]
-        private void FetchEntity(int? incontract_no, int? incontract_seq_no)
+        private void FetchEntity(int? inContractNo, int? inSequenceNo, int? inVehicleNo)
         {
+            // TJB  Frequencies & Vehicles  Jan 2021
+            // Add inVehicleNo parameter
+            // and vehicle_number to retreived values
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "incontract_no", incontract_no);
-                    pList.Add(cm, "incontract_seq_no", incontract_seq_no);
-                    cm.CommandText = "rd.sp_get_vehicle_override_rates";
 
-                    List<VehicleOverrideRates> _list = new List<VehicleOverrideRates>();
-                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    cm.CommandText = "rd.sp_Get_vehicle_override_rates";
+                    pList.Add(cm, "@inContractNo", inContractNo);
+                    pList.Add(cm, "@inSequenceNo", inSequenceNo);
+                    pList.Add(cm, "@inVehicleNo", inVehicleNo);
+                    try
                     {
-                        while (dr.Read())
+                        List<VehicleOverrideRates> _list = new List<VehicleOverrideRates>();
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
-                            VehicleOverrideRates instance = new VehicleOverrideRates();
-                            instance._contract_no = GetValueFromReader<Int32?>(dr,0);
-                            instance._contract_seq_number = GetValueFromReader<Int32?>(dr,1);
-                            instance._vor_nominal_vehicle_value = GetValueFromReader<Decimal?>(dr,2);
-                            instance._vor_repairs_maintenance_rate = GetValueFromReader<Decimal?>(dr,3);
-                            instance._vor_tyre_tubes_rate = GetValueFromReader<Decimal?>(dr,4);
-                            instance._vor_vehical_allowance_rate = GetValueFromReader<Decimal?>(dr,5);
-                            instance._vor_licence_rate = GetValueFromReader<Decimal?>(dr,6);
-                            instance._vor_vehicle_rate_of_return_pct = GetValueFromReader<Decimal?>(dr,7);
-                            instance._vor_salvage_ratio = GetValueFromReader<Decimal?>(dr,8);
-                            instance._vor_ruc = GetValueFromReader<Decimal?>(dr,9);
-                            instance._vor_sundries_k = GetValueFromReader<Decimal?>(dr,10);
-                            instance._vor_vehicle_insurance_premium = GetValueFromReader<Decimal?>(dr,11);
-                            instance._vor_fuel_rate = GetValueFromReader<Decimal?>(dr,12);
-                            instance._vor_consumption_rate = GetValueFromReader<Decimal?>(dr,13);
-                            instance._vor_livery = GetValueFromReader<Decimal?>(dr,14);
-                            instance._vor_effective_date = GetValueFromReader<DateTime?>(dr,15);
-                            instance.MarkOld();
-                            instance.StoreInitialValues();
-                            _list.Add(instance);
+                            while (dr.Read())
+                            {
+                                VehicleOverrideRates instance = new VehicleOverrideRates();
+                                instance._contract_no = GetValueFromReader<Int32?>(dr, 0);
+                                instance._contract_seq_number = GetValueFromReader<Int32?>(dr, 1);
+                                instance._vor_nominal_vehicle_value = GetValueFromReader<Decimal?>(dr, 2);
+                                instance._vor_repairs_maintenance_rate = GetValueFromReader<Decimal?>(dr, 3);
+                                instance._vor_tyre_tubes_rate = GetValueFromReader<Decimal?>(dr, 4);
+                                instance._vor_vehical_allowance_rate = GetValueFromReader<Decimal?>(dr, 5);
+                                instance._vor_licence_rate = GetValueFromReader<Decimal?>(dr, 6);
+                                instance._vor_vehicle_rate_of_return_pct = GetValueFromReader<Decimal?>(dr, 7);
+                                instance._vor_salvage_ratio = GetValueFromReader<Decimal?>(dr, 8);
+                                instance._vor_ruc = GetValueFromReader<Decimal?>(dr, 9);
+                                instance._vor_sundries_k = GetValueFromReader<Decimal?>(dr, 10);
+                                instance._vor_vehicle_insurance_premium = GetValueFromReader<Decimal?>(dr, 11);
+                                instance._vor_fuel_rate = GetValueFromReader<Decimal?>(dr, 12);
+                                instance._vor_consumption_rate = GetValueFromReader<Decimal?>(dr, 13);
+                                instance._vor_livery = GetValueFromReader<Decimal?>(dr, 14);
+                                instance._vor_effective_date = GetValueFromReader<DateTime?>(dr, 15);
+                                instance._vehicle_number = GetValueFromReader<Int32?>(dr, 16);
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
                         }
-                        list = _list.ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        string msg;
+                        msg = e.Message;
                     }
                 }
             }
@@ -458,11 +501,14 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #endregion
 
         [ServerMethod()]
-        private void CreateEntity(int? contract_no, int? contract_seq_number, DateTime? vor_effective_date)
+        private void CreateEntity(int? incontract_no, int? incontract_seq_number, int? inVehicleNo, DateTime? ineffective_date)
         {
-            _contract_no = contract_no;
-            _contract_seq_number = contract_seq_number;
-            _vor_effective_date = vor_effective_date;
+            // TJB  Frequencies & Vehicles  Jan 2021
+            // Add inVehicleNo and ineffective_date parameters
+            _contract_no = incontract_no;
+            _contract_seq_number = incontract_seq_number;
+            _vehicle_number = inVehicleNo;
+            _vor_effective_date = ineffective_date;
         }
     }
 }
