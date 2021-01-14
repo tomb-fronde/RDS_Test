@@ -17,6 +17,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // TJB Frequencies & Vehicles Dec 2020
     // Added check of new vehicle validity to wf_validate_vehicle
     // and dw_contract_vehicle_pfc_validation (need both)
+    // [Jan 2021] Added get_contract_vehicle_number when opening overrides
     //
     // TJB  RPCR_099  Jan-2016
     // Changed NVOR handling: Now treated like VOR (see WContractRate2001)
@@ -222,7 +223,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_contract_vehicle.PfcPostUpdate += new UserEventDelegate(dw_contract_vehicle_pfc_postupdate);
             dw_contract_vehicle.PfcValidation += new UserEventDelegate1(dw_contract_vehicle_pfc_validation);
             dw_contract_vehicle.UpdateStart += new UserEventDelegate1(updatestart);
-            dw_contract_vehicle.WinPfcSave += new UserEventDelegate1(pfc_save);
+
+            dw_contract_vehicle.Scroll += new ScrollEventHandler(dw_contract_vehicle_Scroll);
 
             // TJB RPCR_01 July-2010
             // Added to detect change in number of stars selected
@@ -235,6 +237,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             // TJB  RPCR_099: Added
             this.KeyDown += new KeyEventHandler(WRenewal2001_KeyDown);
+        }
+
+        void dw_contract_vehicle_Scroll(object sender, ScrollEventArgs e)
+        {
+            //throw new Exception("The method or operation is not implemented.");
+
+            System.Text.StringBuilder messageBoxCS = new System.Text.StringBuilder();
+            messageBoxCS.AppendFormat("{0} = {1}", "ScrollOrientation", e.ScrollOrientation );
+            messageBoxCS.AppendLine();
+            messageBoxCS.AppendFormat("{0} = {1}", "Type", e.Type );
+            messageBoxCS.AppendLine();
+            messageBoxCS.AppendFormat("{0} = {1}", "NewValue", e.NewValue );
+            messageBoxCS.AppendLine();
+            messageBoxCS.AppendFormat("{0} = {1}", "OldValue", e.OldValue );
+            messageBoxCS.AppendLine();
+            MessageBox.Show(messageBoxCS.ToString(), "dw_contract_vehicle Scroll Event");
+            
         }
 
         // TJB  RPCR_099: Added
@@ -616,30 +635,54 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             idw_vehicle.GetItem<ContractVehicle>(nRow).VVehicleSafety = nStars;
         }
 
+        private int get_contract_vehicle_number(int? inContractNo, int? inContractSeqNumber )
+        {
+            StaticVariables.gnv_app.of_get_parameters().integerparm = inContractNo;
+            StaticVariables.gnv_app.of_get_parameters().intparm     = inContractSeqNumber;
+            StaticVariables.gnv_app.of_get_parameters().stringparm = this.Text; // idw_contract.GetItem<Contract>(0).ConTitle;
+            Cursor.Current = Cursors.WaitCursor;
+
+            WSelectContractVehicle w_select_contract_vehicle = new WSelectContractVehicle();
+            w_select_contract_vehicle.ShowDialog();
+
+            int result = (int)StaticVariables.gnv_app.of_get_parameters().intparm;
+            return result;
+        }
+
         public virtual void ue_open_rates()
         {
+            int iRow;
+            int? iVehicleNo= -1;
+
+            iRow = dw_contract_vehicle.GetRow();
+            if (dw_contract_vehicle.GetItem<ContractVehicle>(iRow).IsNew)
+            {
+                MessageBox.Show("This vehicle must be saved before opening the overrides"
+                                , "WRenewal2001.ue_open_rates"
+                                , MessageBoxButtons.OK, MessageBoxIcon.Warning );
+                return;
+            }
+
+            if (dw_contract_vehicle.RowCount > 1 && iRow == 0)
+            {
+                int result = get_contract_vehicle_number(il_contract, il_sequence);
+                //MessageBox.Show("get_contract_vehicle_number returned " + result.ToString());
+                iVehicleNo = result;
+            }
+            if (iVehicleNo < 0)  // Cancelled
+                return;
+
+            if (iVehicleNo == 0)  // No vehicle selected
+                iVehicleNo = dw_contract_vehicle.GetItem<ContractVehicle>(iRow).VehicleNumber;
+
             StaticVariables.gnv_app.of_get_parameters().stringparm = this.Text;
             StaticVariables.gnv_app.of_get_parameters().longparm = il_contract;
             StaticVariables.gnv_app.of_get_parameters().integerparm = il_sequence;
+            StaticVariables.gnv_app.of_get_parameters().intparm = iVehicleNo;
 
             // TJB  RPCR_099  Nov-2015: added
             StaticVariables.gnv_app.of_get_parameters().booleanparm = false;  // no refresh required
 
-            // if g_security.Access_Groups[1] = 7 then
-            // 	gnv_App.of_Get_Parameters().booleanparm = (tab_renewal.tabpage_renewal.dw_renewal.getitemstring(1,"con_acceptance_flag") = 'Y')
-            // else
-            // 	gnv_App.of_Get_Parameters().BooleanParm = True
-            // end if
-
-            // TJB  Apr-2014 "Contract Postie Renewals"
-            // Allow any contract to set override rates
-            // if (il_contract > 5999)
-            // {
-            //     MessageBox.Show("Override rates may only be entered for rural delivery contracts."
-            //                    , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //     return;
-            // }
-            
             // TJB  RPCR_099  Dec 2015
             // Get the VOR effective date prior to any new rates that may be added
             int nVorRows = ids_vehicle_override_rate.RowCount;
@@ -703,7 +746,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ********************************************************************/
             }
         }
-
+        public override int pfc_preclose()
+        {
+            return base.pfc_preclose();
+        }
         public override int pfc_save()
         {
             base.pfc_save();
@@ -2515,6 +2561,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         }
                     }
                 }
+                if (idw_vehicle.GetItem<ContractVehicle>(ll_Row).IsDirty
+                     && idw_vehicle.GetItem<ContractVehicle>(ll_Row).IsNew)
+                {
+                    DateTime? ld_purchased_date = idw_vehicle.GetItem<ContractVehicle>(ll_Row).VPurchasedDate;
+                    //  SR#4423 If this is the first vehicle to be inserted, skip the test below
+                    if (idw_vehicle.RowCount > 1)
+                    {
+                        if (ld_purchased_date != null && find_pruchased_date(1, idw_vehicle.RowCount, ld_purchased_date))
+                        {
+                            MessageBox.Show("The purchased date has to be later than other existing vehicles' purchase date."
+                                           , ""
+                                           , MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            ls_ErrorColumn = "v_purchased_date";
+                        }
+                    }
+                }
 
                 if (dw_contract_vehicle.uf_not_entered(ll_Row, "vt_key", "vehicle type"))
                 {
@@ -2750,16 +2812,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_row;
 
             // PowerBuilder 'Choose Case' statement converted into 'if' statement
-            int TestExpr = tab_renewal.SelectedIndex;// newindex;
+            int TestExpr = tab_renewal.SelectedIndex;
             string str = tab_renewal.TabPages[tab_renewal.SelectedIndex].Text.ToLower().Trim();
-            if (str == "renewal")//(TestExpr == 0)
+            if (str == "renewal")
             {
-                idw_renewal.URdsDw_GetFocus(null, null);  //added by jlwang
+                idw_renewal.URdsDw_GetFocus(null, null);
                 // ist_maintenance.dwCurrent = idw_renewal
             }
-            else if (str == "frequency adjustment")//(TestExpr == 1)
+            else if (str == "frequency adjustment")
             {
-                idw_frequency_adjustment.URdsDw_GetFocus(null, null); //added by jlwang
+                idw_frequency_adjustment.URdsDw_GetFocus(null, null);
                 if (idw_frequency_adjustment.RowCount == 0)
                 {
                     ((DRenewalFreqAdjust)idw_frequency_adjustment.DataObject).Retrieve(il_contract, il_sequence);
@@ -2786,9 +2848,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ((DRenewalFreqAdjust)idw_frequency_adjustment.DataObject).Retrieve(il_contract, il_sequence);
                 // ist_maintenance.dwCurrent = idw_frequency_adjustment
             }
-            else if (str == "contract adjustment")//(TestExpr == 2)
+            else if (str == "contract adjustment")
             {
-                idw_contract_adjustment.Focus();//addded by jlwang
+                idw_contract_adjustment.Focus();
 
                 if (idw_contract_adjustment.RowCount == 0)
                 {
@@ -2797,10 +2859,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_contract_adjustment.SelectRow(0, false);
                 // ist_maintenance.dwCurrent = idw_contract_adjustment
             }
-            else if (str == "owner drivers")//(TestExpr == 3)
+            else if (str == "owner drivers")
             {
-                dw_contract_contractor_getfocus(null, null); //added by jlwang
-
+                dw_contract_contractor_getfocus(null, null);
                 if (idw_owner_drivers.RowCount == 0)
                 {
                     ((DContractContractor)idw_owner_drivers.DataObject).Retrieve(il_contract, il_sequence);
@@ -2809,9 +2870,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     idw_owner_drivers.DataObject.GetControlByName("st_title").Text = idw_renewal.GetItem<Renewal>(0).Contracttitle;
                 // ist_maintenance.dwCurrent = idw_owner_drivers
             }
-            else if (str == "vehicles")//(TestExpr == 4)
+            else if (str == "vehicles")
             {
-                idw_vehicle.URdsDw_GetFocus(null, null); //added by jlwang
+                idw_vehicle.URdsDw_GetFocus(null, null);
 
                 //if (idw_vehicle.RowCount == 0)
                 ll_row = idw_vehicle.RowCount;
@@ -2826,9 +2887,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_vehicle.DataObject.GetControlByName("v_vehicle_registration_number").Focus();
                 // ist_maintenance.dwCurrent = idw_vehicle
             }
-            else if (str == "article counts")//(TestExpr == 5)
+            else if (str == "article counts")
             {
-                //added by jlwang
                 dw_renewal_artical_counts_getfocus(null, null);
                 if (idw_article_count.RowCount == 0)
                 {
@@ -3235,10 +3295,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     dw_contract_vehicle.DataObject.SetValue(nRow, "v_purchase_value", lPurchase);
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VLeased = ("Y" == sLeased);
                     dw_contract_vehicle.DataObject.SetValue(nRow, "v_vehicle_month", lMonth);
+                    // TJB  Frequencies & Vehicles  Jan 2021
+                    // Default new vehicle statis to Active
+                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus = true; // cv_vehicle_status = 'Y'
                 }
-                //  PBY 12/06/2002 SR#4402
             }
-            else if (column_name == "ft_key")      /*"vehicle_ft_key"*/
+            else if (column_name == "ft_key")
             {
                 int l_ft_key;
 
@@ -3253,8 +3315,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).VRoadUserChargesIndicator = false;// 'N');
                 }
             }
-//            if ((((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls.Count > 0))
-//                ((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicleTest)(((NZPostOffice.RDS.DataControls.Ruraldw.DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[dw_contract_vehicle.GetRow()])).BindingSource.CurrencyManager.Refresh();
             if ((((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls.Count > 0))
                 ((DContractVehicleTest)(((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[dw_contract_vehicle.GetRow()])).BindingSource.CurrencyManager.Refresh();
         }
