@@ -10,6 +10,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 {
     // TJB  Frequencies & Vehicles  Dec-2020
     // Changed type of CvVehicalStatus to bool (was string)
+    // [Jan-2021] Added contract_vehical.default_vehicle, and CvDefaultVehicle as bool
     //
     // TJB  RPCR_001  July-2010
     // Added _v_vehicle_safety, _v_vehicle_emissions, _v_vehicle_consumption_rate 
@@ -23,6 +24,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("contract_seq_number", "_contract_seq_number", "contract_vehical")]
     [MapInfo("start_kms", "_start_kms", "contract_vehical")]
     [MapInfo("vehicle_allowance_paid_to_date", "_vehicle_allowance_paid_", "contract_vehical")]
+    [MapInfo("cv_vehical_status", "_cv_vehical_status", "contract_vehical")]
+    [MapInfo("default_vehicle", "_cv_default_vehicle", "contract_vehical")]
     [MapInfo("vt_key", "_vt_key", "vehicle")]
     [MapInfo("ft_key", "_ft_key", "vehicle")]
     [MapInfo("v_vehicle_make", "_v_vehicle_make", "vehicle")]
@@ -34,7 +37,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("v_purchased_date", "_v_purchased_date", "vehicle")]
     [MapInfo("v_purchase_value", "_v_purchase_value", "vehicle")]
     [MapInfo("v_leased", "_v_leased", "vehicle")]
-    [MapInfo("cv_vehical_status", "_cv_vehical_status", "contract_vehical")]
     [MapInfo("v_vehicle_month", "_v_vehicle_month", "vehicle")]
     [MapInfo("v_vehicle_transmission", "_v_vehicle_transmission", "vehicle")]
     [MapInfo("v_remaining_economic_life", "_v_remaining_economic_life", "vehicle")]
@@ -101,7 +103,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _v_leased;
 
         [DBField()]
-        private string _cv_vehical_status="N"; //added by jlwang
+        private string _cv_vehical_status="N";
+
+        // TJB  Frequencies & Vehicles  Jan-2021: Added
+        [DBField()]
+        private int? _cv_default_vehicle = 0;
 
         [DBField()]
         private int? _v_vehicle_month;
@@ -445,6 +451,27 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        // TJB  Frequencies & Vehicles  Jan-2021: Added
+        public virtual bool CvDefaultVehicle
+        {
+            get
+            {
+                CanReadProperty("CvDefaultVehicle", true);
+
+                return (_cv_default_vehicle == null ? 0 : _cv_default_vehicle) == 1;
+            }
+            set
+            {
+                CanWriteProperty("CvDefaultVehicle", true);
+                int new_value = (value ? 1 : 0);
+                if (_cv_default_vehicle != new_value)
+                {
+                    _cv_default_vehicle = new_value;
+                    PropertyHasChanged("_cv_default_vehicle");
+                }
+            }
+        }
+
         public virtual int? VVehicleMonth
         {
             get
@@ -741,7 +768,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                 "vehicle.v_vehicle_safety, " +
                                 "vehicle.v_vehicle_emissions, " +
                                 "vehicle.v_vehicle_consumption_rate, " +
-                                "contract_vehical.cv_vehical_status " + 
+                                "contract_vehical.default_vehicle " +
                           " FROM contract_vehical, vehicle " +
                           "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
                           "  AND contract_vehical.contract_no = @contract_no " +
@@ -751,6 +778,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     List<ContractVehicle> _list = new List<ContractVehicle>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
+                        int? val;
                         while (dr.Read())
                         {
                             ContractVehicle instance = new ContractVehicle();
@@ -786,6 +814,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._v_vehicle_safety = GetValueFromReader<Int32?>(dr, 25);
                             instance._v_vehicle_emissions = GetValueFromReader<Int32?>(dr, 26);
                             instance._v_vehicle_consumption_rate = GetValueFromReader<Decimal?>(dr, 27);
+
+                            // TJB  Frequencies & Vehicles  Jan-2021: Added
+                            val = GetValueFromReader<Int32?>(dr, 28);
+                            instance._cv_default_vehicle = (val == null ? 0 : val);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
