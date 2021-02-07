@@ -8,9 +8,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    // TJB  Frequencies & Vehicles  Dec-2020
+    // TJB  Frequencies & Vehicles  16-Jan-2021
     // Changed type of CvVehicalStatus to bool (was string)
-    // [Jan-2021] Added contract_vehical.default_vehicle, and CvDefaultVehicle as bool
+    // Added contract_vehical.default_vehicle, and CvDefaultVehicle as bool
+    // Changed sort order - put default vehicle first
     //
     // TJB  RPCR_001  July-2010
     // Added _v_vehicle_safety, _v_vehicle_emissions, _v_vehicle_consumption_rate 
@@ -142,6 +143,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private decimal? _v_vehicle_consumption_rate;
 
+        private string _cv_vehical_initial_status = "N";
+        private int? _cv_initial_default_vehicle = 0;
+
+        
+        //-------------------------------------------------------------------------
         public virtual int? VehicleNumber
         {
             get
@@ -451,27 +457,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        // TJB  Frequencies & Vehicles  Jan-2021: Added
-        public virtual bool CvDefaultVehicle
-        {
-            get
-            {
-                CanReadProperty("CvDefaultVehicle", true);
-
-                return (_cv_default_vehicle == null ? 0 : _cv_default_vehicle) == 1;
-            }
-            set
-            {
-                CanWriteProperty("CvDefaultVehicle", true);
-                int new_value = (value ? 1 : 0);
-                if (_cv_default_vehicle != new_value)
-                {
-                    _cv_default_vehicle = new_value;
-                    PropertyHasChanged("_cv_default_vehicle");
-                }
-            }
-        }
-
         public virtual int? VVehicleMonth
         {
             get
@@ -709,6 +694,69 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        // TJB  Frequencies & Vehicles  28-Jan-2021: Added
+        public virtual bool CvDefaultVehicle
+        {
+            get
+            {
+                CanReadProperty("CvDefaultVehicle", true);
+
+                return (_cv_default_vehicle == null ? 0 : _cv_default_vehicle) == 1;
+            }
+            set
+            {
+                CanWriteProperty("CvDefaultVehicle", true);
+                int new_value = (value ? 1 : 0);
+                if (_cv_default_vehicle != new_value)
+                {
+                    _cv_default_vehicle = new_value;
+                    PropertyHasChanged("_cv_default_vehicle");
+                }
+            }
+        }
+
+        // These two let me determine if the checkbox changes 
+        public virtual bool CvInitialDefaultVehicle
+        {
+            get
+            {
+                int? old_value = _cv_initial_default_vehicle ?? 0;
+                CanReadProperty("CvInitialDefaultVehicle", true);
+                return (old_value == 1);
+            }
+            set
+            {
+                CanWriteProperty("CvInitialDefaultVehicle", true);
+                int new_value = (value ? 1 : 0);
+                if (_cv_initial_default_vehicle != new_value)
+                {
+                    _cv_initial_default_vehicle = new_value;
+                    PropertyHasChanged("_cv_initial_default_vehicle");
+                }
+            }
+        }
+
+        public virtual bool CvVehicalInitialStatus
+        {
+            get
+            {
+                string old_val = _cv_vehical_initial_status ?? "N";
+                CanReadProperty("CvVehicalInitialStatus", true);
+                return old_val == "A";
+            }
+            set
+            {
+                CanWriteProperty("CvVehicalInitialStatus", true);
+                string new_value = value ? "A" : "N";
+                if (_cv_vehical_initial_status != new_value)
+                {
+                    _cv_vehical_initial_status = new_value;
+                    PropertyHasChanged("_cv_vehical_initial_status");
+                }
+            }
+        }
+
+        //-------------------------------------------------------------------------
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}/{2}", _vehicle_number, _contract_no, _contract_seq_number);
@@ -727,6 +775,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         }
         #endregion
 
+        //-------------------------------------------------------------------------
         #region Data Access
         [ServerMethod]
         private void FetchEntity(int? contract_no, int? contract_seq_number)
@@ -769,11 +818,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                 "vehicle.v_vehicle_emissions, " +
                                 "vehicle.v_vehicle_consumption_rate, " +
                                 "contract_vehical.default_vehicle " +
-                          " FROM contract_vehical, vehicle " +
-                          "WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
-                          "  AND contract_vehical.contract_no = @contract_no " +
-                          "  AND contract_vehical.contract_seq_number = @contract_seq_number " +
-                          "ORDER BY vehicle.v_purchased_date DESC ";
+                         "  FROM contract_vehical, vehicle " +
+                         " WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
+                         "   AND contract_vehical.contract_no = @contract_no " +
+                         "   AND contract_vehical.contract_seq_number = @contract_seq_number " +
+                         " ORDER BY contract_vehical.default_vehicle desc" + 
+                         "         ,vehicle.v_purchased_date DESC ";
 
                     List<ContractVehicle> _list = new List<ContractVehicle>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -816,8 +866,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._v_vehicle_consumption_rate = GetValueFromReader<Decimal?>(dr, 27);
 
                             // TJB  Frequencies & Vehicles  Jan-2021: Added
+                            instance._cv_vehical_initial_status = instance._cv_vehical_status;
                             val = GetValueFromReader<Int32?>(dr, 28);
                             instance._cv_default_vehicle = (val == null ? 0 : val);
+                            instance._cv_initial_default_vehicle = instance._cv_default_vehicle;
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
