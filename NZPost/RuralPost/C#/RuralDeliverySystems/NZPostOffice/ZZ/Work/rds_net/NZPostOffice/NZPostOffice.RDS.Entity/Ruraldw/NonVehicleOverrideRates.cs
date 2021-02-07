@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  22-Jan-2021
+    // Added vehicle_number to Fetch etc parameters and to returned values
+    //
     // TJB  RPCR_099  Jan-2016
     // Added nvor_effective_date
     // Added nvor_effective_date to returned values in FetchEntity
@@ -38,6 +41,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("nvor_processing_wage_rate", "_nvor_processing_wage_rate", "non_vehicle_override_rate")]
     [MapInfo("nvor_relief_weeks", "_nvor_relief_weeks", "non_vehicle_override_rate")]
     [MapInfo("nvor_effective_date", "_nvor_effective_date", "non_vehicle_override_rate")]
+    [MapInfo("vehicle_number", "_vehicle_number", "non_vehicle_override_rate")]
     [System.Serializable()]
 
     public class NonVehicleOverrideRates : Entity<NonVehicleOverrideRates>
@@ -95,6 +99,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private DateTime? _nvor_effective_date;
+
+        [DBField()]
+        private int? _vehicle_number;
+
         //--------------------------------------------------------------------
         public virtual int? ContractNo
         {
@@ -401,22 +409,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
+
+        public virtual int? VehicleNumber
+        {
+            get
+            {
+                CanReadProperty("VehicleNumber", true);
+                return _vehicle_number;
+            }
+            set
+            {
+                CanWriteProperty("VehicleNumber", true);
+                if (_vehicle_number != value)
+                {
+                    _vehicle_number = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         //-----------------------------------------------------------------------------
         protected override object GetIdValue()
         {
-            return string.Format("{0}/{1}", _contract_no, _contract_seq_number);
+            return string.Format("{0}/{1} {2}", _contract_no, _contract_seq_number, _vehicle_number);
         }
         #endregion
 
         #region Factory Methods
-        public static NonVehicleOverrideRates NewNonVehicleOverrideRates(int? incontract_no, int? incontract_seq_no)
+        public static NonVehicleOverrideRates NewNonVehicleOverrideRates(int? incontract_no, int? incontract_seq_number, int? invehicle_number)
         {
-            return Create(incontract_no, incontract_seq_no);
+            return Create(incontract_no, incontract_seq_number, invehicle_number);
         }
 
-        public static NonVehicleOverrideRates[] GetAllNonVehicleOverrideRates(int? incontract_no, int? incontract_seq_no)
+        public static NonVehicleOverrideRates[] GetAllNonVehicleOverrideRates(int? incontract_no, int? incontract_seq_number, int? invehicle_number)
         {
-            return Fetch(incontract_no, incontract_seq_no).list;
+            return Fetch(incontract_no, incontract_seq_number, invehicle_number).list;
         }
 
         // TJB  RD7_0038  Nov-2009: Added (it wasn't included originally!)
@@ -429,8 +456,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         #region Data Access
         [ServerMethod()]
-        private void FetchEntity(int? incontract_no, int? incontract_seq_no)
+        private void FetchEntity(int? incontract_no, int? incontract_seq_number, int? invehicle_number)
         {
+            // TJB  Frequencies & Vehicles  22-Jan-2021
+            // Added vehicle_number to parameters and returned values
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
@@ -438,8 +467,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "rd.sp_get_non_vehicle_override_rates";
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "incontract_no", incontract_no);
-                    pList.Add(cm, "incontract_seq_no", incontract_seq_no);
+                    pList.Add(cm, "inContractNo", incontract_no);
+                    pList.Add(cm, "inSequenceNo", incontract_seq_number);
+                    pList.Add(cm, "inVehicleNo", invehicle_number);
                     List<NonVehicleOverrideRates> _list = new List<NonVehicleOverrideRates>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                     {
@@ -463,6 +493,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._nvor_processing_wage_rate = GetValueFromReader<Decimal?>(dr, 14);
                             instance._nvor_relief_weeks = GetValueFromReader<Decimal?>(dr, 15);
                             instance._nvor_effective_date = GetValueFromReader<DateTime?>(dr, 16);
+                            instance._vehicle_number = GetValueFromReader<Int32?>(dr, 17);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
@@ -497,6 +528,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        // TJB  Frequencies & Vehicles  22-Jan-2021
+        // Added vehicle_number to where clause
+        //
         // TJB  RPCR_099  Jan-2016
         // Added nvor_effective_date to where clause
         //
@@ -513,10 +547,12 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 {
                     cm.CommandText += " WHERE contract_no = @contract_no"
                                       + " AND contract_seq_number = @contract_seq_number"
-                                      + " AND nvor_effective_date = @nvor_effective_date";
-                    pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
+                                      + " AND nvor_effective_date = @nvor_effective_date"
+                                      + " AND vehicle_number      = @vehicle_number";
+                    pList.Add(cm, "contract_no",         GetInitialValue("_contract_no"));
                     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
                     pList.Add(cm, "nvor_effective_date", GetInitialValue("_nvor_effective_date"));
+                    pList.Add(cm, "vehicle_number",      GetInitialValue("_vehicle_number"));
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -533,10 +569,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         #endregion
 
         [ServerMethod()]
-        private void CreateEntity(int? contract_no, int? contract_seq_number)
+        private void CreateEntity(int? contract_no, int? contract_seq_number, int? vehicle_number)
         {
             _contract_no = contract_no;
             _contract_seq_number = contract_seq_number;
+            _vehicle_number = vehicle_number;
         }
     }
 }
