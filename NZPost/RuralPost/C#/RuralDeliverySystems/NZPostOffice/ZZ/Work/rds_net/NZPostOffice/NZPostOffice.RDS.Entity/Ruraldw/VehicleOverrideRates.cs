@@ -8,7 +8,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    // TJB  Frequencies & Vehicles  Jan 2021
+    // TJB  Frequencies & Vehicles  22-Jan-2021
     // Add inVehicleNo parameter to CreateEntity, FetchEntity and GetIdValue
     // and vehicle_number to retreived values
 
@@ -88,7 +88,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private DateTime? _vor_effective_date;
 
-
+        //-------------------------------------------------------------------
         public virtual int? ContractNo
         {
             get
@@ -394,7 +394,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 }
             }
         }
-
+        //---------------------------------------------------------------------------------
         protected override object GetIdValue()
         {
             return string.Format("{0}/{1}/{2}/{3}", _contract_no, _contract_seq_number, _vehicle_number, _vor_effective_date);
@@ -422,7 +422,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             base.MarkNew();
         }
         #endregion
-
+        //-------------------------------------------------------------------------------------------
         #region Data Access
         [ServerMethod()]
         private void FetchEntity(int? inContractNo, int? inSequenceNo, int? inVehicleNo)
@@ -440,7 +440,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandText = "rd.sp_Get_vehicle_override_rates";
                     pList.Add(cm, "@inContractNo", inContractNo);
                     pList.Add(cm, "@inSequenceNo", inSequenceNo);
-                    pList.Add(cm, "@inVehicleNo", inVehicleNo);
+                    pList.Add(cm, "@inVehicleNo",  inVehicleNo);
                     try
                     {
                         List<VehicleOverrideRates> _list = new List<VehicleOverrideRates>();
