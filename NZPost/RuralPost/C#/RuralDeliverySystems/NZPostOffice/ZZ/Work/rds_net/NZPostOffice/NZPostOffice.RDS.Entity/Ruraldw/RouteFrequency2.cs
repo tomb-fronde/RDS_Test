@@ -8,6 +8,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Jan-2021
+    // Changed 'distance' to 'rf_distance'
+    // Added GetAllRouteFrequency2(int? in_Contract)
+    // Set default vehicle_number to 0
+    //
     // TJB Frequencies Changes 15-Nov-2020
     // Checkin working version
     // with DRouteFrequency2 and DRouteFrequency2Rows
@@ -29,7 +34,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("rf_friday", "_rf_friday", "")]
     [MapInfo("rf_saturday", "_rf_saturday", "")]
     [MapInfo("rf_sunday", "_rf_sunday", "")]
-    [MapInfo("rf_distance", "_distance", "route_frequency")]
+    [MapInfo("rf_distance", "_rf_distance", "route_frequency")]
     [MapInfo("rf_nms", "_rf_nms", "route_frequency")]
     [MapInfo("rf_dpcount", "_rf_dpcount", "route_frequency")]
     [MapInfo("vehicle_number", "_vehicle_number", "route_frequency")]
@@ -72,7 +77,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private string _rf_sunday = "N";
 
         [DBField()]
-        private decimal? _distance=0;
+        private decimal? _rf_distance=0;
 
         [DBField()]
         private string _inUse;
@@ -289,19 +294,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual decimal? Distance
+        public virtual decimal? RfDistance
         {
             get
             {
-                CanReadProperty("Distance", true);
-                return _distance;
+                CanReadProperty("RfDistance", true);
+                return _rf_distance;
             }
             set
             {
-                CanWriteProperty("Distance", true);
-                if (_distance != value)
+                CanWriteProperty("RfDistance", true);
+                if (_rf_distance != value)
                 {
-                    _distance = value;
+                    _rf_distance = value;
                     PropertyHasChanged();
                 }
             }
@@ -675,6 +680,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             return Create(in_Contract);
         }
 
+        public static RouteFrequency2[] GetAllRouteFrequency2(int? in_Contract)
+        {
+            return Fetch(in_Contract, 1).list;
+        }
+
         public static RouteFrequency2[] GetAllRouteFrequency2(int? in_Contract, int? in_showAll)
         {
                 return Fetch(in_Contract, in_showAll).list;
@@ -700,7 +710,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_Contract", in_Contract);
                     pList.Add(cm, "in_showAll", in_showAll);
-                    cm.CommandText = "rd.sp_getroutefrequency2020";
+                    cm.CommandText = "rd.sp_getroutefrequency2021";
 
                     sqlCode = 0;
 
@@ -725,7 +735,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                 instance._rf_friday = GetValueFromReader<String>(dr, 8);
                                 instance._rf_saturday = GetValueFromReader<String>(dr, 9);
                                 instance._rf_sunday = GetValueFromReader<String>(dr, 10);
-                                instance._distance = GetValueFromReader<Decimal?>(dr, 11);
+                                instance._rf_distance = GetValueFromReader<Decimal?>(dr, 11);
                                 instance._t_computer = GetValueFromReader<string>(dr, 12);
                                 instance._rf_nms = GetValueFromReader<string>(dr, 13);
                                 instance._rf_dpcount = GetValueFromReader<Int32>(dr, 14);
