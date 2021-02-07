@@ -8,7 +8,7 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
-    // TJB Frequencies and Vehicles Dec-2020 NEW
+    // TJB Frequencies & Vehicles Dec-2020 NEW
     // Data for Frequencies tab's vehicle dropdown list
     // (originally used DddwContractorVehicles)
 
@@ -138,7 +138,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 					cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "sp_DDDW_contract_vehicles";
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "@InContractNo", in_Contract);
+                    pList.Add(cm, "@inContractNo", in_Contract);
 
 					List<DddwContractVehicles> _list = new List<DddwContractVehicles>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
