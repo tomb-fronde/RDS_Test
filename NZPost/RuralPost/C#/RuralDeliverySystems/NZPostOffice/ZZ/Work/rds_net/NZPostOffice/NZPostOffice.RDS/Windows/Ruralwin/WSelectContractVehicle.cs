@@ -12,7 +12,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  Frequencies & Vehicles  Jan-2021
     // Presents a list of a contract's vehicles' for the user to select from
     // Returns the vehicle_number or -1 to cancel
-    //
+    // [23-Jan] Added dw_selectvehicle_doubleclicked
+
     public class WSelectContractVehicle : WAncestorWindow
     {
         #region Define
@@ -23,7 +24,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Label label1;
         public Button cb_ok;
         public Button cb_cancel;
-        private int vehicle_number = 0;
         private TextBox textBox1;
 
         private int il_Contract_no;
@@ -34,6 +34,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.InitializeComponent();
             this.dw_selectvehicle.DataObject = new DSelectContractVehicle();
+            ((DSelectContractVehicle)dw_selectvehicle.DataObject).CellDoubleClick 
+                       += new EventHandler(dw_selectvehicle_doubleclicked);
         }
 
         public override void pfc_postopen()
@@ -42,18 +44,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //dw_fixedasset.GetItem<AddFixedAsset>(0).FaFixedAssetNo = StaticMessage.StringParm;
             //StaticVariables.gnv_app.of_get_parameters().stringparm = "Cancelled";
 
-            int nContractNo = (int)StaticVariables.gnv_app.of_get_parameters().integerparm;
-            int nConSeqNo = (int)StaticVariables.gnv_app.of_get_parameters().intparm;
+            int nContractNo  = (int)StaticVariables.gnv_app.of_get_parameters().integerparm;
+            int nConSeqNo    = (int)StaticVariables.gnv_app.of_get_parameters().intparm;
             string sConTitle = StaticVariables.gnv_app.of_get_parameters().stringparm;
+            string sPurpose  = StaticVariables.gnv_app.of_get_parameters().miscstringparm;
+            il_Contract_no = nContractNo;
             string ls_Title = "Contract: (" + nContractNo.ToString() + ") " + sConTitle;
             this.Text = ls_Title;
-            il_Contract_no = nContractNo;
+            if (sPurpose == "")
+                this.textBox1.Text = "Select a vehicle ";
+            else
+                this.textBox1.Text = sPurpose;
 
             dw_selectvehicle.DataObject.Reset();
-            dw_selectvehicle.Retrieve(new object[] { nContractNo, nConSeqNo });
+            int nFound = dw_selectvehicle.Retrieve(new object[] { nContractNo, nConSeqNo });
+            int t = nFound;
         }
 
-        #region From Design
+        #region Form Design
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -123,7 +131,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(360, 24);
             this.textBox1.TabIndex = 5;
-            this.textBox1.Text = "Select a vehicle for overrides";
+            this.textBox1.Text = "Select a vehicle ";
             // 
             // WSelectContractVehicle
             // 
@@ -169,50 +177,63 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if (StaticVariables.gnv_app.of_get_parameters().stringparm != "Ok")
             {
+/*
                 MessageBox.Show("WSelectContractVehicle close()\n"
-                               + "Returning -1"
-                               );
-
+                               + "Returning -1");
+*/
                 StaticVariables.gnv_app.of_get_parameters().stringparm = "Cancelled";
                 StaticVariables.gnv_app.of_get_parameters().intparm = -1;
             }
             base.close();
         }
         #region Events
+        // TJB  Frequencies & Vehicles  23-Jan-2021 - Added
+        // User can double-click to select vehicle's overrides to open
+        public virtual void dw_selectvehicle_doubleclicked(object sender, EventArgs e)
+        {
+            int nRow = dw_selectvehicle.GetRow();
+            int nVehicle = dw_selectvehicle.GetItem<SelectContractVehicle>(nRow).VehicleNumber;
+            /*******************  Debugging  **********************
+            string sVehName = dw_selectvehicle.GetItem<SelectContractVehicle>(nRow).VehicleName; ;
+            System.Text.StringBuilder msg = new System.Text.StringBuilder();
+            msg.AppendFormat("{0} ({1}) selected",sVehName,nVehicle);
+            msg.AppendLine();
+            MessageBox.Show(msg.ToString(),"Debugging - dw_selectvehicle_doubleclicked");
+            /*******************  Debugging  **********************/
+            // Pretend the user clicked "Ok"
+            StaticVariables.gnv_app.of_get_parameters().stringparm = "Ok";
+            StaticVariables.gnv_app.of_get_parameters().intparm = nVehicle;
+            this.Close();
+        }
+
         public virtual void cb_ok_clicked(object sender, EventArgs e)
         {
-            int nRows, nRow;
-            nRows = dw_selectvehicle.RowCount;
-            nRow = dw_selectvehicle.GetRow();
-
-            vehicle_number = dw_selectvehicle.GetItem<SelectContractVehicle>(nRow).VehicleNumber;
-
-            MessageBox.Show("WSelectContractVehicle cb_ok_clicked\n"
-                           + "Rowcount = " + nRows.ToString() + "\n"
-                           + "GetRow() = " + nRow.ToString() + "\n\n"
-                           + "vehicle_number = " + vehicle_number.ToString()
-                           );
+            int nRow = dw_selectvehicle.GetRow();
+            int nVehicle = dw_selectvehicle.GetItem<SelectContractVehicle>(nRow).VehicleNumber;
+            /*******************  Debugging  **********************
+            string sVehName = dw_selectvehicle.GetItem<SelectContractVehicle>(nRow).VehicleName; ;
+            System.Text.StringBuilder msg = new System.Text.StringBuilder();
+            msg.AppendFormat("{0} ({1}) selected",sVehName,nVehicle);
+            msg.AppendLine();
+            MessageBox.Show(msg.ToString(), "Debugging - cb_ok_clicked");
+            /*******************  Debugging  **********************/
             StaticVariables.gnv_app.of_get_parameters().stringparm = "Ok";
-            StaticVariables.gnv_app.of_get_parameters().intparm = vehicle_number;
+            StaticVariables.gnv_app.of_get_parameters().intparm = nVehicle;
             this.Close();
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
         {
-            int nRows, nRow;
-            nRows = dw_selectvehicle.RowCount;
-            nRow = dw_selectvehicle.GetRow();
-
-            MessageBox.Show("WSelectContractVehicle cb_cancel_clicked\n"
-                           + "Rowcount = " + nRows.ToString() + "\n"
-                           + "GetRow() = " + nRow.ToString() + "\n\n"
-                           + "Returning -1"
-                           );
-
+            /*******************  Debugging  **********************
+            MessageBox.Show("cb_cancel_clicked\n\n"
+                           + "Returning FAILED (-1)"
+                           , "Debugging - cb_cancel_clicked");
+            /*******************  Debugging  **********************/
             StaticVariables.gnv_app.of_get_parameters().stringparm = "Cancelled";
-            StaticVariables.gnv_app.of_get_parameters().intparm = -1;
+            StaticVariables.gnv_app.of_get_parameters().intparm = FAILED;
             this.Close();
         }
         #endregion
+
     }
 }
