@@ -18,7 +18,11 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
-    // TJB Frequencies 4-Dec-2020
+    // TJB Frequencies & Vehicles  8-Feb-2021
+    // Added code to detect changes in the contract's benchmark mainly 
+    //    as a result of changing the vehicles associated with a frequency.
+    // Added nShowAll so all refreshes of dw_frequencies show what the user selected
+    // TJB Frequencies & Vehicles 4-Dec-2020
     // Bug-fix: validation of number of SF days to selected days
     //
     // TJB Frequencies 2-Dec-2020
@@ -33,6 +37,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // See notes in DRouteFrequency2 and DRouteFrequency2Rows
     //
     // TJB Frequencies Nov-2020
+    // Changed Data control idw_frequencies to idw_frequencies2
     // Added tabpage Frequencies2
     // See dw_route_frequency2 and idw_frequencies2
     // Added of_validate_frequencies2() and of_frequency2_unique()
@@ -136,6 +141,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public bool ib_Opening = true;
         public bool ib_custlist_changed = false;
         public DateTime? id_custlist_updated = null;
+        private System.Decimal dcPrevBenchmark = 0;  // TJB 8Feb2021: Added
+
         private System.ComponentModel.IContainer components = null;
         public TabControl tab_contract;
         public TabPage tabpage_contract;
@@ -254,6 +261,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_route_frequency2.Constructor += new UserEventDelegate(dw_route_frequency2_constructor);
             this.dw_route_frequency2.PfcValidation += new UserEventDelegate1(dw_route_frequency2_PfcValidation);
             this.dw_route_frequency2.PfcPreInsertRow += new UserEventDelegate1(dw_route_frequency2_PfcPreInsertRow);
+            this.dw_route_frequency2.DoubleClick += new System.EventHandler(this.dw_route_frequency2_DoubleClick);
+            this.dw_route_frequency2.PfcPostUpdate += new UserEventDelegate(dw_route_frequency2_PfcPostUpdate);
 
             this.dw_route_audit.Constructor += new UserEventDelegate(dw_route_audit_constructor);
             ((DRouteAuditListing)dw_route_audit.DataObject).CellDoubleClick += new EventHandler(dw_route_audit_doubleclicked);
@@ -430,6 +439,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  fail (in URdsDw) with an 'unknown entity type' error when nothing 
             //  was returned from the SQL select query?????
             //idw_freight_allocations.of_set_createpriv(true);
+
+            // TJB  Frequencies & Vehicles 8-Feb-2021
+            // Get the benchmark now; used to determine if there's a change
+            dcPrevBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "pfc_postopen");
 
             BeginInvoke(new delegateInvoke(idw_contractInvoke));
             this.tab_contract_selectionchanging(new object(), new EventArgs());
@@ -766,7 +779,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_route_frequency2.Name = "dw_route_frequency2";
             this.dw_route_frequency2.Size = new System.Drawing.Size(539, 262);
             this.dw_route_frequency2.TabIndex = 2;
-            this.dw_route_frequency2.DoubleClick += new System.EventHandler(this.dw_route_frequency2_DoubleClick);
             // 
             // cb_showAll
             // 
@@ -1210,6 +1222,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return 0;
         }
 
+        public virtual int of_refresh_frequencies2()
+        {
+            idw_frequencies2.Reset();
+            return idw_frequencies2.Retrieve(new object[] { il_Contract_no, nShowAll });
+        }
+
         public virtual bool of_validate_frequencies2()
         {
             // TJB Frequencies Nov-2020 NEW
@@ -1288,9 +1306,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     error_found = true;
                 }
 
-                if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).Distance == null))
+                if ((idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDistance == null))
                 {
-                    idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).Distance = 0;
+                    idw_frequencies2.GetItem<RouteFrequency2>(ll_Row).RfDistance = 0;
                 }
             }
             idw_frequencies2.AcceptText();
@@ -1753,6 +1771,101 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lm_menu._m_updatedatabase.Visible = true;
             lm_menu.m_updatedatabase.Visible = true;
             lm_menu.m_updatedatabase.Enabled = true;
+        }
+
+        // TJB  Frequencies & Vehicles  8-Feb-2021: New
+        // Calculate the benchmark.  Done when the form is opened
+        // and when the route_frequencies table is updated.  When there's 
+        // a change in a frequency's vehicle, the benchmark will likely 
+        // change, and the difference will be recorded as a frequency adjustment.
+        public virtual System.Decimal wf_getBenchmark(int inContractNo, int inSequenceNo, string source)
+        {
+            // Determine the vehicle benchmark for the current vehicle
+            // Returns -1 if unable to.
+            int SQLCode = 0;
+            string SQLErrText = string.Empty;
+            System.Decimal dcBenchmark = -1;
+
+            RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(inContractNo, inSequenceNo);
+            if (obj.SQLCode == 0)
+            {
+                dcBenchmark = (Decimal)obj.decVal;
+                /******************  Debugging  ***************************
+                string sTitle = "wf_getBenchmark (" + source + ")";
+                if (source == "" || source == null)
+                    sTitle = "wf_getBenchmark (" + source + ")";
+                MessageBox.Show("Contract " + il_Contract_no.ToString() + "/" + il_con_active_seq.ToString() + "\n"
+                               + "Benchmark = " + dcBenchmark.ToString()
+                               + ", Previous BM = " + dcPrevBenchmark.ToString()
+                               , "Debugging - "+sTitle);
+                /*******************  Debugging  ***************************/                
+            }
+            else
+            {
+                string sTitle = "wf_getBenchmark (" + source + ")";
+                if( source == "" || source == null)
+                    sTitle = "wf_getBenchmark (" + source + ")";
+
+                MessageBox.Show("Unable to determine current benchmark.\n\n"
+                                 + "Error Code: " + Convert.ToString(obj.SQLCode) + "\n"
+                                 + "Error Text: " + obj.SQLErrText+"\n"
+                               , sTitle
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dcBenchmark = -1;
+            }
+            return dcBenchmark;
+        }
+
+        // TJB  Frequencies & Vehicles  8-Feb-2021: New
+        // Derived from wf_add_frequency_adjustment in WRenewal2001
+        public virtual int wf_add_frequency_adjustment(int inContractNo, int inSequenceNo
+                                     , System.Decimal inNewBenchmark, System.Decimal inPrevBenchmark)
+        {
+            // Called from dw_route_frequency2.pfc_postupdate when a new vehicle has been 
+            // connected to a frequency causing a change in the contract's benchmark, and 
+            // a frequency adjustment is needed.
+            // 
+            //  Return code
+            //     0 (OK)    Successfully added a frequency adjustment
+            //   FAILED (-1) Error preparing for or actually adding the adjusment
+
+            System.Decimal ldc_ruc_amount;
+            int li_return = OK;
+            int SQLErrCode = 0;
+            string SQLErrText = "";
+
+            NFrequencyAdjustment n_freq_adj;
+            //  Calculate the adjustment amount
+            ldc_ruc_amount = inNewBenchmark - inPrevBenchmark;
+            //  Create the adjustment
+            //  Note: the of_save function creates both a frequency_adjustment 
+            //  record and a corresponding frequency_distances record.
+            n_freq_adj = new NFrequencyAdjustment();
+            n_freq_adj.of_set_contract(inContractNo, inSequenceNo);
+            //  TJB  RD7_0037  Aug2009: Changed wording
+            n_freq_adj.is_reason = "Change in value resulting from change in vehicle.";
+            //  Use today's date as the effective date
+            n_freq_adj.of_set_effective_date(DateTime.Today);
+            n_freq_adj.is_confirmed = "N";
+            n_freq_adj.idc_new_benchmark = inNewBenchmark;
+            n_freq_adj.idc_amount_to_pay = ldc_ruc_amount;
+            n_freq_adj.idc_adjustment_amount = ldc_ruc_amount;
+            li_return = n_freq_adj.of_save(ref SQLErrCode, ref SQLErrText);
+            //  Tell the user what's been done.
+            if (li_return > 0)
+            { //?Commit;
+                li_return = OK;
+            }
+            else
+            { //?Rollback;
+                MessageBox.Show("A frequency adjustment insert failed. \n"
+                              + "    Error code = " + SQLErrCode.ToString() + "\n"
+                              + "    Error text = " + SQLErrText + "\n"
+                              , "ERROR"
+                              , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                li_return = FAILED;
+            }
+            return li_return;
         }
 
         public virtual bool of_validate_contract(int arow)
@@ -2219,7 +2332,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
         }
 
-        public virtual void dw_route_audit_constructor()
+        // TJB  Frequencies & Vehicles  8-Feb-2021: New
+        // When the route_frequencies table is updated, check to see if 
+        // there's a change in the benchmark.
+        public virtual void dw_route_frequency2_PfcPostUpdate()
+        {
+            System.Decimal dcNewBenchmark = 0;
+
+            dcNewBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "dw_route_frequency2_PfcPostUpdate");
+            if (dcNewBenchmark != dcPrevBenchmark)
+            {
+                /*******************  Debugging  ***************************
+                MessageBox.Show("dcPrevBenchmark = " + dcPrevBenchmark.ToString() + "\n"
+                               + "dcNewBenchmark = " + dcNewBenchmark.ToString() + "\n"
+                               , "Debugging - dw_route_frequency2_PfcPostUpdate");
+                /*******************  Debugging  ***************************/                
+
+                //***********************************
+                // Add a frequency adjustment
+                //***********************************
+                int rc = wf_add_frequency_adjustment(il_Contract_no, il_con_active_seq, dcNewBenchmark, dcPrevBenchmark);
+
+                // If successful update the "previous benchmark" in case there are further benchmark changes
+                if( rc == OK )
+                    dcPrevBenchmark = dcNewBenchmark;
+            }
+        }
+    
+    public virtual void dw_route_audit_constructor()
         {
             dw_route_audit.of_setautoinsert(true);
             dw_route_audit.of_SetRowSelect(true);
@@ -3209,9 +3349,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     idw_frequencies.Retrieve(new object[]{il_Contract_no, 1});
                 }
-                int i1, i2;
-                i1 = idw_frequencies.RowCount;
-                i2 = i1;
                 idw_frequencies.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 idw_frequencies.uf_settoolbar();
 //                idw_frequencies.URdsDw_Clicked(null, null);
@@ -3222,13 +3359,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //dw_route_frequency2_getfocus(null, null);
                 idw_frequencies2.uf_toggle_audit(false);
                 of_save_contract_no();
+                if( IsRFUpdated )
+                {
+                    idw_frequencies2.Reset();
+                }
                 if (idw_frequencies2.RowCount == 0)
                 {
-                    idw_frequencies2.Retrieve(new object[] { il_Contract_no, 1 });
+                    idw_frequencies2.Retrieve(new object[] { il_Contract_no, nShowAll });
                 }
-                int i1, i2;
-                i1 = idw_frequencies2.RowCount;
-                i2 = i1;
                 idw_frequencies2.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 idw_frequencies2.uf_settoolbar();
 //                idw_frequencies2.URdsDw_Clicked(null, null);
@@ -3666,7 +3804,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_renewals_doubleclicked(object sender, EventArgs e)
         {
             dw_renewals.URdsDw_DoubleClick(sender, e);
-            WRenewal2001 lw_Renewal2001;
             string ls_Title;
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
@@ -3680,17 +3817,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_msg = new NRdsMsg();
             lnv_Criteria.of_addcriteria("Contract_no", dw_renewals.GetItem<Renewals>(row).ContractNo.GetValueOrDefault());
             lnv_Criteria.of_addcriteria("Contract_seq_number", dw_renewals.GetItem<Renewals>(row).ContractSeqNumber.GetValueOrDefault());
+            lnv_Criteria.of_addcriteria("Test_string", "WContract2001 test string");
             lnv_msg.of_addcriteria(lnv_Criteria);
             ls_Title = "Renewal: " + dw_renewals.GetItem<Renewals>(row).ContractNo.GetValueOrDefault().ToString() 
                                    + "/" + idw_renewals.GetItem<Renewals>(row).ContractSeqNumber.GetValueOrDefault().ToString() 
                                    + " " + idw_contract.GetItem<Contract>(0).ConTitle;
             if (!((StaticVariables.gnv_app.of_findwindow(ls_Title, "w_Renewal2001") != null)))
             {
-                //OpenSheetWithParm(lw_Renewal2001, lnv_msg, w_main_mdi, 0, original!);
                 StaticMessage.PowerObjectParm = lnv_msg;
-                lw_Renewal2001 = new WRenewal2001();
+                WRenewal2001 lw_Renewal2001 = new WRenewal2001();
                 lw_Renewal2001.MdiParent = StaticVariables.MainMDI;
-                lw_Renewal2001.Show();
+                lw_Renewal2001.RFTableUpdated += new EventHandler<StatusUpdatedEventArgs>(lw_Renewal2001_RFTableUpdated);
+                lw_Renewal2001.Show();  
             }
         }
 
@@ -3918,24 +4056,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             WCustomerSequencer w_customer_sequencer = OpenSheet<WCustomerSequencer>(StaticVariables.MainMDI);
         }
 
+        int nShowAll = 1;  // TJB 8-Feb-2021 Added
         private void cb_showAll_clicked(object sender, EventArgs e)
-        {   // TJB Frequencies Nov 2020
-            // changed Data control idw_frequencies to idw_frequencies2
-            //
+        {   // TJB Frequencies & Vehicles Nov 2020
+            // Changed Data control idw_frequencies to idw_frequencies2
+            // [8-Feb-2021] Added nShowAll so all refreshes of dw_frequencies show what the user selected
+
             // TJB  RPCR_044  Jan-2013
             // Added cb_showAll button to Route Frequencies tab, and cb_showAll_clicked event
 
             if (this.cb_showAll.Text == "Show &Active Only")
             {
+                nShowAll = 0;
                 this.cb_showAll.Text = "Show &All";
                 idw_frequencies2.Reset();
-                idw_frequencies2.Retrieve(new object[] { il_Contract_no, 0 });
+                idw_frequencies2.Retrieve(new object[] { il_Contract_no,nShowAll });
             }
             else
             {
+                nShowAll = 1; 
                 this.cb_showAll.Text = "Show &Active Only";
                 idw_frequencies2.Reset();
-                idw_frequencies2.Retrieve(new object[] { il_Contract_no, 1 });
+                idw_frequencies2.Retrieve(new object[] { il_Contract_no, nShowAll });
             }
         }
 
@@ -4118,7 +4260,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.new_contract.Text = "";
 
             int nRow = 0;
-            /* ------------------ Debugging  ------------------------ //
+            /***********************  Debugging  **********************
             int nRow = dw_fixed_assets.GetRow();
 
             string sAssetNo = dw_fixed_assets.GetItem<ContractFixedAssets>(nRow).FaFixedAssetNo;
@@ -4131,7 +4273,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             + "Contract = " + nContract.ToString() + "\n"
                             + "ShID = " + nShId.ToString() + "\n"
                             , "cb_fixed_assets_add_Click");
-            // ------------------ Debugging  ------------------------ */
+            /***********************  Debugging  **********************/
 
             // The new asset has been inserted at Row = 0, but getRow() doesn't return that.
             // Set nRow to the inserted row so we can use it to populate the row with some
@@ -4258,6 +4400,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 dw_fixed_assets.Reset();
                 dw_fixed_assets.Retrieve(new object[] { il_Contract_no });
+            }
+        }
+
+        // TJB  Frequencies & Vehicles  7-Jan-2021: Added
+        // Catch the event thrown by WRenewal2001 when it has updated the 
+        // route_frequency table, and remember the result; to be used by the 
+        // Frequencies tab.
+        // See WRenewal2001.cs and StatusUpdatedEventArgs.cs
+        bool IsRFUpdated = false;
+
+        void lw_Renewal2001_RFTableUpdated(object sender, StatusUpdatedEventArgs e)
+        {
+            bool? _IsRFUpdated = false;
+            if (e != null && e.RfUpdated != null)
+                _IsRFUpdated = e.RfUpdated;
+            
+            IsRFUpdated = (_IsRFUpdated == null) ? false : (bool)_IsRFUpdated;
+
+            //MessageBox.Show("IsRFUpdated = " + IsRFUpdated.ToString()
+            //              , "Debugging - WContract2001.lw_Renewal2001_RFTableUpdated");
+
+            if (IsRFUpdated)
+            {
+                int nRows = of_refresh_frequencies2();
+                int t = nRows;
+                IsRFUpdated = false;
             }
         }
 
