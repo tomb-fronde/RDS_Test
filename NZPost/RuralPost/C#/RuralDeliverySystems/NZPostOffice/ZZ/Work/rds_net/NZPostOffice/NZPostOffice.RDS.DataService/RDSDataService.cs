@@ -10,10 +10,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.DataService
 {
-    // TJB Frequencies and Vehicles Dec-2020
-    // Added CheckVehicleOwnership
+    // TJB Frequencies and Vehicles Jan-2020
+    // Added CheckVehicleOwnership 
+    // (Jan2021) Updated to f_CheckVehicleOwnership
+    // Added cr_f_VehicleName
     //
-    // Modifications
     // TJB  RPCR_140  June-2019
     // NEW: GetContractTypeKey - Get ct_key, contract_type for contract
     // NEW: GetContractorName
@@ -823,9 +824,27 @@ namespace NZPostOffice.RDS.DataService
             return obj;
         }
 
+        // TJB  Frequencies & Vehicles  Jan-2021
+        // Dummy so WContractRate2001 (obsolete) continues to compile
         public static RDSDataService GetVehicleLifeCode(int? il_sequence, int? il_contract)
         {
-            RDSDataService obj = Execute("_GetVehicleLifeCode", il_sequence, il_contract);
+            RDSDataService obj = Execute("_GetVehicleLifeCode", il_sequence, il_contract, null);
+            return obj;
+        }
+
+        // TJB  Frequencies & Vehicles  Jan-2021
+        // New version (inVehicleNo added)
+        public static RDSDataService GetVehicleLifeCode(int? il_contract, int? il_sequence, int? inVehicleNo)
+        {
+            RDSDataService obj = Execute("_GetVehicleLifeCode", il_contract, il_sequence, inVehicleNo);
+            return obj;
+        }
+
+        // TJB  Frequencies & Vehicles  17-Jan-2021
+        // Created new routine for BenchmarkCalc2021 derived from GetBenchmarkCalc2005
+        public static RDSDataService GetBenchmarkCalc2021(int? il_contract, int? il_sequence)
+        {
+            RDSDataService obj = Execute("_GetBenchmarkCalc2021", il_contract, il_sequence);
             return obj;
         }
 
@@ -833,6 +852,17 @@ namespace NZPostOffice.RDS.DataService
         {
             RDSDataService obj = Execute("_GetBenchmarkCalc2005", il_sequence, il_contract);
             return obj;
+        }
+
+        /// <summary>
+        ///select benchmarkCalcVeh2005 ( @il_contract, @il_sequence, @li_newVehNo)  into @ldc_newBenchmark   from dummy
+        /// </summary>
+        public static int GetBenchMarkCalcVeh2005(int? il_contract, int? il_sequence, int? li_newVehNo, ref int SQLCode, ref string SQLErrText)
+        {
+            RDSDataService obj = Execute("_GetBenchMarkCalcVeh2005", il_contract, il_sequence, li_newVehNo);
+            SQLCode = obj.SQLCode;
+            SQLErrText = obj.SQLErrText;
+            return obj.intVal;
         }
 
         public static RDSDataService GetCaLoadResults()
@@ -2085,14 +2115,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// INSERT INTO vehicle
-        ///            (vehicle_number, vt_key, ft_key, v_vehicle_make, v_vehicle_model, v_vehicle_year,   
-        ///            v_vehicle_registration_number, v_vehicle_cc_rating, v_road_user_charges_indicator,   
-        ///            v_purchased_date, v_purchase_value, v_leased, v_vehicle_month, v_vehicle_transmission, 
-        ///            vs_key, v_remaining_economic_life, v_vehicle_speedo_kms, v_vehicle_speedo_date, v_salvage_value)
-        /// VALUES (@lvehicleNumber, @lVTKey, @lFTKey, @sMake, @sModel, @lYear, @sRegistration,   
-        ///            @lCCRate, @sUserCharge, @dPurchase, @lPurchase, @sLeased , @lMonth, @sTransmission, 
-        ///            @ll_VSKey, @ll_remaining_economic_life, @lSpeedoKms, @dSpeedoDate, @ll_salvage )
+        /// Insert a new record into the rd.vehicle table
         /// </summary>
         public static void InsertIntoVehicle(int? lvehicleNumber, int? lVTKey, int? lFTKey, string sMake, string sModel
                                             , int? lYear, string sRegistration, int? lCCRate, string sUserCharge
@@ -2111,13 +2134,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         /// <summary>
-        /// UPDATE vehicle SET vt_key = @lVTKey,   
-        ///            ft_key = @lFTKey, v_vehicle_make = @sMake, v_vehicle_model = @sModel,   
-        ///            v_vehicle_year = @lYear,   v_vehicle_month = @lmonth,   v_vehicle_registration_number = @sRegistration,   
-        ///            v_vehicle_cc_rating = @lCCRate,  v_road_user_charges_indicator = @sUserCharge, v_purchased_date = @dPurchase,   
-        ///            v_purchase_value = @lPurchase, v_leased = @sLeased, v_vehicle_transmission = @sTransmission,vs_key = @ll_VSKey,
-        ///            v_remaining_economic_life = @ll_remaining_economic_life,v_vehicle_speedo_kms  = @lSpeedoKms ,
-        ///            v_vehicle_speedo_date = @dSpeedoDate, v_salvage_value = @ll_salvage WHERE vehicle_number = @lVehicleNumber
+        /// Update an existing in the rd.vehicle table
         /// </summary>
         public static void UpdateVehicle(int? lVTKey, int? lFTKey, string sMake, string sModel, int? lYear, int? lMonth
                                             , string sRegistration, int? lCCRate, string sUserCharge, DateTime? dPurchase
@@ -2241,23 +2258,29 @@ namespace NZPostOffice.RDS.DataService
             return obj.intVal;
         }
 
+        // TJB  Frequencies & Vehicles  Jan-2021
+        public static string GetVehicleName(int? inVehicleNo, ref int SQLCode, ref string SQLErrText)
+        {
+            RDSDataService obj = Execute("_GetVehicleName", inVehicleNo);
+            SQLCode = obj.SQLCode;
+            SQLErrText = obj.SQLErrText;
+            return obj.strVal;
+        }
+
+        // TJB  Frequencies & Vehicles  24-Jan-2021
+        // Added version with only the vehicle number parameter
+        public static string GetVehicleName(int? inVehicleNo)
+        {
+            RDSDataService obj = Execute("_GetVehicleName", inVehicleNo);
+            return obj.strVal;
+        }
+
         /// <summary>
         ///SELECT count(*) INTO @li_rows FROM contract  WHERE contract_no = @il_contract AND con_active_sequence = @il_sequence
         /// </summary>
         public static int GetContractorCount3(int? il_contract, int? il_sequence, ref int SQLCode, ref string SQLErrText)
         {
             RDSDataService obj = Execute("_GetContractorCount3", il_contract, il_sequence);
-            SQLCode = obj.SQLCode;
-            SQLErrText = obj.SQLErrText;
-            return obj.intVal;
-        }
-
-        /// <summary>
-        ///select benchmarkCalcVeh2005 ( @il_contract, @il_sequence, @li_newVehNo)  into @ldc_newBenchmark   from dummy
-        /// </summary>
-        public static int GetBenchMarkCalcVeh2005(int? il_contract, int? il_sequence, int? li_newVehNo, ref int SQLCode, ref string SQLErrText)
-        {
-            RDSDataService obj = Execute("_GetBenchMarkCalcVeh2005", il_contract, il_sequence, li_newVehNo);
             SQLCode = obj.SQLCode;
             SQLErrText = obj.SQLErrText;
             return obj.intVal;
@@ -6424,20 +6447,32 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetVehicleLifeCode(int? il_sequence, int? il_contract)
+        private void _GetVehicleLifeCode(int? il_sequence, int? il_contract, int? inVehicleNo)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT vehicle.v_remaining_economic_life " + 
-                         "FROM rd.contract_vehical, rd.vehicle " +
-                        "WHERE vehicle.vehicle_number = contract_vehical.vehicle_number and " +
-                        "contract_vehical.contract_no = @il_contract AND " +
-                        "contract_vehical.contract_seq_number = @il_sequence";
-                    pList.Add(cm, "il_sequence", il_sequence);
-                    pList.Add(cm, "il_contract", il_contract);
+                    if (inVehicleNo == null)
+                    {
+                        cm.CommandText =
+                             "SELECT vehicle.v_remaining_economic_life " 
+                            +"  FROM rd.contract_vehical, rd.vehicle " 
+                            +" WHERE vehicle.vehicle_number = contract_vehical.vehicle_number " 
+                            +"   AND contract_vehical.contract_no = @il_contract " 
+                            +"   AND contract_vehical.contract_seq_number = @il_sequence";
+                        pList.Add(cm, "il_sequence", il_sequence);
+                        pList.Add(cm, "il_contract", il_contract);
+                    }
+                    else
+                    {
+                        cm.CommandText =
+                             "SELECT vehicle.v_remaining_economic_life " 
+                            +"  FROM rd.vehicle " 
+                            +" WHERE vehicle.vehicle_number = @inVehicleNo ";
+                        pList.Add(cm, "inVehicleNo", inVehicleNo);
+                    }
 
                     try
                     {
@@ -6446,6 +6481,41 @@ namespace NZPostOffice.RDS.DataService
                             if (dr.Read())
                             {
                                 intVal = dr.GetInt32(0);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
+        // TJB  Frequencies & Vehicles  17-Jan-2021
+        // Created new routine for BenchmarkCalc2021 derived from _GetBenchmarkCalc2005
+        [ServerMethod]
+        private void _GetBenchmarkCalc2021(int? il_contract, int? il_sequence )
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int sequence = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select rd.BenchmarkCalc2021( @il_contract, @il_sequence )";
+                    pList.Add(cm, "il_contract", il_contract);
+                    pList.Add(cm, "il_sequence", il_sequence);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                decVal = Convert.ToDecimal(dr.GetFloat(0));
                             }
                             _sqlcode = 0;
                         }
@@ -6468,18 +6538,9 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    //cm.CommandText = "exec BenchmarkCalc2005  @il_contract, @il_sequence ";
+                    //cm.CommandText = "select BenchmarkCalc2005  @il_contract, @il_sequence ";
                     pList.Add(cm, "il_sequence", il_sequence);
                     pList.Add(cm, "il_contract", il_contract);
-
-                    //using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                    //{
-                    //    if (dr.Read())
-                    //    {
-                    //        sequence = dr.GetInt32(0);
-                    //    }
-                    //    _sqlcode = 0;
-                    //}
 
                     cm.CommandText = "SELECT rd.BenchmarkCalc2005 (:il_contract, :il_sequence)";
 
@@ -7063,16 +7124,6 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "il_sequence", il_sequence);
                     pList.Add(cm, "li_newVehNo", li_newVehNo);
-                    //cm.CommandText = "exec benchmarkCalcVeh2005  @il_contract, @il_sequence, @li_newVehNo ";
-                    //using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                    //{
-                    //    if (dr.Read())
-                    //    {
-                    //        sequence = dr.GetInt32(0);
-                    //        _sqlcode = 0;
-                    //    }
-                    //}
-
                     cm.CommandText = "select rd.benchmarkCalcVeh2005(@il_contract, @il_sequence, @li_newVehNo)";
 
                     try
@@ -7189,8 +7240,9 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Frequencies & Vehicles  Jan 2021: New
         [ServerMethod]
-        private void _CheckVehicleOwnership(string inRegNo, int? inContractNo)
+        private void _CheckVehicleOwnership(string inVehicleRegNo, int? inContractNo)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -7198,8 +7250,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int iReturnValue = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "EXEC rd.CheckVehicleOwnership @inRegNo, @inContractNo";
-                    pList.Add(cm, "inRegNo", inRegNo);
+                    cm.CommandText = "declare @x int exec @x = rd.f_CheckVehicleOwnership @inVehicleRegNo, @inContractNo select @x";
+                    pList.Add(cm, "inVehicleRegNo", inVehicleRegNo);
                     pList.Add(cm, "inContractNo", inContractNo);
                     try
                     {
@@ -7224,6 +7276,44 @@ namespace NZPostOffice.RDS.DataService
                     }
 
                     intVal = iReturnValue;
+                }
+            }
+        }
+
+        // TJB  Frequencies & Vehicles  Jan 2021: New
+        [ServerMethod]
+        private void _GetVehicleName(int? inVehicleNumber)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    string sVehicleName = "";
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "declare @x varchar(50) exec @x = rd.f_VehicleName @inVehicleNumber select @x";
+                    pList.Add(cm, "inVehicleNumber", inVehicleNumber);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                sVehicleName = dr.GetString(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                        sVehicleName = "";
+                    }
+                    strVal = sVehicleName;
                 }
             }
         }
