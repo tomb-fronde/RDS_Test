@@ -4,6 +4,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     // TJB Frequencies & Values Dec-2020
     // Changed vehicle dropdown from DDddwContractorVehicles to DDddwContractVehicles
     // (see also DRouteFrequency2)
+    // [25-Jan] Changed 'distance' to rf_distance, retreiving "RfDistance"
     //
     // TJB Frequencies Nov-2020
     // Created modelled on DContractFixedAssetsTest.designer
@@ -40,7 +41,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private void InitializeComponent()
         {
             this.n_39995586 = new System.Windows.Forms.Label();
-            this.distance = new System.Windows.Forms.TextBox();
+            this.rf_distance = new System.Windows.Forms.TextBox();
             this.rf_nms_t = new System.Windows.Forms.Label();
             this.rf_nms = new System.Windows.Forms.TextBox();
             this.rf_active = new System.Windows.Forms.CheckBox();
@@ -74,19 +75,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.n_39995586.Size = new System.Drawing.Size(100, 23);
             this.n_39995586.TabIndex = 0;
             // 
-            // distance
+            // rf_distance
             // 
-            this.distance.BackColor = System.Drawing.SystemColors.Control;
-            this.distance.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.distance.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "Distance", true));
-            this.distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.distance.Location = new System.Drawing.Point(324, 1);
-            this.distance.MaxLength = 40;
-            this.distance.Name = "distance";
-            this.distance.ReadOnly = true;
-            this.distance.Size = new System.Drawing.Size(50, 13);
-            this.distance.TabIndex = 30;
-            this.distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.rf_distance.BackColor = System.Drawing.SystemColors.Control;
+            this.rf_distance.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rf_distance.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RfDistance", true));
+            this.rf_distance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.rf_distance.Location = new System.Drawing.Point(324, 1);
+            this.rf_distance.MaxLength = 40;
+            this.rf_distance.Name = "rf_distance";
+            this.rf_distance.ReadOnly = true;
+            this.rf_distance.Size = new System.Drawing.Size(50, 13);
+            this.rf_distance.TabIndex = 30;
+            this.rf_distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // rf_nms_t
             // 
@@ -271,7 +272,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vehicle_number.FormattingEnabled = true;
             this.vehicle_number.Location = new System.Drawing.Point(330, 15);
             this.vehicle_number.Name = "vehicle_number";
-            this.vehicle_number.Size = new System.Drawing.Size(130, 21);
+            this.vehicle_number.Size = new System.Drawing.Size(165, 21);
             this.vehicle_number.TabIndex = 80;
             this.vehicle_number.Value = null;
             this.vehicle_number.ValueMember = "VehicleNumber";
@@ -311,7 +312,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.rf_active);
             this.Controls.Add(this.rf_nms);
             this.Controls.Add(this.rf_nms_t);
-            this.Controls.Add(this.distance);
+            this.Controls.Add(this.rf_distance);
             this.Name = "DRouteFrequency2Rows";
             this.Size = new System.Drawing.Size(525, 41);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
@@ -353,7 +354,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         #endregion
 
         private System.Windows.Forms.Label n_39995586;
-        private System.Windows.Forms.TextBox distance;
+        private System.Windows.Forms.TextBox rf_distance;
         private Metex.Windows.DataEntityCombo n_24415962;
         private System.Windows.Forms.Label rf_nms_t;
         private System.Windows.Forms.TextBox rf_nms;
