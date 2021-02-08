@@ -22,6 +22,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Added code to detect changes in the contract's benchmark mainly 
     //    as a result of changing the vehicles associated with a frequency.
     // Added nShowAll so all refreshes of dw_frequencies show what the user selected
+    // Added user event StatusUpdatedEventArgs so WRenewal could inform WContract when the route_frequency table had been modified
+    // so WContract could update its Frequencies tab.
+    //
     // TJB Frequencies & Vehicles 4-Dec-2020
     // Bug-fix: validation of number of SF days to selected days
     //
