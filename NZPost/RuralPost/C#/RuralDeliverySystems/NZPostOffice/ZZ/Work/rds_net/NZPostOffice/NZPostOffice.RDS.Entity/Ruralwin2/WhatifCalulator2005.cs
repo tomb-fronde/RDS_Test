@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB Frequencies & Vehicles Jan-2021
+    // Changed sp_GetWhatIfCalc2005 to sp_GetWhatIfCalc2021
+    //
     // TJB RPCR_148 May-2020 Added
     // Added uniform allowance to opcost
     //
@@ -2258,7 +2261,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "rd.sp_GetWhatIfCalc2005";
+                    cm.CommandText = "rd.sp_GetWhatIfCalc2021";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContract", inContract);
                     pList.Add(cm, "inSequence", inSequence);
