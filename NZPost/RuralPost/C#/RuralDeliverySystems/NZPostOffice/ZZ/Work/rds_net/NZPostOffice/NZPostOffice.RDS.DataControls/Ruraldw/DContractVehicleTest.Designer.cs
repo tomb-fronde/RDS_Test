@@ -2,6 +2,9 @@ using System.Windows.Forms;
 using System;
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Feb-2021
+    // Added bits in an unsuccessful attempt to manipulate the vertivle scrollbar
+
     partial class DContractVehicle
     {
         /// <summary> 
@@ -26,7 +29,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private System.Windows.Forms.Label st_sysadmin;
         private System.Windows.Forms.Label st_active;
         private TableLayoutPanel tbPanel;
-        private VScrollBar vScrollBar1;
         private Label label1;
         private bool retrieve_end;
 
@@ -46,28 +48,31 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         /// </summary>
         private void InitializeComponent()
         {
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_sysadmin = new System.Windows.Forms.Label();
+            this.st_active = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle);
+            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // st_title
             // 
-            this.st_title = new Label();
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F,System.Drawing.FontStyle.Bold);
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Bold);
             this.st_title.Location = new System.Drawing.Point(0, 4);
             this.st_title.Name = "st_title";
             this.st_title.Size = new System.Drawing.Size(577, 18);
             this.st_title.TabIndex = 0;
             this.st_title.Text = "test";
-            this.st_title.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-
             // 
             // st_sysadmin
             // 
-            st_sysadmin = new Label();
             this.st_sysadmin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.st_sysadmin.Location = new System.Drawing.Point(469, 1);
             this.st_sysadmin.Name = "st_sysadmin";
@@ -75,11 +80,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.st_sysadmin.TabIndex = 0;
             this.st_sysadmin.Text = "Y";
             this.st_sysadmin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
             // 
             // st_active
             // 
-            st_active = new Label();
             this.st_active.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.st_active.Location = new System.Drawing.Point(569, 1);
             this.st_active.Name = "st_active";
@@ -88,17 +91,16 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.st_active.Text = "N";
             this.st_active.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.st_active.Visible = false;
-
             // 
             // label1
             // 
-            this.label1 = new Label();
             this.label1.Location = new System.Drawing.Point(2, 315);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(600, 20);
             this.label1.TabIndex = 0;
-
-            tbPanel = new TableLayoutPanel();
+            // 
+            // tbPanel
+            // 
             this.tbPanel.AutoScroll = true;
             this.tbPanel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tbPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
@@ -109,30 +111,33 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.tbPanel.RowCount = 1;
             this.tbPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tbPanel.Size = new System.Drawing.Size(565, 310);
+            this.tbPanel.TabIndex = 1;
             // 
             // vScrollBar1
             // 
-            this.vScrollBar1 = new VScrollBar();
             this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(521, 0);
+            this.vScrollBar1.Location = new System.Drawing.Point(560, 0);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(19, 290);
+            this.vScrollBar1.Size = new System.Drawing.Size(19, 320);
             this.vScrollBar1.TabIndex = 0;
             this.vScrollBar1.Visible = false;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
-
+            // 
+            // DContractVehicle
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(st_title);
-            this.Controls.Add(st_sysadmin);
-            this.Controls.Add(st_active);
-            this.Controls.Add(tbPanel);
+            this.Controls.Add(this.st_title);
+            this.Controls.Add(this.st_sysadmin);
+            this.Controls.Add(this.st_active);
+            this.Controls.Add(this.tbPanel);
+            this.Name = "DContractVehicle";
             this.Size = new System.Drawing.Size(579, 320);
+            this.RetrieveEnd += new System.EventHandler(this.DContractVehicle_RetrieveEnd);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
-            this.RetrieveEnd += new System.EventHandler(DContractVehicle_RetrieveEnd);
-            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(bindingSource_ListChanged);
+
         }
 
         void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
@@ -468,6 +473,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 tbPanel.Controls.Add(ldw_temp, 0, i);
             }
         }
+
+        public VScrollBar vScrollBar1;
 
         public event EventHandler SelectedItemChanged;
         public event EventHandler TextChanged;
