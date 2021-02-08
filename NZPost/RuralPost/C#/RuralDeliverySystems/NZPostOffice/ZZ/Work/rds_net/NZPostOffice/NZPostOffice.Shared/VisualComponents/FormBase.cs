@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB Frequencies & Vehicles  Fwb-2021
+    // Added cobstants OK, FAILED
+    //
     // TJB  RPCR_117  July-2018
     // Added NOTSAVED and changed CANCLE to CANCEL
 
@@ -18,7 +21,9 @@ namespace NZPostOffice.Shared.VisualComponents
     {
         #region Define
 
+        public const int OK      = 0;
         public const int SUCCESS = 1;
+        public const int FAILED = -1;
         public const int FAILURE = -1;
         public const int NOTSAVED = 2;
         public const int CANCEL = 3;
