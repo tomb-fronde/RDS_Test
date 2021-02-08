@@ -102,7 +102,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_vehicle_override_rates.FireConstructor = false;
             this.dw_vehicle_override_rates.Location = new System.Drawing.Point(3, 5);
             this.dw_vehicle_override_rates.Name = "dw_vehicle_override_rates";
-            this.dw_vehicle_override_rates.Size = new System.Drawing.Size(352, 325);
+            this.dw_vehicle_override_rates.Size = new System.Drawing.Size(352, 306);
             this.dw_vehicle_override_rates.TabIndex = 2;
             // 
             // tabpage_non_vehicle_rates

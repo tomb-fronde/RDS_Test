@@ -18,6 +18,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Derived from WContractRate2001; renamed WOverrideRates to reflect function
     // Added handling of (potentially) multiple vehicles in a contract
     // Renamed dw_vehicle_rates to dw_vehicle_override_rates
+    // Changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
     //
     // TJB  Mar-2016: Bug fix
     // Ensure the NVOR effective date saved is the same as the VOR effective date
@@ -175,6 +176,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).ContractNo = il_contract;
                 idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).ContractSeqNumber = il_sequence;
                 idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).NvorEffectiveDate = System.DateTime.Today;
+                idw_nonvehicleoverriderates.GetItem<NonVehicleOverrideRates>(ll_row).VehicleNumber = iVehicleNo;
             }
 
             // Make the columns read only if the contract has been accepted
@@ -198,7 +200,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
-            RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            // TJB Jan-2021: Changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
+            //RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            RDSDataService dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
@@ -446,6 +450,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  This is not an active contract
                 //  do not create any frequency adjustments
                 //? COMMIT;
+                MessageBox.Show("This contract is not active - no frequency adjustment created");
                 return li_return;
             }
             n_freq = new NFrequencyAdjustment();
@@ -459,7 +464,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Obtain the new benchmark
 
             // SELECT BenchmarkCalc2005(:il_contract,:il_sequence) INTO :ldc_benchmark FROM dummy USING SQLCA;
-            dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            //dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
             ldc_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
@@ -471,21 +477,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return -(1);
             }
             ldc_amount_to_pay = ldc_benchmark - idc_original_benchmark;
-            n_freq.idc_new_benchmark = ldc_benchmark;
-            n_freq.idc_amount_to_pay = ldc_amount_to_pay;
-            n_freq.idc_adjustment_amount = ldc_amount_to_pay;
-            li_rc = -(1);
-            if (ldc_benchmark > 0)
+            if (ldc_amount_to_pay == 0m || ldc_amount_to_pay is Nullable)
             {
-                li_rc = n_freq.of_save();
-            }
-            if (li_rc > 0)
-            {
-                //? Commit;
+                MessageBox.Show("The benchmark for this contract has not changed.\n"
+                                + "No frequency adjustment created.");
             }
             else
             {
-                //? Rollback;
+                n_freq.idc_new_benchmark = ldc_benchmark;
+                n_freq.idc_amount_to_pay = ldc_amount_to_pay;
+                n_freq.idc_adjustment_amount = ldc_amount_to_pay;
+                li_rc = -(1);
+                if (ldc_benchmark > 0)
+                {
+                    li_rc = n_freq.of_save();
+                }
+                if (li_rc > 0)
+                {
+                    //? Commit;
+                }
+                else
+                {
+                    //? Rollback;
+                }
             }
             return li_return;
         }
@@ -553,24 +567,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int dw_vehicle_override_rates_pfc_predeleterow()
         {
-            // MessageBox.Show("dw_vehicle_override_rates_pfc_predeletedow");  // Debugging
+            // MessageBox.Show("dw_vehicle_override_rates_pfc_predeletedow","Debugging");
             return 1;
         }
 
         public virtual void dw_vehicle_override_rates_pfc_deleterow()
         {
-            // MessageBox.Show("dw_vehicle_override_rates_pfc_deletedow");  // Debugging
+            // MessageBox.Show("dw_vehicle_override_rates_pfc_deletedow","Debugging");
         }
 
         public virtual int dw_non_vehicle_rates_pfc_predeleterow()
         {
-            // MessageBox.Show("dw_non_vehicle_rates_pfc_predeletedow");  // Debugging
+            // MessageBox.Show("dw_non_vehicle_rates_pfc_predeletedow","Debugging");
             return 1;
         }
 
         public virtual void dw_non_vehicle_rates_pfc_deleterow()
         {
-            // MessageBox.Show("dw_non_vehicle_rates_pfc_deletedow");  // Debugging
+            // MessageBox.Show("dw_non_vehicle_rates_pfc_deletedow","Debugging");
         }
 
         public virtual void pfc_preupdate()
