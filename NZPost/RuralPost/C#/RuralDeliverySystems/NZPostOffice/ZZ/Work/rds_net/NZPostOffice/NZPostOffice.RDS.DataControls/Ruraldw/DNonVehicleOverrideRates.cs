@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
 	public partial class DNonVehicleOverrideRates : Metex.Windows.DataUserControl
 	{
+        // TJB  Frequencies & Vehicles  22-Jan-2021
+        // Added vehicle_number to retrieve parameters
+        //
         // TJB  RPCR_041  Nov-2012
         // Added references to nvor_relief_weeks
 
@@ -68,10 +71,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             }
         }
 
-		public int Retrieve( int? incontract_no, int? incontract_seq_no )
+        // TJB  Frequencies & Vehicles  22-Jan-2021
+        // Added vehicle_number to parameters
+        public int Retrieve(int? incontract_no, int? incontract_seq_number, int? invehicle_number)
 		{
 			return RetrieveCore<NonVehicleOverrideRates>(new List<NonVehicleOverrideRates>
-                (NonVehicleOverrideRates.GetAllNonVehicleOverrideRates(incontract_no, incontract_seq_no)));
+                (NonVehicleOverrideRates.GetAllNonVehicleOverrideRates(incontract_no, incontract_seq_number, invehicle_number)));
 		}
 
         // TJB  RD7_0038  Nov-2009:  Added 

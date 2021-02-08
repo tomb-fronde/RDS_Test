@@ -10,7 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-	public partial class DOtherOverrideRates : Metex.Windows.DataUserControl
+    // TJB  Frequencies & Vehicles  22-Jan-2021
+    // Added vehicle_number to retrieve parameters
+    
+    public partial class DOtherOverrideRates : Metex.Windows.DataUserControl
 	{
 		public DOtherOverrideRates()
 		{
@@ -27,10 +30,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             }
         }
 
-		public int Retrieve( int? incontract_no, int? incontract_seq_no )
+        // TJB  Frequencies & Vehicles  22-Jan-2021
+        // Added vehicle_number to parameters
+        public int Retrieve(int? incontract_no, int? incontract_seq_number, int? invehicle_number)
 		{
 			return RetrieveCore<OtherOverrideRates>(new List<OtherOverrideRates>
-				(OtherOverrideRates.GetAllOtherOverrideRates( incontract_no, incontract_seq_no )));
+				(OtherOverrideRates.GetAllOtherOverrideRates( incontract_no, incontract_seq_number, invehicle_number )));
 		}
 
         public void DOtherOverrideRates_RetrieveEnd(object sender, EventArgs e)
