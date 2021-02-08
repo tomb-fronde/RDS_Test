@@ -14,6 +14,9 @@ using System.Reflection;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Jan-2021
+    // Added Label1 (window name) to aid debugging
+    //
     // TJB  Aug-2013
     // Minor formatting and comment changes
 
@@ -55,6 +58,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public URdsDw dw_1;
 
+        private Label label1;
+
         public GroupBox gb_2;
 
         public GroupBox gb_1;
@@ -83,139 +88,175 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.cb_ok = new System.Windows.Forms.Button();
+            this.cb_cancel = new System.Windows.Forms.Button();
+            this.cb_1 = new System.Windows.Forms.Button();
+            this.em_1 = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.st_1 = new System.Windows.Forms.Label();
+            this.em_2 = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBox();
+            this.st_2 = new System.Windows.Forms.Label();
+            this.dw_1 = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_2 = new System.Windows.Forms.GroupBox();
+            this.gb_1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            this.cb_ok = new Button();
-            this.cb_cancel = new Button();
-            this.cb_1 = new Button();
-            this.em_1 = new NumericalMaskedTextBox();
-            this.st_1 = new Label();
-            this.em_2 = new NumericalMaskedTextBox();
-            this.st_2 = new Label();
-            dw_1 = new URdsDw();
-//!            this.dw_1.DataObject = new DWhatifFreqs();
-            this.gb_2 = new GroupBox();
-            this.gb_1 = new GroupBox();
-            Controls.Add(cb_ok);
-            Controls.Add(cb_cancel);
-            Controls.Add(cb_1);
-            Controls.Add(em_1);
-            Controls.Add(st_1);
-            Controls.Add(em_2);
-            Controls.Add(st_2);
-            Controls.Add(dw_1);
-            Controls.Add(gb_2);
-            Controls.Add(gb_1);
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Text = "What If Frequency Changer";
-            this.Size = new System.Drawing.Size(412, 370);
-            this.Location = new System.Drawing.Point(46, 55);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-
             // 
             // cb_ok
             // 
-            this.AcceptButton = cb_ok;
-            cb_ok.Text = "&Ok";
-            cb_ok.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_ok.TabIndex = 5;
-            cb_ok.Size = new System.Drawing.Size(53, 22);
-            cb_ok.Location = new System.Drawing.Point(273, 306);
-            cb_ok.Click += new EventHandler(cb_ok_clicked);
-
+            this.cb_ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_ok.Location = new System.Drawing.Point(273, 306);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(53, 22);
+            this.cb_ok.TabIndex = 5;
+            this.cb_ok.Text = "&Ok";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
             // cb_cancel
             // 
-            this.CancelButton = cb_cancel;
-            cb_cancel.Text = "&Cancel";
-            cb_cancel.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_cancel.TabIndex = 7;
-            cb_cancel.Size = new System.Drawing.Size(54, 22);
-            cb_cancel.Location = new System.Drawing.Point(344, 306);
-            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
-
+            this.cb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_cancel.Location = new System.Drawing.Point(344, 306);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(54, 22);
+            this.cb_cancel.TabIndex = 7;
+            this.cb_cancel.Text = "&Cancel";
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // cb_1
             // 
-            cb_1.Text = "Insert Frequency";
-            cb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_1.TabIndex = 6;
-            cb_1.Size = new System.Drawing.Size(100, 22);
-            cb_1.Location = new System.Drawing.Point(154, 202);
-            cb_1.Click += new EventHandler(cb_1_clicked);
-
+            this.cb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_1.Location = new System.Drawing.Point(154, 202);
+            this.cb_1.Name = "cb_1";
+            this.cb_1.Size = new System.Drawing.Size(100, 22);
+            this.cb_1.TabIndex = 6;
+            this.cb_1.Text = "Insert Frequency";
+            this.cb_1.Click += new System.EventHandler(this.cb_1_clicked);
             // 
             // em_1
             // 
-            em_1.EditMask = "#0.00";
-            em_1.TextAlign = HorizontalAlignment.Right;
-            em_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            em_1.TabIndex = 2;
-            em_1.Size = new System.Drawing.Size(64, 21);
-            em_1.Location = new System.Drawing.Point(299, 261);
-            em_1.LostFocus += new EventHandler(em_1_LostFocus);
-
+            this.em_1.EditMask = "#0.00";
+            this.em_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.em_1.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.em_1.Location = new System.Drawing.Point(299, 261);
+            this.em_1.Name = "em_1";
+            this.em_1.PromptChar = ' ';
+            this.em_1.Size = new System.Drawing.Size(64, 20);
+            this.em_1.TabIndex = 2;
+            this.em_1.Text = "0.00";
+            this.em_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.em_1.Value = "0.00";
+            this.em_1.LostFocus += new System.EventHandler(this.em_1_LostFocus);
             // 
             // st_1
             // 
-            st_1.TabStop = false;
-            st_1.Text = "Delivery Hours";
-            st_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            st_1.Size = new System.Drawing.Size(80, 18);
-            st_1.Location = new System.Drawing.Point(220, 264);
-        
+            this.st_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_1.Location = new System.Drawing.Point(220, 264);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(80, 18);
+            this.st_1.TabIndex = 8;
+            this.st_1.Text = "Delivery Hours";
             // 
             // em_2
             // 
-            em_2.EditMask = "#,###,###";
-            em_2.TextAlign = HorizontalAlignment.Right; 
-            em_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            em_2.TabIndex = 4;
-            em_2.Size = new System.Drawing.Size(83, 21);
-            em_2.Location = new System.Drawing.Point(63, 261);
-            em_2.LostFocus += new EventHandler(em_2_LostFocus);
-            
+            this.em_2.EditMask = "#,###,###";
+            this.em_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.em_2.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
+            this.em_2.Location = new System.Drawing.Point(63, 261);
+            this.em_2.Name = "em_2";
+            this.em_2.PromptChar = ' ';
+            this.em_2.Size = new System.Drawing.Size(83, 20);
+            this.em_2.TabIndex = 4;
+            this.em_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.em_2.Value = "";
+            this.em_2.LostFocus += new System.EventHandler(this.em_2_LostFocus);
             // 
             // st_2
             // 
-            st_2.TabStop = false;
-            st_2.Text = "Volume";
-            st_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            st_2.Size = new System.Drawing.Size(43, 18);
-            st_2.Location = new System.Drawing.Point(17, 264);
-          
+            this.st_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_2.Location = new System.Drawing.Point(17, 264);
+            this.st_2.Name = "st_2";
+            this.st_2.Size = new System.Drawing.Size(43, 18);
+            this.st_2.TabIndex = 9;
+            this.st_2.Text = "Volume";
             // 
             // dw_1
             // 
-//!            dw_1.DataObject.BorderStyle = BorderStyle.Fixed3D;
-            dw_1.TabIndex = 1;
-            dw_1.Size = new System.Drawing.Size(369, 167);
-            dw_1.Location=new System.Drawing.Point(17,27);
-            //dw_1.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_constructor);
-        
+            this.dw_1.DataObject = null;
+            this.dw_1.FireConstructor = false;
+            this.dw_1.Location = new System.Drawing.Point(17, 27);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(369, 167);
+            this.dw_1.TabIndex = 1;
             // 
             // gb_2
             // 
-            gb_2.Text = "Frequencies";
-            gb_2.BackColor = System.Drawing.SystemColors.Control;
-            gb_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_2.TabIndex = 1;
-            gb_2.Size = new System.Drawing.Size(391, 228);
-            gb_2.Location = new System.Drawing.Point(7, 6);
-           
+            this.gb_2.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_2.Location = new System.Drawing.Point(7, 6);
+            this.gb_2.Name = "gb_2";
+            this.gb_2.Size = new System.Drawing.Size(391, 228);
+            this.gb_2.TabIndex = 1;
+            this.gb_2.TabStop = false;
+            this.gb_2.Text = "Frequencies";
             // 
             // gb_1
             // 
-            gb_1.Text = "Volume and Hours";
-            gb_1.BackColor = System.Drawing.SystemColors.Control;
-            gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            gb_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            gb_1.TabIndex = 3;
-            gb_1.Size = new System.Drawing.Size(391, 53);
-            gb_1.Location = new System.Drawing.Point(7, 242);
-         
-            this.ResumeLayout();
+            this.gb_1.BackColor = System.Drawing.SystemColors.Control;
+            this.gb_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.gb_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.gb_1.Location = new System.Drawing.Point(7, 242);
+            this.gb_1.Name = "gb_1";
+            this.gb_1.Size = new System.Drawing.Size(391, 53);
+            this.gb_1.TabIndex = 3;
+            this.gb_1.TabStop = false;
+            this.gb_1.Text = "Volume and Hours";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 324);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(99, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "WWhatifFreqs2001";
+            // 
+            // WWhatifFreqs2001
+            // 
+            this.AcceptButton = this.cb_ok;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_cancel;
+            this.ClientSize = new System.Drawing.Size(404, 343);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.cb_1);
+            this.Controls.Add(this.em_1);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.em_2);
+            this.Controls.Add(this.st_2);
+            this.Controls.Add(this.dw_1);
+            this.Controls.Add(this.gb_2);
+            this.Controls.Add(this.gb_1);
+            this.Location = new System.Drawing.Point(46, 55);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WWhatifFreqs2001";
+            this.Text = "What If Frequency Changer";
+            this.Controls.SetChildIndex(this.gb_1, 0);
+            this.Controls.SetChildIndex(this.gb_2, 0);
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.Controls.SetChildIndex(this.st_2, 0);
+            this.Controls.SetChildIndex(this.em_2, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.Controls.SetChildIndex(this.em_1, 0);
+            this.Controls.SetChildIndex(this.cb_1, 0);
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.Controls.SetChildIndex(this.label1, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         void em_1_LostFocus(object sender, EventArgs e)
