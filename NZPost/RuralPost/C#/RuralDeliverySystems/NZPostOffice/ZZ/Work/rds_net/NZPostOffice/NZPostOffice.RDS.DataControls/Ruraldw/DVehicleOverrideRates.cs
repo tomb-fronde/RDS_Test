@@ -11,6 +11,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Jan-2021
+    // Added vehicle_number to retrieve parameters
+    //
     // TJB  RPCR_101  Feb 2016
     // Changed "Livery" to "Vehicle Allowance"
 
@@ -83,9 +86,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             }
         }
 
-		public int Retrieve( int? incontract_no, int? incontract_seq_no )
+        // TJB  Frequencies & Vehicles  22-Jan-2021
+        // Added vehicle_number to parameters
+        public int Retrieve(int? incontract_no, int? incontract_seq_no, int? inVehicleNo)
         {
-			return RetrieveCore<VehicleOverrideRates>(VehicleOverrideRates.GetAllVehicleOverrideRates(incontract_no, incontract_seq_no));
+			return RetrieveCore<VehicleOverrideRates>(VehicleOverrideRates.GetAllVehicleOverrideRates(incontract_no, incontract_seq_no, inVehicleNo));
 		}
 
         public event EventHandler TextBoxLostFocus;
