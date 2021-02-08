@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  Jan-2021
+    // Added Active and Default Vehicle checkboxes (in design)
+
     public partial class DContractVehicleTest : Metex.Windows.DataUserControl
     {
         private bool[] safety_filled = new bool[6];
