@@ -6,6 +6,10 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Frequencies & Vehicles  8-Feb-2021
+    // Added SQLCode and SQLErrText parameters to of_save
+    // and added of_save() so existing uses continue to work.
+
     public class NFrequencyAdjustment
     {
         #region Define
@@ -57,11 +61,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual int of_set_effective_date(DateTime? ad_effective_date)
         {
-            DateTime id_date_exists;
-            System.Decimal ldc_benchmark;
-            int lnextseq;
-            System.Decimal ldc_amount_to_pay;
-            int ll_Return;
             int ll_count;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
@@ -142,16 +141,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return ii_SUCCESS;
         }
 
-        public virtual int of_save(/*?SqlConnection atr_tran_object*/)
+        // TJB  Frequencies & Vehicles  8-Feb-2021
+        // Added SQLCode and SQLErrText parameters to of_save
+        // and added of_save() so existing uses continue to work.
+        public virtual int of_save()
         {
-            DateTime id_date_exists;
-            System.Decimal ldc_benchmark;
-            int lnextseq;
-            System.Decimal ldc_amount_to_pay;
-            int ll_Return;
-            int ll_count;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
+            int rc = of_save(ref SQLCode, ref SQLErrText);
+            return rc;
+        }
+
+        public virtual int of_save(ref int SQLCode, ref string SQLErrText)
+        {
+            int lnextseq;
 
             if ((id_effective_date == null) 
                 || (idc_adjustment_amount == null) 
@@ -183,11 +186,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //?ROLLBACK USING atr_tran_object;
                 return ii_FAILURE;
             }
-            ///SELECT max ( fd_unique_seq_number) INTO :lNextSeq FROM frequency_adjustments
+            ///SELECT max(fd_unique_seq_number) INTO :lNextSeq FROM frequency_adjustments
             //  WHERE contract_no = :il_Contract_no AND contract_seq_number = :il_Sequence_no 
             //  USING atr_tran_object;
-            lnextseq = RDSDataService.GetMaxFdUniqueSeqNumber(il_contract_no
-                                                             , il_sequence_no
+            lnextseq = RDSDataService.GetMaxFdUniqueSeqNumber(il_contract_no, il_sequence_no
                                                              , ref SQLCode, ref SQLErrText);
             if (SQLCode < 0)
             {
@@ -208,57 +210,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB SR4632 29-July-2004
             //  Replaced hard-coded 'Y' with is_confirmed
             //  TJB  SR4695  Jan-2007
-            //  Added sf_key to inserted values  ( new field)
-            /*INSERT INTO frequency_adjustments  
-                     ( contract_no,   
-                    contract_seq_number,   
-                    fd_unique_seq_number,   
-                    fd_adjustment_amount,   
-                    fd_paid_to_date,   
-                    fd_bm_after_extn,   
-                    fd_confirmed,   
-                    fd_amount_to_pay,
-                    fd_effective_date,
-                    sf_key, 
-                    rf_delivery_days) 
-                    VALUES 
-                     ( :il_Contract_no,   
-                    :il_Sequence_no,   
-                    :lNextSeq,   
-                    :idc_adjustment_amount,
-                    null,   
-                    :idc_new_benchmark,   
-                    :is_confirmed,   
-                    :idc_amount_to_pay,
-                    :id_Effective_Date, 
-                    :il_sf_key,
-                    :is_Delivery_Days)  ;*/
-            RDSDataService.InsertIntoFrequencyAdjustments(il_contract_no
-                                                         , il_sequence_no
-                                                         , lnextseq
-                                                         , idc_adjustment_amount
-                                                         , idc_new_benchmark
-                                                         , is_confirmed
-                                                         , idc_amount_to_pay
-                                                         , id_effective_date
-                                                         , il_sf_key
-                                                         , is_delivery_days
-                                                         , ref SQLCode, ref SQLErrText);
+            //  Added sf_key to inserted values (new field)
+            //  INSERT INTO frequency_adjustments  
+            //         ( contract_no, contract_seq_number, fd_unique_seq_number,   
+            //           fd_adjustment_amount, fd_paid_to_date, fd_bm_after_extn, fd_confirmed, 
+            //          fd_amount_to_pay, fd_effective_date, sf_key, rf_delivery_days) 
+            //  VALUES 
+            //         ( :il_Contract_no, :il_Sequence_no, :lNextSeq, :idc_adjustment_amount,
+            //           null, :idc_new_benchmark, :is_confirmed, :idc_amount_to_pay,
+            //           :id_Effective_Date, :il_sf_key, :is_Delivery_Days)
+
+            RDSDataService.InsertIntoFrequencyAdjustments(
+                                   il_contract_no, il_sequence_no, lnextseq, idc_adjustment_amount
+                                   , idc_new_benchmark, is_confirmed, idc_amount_to_pay
+                                   , id_effective_date, il_sf_key, is_delivery_days
+                                   , ref SQLCode, ref SQLErrText);
             if (SQLCode == -(1))
             {
                 MessageBox.Show("Error saving frequency_adjustment record\n" 
-                                 + "Error Text: " + SQLErrText
-                               , "Database Error (NFrequencyAdjustment.of_save)");
+                              + "Error Text: " + SQLErrText
+                              , "Database Error (NFrequencyAdjustment.of_save)");
                 //?ROLLBACK USING atr_tran_object;
                 return ii_FAILURE;
             }
             return ii_SUCCESS;
         }
-
-        //?public virtual int of_save() 
-        //{
-        //    return of_save(StaticVariables.sqlca);
-        //}
 
         public virtual void of_reset()
         {
