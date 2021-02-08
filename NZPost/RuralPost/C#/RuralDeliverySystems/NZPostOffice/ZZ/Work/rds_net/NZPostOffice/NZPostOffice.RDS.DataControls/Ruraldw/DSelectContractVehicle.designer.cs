@@ -31,12 +31,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
-            this.st_title = new System.Windows.Forms.Label();
-            this.st_protect_confirm = new System.Windows.Forms.Label();
             this.vehicle_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vehicle_number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.VehicleStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DefaultVehicle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_protect_confirm = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -79,24 +79,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(348, 209);
             this.grid.TabIndex = 0;
-            // 
-            // st_title
-            // 
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(0, 0);
-            this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(638, 14);
-            this.st_title.TabIndex = 1;
-            this.st_title.Text = "SelectVehicle:";
-            // 
-            // st_protect_confirm
-            // 
-            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
-            this.st_protect_confirm.Name = "st_protect_confirm";
-            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
-            this.st_protect_confirm.TabIndex = 2;
-            this.st_protect_confirm.Text = "N";
-            this.st_protect_confirm.Visible = false;
             // 
             // vehicle_name
             // 
@@ -149,6 +131,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.DefaultVehicle.ToolTipText = "1 means this is the  default vehicle";
             this.DefaultVehicle.Visible = false;
             this.DefaultVehicle.Width = 50;
+            // 
+            // st_title
+            // 
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_title.Location = new System.Drawing.Point(0, 0);
+            this.st_title.Name = "st_title";
+            this.st_title.Size = new System.Drawing.Size(638, 14);
+            this.st_title.TabIndex = 1;
+            this.st_title.Text = "SelectVehicle:";
+            // 
+            // st_protect_confirm
+            // 
+            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
+            this.st_protect_confirm.Name = "st_protect_confirm";
+            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
+            this.st_protect_confirm.TabIndex = 2;
+            this.st_protect_confirm.Text = "N";
+            this.st_protect_confirm.Visible = false;
             // 
             // DSelectContractVehicle
             // 
