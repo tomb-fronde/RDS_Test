@@ -120,7 +120,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(19, 320);
             this.vScrollBar1.TabIndex = 0;
-            this.vScrollBar1.Visible = false;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             // 
             // DContractVehicle
@@ -182,8 +181,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                     ldw_temp.Name = (e.NewIndex).ToString();
                     ldw_temp.Size = new System.Drawing.Size(535, 300);
                     ldw_temp.BindingSource.DataSource = this.BindingSource.List[i];
-                    ldw_temp.GetControlByName("v_vehicle_registration_number").Leave +=new System.EventHandler(DContractVehicle_Leave);
                     ((Metex.Windows.DataEntityCombo)ldw_temp.GetControlByName("ft_key")).SelectedValueChanged += new System.EventHandler(DContractVehicle_SelectedValueChanged);
+                    ldw_temp.GetControlByName("v_vehicle_registration_number").Leave += new System.EventHandler(DContractVehicle_Leave);
+                    //ldw_temp.GetControlByName("cb_active").Leave += new System.EventHandler(DContractVehicle_cb_active_Leave);
+                    ldw_temp.GetControlByName("cb_active").Click += new EventHandler(DContractVehicle_cb_active_Click);
+
                     if (st_sysadmin.Text != "Y")
                     {
                         if (ldw_temp.GetItem<NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle>(0).VVehicleTransmission == "A"
@@ -328,6 +330,18 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             //}
         }
 
+        void DContractVehicle_cb_active_Leave(object sender, System.EventArgs e)
+        {
+            if (TextChanged != null)
+                TextChanged(sender, e);
+        }
+
+        void DContractVehicle_cb_active_Click(object sender, System.EventArgs e)
+        {
+            if (TextChanged != null)
+                TextChanged(sender, e);
+        }
+
         //void DContractFixedAssetsTest_RetrieveEnd(object sender, System.EventArgs e)
         void DContractVehicle_RetrieveEnd(object sender, System.EventArgs e)
         {
@@ -340,8 +354,10 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 ldw_temp.Size = new System.Drawing.Size(535, 300);
                 ldw_temp.BindingSource.DataSource = this.BindingSource.List[i];
 
-                ldw_temp.GetControlByName("v_vehicle_registration_number").Leave += new System.EventHandler(DContractVehicle_Leave);
                 ((Metex.Windows.DataEntityCombo)ldw_temp.GetControlByName("ft_key")).SelectedValueChanged += new System.EventHandler(DContractVehicle_SelectedValueChanged);
+                ldw_temp.GetControlByName("v_vehicle_registration_number").Leave += new System.EventHandler(DContractVehicle_Leave);
+                //ldw_temp.GetControlByName("cb_active").Leave += new System.EventHandler(DContractVehicle_cb_active_Leave);
+                //ldw_temp.GetControlByName("cb_active").Click += new EventHandler(DContractVehicle_cb_active_Click);
 
                 if (st_sysadmin.Text != "Y")
                 {
@@ -361,7 +377,8 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 if (st_sysadmin.Text != "Y")
                 {
                     if (ldw_temp.GetItem<NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle>(0).StartKms < 5000 || ldw_temp.GetItem<NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle>(0).StartKms == null
-                        || this.Enabled == false || !ldw_temp.GetItem<NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle>(0).IsNew)
+                        || this.Enabled == false 
+                        || !ldw_temp.GetItem<NZPostOffice.RDS.Entity.Ruraldw.ContractVehicle>(0).IsNew)
                     {
                         ldw_temp.GetControlByName("v_remaining_economic_life").Enabled = false;
                     }
