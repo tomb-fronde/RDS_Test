@@ -16,8 +16,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     // TJB Frequencies & Vehicles  Jan/Feb-2021
     // Added call to user event to tell WContract that the route_frequency 
-    //   table had been modified (see OnRFTableUpdated)
-    // Added of_validate_vehicle_flags to validate/process the Active and Default flags
+    //   table had been modified (specifically by WRenewal) - see OnRFTableUpdated
+    // Added of_validate_vehicle_flags_v2 to validate/process the Active flag
     //   with lots of related changes.
     //
     // TJB Frequencies & Vehicles Dec 2020
@@ -76,6 +76,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public bool ib_nvor_modified = false;
         public bool ib_new_veh_added    = false;
         public bool ib_default_replaced = false;  // Flags the default vehicle was replaced
+        public bool ibActiveChanged = false;
 
         //  TJB 7-Oct-2004  SR4633 
         public bool ib_new_veh_validated = false;
@@ -193,8 +194,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_renewal_artical_counts.DataObject = new DRenewalArticalCounts();
             dw_renewal_artical_counts.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            ((DContractVehicle)dw_contract_vehicle.DataObject).SelectedItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
-            ((DContractVehicle)dw_contract_vehicle.DataObject).TextChanged += new EventHandler(dw_contract_vehicle_itemchanged);
             
             //jlwang:moved from IC
             dw_renewal.Constructor += new UserEventDelegate(dw_renewal_constructor);
@@ -230,12 +229,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             dw_contract_vehicle.PfcInsertRow += new UserEventDelegate(dw_contract_vehicle_pfc_insertrow);
             dw_contract_vehicle.PfcPostUpdate += new UserEventDelegate(dw_contract_vehicle_pfc_postupdate);
             dw_contract_vehicle.PfcValidation += new UserEventDelegate1(dw_contract_vehicle_pfc_validation);
-//            dw_contract_vehicle.UpdateStart += new UserEventDelegate1(dw_contract_vehicle_updatestart);
             // TJB RPCR_01 July-2010
             // Added to detect change in number of stars selected
             dw_contract_vehicle.Validated += new System.EventHandler(this.dw_contract_vehicle_Validated);
             dw_contract_vehicle.UpdateStart += new UserEventDelegate1(updatestart);
             dw_contract_vehicle.WinPfcSave += new UserEventDelegate1(pfc_save);
+            ((DContractVehicle)dw_contract_vehicle.DataObject).SelectedItemChanged += new EventHandler(dw_contract_vehicle_itemchanged);
+            ((DContractVehicle)dw_contract_vehicle.DataObject).TextChanged += new EventHandler(dw_contract_vehicle_itemchanged);
 
             ((DRenewalArticalCounts)dw_renewal_artical_counts.DataObject).DoubleClick += new EventHandler(dw_renewal_artical_counts_doubleclicked);
             dw_renewal_artical_counts.Constructor += new UserEventDelegate(dw_renewal_artical_counts_constructor);
@@ -246,20 +246,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.KeyDown += new KeyEventHandler(WRenewal2001_KeyDown);
         }
 
-        // TJB  RPCR_099: Added
-        // Ignore keyboard the Delete key
-        // Was deleting rows from the display without executing delete code
-        // (not validated or deleted from the database)
-        void WRenewal2001_KeyDown(object sender, KeyEventArgs e)
+        void WRenewal2001_CheckedChanged(object sender, EventArgs e)
         {
-            // Determine whether the keystroke is the Delete key.
-            if (e.KeyCode == Keys.Delete)
-            {
-                // Set the Handled flag to cause the keypress to be ignored
-                e.Handled = true;
-            }
+            throw new Exception("The method or operation is not implemented.");
         }
 
+        
         #region Form Design
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -540,6 +532,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             base.pfc_postopen();
             // Additional security settings
             int? ll_Null;
+
             // Manually allow maintenance of override rates
             idw_renewal.of_set_deletepriv(false);
             idw_renewal.of_set_createpriv(false);
@@ -556,7 +549,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //?m_sheet.m_renewalrates.Enabled = true;
                 //?lm_sheet.m_renewalrates.toolbaritemvisible = true;
                 m_sheet._m_renewalrates.Visible = true;
-
             }
             //  TWC 13/06/2003 Manually showing the article count tab if have privilege
           
@@ -581,6 +573,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
             }
+/*
+            string sTitle ="Contract: (" + il_contract.ToString() + ") " + idw_renewal.GetItem<Renewal>(0).ConTitle;
+            if (!((StaticVariables.gnv_app.of_findwindow(sTitle, "w_Contract2001") != null)))
+            {
+                //StaticMessage.PowerObjectParm = lnv_msg;
+                WContract2001 lw_Contract2001 = new WContract2001();
+                lw_Contract2001.MdiParent = StaticVariables.MainMDI;
+                lw_Contract2001.ContractRFUpdated += new EventHandler<ContractRFUpdatedEventArgs>(dw_contract_vehicle_ContractRFUpdated);
+            }
+*/
+
+/*
+     TJB 11-Feb-2021 Obsolete 
+     Changed how dcPrevBenchmark calculated (see dw_contract_vehicle_pfc_postupdate)
+     Dropped concept of a default vehicle
+     
             // TJB  RD7_0037  Aug2009
             // Determine initial vehicle benchmark
             // Save the fuel type and original vehicle number (so we can tell if there's any change).
@@ -600,13 +608,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-
+*/
             // TJB RPCR_001 July-2010: implement using stars to display Vehicle Safety Rating
             int? VSafety = 0;
             int nStars = 0;
             string sUser = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_username();
             int nRows = dw_contract_vehicle.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
+            for (int nRow = 0; nRow < nRows; nRow++)
             {
                 VSafety = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VVehicleSafety;
                 nStars = (VSafety == null) ? 0 : (int)VSafety;
@@ -835,6 +843,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 RFUpdated.RfUpdated = true;
                 OnRFTableUpdated(RFUpdated);
+                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_preclose");
             }
             return base.pfc_preclose();
         }
@@ -848,7 +857,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Added ib_new_veh_validated to the condition to stop
             //  the message being displayed when the new vehicle
             //  details don't pass validation.
-            //  (See dw_contract_vehicle_updatestart)
+            //  (See dw_contract_vehicle.updatestart)
             if (ib_new_veh_added && ib_new_veh_validated)
             {
                 ll_response = MessageBox.Show("Do you wish to review the overrides for this contract?"
@@ -902,12 +911,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ids_route_frequency.Save();
                 ib_rf_modified = false;
+                // MessageBox.Show("route_frequency saved (modified)", "Debugging - pfc_save");
 
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
                 StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 RFUpdated.RfUpdated = true;
                 OnRFTableUpdated(RFUpdated);
-                // MessageBox.Show("route_frequency saved (modified)", "Debugging - pfc_save");
+                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_save");
             }
             return SUCCESS;
         }
@@ -1513,7 +1523,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  The datastore will have been populated only with records for the 
             //  right contract so we don't need to include the contract number 
             //  in the search string.
-            ll_rows = ((DsRouteFrequency2)ids_route_frequency).Retrieve(il_contract);
+            // TJB [11-Feb-2021] Added check to see if the route_frequency has already been loaded
+            ll_rows = 0;
+            if( ids_route_frequency.RowCount < 1 )
+                ll_rows = ((DsRouteFrequency2)ids_route_frequency).Retrieve(il_contract);
 
             if (ll_rows < 0)
             {
@@ -1687,29 +1700,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual void wf_set_security(string ainsert, string adelete, string aupdate)
         {
-            // m_Main_Menu mCurrent
-            // mCurrent = this.MenuId
-            // 
-            // If aInsert = 'insert' Then
-            // 	mCurrent.m_Record.m_InsertRow.Enabled = True
-            // else
-            // 	mCurrent.m_Record.m_InsertRow.Enabled = False
-            // End If
-            // 
-            // If aDelete = 'delete' Then
-            // 	mCurrent.m_Record.m_DeleteRow.Enabled = True
-            // Else
-            // 	mCurrent.m_Record.m_DeleteRow.Enabled = False
-            // End If
-            // 
-            // If aUpdate = 'update' Then
-            // 	mCurrent.m_Record.m_UpdateDatabase.Enabled = True
-            // Else
-            // 	mCurrent.m_Record.m_UpdateDatabase.Enabled = False
-            // End If
-            // 
+            MMainMenu mCurrent;
+            mCurrent = this.m_sheet;
+            //if (ainsert == "insert")
+            //    mCurrent.m_insertrow.Enabled = true;
+            //else
+            //    mCurrent.m_insertrow.Enabled = false;
+
+            if (adelete == "delete")
+                mCurrent.m_deleterow.Enabled = true;
+            else
+                mCurrent.m_deleterow.Enabled = false;
+
+            //if (aupdate == "update")
+            //    mCurrent.m_updatedatabase.Enabled = true;
+            //else
+            //    mCurrent.m_updatedatabase.Enabled = false;
         }
- 
+
         public virtual void dw_renewal_constructor()
         {
             //?base.constructor();
@@ -2827,107 +2835,86 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return lActionCode;
         }
 
-        public virtual int of_validate_vehicle_flags()
+        public virtual int of_validate_vehicle_flags_v2()
         {   // TJB  Frequencies & Vehicles  6-Feb-2021: New
-            // Adapted from dw_contract_vehicle_updatestart 
-            //    (which itself was adapted for Frequencies & Vehicles)
-            //
-            // Check the vehicle flags and make any necessary changes 
-            //
+            // Check whether any vehicles that have been marked inactive
+            // are associated with any frequencies.  If so, ask that they
+            // be replaced before being made inactive.
             // Returns
-            //     0   (OK)
-            //    -1   (FAILED)
+            //     OK   (0)
+            //   FAILED (-1)
 
-            int lRow = 0, nRows = 0;
+            int nRow = 0, nRows = 0;
             //string sColumn = "";
-            int lActionCode = OK;
-            bool bVehIsNew;
-            bool bVehIsDirty;
-/* Leave this test to pfc_validation after processing the flags has finished
-            if (of_count_default_vehicles() > 1)
-            {
-                MessageBox.Show("There may only be one vehicle marked as the default."
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dw_contract_vehicle.DataObject.GetControlByName("cb_default").Focus();
-                ib_new_veh_validated = false;
-                return FAILED;
-            }
-*/            
-            ib_default_replaced = false;
+            int lActionCode;
+            int? nThisVehicle;
+            string sThisVehicleRego;
+            bool bThisActive, bInitialActive;
+            int nReferences;
 
+            ibActiveChanged = false;
+            lActionCode = OK;
             // Scan through the contract_vehicle rows
             nRows = dw_contract_vehicle.RowCount;
-            //while (lRow >= 0)
-            for (lRow=0; lRow<nRows; lRow++)  // For each vehicle
+            for (nRow = 0; nRow < nRows; nRow++)  // For each vehicle
             {
-                bVehIsNew = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).IsNew;
-                bVehIsDirty = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).IsDirty;
-                int nVehModified = idw_contract_vehicle.ModifiedCount();
+
+                nThisVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+                sThisVehicleRego = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VVehicleRegistrationNumber;
+                bThisActive = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus;
+                bInitialActive = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalInitialStatus;
+                string sThisVehicleName = RDSDataService.GetVehicleName(nThisVehicle);
 
                 /*************************  Debugging  ***********************
                 // Let's see which vehicle is being processed
-                int? nThisVehicle;
-                string sThisVehicleRego;
-                bool bThisActive, bInitialActive;
-                bool bThisDefault, bInitialDefault;
+                bool bVehIsDirty, bVehIsNew;
+                int nVehModified;
 
-                nThisVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).VehicleNumber;
-                sThisVehicleRego = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).VVehicleRegistrationNumber;
-                bThisActive = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus;
-                bInitialActive = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalInitialStatus;
-                bThisDefault = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle;
-                bInitialDefault = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvInitialDefaultVehicle;
-
-                MessageBox.Show("Processing row "+lRow.ToString()+"\n\n" 
-                               + "This Vehicle = " +sThisVehicleRego+" ("+nThisVehicle.ToString()+")\n\n"
+                bVehIsNew = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).IsNew;
+                bVehIsDirty = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).IsDirty;
+                int nVehModified = idw_contract_vehicle.ModifiedCount();
+                MessageBox.Show("Processing row "+nRow.ToString()+"\n\n" 
+                               + "This Vehicle = " +sThisVehicleName+" ("+nThisVehicle.ToString()+")\n\n"
                                + "IsNew = "+bVehIsNew.ToString()+", IsDirty = "+bVehIsDirty.ToString()
                                + ", nVehModified = "+nVehModified.ToString()+"\n"
                                + "Active flag  = " + bThisActive.ToString() + ", was " + bInitialActive.ToString() + "\n"
-                               + "Default flag = " + bThisDefault.ToString() + ", was " + bInitialDefault.ToString()
                                , "Debugging - of_validate_vehicle_flags");
 
                 //show_contract_vehicles("Top of processing loop", "Debugging - of_validate_vehicle_flags");
 
                 *************************  End Debugging  ***********************/
 
-                if (!bVehIsDirty && nVehModified < 1)  // if this vehicle hasn't been changed, its flags are assumed to be OK
-                    continue;
-
-                lActionCode = OK;
-                ib_new_veh_validated = true;
-
-                // TJB Frequencies & Vehicles  30-Jan-2021
-                // The vehicle info is syntacticly OK.  Process the Active and Default 
-                // flags to see if any changes to the default vehicle and/or frequency-
-                // vehicle associations are indicated.  Problems here can also invalidate
-                // the vehicle.
-                if ( ib_new_veh_validated )
+                // If this vehicle's cb_active checkbox is unchecked (marked inactive) 
+                // and was previously active
+                if (!bThisActive && bInitialActive)
                 {
-                    //if (ib_new_veh_added && bVehIsNew)
-                    if (ib_new_veh_added)
+                    // Count the number of references to it in route_frequencies
+                    nReferences = of_count_frequency_vehicle(nThisVehicle);
+                    // If there are some references
+                    if (nReferences > 0)
                     {
-                        if (of_contract_vehicle_process_new_vehicle(lRow) < 0)
-                            ib_new_veh_validated = false;
-                    }
-                    else  // None of the vehicles are new
-                    {
-                        if (of_contract_vehicle_process_status_flags(lRow) < 0)
-                            ib_new_veh_validated = false;
-                    }
-                }
+                        // Tell the user to replace those references
+                        MessageBox.Show("Vehicle " + sThisVehicleName + " is associated ith " + nReferences.ToString() + " frequencies.\n\n"
+                                      + "Please replace these references with another vehicle before marking this vehicle inactive."
+                                      , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                // If the vehicle has passed all validation and Active/Default processing
-                // check to see if there is another vehicle to validate
-                if (ib_new_veh_validated) // This vehicle is OK; continue looping through 
-                {                         // the remaining vehicles.
-                    lActionCode = OK;
+                        // Mark it active again
+                        idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus = true;
+                        // And mark it "clean" (ie unchanged)
+                        idw_contract_vehicle.Refresh();
+                        idw_contract_vehicle.GetItem<ContractVehicle>(nRow).MarkClean();
+                    }
+                    else  // The change is OK: flag the change
+                    {
+                        DialogResult ans;
+                        ibActiveChanged = true;
+                    }
                 }
-                else                      // This vehicle failed in some way; stop processing
-                {                         // the remaining vehicles and indicate it failed
-                    lActionCode = FAILED; // validation.
-                    break;
-                }
+                // If the vehicle was inactive and has now been marked active: flag the change
+                if (bThisActive && !bInitialActive)
+                    ibActiveChanged = true;
             }  // End for() loop
+
             return lActionCode;
         }
 
@@ -2962,16 +2949,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return 0;
 
             }
-            //  PBY 12/06/2002 SR#4402
-            // if Idw_Renewal.GetItemString(1, "con_acceptance_flag") = "Y" then
-            // 	idw_contract_vehicle.Modify("cv_vehical_status.Values='New~tN'")
-            // 	il_newvehicle = This.GetRow()
-            // end if
-            // 
-            // return 1
-            //  PBY 14/06/2002 SR#4402
-            //  If there is already a new row in the datawindow, do not allow
-            //  another new row to be created
             if (li_ReturnCode == 1)
             {
                 for (li_x = 0; li_x < dw_contract_vehicle.RowCount; li_x++)
@@ -3123,8 +3100,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }  // End for each vehicle loop
 
             // TJB Frequencies & Vehicles 6-Feb-2021 - Added
-            // Moved vehicle flags validation from dw_contract_vehicle_updatestart
-            int nIsOK = of_validate_vehicle_flags();
+            // Moved vehicle flags validation from dw_contract_vehicle.updatestart
+            int nIsOK = of_validate_vehicle_flags_v2();
             if (nIsOK != OK)
             {
                 ib_new_veh_validated = false;
@@ -3132,11 +3109,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nDefaultVehicle = of_get_default_vehicle(true);
                 //return FAILED;
             }
-
+/* Dropped the idea of a default vehicle
             // TJB Frequencies & Vehicles 4-Feb-2021 - Added
             // Over all vehicles, check that there is a default vehicle identified
             // and that it is active
             // Check that more than one vehicle hasn't been marked as a default vehicle
+
             if (of_count_default_vehicles() > 1)
             {
                 MessageBox.Show("There may only be one vehicle marked as the default."
@@ -3145,6 +3123,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_new_veh_validated = false;
                 return FAILED;
             }
+
             int? nTmpVehicle = of_get_default_vehicle(false);
             if (nTmpVehicle == 0)
             {
@@ -3166,6 +3145,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_new_veh_validated = false;
                 return FAILED;
             }
+
             bool bTmpActive;
             bTmpActive = idw_contract_vehicle.GetItem<ContractVehicle>(nVehRow).CvVehicalStatus;
             if (!bTmpActive)
@@ -3176,7 +3156,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_new_veh_validated = false;
                 return FAILED;
             }
-
+*/
             // Passed validation
             ib_new_veh_validated = true;
             return 1;
@@ -3220,22 +3200,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int dw_contract_vehicle_pfc_predeleterow()
         {
-            //  PBY 12/06/2002 SR#4402
-            //  Code added
-            int li_return_code = 1;// ancestorreturnvalue;
-            if (li_return_code == 1/*CONTINUE_ACTION*/)
+            int li_return_code = 1;
+            if (li_return_code == 1)
             {
+                int nRow, nRows;
+
                 //  Check if this row can be deleted
                 //  A row cannot be deleted if it is read only, or if it is the only row
                 //  left in the datawindow
-                if (dw_contract_vehicle.GetRow() > 0)
+                nRow = dw_contract_vehicle.GetRow();
+                nRows = dw_contract_vehicle.RowCount;
+                if (nRow > 0)
                 {
-                    //  this row would be protected
-                    li_return_code = 0;// PREVENT_ACTION;
+                    li_return_code = 1;
                 }
-                else if (dw_contract_vehicle.RowCount == 1)
-                {
-                    //  Cannot delete the only row
+                else if (nRows == 1)
+                {   //  Cannot delete the only row
                     li_return_code = 0;// PREVENT_ACTION;
                 }
             }
@@ -3247,10 +3227,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int nRow = 0, nRows = 0, nRowsFound = 0;
             int? nThisVehicle;
 
-            // Retreive the frequencies for this contract (if not already retreived)
-            nRows = ids_route_frequency.RowCount;
-            if (nRows < 1)
-                nRows = ((DsRouteFrequency2)ids_route_frequency).Retrieve(il_contract);
+            // Retreive the frequencies for this contract 
+            ids_route_frequency.Reset();
+            nRows = ((DsRouteFrequency2)ids_route_frequency).Retrieve(il_contract);
+            
 
             for (nRow = 0; nRow < nRows; nRow++)
             {
@@ -3389,6 +3369,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? nThisVehicle = 0;
             int nRow = 0, nRows = 0;
             string adj_type = "";
+            bool brf_updated;
             DialogResult ans = DialogResult.No;
             System.Decimal dcThisVehBenchmark;
 
@@ -3400,16 +3381,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             nThisFtKey = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
 
             // If route_frequency hasn't been saved, do so now
+            brf_updated = false;
             if (StaticFunctions.IsDirty(ids_route_frequency) || ib_rf_modified)
             {
                 ids_route_frequency.Save();
                 ib_rf_modified = false;
+                brf_updated = true;
 
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
+                // Tell WContract201 that we've updated the route_frequencies table
                 StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 RFUpdated.RfUpdated = true;
                 OnRFTableUpdated(RFUpdated);
+                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (1)");
             }
+            // If the active flag has been successfully changed for one or more vehicles
+            if (ibActiveChanged || ib_new_veh_added || brf_updated) 
+            {   // Post the event to tell WContract Frequencies tab to refresh
+                // ... particularly its dropdown list of available vehicles
+
+                StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                RFUpdated.RfUpdated = true;
+                OnRFTableUpdated(RFUpdated);
+                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (2)");
+
+                ibActiveChanged = ib_new_veh_added = brf_updated = false;
+            }
+            //GetLatestBenchmark and compare with previous
+            // TJB  11-Feb-2021 Changed method of determining previous benchmark
+            // - now get previous value from frequency_adjustments table
+            RDSDataService obj = RDSDataService.GetLatestBenchmark(il_contract, il_sequence);
+            dcPrevVehBenchmark = (decimal)obj.decVal;
 
             dcThisVehBenchmark = wf_getVehBenchmark("dw_contract_vehicle_pfc_postupdate");
 
@@ -3431,13 +3433,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     MessageBox.Show("A frequency adjustment for the " + adj_type + " has been made.\n"
                                      + "Please check and confirm it."
-                                   , "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                   , "WRenewal2001", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     dcPrevVehBenchmark = dcThisVehBenchmark;
                 }
                 else if (li_rc == 0)
                 {
                     MessageBox.Show("A frequency adjustment for the " + adj_type + " was not created."
-                                   , "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                                   , "ERROR (WRenewal2001)", MessageBoxButtons.OK, MessageBoxIcon.Error );
                 }
             }
             // TJB  Feb-2010
@@ -3487,6 +3489,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 //            show_contract_vehicles("Reset/Refresh","dw_contract_vehicle_pfc_postupdate");
         }
 
+        // TJB  Frequencies & Vehicles 13-Feb-2021: New
+        private int of_refresh_route_frequencies()
+        {
+            int nRows;
+            // Retreive the frequencies for this contract 
+            ids_route_frequency.Reset();
+            nRows = ((DsRouteFrequency2)ids_route_frequency).Retrieve(il_contract);
+            return nRows;
+        }
+
         // TJB  Frequencies & Vehicles 2-Feb-2021: New
         private void of_refresh_contract_vehicle()
         {
@@ -3516,7 +3528,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
             // TJB 2-Feb-2021: These get the focus on the right row and control (rego), but the
-            // scrollbar doesn't change and is incorrect - hense being commented out for now
+            // scrollbar doesn't change and is incorrect - hence being commented out for now
             //idw_contract_vehicle.SelectRow(0, false);
             //idw_contract_vehicle.DataObject.GetControlByName("v_vehicle_registration_number").Focus();
 
@@ -3652,7 +3664,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //dcVehBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(nContract, nSequence, nVehicle
                 //                                                      , ref SQLCode, ref SQLErrText);
                 
-                 RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(nContract, nSequence);
+                RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(nContract, nSequence);
                 if (obj.SQLCode == 0)
                 {
                     dcVehBenchmark = (Decimal)obj.decVal;
@@ -3899,7 +3911,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 else
                     idw_contract_vehicle.DataObject.Reset();
             }
-            if( ib_rf_modified )
+
+            if (ib_rf_modified)
             {
                 di_ret = MessageBox.Show("The route_frequency table has been modified. Save the changes?"
                                         , "Route Frequency Update"
@@ -3908,10 +3921,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     ids_route_frequency.Save();
                     ib_rf_modified = false;
+
                     // TJB Frequencies & Vehicles  7-Feb-2021: Added
                     StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                     RFUpdated.RfUpdated = true;
                     OnRFTableUpdated(RFUpdated);
+                    //MessageBox.Show("RFUpdated sent to WContract", "Debugging - tab_renewal_selectionchanging");
 
                 }
                 else
@@ -4091,8 +4106,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 if (dw_contract_contractor.DataObject.GetValue(dw_contract_contractor.GetRow(), "ccontractor_name") != null)
                     sContractorName = dw_contract_contractor.DataObject.GetValue(dw_contract_contractor.GetRow(), "ccontractor_name").ToString();
-                /*SELECT contractor.contractor_supplier_no into :lContractor 
-                   FROM contractor WHERE contractor.c_surname_company || ifnull(contractor.c_first_names,'',', ' || contractor.c_first_names) = :sContractorName;*/
                 lContractor = RDSDataService.GetContractorSupplierNoFormContractor(sContractorName);
                 dw_contract_contractor.SetValue(dw_contract_contractor.GetRow(), "contractor_supplier_no", lContractor);
             }
@@ -4101,25 +4114,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual void dw_contract_contractor_getfocus(object sender, EventArgs e)
         {
             dw_contract_contractor.URdsDw_GetFocus(null, null);
-            // if g_security.u_usergroup = 'National Operations Manager' then
-            // 	wf_set_security('insert','','update')
-            // elseif g_security.u_usergroup = 'Regional Contracts Managers' then
-            // 	wf_set_security('insert','','update')		
-            // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GROOMEJ" or g_security.userid = "DRYSDALEP" then
-            // 	wf_set_security('insert','delete','update')
-            // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "GARDINERE" then
-            // 	uf_protect()
-            // 	wf_set_security('','','update')
-            // elseif g_security.u_usergroup = 'RuralPost Manager' and g_security.userid = "SHOTTERI" then
-            // 	uf_protect()
-            // 	wf_set_security('','','')
-            // elseif g_security.u_usergroup = 'HO Staff' and g_security.userid = "MCKAYT" or g_security.userid = "HOCKLYJ" then
-            // 	uf_protect()	
-            // 	wf_set_security('','','')
-            // else
-            // 	uf_protect()	
-            // 	wf_set_security('','','')
-            // end if
         }
 
         public virtual void dw_contract_vehicle_itemchanged(object sender, EventArgs e)
@@ -4144,10 +4138,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             string column_name = ((Control)sender).Name;
             if (column_name == "v_vehicle_registration_number")
-            {
-                //int nRow = idw_contract_vehicle.GetRow();
+            {   // NOTE: This only affects the first row!  It replaces whatever is in the
+                //       first row with whatever it finds for the registration number there.
+                //       If it doesn't find anything, it replaces everytinng with nulls.
+                
                 int nRow = dw_contract_vehicle.GetRow();
                 sRegNo = (string)dw_contract_vehicle.DataObject.GetValue(nRow, "v_vehicle_registration_number");
+                //MessageBox.Show("v_vehicle_registration_number\n"
+                //              + "    Row = "+nRow.ToString()+", RegNo = "+sRegNo
+                //              ,"Debugging - Itemchanged");
                 List<VehicleItem> list = new List<VehicleItem>();
                 RDSDataService dataService = RDSDataService.GetVehicleList(sRegNo, ref SQLCode);
                 list = dataService.VehicleList;
@@ -4166,7 +4165,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     sLeased = list[0].V_leased;
                     lMonth = list[0].V_vehicle_month;
                 }
-                if (SQLCode == 100)
+                if (SQLCode == 100) // 
                 {
                     lVehicleNo = null;
                     lVTKey = null;
@@ -4199,7 +4198,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (ib_new_veh_added)
                 {
                     // TJB  Frequencies & Vehicles  Jan 2021
-                    // Default new vehicle statis to Active
+                    // Default new vehicle status to Active
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus = true;   // cv_vehical_status = 'A'
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle = false; // cv_default_vehicle = '1'
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractNo = il_contract;
@@ -4209,17 +4208,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             else if (column_name == "ft_key")
             {
                 int l_ft_key;
-
-                l_ft_key = Convert.ToInt32(dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).FtKey);
+                int nRow = dw_contract_vehicle.GetRow();
+                l_ft_key = Convert.ToInt32(dw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey);
                 if (l_ft_key == 4)
-                {
-                    //  This is diesel
-                    dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).VRoadUserChargesIndicator = true;// "Y";
+                {   //  This is diesel
+                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VRoadUserChargesIndicator = true;// "Y";
                 }
                 else
                 {
-                    dw_contract_vehicle.GetItem<ContractVehicle>(dw_contract_vehicle.GetRow()).VRoadUserChargesIndicator = false;// 'N');
+                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VRoadUserChargesIndicator = false;// 'N');
                 }
+            }
+            else if (column_name == "cb_active")
+            {
+/*  
+                int nRow = dw_contract_vehicle.GetRow();
+                bool bActive = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus;
+                bool bPrevActive = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalInitialStatus;
+
+                MessageBox.Show("cb_active:\n\n"
+                              + "    Row "+nRow.ToString()+" \n"
+                              + "    Active = " + bActive.ToString() + " now, " + bPrevActive.ToString() + " before."
+                              , "Debugging - Itemchanged");
+*/                              
             }
             if ((((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls.Count > 0))
                 ((DContractVehicleTest)(((DContractVehicle)(dw_contract_vehicle.DataObject)).TbPanel.Controls[dw_contract_vehicle.GetRow()])).BindingSource.CurrencyManager.Refresh();
@@ -4242,6 +4253,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             w_full_artical_count_form.ShowDialog();
         }
 
+        // TJB  RPCR_099: Added
+        // Ignore keyboard the Delete key
+        // Was deleting rows from the display without executing delete code
+        // (not validated or deleted from the database)
+        void WRenewal2001_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Determine whether the keystroke is the Delete key.
+            if (e.KeyCode == Keys.Delete)
+            {
+                // Set the Handled flag to cause the keypress to be ignored
+                e.Handled = true;
+            }
+        }
+
         public virtual void dw_renewal_artical_counts_getfocus(object sender, EventArgs e)
         {
             dw_renewal_artical_counts.URdsDw_GetFocus(null, null);
@@ -4261,19 +4286,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             base.FormBase_FormClosing(sender, e);
             pfc_preclose();
         }
+/*
+        // TJB  Frequencies & Vehicles  13-Jan-2021: Added
+        // Catch the event thrown by WContract2001 when it has updated the 
+        // route_frequency table, and remember the result.
+        // See WContract2001.cs and StatusUpdatedEventArgs.cs
+        bool IsRFUpdated = false;
 
+        public void dw_contract_vehicle_ContractRFUpdated(object sender, ContractRFUpdatedEventArgs e)
+        {
+            bool? _IsRFUpdated = false;
+            if (e != null && e.RfUpdated != null)
+                _IsRFUpdated = e.RfUpdated;
+
+            IsRFUpdated = (_IsRFUpdated == null) ? false : (bool)_IsRFUpdated;
+
+            //MessageBox.Show("Received message from WContract\n\n"
+            //              + "IsRFUpdated = " + IsRFUpdated.ToString()
+            //              , "Debugging - WRenewal2001.lw_ContractRFTableUpdated");
+
+            if (IsRFUpdated)
+            {
+                int nRows = of_refresh_route_frequencies();
+                int t = nRows;
+                IsRFUpdated = false;
+            }
+        }
+*/
         // TJB  Frequencies & Vehicles 7-Feb-2021: New
         // User event used to "tell" the WContract2001 form that this form (WRenewal2001) 
         // has updated the route_frequency table.  The Frequencies tab in the WContract2001
         // form can then refresh itself with the updated data.
         // See NZPostOffice.RDS.Controls.StatusUpdatedEventArgs.cs
-        public event EventHandler<StatusUpdatedEventArgs> RFTableUpdated;
+        public event EventHandler<StatusUpdatedEventArgs> RenewalRFTableUpdated;
 
         // TJB  Frequencies & Vehicles 7-Feb-2021: New
         protected virtual void OnRFTableUpdated(StatusUpdatedEventArgs e)
         {
-            if (RFTableUpdated != null)
-                RFTableUpdated(this, e);
+            if (RenewalRFTableUpdated != null)
+                RenewalRFTableUpdated(this, e);
+        }
+
+        public void dw_contract_vehicle_CheckedChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("dw_contract_vehicle_CheckedChanged is not implemented."
+                            , "WRenewal2001");
         }
 
         #endregion  // Events
