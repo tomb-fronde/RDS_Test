@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  9-Feb-2021
+    // Changed TextMaskFormat property on purchased_date
+    //
     // TJB  Frequencies & Vehicles  Jan-2021
     // Added Active and Default Vehicle checkboxes (in design)
 
@@ -45,6 +48,44 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             InitializeDropdown();
         }
 
+        private void InitializeDropdown()
+        {
+            ft_key.AssignDropdownType<DDddwFuewTypes>();
+            vt_key.AssignDropdownType<DDddwVehicalTypes>();
+            vs_key.AssignDropdownType<DDddwVehicalStyles>();
+
+            #region vehicle_v_vehicle_month
+            System.Data.DataTable sourceTable1 = new System.Data.DataTable();
+            sourceTable1.Columns.AddRange(new System.Data.DataColumn[]
+			{
+				new System.Data.DataColumn("Display", typeof(string)),
+				new System.Data.DataColumn("Value", typeof(string))
+			});
+            sourceTable1.Rows.Add(new object[] { "January", "1" });
+            sourceTable1.Rows.Add(new object[] { "February", "2" });
+            sourceTable1.Rows.Add(new object[] { "March", "3" });
+            sourceTable1.Rows.Add(new object[] { "April", "4" });
+            sourceTable1.Rows.Add(new object[] { "May", "5" });
+            sourceTable1.Rows.Add(new object[] { "June", "6" });
+            sourceTable1.Rows.Add(new object[] { "July", "7" });
+            sourceTable1.Rows.Add(new object[] { "August", "8" });
+            sourceTable1.Rows.Add(new object[] { "September", "9" });
+            sourceTable1.Rows.Add(new object[] { "October", "10" });
+            sourceTable1.Rows.Add(new object[] { "November", "11" });
+            sourceTable1.Rows.Add(new object[] { "December", "12" });
+            this.v_vehicle_month.DataSource = sourceTable1;
+            this.v_vehicle_month.DisplayMember = "Display";
+            this.v_vehicle_month.ValueMember = "Value";
+            #endregion
+        }
+
+        public int Retrieve(int? contract_no, int? contract_seq_number)
+        {
+            return RetrieveCore<ContractVehicle>(new List<ContractVehicle>
+                (ContractVehicle.GetAllContractVehicle(contract_no, contract_seq_number)));
+        }
+
+        #region extraprocessing
         // TJB  Dec-2009:  Safety-stars prototype
         //  Test using stars to display Vehicle Safety Rating
         //  - For testing, use vehicle year to determine the number of stars
@@ -143,61 +184,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Consumption.ReadOnly = pValue;
         }
 
-        private void InitializeDropdown()
-        {
-            ft_key.AssignDropdownType<DDddwFuewTypes>();
-            vt_key.AssignDropdownType<DDddwVehicalTypes>();
-            vs_key.AssignDropdownType<DDddwVehicalStyles>();
-
-            #region vehicle_v_vehicle_month
-            System.Data.DataTable sourceTable1 = new System.Data.DataTable();
-            sourceTable1.Columns.AddRange(new System.Data.DataColumn[]
-			{
-				new System.Data.DataColumn("Display", typeof(string)),
-				new System.Data.DataColumn("Value", typeof(string))
-			});
-            sourceTable1.Rows.Add(new object[] { "January", "1" });
-            sourceTable1.Rows.Add(new object[] { "February", "2" });
-            sourceTable1.Rows.Add(new object[] { "March", "3" });
-            sourceTable1.Rows.Add(new object[] { "April", "4" });
-            sourceTable1.Rows.Add(new object[] { "May", "5" });
-            sourceTable1.Rows.Add(new object[] { "June", "6" });
-            sourceTable1.Rows.Add(new object[] { "July", "7" });
-            sourceTable1.Rows.Add(new object[] { "August", "8" });
-            sourceTable1.Rows.Add(new object[] { "September", "9" });
-            sourceTable1.Rows.Add(new object[] { "October", "10" });
-            sourceTable1.Rows.Add(new object[] { "November", "11" });
-            sourceTable1.Rows.Add(new object[] { "December", "12" });
-            this.v_vehicle_month.DataSource = sourceTable1;
-            this.v_vehicle_month.DisplayMember = "Display";
-            this.v_vehicle_month.ValueMember = "Value";
-            #endregion
-        }
-
-        public int Retrieve(int? contract_no, int? contract_seq_number)
-        {
-            return RetrieveCore<ContractVehicle>(new List<ContractVehicle>
-                (ContractVehicle.GetAllContractVehicle(contract_no, contract_seq_number)));
-        }
-
-        private void v_vehicle_registration_number_Click(object sender, EventArgs e)
-        {
-            string sRego, sPurchaseDate;
-            sRego = this.v_vehicle_registration_number.Text;
-            sPurchaseDate = this.v_purchased_date.Text;
-            MessageBox.Show("Rego = "+sRego+"             \n"
-                            +"Purchased "+sPurchaseDate
-                            ,"rego.click");
-        }
-
-        private void v_vehicle_registration_number_Leave(object sender, EventArgs e)
-        {
-            string sRego, sPurchaseDate;
-            sRego = this.v_vehicle_registration_number.Text;
-            sPurchaseDate = this.v_purchased_date.Text;
-            MessageBox.Show("Rego = " + sRego + "             \n"
-                            + "Purchased " + sPurchaseDate
-                            , "rego.leave");
-        }
+        #endregion
     }
 }

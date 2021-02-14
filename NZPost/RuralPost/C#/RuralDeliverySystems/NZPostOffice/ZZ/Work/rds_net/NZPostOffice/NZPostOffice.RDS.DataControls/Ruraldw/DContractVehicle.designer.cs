@@ -91,7 +91,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.SafetyValue_t = new System.Windows.Forms.Label();
             this.SafetyValue = new System.Windows.Forms.TextBox();
             this.cb_active = new System.Windows.Forms.CheckBox();
-            this.cb_default = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -124,7 +123,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.contract_vehical_vehicle_number.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VehicleNumber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.contract_vehical_vehicle_number.Font = new System.Drawing.Font("Arial", 8F);
-            this.contract_vehical_vehicle_number.Location = new System.Drawing.Point(85, 3);
+            this.contract_vehical_vehicle_number.Location = new System.Drawing.Point(125, 3);
             this.contract_vehical_vehicle_number.Name = "contract_vehical_vehicle_number";
             this.contract_vehical_vehicle_number.Size = new System.Drawing.Size(42, 20);
             this.contract_vehical_vehicle_number.TabIndex = 0;
@@ -377,6 +376,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.v_purchased_date.Size = new System.Drawing.Size(80, 20);
             this.v_purchased_date.TabIndex = 16;
             this.v_purchased_date.Text = "00000000";
+            this.v_purchased_date.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludePromptAndLiterals;
             this.v_purchased_date.Value = null;
             // 
             // contract_vehical_start_kms_t
@@ -705,7 +705,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // SafetyValue_t
             // 
             this.SafetyValue_t.AutoSize = true;
-            this.SafetyValue_t.Location = new System.Drawing.Point(348, 277);
+            this.SafetyValue_t.Location = new System.Drawing.Point(193, 263);
             this.SafetyValue_t.Name = "SafetyValue_t";
             this.SafetyValue_t.Size = new System.Drawing.Size(67, 13);
             this.SafetyValue_t.TabIndex = 0;
@@ -716,7 +716,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             // 
             this.SafetyValue.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VVehicleSafety", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SafetyValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.SafetyValue.Location = new System.Drawing.Point(422, 273);
+            this.SafetyValue.Location = new System.Drawing.Point(267, 259);
             this.SafetyValue.Name = "SafetyValue";
             this.SafetyValue.Size = new System.Drawing.Size(52, 20);
             this.SafetyValue.TabIndex = 0;
@@ -735,24 +735,11 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.cb_active.Text = "Active";
             this.cb_active.UseVisualStyleBackColor = true;
             // 
-            // cb_default
-            // 
-            this.cb_default.AutoSize = true;
-            this.cb_default.CheckAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.cb_default.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bindingSource, "CvDefaultVehicle", true));
-            this.cb_default.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_default.Location = new System.Drawing.Point(240, 25);
-            this.cb_default.Name = "cb_default";
-            this.cb_default.Size = new System.Drawing.Size(108, 19);
-            this.cb_default.TabIndex = 26;
-            this.cb_default.Text = "Default Vehicle";
-            this.cb_default.UseVisualStyleBackColor = true;
-            // 
             // DContractVehicleTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.cb_default);
+            this.AutoScroll = true;
             this.Controls.Add(this.cb_active);
             this.Controls.Add(this.SafetyValue);
             this.Controls.Add(this.SafetyValue_t);
@@ -811,7 +798,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.Controls.Add(this.v_purchase_value);
             this.Controls.Add(this.v_salvage_value);
             this.Name = "DContractVehicleTest";
-            this.Size = new System.Drawing.Size(534, 300);
+            this.Size = new System.Drawing.Size(526, 285);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -887,6 +874,5 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private TextBox SafetyValue;
         // TJB 17-Sep-2010 Add end
         private CheckBox cb_active;
-        private CheckBox cb_default;
     }
 }
