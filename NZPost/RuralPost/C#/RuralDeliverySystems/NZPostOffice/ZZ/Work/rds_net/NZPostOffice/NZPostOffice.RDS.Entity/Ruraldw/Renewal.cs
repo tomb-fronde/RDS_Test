@@ -9,6 +9,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Feb-2021
+    // Reformatted Fetch query for clarity (not changed)
+
     // Mapping info for object fields to DB
     // Mapping fieldname, entity fieldname, database table name, form name
     // Application Form Name : BE
@@ -834,7 +837,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
                     pList.Add(cm, "contract_seq_number", GetInitialValue("_contract_seq_number"));
-                    cm.CommandText += "DELETE FROM contract_renewals WHERE contract_renewals.contract_no = @contract_no and contract_renewals.contract_seq_number = @contract_seq_number";
+                    cm.CommandText += "DELETE FROM contract_renewals " 
+                                    + " WHERE contract_renewals.contract_no = @contract_no " 
+                                    + "   AND contract_renewals.contract_seq_number = @contract_seq_number";
                     DBHelper.ExecuteNonQuery(cm, pList);
                     tr.Commit();
                 }
