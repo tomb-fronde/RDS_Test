@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies & Vehicles  12-Feb-2021
+    // Changed verification: when effective date is wrong, don't close
+    //
     // TJB Frequencies & Vehicles  22-Jan-2021
     // Derived from WContractRate2001; renamed WOverrideRates to reflect function
     // Added handling of (potentially) multiple vehicles in a contract
@@ -401,9 +404,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int dw_vehicle_override_rates_pfc_update()
         {
-            decimal? ldc_benchmark = 0;
-            decimal? ldc_amount_to_pay = 0;
-            int ll_return;
+            decimal? dc_this_benchmark = 0;
+            decimal? dc_amount_to_pay = 0;
             int li_rc;
             int li_rows;
             DateTime? ld_effective_date;
@@ -433,7 +435,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //   FROM contract 
             //  WHERE contract_no = :il_contract 
             //    AND con_active_sequence = :il_sequence 
-            //  USING SQLCA
             RDSDataService dataService = RDSDataService.GetContractCountByNoAndSeq(il_sequence, il_contract);
             li_rows = dataService.intVal;
             if (dataService.SQLCode != 0)
@@ -442,64 +443,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                  + "Error Text: " + dataService.SQLErrText
                                , "Database Error (WOverrideRates.pfc_update)"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //? Rollback;
                 return -(1);
             }
             if (li_rows <= 0)
             {
                 //  This is not an active contract
                 //  do not create any frequency adjustments
-                //? COMMIT;
                 MessageBox.Show("This contract is not active - no frequency adjustment created");
                 return li_return;
             }
-            n_freq = new NFrequencyAdjustment();
-            n_freq.of_set_contract(il_contract, il_sequence);
-            n_freq.is_reason = "New override rate entered. ";
-            n_freq.of_set_effective_date(ld_effective_date);
-            //  TJB SR4632 29-July-2004   - added setting is_confirmed
-            n_freq.is_confirmed = "N";
-            //  TJB  SR4661  May 2005
+            //  TJB  SR4661  May-2005 again in Jan-2021
             //  Changed BenchmarkCalc subroutine name
             //  Obtain the new benchmark
-
-            // SELECT BenchmarkCalc2005(:il_contract,:il_sequence) INTO :ldc_benchmark FROM dummy USING SQLCA;
             //dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
-            dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
-            ldc_benchmark = dataService.decVal;
+            dataService = RDSDataService.GetBenchmarkCalc2021(il_contract, il_sequence);
+            dc_this_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
                 MessageBox.Show("Unable to calculate a new benchmark for the contract.\n\n" 
                                  + "Error Text: " + dataService.SQLErrText
                                , "Database Error (WOverrideRates.pfc_update)"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //? Rollback;
                 return -(1);
             }
-            ldc_amount_to_pay = ldc_benchmark - idc_original_benchmark;
-            if (ldc_amount_to_pay == 0m || ldc_amount_to_pay is Nullable)
+            // TJB  Frequencies & Vehicles 14-Feb-2021 
+            // Reorganised and added messages about successful frequenct_adjustment update
+            // and zero benchmarkcalc
+            dc_amount_to_pay = dc_this_benchmark - idc_original_benchmark;
+            if (dc_amount_to_pay == 0m || dc_amount_to_pay is Nullable)
             {
                 MessageBox.Show("The benchmark for this contract has not changed.\n"
                                 + "No frequency adjustment created.");
             }
-            else
+            else if (dc_this_benchmark > 0)
             {
-                n_freq.idc_new_benchmark = ldc_benchmark;
-                n_freq.idc_amount_to_pay = ldc_amount_to_pay;
-                n_freq.idc_adjustment_amount = ldc_amount_to_pay;
                 li_rc = -(1);
-                if (ldc_benchmark > 0)
-                {
-                    li_rc = n_freq.of_save();
-                }
+                n_freq = new NFrequencyAdjustment();
+                n_freq.of_set_contract(il_contract, il_sequence);
+                n_freq.is_reason = "New override rate entered. ";
+                n_freq.of_set_effective_date(ld_effective_date);
+                //  TJB SR4632 29-July-2004   - added setting is_confirmed
+                n_freq.is_confirmed = "N";
+                n_freq.idc_new_benchmark = dc_this_benchmark;
+                n_freq.idc_amount_to_pay = dc_amount_to_pay;
+                n_freq.idc_adjustment_amount = dc_amount_to_pay;
+                li_rc = n_freq.of_save();
                 if (li_rc > 0)
                 {
-                    //? Commit;
+                    MessageBox.Show("A frequency adjustment for the new override rate has been made.\n"
+                                     + "Please check and confirm it."
+                                   , "WOverrideRates"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else
-                {
-                    //? Rollback;
-                }
+            }
+            else
+            {
+                MessageBox.Show("A new benchmark has been calculated as $0.00??"
+                               , "WOverrideRates - Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return li_return;
         }
@@ -508,11 +509,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             DateTime? ld_effective_date = null;
             DateTime? id_date_exists = null;
-            decimal? ldc_benchmark;
-            decimal? ldc_amount_to_pay;
-            int ll_return;
-            int li_rc = -(1);
-            int li_rows = 0;
             DateTime? ld_upperlimitdate = null;
             int li_return = 1;
 
@@ -530,7 +526,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                      + string.Format("{0:d}", id_previous_effective_date) + "."
                                    , "Invalid Date"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? return -(1);
+                    return -(1);
                 }
                 //  PBY 02/09/2002 SR#4414 also make sure effective date cannot be greater than
                 //  today()+30days
@@ -541,7 +537,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                      + string.Format("{0:d}", ld_upperlimitdate) + "."
                                    , "Invalid Date"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    //? return -(1);
+                    return -(1);
                 }
                 // TJB  8-Jan-2016: Bug fix
                 // Changed GetVovEffectiveDate to GetVorEffectiveDate
@@ -892,14 +888,18 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_vor_rc = idw_vehicleoverriderates.Save();
             }
 
+            // TJB Frequencies & Vehicles 14-Feb-2021: change
+            // Only close if all changes were successful (
             // Tell the caller we made changes
-            if (ll_vor_rc > 0 || ll_nvor_rc > 0)
+            //if (ll_vor_rc > 0 || ll_nvor_rc > 0)
+            if (ll_vor_rc > 0 && ll_nvor_rc > 0)
+            {
                 StaticVariables.gnv_app.of_get_parameters().booleanparm = true;
+                senderName = "OK";
+                this.Close();
+            }
             else
                 StaticVariables.gnv_app.of_get_parameters().booleanparm = false;
-
-            senderName = "OK";
-            this.Close();
         }
 
         public virtual void cb_cancel_clicked(object sender, EventArgs e)
