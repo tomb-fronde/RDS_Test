@@ -16,6 +16,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     // TJB Frequencies & Vehicles  12-Feb-2021
     // Changed verification: when effective date is wrong, don't close
+    // [15-Feb-2021] Fixed bug in frequency adjustment calculation
     //
     // TJB Frequencies & Vehicles  22-Jan-2021
     // Derived from WContractRate2001; renamed WOverrideRates to reflect function
@@ -203,9 +204,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
-            // TJB Jan-2021: Changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
+            // TJB Feb-2021: This code obsolete; moved to dw_vehicle_override_rates_pfc_update
             //RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
-            RDSDataService dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
+/*
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
@@ -218,6 +219,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
+*/
             // TJB  RPCR_099  Jan-2015
             // Removed: non_vehicle_override_rate_history no longer used
             //
@@ -456,8 +458,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed BenchmarkCalc subroutine name
             //  Obtain the new benchmark
             //dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            dataService = RDSDataService.GetPrevBench(il_contract);
+            idc_original_benchmark = dataService.decVal;
             dataService = RDSDataService.GetBenchmarkCalc2021(il_contract, il_sequence);
-            dc_this_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
                 MessageBox.Show("Unable to calculate a new benchmark for the contract.\n\n" 
@@ -466,14 +469,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return -(1);
             }
+            dc_this_benchmark = dataService.decVal;
             // TJB  Frequencies & Vehicles 14-Feb-2021 
             // Reorganised and added messages about successful frequenct_adjustment update
             // and zero benchmarkcalc
             dc_amount_to_pay = dc_this_benchmark - idc_original_benchmark;
             if (dc_amount_to_pay == 0m || dc_amount_to_pay is Nullable)
             {
-                MessageBox.Show("The benchmark for this contract has not changed.\n"
-                                + "No frequency adjustment created.");
+                //MessageBox.Show("The benchmark for this contract has not changed.\n"
+                //                + "No frequency adjustment created.");
             }
             else if (dc_this_benchmark > 0)
             {
