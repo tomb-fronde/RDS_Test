@@ -9,6 +9,9 @@ using NZPostOffice.Shared;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies and Vehicles 17-Feb-2021
+    // Removed references to default_vehicle
+    //
     // TJB  Frequencies & Vehicles  Jan-2021
     // Presents a list of a contract's vehicles' for the user to select from
     // Returns the vehicle_number or -1 to cancel
