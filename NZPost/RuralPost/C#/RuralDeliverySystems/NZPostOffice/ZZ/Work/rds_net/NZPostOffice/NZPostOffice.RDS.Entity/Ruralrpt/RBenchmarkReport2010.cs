@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralrpt
 {
+    // TJB Frequencies & Vehicles 17-Feb-2021
+    // Updated stored proc to sp_GetBenchmarkRpt2021
+    //
     // TJB RPCR_147  May-2020
     // Changed stored procedure called
     // Added freqdesc, freqdays,freqdist 6 - 12
@@ -2243,7 +2246,8 @@ namespace NZPostOffice.RDS.Entity.Ruralrpt
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2006";
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2010";
                     //cm.CommandText = "rd.sp_GetBenchmarkRpt2013";
-                    cm.CommandText = "rd.sp_GetBenchmarkRpt2020";
+                    //cm.CommandText = "rd.sp_GetBenchmarkRpt2020";
+                    cm.CommandText = "rd.sp_GetBenchmarkRpt2021";
                     ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContract", inContract);
 					pList.Add(cm, "inSequence", inSequence);
