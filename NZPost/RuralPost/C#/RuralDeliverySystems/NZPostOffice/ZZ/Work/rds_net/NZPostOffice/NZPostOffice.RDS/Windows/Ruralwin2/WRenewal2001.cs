@@ -14,6 +14,11 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB  Frequencies & Vehicles 17-Feb-2021
+    // Added logic: when opening WSelectContractVehicle, if there's only one 
+    //   active vehicle, use it.
+    // Removed references to default_vehicle.
+    //
     // TJB Frequencies & Vehicles  Jan/Feb-2021
     // Added call to user event to tell WContract that the route_frequency 
     //   table had been modified (specifically by WRenewal) - see OnRFTableUpdated
@@ -168,8 +173,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         // TJB  RD7_0040  Aug2009  -- Added --
         private int? nPrevVolume, nPrevRgCode;
 
-        // TJB Frequencies & Vehicles 24-Jan-2021 - added
-        private int? nDefaultVehicle;
         #endregion
 
         public WRenewal2001()
@@ -408,7 +411,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.dw_contract_vehicle.FireConstructor = false;
             this.dw_contract_vehicle.Location = new System.Drawing.Point(5, 7);
             this.dw_contract_vehicle.Name = "dw_contract_vehicle";
-            this.dw_contract_vehicle.Size = new System.Drawing.Size(578, 350);
+            this.dw_contract_vehicle.Size = new System.Drawing.Size(574, 350);
             this.dw_contract_vehicle.TabIndex = 1;
             // 
             // tabpage_article_count
@@ -416,9 +419,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             this.tabpage_article_count.Controls.Add(this.dw_renewal_artical_counts);
             this.tabpage_article_count.ForeColor = System.Drawing.SystemColors.WindowText;
             this.tabpage_article_count.Location = new System.Drawing.Point(4, 22);
-            // TJB  RD7_0040  Aug2009:  Changed from 'this.tabpage_article_count.Text' to literal
-            // Previously, the Text value was null, and assigning Null to Name 
-            // caused the tab to not be displayed.
             this.tabpage_article_count.Name = "tabpage_article_count";
             this.tabpage_article_count.Size = new System.Drawing.Size(582, 364);
             this.tabpage_article_count.TabIndex = 5;
@@ -573,42 +573,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ((DContractVehicle)dw_contract_vehicle.DataObject).Retrieve(il_contract, il_sequence);
             }
-/*
-            string sTitle ="Contract: (" + il_contract.ToString() + ") " + idw_renewal.GetItem<Renewal>(0).ConTitle;
-            if (!((StaticVariables.gnv_app.of_findwindow(sTitle, "w_Contract2001") != null)))
-            {
-                //StaticMessage.PowerObjectParm = lnv_msg;
-                WContract2001 lw_Contract2001 = new WContract2001();
-                lw_Contract2001.MdiParent = StaticVariables.MainMDI;
-                lw_Contract2001.ContractRFUpdated += new EventHandler<ContractRFUpdatedEventArgs>(dw_contract_vehicle_ContractRFUpdated);
-            }
-*/
 
-/*
-     TJB 11-Feb-2021 Obsolete 
-     Changed how dcPrevBenchmark calculated (see dw_contract_vehicle_pfc_postupdate)
-     Dropped concept of a default vehicle
-     
-            // TJB  RD7_0037  Aug2009
-            // Determine initial vehicle benchmark
-            // Save the fuel type and original vehicle number (so we can tell if there's any change).
-            // [24-Jan-2021] TJB  Also lookup the contract's default vehicle
-            dcPrevVehBenchmark = 0;
-            int nRow = dw_contract_vehicle.GetRow();
-            if (nRow >= 0)
-            {
-                nPrevFtKey = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).FtKey;
-                dcPrevVehBenchmark = wf_getVehBenchmark("pfc_postopen");
-                nDefaultVehicle = of_get_default_vehicle(true);
-                if (nDefaultVehicle == 0)  // This is mainly for debugging;
-                {                          // there should ALWAYS be a default vehicle
-                    MessageBox.Show("WARNING\n\n"
-                                   + "Failed to find the default vehicle??"
-                                   , "WRenewal2001.pfc_postopen"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-*/
             // TJB RPCR_001 July-2010: implement using stars to display Vehicle Safety Rating
             int? VSafety = 0;
             int nStars = 0;
@@ -645,26 +610,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         // TJB  Frequencies & Vehicles 4-Feb-2021 - new
-        private int of_count_default_vehicles()
-        {   // Count the number of vehicles marked as the default
-            // There should only ever be one; more should never happen :-)
-            int nRow, nRows, nDefaults;
-            nDefaults = 0;
-            nRows = dw_contract_vehicle.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
-            {
-                if (dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle)
-                    nDefaults++;
-            }
-            return nDefaults;
-        }
-
-        // TJB  Frequencies & Vehicles 4-Feb-2021 - new
         private int of_get_vehicle_row(int? inVehicle)
         {  // Looks up the row in dw_contract_vehicle for inVehicle
            // Returns -1 (FAILED) if not found
 
-            int nRow, nRows, nVehicleRow;
+            int nRow, nRows;
             int? nTmpVehicle;
             
             nRows = dw_contract_vehicle.RowCount;
@@ -678,41 +628,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         // TJB  Frequencies & Vehicles 24-Jan-2021 - new
-        private int? of_get_default_vehicle(bool bWasDefault)
-        {   // Looks up the current default vehicle in dw_contract_vehicle
-            // If bWasDefault is true, the vehicle's InitialDefault flag must be set too
-            // If bWasDefault is false, the vehicle's InitialDefault flag may or may not be
-            // Returns the vehicle number or 0 if not found.
-            int nRow = 0, nRows = 0;
-            bool bThisVehDefaultFlag, bInitialVehDefaultFlag;
-            int? nThisVehicle = 0;
-
-            // Scan the rows in dw_contract_vehicle
-            nRows = dw_contract_vehicle.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
-            {
-                nThisVehicle = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
-                bThisVehDefaultFlag = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle;
-                bInitialVehDefaultFlag = dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvInitialDefaultVehicle;
-                if (bThisVehDefaultFlag)
-                {
-                    if (bWasDefault && bInitialVehDefaultFlag)
-                        return nThisVehicle;
-                    if (!bWasDefault)
-                        return nThisVehicle;
-                }
-            }
-            return 0;
-        }
-
-        // TJB  Frequencies & Vehicles 24-Jav-2021 - new
+        // TJB  Frequencies & Vehicles 17-Feb-2021
+        // Added logic: if there's only one active vehicle, use it
         private int of_select_vehicle(string sPurpose, int? inContractNo, int? inContractSeqNumber)
         {
+            int VehicleNo = 0, nActiveVehicles = 0;
+
+            // Count the number of active vehicles
+            for (int nRow = 0; nRow < idw_contract_vehicle.RowCount; nRow++)
+            {
+                if (idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus)
+                {
+                    nActiveVehicles++;
+                    VehicleNo = (int)idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+                }
+            }
+            if (nActiveVehicles == 1)  // If there's only one vehicle, use it.
+                return VehicleNo;
+
+            // Otherwise, let the user select the one to use
             // Opens the WSelectContractVehicle window which lists all
             // the vehicles currently associated with this contract for
             // the user to select one.  Returns the selected vehicle's vehicle_number
             StaticVariables.gnv_app.of_get_parameters().integerparm = inContractNo;
-            StaticVariables.gnv_app.of_get_parameters().intparm     = inContractSeqNumber;
+            StaticVariables.gnv_app.of_get_parameters().intparm = inContractSeqNumber;
             StaticVariables.gnv_app.of_get_parameters().stringparm = this.Text; // idw_contract.GetItem<Contract>(0).ConTitle;
             StaticVariables.gnv_app.of_get_parameters().miscstringparm = sPurpose;
             Cursor.Current = Cursors.WaitCursor;
@@ -720,8 +659,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             WSelectContractVehicle w_select_contract_vehicle = new WSelectContractVehicle();
             w_select_contract_vehicle.ShowDialog();
 
-            int result = (int)StaticVariables.gnv_app.of_get_parameters().intparm;
-            return result;
+            VehicleNo = (int)StaticVariables.gnv_app.of_get_parameters().intparm;
+            return VehicleNo;
         }
 
         public virtual void ue_open_rates()
@@ -839,11 +778,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ids_route_frequency.Save();
                 ib_rf_modified = false;
 
+                // TJB Frequencies & Vehicles  17-Feb-2021: Added
+                Send_RFUpdatedMessage();
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
-                StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                RFUpdated.RfUpdated = true;
-                OnRFTableUpdated(RFUpdated);
-                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_preclose");
+                // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                // RFUpdated.RfUpdated = true;
+                // OnRFTableUpdated(RFUpdated);
+                // MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_preclose");
             }
             return base.pfc_preclose();
         }
@@ -913,11 +854,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_rf_modified = false;
                 // MessageBox.Show("route_frequency saved (modified)", "Debugging - pfc_save");
 
+                // TJB Frequencies & Vehicles  17-Feb-2021: Added
+                Send_RFUpdatedMessage();
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
-                StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                RFUpdated.RfUpdated = true;
-                OnRFTableUpdated(RFUpdated);
-                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_save");
+                // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                // RFUpdated.RfUpdated = true;
+                // OnRFTableUpdated(RFUpdated);
+                // MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_save");
             }
             return SUCCESS;
         }
@@ -1090,16 +1033,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         private bool check_purchased_date(DateTime? ld_purchased_date)
         {
-            // Check to see if the default vehicles' purchased date is newer than ld_purchased_date
             // Return true if if it is
             //        false otherwise (ld_purchased_date is newer (or equal to) the default vehicle's)
             int nRows = 0;
             int nRow   = 0;
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                if (idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle)
-                    if (idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VPurchasedDate > ld_purchased_date)
-                        return true;
+                if (idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VPurchasedDate > ld_purchased_date)
+                    return true;
             }
             return false;
         }
@@ -2471,73 +2412,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             string sThisVehicleRego = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).VVehicleRegistrationNumber;
             bool bThisActive        = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus;
             bool bInitialActive     = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalInitialStatus;
-            bool bThisDefault       = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle;
-            bool bInitialDefault    = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvInitialDefaultVehicle;
 
-            // If this vehicle is marked as being the default, and also as being inactive, 
-            // tell the user this isn't OK and suggest they fix it (don't fix it for them).
-            // A vehicle marked Active may or may not be the the default vehicle.
-            if (bThisDefault && !bThisActive)
-            {
-                MessageBox.Show("An inactive vehicle may not be the contract's default vehicle.\n\n"
-                               + "Please correct."
-                               , ""
-                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return FAILED;
-            }
-
-            // If this vehicle is the original default, it may or may not have been replaced.
-            // There's no need to continue processing its Active and Default flags.
-            if (nThisVehicle == nDefaultVehicle) 
-            {
-                /*********************  Debugging  ********************
-                MessageBox.Show("Skipping this vehicle (" + nThisVehicle.ToString() + ") replaced default"
-                               , "Debugging - of_contract_vehicle_process_new_vehicle");
-                *********************  Debugging  ********************/
-                return OK;
-            }
-            
             //If the Vehicle is marked Active ask about replacing the current default vehicle.
-            if (bThisActive) 
+            if (bThisActive)
             {    // "ThisVehicle" is the new vehicle
                 string sThisVehicleName = RDSDataService.GetVehicleName(nThisVehicle);
-                string sDefaultVehicleName = RDSDataService.GetVehicleName(nDefaultVehicle);
-
-                if (!bThisDefault) // If the user has not ticked the default CheckBox
-                {                  // Ask if he/she wants to replace the default
-                    ans = MessageBox.Show("Do you want to replace the default vehicle ("+sDefaultVehicleName+")"
-                                         + " with "+sThisVehicleName
-                                          , "Question"
-                                          , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                    if (ans == DialogResult.Cancel)
-                        return FAILED;
-                }
-                else     // If the user has ticked the default CheckBox, we know that's 
-                {        // what the user wants to do; of_replace... will confirm it.
-                    ans = DialogResult.Yes;
-                }
-                if (ans == DialogResult.Yes)
-                {
-                    // Change the contract's default vehicle in both the contract_vehical table
-                    // and in any route_frequencies the previous default vehicle was associated with
-                    // and mark the old vehicle "not active"
-                    int nReplaced = of_replace_contract_default_vehicle(nDefaultVehicle, sDefaultVehicleName
-                                                               , nThisVehicle, sThisVehicleName);
-                    if (nReplaced < 0)
-                    {   // Problem replacing the default vehicle 
-                        return FAILED;
-                    }
-                }
-                else
-                    if (ans == DialogResult.No)
-                        ib_default_replaced = false;
             }
-
             return OK;
         }
 
         public virtual int of_contract_vehicle_process_status_flags(int lRow)
-        {   // TJB  Frequencies & Vehicles 30-Jan-2021: New
+        {   // TJB  Frequencies & Vehicles 15-Feb-2021
+            // Removed references to default vehicle; nothing left!
+            //
+            // TJB  Frequencies & Vehicles 30-Jan-2021: New
             // If this isn't a new vehicle, process its 'Active' and 'Default' checkbox flags
             // Returns
             //     0   Normal exit (OK)
@@ -2545,264 +2433,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //
             // If it is a new vehicle, see the separate contract_vehicle_process_new_vehicle
 
-            int nRows;
-            int? nOtherVehicle = 0;
-            string sOtherVehName = "";
-
-            nRows = idw_contract_vehicle.RowCount;
-
-            int? nThisVehicle       = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).VehicleNumber;
-            string sThisVehicleRego = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).VVehicleRegistrationNumber;
-            bool bThisActive        = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus;
-            bool bInitialActive     = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalInitialStatus;
-            bool bThisDefault       = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle;
-            bool bInitialDefault    = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvInitialDefaultVehicle;
-            string sThisVehName = RDSDataService.GetVehicleName(nThisVehicle);
-            string sDefaultVehName = RDSDataService.GetVehicleName(nDefaultVehicle);
-
-            // If this vehicle is marked as being the default, and also as being inactive, 
-            // tell the user this isn't OK and suggest they fix it (don't fix it for them).
-            if (bThisDefault && !bThisActive)
-            {
-                MessageBox.Show("An inactive vehicle may not be the contract's default vehicle.\n\n"
-                               + "Please correct.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return FAILED;
-            }
-
-            // Check the default flag
-            if (bThisDefault && !bInitialDefault)
-            {   // It is now on and previously wasn't
-                if (ib_default_replaced)  // This vehicle may already have been used to replace
-                    return OK;            // the default vehicle.  Don't need to do anything now.
-
-                /*********************  Debugging  ********************
-                MessageBox.Show("Making vehicle " + sThisVehName + " (" + nThisVehicle.ToString() + ") the new default\n\n"
-                               , "Debugging - of_validate_vehicle_flags.process_status_flags");
-                *********************  Debugging  ********************/
-
-                // Change the contract's default vehicle in both the contract_vehical table
-                // and in any route_frequencies the previous default vehicle was associated with
-                // and mark the old vehicle "not active".
-                int nReplaced = of_replace_contract_default_vehicle(nDefaultVehicle, sDefaultVehName
-                                                               , nThisVehicle, sThisVehName);
-                if (nReplaced < 0)  // Problem replacing the default vehicle
-                {
-                    //bThisDefault= idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = false;
-                    return FAILED;
-                }
-                if (nReplaced >= 0)  // Successfully replaced the default vehicle
-                {   // This might be redundant - active and default flags are set when/if the vehicle is replaced
-                    idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                    idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                }
-                return OK;
-            }  // End if (bThisDefault && !bInitialDefault)
-
-            if (bInitialDefault && !bThisDefault)
-            {   // This vehicle's default flag is off and was previously on
-                // (this has to have been the initial default vehicle)
-                if (ib_default_replaced)   // and has been replaced
-                {
-                    // If it has been replaced, we don't need to do anything
-                }
-                else  // If it hasn't been replaced yet ...
-                {
-                    nOtherVehicle = 0;
-                /*********************  Debugging  ********************
-                    MessageBox.Show("Find a vehicle to replace "+sThisVehName+" as the default."
-                               , "Debugging - of_validate_vehicle_flags.process_status_flags");
-                *********************  Debugging  ********************/
-
-                    if (nRows < 2)  // There is only one vehicle; it must stay the default
-                    {   
-                        MessageBox.Show(sThisVehName+" is only vehicle asociated with this contract.\n"
-                                        + "It must remain the default."
-                                        , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                        idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus  = true;
-                        return OK;
-                    }
-                    if (nRows == 2)  // There are only two vehicles; switch to the other one
-                    {
-                        int nRow = (lRow == 0) ? 1 : 0;
-                        sThisVehName = RDSDataService.GetVehicleName(nThisVehicle);
-                        nOtherVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
-                        sOtherVehName = RDSDataService.GetVehicleName(nOtherVehicle);
-
-                        DialogResult ans;
-                        ans = MessageBox.Show("There are only two vehicles asociated with this contract.\n"
-                                        + "Switching to the other one ("+sOtherVehName+")."
-                                        , "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                        if (ans == DialogResult.Cancel)
-                        {
-                            idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                            idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                            return FAILED;
-                        }
-                        else
-                        {
-                            int nReplaced = of_replace_contract_default_vehicle(nThisVehicle, sThisVehName
-                                                                       , nOtherVehicle, sOtherVehName);
-                            if (nReplaced < 0)   // Problem replacing the default vehicle
-                            {
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                                return FAILED;
-                            }
-                            else
-                                return OK;  // of_replace... sets the vehicle flags appropriately
-                        }
-                        return OK;
-                    }
-                    if (nRows > 2)  // There is more than one other vehicle
-                    {  // Check to see if one of the other vehicles we haven't processed yet 
-                        // is marked to be the new default.
-                        bool bTmpActive, bTmpDefault;
-                        nOtherVehicle = 0;
-                        for (int nRow = lRow + 1; nRow < nRows; nRow++)
-                        {
-                            bTmpDefault = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle;
-                            if (bTmpDefault)
-                            {
-                                bTmpActive = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus;
-                                if (!bTmpActive)  // Make sure this is a legitimate default candidate
-                                {
-                                    MessageBox.Show("An inactive vehicle may not be the contract's default vehicle.\n\n"
-                                                   , "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return FAILED;
-                                }
-
-                                nOtherVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
-                                break;
-                            }
-                        }
-                        if (nOtherVehicle > 0)  // We have found a vehicle marked as the default;
-                        {                        // do the deed
-                            // Change the contract's default vehicle in both the contract_vehical table
-                            // and in any route_frequencies the previous default vehicle was associated with
-                            // and mark the old vehicle "not active"
-                            sOtherVehName = RDSDataService.GetVehicleName(nOtherVehicle);
-                            sThisVehName = RDSDataService.GetVehicleName(nThisVehicle);
-                            int nReplaced = of_replace_contract_default_vehicle(nThisVehicle, sThisVehName
-                                                                       , nOtherVehicle, sOtherVehName);
-                            if (nReplaced < 0)   // Problem replacing the default vehicle
-                            {
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                                return FAILED;
-                            }
-                            else
-                                return OK;  // of_replace... sets the vehicle flags appropriately
-                        }
-                        // We didn't find a marked vehicle to replace this one with;
-                        // We'll ask the user to select one.
-
-                        DialogResult ans;
-                        nOtherVehicle = 0;
-
-                        bool bLoop = true, bKeepOld = false;
-                        // Put a loop around the select call so that, if the user's selected vehicle
-                        // is rejected, the user gets another try.
-                        while (bLoop)
-                        {
-                            bLoop = false;  // Assume we'll find something and exit the loop
-                            nOtherVehicle = of_select_vehicle("Select a vehicle to be made the default"
-                                                        , il_contract, il_sequence);
-                            if (nOtherVehicle < 0)  // Either something went wrong or the user cancelled
-                            {
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                                return FAILED;
-                            }
-                            if (nOtherVehicle == nDefaultVehicle)
-                            {
-                                sOtherVehName = RDSDataService.GetVehicleName(nOtherVehicle);
-                                ans = MessageBox.Show(sOtherVehName+" is aleady the default vehicle. " 
-                                                    + "Do you want to choose a different vehicle?"
-                                                    , "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                                if (ans == DialogResult.Cancel)
-                                {
-                                    idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                                    idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                                    return FAILED;
-                                }
-                                if (ans == DialogResult.No)
-                                {
-                                    bKeepOld = true;
-                                    break;
-                                }
-                                bLoop = true;  // Ans == Yes; continue through loop again
-                                nOtherVehicle = 0;
-                                continue;
-                            }
-                            /************************************************************************
-                             * At this point, the user has selected a vehicle, which isn't the 
-                             * current default vehicle.  Offer to make the selected vehicle the 
-                             * new default.  The user can reject the offer, in which case they 
-                             * will be asked to select another vehicle. 
-                             ************************************************************************/
-                            sThisVehName = RDSDataService.GetVehicleName(nThisVehicle);
-                            sOtherVehName = RDSDataService.GetVehicleName(nOtherVehicle);
-                            int nReplaced = of_replace_contract_default_vehicle(nThisVehicle, sThisVehName
-                                                                        , nOtherVehicle, sOtherVehName);
-                            if (nReplaced < 0)   // Problem replacing the default vehicle 
-                            {
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvDefaultVehicle = true;
-                                idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus = true;
-                                return FAILED;
-                            }
-                            if (nReplaced >= 0)
-                            {
-                                nDefaultVehicle = nOtherVehicle;
-                                of_set_vehicle_active_flag(nDefaultVehicle,true);
-                                of_set_vehicle_active_flag(nDefaultVehicle,true);
-                                bLoop = false;
-                                return OK;
-                            }
-                            bLoop = true;  // The user answered 'No' - go round the loop again
-                        } // End While() loop
-
-                        if (bKeepOld)
-                        {
-                            of_set_vehicle_active_flag(nDefaultVehicle,true);
-                            of_set_vehicle_active_flag(nDefaultVehicle,true);
-                            return OK;
-                        }
-                    }  // END if (nRows > 2)
-                }  // End if (ib_default_replaced) ELSE
-            }   // End if (bInitialDefault && !bThisDefault)
-
-            // We've survived so far ...  but things might have changed.
-            // Get this vehicle's status now.  If it has made it this far, it won't have been made 
-            // the default, and all we have to consider is its 'Active' state.
-
-            bThisActive    = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalStatus;
-            bInitialActive = idw_contract_vehicle.GetItem<ContractVehicle>(lRow).CvVehicalInitialStatus;
-
-            if( bThisActive )  // If the vehicle is marked 'Active' there's nothing more to do
-                return OK;
-
-            // If the Active flag was on but has been turned off ...
-            if (bInitialActive && !bThisActive)
-            {
-                // Need to remove any frequency vehicles for this vehicle
-                // Could ask what to replace them with, but will just replace
-                // with the default; the user advised to use the contract/freqyencies tab 
-                // to replace with a different vehicle.
-                int nReplaced = of_replace_frequency_vehicle( nThisVehicle, nDefaultVehicle );
-                if( nReplaced > 0 )
-                {
-                    sThisVehName = RDSDataService.GetVehicleName(nThisVehicle);
-                    sDefaultVehName = RDSDataService.GetVehicleName(nDefaultVehicle);
-
-                    MessageBox.Show(sThisVehName + " was replaced " + nReplaced.ToString()
-                                    + " times in the route frequencies \n" 
-                                    + "with the default vehicle ("+sDefaultVehName+").\n\n"
-                                    +"If you want to use a different vehicle for these routes, use the \n"
-                                    + "frequencies tab in the contracts window.");
-                }
-                return OK;
-            }
             return OK;
         }
 
@@ -2894,7 +2524,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     if (nReferences > 0)
                     {
                         // Tell the user to replace those references
-                        MessageBox.Show("Vehicle " + sThisVehicleName + " is associated ith " + nReferences.ToString() + " frequencies.\n\n"
+                        MessageBox.Show("Vehicle " + sThisVehicleName + " is associated with " + nReferences.ToString() + " frequencies.\n\n"
                                       + "Please replace these references with another vehicle before marking this vehicle inactive."
                                       , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
@@ -3106,57 +2736,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ib_new_veh_validated = false;
                 of_refresh_contract_vehicle();
-                nDefaultVehicle = of_get_default_vehicle(true);
-                //return FAILED;
             }
-/* Dropped the idea of a default vehicle
-            // TJB Frequencies & Vehicles 4-Feb-2021 - Added
-            // Over all vehicles, check that there is a default vehicle identified
-            // and that it is active
-            // Check that more than one vehicle hasn't been marked as a default vehicle
-
-            if (of_count_default_vehicles() > 1)
-            {
-                MessageBox.Show("There may only be one vehicle marked as the default."
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dw_contract_vehicle.DataObject.GetControlByName("cb_default").Focus();
-                ib_new_veh_validated = false;
-                return FAILED;
-            }
-
-            int? nTmpVehicle = of_get_default_vehicle(false);
-            if (nTmpVehicle == 0)
-            {
-                MessageBox.Show("There must be a default vehicle for this contract.\n\n"
-                               + "If you want to change the default vehicle, please mark \n"
-                               + "the vehicle you want as the new default."
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                dw_contract_vehicle.DataObject.GetControlByName("cb_default").Focus();
-                ib_new_veh_validated = false;
-                return FAILED;
-            }
-            //Check that the default Vehicle is marked Active
-            int nVehRow = of_get_vehicle_row(nTmpVehicle);
-            if (nVehRow < 0)  // This should never happen :-)
-            {
-                MessageBox.Show("Failed to find the row for vehicle " + nTmpVehicle.ToString()
-                              , "Error - dw_contract_vehicle_pfc_validation"
-                              , MessageBoxButtons.OK, MessageBoxIcon.Error);
-                ib_new_veh_validated = false;
-                return FAILED;
-            }
-
-            bool bTmpActive;
-            bTmpActive = idw_contract_vehicle.GetItem<ContractVehicle>(nVehRow).CvVehicalStatus;
-            if (!bTmpActive)
-            {
-                MessageBox.Show("The default vehicle must be active"
-                              , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                dw_contract_vehicle.DataObject.GetControlByName("cb_active").Focus();
-                ib_new_veh_validated = false;
-                return FAILED;
-            }
-*/
             // Passed validation
             ib_new_veh_validated = true;
             return 1;
@@ -3290,79 +2870,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return -1;
         }
 
-        public virtual int of_set_vehicle_default_flag(int? nVehicle, bool bNewValue)
-        {   // (the name says it all)
-            // Returns  0  OK
-            //         -1  Not found
-
-            // Scan the set of vehicles to find the one to update
-            int nRows = idw_contract_vehicle.RowCount;
-            for (int nRow = 0; nRow < idw_contract_vehicle.RowCount; nRow++)
-            {
-                if (nVehicle == idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber)
-                {
-                    idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle = bNewValue;
-                    return 0;
-                }
-            }
-            return -1;
-        }
-
-        public virtual int of_replace_contract_default_vehicle(int? nOldVehicle, string sOldVehicleName
-                                                      , int? nNewVehicle, string sNewVehicleName)
-        {
-            // Returns
-            //    The number of frequency vehicles replaced
-            //   -1     Error/Cancel
-
-            int result = 0;
-            ib_default_replaced = false;
-
-            // Confirm what we think we've been asked to do
-            //string sReplace = "Replace ";
-            //if (nOldVehicle == nDefaultVehicle)
-            //    sReplace = "Replace default vehicle ";
-
-            DialogResult ans;
-            ans = MessageBox.Show("Please confirm:\n\n"
-                                  + "Replace the current default vehicle ("+ sOldVehicleName + ")\n"
-                                  + "with this vehicle (" + sNewVehicleName + ").\n"
-                                  , "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (ans == DialogResult.No)
-                return FAILED;  // Not replaced, but not an error
-            if (ans == DialogResult.Cancel)
-                return FAILED;  // Cancelled
-
-            // Yes, we'll replace the vehicle.  Set the vehicles' active and default flags
-            // Leave the old vehicle's Active flag in whatever state the user set it to.
-
-            // Ensure the new vehicle's active flag is on
-            if( of_set_vehicle_active_flag(nNewVehicle, true) != 0)
-            {
-                MessageBox.Show("Vehicle "+sNewVehicleName+" active flag failed to turn on"
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return -1;  // Error
-            }
-            // Ensure the new vehicle's default flag is on
-            if (of_set_vehicle_default_flag(nNewVehicle, true) != 0)
-            {
-                MessageBox.Show("Vehicle " + sNewVehicleName + " default flag failed to turn on"
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return -1;  // Error
-            }
-            // Turn the old vehicle's Default flag off
-            if (of_set_vehicle_default_flag(nOldVehicle, false) != 0)
-            {
-                MessageBox.Show("Vehicle " + sOldVehicleName + " default flag failed to turn off"
-                               , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return -1;  // Error
-            }
-            // Check to see if any frequency-vehicle associations need to change (and do so)
-            int nReplaced = of_replace_frequency_vehicle(nOldVehicle, nNewVehicle);
-            ib_default_replaced = true;
-            return nReplaced;  // OK
-        }
-
         public virtual void dw_contract_vehicle_pfc_postupdate()
         {
             int? nThisFtKey = 0;
@@ -3388,29 +2895,34 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_rf_modified = false;
                 brf_updated = true;
 
-                // TJB Frequencies & Vehicles  7-Feb-2021: Added
+                // TJB Frequencies & Vehicles  17-Feb-2021: Added
                 // Tell WContract201 that we've updated the route_frequencies table
-                StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                RFUpdated.RfUpdated = true;
-                OnRFTableUpdated(RFUpdated);
-                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (1)");
+                Send_RFUpdatedMessage();
+                // TJB Frequencies & Vehicles  7-Feb-2021: Added
+                // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                // RFUpdated.RfUpdated = true;
+                // OnRFTableUpdated(RFUpdated);
+                // MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (1)");
             }
             // If the active flag has been successfully changed for one or more vehicles
             if (ibActiveChanged || ib_new_veh_added || brf_updated) 
             {   // Post the event to tell WContract Frequencies tab to refresh
                 // ... particularly its dropdown list of available vehicles
 
-                StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                RFUpdated.RfUpdated = true;
-                OnRFTableUpdated(RFUpdated);
-                //MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (2)");
+                // TJB Frequencies & Vehicles  17-Feb-2021: Added
+                // Tell WContract201 that we've updated the route_frequencies table
+                Send_RFUpdatedMessage();
+                // TJB Frequencies & Vehicles  7-Feb-2021: Added
+                // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                // RFUpdated.RfUpdated = true;
+                // OnRFTableUpdated(RFUpdated);
+                // MessageBox.Show("RFUpdated sent to WContract", "Debugging - dw_contract_vehicle_pfc_postupdate (2)");
 
                 ibActiveChanged = ib_new_veh_added = brf_updated = false;
             }
-            //GetLatestBenchmark and compare with previous
             // TJB  11-Feb-2021 Changed method of determining previous benchmark
             // - now get previous value from frequency_adjustments table
-            RDSDataService obj = RDSDataService.GetLatestBenchmark(il_contract, il_sequence);
+            RDSDataService obj = RDSDataService.GetPrevBench(il_contract);
             dcPrevVehBenchmark = (decimal)obj.decVal;
 
             dcThisVehBenchmark = wf_getVehBenchmark("dw_contract_vehicle_pfc_postupdate");
@@ -3462,17 +2974,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     if (idw_contract_vehicle.GetItem<ContractVehicle>(nRow).IsNew)
                         idw_contract_vehicle.GetItem<ContractVehicle>(nRow).MarkClean();
 
-                    // Save the current checkbox state as the now-initial values
-                    idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvInitialDefaultVehicle
-                         = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle;
                     idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalInitialStatus
                          = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus;
 
                     // Mark this record 'Clean' so these changes don't leave it marked 'Dirty'
                     idw_contract_vehicle.GetItem<ContractVehicle>(nRow).MarkClean();
-
-                    // Update the Default vehicle in case the user wants to make further changes
-                    nDefaultVehicle = of_get_default_vehicle(true);
                 }
             }
 
@@ -3485,7 +2991,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // We've saved the new vehicle; treat the vehicles as 'not new'
             //dw_contract_vehicle.GetControlByName("cb_default").Enabled = true;
             of_refresh_contract_vehicle();
-            nDefaultVehicle = of_get_default_vehicle(true);
 //            show_contract_vehicles("Reset/Refresh","dw_contract_vehicle_pfc_postupdate");
         }
 
@@ -3578,8 +3083,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             nRows = dw_contract_vehicle.RowCount;
             msg.AppendLine();
-            msg.AppendFormat("Current vehicles - {0} rows, default vehicle {1}"
-                               , nRows, nDefaultVehicle);
+            msg.AppendFormat("Current vehicles - {0} rows", nRows);
             msg.AppendLine();
             msg.AppendLine();
             for (i = 0; i < nRows; i++)
@@ -3588,12 +3092,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nSequence = (int)(idw_contract_vehicle.GetItem<ContractVehicle>(i).ContractSeqNumber ?? 0);
                 nVehicle = (int)(idw_contract_vehicle.GetItem<ContractVehicle>(i).VehicleNumber ?? 0);
                 bActive = idw_contract_vehicle.GetItem<ContractVehicle>(i).CvVehicalStatus;
-                bDefault = idw_contract_vehicle.GetItem<ContractVehicle>(i).CvDefaultVehicle;
                 bVehIsDirty = idw_contract_vehicle.GetItem<ContractVehicle>(i).IsDirty;
                 msg.AppendFormat(" Contract {0}/{1} ", nContract, nSequence);
                 msg.AppendFormat(" Vehicle {0} ", nVehicle);
                 msg.AppendFormat(" Active {0} ", bActive);
-                msg.AppendFormat(" Default {0} ", bDefault);
                 msg.AppendFormat(" IsDirty {0} ", bVehIsDirty);
                 msg.AppendLine();
             }
@@ -3659,8 +3161,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nSequence = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractSeqNumber;
                 // nVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
                 // TJB Frequencies & Vehicles 17-Jan-2021
-                // BenchMarkCalcVeh2005 obsolete
-                // Replaced with BenchMarkCalc2021
+                // BenchMarkCalcVeh2005 obsolete, replaced with BenchMarkCalc2021
                 //dcVehBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(nContract, nSequence, nVehicle
                 //                                                      , ref SQLCode, ref SQLErrText);
                 
@@ -3776,6 +3277,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     idw_contract_vehicle.DataObject.GetControlByName("st_title").Text = idw_renewal.GetItem<Renewal>(0).Contracttitle;
                 }
+                ll_row = idw_contract_vehicle.RowCount;
+                if (ll_row > 1)
+                {
+                    idw_contract_vehicle.SelectRow(1, true);
+                }
+                idw_contract_vehicle.SelectRow(0, true);
+                idw_contract_vehicle.Refresh();
+
                 idw_contract_vehicle.DataObject.GetControlByName("v_vehicle_registration_number").Focus();
                 // ist_maintenance.dwCurrent = idw_contract_vehicle
             }
@@ -3922,11 +3431,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ids_route_frequency.Save();
                     ib_rf_modified = false;
 
+                    // TJB Frequencies & Vehicles  17-Feb-2021: Added
+                    // Tell WContract201 that we've updated the route_frequencies table
+                    Send_RFUpdatedMessage();
                     // TJB Frequencies & Vehicles  7-Feb-2021: Added
-                    StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                    RFUpdated.RfUpdated = true;
-                    OnRFTableUpdated(RFUpdated);
-                    //MessageBox.Show("RFUpdated sent to WContract", "Debugging - tab_renewal_selectionchanging");
+                    // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+                    // RFUpdated.RfUpdated = true;
+                    // OnRFTableUpdated(RFUpdated);
+                    // MessageBox.Show("RFUpdated sent to WContract", "Debugging - tab_renewal_selectionchanging");
 
                 }
                 else
@@ -4200,7 +3712,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     // TJB  Frequencies & Vehicles  Jan 2021
                     // Default new vehicle status to Active
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvVehicalStatus = true;   // cv_vehical_status = 'A'
-                    dw_contract_vehicle.GetItem<ContractVehicle>(nRow).CvDefaultVehicle = false; // cv_default_vehicle = '1'
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractNo = il_contract;
                     dw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractSeqNumber = il_sequence; ;
                 }                
@@ -4286,33 +3797,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             base.FormBase_FormClosing(sender, e);
             pfc_preclose();
         }
-/*
-        // TJB  Frequencies & Vehicles  13-Jan-2021: Added
-        // Catch the event thrown by WContract2001 when it has updated the 
-        // route_frequency table, and remember the result.
-        // See WContract2001.cs and StatusUpdatedEventArgs.cs
-        bool IsRFUpdated = false;
 
-        public void dw_contract_vehicle_ContractRFUpdated(object sender, ContractRFUpdatedEventArgs e)
+        public void Send_RFUpdatedMessage()
         {
-            bool? _IsRFUpdated = false;
-            if (e != null && e.RfUpdated != null)
-                _IsRFUpdated = e.RfUpdated;
+            // TJB Frequencies & Vehicles  7-Feb-2021: Added
+            StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+            RFUpdated.RfUpdated = true;
+            OnRFTableUpdated(RFUpdated);
+            //MessageBox.Show("RFUpdated sent to WContract", "Debugging - Send_RFUpdatedMessage");
 
-            IsRFUpdated = (_IsRFUpdated == null) ? false : (bool)_IsRFUpdated;
-
-            //MessageBox.Show("Received message from WContract\n\n"
-            //              + "IsRFUpdated = " + IsRFUpdated.ToString()
-            //              , "Debugging - WRenewal2001.lw_ContractRFTableUpdated");
-
-            if (IsRFUpdated)
-            {
-                int nRows = of_refresh_route_frequencies();
-                int t = nRows;
-                IsRFUpdated = false;
-            }
         }
-*/
+
         // TJB  Frequencies & Vehicles 7-Feb-2021: New
         // User event used to "tell" the WContract2001 form that this form (WRenewal2001) 
         // has updated the route_frequency table.  The Frequencies tab in the WContract2001
@@ -4326,13 +3821,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (RenewalRFTableUpdated != null)
                 RenewalRFTableUpdated(this, e);
         }
-
-        public void dw_contract_vehicle_CheckedChanged(object sender, EventArgs e)
-        {
-            MessageBox.Show("dw_contract_vehicle_CheckedChanged is not implemented."
-                            , "WRenewal2001");
-        }
-
         #endregion  // Events
     }
 }
