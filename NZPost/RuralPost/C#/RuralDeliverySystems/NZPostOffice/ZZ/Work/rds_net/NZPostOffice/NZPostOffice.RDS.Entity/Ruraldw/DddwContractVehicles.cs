@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Frequencies & Vehicles 16-Feb-2021
+    // Dropped default_vehicle
+    //
     // TJB Frequencies & Vehicles Dec-2020 NEW
     // Data for Frequencies tab's vehicle dropdown list
     // (originally used DddwContractorVehicles)
@@ -18,7 +21,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("vehicle_number", "_vehicle_number", "contract_vehical")]
     [MapInfo("vehicle_name", "_vehicle_name", "contract_vehical")]
     [MapInfo("cv_vehicle_status", "_vehicle_status", "contract_vehical")]
-    [MapInfo("default_vehicle", "_default_vehicle", "contract_vehical")]
     [System.Serializable()]
 
     public class DddwContractVehicles : Entity<DddwContractVehicles>
@@ -32,9 +34,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _vehicle_status;
-
-        [DBField()]
-        private int _default_vehicle;
 
 
         public virtual int VehicleNumber
@@ -91,24 +90,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int DefaultVehicle
-        {
-            get
-            {
-                CanReadProperty("DefaultVehicle", true);
-                return _default_vehicle;
-            }
-            set
-            {
-                CanWriteProperty("DefaultVehicle", true);
-                if (_default_vehicle != value)
-                {
-                    _default_vehicle = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
         protected override object GetIdValue()
 		{
             return _vehicle_number ;
@@ -149,7 +130,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._vehicle_number = GetValueFromReader<int>(dr,0);
                             instance._vehicle_name = GetValueFromReader<String>(dr, 1);
                             instance._vehicle_status = GetValueFromReader<String>(dr, 2);
-                            instance._default_vehicle = GetValueFromReader<int>(dr, 3);
                             instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
