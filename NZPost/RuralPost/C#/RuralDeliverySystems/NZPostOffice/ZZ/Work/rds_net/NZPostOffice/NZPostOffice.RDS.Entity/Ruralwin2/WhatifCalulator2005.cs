@@ -2261,6 +2261,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
+                    //cm.CommandText = "rd.sp_GetWhatIfCalc2005";
                     cm.CommandText = "rd.sp_GetWhatIfCalc2021";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContract", inContract);
@@ -2271,104 +2272,112 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
 
                     List<WhatifCalulator2005> _list = new List<WhatifCalulator2005>();
 
-                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    try
                     {
-                        while (dr.Read())
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
-                            WhatifCalulator2005 instance = new WhatifCalulator2005();
-                            instance._contract_no = GetValueFromReader<int?>(dr, 0);
-                            instance._contract_seq_number = GetValueFromReader<int?>(dr, 1);
-                            instance._con_title = GetValueFromReader<string>(dr, 2);
-                            instance._nominalvehical = GetValueFromReader<decimal?>(dr, 3);
-                            instance._delwagerate = GetValueFromReader<decimal?>(dr, 4);
-                            instance._repairsmaint = GetValueFromReader<decimal?>(dr, 5);
-                            instance._tyrestubes = GetValueFromReader<decimal?>(dr, 6);
-                            instance._vehicalallow = GetValueFromReader<decimal?>(dr, 7);
-                            instance._vehicalinsure = GetValueFromReader<decimal?>(dr, 8);
-                            instance._publiclia = GetValueFromReader<decimal?>(dr, 9);
-                            instance._carrierrisk = GetValueFromReader<decimal?>(dr, 10);
-                            instance._accrate = GetValueFromReader<decimal?>(dr, 11);
-                            instance._licence = GetValueFromReader<decimal?>(dr, 12);
-                            instance._rateofreturn = GetValueFromReader<decimal?>(dr, 13);
-                            instance._salvageratio = GetValueFromReader<decimal?>(dr, 14);
-                            instance._itemshour = GetValueFromReader<decimal?>(dr, 15);
-                            instance._fuel = GetValueFromReader<decimal?>(dr, 16);
-                            instance._consumption = GetValueFromReader<decimal?>(dr, 17);
-                            instance._routedistance = GetValueFromReader<decimal?>(dr, 18);
-                            instance._deliveryhours = GetValueFromReader<decimal?>(dr, 19);
-                            instance._processinghours = GetValueFromReader<decimal?>(dr, 20);
-                            instance._volume = GetValueFromReader<decimal?>(dr, 21);
-                            instance._deliverydays = GetValueFromReader<decimal?>(dr, 22);
-                            instance._maxdeliverydays = GetValueFromReader<decimal?>(dr, 23);
-                            instance._numberboxholders = GetValueFromReader<int?>(dr, 24);
-                            instance._routedistanceperday = GetValueFromReader<int?>(dr, 25);
-                            instance._vehicledepreciation = GetValueFromReader<decimal?>(dr, 26);
-                            instance._fuelcostperannum = GetValueFromReader<decimal?>(dr, 27);
-                            instance._repairsperannum = GetValueFromReader<decimal?>(dr, 28);
-                            instance._tyrestubesperannum = GetValueFromReader<decimal?>(dr, 29);
-                            instance._deliverycost = GetValueFromReader<decimal?>(dr, 30);
-                            instance._processingcost = GetValueFromReader<decimal?>(dr, 31);
-                            instance._publicliabilitycost = GetValueFromReader<int?>(dr, 32);
-                            instance._accperannum = GetValueFromReader<decimal?>(dr, 33);
-                            instance._vehicleinsurance = GetValueFromReader<int?>(dr, 34);
-                            instance._licensing = GetValueFromReader<decimal?>(dr, 35);
-                            instance._carrierriskrate = GetValueFromReader<int?>(dr, 36);
-                            instance._benchmark = GetValueFromReader<int?>(dr, 37);
-                            instance._rateofreturn_1 = GetValueFromReader<decimal?>(dr, 38);
-                            instance._finalbenchmark = GetValueFromReader<int?>(dr, 39);
-                            instance._retainedallowances = GetValueFromReader<decimal?>(dr, 40);
-                            instance._currentpayment = GetValueFromReader<decimal?>(dr, 41);
-                            instance._sf_key = GetValueFromReader<int?>(dr, 42);
-                            instance._rf_distance = GetValueFromReader<decimal?>(dr, 43);
-                            instance._rf_deliverydays = GetValueFromReader<string>(dr, 44);
-                            instance._rf_daysyear = GetValueFromReader<int?>(dr, 45);
-                            instance._rf_daysweek = GetValueFromReader<int?>(dr, 46);
-                            instance._itemspercust = GetValueFromReader<decimal?>(dr, 47);
-                            instance._rf_active = GetValueFromReader<string>(dr, 48);
-                            instance._firstrow = GetValueFromReader<string>(dr, 49);
-                            instance._currentbenchmark = GetValueFromReader<decimal?>(dr, 50);
-                            instance._accounting = GetValueFromReader<decimal?>(dr, 51);
-                            instance._telephone = GetValueFromReader<decimal?>(dr, 52);
-                            instance._sundries = GetValueFromReader<decimal?>(dr, 53);
-                            instance._ruc = GetValueFromReader<decimal?>(dr, 54);
-                            instance._rrrate_nomvehicle = GetValueFromReader<decimal?>(dr, 55);
-                            instance._rrrate_del_wage = GetValueFromReader<decimal?>(dr, 56);
-                            instance._rrrate_repairsmaint = GetValueFromReader<decimal?>(dr, 57);
-                            instance._rrrate_tyretubes = GetValueFromReader<decimal?>(dr, 58);
-                            instance._rrrate_vehallow = GetValueFromReader<decimal?>(dr, 59);
-                            instance._rrrate_vehinsurance = GetValueFromReader<decimal?>(dr, 60);
-                            instance._rrrate_publiclia = GetValueFromReader<decimal?>(dr, 61);
-                            instance._rrrate_carrierrisk = GetValueFromReader<decimal?>(dr, 62);
-                            instance._rrrate_acc = GetValueFromReader<decimal?>(dr, 63);
-                            instance._rrrate_license = GetValueFromReader<decimal?>(dr, 64);
-                            instance._rrrate_vehrateofreturn = GetValueFromReader<decimal?>(dr, 65);
-                            instance._rrrate_salvageratio = GetValueFromReader<decimal?>(dr, 66);
-                            instance._rrrate_itemprocrate = GetValueFromReader<decimal?>(dr, 67);
-                            instance._rrrate_ruc = GetValueFromReader<decimal?>(dr, 68);
-                            instance._rrrate_accounting = GetValueFromReader<decimal?>(dr, 69);
-                            instance._rrrate_telephone = GetValueFromReader<decimal?>(dr, 70);
-                            instance._rrrate_sundries = GetValueFromReader<decimal?>(dr, 71);
-                            instance._rrrate_sundriesk = GetValueFromReader<decimal?>(dr, 72);
-                            instance._sundriesk = GetValueFromReader<decimal?>(dr, 73);
-                            instance._nmultiplier = GetValueFromReader<int?>(dr, 74);
-                            instance._ninsurancepct = GetValueFromReader<decimal?>(dr, 75);
-                            instance._nlivery = GetValueFromReader<decimal?>(dr, 76);
-                            instance._nuniform = GetValueFromReader<decimal?>(dr, 77);
-                            instance._naccamount = GetValueFromReader<decimal?>(dr, 78);
-                            instance._nvtkey = GetValueFromReader<int?>(dr, 79);
-                            instance._reliefcost = GetValueFromReader<decimal?>(dr, 80);
-                            instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
-                            instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
-                            instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
-                            // TJB Aug-2013 Hack
-                            // Trying to get ReliefWeeks into WhatifReport
-                            // Try using _rrrate_itemprocrate (appears unused)
-                            instance._rrrate_itemprocrate = instance._relief_weeks;
-                            instance.MarkOld();
-                            instance.StoreInitialValues();
-                            _list.Add(instance);
+                            while (dr.Read())
+                            {
+                                WhatifCalulator2005 instance = new WhatifCalulator2005();
+                                instance._contract_no = GetValueFromReader<int?>(dr, 0);
+                                instance._contract_seq_number = GetValueFromReader<int?>(dr, 1);
+                                instance._con_title = GetValueFromReader<string>(dr, 2);
+                                instance._nominalvehical = GetValueFromReader<decimal?>(dr, 3);
+                                instance._delwagerate = GetValueFromReader<decimal?>(dr, 4);
+                                instance._repairsmaint = GetValueFromReader<decimal?>(dr, 5);
+                                instance._tyrestubes = GetValueFromReader<decimal?>(dr, 6);
+                                instance._vehicalallow = GetValueFromReader<decimal?>(dr, 7);
+                                instance._vehicalinsure = GetValueFromReader<decimal?>(dr, 8);
+                                instance._publiclia = GetValueFromReader<decimal?>(dr, 9);
+                                instance._carrierrisk = GetValueFromReader<decimal?>(dr, 10);
+                                instance._accrate = GetValueFromReader<decimal?>(dr, 11);
+                                instance._licence = GetValueFromReader<decimal?>(dr, 12);
+                                instance._rateofreturn = GetValueFromReader<decimal?>(dr, 13);
+                                instance._salvageratio = GetValueFromReader<decimal?>(dr, 14);
+                                instance._itemshour = GetValueFromReader<decimal?>(dr, 15);
+                                instance._fuel = GetValueFromReader<decimal?>(dr, 16);
+                                instance._consumption = GetValueFromReader<decimal?>(dr, 17);
+                                instance._routedistance = GetValueFromReader<decimal?>(dr, 18);
+                                instance._deliveryhours = GetValueFromReader<decimal?>(dr, 19);
+                                instance._processinghours = GetValueFromReader<decimal?>(dr, 20);
+                                instance._volume = GetValueFromReader<decimal?>(dr, 21);
+                                instance._deliverydays = GetValueFromReader<decimal?>(dr, 22);
+                                instance._maxdeliverydays = GetValueFromReader<decimal?>(dr, 23);
+                                instance._numberboxholders = GetValueFromReader<int?>(dr, 24);
+                                instance._routedistanceperday = GetValueFromReader<int?>(dr, 25);
+                                instance._vehicledepreciation = GetValueFromReader<decimal?>(dr, 26);
+                                instance._fuelcostperannum = GetValueFromReader<decimal?>(dr, 27);
+                                instance._repairsperannum = GetValueFromReader<decimal?>(dr, 28);
+                                instance._tyrestubesperannum = GetValueFromReader<decimal?>(dr, 29);
+                                instance._deliverycost = GetValueFromReader<decimal?>(dr, 30);
+                                instance._processingcost = GetValueFromReader<decimal?>(dr, 31);
+                                instance._publicliabilitycost = GetValueFromReader<int?>(dr, 32);
+                                instance._accperannum = GetValueFromReader<decimal?>(dr, 33);
+                                instance._vehicleinsurance = GetValueFromReader<int?>(dr, 34);
+                                instance._licensing = GetValueFromReader<decimal?>(dr, 35);
+                                instance._carrierriskrate = GetValueFromReader<int?>(dr, 36);
+                                instance._benchmark = GetValueFromReader<int?>(dr, 37);
+                                instance._rateofreturn_1 = GetValueFromReader<decimal?>(dr, 38);
+                                instance._finalbenchmark = GetValueFromReader<int?>(dr, 39);
+                                instance._retainedallowances = GetValueFromReader<decimal?>(dr, 40);
+                                instance._currentpayment = GetValueFromReader<decimal?>(dr, 41);
+                                instance._sf_key = GetValueFromReader<int?>(dr, 42);
+                                instance._rf_distance = GetValueFromReader<decimal?>(dr, 43);
+                                instance._rf_deliverydays = GetValueFromReader<string>(dr, 44);
+                                instance._rf_daysyear = GetValueFromReader<int?>(dr, 45);
+                                instance._rf_daysweek = GetValueFromReader<int?>(dr, 46);
+                                instance._itemspercust = GetValueFromReader<decimal?>(dr, 47);
+                                instance._rf_active = GetValueFromReader<string>(dr, 48);
+                                instance._firstrow = GetValueFromReader<string>(dr, 49);
+                                instance._currentbenchmark = GetValueFromReader<decimal?>(dr, 50);
+                                instance._accounting = GetValueFromReader<decimal?>(dr, 51);
+                                instance._telephone = GetValueFromReader<decimal?>(dr, 52);
+                                instance._sundries = GetValueFromReader<decimal?>(dr, 53);
+                                instance._ruc = GetValueFromReader<decimal?>(dr, 54);
+                                instance._rrrate_nomvehicle = GetValueFromReader<decimal?>(dr, 55);
+                                instance._rrrate_del_wage = GetValueFromReader<decimal?>(dr, 56);
+                                instance._rrrate_repairsmaint = GetValueFromReader<decimal?>(dr, 57);
+                                instance._rrrate_tyretubes = GetValueFromReader<decimal?>(dr, 58);
+                                instance._rrrate_vehallow = GetValueFromReader<decimal?>(dr, 59);
+                                instance._rrrate_vehinsurance = GetValueFromReader<decimal?>(dr, 60);
+                                instance._rrrate_publiclia = GetValueFromReader<decimal?>(dr, 61);
+                                instance._rrrate_carrierrisk = GetValueFromReader<decimal?>(dr, 62);
+                                instance._rrrate_acc = GetValueFromReader<decimal?>(dr, 63);
+                                instance._rrrate_license = GetValueFromReader<decimal?>(dr, 64);
+                                instance._rrrate_vehrateofreturn = GetValueFromReader<decimal?>(dr, 65);
+                                instance._rrrate_salvageratio = GetValueFromReader<decimal?>(dr, 66);
+                                instance._rrrate_itemprocrate = GetValueFromReader<decimal?>(dr, 67);
+                                instance._rrrate_ruc = GetValueFromReader<decimal?>(dr, 68);
+                                instance._rrrate_accounting = GetValueFromReader<decimal?>(dr, 69);
+                                instance._rrrate_telephone = GetValueFromReader<decimal?>(dr, 70);
+                                instance._rrrate_sundries = GetValueFromReader<decimal?>(dr, 71);
+                                instance._rrrate_sundriesk = GetValueFromReader<decimal?>(dr, 72);
+                                instance._sundriesk = GetValueFromReader<decimal?>(dr, 73);
+                                instance._nmultiplier = GetValueFromReader<int?>(dr, 74);
+                                instance._ninsurancepct = GetValueFromReader<decimal?>(dr, 75);
+                                instance._nlivery = GetValueFromReader<decimal?>(dr, 76);
+                                instance._nuniform = GetValueFromReader<decimal?>(dr, 77);
+                                instance._naccamount = GetValueFromReader<decimal?>(dr, 78);
+                                instance._nvtkey = GetValueFromReader<int?>(dr, 79);
+                                instance._reliefcost = GetValueFromReader<decimal?>(dr, 80);
+                                instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
+                                instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
+                                instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
+                                // TJB Aug-2013 Hack
+                                // Trying to get ReliefWeeks into WhatifReport
+                                // Try using _rrrate_itemprocrate (appears unused)
+                                instance._rrrate_itemprocrate = instance._relief_weeks;
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
                         }
-                        list = _list.ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        sqlCode = -1;
+                        sqlErrText = e.Message;
                     }
                 }
             }
