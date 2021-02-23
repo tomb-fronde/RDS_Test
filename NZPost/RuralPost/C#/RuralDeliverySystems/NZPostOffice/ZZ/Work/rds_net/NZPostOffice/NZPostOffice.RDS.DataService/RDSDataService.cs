@@ -11,11 +11,9 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // TJB Frequencies and Vehicles Jan/Feb-2021
-    // Added GetLatestBenchmark
-    //       GetBenchmarkCalc2021
+    // Added GetBenchmarkCalc2021
     //       GetVehicleName
-    // TJB Frequencies and Vehicles Jan-2021
-    // Added CheckVehicleOwnership 
+    //       CheckVehicleOwnership 
     // (Jan2021) Updated function to f_CheckVehicleOwnership
     //
     // TJB  RPCR_140  June-2019
@@ -840,14 +838,6 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService GetVehicleLifeCode(int? il_contract, int? il_sequence, int? inVehicleNo)
         {
             RDSDataService obj = Execute("_GetVehicleLifeCode", il_contract, il_sequence, inVehicleNo);
-            return obj;
-        }
-
-        // TJB  Frequencies & Vehicles  11-Feb-2021
-        // Get the most-recent benchmark recorded in the frequency_adjustments table
-        public static RDSDataService GetLatestBenchmark(int? il_contract, int? il_sequence)
-        {
-            RDSDataService obj = Execute("_GetLatestBenchmark", il_contract, il_sequence);
             return obj;
         }
 
@@ -5121,7 +5111,8 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "SELECT rd.get_prev_bench(@li_contract) FROM sys.dummy";
+                    //cm.CommandText = "SELECT rd.get_prev_bench(@li_contract) FROM sys.dummy";
+                    cm.CommandText = "SELECT rd.get_prev_bench(@li_contract)";
                     pList.Add(cm, "li_contract", li_contract);
 
                     try
@@ -6492,48 +6483,6 @@ namespace NZPostOffice.RDS.DataService
                             if (dr.Read())
                             {
                                 intVal = dr.GetInt32(0);
-                            }
-                            _sqlcode = 0;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _sqlcode = -1;
-                        _sqlerrtext = ex.Message;
-                    }
-                }
-            }
-        }
-
-        // TJB  Frequencies & Vehicles  11-Feb-2021
-        // Get the most-recent benchmark recorded in the frequency_adjustments table
-        [ServerMethod]
-        private void _GetLatestBenchmark(int? il_contract, int? il_sequence)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    int sequence = 0;
-                    ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText =
-                              "select fa1.fd_bm_after_extn from frequency_adjustments fa1 "
-                            + " where fa1.contract_no = 5000 "
-                            + "   and fa1.contract_seq_number = 24 "
-                            + "   and fa1.fd_unique_seq_number = "
-                            + "              (select max(fa2.fd_unique_seq_number) from frequency_adjustments fa2 "
-                            + "                where fa2.contract_no = fa1.contract_no "
-                            + "                  and fa2.contract_seq_number = fa1.contract_seq_number) ";
-                    pList.Add(cm, "il_contract", il_contract);
-                    pList.Add(cm, "il_sequence", il_sequence);
-
-                    try
-                    {
-                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                        {
-                            if (dr.Read())
-                            {
-                                decVal = dr.GetDecimal(0);
                             }
                             _sqlcode = 0;
                         }
