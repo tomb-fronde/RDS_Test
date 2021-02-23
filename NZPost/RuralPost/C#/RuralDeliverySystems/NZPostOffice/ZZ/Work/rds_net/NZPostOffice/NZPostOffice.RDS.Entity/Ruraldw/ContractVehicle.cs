@@ -8,9 +8,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Frequencies & Vehicles  15-Feb-2021
+    // Removed references to default vehicle (removed from design)
+    // Changed sort order - put active vehicles (status = 'A') first
+    //
     // TJB  Frequencies & Vehicles  16-Jan-2021
     // Changed type of CvVehicalStatus to bool (was string)
-    // Added contract_vehical.default_vehicle, and CvDefaultVehicle as bool
     // Changed sort order - put default vehicle first
     //
     // TJB  RPCR_001  July-2010
@@ -26,7 +29,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("start_kms", "_start_kms", "contract_vehical")]
     [MapInfo("vehicle_allowance_paid_to_date", "_vehicle_allowance_paid_", "contract_vehical")]
     [MapInfo("cv_vehical_status", "_cv_vehical_status", "contract_vehical")]
-    [MapInfo("default_vehicle", "_cv_default_vehicle", "contract_vehical")]
     [MapInfo("vt_key", "_vt_key", "vehicle")]
     [MapInfo("ft_key", "_ft_key", "vehicle")]
     [MapInfo("v_vehicle_make", "_v_vehicle_make", "vehicle")]
@@ -106,10 +108,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         [DBField()]
         private string _cv_vehical_status="N";
 
-        // TJB  Frequencies & Vehicles  Jan-2021: Added
-        [DBField()]
-        private int? _cv_default_vehicle = 0;
-
         [DBField()]
         private int? _v_vehicle_month;
 
@@ -144,7 +142,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private decimal? _v_vehicle_consumption_rate;
 
         private string _cv_vehical_initial_status = "N";
-        private int? _cv_initial_default_vehicle = 0;
 
         
         //-------------------------------------------------------------------------
@@ -694,49 +691,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        // TJB  Frequencies & Vehicles  28-Jan-2021: Added
-        public virtual bool CvDefaultVehicle
-        {
-            get
-            {
-                CanReadProperty("CvDefaultVehicle", true);
-
-                return (_cv_default_vehicle == null ? 0 : _cv_default_vehicle) == 1;
-            }
-            set
-            {
-                CanWriteProperty("CvDefaultVehicle", true);
-                int new_value = (value ? 1 : 0);
-                if (_cv_default_vehicle != new_value)
-                {
-                    _cv_default_vehicle = new_value;
-                    PropertyHasChanged("_cv_default_vehicle");
-                }
-            }
-        }
-
-        // These two let me determine if the checkbox changes 
-        public virtual bool CvInitialDefaultVehicle
-        {
-            get
-            {
-                int? old_value = _cv_initial_default_vehicle ?? 0;
-                CanReadProperty("CvInitialDefaultVehicle", true);
-                return (old_value == 1);
-            }
-            set
-            {
-                CanWriteProperty("CvInitialDefaultVehicle", true);
-                int new_value = (value ? 1 : 0);
-                if (_cv_initial_default_vehicle != new_value)
-                {
-                    _cv_initial_default_vehicle = new_value;
-                    PropertyHasChanged("_cv_initial_default_vehicle");
-                }
-            }
-        }
-
-        public virtual bool CvVehicalInitialStatus
+        public virtual bool CvVehicalInitialStatus   // manipulated via cb_active checkbox
         {
             get
             {
@@ -789,41 +744,41 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     pList.Add(cm, "contract_no", contract_no);
                     pList.Add(cm, "contract_seq_number", contract_seq_number);
                     cm.CommandText = "SELECT " + 
-                                "contract_vehical.vehicle_number, " +
-                                "contract_vehical.contract_no, " +
-                                "contract_vehical.contract_seq_number, " +
-                                "contract_vehical.start_kms, " +
-                                "contract_vehical.vehicle_allowance_paid_to_date, " +
-                                "vehicle.vt_key, " +
-                                "vehicle.ft_key, " +
-                                "vehicle.v_vehicle_make, " +
-                                "vehicle.v_vehicle_model, " +
-                                "vehicle.v_vehicle_registration_number, " +
-                                "vehicle.v_vehicle_year, " +
-                                "vehicle.v_vehicle_cc_rating, " +
-                                "vehicle.v_road_user_charges_indicator, " +
-                                "vehicle.v_purchased_date, " +
-                                "vehicle.v_purchase_value, " +
-                                "vehicle.v_leased, " +
-                                "contract_vehical.cv_vehical_status, " +
-                                "vehicle.v_vehicle_month, " +
-                                "vehicle.v_vehicle_transmission, " +
-                                "vehicle.v_remaining_economic_life, " +
-                                "vehicle.vs_key, " +
-                                "contract_vehical.signage_compliant, " +
-                                "vehicle.v_vehicle_speedo_kms, " +
-                                "vehicle.v_vehicle_speedo_date, " +
-                                "vehicle.v_salvage_value, " +
-                                "vehicle.v_vehicle_safety, " +
-                                "vehicle.v_vehicle_emissions, " +
-                                "vehicle.v_vehicle_consumption_rate, " +
-                                "contract_vehical.default_vehicle " +
-                         "  FROM contract_vehical, vehicle " +
+                                "contract_vehical.vehicle_number " +
+                                ",contract_vehical.contract_no " +
+                                ",contract_vehical.contract_seq_number " +
+                                ",contract_vehical.start_kms " +
+                                ",contract_vehical.vehicle_allowance_paid_to_date " +
+                                ",vehicle.vt_key " +
+                                ",vehicle.ft_key " +
+                                ",vehicle.v_vehicle_make " +
+                                ",vehicle.v_vehicle_model " +
+                                ",vehicle.v_vehicle_registration_number " +
+                                ",vehicle.v_vehicle_year " +
+                                ",vehicle.v_vehicle_cc_rating " +
+                                ",vehicle.v_road_user_charges_indicator " +
+                                ",vehicle.v_purchased_date " +
+                                ",vehicle.v_purchase_value " +
+                                ",vehicle.v_leased " +
+                                ",contract_vehical.cv_vehical_status " +
+                                ",vehicle.v_vehicle_month " +
+                                ",vehicle.v_vehicle_transmission " +
+                                ",vehicle.v_remaining_economic_life " +
+                                ",vehicle.vs_key " +
+                                ",contract_vehical.signage_compliant " +
+                                ",vehicle.v_vehicle_speedo_kms " +
+                                ",vehicle.v_vehicle_speedo_date " +
+                                ",vehicle.v_salvage_value " +
+                                ",vehicle.v_vehicle_safety " +
+                                ",vehicle.v_vehicle_emissions " +
+                                ",vehicle.v_vehicle_consumption_rate " +
+                         "  FROM contract_vehical " + 
+                         "     , vehicle " +
                          " WHERE contract_vehical.vehicle_number = vehicle.vehicle_number " +
                          "   AND contract_vehical.contract_no = @contract_no " +
                          "   AND contract_vehical.contract_seq_number = @contract_seq_number " +
-                         " ORDER BY contract_vehical.default_vehicle desc" + 
-                         "         ,vehicle.v_purchased_date DESC ";
+                         " ORDER BY contract_vehical.cv_vehical_status" +
+                         "        , contract_vehical.vehicle_number";
 
                     List<ContractVehicle> _list = new List<ContractVehicle>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -867,9 +822,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
                             // TJB  Frequencies & Vehicles  Jan-2021: Added
                             instance._cv_vehical_initial_status = instance._cv_vehical_status;
-                            val = GetValueFromReader<Int32?>(dr, 28);
-                            instance._cv_default_vehicle = (val == null ? 0 : val);
-                            instance._cv_initial_default_vehicle = instance._cv_default_vehicle;
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
