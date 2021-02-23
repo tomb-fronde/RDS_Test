@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Frequencies and Vehicles 17-Feb-2021
+    // Removed references to default_vehicle
+    //
     // TJB Frequencies and Vehicles Jan-2021
     // Return a list of a contract's active vehicles
 
@@ -17,7 +20,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("vehicle_number", "_vehicle_number", "contract_vehical")]
     [MapInfo("vehicle_name", "_vehicle_name", "contract_vehical")]
     [MapInfo("cv_vehicle_status", "_vehicle_status", "contract_vehical")]
-    [MapInfo("default_vehicle", "_default_vehicle", "contract_vehical")]
     [System.Serializable()]
 
     public class SelectContractVehicle : Entity<SelectContractVehicle>
@@ -31,9 +33,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private string _vehicle_status;
-
-        [DBField()]
-        private int _default_vehicle;
 
 
         public virtual int VehicleNumber
@@ -90,24 +89,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int DefaultVehicle
-        {
-            get
-            {
-                CanReadProperty("DefaultVehicle", true);
-                return _default_vehicle;
-            }
-            set
-            {
-                CanWriteProperty("DefaultVehicle", true);
-                if (_default_vehicle != value)
-                {
-                    _default_vehicle = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
         protected override object GetIdValue()
 		{
             return _vehicle_number ;
@@ -138,12 +119,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandText = "  select cv.vehicle_number "
                                    + "       , rd.f_VehicleName( cv.vehicle_number) "
                                    + "       , cv.cv_vehical_status"
-                                   + "       , cv.default_vehicle"
                                    + "    from contract_vehical cv "
                                    + "   where cv.contract_no = @inContractNo "
                                    + "     and cv.contract_seq_number = @InConSeqNo "
                                    + "     and cv.cv_vehical_status = 'A' "
-                                   + "   order by cv.default_vehicle desc, 2";
+                                   + "   order by cv.vehicle_number";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "@InContractNo", in_Contract);
                     pList.Add(cm, "@InConSeqNo",   in_Sequence);
@@ -157,7 +137,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._vehicle_number = GetValueFromReader<int>(dr,0);
                             instance._vehicle_name = GetValueFromReader<String>(dr, 1);
                             instance._vehicle_status = GetValueFromReader<String>(dr, 2);
-                            instance._default_vehicle = GetValueFromReader<int>(dr, 3);
                             instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
