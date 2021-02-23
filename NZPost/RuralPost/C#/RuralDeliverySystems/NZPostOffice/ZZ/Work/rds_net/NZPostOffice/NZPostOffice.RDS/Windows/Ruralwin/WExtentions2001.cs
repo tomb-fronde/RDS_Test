@@ -13,6 +13,9 @@ using NZPostOffice.RDS.Windows.Ruralwin2;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies & Vehicles 15-Feb-2021
+    // Changed BenchmarkCalc2005 to BenchmarkCalc2021
+    //
     // TJB  Mar-2016
     // Changed window to allow resizing (to see BM more easily)
     //
@@ -383,9 +386,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                  *      fd_adjustment_amount, fd_paid_to_date, fd_bm_after_extn,   
                  *      fd_confirmed, fd_amount_to_pay, fd_effective_date, sf_key, rf_delivery_days)  
                  *  VALUES 
-                 *     (:lContract, :lSequence, :lNextSeq, :dBenchmark, null, BenchmarkCalc2005(:lContract, :lSequence),
+                 *     (:lContract, :lSequence, :lNextSeq, :dBenchmark, null, BenchmarkCalc2005(:lSequence, :lContract),
                  *      'N', :dAmountToPay, :dEffectiveDate, :lSFKey, :sDeliveryDays)  ; */
-                dataService = RDSDataService.InsertFreqAdjustments(dBenchmark, lNextSeq, dEffectiveDate, lSequence, lSFKey, sDeliveryDays, dAmountToPay, lContract);
+                dataService = RDSDataService.InsertFreqAdjustments(dBenchmark, lNextSeq, dEffectiveDate, lSequence
+                                                                 , lSFKey, sDeliveryDays, dAmountToPay, lContract);
                 if (dataService.SQLCode == -(1))
                 {
                     MessageBox.Show("Inserting into frequency_adjustments\n\n" 
@@ -446,14 +450,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             RDSDataService dataService = RDSDataService.GetPrevBench(li_contract);
             ld_prev = dataService.decVal;
 
-            // select max(contract_seq_number) into :li_seq from contract_renewals where contract_no = :li_contract;
             dataService = RDSDataService.GetMaxContractRenewals(li_contract);
             li_seq = dataService.intVal;
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
 
-            // SELECT BenchmarkCalc2005 ( :li_contract, :li_seq) INTO :ld_new FROM sys.dummy;
-            dataService = RDSDataService.GetBenchmarkCalc2005(li_seq, li_contract);
+            // TJB Frequencies & Vehicles 15-Feb-2021
+            // Changed BenchmarkCalc2005 to BenchmarkCalc2021 (note changed order of parameters)
+            //dataService = RDSDataService.GetBenchmarkCalc2005(li_seq, li_contract);
+            dataService = RDSDataService.GetBenchmarkCalc2021(li_contract, li_seq);
             ld_new = dataService.decVal;
             ld_adjust = ld_new - ld_prev;
             return (int)ld_adjust;
