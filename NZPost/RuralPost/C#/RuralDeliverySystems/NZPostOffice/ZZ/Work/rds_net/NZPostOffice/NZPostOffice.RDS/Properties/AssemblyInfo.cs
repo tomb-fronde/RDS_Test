@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fronde Systems Group")]
 [assembly: AssemblyProduct("Rural Delivery System")]
-[assembly: AssemblyCopyright("Copyright@20120 Rural Post")]
+[assembly: AssemblyCopyright("Copyright@2021 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
