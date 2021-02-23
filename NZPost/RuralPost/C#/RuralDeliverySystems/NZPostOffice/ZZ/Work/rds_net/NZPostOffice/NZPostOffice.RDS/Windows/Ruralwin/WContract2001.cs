@@ -18,7 +18,12 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies & Vehicles 11-Feb-2021
+    // Changed how previous Benchmark determined 
+    //  - get last BM from Frequency_adjustments
+    //
     // TJB Frequencies & Vehicles  8-Feb-2021
+    // Changed idw_frequencies to idw_frequencies2
     // Added code to detect changes in the contract's benchmark mainly 
     //    as a result of changing the vehicles associated with a frequency.
     // Added nShowAll so all refreshes of dw_frequencies show what the user selected
@@ -147,6 +152,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public bool ib_custlist_changed = false;
         public DateTime? id_custlist_updated = null;
         private System.Decimal dcPrevBenchmark = 0;  // TJB 8Feb2021: Added
+        private bool isFrequencies2Ready = false;    // TJB 15Feb2021 Added
 
         private System.ComponentModel.IContainer components = null;
         public TabControl tab_contract;
@@ -1233,7 +1239,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual int of_refresh_frequencies2()
         {
-            idw_frequencies2.Reset();
+            if (idw_frequencies2.RowCount > 0)
+            {
+                idw_frequencies2.Reset();
+            }
             return idw_frequencies2.Retrieve(new object[] { il_Contract_no, nShowAll });
         }
 
@@ -1538,16 +1547,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int of_update_route_frequencies2()
         {
             int nRows = idw_frequencies2.Save();
-/*
-            if (nRows > 0)
-            {   // If successful, tell WRenewal via the ContractRFUpdatedEvent event
-                MessageBox.Show("Send message to WRenewal that route_frequency updated"
-                              , "Debugging - WContract.of_update_route_frequencies2");
-                ContractRFUpdatedEventArgs RFUpdated = new ContractRFUpdatedEventArgs();
-                RFUpdated.RfUpdated = true;
-                OnContractRFUpdated(RFUpdated);
-            }
-*/                
             return nRows;
          }
 
@@ -2257,7 +2256,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //MessageBox.Show("dw_route_frequency2 \n"
                 //                + "NRow = " + nRow.ToString() + " NRows = " + nRows.ToString()
                 //                , "WContract2001.dw_route_frequency2_ue_enabledistance");
-                //dw_route_frequency.GetControlByName("grid"))).Columns["distance"].ReadOnly = true;
+                //dw_route_frequency.GetControlByName("grid"))).Columns["rf_distance"].ReadOnly = true;
             }
         }
 
@@ -2374,7 +2373,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 */
             // TJB  11-Feb-2021 Changed method of determining previous benchmark
             // - now get previous value from frequency_adjustments table
-            RDSDataService obj = RDSDataService.GetLatestBenchmark(il_Contract_no, il_con_active_seq);
+            RDSDataService obj = RDSDataService.GetPrevBench(il_Contract_no);
             dcPrevBenchmark = (decimal)obj.decVal;
 
             dcNewBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "dw_route_frequency2_pfc_postupdate");
@@ -3127,28 +3126,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     idw_contract.Retrieve(new object[] { il_Contract_no });
                 }
             }
-            // Check for any changes to idw_frequencies
-/*            idw_frequencies.AcceptText();
-            if (idw_frequencies.DataObject.DeletedCount > 0 || idw_frequencies.ModifiedCount() > 0)
-            {
-                ans = MessageBox.Show("Do you want to update database?"
-                                        , "Frequencies"
-                                        , MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                ll_Row = idw_frequencies.GetRow();
-                if (ans == DialogResult.Yes)
-                {
-                    ll_ret = idw_frequencies.Save();
-                    if (ll_ret < 0)
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    idw_frequencies.Reset();
-                }
-            }
-*/            
             // TJB Frequencies testing Nov-2020: Added
             // Check for any changes to idw_frequencies2
             idw_frequencies2.AcceptText();
@@ -3385,35 +3362,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 idw_renewals.uf_settoolbar();
             }//
-/*            else if (ToTabName == "frequencies")
-            {
-                dw_route_frequency_getfocus(null, null);
-                idw_frequencies.uf_toggle_audit(false);
-                if (idw_frequencies.RowCount == 0)
-                {
-                    idw_frequencies.Retrieve(new object[]{il_Contract_no, 1});
-                }
-                idw_frequencies.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
-                idw_frequencies.uf_settoolbar();
-//                idw_frequencies.URdsDw_Clicked(null, null);
-            }  */
             else if (ToTabName == "frequencies")
             {
                 idw_frequencies2.URdsDw_GetFocus(null, null);
                 //dw_route_frequency2_getfocus(null, null);
                 idw_frequencies2.uf_toggle_audit(false);
                 of_save_contract_no();
-                if( IsRFUpdated )
+
+                // TJB Frequencies & Vehicles 15-Feb-2021
+                // Changed to refresh on each entry to tab
+                if (!isFrequencies2Ready)
                 {
-                    idw_frequencies2.Reset();
+                    of_refresh_frequencies2();
+                    isFrequencies2Ready = true;
                 }
+                //if( IsRFUpdated )
+                //    idw_frequencies2.Reset();
                 if (idw_frequencies2.RowCount == 0)
-                {
                     idw_frequencies2.Retrieve(new object[] { il_Contract_no, nShowAll });
-                }
+
                 idw_frequencies2.GetControlByName("st_contract").Text = idw_contract.GetItem<Contract>(0).ConTitle;
                 idw_frequencies2.uf_settoolbar();
-//                idw_frequencies2.URdsDw_Clicked(null, null);
             }
             else if (ToTabName == "route audit")
             {
@@ -3962,7 +3931,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    //OpenSheet(wNewArt, w_main_mdi, 0, original!);
                     WAddArticleCounts wNewArt = new WAddArticleCounts();
                     wNewArt.MdiParent = StaticVariables.MainMDI;
                     wNewArt.Show();
@@ -3973,9 +3941,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_artical_counts_losefocus(object sender, EventArgs e)
         {
             // Force update so that the article count on the renewal window is accurate
-            //! dw_artical_counts.Update();
             dw_artical_counts.Save();
-            //?Commit;
         }
 
         public virtual void dw_piece_rates_doubleclicked(object sender, EventArgs e)
@@ -4457,12 +4423,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         void Renewal_RFTableUpdated(object sender, StatusUpdatedEventArgs e)
         {
             bool? _IsRFUpdated = false;
-            if (e != null && e.RfUpdated != null)
+            //if (e != null && e.RfUpdated != null)
                 _IsRFUpdated = e.RfUpdated;
             
             IsRFUpdated = (_IsRFUpdated == null) ? false : (bool)_IsRFUpdated;
 
-            //MessageBox.Show("IsRFUpdated = " + IsRFUpdated.ToString()
+            //MessageBox.Show("Received message from WRenewal \n\n"
+            //              + "IsRFUpdated = " + IsRFUpdated.ToString() + "\n"
             //              , "Debugging - WContract2001.Renewal_RFTableUpdated");
 
             if (IsRFUpdated)
@@ -4472,20 +4439,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 IsRFUpdated = false;
             }
         }
-/*
-        // TJB  Frequencies & Vehicles 11-Feb-2021: New
-        // User event used to "tell" the WRenewal2001 form that we've 
-        // updated the route_frequency table. 
-        // See NZPostOffice.RDS.Controls.StatusUpdatedEventArgs.cs
-        public event EventHandler<ContractRFUpdatedEventArgs> ContractRFUpdated;
-
-        // TJB  Frequencies & Vehicles 11-Feb-2021: New
-        protected virtual void OnContractRFUpdated(ContractRFUpdatedEventArgs e)
-        {
-            if (ContractRFUpdated != null)
-                ContractRFUpdated(this, e);
-        }
-*/
         #endregion
     }
 }
