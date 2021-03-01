@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
+    // TJB Frequencies & Vehicles 1-Mar-2021
+    // Added vt_list
+    //
     // TJB Frequencies & Vehicles Jan-2021
     // Changed sp_GetWhatIfCalc2005 to sp_GetWhatIfCalc2021
     //
@@ -113,6 +116,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
     [MapInfo("procwagerate", "_procwagerate", "")]
     [MapInfo("rrrate_proc_wage", "_rrrate_proc_wage", "")]
     [MapInfo("relief_weeks", "_relief_weeks", "")]
+    [MapInfo("vt_list", "_vt_list", "")]
 
     [System.Serializable()]
 
@@ -371,7 +375,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
         [DBField()]
         private decimal? _relief_weeks;
 
-/*-------------------------------------------------------*/
+        [DBField()]
+        private string _vt_list;
+
+        /*-------------------------------------------------------*/
         public virtual decimal? ReliefWeeks
         {
             get
@@ -2547,6 +2554,26 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                 return _rrrate_proc_wage;
             }
         }
+
+        public string VtList
+        {
+            get
+            {
+                CanReadProperty("VtList", true);
+                return _vt_list;
+            }
+            set
+            {
+                CanWriteProperty("VtList", true);
+                if (_vt_list != value)
+                {
+                    _vt_list = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        
         // needs to implement compute expression manually:
         // compute control name=[proccosts]
         /*?(((   if(isnull(calcvolume),0,calcvolume)  /  if(isnull(itemshour),0,itemshour) ) / 365) * 7) * 52) *  if(isnull(procwagerate),0,procwagerate
@@ -3791,6 +3818,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
                             instance._procwagerate = GetValueFromReader<decimal?>(dr, 81);
                             instance._rrrate_proc_wage = GetValueFromReader<decimal?>(dr, 82);
                             instance._relief_weeks = GetValueFromReader<decimal?>(dr, 83);
+                            instance._vt_list = GetValueFromReader<string>(dr, 84);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);
