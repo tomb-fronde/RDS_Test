@@ -20,6 +20,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     public class WWhatifCalc2001 : WAncestorWindow
     {
+        // TJB Frequencies & Vehicles 3-Mar-2021  
+        // Added vt_key to GetVehicleOverrideRateList parameters
+        // Bug fix: replaced RERrrateVehinsurance with RENinsurancepct in store_group_report
+        // Add support for VtList - list of vehicle types in a contract - and add them
+        //    to the set of vehicle types in the report
+        // Commented out of_cachevtkeys; obsolete (could be deleted)
+        //
         // TJB  RPCR_148 May-2020
         // Added new section for additional Vehicle rates to REDWhatifCalculatorReport2005.rpt
         // Changes here to add between 4 and 11 vehicle rates to report
@@ -837,9 +844,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text)
                         || ((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text) == "0.00"
                         )
-                    {
+                    { // TJB Frequencies & Vehicles 3-Mar-2021  Bug fix: replaced RERrrateVehinsurance with RENinsurancepct
                         (((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_vi" + ll_Ctr.ToString()] as TextObject).Text =
-                            item.RERrrateVehinsurance.GetValueOrDefault().ToString("#,##0.00");
+                            item.RENinsurancepct.GetValueOrDefault().ToString("##0%");
+                            //item.RERrrateVehinsurance.GetValueOrDefault().ToString("#,##0.00");
                     }
 
                     if (string.IsNullOrEmpty((((DWhatifCalculatorReport2005)idw_report).Report.ReportDefinition.ReportObjects["st_via" + ll_Ctr.ToString()] as TextObject).Text)
@@ -1131,6 +1139,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ldec_vor_livery = null;
 
 
+            // vtList lists all vehicle types from rd.vehicle_type (vt_key and vt_description only)
+            // ila_VtKeys lists the unique vehicle types in the contract(s) in the Whatif report
+            //   - see of_isvtkeyinlist() and other places
+            // vvList gets the full vehicle details for the vehicles in ila_VtKeys
             List<VehicleTypeItem> vtList = new List<VehicleTypeItem>();
             RDSDataService rService = RDSDataService.GetVehicleTypeList();
             vtList = rService.VehicleTypeList;
@@ -1186,8 +1198,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //  (in of_loadvtkeys) if there's only one contract; to 0 otherwise.
                 if (il_contract != 0)
                 {
+                    //  Need to reset these for each contract vehicle
+                    ldec_vor_nominal_vehicle_value = null;
+                    ldec_vor_repairs_maintenance_rate = null;
+                    ldec_vor_tyre_tubes_rate = null;
+                    ldec_vor_vehicle_allowance_rate = null;
+                    ldec_vor_licence_rate = null;
+                    ldec_vor_vehicle_rate_of_return_pct = null;
+                    ldec_vor_salvage_ratio = null;
+                    ldec_vor_ruc = null;
+                    ldec_vor_sundries_k = null;
+                    ldec_vor_vehicle_insurance_premium = null;
+                    ldec_vor_livery = null;
+
+                    // TJB Frequencies & Vehicles 2-Mar-2021
+                    // Added vt_key to GetVehicleOverrideRateList parameters; gets one of the
+                    // sets of overrides if there is more than one vehicle of the same type.
                     List<VehicleOverrideRateItem> vlist = new List<VehicleOverrideRateItem>();
-                    RDSDataService rdsService2 = RDSDataService.GetVehicleOverrideRateList(il_contract, il_sequence);
+                    RDSDataService rdsService2 = RDSDataService.GetVehicleOverrideRateList(il_contract, il_sequence, ll_vtkey);
                     vlist = rdsService2.VehicleOverrideRateList;
 
                     if (vlist.Count > 0)
@@ -1316,12 +1344,40 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             tnow = System.DateTime.Now;// Now();
             int? ll_contract;
             bool lb_oneContract;
+            string sVtList, sVtKey;
+            int start, at, end, count;
+            int nVtKey;
+
             il_contract = 0;
             lb_oneContract = false;
             for (ll_Ctr = 0; ll_Ctr < idw_summary.RowCount; ll_Ctr++)
             {
                 //?StaticVariables.gnv_app.of_showstatus(ll_Ctr, idw_summary.RowCount, "Recalculating...");
                 ll_VtKey = idw_summary.GetItem<WhatifCalulator2005>(ll_Ctr).Nvtkey.GetValueOrDefault();
+                // TJB Frequencies & Vehicles  1-Feb-2021: Added
+                // Get and parse the list of vehicle types for this contract
+                // and add to the ila_VtKeys list.  ll_VtKey is no longer needed.
+                sVtList = idw_summary.GetItem<WhatifCalulator2005>(ll_Ctr).VtList;
+                end = sVtList.Length;
+                start = 0;
+                count = 0;
+                at = 0;
+                while ((start <= end) && (at > -1))
+                {
+                    count = end - start;
+                    at = sVtList.IndexOf(",", start, count);
+                    if (at == -1) break;
+                    sVtKey = sVtList.Substring(start, (at - start));
+                    if (Int32.TryParse(sVtKey, out nVtKey))
+                    {
+                        if (!(of_isvtkeyinlist(nVtKey)))
+                        {
+                            ila_VtKeys.Add(nVtKey);
+                        }
+                    }
+                    start = at + 1;
+                }
+                
                 ll_contract = idw_summary.GetItem<WhatifCalulator2005>(ll_Ctr).ContractNo;
                 if (il_contract == 0)
                 {
@@ -1386,6 +1442,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return ll_Ctr;
         }
 
+/*   TJB Feb-2021: obsolete
         public virtual int of_cachevtkeys()
         {
             // idw_report.dataobject = 'd_whatif_calculator_report2001bf3'
@@ -1405,11 +1462,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? ldec_livery;
             decimal? ldec_vehicle_insurance_base_premium;
 
+            // vtList lists all vehicle types from rd.vehicle_type (vt_key and vt_description only)
+            // ila_VtKeys lists the unique vehicle types in the contract(s) in the Whatif report
+            // vvList gets the full vehicle details for the vehicles in ila_VtKeys
             List<VehicleTypeItem> vtList = new List<VehicleTypeItem>();
             RDSDataService rService = RDSDataService.GetVehicleTypeList();
             vtList = rService.VehicleTypeList;
 
-            //while (StaticVariables.sqlca.SQLCode == 0) {
+            List<VehicleRateNonVehicleRateItem> vvList = new List<VehicleRateNonVehicleRateItem>();
+
             for (int i = 0; i < vtList.Count; i++)
             {
                 ll_vtkey = vtList[i].VtKey;
@@ -1417,17 +1478,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (!(of_isvtkeyinlist(ll_vtkey)))
                 {
-                    //FETCH c_vtype INTO :ll_vtkey, :ls_vt;
+                    //Skip if this key isn't one of the ones in ila_VtKeys
                     continue;
                 }
-                if (ll_Ctr == 4)
+                if (ll_Ctr >= 11)  // TJB Feb-2021: the limit was 4 and is now 11
                 {
-                    //?idw_report.DataControl["st_cannotdisplay"].Text = "\'Some rates cannot be displayed due to space limitations\'";
                     break;
                 }
                 ll_Ctr++;
 
-                List<VehicleRateNonVehicleRateItem> vvList = new List<VehicleRateNonVehicleRateItem>();
+                // Get the details for this vehicle
                 RDSDataService rdsService = RDSDataService.GetMoreValues1(ll_vtkey, id_EffectDate, il_RGCode);
                 vvList = rdsService.VehicleRateNonVehicleRateList;
 
@@ -1450,7 +1510,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             return 1;
         }
-
+*/
         public virtual void dw_summary_constructor()
         {
             //?base.constructor();
