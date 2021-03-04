@@ -10,6 +10,10 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB Frequencies & Vehicles 2-Mar-2021
+    // Added vt_key to GetVehicleOverrideRateList parameter list 
+    // - get overrides for [one of] the contract's vehicles of the type
+    //
     // TJB Frequencies and Vehicles Jan/Feb-2021
     // Added GetBenchmarkCalc2021
     //       GetVehicleName
@@ -1711,9 +1715,11 @@ namespace NZPostOffice.RDS.DataService
         ///   WHERE contract_no = @il_contract and contract_seq_number = @il_sequence 
         ///   order by vor_effective_date desc;
         /// </summary>
-        public static RDSDataService GetVehicleOverrideRateList(int? il_contract, int? il_sequence)
+        // TJB Frequencies & Vehicles 2-Mar-2021
+        // Added vt_key to parameter list - get overrides for [one of] the contract's vehicles of the type
+        public static RDSDataService GetVehicleOverrideRateList(int? il_contract, int? il_sequence, int? nVtKey)
         {
-            RDSDataService obj = Execute("_GetVehicleOverrideRateList", il_contract, il_sequence);
+            RDSDataService obj = Execute("_GetVehicleOverrideRateList", il_contract, il_sequence, nVtKey);
             return obj;
         }
 
@@ -10351,7 +10357,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _GetVehicleOverrideRateList(int? il_contract, int? il_sequence)
+        private void _GetVehicleOverrideRateList(int? il_contract, int? il_sequence, int? nVtKey)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -10359,35 +10365,73 @@ namespace NZPostOffice.RDS.DataService
                 {
                     ParameterCollection pList = new ParameterCollection();
 
-                    cm.CommandText = "  SELECT top 1 vor_nominal_vehicle_value ,vor_repairs_maintenance_rate ,vor_tyre_tubes_rate,vor_vehical_allowance_rate ," +
-                        "vor_licence_rate ,vor_vehicle_rate_of_return_pct ,vor_salvage_ratio ,vor_ruc ," +
-                        "vor_sundries_k ,vor_vehicle_insurance_premium ,vor_livery " +
-                        " FROM rd.vehicle_override_rate " +
-                        " WHERE contract_no = @il_contract and contract_seq_number = @il_sequence " +
-                        " order by vor_effective_date desc; ";
+                    cm.CommandText = " SELECT top 1 " 
+                                   + "  vor.vor_nominal_vehicle_value, vor.vor_repairs_maintenance_rate "
+                                   + ", vor.vor_tyre_tubes_rate, vor.vor_vehical_allowance_rate "
+                                   + ", vor.vor_licence_rate, vor.vor_vehicle_rate_of_return_pct "
+                                   + ", vor.vor_salvage_ratio, vor.vor_ruc, vor.vor_sundries_k "
+                                   + ", vor.vor_vehicle_insurance_premium, vor.vor_livery "
+                              + "  FROM rd.vehicle_override_rate vor "
+                              + "     , rd.contract_vehical cv "
+                              + "     , rd.vehicle v "
+                              + "     , rd.route_frequency rf "
+                              + " WHERE vor.contract_no = @il_contract "
+                              + "   AND vor.contract_seq_number = @il_sequence "
+                              + "   AND cv.contract_no = vor.contract_no "
+                              + "   AND cv.contract_seq_number = vor.contract_seq_number "
+                              + "   AND cv.cv_vehical_status = 'A' "
+                              + "   AND v.vehicle_number = cv.vehicle_number "
+                              + "   AND v.vt_key = @nVtKey "
+                              + "   AND rf.contract_no = vor.contract_no "
+                              + "   AND rf.vehicle_number = cv.vehicle_number "
+                              + "   and rf.rf_active = 'Y' "
+                              + "   AND vor.vehicle_number = cv.vehicle_number "
+                              + " ORDER BY vor_effective_date DESC ";
                     pList.Add(cm, "il_contract", il_contract);
                     pList.Add(cm, "il_sequence", il_sequence);
+                    pList.Add(cm, "nVtKey", nVtKey);
 
                     _vehicleOverrideRateList = new List<VehicleOverrideRateItem>();
-                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    try
                     {
-                        if (dr.Read())
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
-                            VehicleOverrideRateItem vt = new VehicleOverrideRateItem();
-                            _vehicleOverrideRateList.Add(vt);
+                            if (dr.Read())
+                            {
+                                VehicleOverrideRateItem vt = new VehicleOverrideRateItem();
+                                _vehicleOverrideRateList.Add(vt);
 
-                            vt.vor_nominal_vehicle_value = dr.GetDecimal(0);
-                            vt.vor_repairs_maintenance_rate = dr.GetDecimal(1);
-                            vt.vor_tyre_tubes_rate = dr.GetDecimal(2);
-                            vt.vor_vehical_allowance_rate = dr.GetDecimal(3);
-                            vt.vor_licence_rate = dr.GetDecimal(4);
-                            vt.vor_vehicle_rate_of_return_pct = dr.GetDecimal(5);
-                            vt.vor_salvage_ratio = dr.GetDecimal(6);
-                            vt.vor_ruc = dr.GetDecimal(7);
-                            vt.vor_sundries_k = dr.GetDecimal(8);
-                            vt.vor_vehicle_insurance_premium = dr.GetDecimal(9);
-                            vt.vor_livery = dr.GetDecimal(10);
+                                // TJB Frequencies & Vehicles 2-Feb-2021
+                                // Changed dr.GetDecimal() to GetValueFromReader<decimal?>()
+                                // - GetDecimal returned 0 for null
+                                //vt.vor_nominal_vehicle_value = dr.GetDecimal(0);
+                                //vt.vor_repairs_maintenance_rate = dr.GetDecimal(1);
+                                //vt.vor_tyre_tubes_rate = dr.GetDecimal(2);
+                                //vt.vor_vehical_allowance_rate = dr.GetDecimal(3);
+                                //vt.vor_licence_rate = dr.GetDecimal(4);
+                                //vt.vor_vehicle_rate_of_return_pct = dr.GetDecimal(5);
+                                //vt.vor_salvage_ratio = dr.GetDecimal(6);
+                                //vt.vor_ruc = dr.GetDecimal(7);
+                                //vt.vor_sundries_k = dr.GetDecimal(8);
+                                //vt.vor_vehicle_insurance_premium = dr.GetDecimal(9);
+                                //vt.vor_livery = dr.GetDecimal(10);
+                                vt.vor_nominal_vehicle_value = GetValueFromReader<decimal?>(dr, 0);
+                                vt.vor_repairs_maintenance_rate = GetValueFromReader<decimal?>(dr, 1);
+                                vt.vor_tyre_tubes_rate = GetValueFromReader<decimal?>(dr, 2);
+                                vt.vor_vehical_allowance_rate = GetValueFromReader<decimal?>(dr, 3);
+                                vt.vor_licence_rate = GetValueFromReader<decimal?>(dr, 4);
+                                vt.vor_vehicle_rate_of_return_pct = GetValueFromReader<decimal?>(dr, 5);
+                                vt.vor_salvage_ratio = GetValueFromReader<decimal?>(dr, 6);
+                                vt.vor_ruc = GetValueFromReader<decimal?>(dr, 7);
+                                vt.vor_sundries_k = GetValueFromReader<decimal?>(dr, 8);
+                                vt.vor_vehicle_insurance_premium = GetValueFromReader<decimal?>(dr, 9);
+                                vt.vor_livery = GetValueFromReader<decimal?>(dr, 10);
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        string msg = e.Message;
                     }
                 }
             }
