@@ -13,6 +13,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB 11-Mar-2021
+    // Added focus to contract_no when clear button pressed
+    //
     // TJB  RPCR_122 Bug  July-2018
     // Lost Region dropdown size change - reinstated
     //
@@ -113,8 +116,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 dw_criteria.SetValue(0, "region_id", -99);
             //added by jlwang
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh();
-
-            dw_criteria.URdsDw_GetFocus(null, null);
         }
 
         private delegate void delegateInvoke();
@@ -157,6 +158,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_criteria.DataObject.BindingSource.CurrencyManager.Refresh(); //added by jlwang
             //  clear the results box
             dw_results.of_Reset();
+            dw_criteria.URdsDw_GetFocus(null, null);
             return 1;
         }
 
@@ -485,6 +487,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             this.of_clear();
             this.AcceptButton = pb_search;
+            dw_criteria.GetControlByName("contract_no").Focus();
         }
 
         public void WContractSearch_KeyDown(object sender, KeyEventArgs e)
