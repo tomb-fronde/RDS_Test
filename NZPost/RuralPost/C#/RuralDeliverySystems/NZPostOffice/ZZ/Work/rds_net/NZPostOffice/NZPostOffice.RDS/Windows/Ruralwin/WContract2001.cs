@@ -18,6 +18,10 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Allowances 11-Mar-2021
+    // Changed Allowances display to DContractAllowancesV3
+    // Changed update function (pfc_modify) to open WModifyAllowances
+    //
     // TJB Frequencies & Vehicles 11-Feb-2021
     // Changed how previous Benchmark determined 
     //  - get last BM from Frequency_adjustments
@@ -216,7 +220,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_route_audit.DataObject = new DRouteAuditListing();
             dw_route_audit.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
-            dw_contract_allowances.DataObject = new DContractAllowancesV2();
+            dw_contract_allowances.DataObject = new DContractAllowancesV3();
             dw_contract_allowances.DataObject.BorderStyle = BorderStyle.Fixed3D;
 
             dw_artical_counts.DataObject = new DContractArticalCounts();
@@ -285,7 +289,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_types.WinValidate += new UserEventDelegate2(of_validate);
 
             this.dw_contract_allowances.Constructor += new UserEventDelegate(dw_contract_allowances_constructor);
-            ((DContractAllowancesV2)dw_contract_allowances.DataObject).CellDoubleClick += new EventHandler(dw_contract_allowances_doubleclicked);
+            ((DContractAllowancesV3)dw_contract_allowances.DataObject).CellDoubleClick += new EventHandler(dw_contract_allowances_doubleclicked);
             this.dw_contract_allowances.PfcInsertRow = new UserEventDelegate(dw_contract_allowances_pfc_preinsertrow);
             this.dw_contract_allowances.PfcPreUpdate += new UserEventDelegate1(dw_contract_allowances_pfc_preupdate);
             this.dw_contract_allowances.WinValidate += new UserEventDelegate2(of_validate);
@@ -1636,7 +1640,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         StaticVariables.window = null;
                     }
                     lnv_Criteria.of_addcriteria("Contract_no", il_Contract_no);
-                    lnv_Criteria.of_addcriteria("alt_key", idw_allowances.GetItem<ContractAllowancesV2>(al_row).AltKey);
+                    lnv_Criteria.of_addcriteria("alt_key", idw_allowances.GetItem<ContractAllowancesV3>(al_row).AltKey);
                     lnv_Criteria.of_addcriteria("allowance_row", al_row);
                     lnv_msg.of_addcriteria(lnv_Criteria);
                     StaticMessage.PowerObjectParm = lnv_msg;
@@ -2489,7 +2493,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dw_contract_allowances.AcceptText();
             for (ll_Row = 0; ll_Row < dw_contract_allowances.RowCount; ll_Row++)
             {
-                dw_contract_allowances.GetItem<ContractAllowancesV2>(ll_Row).ContractNo = il_Contract_no;
+                dw_contract_allowances.GetItem<ContractAllowancesV3>(ll_Row).ContractNo = il_Contract_no;
                 if (dw_contract_allowances.uf_not_entered(ll_Row, "alt_key", "allowance type"))
                 {
                     sReturn = "alt_key";
@@ -2509,15 +2513,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         for (lMasterRow = 1; lMasterRow <= lRowCount - 1; lMasterRow += 1)
                         {
-                            lAltKey = dw_contract_allowances.GetItem<ContractAllowancesV2>(lMasterRow).AltKey.GetValueOrDefault();
-                            //?dtEfDate = dw_contract_allowances.GetItem<ContractAllowancesV2>(lMasterRow).CaEffectiveDate.GetValueOrDefault().Date;
+                            lAltKey = dw_contract_allowances.GetItem<ContractAllowancesV3>(lMasterRow).AltKey.GetValueOrDefault();
+                            //?dtEfDate = dw_contract_allowances.GetItem<ContractAllowancesV3>(lMasterRow).CaEffectiveDate.GetValueOrDefault().Date;
                             for (lChildRow = 1; lChildRow <= lRowCount; lChildRow++)
                             {
                                 if (lMasterRow != lChildRow)
                                 {
-                                    if (lAltKey == dw_contract_allowances.GetItem<ContractAllowancesV2>(lChildRow).AltKey.GetValueOrDefault())
+                                    if (lAltKey == dw_contract_allowances.GetItem<ContractAllowancesV3>(lChildRow).AltKey.GetValueOrDefault())
                                     {
-                                        //?if (dtEfDate == dw_contract_allowances.GetItem<ContractAllowancesV2>(lChildRow).CaEffectiveDate.GetValueOrDefault().Date)
+                                        //?if (dtEfDate == dw_contract_allowances.GetItem<ContractAllowancesV3>(lChildRow).CaEffectiveDate.GetValueOrDefault().Date)
                                         {
                                             dw_contract_allowances.SetCurrent(lChildRow);
                                             dw_contract_allowances.SetCurrent(lChildRow);
@@ -2564,7 +2568,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_contract_allowances_pfc_modify()
         {
-            openAddAllowance("Update");
+            openMaintainAllowances();
         }
 
         public virtual void openAddAllowance(string sOptype)
@@ -2579,7 +2583,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("contract_no", il_Contract_no);
             lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
             lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
-            lnv_Criteria.of_addcriteria("alt_key", dw_contract_allowances.GetItem<ContractAllowancesV2>(dw_contract_allowances.GetRow()).AltKey);
+            lnv_Criteria.of_addcriteria("alt_key", dw_contract_allowances.GetItem<ContractAllowancesV3>(dw_contract_allowances.GetRow()).AltKey);
             lnv_Criteria.of_addcriteria("allowance_row", dw_contract_allowances.GetRow());
             lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
@@ -2603,6 +2607,42 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             w_add_allowance.MdiParent = StaticVariables.MainMDI;
             w_add_allowance.Show();
+            // This.retrieve(il_Contract_no)
+            // No row inserted
+            return;
+        }
+
+        public virtual void openMaintainAllowances()
+        {
+            NCriteria lnv_Criteria;
+            NRdsMsg lnv_msg;
+
+            lnv_Criteria = new NCriteria();
+            lnv_msg = new NRdsMsg();
+
+            Cursor.Current = Cursors.WaitCursor;
+            int caRow = dw_contract_allowances.GetRow();
+            int? caAltKey = dw_contract_allowances.GetItem<ContractAllowancesV3>(caRow).AltKey;
+            DateTime caEffDate = dw_contract_allowances.GetItem<ContractAllowancesV3>(caRow).CaEffectiveDate;
+            RDSDataService obj = RDSDataService.GetAllowanceCalcType(caAltKey);
+            int nAlctID = obj.intVal;
+            string sAlctDescription = obj.strVal;
+            lnv_Criteria.of_addcriteria("contract_no", il_Contract_no);
+            lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
+            lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
+            lnv_Criteria.of_addcriteria("alt_key", caAltKey);
+            lnv_Criteria.of_addcriteria("allowance_row", caRow);
+            lnv_Criteria.of_addcriteria("effective_date", caEffDate);
+            lnv_Criteria.of_addcriteria("alct_id", nAlctID);
+            lnv_Criteria.of_addcriteria("alct_description", sAlctDescription);
+            lnv_msg.of_addcriteria(lnv_Criteria);
+
+            StaticMessage.PowerObjectParm = lnv_msg;
+            StaticVariables.window = this;
+            WMaintainAllowances w_maintain_allowances = new WMaintainAllowances();
+
+            w_maintain_allowances.MdiParent = StaticVariables.MainMDI;
+            w_maintain_allowances.Show();
             // This.retrieve(il_Contract_no)
             // No row inserted
             return;
