@@ -10,6 +10,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.DataService
 {
+    // TJB Allowances 11-Mar-2021
+    // Added GetAllowanceCalcType
+    //
     // TJB Frequencies & Vehicles 2-Mar-2021
     // Added vt_key to GetVehicleOverrideRateList parameter list 
     // - get overrides for [one of] the contract's vehicles of the type
@@ -19,6 +22,7 @@ namespace NZPostOffice.RDS.DataService
     //       GetVehicleName
     //       CheckVehicleOwnership 
     // (Jan2021) Updated function to f_CheckVehicleOwnership
+
     //
     // TJB  RPCR_140  June-2019
     // NEW: GetContractTypeKey - Get ct_key, contract_type for contract
@@ -2280,6 +2284,14 @@ namespace NZPostOffice.RDS.DataService
         {
             RDSDataService obj = Execute("_GetVehicleName", inVehicleNo);
             return obj.strVal;
+        }
+
+        // TJB  Allowances  11-Mar-2021
+        // Returns alct_id in obj.intVal, alct_description in obj.strVal
+        public static RDSDataService GetAllowanceCalcType(int? inAltKey)
+        {
+            RDSDataService obj = Execute("_GetAllowanceCalcType", inAltKey);
+            return obj;
         }
 
         /// <summary>
@@ -7322,6 +7334,52 @@ namespace NZPostOffice.RDS.DataService
                         sVehicleName = "";
                     }
                     strVal = sVehicleName;
+                }
+            }
+        }
+
+        // TJB  Allowances 11-Mar-2021: New
+        [ServerMethod]
+        private void _GetAllowanceCalcType(int? inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int nId = -1;
+                    string sDescr = "";
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select alct.alct_id, alct.alct_description "
+                                   + "  from rd.allowance_calc_type alct"
+                                   + "     , rd.allowance_type alt"
+                                   + " where alt.alt_key = @inAltKey"
+                                   + "   and alct.alct_id = alt.alct_id";
+                    pList.Add(cm, "inAltKey", inAltKey);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                nId = dr.GetInt32(0);
+                                sDescr = dr.GetString(1);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                        nId = -1;
+                        sDescr = e.Message;
+                    }
+                    intVal = nId;
+                    strVal = sDescr;
                 }
             }
         }
