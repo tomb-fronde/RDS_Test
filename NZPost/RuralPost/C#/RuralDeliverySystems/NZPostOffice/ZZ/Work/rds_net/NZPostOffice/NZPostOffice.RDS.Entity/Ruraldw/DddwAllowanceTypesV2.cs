@@ -77,40 +77,46 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			return Create();
 		}
 
-		public static DddwAllowanceTypesV2[] GetAllDddwAllowanceTypesV2(int? inAlctId)
+		public static DddwAllowanceTypesV2[] GetAllDddwAllowanceTypesV2()
 		{
-			return Fetch(inAlctId).list;
+			return Fetch().list;
 		}
 		#endregion
 
 		#region Data Access
 		[ServerMethod]
-        private void FetchEntity(int? inAlctId)
+        private void FetchEntity()
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
-				using (DbCommand cm = cn.CreateCommand())
-				{
-					cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "sp_DDDW_AllowanceTypeV2";
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "inAlctId", inAlctId);
+                try
+                {
+                    using (DbCommand cm = cn.CreateCommand())
+                    {
+                        cm.CommandType = CommandType.StoredProcedure;
+                        cm.CommandText = "sp_DDDW_AllowanceTypeV2";
+                        ParameterCollection pList = new ParameterCollection();
 
-					List<DddwAllowanceTypesV2> _list = new List<DddwAllowanceTypesV2>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							DddwAllowanceTypesV2 instance = new DddwAllowanceTypesV2();
-                            instance._alt_key = GetValueFromReader<Int32?>(dr,0);
-                            instance._alt_description = GetValueFromReader<String>(dr,1);
-							instance.MarkOld();
-                            instance.StoreInitialValues();
-							_list.Add(instance);
-						}
-						list = _list.ToArray();
-					}
-				}
+                        List<DddwAllowanceTypesV2> _list = new List<DddwAllowanceTypesV2>();
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                DddwAllowanceTypesV2 instance = new DddwAllowanceTypesV2();
+                                instance._alt_key = GetValueFromReader<Int32?>(dr, 0);
+                                instance._alt_description = GetValueFromReader<String>(dr, 1);
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    sqlErrText = e.Message;
+                }
 			}
 		}
 
