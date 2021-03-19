@@ -8,10 +8,14 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
-    // TJB  Allowance  19-Mar-2021
-    // Changed to include added ca_end_date, ca_doc_description columns
+    // TJB  Allowances  19-Mar-2021
+    // Added ca_ennd_date and ca_doc_description columns
     //
-	// Mapping info for object fields to DB
+    // TJB RPCR_017 July-2010
+    // Added GetCurrentAllowances to limit allowance list to current allowances
+    // Added ca_approved column to table
+    
+    // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("alt_key", "_alt_key", "contract_allowance")]
@@ -21,18 +25,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("ca_notes", "_notes", "contract_allowance")]
 	[MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
 	[MapInfo("ca_approved", "_approved", "contract_allowance")]
-    [MapInfo("ca_end_date", "_ca_end_date", "contract_allowance")]
-    [MapInfo("ca_doc_description", "_ca_doc_description", "contract_allowance")]
-    [MapInfo("con_title", "_contract_title", "contract")]
-    [MapInfo("alt_description", "_alt_description", "")]
-	[System.Serializable()]
+	[MapInfo("con_title", "_contract_title", "contract")]
+    [MapInfo("ca_end_date", "_end_date", "contract_allowance")]
+    [MapInfo("ca_doc_description", "_doc_description", "contract_allowance")]
+    [System.Serializable()]
 
 	public class AddAllowance : Entity<AddAllowance>
 	{
-        // TJB RPCR_017 July-2010
-        // Added GetCurrentAllowances to limit allowance list to current allowances
-        // Added ca_approved column to table
-
         private int _sqlcode = 0;
         public int SQLCode
         {
@@ -73,17 +72,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		[DBField()]
 		private string  _approved;
 
+		[DBField()]
+		private string  _contract_title;
+
         [DBField()]
         private DateTime? _end_date;
 
         [DBField()]
         private string _doc_description;
-
-        [DBField()]
-		private string  _contract_title;
-
-        [DBField()]
-        private string _alt_description;
 
 
 		public virtual int? AltKey
@@ -212,6 +208,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			}
 		}
 
+		public virtual string ContractTitle
+		{
+			get
+			{
+				CanReadProperty("ContractTitle", true);
+				return _contract_title;
+			}
+			set
+			{
+				CanWriteProperty("ContractTitle", true);
+				if ( _contract_title != value )
+				{
+					_contract_title = value;
+					PropertyHasChanged();
+				}
+			}
+		}
+
         public virtual DateTime? EndDate
         {
             get
@@ -243,42 +257,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 if (_doc_description != value)
                 {
                     _doc_description = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual string ContractTitle
-		{
-			get
-			{
-				CanReadProperty("ContractTitle", true);
-				return _contract_title;
-			}
-			set
-			{
-				CanWriteProperty("ContractTitle", true);
-				if ( _contract_title != value )
-				{
-					_contract_title = value;
-					PropertyHasChanged();
-				}
-			}
-		}
-
-        public virtual string AltDescription
-        {
-            get
-            {
-                CanReadProperty("AltDescription", true);
-                return _alt_description;
-            }
-            set
-            {
-                CanWriteProperty("AltDescription", true);
-                if (_alt_description != value)
-                {
-                    _alt_description = value;
                     PropertyHasChanged();
                 }
             }
@@ -334,13 +312,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                         + "    , contract_allowance.ca_paid_to_date"
                         + "    , contract_allowance.ca_approved "
                         + "    , contract.con_title "
-                        + "    , allowance_type.alt_description "
-                        + "    , contract_allowance.ca_end_date "
-                        + "    , contract_allowance.ca_doc_description "
-                        + " FROM rd.contract_allowance, rd.contract, rd.allowance_type "
+                        + "    , contract_allowance.ca_end_date"
+                        + "    , contract_allowance.ca_doc_description"
+                        + " FROM rd.contract_allowance, rd.contract "
                         + "WHERE contract.contract_no = contract_allowance.contract_no "
-                        + "  AND contract_allowance.contract_no = @inContractNo "
-                        + "  AND allowance_type.alt_key = contract_allowance.alt_key";
+                        + "  AND contract_allowance.contract_no = @inContractNo ";
                     pList.Add(cm, "inContractNo", inContractNo);
                     if (inEffDate != null)
                     {
@@ -362,10 +338,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 							instance._notes = dr.GetString(4);
 							instance._paid_to_date = GetValueFromReader<DateTime?>(dr,5);
 							instance._approved = dr.GetString(6);
-                            instance._contract_title = dr.GetString(7);
-                            instance._alt_description = dr.GetString(8);
-                            instance._end_date = GetValueFromReader<DateTime?>(dr, 9);
-                            instance._doc_description = dr.GetString(10);
+							instance._contract_title = dr.GetString(7);
+                            instance._end_date = GetValueFromReader<DateTime?>(dr, 8);
+                            instance._doc_description = dr.GetString(9);
                             instance.MarkOld();
 							instance.StoreInitialValues();
 							_list.Add(instance);
@@ -417,24 +392,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             _sqlcode = 0;
             _sqlerrtext = "";
 
-            using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+            using (
+                DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
-                try
-                {
-				    if (GenerateInsertCommandText(cm, "contract_allowance", pList))
-				    {
-                            DBHelper.ExecuteNonQuery(cm, pList);
-				    }
-                }
-                catch (Exception e)
-                {
-                    _sqlcode = -2;
-                    _sqlerrtext = e.Message;
-                }
-                StoreInitialValues();
+				if (GenerateInsertCommandText(cm, "contract_allowance", pList))
+				{
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -2;
+                        _sqlerrtext = e.Message;
+                    }
+				}
+				StoreInitialValues();
 			}
 		}
 		[ServerMethod()]
