@@ -18,6 +18,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Allowances 19-Mar-2021
+    // Minor adjustments when opening WMaintainAllowances
+    //
     // TJB Allowances 11-Mar-2021
     // Changed Allowances display to DContractAllowancesV3
     // Changed update function (pfc_modify) to open WModifyAllowances
@@ -1625,7 +1628,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual int of_display_allowance(int al_row)
         {
             //  TJB  SR4596  Apr-2005   NEW
-            //  Display detail for selected allowance
+            //  Display history detail for selected allowance
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
             lnv_Criteria = new NCriteria();
@@ -2568,7 +2571,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void dw_contract_allowances_pfc_modify()
         {
-            openMaintainAllowances();
+            openMaintainAllowances("Update");
         }
 
         public virtual void openAddAllowance(string sOptype)
@@ -2612,7 +2615,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return;
         }
 
-        public virtual void openMaintainAllowances()
+        public virtual void openMaintainAllowances(string sOptype)
         {
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
@@ -2621,20 +2624,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_msg = new NRdsMsg();
 
             Cursor.Current = Cursors.WaitCursor;
-            int caRow = dw_contract_allowances.GetRow();
-            int? caAltKey = dw_contract_allowances.GetItem<ContractAllowancesV3>(caRow).AltKey;
-            DateTime caEffDate = dw_contract_allowances.GetItem<ContractAllowancesV3>(caRow).CaEffectiveDate;
-            RDSDataService obj = RDSDataService.GetAllowanceCalcType(caAltKey);
-            int nAlctID = obj.intVal;
-            string sAlctDescription = obj.strVal;
             lnv_Criteria.of_addcriteria("contract_no", il_Contract_no);
             lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
             lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
-            lnv_Criteria.of_addcriteria("alt_key", caAltKey);
-            lnv_Criteria.of_addcriteria("allowance_row", caRow);
-            lnv_Criteria.of_addcriteria("effective_date", caEffDate);
-            lnv_Criteria.of_addcriteria("alct_id", nAlctID);
-            lnv_Criteria.of_addcriteria("alct_description", sAlctDescription);
+            lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
 
             StaticMessage.PowerObjectParm = lnv_msg;
