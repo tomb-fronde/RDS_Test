@@ -11,22 +11,41 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
-	public partial class DAddAllowance : Metex.Windows.DataUserControl
+    // TJB  Allowances  19-Mar-2019
+    // Changed display.  Added ca_end_date, ca_doc_description columns
+    // and removed ca_annual_amount, ca_approved and ca_paid_to_date
+    //
+    // TJB 16-Sept-2010: Added
+    // Update total amount when an item amount is changed.
+    // See grid_CellValueChanged
+
+    // TJB RPCR_017 July-2010
+    // Significantly re-written
+    // Displays all current period records in a gris, rather than
+    // a single added record in a Windows form.
+    // See DAddAllowance0 for original
+
+    public partial class DAddAllowance : Metex.Windows.DataUserControl
 	{
-        // TJB 16-Sept-2010: Added
-        // Update total amount when an item amount is changed.
-        // See grid_CellValueChanged
-
-        // TJB RPCR_017 July-2010
-        // Significantly re-written
-        // Displays all current period records in a gris, rather than
-        // a single added record in a Windows form.
-        // See DAddAllowance0 for original
-
 		public DAddAllowance()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
+
+            // These are either missing or incorrectly included in the 
+            // designer-generated code.
+            this.alt_key.DefaultCellStyle.NullValue = null;
+            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
+            this.alt_key.ValueMember = "AltKey";
+            this.alt_key.DisplayMember = "AltDescription";
+
+            this.ca_effective_date.Mask = "00/00/0000";
+            this.ca_effective_date.PromptChar = '0';
+            this.ca_effective_date.ValueType = typeof(System.DateTime);
+
+            this.ca_end_date.Mask = "00/00/0000";
+            this.ca_end_date.PromptChar = '0';
+            this.ca_end_date.ValueType = typeof(System.DateTime);
 		}
 
         protected override void OnHandleCreated(EventArgs e)
