@@ -11,21 +11,24 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Allowances  19-Mar-2021
+    // Changed columns displayed - See DAddAllowance.
+    //
+    // TJB 16-Sep-2010 Bug fix
+    // If there are no rows to save, don't attempt to.
+    // See cb_save_clicked.
+    //
+    // TJB 26-Aug-2010  Bug fix
+    // Setting default values in existing records. See pfc_postopen.
+    //
+    // TJB RPCR_017 July-2010
+    // Re-written to list all current-period allowances as a grid
+    // and allow inserts, updates and deletes on un-paid allowances.
+    // Add 'authorised' flag to database record
+    // See WAddAllowance0 for previous version.
+
     public class WAddAllowance : WAncestorWindow
     {
-        // TJB 16-Sep-2010 Bug fix
-        // If there are no rows to save, don't attempt to.
-        // See cb_save_clicked.
-        //
-        // TJB 26-Aug-2010  Bug fix
-        // Setting default values in existing records. See pfc_postopen.
-        //
-        // TJB RPCR_017 July-2010
-        // Re-written to list all current-period allowances as a grid
-        // and allow inserts, updates and deletes on un-paid allowances.
-        // Add 'authorised' flag to database record
-        // See WAddAllowance0 for previous version.
-        //
         #region Define
         //public dw_allowance idw_allowance;
         public URdsDw idw_allowance;
@@ -305,6 +308,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual int wf_validate(int pRow, out string pErrmsg)
         {
+            // TJB 18-Mar-2021 Added sAltDescription
+
             // Validate the record at arow.
             //
             // Return codes
@@ -315,7 +320,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //              (or, for the new records, the user doesn't want it)
             //
 
-            DateTime? ld_effdate;
+            DateTime? ld_effdate, ld_enddate;
             DateTime? ld_maxdate;
             Decimal? ldc_amount;
             string ls_notes;
@@ -334,12 +339,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return FAILURE;
             }
             ldc_amount = idw_allowance.GetItem<AddAllowance>(pRow).AnnualAmount;
-            if (ldc_amount == null || ldc_amount == 0)
-            {
-                pErrmsg = "You must enter an amount.";
-                ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_annual_amount", true);
-                return FAILURE;
-            }
+            if (ldc_amount == null)
+                idw_allowance.GetItem<AddAllowance>(pRow).AnnualAmount = 0;
+            //if (ldc_amount == null || ldc_amount == 0)
+            //{
+            //    pErrmsg = "You must enter an amount.";
+            //    ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_annual_amount", true);
+            //    return FAILURE;
+            //}
             ld_effdate = idw_allowance.GetItem<AddAllowance>(pRow).EffectiveDate;
             if (ld_effdate == null || ld_effdate == DateTime.MinValue)
             {
@@ -356,16 +363,32 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             if (!(StaticVariables.gnv_app.of_sanedate(ld_effdate.GetValueOrDefault(), "effective date")))
             {
-                pErrmsg = "Date failed sanity check";
+                pErrmsg = "Effective date failed sanity check";
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                 return FAILURE2;
             }
+            ld_enddate = idw_allowance.GetItem<AddAllowance>(pRow).EndDate;
+            if (ld_enddate != null)
+            {
+                if (!(StaticVariables.gnv_app.of_sanedate(ld_enddate.GetValueOrDefault(), "end date")))
+                {
+                    pErrmsg = "End date failed sanity check";
+                    ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_end_date", true);
+                    return FAILURE2;
+                }
+                if (ld_enddate < ld_effdate)
+                {
+                    pErrmsg = "End date must be greater than the effective date";
+                    ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_end_date", true);
+                    return FAILURE;
+                }
+            }
+
             // if this is the new record, check that its effective date is later than that
             // of any existing allowances of the same type.
             if (newRow >= 0 && pRow == newRow)
             {
                 ld_maxdate = new DateTime();
-                /*select max(ca_effective_date) into :ld_maxdate from contract_allowance where contract_no = :il_contract and alt_key = :ll_altkey;*/
                 int SQLCode = 0;
                 string SQLErrText = string.Empty;
                 ld_maxdate = RDSDataService.GetContractAllownceMaxCaEffective(il_contract, ll_altkey, ref SQLCode, ref SQLErrText);
@@ -378,12 +401,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                     + "Error Code: " + SQLCode.ToString() + "\n"
                                     + "Error Text: " + SQLErrText
                                     , "Database error");
-                    //?rollback;
                     pErrmsg = "Failed looking up max(ca_effective_date)";
                     ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                     return FAILURE2;
                 }
-                //?rollback;
+
                 if (ld_effdate <= ld_maxdate)
                 {
                     pErrmsg = "The effective date must be greater than "
