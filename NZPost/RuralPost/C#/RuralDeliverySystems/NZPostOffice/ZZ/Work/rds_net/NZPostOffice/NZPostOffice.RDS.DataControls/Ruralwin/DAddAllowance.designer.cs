@@ -42,7 +42,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_end_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
-            this.cs_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -74,7 +74,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key,
             this.ca_effective_date,
             this.ca_end_date,
-            this.cs_doc_description,
+            this.ca_doc_description,
             this.ca_notes});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -160,18 +160,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_end_date.ValidatingType = null;
             this.ca_end_date.Width = 70;
             // 
-            // cs_doc_description
+            // ca_doc_description
             // 
-            this.cs_doc_description.DataPropertyName = "DocDescription";
+            this.ca_doc_description.DataPropertyName = "DocDescription";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.cs_doc_description.DefaultCellStyle = dataGridViewCellStyle5;
-            this.cs_doc_description.HeaderText = "Doc Description";
-            this.cs_doc_description.Name = "cs_doc_description";
-            this.cs_doc_description.Width = 150;
+            this.ca_doc_description.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ca_doc_description.HeaderText = "Doc Description";
+            this.ca_doc_description.Name = "ca_doc_description";
+            this.ca_doc_description.Width = 150;
             // 
             // ca_notes
             // 
@@ -409,8 +409,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private Metex.Windows.DataGridViewEntityComboColumn alt_key;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_end_date;
-        private DataGridViewTextBoxColumn cs_doc_description;
+        private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
+
+
+
+
+
+
 
 
 

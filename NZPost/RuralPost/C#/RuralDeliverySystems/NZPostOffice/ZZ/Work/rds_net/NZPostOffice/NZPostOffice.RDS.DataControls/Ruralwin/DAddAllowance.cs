@@ -13,7 +13,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB  Allowances  19-Mar-2019
     // Changed display.  Added ca_end_date, ca_doc_description columns
-    // and removed ca_annual_amount, ca_approved and ca_paid_to_date
+    // and removed ca_annual_amount, ca_approved and ca_paid_to_date.
+    // Set row height to adjust to fit multi-line text.
     //
     // TJB 16-Sept-2010: Added
     // Update total amount when an item amount is changed.
@@ -46,7 +47,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_end_date.Mask = "00/00/0000";
             this.ca_end_date.PromptChar = '0';
             this.ca_end_date.ValueType = typeof(System.DateTime);
-		}
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         protected override void OnHandleCreated(EventArgs e)
     	{
