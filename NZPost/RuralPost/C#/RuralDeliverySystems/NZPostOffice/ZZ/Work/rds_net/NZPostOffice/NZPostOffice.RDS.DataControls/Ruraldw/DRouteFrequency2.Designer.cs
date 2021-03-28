@@ -275,7 +275,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             {
                 this.SetCurrent(this.bindingSource.List.IndexOf(((DRouteFrequency2Rows)prevSender).BindingSource.DataSource as RouteFrequency2));
                 ((DRouteFrequency2Rows)prevSender).BackColor = System.Drawing.SystemColors.ButtonFace;
-                ((DRouteFrequency2Rows)prevSender).GetControlByName("distance").BackColor = System.Drawing.SystemColors.Control;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_distance").BackColor = System.Drawing.SystemColors.Control;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms").BackColor = System.Drawing.SystemColors.Control;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms_t").BackColor = System.Drawing.Color.Empty;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount").BackColor = System.Drawing.SystemColors.Control;
@@ -285,7 +285,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_adjusted").BackColor = System.Drawing.SystemColors.Control;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("sf_key").BackColor = System.Drawing.Color.Empty;
 
-                ((DRouteFrequency2Rows)prevSender).GetControlByName("distance").ForeColor = System.Drawing.Color.Black;
+                ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_distance").ForeColor = System.Drawing.Color.Black;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms").ForeColor = System.Drawing.Color.Black;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_nms_t").ForeColor = System.Drawing.Color.Black;
                 ((DRouteFrequency2Rows)prevSender).GetControlByName("rf_dpcount").ForeColor = System.Drawing.Color.Black;
@@ -315,7 +315,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             prevSender = sender;
             prevSenderIndex = thisSenderIndex;
             ((DRouteFrequency2Rows)sender).BackColor = System.Drawing.SystemColors.Highlight;
-            ((DRouteFrequency2Rows)sender).GetControlByName("distance").BackColor = System.Drawing.SystemColors.Highlight;
+            ((DRouteFrequency2Rows)sender).GetControlByName("rf_distance").BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_nms").BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_nms_t").BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_dpcount").BackColor = System.Drawing.SystemColors.Highlight;
@@ -325,7 +325,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_adjusted").BackColor = System.Drawing.SystemColors.Highlight;
             ((DRouteFrequency2Rows)sender).GetControlByName("sf_key").BackColor = System.Drawing.SystemColors.Highlight;
 
-            ((DRouteFrequency2Rows)sender).GetControlByName("distance").ForeColor = System.Drawing.Color.White;
+            ((DRouteFrequency2Rows)sender).GetControlByName("rf_distance").ForeColor = System.Drawing.Color.White;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_nms").ForeColor = System.Drawing.Color.White;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_nms_t").ForeColor = System.Drawing.Color.White;
             ((DRouteFrequency2Rows)sender).GetControlByName("rf_dpcount").ForeColor = System.Drawing.Color.White;
