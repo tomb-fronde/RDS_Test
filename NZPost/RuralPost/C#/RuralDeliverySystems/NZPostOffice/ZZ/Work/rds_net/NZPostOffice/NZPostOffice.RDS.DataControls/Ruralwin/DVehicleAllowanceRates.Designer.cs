@@ -28,13 +28,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private System.Windows.Forms.Label var_id_t;
         private System.Windows.Forms.Label var_description_t;
         private System.Windows.Forms.Label var_carrier_pa_t;
-        private System.Windows.Forms.Label var_repairs_pa_t;
+        private System.Windows.Forms.Label var_repairs_pk_t;
         private System.Windows.Forms.Label var_licence_pa_t;
 
         private System.Windows.Forms.TextBox var_id;
         private System.Windows.Forms.TextBox var_description;
         private System.Windows.Forms.TextBox var_carrier_pa;
-        private System.Windows.Forms.TextBox var_repairs_pa;
+        private System.Windows.Forms.TextBox var_repairs_pk;
         private System.Windows.Forms.TextBox var_licence_pa;
         private System.Windows.Forms.TextBox var_tyres_pk;
         private System.Windows.Forms.TextBox var_allowance_pk;
@@ -52,12 +52,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.var_id_t = new System.Windows.Forms.Label();
             this.var_description_t = new System.Windows.Forms.Label();
             this.var_carrier_pa_t = new System.Windows.Forms.Label();
-            this.var_repairs_pa_t = new System.Windows.Forms.Label();
+            this.var_repairs_pk_t = new System.Windows.Forms.Label();
             this.var_licence_pa_t = new System.Windows.Forms.Label();
             this.var_id = new System.Windows.Forms.TextBox();
             this.var_description = new System.Windows.Forms.TextBox();
             this.var_carrier_pa = new System.Windows.Forms.TextBox();
-            this.var_repairs_pa = new System.Windows.Forms.TextBox();
+            this.var_repairs_pk = new System.Windows.Forms.TextBox();
             this.var_licence_pa = new System.Windows.Forms.TextBox();
             this.var_tyres_pk = new System.Windows.Forms.TextBox();
             this.var_allowance_pk = new System.Windows.Forms.TextBox();
@@ -110,17 +110,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.var_carrier_pa_t.Text = "CarrierPa";
             this.var_carrier_pa_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // var_repairs_pa_t
+            // var_repairs_pk_t
             // 
-            this.var_repairs_pa_t.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.var_repairs_pa_t.Font = new System.Drawing.Font("Arial", 8F);
-            this.var_repairs_pa_t.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.var_repairs_pa_t.Location = new System.Drawing.Point(405, 2);
-            this.var_repairs_pa_t.Name = "var_repairs_pa_t";
-            this.var_repairs_pa_t.Size = new System.Drawing.Size(59, 14);
-            this.var_repairs_pa_t.TabIndex = 0;
-            this.var_repairs_pa_t.Text = "RepairsPa";
-            this.var_repairs_pa_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.var_repairs_pk_t.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.var_repairs_pk_t.Font = new System.Drawing.Font("Arial", 8F);
+            this.var_repairs_pk_t.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.var_repairs_pk_t.Location = new System.Drawing.Point(405, 2);
+            this.var_repairs_pk_t.Name = "var_repairs_pk_t";
+            this.var_repairs_pk_t.Size = new System.Drawing.Size(59, 14);
+            this.var_repairs_pk_t.TabIndex = 0;
+            this.var_repairs_pk_t.Text = "RepairsPk";
+            this.var_repairs_pk_t.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // var_licence_pa_t
             // 
@@ -133,7 +133,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_id
             // 
-            this.var_id.BackColor = System.Drawing.Color.White;
+            this.var_id.BackColor = System.Drawing.SystemColors.Window;
             this.var_id.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.var_id.Font = new System.Drawing.Font("Arial", 8F);
             this.var_id.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -145,7 +145,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_description
             // 
-            this.var_description.BackColor = System.Drawing.Color.White;
+            this.var_description.BackColor = System.Drawing.SystemColors.Window;
             this.var_description.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarDescription", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.var_description.Font = new System.Drawing.Font("Arial", 8F);
             this.var_description.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -157,7 +157,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_carrier_pa
             // 
-            this.var_carrier_pa.BackColor = System.Drawing.Color.White;
+            this.var_carrier_pa.BackColor = System.Drawing.SystemColors.Window;
             this.var_carrier_pa.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarCarrierPa", true));
             this.var_carrier_pa.Font = new System.Drawing.Font("Arial", 8F);
             this.var_carrier_pa.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -167,21 +167,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.var_carrier_pa.Size = new System.Drawing.Size(82, 20);
             this.var_carrier_pa.TabIndex = 15;
             // 
-            // var_repairs_pa
+            // var_repairs_pk
             // 
-            this.var_repairs_pa.BackColor = System.Drawing.Color.White;
-            this.var_repairs_pa.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarRepairsPa", true));
-            this.var_repairs_pa.Font = new System.Drawing.Font("Arial", 8F);
-            this.var_repairs_pa.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.var_repairs_pa.Location = new System.Drawing.Point(408, 19);
-            this.var_repairs_pa.MaxLength = 0;
-            this.var_repairs_pa.Name = "var_repairs_pa";
-            this.var_repairs_pa.Size = new System.Drawing.Size(95, 20);
-            this.var_repairs_pa.TabIndex = 20;
+            this.var_repairs_pk.BackColor = System.Drawing.SystemColors.Window;
+            this.var_repairs_pk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarRepairsPa", true));
+            this.var_repairs_pk.Font = new System.Drawing.Font("Arial", 8F);
+            this.var_repairs_pk.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.var_repairs_pk.Location = new System.Drawing.Point(408, 19);
+            this.var_repairs_pk.MaxLength = 0;
+            this.var_repairs_pk.Name = "var_repairs_pk";
+            this.var_repairs_pk.Size = new System.Drawing.Size(95, 20);
+            this.var_repairs_pk.TabIndex = 20;
             // 
             // var_licence_pa
             // 
-            this.var_licence_pa.BackColor = System.Drawing.Color.White;
+            this.var_licence_pa.BackColor = System.Drawing.SystemColors.Window;
             this.var_licence_pa.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarLicencePa", true));
             this.var_licence_pa.Font = new System.Drawing.Font("Arial", 8F);
             this.var_licence_pa.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -193,7 +193,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_tyres_pk
             // 
-            this.var_tyres_pk.BackColor = System.Drawing.Color.White;
+            this.var_tyres_pk.BackColor = System.Drawing.SystemColors.Window;
             this.var_tyres_pk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarTyresPk", true));
             this.var_tyres_pk.Font = new System.Drawing.Font("Arial", 8F);
             this.var_tyres_pk.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -205,7 +205,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_allowance_pk
             // 
-            this.var_allowance_pk.BackColor = System.Drawing.Color.White;
+            this.var_allowance_pk.BackColor = System.Drawing.SystemColors.Window;
             this.var_allowance_pk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarAllowancePk", true));
             this.var_allowance_pk.Font = new System.Drawing.Font("Arial", 8F);
             this.var_allowance_pk.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -217,7 +217,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_insurance_pa
             // 
-            this.var_insurance_pa.BackColor = System.Drawing.Color.White;
+            this.var_insurance_pa.BackColor = System.Drawing.SystemColors.Window;
             this.var_insurance_pa.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarInsurancePa", true));
             this.var_insurance_pa.Font = new System.Drawing.Font("Arial", 8F);
             this.var_insurance_pa.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -229,7 +229,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // var_ror_pa
             // 
-            this.var_ror_pa.BackColor = System.Drawing.Color.White;
+            this.var_ror_pa.BackColor = System.Drawing.SystemColors.Window;
             this.var_ror_pa.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "VarRorPa", true));
             this.var_ror_pa.Font = new System.Drawing.Font("Arial", 8F);
             this.var_ror_pa.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -274,7 +274,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.insurance_pa_t.TabIndex = 48;
             this.insurance_pa_t.Text = "InsurancePa";
             this.insurance_pa_t.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.insurance_pa_t.Click += new System.EventHandler(this.label3_Click);
             // 
             // ror_pa_t
             // 
@@ -300,12 +299,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.Controls.Add(this.var_id_t);
             this.Controls.Add(this.var_description_t);
             this.Controls.Add(this.var_carrier_pa_t);
-            this.Controls.Add(this.var_repairs_pa_t);
+            this.Controls.Add(this.var_repairs_pk_t);
             this.Controls.Add(this.var_licence_pa_t);
             this.Controls.Add(this.var_id);
             this.Controls.Add(this.var_description);
             this.Controls.Add(this.var_carrier_pa);
-            this.Controls.Add(this.var_repairs_pa);
+            this.Controls.Add(this.var_repairs_pk);
             this.Controls.Add(this.var_licence_pa);
             this.Controls.Add(this.var_tyres_pk);
             this.Controls.Add(this.var_allowance_pk);
@@ -313,7 +312,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.Controls.Add(this.var_ror_pa);
             this.Name = "DVehicleAllowanceRates";
             this.Size = new System.Drawing.Size(650, 85);
-            this.Load += new System.EventHandler(this.DVehicleAllowanceRates_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -24,15 +24,5 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             return RetrieveCore<VehicleAllowanceRates>(VehicleAllowanceRates.GetAllVehicleAllowanceRates(in_var_id));
         }
-
-        private void DVehicleAllowanceRates_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
