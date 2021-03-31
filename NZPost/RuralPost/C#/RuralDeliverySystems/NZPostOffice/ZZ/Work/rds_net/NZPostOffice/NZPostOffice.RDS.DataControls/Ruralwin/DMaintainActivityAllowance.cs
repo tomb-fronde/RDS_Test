@@ -13,6 +13,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
     // Layout for Activity Allowance maintenance tab
+    // [31-Mar-2021] Added calculation for annual amount
 
     public partial class DMaintainActivityAllowance : Metex.Windows.DataUserControl
 	{
@@ -20,6 +21,27 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		{
 			InitializeComponent();
 			//InitializeDropdown();
+
+            // For some reason, any changes to the grid in the designer
+            // causes some of these values - particularly the ValueMember
+            // and DisplayMember - to be omitted from the generated code
+            // (and I don't have to remember to manually put them back).
+            // Putting them here overrides the emitted code.
+            this.alt_key.DefaultCellStyle.NullValue = null;
+            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
+            this.alt_key.ValueMember = "AltKey";
+            this.alt_key.DisplayMember = "AltDescription";
+
+            // For dates, it sets the prompt to '\0' instead of '0'
+            this.ca_effective_date.PromptChar = '0';
+            this.ca_paid_to_date.PromptChar = '0';
+            this.ca_end_date.PromptChar = '0';
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 		}
 
         protected override void OnHandleCreated(EventArgs e)
@@ -75,33 +97,59 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
+        // TJB  Allowance  16-Mar-2021
+        // The grid columns for this tab (see designer)
+        // this.grid.Columns
+        //  0    this.alt_description,
+        //  1    this.activity_count, (per week)
+        //  2    this.activity_rate,
+        //  3    this.wks_per_year
+        //  4    this.ca_annual_amount,
+        //  5    this.ca_effective_date,
+        //  6    this.ca_approved,
+        //  7    this.ca_paid_to_date,
+        //  8    this.ca_notes});
+        //
         // TJB 16-Sept-2010: Added
         // When the user changes the value in the amount column,
         // Recalculate the column total and update it on the form.
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            int column;
+        {  /*****************************************************
+            * NOTE:                                             *
+            *    Activity count = contract_allowance.ca_var1    *
+            *    Activity rate  = allowance_type.alt_rate       *
+            *    Weeks per year = allowance_type.alt_wks_yr     *
+            *                                                   *
+            *    Annual amount = Count * rate * WeeksPerYear    *
+            *****************************************************/
+            int column, thisRow;
             string column_name;
 
+            thisRow = e.RowIndex;
             column = e.ColumnIndex;
             column_name = this.grid.Columns[column].Name;
-            if (column_name == "ca_annual_amount")
-            {
-                int row, nRows;
-                decimal? value = 0.0M;
-                decimal sumThisAmt = 0.0M;
 
-                // Recalculate the column total
-                nRows = this.grid.RowCount;
-                for (row = 0; row < nRows; row++)
-                {
-                    value = (decimal?)this.grid[column, row].Value;
-                    sumThisAmt += (value == null) ? 0.0M : (decimal)value;
-                }
-                // Update the total on the form.
-                // The grid is inside a panel inside the form, 
-                // thus we have to go two layers out to get to the form.
-                this.Parent.Parent.Controls["Total"].Text = sumThisAmt.ToString();
+            // TJB March-2021
+            // Some cell, not necessarily the ca_annual_amount cell - has changed;
+            // mark the row changed
+            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
+
+            if (column_name == "ca_var1")
+            {   // Calculate the allowance annual amount (ca_annual_amount)
+                decimal? ThisAmt = 0.0M;
+                decimal? activity_count = 0;
+                decimal? wks_per_year = 0;
+                decimal? activity_rate = 0.0M;
+
+                activity_count = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value;
+                activity_rate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value;
+                wks_per_year = (decimal?)grid.Rows[thisRow].Cells["alt_wks_yr"].Value;
+
+                ThisAmt = ((activity_count == null) ? 0 : (int)activity_count)
+                          * ((activity_rate == null) ? 0.0M : (decimal)activity_rate)
+                          * ((wks_per_year == null) ? 0 : (int)wks_per_year);
+
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = ThisAmt;
             }
         }
     }
