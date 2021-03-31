@@ -12,7 +12,8 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 12-Mar-2021: New
-    // Layout for Fixed Allowance maintenance tab
+    // DataControl for Fixed Allowance maintenance tab
+    // [31-Mar-2021] Annual amount calculation added
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{
@@ -20,7 +21,28 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		{
 			InitializeComponent();
 			//InitializeDropdown();
-		}
+
+            // For some reason, any changes to the grid in the designer
+            // causes some of these values - particularly the ValueMember
+            // and DisplayMember - to be omitted from the generated code
+            // (and I don't have to remember to manually put them back).
+            // Putting them here overrides the emitted code.
+            this.alt_key.DefaultCellStyle.NullValue = null;
+            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
+            this.alt_key.ValueMember = "AltKey";
+            this.alt_key.DisplayMember = "AltDescription";
+
+            // For dates, it sets the prompt to '\0' instead of '0'
+            this.ca_effective_date.PromptChar = '0';
+            this.ca_paid_to_date.PromptChar = '0';
+            this.ca_end_date.PromptChar = '0';
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         protected override void OnHandleCreated(EventArgs e)
     	{
@@ -39,10 +61,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
 		{
-            set_row_readability();
             return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
                                         (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
-		}
+            set_row_readability();
+        }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
@@ -75,34 +97,111 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
-        // TJB 16-Sept-2010: Added
-        // When the user changes the value in the amount column,
-        // Recalculate the column total and update it on the form.
-        private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        void SetGridCellReadonly(int nRow, string sCell, bool bValue)
         {
-            int column;
-            string column_name;
+            // Set the cell's Readonly property to true/false
+            // and its background colour to 'control' if readonly, 'Window' (white) if not
+            grid.Rows[nRow].Cells[sCell].ReadOnly = bValue;
+            if (bValue)
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+            else
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
 
-            column = e.ColumnIndex;
-            column_name = this.grid.Columns[column].Name;
-            if (column_name == "ca_annual_amount")
+            grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
+        }
+
+        void set_row_readability()
+        {
+            for (int i = 0; i < grid.RowCount; i++)
             {
-                int row, nRows;
-                decimal? value = 0.0M;
-                decimal sumThisAmt = 0.0M;
-
-                // Recalculate the column total
-                nRows = this.grid.RowCount;
-                for (row = 0; row < nRows; row++)
+                if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
                 {
-                    value = (decimal?)this.grid[column, row].Value;
-                    sumThisAmt += (value == null) ? 0.0M : (decimal)value;
+                    // Note: changed alt_key to readonly
+                    SetGridCellReadonly(i, "alt_key", true);
+                    SetGridCellReadonly(i, "ca_annual_amount", false);
+                    SetGridCellReadonly(i, "ca_effective_date", false);
+                    SetGridCellReadonly(i, "ca_end_date", false);
+                    SetGridCellReadonly(i, "ca_doc_description", false);
+                    SetGridCellReadonly(i, "ca_approved", false);
+                    SetGridCellReadonly(i, "ca_paid_to_date", true);
+                    SetGridCellReadonly(i, "ca_notes", false);
                 }
-                // Update the total on the form.
-                // The grid is inside a panel inside the form, 
-                // thus we have to go two layers out to get to the form.
-                this.Parent.Parent.Controls["Total"].Text = sumThisAmt.ToString();
+                else
+                {
+                    SetGridCellReadonly(i, "alt_key", true);
+                    SetGridCellReadonly(i, "ca_annual_amount", true);
+                    SetGridCellReadonly(i, "ca_effective_date", true);
+                    SetGridCellReadonly(i, "ca_end_date", true);
+                    SetGridCellReadonly(i, "ca_doc_description", true);
+                    SetGridCellReadonly(i, "ca_approved", true);
+                    SetGridCellReadonly(i, "ca_paid_to_date", true);
+                    SetGridCellReadonly(i, "ca_notes", true);
+                }
             }
         }
+
+        void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
+        {
+            for (int i = 0; i < grid.RowCount; i++)
+            {
+                if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
+                {
+                    // Note: changed alt_key to readonly
+                    SetGridCellReadonly(i, "alt_key", true);
+                    SetGridCellReadonly(i, "ca_annual_amount", false);
+                    SetGridCellReadonly(i, "ca_effective_date", false);
+                    SetGridCellReadonly(i, "ca_end_date", false);
+                    SetGridCellReadonly(i, "ca_doc_description", false);
+                    SetGridCellReadonly(i, "ca_approved", false);
+                    SetGridCellReadonly(i, "ca_paid_to_date", true);
+                    SetGridCellReadonly(i, "ca_notes", false);
+                }
+                else
+                {
+                    SetGridCellReadonly(i, "alt_key", true);
+                    SetGridCellReadonly(i, "ca_annual_amount", true);
+                    SetGridCellReadonly(i, "ca_effective_date", true);
+                    SetGridCellReadonly(i, "ca_end_date", true);
+                    SetGridCellReadonly(i, "ca_doc_description", true);
+                    SetGridCellReadonly(i, "ca_approved", true);
+                    SetGridCellReadonly(i, "ca_paid_to_date", true);
+                    SetGridCellReadonly(i, "ca_notes", true);
+                }
+
+                if (grid.Rows[i].Cells["ca_approved"].Value != null
+                    && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
+                    SetGridCellReadonly(i, "ca_annual_amount", true);
+                else
+                    SetGridCellReadonly(i, "ca_annual_amount", false);
+
+                if (this.st_protect_confirm.Text == "Y")
+                    SetGridCellReadonly(i, "ca_approved", true);
+                else if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
+                    SetGridCellReadonly(i, "ca_approved", false);
+                else if (grid.Rows[i].Cells["ca_approved"].Value != null
+                         && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
+                    SetGridCellReadonly(i, "ca_approved", true);
+                else
+                    SetGridCellReadonly(i, "ca_approved", false);
+            }
+        }
+
+        // TJB 16-Sept-2010: Added
+        private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {  /*****************************************************
+            * NOTE:                                             *
+            *    There are no variable or fixed components to   *
+            *    the annual amount                              *
+            *                                                   *
+            *    Annual amount = <value entered>                *
+            *****************************************************/
+            int thisRow = e.RowIndex;
+
+            // TJB March-2021
+            // Some cell, not necessarily the ca_annual_amount cell - has changed;
+            // mark the row changed
+            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
+        }
+
     }
 }
