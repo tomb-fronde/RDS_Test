@@ -42,10 +42,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.st_title = new System.Windows.Forms.Label();
             this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
+            this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_var1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_rate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_end_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_approved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ca_paid_to_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
@@ -80,10 +80,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.alt_key,
+            this.ca_effective_date,
             this.ca_var1,
             this.alt_rate,
             this.ca_annual_amount,
-            this.ca_effective_date,
             this.ca_end_date,
             this.ca_approved,
             this.ca_paid_to_date,
@@ -134,58 +134,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key.Name = "alt_key";
             this.alt_key.Width = 140;
             // 
-            // ca_var1
-            // 
-            this.ca_var1.DataPropertyName = "CaVar1";
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.Format = "##,###.00";
-            dataGridViewCellStyle3.NullValue = "0.00";
-            this.ca_var1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ca_var1.HeaderText = "Investment Amount";
-            this.ca_var1.Name = "ca_var1";
-            this.ca_var1.Width = 64;
-            // 
-            // alt_rate
-            // 
-            this.alt_rate.DataPropertyName = "AltRate";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.Format = "##,###.00";
-            dataGridViewCellStyle4.NullValue = "0.00";
-            this.alt_rate.DefaultCellStyle = dataGridViewCellStyle4;
-            this.alt_rate.HeaderText = "ROI%";
-            this.alt_rate.Name = "alt_rate";
-            this.alt_rate.Width = 50;
-            // 
-            // ca_annual_amount
-            // 
-            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.Format = "##,###.00";
-            dataGridViewCellStyle5.NullValue = ".00";
-            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ca_annual_amount.HeaderText = "Annual Amount";
-            this.ca_annual_amount.Name = "ca_annual_amount";
-            this.ca_annual_amount.Width = 60;
-            // 
             // ca_effective_date
             // 
             this.ca_effective_date.DataPropertyName = "EffectiveDate";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.Format = "dd/MM/yyyy";
-            dataGridViewCellStyle6.NullValue = "00/00/0000";
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.Format = "dd/MM/yyyy";
+            dataGridViewCellStyle3.NullValue = "00/00/0000";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle3;
             this.ca_effective_date.HeaderText = "Effective Date";
             this.ca_effective_date.IncludeLiterals = false;
             this.ca_effective_date.IncludePrompt = false;
@@ -194,6 +153,47 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_effective_date.PromptChar = '\0';
             this.ca_effective_date.ValidatingType = null;
             this.ca_effective_date.Width = 70;
+            // 
+            // ca_var1
+            // 
+            this.ca_var1.DataPropertyName = "CaVar1";
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.Format = "##,###.00";
+            dataGridViewCellStyle4.NullValue = "0.00";
+            this.ca_var1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ca_var1.HeaderText = "Investment Amount";
+            this.ca_var1.Name = "ca_var1";
+            this.ca_var1.Width = 64;
+            // 
+            // alt_rate
+            // 
+            this.alt_rate.DataPropertyName = "AltRate";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.Format = "##,###.00";
+            dataGridViewCellStyle5.NullValue = "0.00";
+            this.alt_rate.DefaultCellStyle = dataGridViewCellStyle5;
+            this.alt_rate.HeaderText = "ROI%";
+            this.alt_rate.Name = "alt_rate";
+            this.alt_rate.Width = 50;
+            // 
+            // ca_annual_amount
+            // 
+            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.Format = "##,###.00";
+            dataGridViewCellStyle6.NullValue = ".00";
+            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle6;
+            this.ca_annual_amount.HeaderText = "Annual Amount";
+            this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.Width = 60;
             // 
             // ca_end_date
             // 
@@ -579,16 +579,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         #endregion
 
         private Metex.Windows.DataGridViewEntityComboColumn alt_key;
+        private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private DataGridViewTextBoxColumn ca_var1;
         private DataGridViewTextBoxColumn alt_rate;
         private DataGridViewTextBoxColumn ca_annual_amount;
-        private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_end_date;
         private DataGridViewCheckBoxColumn ca_approved;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_paid_to_date;
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
         private DataGridViewTextBoxColumn row_changed;
+
 
 
 

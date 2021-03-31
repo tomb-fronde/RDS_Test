@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // DataControl for ROI Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
+    // [31-Mar-2021] Rearranged columns
 
     public partial class DMaintainROIAllowance : Metex.Windows.DataUserControl
 	{
