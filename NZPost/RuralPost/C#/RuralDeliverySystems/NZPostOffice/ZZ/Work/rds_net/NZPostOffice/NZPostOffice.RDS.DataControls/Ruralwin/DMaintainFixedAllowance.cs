@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 12-Mar-2021: New
     // DataControl for Fixed Allowance maintenance tab
     // [31-Mar-2021] Annual amount calculation added
+    // [31-Mar-2021] Rearranged columns
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{

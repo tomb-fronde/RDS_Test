@@ -40,8 +40,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.st_title = new System.Windows.Forms.Label();
             this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
-            this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
+            this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_end_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_approved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ca_paid_to_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
@@ -76,8 +76,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.alt_key,
-            this.ca_annual_amount,
             this.ca_effective_date,
+            this.ca_annual_amount,
             this.ca_end_date,
             this.ca_approved,
             this.ca_paid_to_date,
@@ -130,31 +130,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key.ReadOnly = true;
             this.alt_key.Width = 140;
             // 
-            // ca_annual_amount
-            // 
-            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.Format = "##,###.00";
-            dataGridViewCellStyle3.NullValue = "0.00";
-            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ca_annual_amount.HeaderText = "Annual Amount";
-            this.ca_annual_amount.Name = "ca_annual_amount";
-            this.ca_annual_amount.Width = 78;
-            // 
             // ca_effective_date
             // 
             this.ca_effective_date.DataPropertyName = "EffectiveDate";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.Format = "dd/MM/yyyy";
-            dataGridViewCellStyle4.NullValue = "00/00/0000";
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.Format = "dd/MM/yyyy";
+            dataGridViewCellStyle3.NullValue = "00/00/0000";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle3;
             this.ca_effective_date.HeaderText = "Effective Date";
             this.ca_effective_date.IncludeLiterals = false;
             this.ca_effective_date.IncludePrompt = false;
@@ -163,6 +149,20 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_effective_date.PromptChar = '\0';
             this.ca_effective_date.ValidatingType = null;
             this.ca_effective_date.Width = 70;
+            // 
+            // ca_annual_amount
+            // 
+            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.Format = "##,###.00";
+            dataGridViewCellStyle4.NullValue = "0.00";
+            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ca_annual_amount.HeaderText = "Annual Amount";
+            this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.Width = 78;
             // 
             // ca_end_date
             // 
@@ -184,6 +184,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_end_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_end_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.ca_end_date.ValidatingType = null;
+            this.ca_end_date.Visible = false;
             this.ca_end_date.Width = 70;
             // 
             // ca_approved
@@ -399,14 +400,15 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         #endregion
 
         private Metex.Windows.DataGridViewEntityComboColumn alt_key;
-        private DataGridViewTextBoxColumn ca_annual_amount;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
+        private DataGridViewTextBoxColumn ca_annual_amount;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_end_date;
         private DataGridViewCheckBoxColumn ca_approved;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_paid_to_date;
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
         private DataGridViewTextBoxColumn row_changed;
+
 
 
 
