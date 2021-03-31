@@ -6,10 +6,12 @@ using System.Data.Common;
 using Metex.Core;
 using Metex.Core.Security;
 
+
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
     // Get details for the DMaintainAllowances tabs
+    // [29Mar2021] Updated alt_fixed* names and addedd alt_ruc_pk
 
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -22,16 +24,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
 	[MapInfo("ca_approved", "_approved", "contract_allowance")]
 	[MapInfo("con_title", "_contract_title", "contract")]
-    [MapInfo("ca_var1", "_ca_var1", "contract_allowance")]
-    [MapInfo("ca_var2", "_ca_var2", "contract_allowance")]
-    [MapInfo("ca_var3", "_ca_var3", "contract_allowance")]
+    [MapInfo("ca_dist_day", "_ca_dist_day", "contract_allowance")]
+    [MapInfo("ca_hrs_wk", "_ca_hrs_wk", "contract_allowance")]
+    [MapInfo("var_id", "_var_id", "contract_allowance")]
     [MapInfo("alt_description", "_alt_description", "allowance_type")]
-    [MapInfo("alt_fixed1", "_alt_fixed1", "allowance_type")]
-    [MapInfo("alt_fixed2", "_alt_fixed2", "allowance_type")]
-    [MapInfo("alt_fixed3", "_alt_fixed3", "allowance_type")]
-    [MapInfo("alt_fixed4", "_alt_fixed4", "allowance_type")]
+    [MapInfo("alt_rate", "_alt_rate", "allowance_type")]
+    [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type")]
+    [MapInfo("alt_acc", "_alt_acc", "allowance_type")]
+    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
+    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
     [MapInfo("alct_id", "_alct_id", "allowance_calc_type")]
     [MapInfo("alct_description", "_alct_description", "allowance_calc_type")]
+    [MapInfo("row_changed", "_row_changed", "")]
+    [MapInfo("ca_end_date", "_end_date", "contract_allowance")]
+    [MapInfo("ca_doc_description", "_ca_doc_description", "contract_allowance")]
+    [MapInfo("ca_costs_covered", "_ca_costs_covered", "contract_allowance")]
     [System.Serializable()]
 
 	public class MaintainAllowance : Entity<MaintainAllowance>
@@ -84,31 +91,34 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		private string  _contract_title;
 
         [DBField()]
-        private int? _ca_var1;
+        private decimal? _ca_var1;
 
         [DBField()]
-        private int? _ca_var2;
+        private decimal? _ca_dist_day;
 
         [DBField()]
-        private decimal? _ca_var3;
+        private decimal? _ca_hrs_wk;
 
         [DBField()]
-        private decimal? _ca_var4;
+        private int? _var_id;
 
         [DBField()]
         private string _alt_description;
 
         [DBField()]
-        private int? _alt_fixed1;
+        private decimal? _alt_rate;
 
         [DBField()]
-        private decimal? _alt_fixed2;
+        private decimal? _alt_wks_yr;
 
         [DBField()]
-        private decimal? _alt_fixed3;
+        private decimal? _alt_acc;
 
         [DBField()]
-        private decimal? _alt_fixed4;
+        private decimal? _alt_fuel_pk;
+
+        [DBField()]
+        private decimal? _alt_ruc_pk;
 
         [DBField()]
         private int? _alct_id;
@@ -116,7 +126,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         [DBField()]
         private string _alct_description;
 
-/*************************************************************************/
+        [DBField()]
+        private string _ca_doc_description;
+
+        [DBField()]
+        private DateTime? _ca_end_date;
+
+        [DBField()]
+        private string _ca_costs_covered;
+
+        // Used to mark changed rows, primarily so that
+        // WMaintainAllowance.wf_validate only validates changed rows.
+        [DBField()]
+        private string _row_changed = "N";
+        
+        /*************************************************************************/
 
 		public virtual int? AltKey
 		{
@@ -262,7 +286,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			}
 		}
 
-        public virtual int? CaVar1
+        public virtual Decimal? CaVar1
         {
             get
             {
@@ -280,55 +304,55 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual int? CaVar2
+        public virtual Decimal? CaDistDay
         {
             get
             {
-                CanReadProperty("CaVar2", true);
-                return _ca_var2;
+                CanReadProperty("CaDistDay", true);
+                return _ca_dist_day;
             }
             set
             {
-                CanWriteProperty("CaVar2", true);
-                if (_ca_var2 != value)
+                CanWriteProperty("CaDistDay", true);
+                if (_ca_dist_day != value)
                 {
-                    _ca_var2 = value;
+                    _ca_dist_day = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        public virtual decimal? CaVar3
+        public virtual Decimal? CaHrsWk
         {
             get
             {
-                CanReadProperty("CaVar3", true);
-                return _ca_var3;
+                CanReadProperty("CaHrsWk", true);
+                return _ca_hrs_wk;
             }
             set
             {
-                CanWriteProperty("CaVar3", true);
-                if (_ca_var3 != value)
+                CanWriteProperty("CaHrsWk", true);
+                if (_ca_hrs_wk != value)
                 {
-                    _ca_var3 = value;
+                    _ca_hrs_wk = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        public virtual decimal? CaVar4
+        public virtual int? VarId
         {
             get
             {
-                CanReadProperty("CaVar4", true);
-                return _ca_var4;
+                CanReadProperty("VarId", true);
+                return _var_id;
             }
             set
             {
-                CanWriteProperty("CaVar4", true);
-                if (_ca_var4 != value)
+                CanWriteProperty("VarId", true);
+                if (_var_id != value)
                 {
-                    _ca_var4 = value;
+                    _var_id = value;
                     PropertyHasChanged();
                 }
             }
@@ -352,73 +376,91 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual int? AltFixed1
+        public virtual decimal? AltRate
         {
             get
             {
-                CanReadProperty("AltFixed1", true);
-                return _alt_fixed1;
+                CanReadProperty("AltRate", true);
+                return _alt_rate;
             }
             set
             {
-                CanWriteProperty("AltFixed1", true);
-                if (_alt_fixed1 != value)
+                CanWriteProperty("AltRate", true);
+                if (_alt_rate != value)
                 {
-                    _alt_fixed1 = value;
+                    _alt_rate = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        public virtual decimal? AltFixed2
+        public virtual Decimal? AltWksYr
         {
             get
             {
-                CanReadProperty("AltFixed2", true);
-                return _alt_fixed2;
+                CanReadProperty("AltWksYr", true);
+                return _alt_wks_yr;
             }
             set
             {
-                CanWriteProperty("AltFixed2", true);
-                if (_alt_fixed2 != value)
+                CanWriteProperty("AltWksYr", true);
+                if (_alt_wks_yr != value)
                 {
-                    _alt_fixed2 = value;
+                    _alt_wks_yr = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        public virtual decimal? AltFixed3
+        public virtual Decimal? AltAcc
         {
             get
             {
-                CanReadProperty("AltFixed3", true);
-                return _alt_fixed3;
+                CanReadProperty("AltAcc", true);
+                return _alt_acc;
             }
             set
             {
-                CanWriteProperty("AltFixed3", true);
-                if (_alt_fixed3 != value)
+                CanWriteProperty("AltAcc", true);
+                if (_alt_acc != value)
                 {
-                    _alt_fixed3 = value;
+                    _alt_acc = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        public virtual decimal? AltFixed4
+        public virtual Decimal? AltFuelPk
         {
             get
             {
-                CanReadProperty("AltFixed4", true);
-                return _alt_fixed4;
+                CanReadProperty("AltFuelPk", true);
+                return _alt_fuel_pk;
             }
             set
             {
-                CanWriteProperty("AltFixed4", true);
-                if (_alt_fixed4 != value)
+                CanWriteProperty("AltFuelPk", true);
+                if (_alt_fuel_pk != value)
                 {
-                    _alt_fixed4 = value;
+                    _alt_fuel_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? AltRucPk
+        {
+            get
+            {
+                CanReadProperty("AltrucPk", true);
+                return _alt_ruc_pk;
+            }
+            set
+            {
+                CanWriteProperty("AltRucPk", true);
+                if (_alt_ruc_pk != value)
+                {
+                    _alt_ruc_pk = value;
                     PropertyHasChanged();
                 }
             }
@@ -455,6 +497,78 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 if (_alct_description != value)
                 {
                     _alct_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string RowChanged
+        {
+            get
+            {
+                CanReadProperty("RowChanged", true);
+                return (_row_changed == null) ? "N" : _row_changed;
+            }
+            set
+            {
+                CanWriteProperty("RowChanged", true);
+                if (_row_changed != value)
+                {
+                    _row_changed = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? EndDate
+        {
+            get
+            {
+                CanReadProperty("EndDate", true);
+                return _ca_end_date;
+            }
+            set
+            {
+                CanWriteProperty("EndDate", true);
+                if (_ca_end_date != value)
+                {
+                    _ca_end_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string DocDescription
+        {
+            get
+            {
+                CanReadProperty("DocDescription", true);
+                return _ca_doc_description;
+            }
+            set
+            {
+                CanWriteProperty("DocDescription", true);
+                if (_ca_doc_description != value)
+                {
+                    _ca_doc_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string CaCostsCovered
+        {
+            get
+            {
+                CanReadProperty("CaCostsCovered", true);
+                return _ca_costs_covered;
+            }
+            set
+            {
+                CanWriteProperty("CaCostsCovered", true);
+                if (_ca_costs_covered != value)
+                {
+                    _ca_costs_covered = value;
                     PropertyHasChanged();
                 }
             }
@@ -500,76 +614,90 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					//GenerateSelectCommandText(cm, "contract_allowance");
 					//GenerateSelectCommandText(cm, "contract");
                     cm.CommandText =
-                        " SELECT contract_allowance.alt_key"
-                            + ", contract_allowance.contract_no "
-                            + ", contract_allowance.ca_effective_date "
-                            + ", contract_allowance.ca_annual_amount"
-                            + ", contract_allowance.ca_notes "
-                            + ", contract_allowance.ca_paid_to_date"
-                            + ", contract_allowance.ca_approved "
-                            + ", contract.con_title "
-                            + ", contract_allowance.ca_var1"
-                            + ", contract_allowance.ca_var2"
-                            + ", contract_allowance.ca_var3"
-                            + ", contract_allowance.ca_var4"
-	                        + ", allowance_type.alt_description"
-	                        + ", allowance_type.alt_fixed1"
-	                        + ", allowance_type.alt_fixed2"
-	                        + ", allowance_type.alt_fixed3"
-	                        + ", allowance_type.alt_fixed4"
-                            + ", allowance_calc_type.alct_id"
-                            + ", allowance_calc_type.alct_description"
-                        + " FROM rd.contract_allowance " 
-                        + "    , rd.contract "
-	                    + "    , rd.allowance_type "
-                        + "    , rd.allowance_calc_type "
-                        + "WHERE contract.contract_no = contract_allowance.contract_no "
-                        + "  AND contract_allowance.contract_no = @inContractNo "
-                        + "  AND contract_allowance.ca_effective_date >= @inEffDate "
-                        + "  AND allowance_type.alct_id = @inAlctId "
-                        + "  AND allowance_type.alt_key = contract_allowance.alt_key "
-                        + "  AND allowance_calc_type.alct_id = allowance_type.alct_id "
-                        + "ORDER BY contract_allowance.contract_no "
-                        + "       , contract_allowance.alt_key"
-                        + "       , contract_allowance.ca_effective_date DESC";
-                    //cm.CommandText += "ORDER BY contract_allowance.ca_effective_date DESC ";
+                            "SELECT ca.alt_key "
+                                + ", ca.contract_no "
+                                + ", ca.ca_effective_date "
+                                + ", ca.ca_annual_amount "
+                                + ", ca.ca_notes "
+                                + ", ca.ca_paid_to_date "
+                                + ", ca.ca_approved "
+                                + ", c.con_title "
+                                + ", ca.ca_var1 "
+                                + ", ca.ca_dist_day "
+                                + ", ca.ca_hrs_wk "
+                                + ", ca.var_id "
+                                + ", alt.alt_description "
+                                + ", alt.alt_rate "
+                                + ", alt.alt_wks_yr "
+                                + ", alt.alt_acc "
+                                + ", alt.alt_fuel_pk "
+                                + ", alt.alt_ruc_pk "
+                                + ", alct.alct_id "
+                                + ", alct.alct_description "
+                                + ", ca.ca_end_date "
+                                + ", ca.ca_doc_description "
+                                + ", ca.ca_costs_covered "
+                             + "FROM rd.contract_allowance ca "
+                                + ", rd.contract c "
+                                + ", rd.allowance_type alt "
+                                + ", rd.allowance_calc_type alct "
+                            + "WHERE ca.contract_no = @inContractNo "
+                            + "  AND ca.ca_effective_date >= @inEffDate "
+                            + "  AND c.contract_no = ca.contract_no "
+                            + "  AND alt.alt_key = ca.alt_key "
+                            + "  AND alt.alct_id =  @inAlctId "
+                            + "  AND alct.alct_id = alt.alct_id "
+                            + "ORDER BY ca.ca_effective_date DESC "
+                                   + ", ca.alt_key ";
 
                     pList.Add(cm, "inContractNo", inContractNo);
                     pList.Add(cm, "inEffDate", inEffDate);
                     pList.Add(cm, "inAlctId", inAlctId);
 
 					List<MaintainAllowance> _list = new List<MaintainAllowance>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							MaintainAllowance instance = new MaintainAllowance();
-							instance._alt_key = GetValueFromReader<int?>(dr,0);
-							instance._contract_no = GetValueFromReader<int?>(dr,1);
-							instance._effective_date = GetValueFromReader<DateTime?>(dr,2);
-							instance._annual_amount = GetValueFromReader<decimal?>(dr,3);
-							instance._notes = dr.GetString(4);
-							instance._paid_to_date = GetValueFromReader<DateTime?>(dr,5);
-							instance._approved = dr.GetString(6);
-							instance._contract_title = dr.GetString(7);
-                            instance._ca_var1 = GetValueFromReader<int?>(dr, 8);
-                            instance._ca_var2 = GetValueFromReader<int?>(dr, 9);
-                            instance._ca_var3 = GetValueFromReader<decimal?>(dr, 10);
-                            instance._ca_var4 = GetValueFromReader<decimal?>(dr, 11);
-                            instance._alt_description = dr.GetString(12);
-                            instance._alt_fixed1 = GetValueFromReader<int?>(dr, 13);
-                            instance._alt_fixed2 = GetValueFromReader<decimal?>(dr, 14);
-                            instance._alt_fixed3 = GetValueFromReader<decimal?>(dr, 15);
-                            instance._alt_fixed4 = GetValueFromReader<decimal?>(dr, 16);
-                            instance._alct_id = GetValueFromReader<int?>(dr, 17);
-                            instance._alct_description = dr.GetString(18);
-                            
-                            instance.MarkOld();
-							instance.StoreInitialValues();
-							_list.Add(instance);
-						}
-						list = _list.ToArray();
-					}
+                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    {
+                        while (dr.Read())
+                        {
+                            MaintainAllowance instance = new MaintainAllowance();
+                            try
+                            {
+                                instance._alt_key = GetValueFromReader<int?>(dr, 0);
+                                instance._contract_no = GetValueFromReader<int?>(dr, 1);
+                                instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
+                                instance._annual_amount = GetValueFromReader<decimal?>(dr, 3);
+                                instance._notes = dr.GetString(4);
+                                instance._paid_to_date = GetValueFromReader<DateTime?>(dr, 5);
+                                instance._approved = dr.GetString(6);
+                                instance._contract_title = dr.GetString(7);
+                                instance._ca_var1 = GetValueFromReader<Decimal?>(dr, 8);
+                                instance._ca_dist_day = GetValueFromReader<Decimal?>(dr, 9);
+                                instance._ca_hrs_wk = GetValueFromReader<Decimal?>(dr, 10);
+                                instance._var_id = GetValueFromReader<int?>(dr, 11);
+                                instance._alt_description = dr.GetString(12);
+                                instance._alt_rate = GetValueFromReader<Decimal?>(dr, 13);
+                                instance._alt_wks_yr = GetValueFromReader<Decimal?>(dr, 14);
+                                instance._alt_acc = GetValueFromReader<Decimal?>(dr, 15);
+                                instance._alt_fuel_pk = GetValueFromReader<Decimal?>(dr, 16);
+                                instance._alt_ruc_pk = GetValueFromReader<Decimal?>(dr, 17);
+                                instance._alct_id = GetValueFromReader<int?>(dr, 18);
+                                instance._alct_description = dr.GetString(19);
+                                instance._ca_end_date = GetValueFromReader<DateTime?>(dr, 20);
+                                instance._ca_doc_description = dr.GetString(21);
+                                instance._ca_costs_covered = dr.GetString(22);
+
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            catch(Exception e)
+                            {
+                                sqlErrText = e.Message;
+                            }
+                        }
+                        list = _list.ToArray();
+                    }
+                    _row_changed = "N";
 				}
 			}
 		}
@@ -607,6 +735,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				}
 				// reinitialize original key/value list
 				StoreInitialValues();
+                _row_changed = "N";
 			}
 		}
 		[ServerMethod()]
@@ -633,6 +762,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     }
 				}
 				StoreInitialValues();
+                _row_changed = "N";
 			}
 		}
 		[ServerMethod()]
