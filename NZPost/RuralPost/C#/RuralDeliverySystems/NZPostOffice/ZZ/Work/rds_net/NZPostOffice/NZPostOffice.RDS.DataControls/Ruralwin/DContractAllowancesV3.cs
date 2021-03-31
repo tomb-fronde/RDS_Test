@@ -12,12 +12,16 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
     // Updated DContractAllowancesV2 with additional fields (notably ca_notes)
+    // [31-Mar-2021] Changed repairs_pa to repairs_pk (mostly in designer)
 
     public partial class DContractAllowancesV3 : Metex.Windows.DataUserControl
 	{
 		public DContractAllowancesV3()
 		{
 			InitializeComponent();
+            this.net_amount.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+            this.CaEffectiveDate.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.CaPaidToDate.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             this.grid.CellDoubleClick += new DataGridViewCellEventHandler(grid_CellDoubleClick);
 		}
 
