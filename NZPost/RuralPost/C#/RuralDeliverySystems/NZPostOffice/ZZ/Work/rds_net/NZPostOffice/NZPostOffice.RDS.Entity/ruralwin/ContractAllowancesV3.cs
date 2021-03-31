@@ -10,6 +10,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB  Allowances  10-Mar-2021: New
     // Updated ContractAllowancesV2 with additional fields
+    // [15-Mar-2021] Added alct_id as retreived value (mostly for debugging)
     
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -21,6 +22,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("alt_key", "_alt_key", "allowance_type")]
     [MapInfo("ca_notes", "_ca_notes", "contract_allowance")]
     [MapInfo("ca_effective_date", "_effective_date", "contract_allowance")]
+    [MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
+    [MapInfo("alct_id", "_alct_id", "allowance_type")]
     [System.Serializable()]
 
 	public class ContractAllowancesV3 : Entity<ContractAllowancesV3>
@@ -45,7 +48,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private string _ca_notes;
 
         [DBField()]
-        private DateTime _ca_effective_date;
+        private DateTime? _ca_effective_date;
+
+        [DBField()]
+        private DateTime? _ca_paid_to_date;
+
+        [DBField()]
+        private int? _alct_id;
 
 
 		public virtual int? ContractNo
@@ -156,7 +165,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual DateTime CaEffectiveDate
+        public virtual DateTime? CaEffectiveDate
         {
             get
             {
@@ -169,6 +178,42 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 if (_ca_effective_date != value)
                 {
                     _ca_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? CaPaidToDate
+        {
+            get
+            {
+                CanReadProperty("CaPaidToDate", true);
+                return _ca_paid_to_date;
+            }
+            set
+            {
+                CanWriteProperty("CaPaidToDate", true);
+                if (_ca_paid_to_date != value)
+                {
+                    _ca_paid_to_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? AlctId
+        {
+            get
+            {
+                CanReadProperty("AlctId", true);
+                return _alct_id;
+            }
+            set
+            {
+                CanWriteProperty("AlctId", true);
+                if (_alct_id != value)
+                {
+                    _alct_id = value;
                     PropertyHasChanged();
                 }
             }
@@ -226,6 +271,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                         + "	              where ca.contract_no = contract_allowance.contract_no"
                                         + "	                and ca.alt_key = allowance_type.alt_key"
                                         + "	              order by ca.ca_effective_date desc)"
+                                        + ", ca_paid_to_date ="
+                                        + "             (select top 1 ca.ca_paid_to_date from contract_allowance ca"
+                                        + "	              where ca.contract_no = contract_allowance.contract_no"
+                                        + "	                and ca.alt_key = allowance_type.alt_key"
+                                        + "	              order by ca.ca_effective_date desc)"
+                                        + ", allowance_type.alct_id "
                                      + "FROM rd.contract_allowance" 
                                         + ", rd.allowance_type" 
                                         + ", rd.types_for_contract" 
@@ -238,6 +289,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                         + ", contract_type.contract_type"
                                         + ", allowance_type.alt_description" 
                                         + ", allowance_type.alt_key "
+                                        + ", allowance_type.alct_id "
                                     + "ORDER BY contract_allowance.contract_no ASC " 
                                            + ", contract_type.contract_type    ASC "
                                            + ", allowance_type.alt_description ASC"
@@ -255,7 +307,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             instance._net_amount = GetValueFromReader<decimal?>(dr,3);
                             instance._alt_key = GetValueFromReader<int?>(dr, 4);
                             instance._ca_notes = GetValueFromReader<string>(dr, 5);
-                            instance._ca_effective_date = GetValueFromReader<DateTime>(dr, 6);
+                            instance._ca_effective_date = GetValueFromReader<DateTime?>(dr, 6);
+                            instance._ca_paid_to_date = GetValueFromReader<DateTime?>(dr, 7);
+                            instance._alct_id = GetValueFromReader<int?>(dr, 8);
 
 							instance.MarkOld();
                             instance.StoreInitialValues();
