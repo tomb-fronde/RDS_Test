@@ -13,6 +13,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     // TJB Frequencies & Vehicles Jan-2021  NEW
     // List a contract's vehicles - used by WSelectContractVehicle
     // A bit later, added grid_CellDoubleClick
+    // [17-Feb-2021] Removed references to default_vehicle (in designer)
 
 	public partial class DSelectContractVehicle : Metex.Windows.DataUserControl
 	{

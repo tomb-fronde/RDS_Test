@@ -3,6 +3,9 @@ using System.Windows.Forms;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Frequencies and Vehicles 17-Feb-2021
+    // Removed references to default_vehicle
+
     partial class DSelectContractVehicle
 	{
 		/// <summary>
@@ -29,14 +32,12 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_protect_confirm = new System.Windows.Forms.Label();
             this.vehicle_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vehicle_number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.VehicleStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DefaultVehicle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.st_title = new System.Windows.Forms.Label();
-            this.st_protect_confirm = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -68,8 +69,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.vehicle_name,
             this.vehicle_number,
-            this.VehicleStatus,
-            this.DefaultVehicle});
+            this.VehicleStatus});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -79,6 +79,24 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(348, 209);
             this.grid.TabIndex = 0;
+            // 
+            // st_title
+            // 
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_title.Location = new System.Drawing.Point(0, 0);
+            this.st_title.Name = "st_title";
+            this.st_title.Size = new System.Drawing.Size(638, 14);
+            this.st_title.TabIndex = 1;
+            this.st_title.Text = "SelectVehicle:";
+            // 
+            // st_protect_confirm
+            // 
+            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
+            this.st_protect_confirm.Name = "st_protect_confirm";
+            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
+            this.st_protect_confirm.TabIndex = 2;
+            this.st_protect_confirm.Text = "N";
+            this.st_protect_confirm.Visible = false;
             // 
             // vehicle_name
             // 
@@ -118,37 +136,6 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.VehicleStatus.ToolTipText = "\"A\" is active otherwise not active";
             this.VehicleStatus.Visible = false;
             this.VehicleStatus.Width = 50;
-            // 
-            // DefaultVehicle
-            // 
-            this.DefaultVehicle.DataPropertyName = "DefaultVehicle";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            this.DefaultVehicle.DefaultCellStyle = dataGridViewCellStyle5;
-            this.DefaultVehicle.HeaderText = "Default";
-            this.DefaultVehicle.Name = "DefaultVehicle";
-            this.DefaultVehicle.ToolTipText = "1 means this is the  default vehicle";
-            this.DefaultVehicle.Visible = false;
-            this.DefaultVehicle.Width = 50;
-            // 
-            // st_title
-            // 
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(0, 0);
-            this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(638, 14);
-            this.st_title.TabIndex = 1;
-            this.st_title.Text = "SelectVehicle:";
-            // 
-            // st_protect_confirm
-            // 
-            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
-            this.st_protect_confirm.Name = "st_protect_confirm";
-            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
-            this.st_protect_confirm.TabIndex = 2;
-            this.st_protect_confirm.Text = "N";
-            this.st_protect_confirm.Visible = false;
             // 
             // DSelectContractVehicle
             // 
@@ -199,7 +186,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
         private DataGridViewTextBoxColumn vehicle_name;
         private DataGridViewTextBoxColumn vehicle_number;
         private DataGridViewTextBoxColumn VehicleStatus;
-        private DataGridViewTextBoxColumn DefaultVehicle;
+
 
 
 
