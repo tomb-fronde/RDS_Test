@@ -13,14 +13,34 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
     // Layout for Time-based Allowance maintenance tab
+    // [31-Mar-2021] Added calculation for annual amount
 
     public partial class DMaintainTimeAllowance : Metex.Windows.DataUserControl
 	{
 		public DMaintainTimeAllowance()
 		{
 			InitializeComponent();
-			//InitializeDropdown();
-		}
+            // For some reason, any changes to the grid in the designer
+            // causes some of these values - particularly the ValueMember
+            // and DisplayMember - to be omitted from the generated code
+            // (and I don't have to remember to manually put them back).
+            // Putting them here overrides the emitted code.
+            this.alt_key.DefaultCellStyle.NullValue = null;
+            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
+            this.alt_key.ValueMember = "AltKey";
+            this.alt_key.DisplayMember = "AltDescription";
+
+            // For dates, it sets the prompt to '\0' instead of '0'
+            this.ca_effective_date.PromptChar = '0';
+            this.ca_paid_to_date.PromptChar = '0';
+            this.ca_end_date.PromptChar = '0';
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         protected override void OnHandleCreated(EventArgs e)
     	{
@@ -79,29 +99,51 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         // When the user changes the value in the amount column,
         // Recalculate the column total and update it on the form.
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            int column;
+        {  /***************************************************
+            * NOTE:                                           *
+            *    Hours per week = contract_allowance.ca_var1  *
+            *    Labour rate    = allowance_type.alt_rate     *
+            *    Weeks per year = allowance_type.alt_wks_yr   *
+            *    ACC%           = allowance_type.alt_acc      *
+            *                                                 *
+            *    Activity amount = Hours * rate * weeks       *
+            *    ACC amount      = Activity amount * ACC%     *
+            *                                                 *
+            *    Annual_amount = Activity amount + ACC amount *
+            ***************************************************/
+            int column, thisRow;
             string column_name;
 
+            thisRow = e.RowIndex;
             column = e.ColumnIndex;
             column_name = this.grid.Columns[column].Name;
-            if (column_name == "ca_annual_amount")
-            {
-                int row, nRows;
-                decimal? value = 0.0M;
-                decimal sumThisAmt = 0.0M;
 
-                // Recalculate the column total
-                nRows = this.grid.RowCount;
-                for (row = 0; row < nRows; row++)
-                {
-                    value = (decimal?)this.grid[column, row].Value;
-                    sumThisAmt += (value == null) ? 0.0M : (decimal)value;
-                }
-                // Update the total on the form.
-                // The grid is inside a panel inside the form, 
-                // thus we have to go two layers out to get to the form.
-                this.Parent.Parent.Controls["Total"].Text = sumThisAmt.ToString();
+            // TJB March-2021
+            // Some cell, not necessarily the ca_annual_amount cell - has changed;
+            // mark the row changed
+            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
+
+            if (column_name == "ca_var1")
+            {
+                decimal? hours;
+                decimal? rate;
+                decimal? wks;
+                decimal? acc;
+                decimal? TimeAmt = 0.0M;
+                decimal? ACCAmt  = 0.0M;
+
+                hours = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value;
+                rate  = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value;
+                wks   = (decimal?)grid.Rows[thisRow].Cells["alt_wks_yr"].Value;
+                acc   = (decimal?)grid.Rows[thisRow].Cells["alt_acc"].Value;
+
+                TimeAmt = ((hours == null) ? 0.0M : (decimal)hours)
+                          * ((rate == null) ? 0.0M : (decimal)rate)
+                          * ((wks == null) ? 0.0M : (decimal)wks);
+
+                ACCAmt = TimeAmt * ((acc == null) ? 0.0M : (decimal)acc);
+
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = TimeAmt + ACCAmt;
             }
         }
     }
