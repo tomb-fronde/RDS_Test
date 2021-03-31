@@ -38,27 +38,44 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
             this.st_title = new System.Windows.Forms.Label();
             this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
-            this.CaVar1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hrs_per_week = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hourly_rate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.veh_allowance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
+            this.ca_var1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_dist_day = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_hrs_wk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_rate = new NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBoxColumn();
+            this.var_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_costs_covered = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_approved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ca_paid_to_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
+            this.ca_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.row_changed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_wks_yr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_fuel_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_ruc_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_carrier_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_repairs_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_licence_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_tyres_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_allowance_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_insurance_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_ror_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingSource
             // 
-            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.MaintainAllowance);
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.MaintainVehAllowance);
             this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // grid
@@ -80,16 +97,30 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.alt_key,
-            this.CaVar1,
-            this.hrs_per_week,
-            this.distance,
-            this.hourly_rate,
-            this.veh_allowance,
-            this.ca_annual_amount,
             this.ca_effective_date,
+            this.ca_var1,
+            this.ca_dist_day,
+            this.ca_hrs_wk,
+            this.alt_rate,
+            this.var_id,
+            this.ca_costs_covered,
+            this.ca_annual_amount,
             this.ca_approved,
             this.ca_paid_to_date,
-            this.ca_notes});
+            this.ca_doc_description,
+            this.ca_notes,
+            this.row_changed,
+            this.alt_wks_yr,
+            this.alt_acc,
+            this.alt_fuel_pk,
+            this.alt_ruc_pk,
+            this.var_carrier_pa,
+            this.var_repairs_pk,
+            this.var_licence_pa,
+            this.var_tyres_pk,
+            this.var_allowance_pk,
+            this.var_insurance_pa,
+            this.var_ror_pa});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -97,7 +128,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.grid.Size = new System.Drawing.Size(570, 252);
+            this.grid.Size = new System.Drawing.Size(833, 251);
             this.grid.TabIndex = 0;
             this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
             this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
@@ -133,89 +164,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key.HeaderText = "Allowance";
             this.alt_key.Name = "alt_key";
             this.alt_key.Width = 140;
-            this.alt_key.ValueMember = "AltKey";
-            this.alt_key.DisplayMember = "AltDescription";
-            // 
-            // CaVar1
-            // 
-            this.CaVar1.DataPropertyName = "CaVar1";
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.CaVar1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.CaVar1.HeaderText = "Days/wk";
-            this.CaVar1.Name = "CaVar1";
-            this.CaVar1.Width = 50;
-            // 
-            // hrs_per_week
-            // 
-            this.hrs_per_week.DataPropertyName = "CaVar2";
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.hrs_per_week.DefaultCellStyle = dataGridViewCellStyle4;
-            this.hrs_per_week.HeaderText = "Hrs/Wk";
-            this.hrs_per_week.Name = "hrs_per_week";
-            this.hrs_per_week.Width = 50;
-            // 
-            // distance
-            // 
-            this.distance.DataPropertyName = "CaVar3";
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.distance.DefaultCellStyle = dataGridViewCellStyle5;
-            this.distance.HeaderText = "Distance/Day";
-            this.distance.Name = "distance";
-            this.distance.Width = 50;
-            // 
-            // hourly_rate
-            // 
-            this.hourly_rate.DataPropertyName = "AltFixed1";
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonFace;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.hourly_rate.DefaultCellStyle = dataGridViewCellStyle6;
-            this.hourly_rate.HeaderText = "Hourly Rate";
-            this.hourly_rate.Name = "hourly_rate";
-            this.hourly_rate.Width = 50;
-            // 
-            // veh_allowance
-            // 
-            this.veh_allowance.DataPropertyName = "AltFixed2";
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ButtonFace;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.veh_allowance.DefaultCellStyle = dataGridViewCellStyle7;
-            this.veh_allowance.HeaderText = "Veh Allowance";
-            this.veh_allowance.Name = "veh_allowance";
-            this.veh_allowance.Width = 60;
-            // 
-            // ca_annual_amount
-            // 
-            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle8.Format = "##,###.00";
-            dataGridViewCellStyle8.NullValue = ".00";
-            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle8;
-            this.ca_annual_amount.HeaderText = "Amount";
-            this.ca_annual_amount.Name = "ca_annual_amount";
-            this.ca_annual_amount.Width = 60;
             // 
             // ca_effective_date
             // 
             this.ca_effective_date.DataPropertyName = "EffectiveDate";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle9.Format = "dd/MM/yyyy";
-            dataGridViewCellStyle9.NullValue = "00/00/0000";
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.Format = "dd/MM/yyyy";
+            dataGridViewCellStyle3.NullValue = "00/00/0000";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_effective_date.DefaultCellStyle = dataGridViewCellStyle3;
             this.ca_effective_date.HeaderText = "Effective Date";
             this.ca_effective_date.IncludeLiterals = false;
             this.ca_effective_date.IncludePrompt = false;
@@ -225,13 +185,103 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_effective_date.ValidatingType = null;
             this.ca_effective_date.Width = 70;
             // 
+            // ca_var1
+            // 
+            this.ca_var1.DataPropertyName = "CaVar1";
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ca_var1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ca_var1.HeaderText = "Days per wk";
+            this.ca_var1.Name = "ca_var1";
+            this.ca_var1.Width = 50;
+            // 
+            // ca_dist_day
+            // 
+            this.ca_dist_day.DataPropertyName = "CaDistDay";
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ca_dist_day.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ca_dist_day.HeaderText = "Distance per Day";
+            this.ca_dist_day.Name = "ca_dist_day";
+            this.ca_dist_day.Width = 50;
+            // 
+            // ca_hrs_wk
+            // 
+            this.ca_hrs_wk.DataPropertyName = "CaHrsWk";
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ca_hrs_wk.DefaultCellStyle = dataGridViewCellStyle6;
+            this.ca_hrs_wk.HeaderText = "Hours per Wk";
+            this.ca_hrs_wk.Name = "ca_hrs_wk";
+            this.ca_hrs_wk.Width = 50;
+            // 
+            // alt_rate
+            // 
+            this.alt_rate.DataPropertyName = "AltRate";
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.alt_rate.DefaultCellStyle = dataGridViewCellStyle7;
+            this.alt_rate.HeaderText = "Hourly Rate";
+            this.alt_rate.IncludeLiterals = false;
+            this.alt_rate.IncludePrompt = false;
+            this.alt_rate.Mask = null;
+            this.alt_rate.Name = "alt_rate";
+            this.alt_rate.PromptChar = '\0';
+            this.alt_rate.ReadOnly = true;
+            this.alt_rate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_rate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.alt_rate.ValidatingType = null;
+            this.alt_rate.Width = 50;
+            // 
+            // var_id
+            // 
+            this.var_id.DataPropertyName = "VarId";
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.var_id.DefaultCellStyle = dataGridViewCellStyle8;
+            this.var_id.HeaderText = "Vehicle Type";
+            this.var_id.Name = "var_id";
+            this.var_id.Width = 60;
+            // 
+            // ca_costs_covered
+            // 
+            this.ca_costs_covered.DataPropertyName = "CaCostsCovered";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ca_costs_covered.DefaultCellStyle = dataGridViewCellStyle9;
+            this.ca_costs_covered.HeaderText = "Costs";
+            this.ca_costs_covered.Name = "ca_costs_covered";
+            this.ca_costs_covered.Width = 30;
+            // 
+            // ca_annual_amount
+            // 
+            this.ca_annual_amount.DataPropertyName = "AnnualAmount";
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle10.Format = "##,###.00";
+            dataGridViewCellStyle10.NullValue = ".00";
+            this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle10;
+            this.ca_annual_amount.HeaderText = "Annual Amount";
+            this.ca_annual_amount.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.Width = 73;
+            // 
             // ca_approved
             // 
             this.ca_approved.DataPropertyName = "Approved";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.NullValue = false;
-            this.ca_approved.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.NullValue = false;
+            this.ca_approved.DefaultCellStyle = dataGridViewCellStyle11;
             this.ca_approved.FalseValue = "N";
             this.ca_approved.HeaderText = "Approved";
             this.ca_approved.Name = "ca_approved";
@@ -241,13 +291,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // ca_paid_to_date
             // 
             this.ca_paid_to_date.DataPropertyName = "PaidToDate";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.Format = "dd/MM/yy";
-            dataGridViewCellStyle11.NullValue = "00/00/00";
-            this.ca_paid_to_date.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle12.Format = "dd/MM/yy";
+            dataGridViewCellStyle12.NullValue = "00/00/00";
+            this.ca_paid_to_date.DefaultCellStyle = dataGridViewCellStyle12;
             this.ca_paid_to_date.HeaderText = "Paid to Date";
             this.ca_paid_to_date.IncludeLiterals = false;
             this.ca_paid_to_date.IncludePrompt = false;
@@ -258,17 +308,132 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_paid_to_date.ValidatingType = null;
             this.ca_paid_to_date.Width = 70;
             // 
+            // ca_doc_description
+            // 
+            this.ca_doc_description.DataPropertyName = "DocDescription";
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.ca_doc_description.DefaultCellStyle = dataGridViewCellStyle13;
+            this.ca_doc_description.HeaderText = "Document Description";
+            this.ca_doc_description.Name = "ca_doc_description";
+            this.ca_doc_description.Width = 120;
+            // 
             // ca_notes
             // 
             this.ca_notes.DataPropertyName = "Notes";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Black;
-            this.ca_notes.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ca_notes.DefaultCellStyle = dataGridViewCellStyle14;
             this.ca_notes.HeaderText = "Notes";
             this.ca_notes.Name = "ca_notes";
-            this.ca_notes.Width = 138;
+            // 
+            // row_changed
+            // 
+            this.row_changed.DataPropertyName = "RowChanged";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.row_changed.DefaultCellStyle = dataGridViewCellStyle15;
+            this.row_changed.HeaderText = "Row Changed";
+            this.row_changed.Name = "row_changed";
+            this.row_changed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.row_changed.Visible = false;
+            this.row_changed.Width = 20;
+            // 
+            // alt_wks_yr
+            // 
+            this.alt_wks_yr.DataPropertyName = "AltWksYr";
+            this.alt_wks_yr.HeaderText = "WksYr";
+            this.alt_wks_yr.Name = "alt_wks_yr";
+            this.alt_wks_yr.Visible = false;
+            this.alt_wks_yr.Width = 30;
+            // 
+            // alt_acc
+            // 
+            this.alt_acc.DataPropertyName = "AltAcc";
+            this.alt_acc.HeaderText = "Acc%";
+            this.alt_acc.Name = "alt_acc";
+            this.alt_acc.Visible = false;
+            this.alt_acc.Width = 30;
+            // 
+            // alt_fuel_pk
+            // 
+            this.alt_fuel_pk.DataPropertyName = "AltFuelPk";
+            this.alt_fuel_pk.HeaderText = "FuelPk";
+            this.alt_fuel_pk.Name = "alt_fuel_pk";
+            this.alt_fuel_pk.Visible = false;
+            this.alt_fuel_pk.Width = 30;
+            // 
+            // alt_ruc_pk
+            // 
+            this.alt_ruc_pk.DataPropertyName = "AltRucPk";
+            this.alt_ruc_pk.HeaderText = "RucPk";
+            this.alt_ruc_pk.Name = "alt_ruc_pk";
+            this.alt_ruc_pk.Visible = false;
+            this.alt_ruc_pk.Width = 30;
+            // 
+            // var_carrier_pa
+            // 
+            this.var_carrier_pa.DataPropertyName = "VarCarrierPa";
+            this.var_carrier_pa.HeaderText = "Carrier";
+            this.var_carrier_pa.Name = "var_carrier_pa";
+            this.var_carrier_pa.Visible = false;
+            this.var_carrier_pa.Width = 30;
+            // 
+            // var_repairs_pk
+            // 
+            this.var_repairs_pk.DataPropertyName = "VarRepairsPk";
+            this.var_repairs_pk.HeaderText = "Repairs";
+            this.var_repairs_pk.Name = "var_repairs_pk";
+            this.var_repairs_pk.Visible = false;
+            this.var_repairs_pk.Width = 30;
+            // 
+            // var_licence_pa
+            // 
+            this.var_licence_pa.DataPropertyName = "VarLicencePa";
+            this.var_licence_pa.HeaderText = "Licence";
+            this.var_licence_pa.Name = "var_licence_pa";
+            this.var_licence_pa.Visible = false;
+            this.var_licence_pa.Width = 30;
+            // 
+            // var_tyres_pk
+            // 
+            this.var_tyres_pk.DataPropertyName = "VarTyresPk";
+            this.var_tyres_pk.HeaderText = "Tyres";
+            this.var_tyres_pk.Name = "var_tyres_pk";
+            this.var_tyres_pk.Visible = false;
+            this.var_tyres_pk.Width = 30;
+            // 
+            // var_allowance_pk
+            // 
+            this.var_allowance_pk.DataPropertyName = "VarAllowancePk";
+            this.var_allowance_pk.HeaderText = "Allowance";
+            this.var_allowance_pk.Name = "var_allowance_pk";
+            this.var_allowance_pk.Visible = false;
+            this.var_allowance_pk.Width = 30;
+            // 
+            // var_insurance_pa
+            // 
+            this.var_insurance_pa.DataPropertyName = "VarInsurancePa";
+            this.var_insurance_pa.HeaderText = "Insurance";
+            this.var_insurance_pa.Name = "var_insurance_pa";
+            this.var_insurance_pa.Visible = false;
+            this.var_insurance_pa.Width = 30;
+            // 
+            // var_ror_pa
+            // 
+            this.var_ror_pa.DataPropertyName = "VarRorPa";
+            this.var_ror_pa.HeaderText = "Ror";
+            this.var_ror_pa.Name = "var_ror_pa";
+            this.var_ror_pa.Visible = false;
+            this.var_ror_pa.Width = 30;
             // 
             // DMaintainDistanceAllowance
             // 
@@ -279,7 +444,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.Controls.Add(this.st_title);
             this.Controls.Add(this.st_protect_confirm);
             this.Name = "DMaintainDistanceAllowance";
-            this.Size = new System.Drawing.Size(570, 252);
+            this.Size = new System.Drawing.Size(833, 251);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -329,14 +494,22 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         void grid_DataError(object sender, System.Windows.Forms.DataGridViewDataErrorEventArgs e)
         {
             // this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            //  0    this.alt_key,
-            //  1    this.ca_effective_date,
-            //  2    this.ca_annual_amount,
-            //  3    this.ca_approved,
-            //  4    this.ca_paid_to_date,
-            //  5    this.ca_notes});
+            //   0    this.alt_key,
+            //   1    this.days_per_wk,
+            //   2    this.hrs_per_week,
+            //   3    this.distance,
+            //   4    this.hourly_rate,
+            //   5    this.veh_allowance,
+            //   6    this.ca_annual_amount,
+            //   7    this.ca_effective_date,
+            //   8    this.ca_approved,
+            //   9    this.ca_paid_to_date,
+            //  10    this.ca_notes});
             int nRow = e.RowIndex;
             int nCol = e.ColumnIndex;
+            string sColHeader = grid.Columns[nCol].HeaderText;
+            string sColName = grid.Columns[nCol].Name;
+            
             if (grid.Rows[nRow].Cells["ca_paid_to_date"].Value != null)
             {
                 e.Cancel = true;
@@ -485,15 +658,29 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         #endregion
 
         private Metex.Windows.DataGridViewEntityComboColumn alt_key;
-        private DataGridViewTextBoxColumn CaVar1;
-        private DataGridViewTextBoxColumn hrs_per_week;
-        private DataGridViewTextBoxColumn distance;
-        private DataGridViewTextBoxColumn hourly_rate;
-        private DataGridViewTextBoxColumn veh_allowance;
-        private DataGridViewTextBoxColumn ca_annual_amount;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
+        private DataGridViewTextBoxColumn ca_var1;
+        private DataGridViewTextBoxColumn ca_dist_day;
+        private DataGridViewTextBoxColumn ca_hrs_wk;
+        private NZPostOffice.Shared.VisualComponents.NumericalMaskedTextBoxColumn alt_rate;
+        private DataGridViewTextBoxColumn var_id;
+        private DataGridViewTextBoxColumn ca_costs_covered;
+        private DataGridViewTextBoxColumn ca_annual_amount;
         private DataGridViewCheckBoxColumn ca_approved;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_paid_to_date;
+        private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
+        private DataGridViewTextBoxColumn row_changed;
+        private DataGridViewTextBoxColumn alt_wks_yr;
+        private DataGridViewTextBoxColumn alt_acc;
+        private DataGridViewTextBoxColumn alt_fuel_pk;
+        private DataGridViewTextBoxColumn alt_ruc_pk;
+        private DataGridViewTextBoxColumn var_carrier_pa;
+        private DataGridViewTextBoxColumn var_repairs_pk;
+        private DataGridViewTextBoxColumn var_licence_pa;
+        private DataGridViewTextBoxColumn var_tyres_pk;
+        private DataGridViewTextBoxColumn var_allowance_pk;
+        private DataGridViewTextBoxColumn var_insurance_pa;
+        private DataGridViewTextBoxColumn var_ror_pa;
     }
 }
