@@ -10,6 +10,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB  Allowances  28-Mar-2021:  New
     // Data entity for vehicle allowance calculations
+    // [31-Mar-2021] Changed repairs_pa to repairs_pk
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -17,7 +18,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("var_id", "_var_id", "vehicle_allowance_rates")]
     [MapInfo("var_description", "_var_description", "vehicle_allowance_rates")]
     [MapInfo("var_carrier_pa", "_var_carrier_pa", "vehicle_allowance_rates")]
-    [MapInfo("var_repairs_pa", "_var_repairs_pa", "vehicle_allowance_rates")]
+    [MapInfo("var_repairs_pk", "_var_repairs_pk", "vehicle_allowance_rates")]
     [MapInfo("var_licence_pa", "_var_licence_pa", "vehicle_allowance_rates")]
     [MapInfo("var_tyres_pk", "_var_tyres_pk", "vehicle_allowance_rates")]
     [MapInfo("var_allowance_pa", "_var_allowance_pa", "vehicle_allowance_rates")]
@@ -37,7 +38,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private decimal? _var_carrier_pa;
 
         [DBField()]
-        private decimal? _var_repairs_pa;
+        private decimal? _var_repairs_pk;
 
         [DBField()]
         private decimal? _var_licence_pa;
@@ -109,19 +110,19 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual decimal? VarRepairsPa
+        public virtual decimal? VarRepairsPk
         {
             get
             {
-                CanReadProperty("VarRepairsPa", true);
-                return _var_repairs_pa;
+                CanReadProperty("VarRepairsPk", true);
+                return _var_repairs_pk;
             }
             set
             {
-                CanWriteProperty("VarRepairsPa", true);
-                if (_var_repairs_pa != value)
+                CanWriteProperty("VarRepairsPk", true);
+                if (_var_repairs_pk != value)
                 {
-                    _var_repairs_pa = value;
+                    _var_repairs_pk = value;
                     PropertyHasChanged();
                 }
             }
@@ -259,7 +260,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                         " SELECT var_id"
                         + "      var_description "
                         + "      var_carrier_pa "
-                        + "      var_repairs_pa "
+                        + "      var_repairs_pk "
                         + "      var_licemce_pa "
                         + "      var_tyres_pk "
                         + "      var_allowance_pk "
@@ -283,7 +284,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._var_id           = GetValueFromReader<int?>(dr, 0);
                                 instance._var_description  = GetValueFromReader<string>(dr, 1);
                                 instance._var_carrier_pa   = GetValueFromReader<decimal?>(dr, 2);
-                                instance._var_repairs_pa   = GetValueFromReader<decimal?>(dr, 3);
+                                instance._var_repairs_pk   = GetValueFromReader<decimal?>(dr, 3);
                                 instance._var_licence_pa   = GetValueFromReader<decimal?>(dr, 4);
                                 instance._var_tyres_pk     = GetValueFromReader<decimal?>(dr, 5);
                                 instance._var_allowance_pk = GetValueFromReader<decimal?>(dr, 6);
