@@ -13,6 +13,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     // TJB  Allowances  19-Mar-2021
     // Changed columns displayed - See DAddAllowance.
+    // [30-Mar-2021] default ca_approved value to "N" for inserts
     //
     // TJB 16-Sep-2010 Bug fix
     // If there are no rows to save, don't attempt to.
@@ -243,6 +244,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_allowance.GetItem<AddAllowance>(newRow).ContractTitle = ls_title;
                 idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
                 idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
+                idw_allowance.GetItem<AddAllowance>(newRow).Approved = "N";
             }
 
             // Calculate the total of the AnnualPayments
@@ -592,7 +594,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // TJB Release 7.1.3 testing  Aug-2010: added
                 //     Found to be needed - read-only status lost when a row deleted.
                 set_approvability();
-                calc_allowance_total();
+                //calc_allowance_total();
             }
         }
 
