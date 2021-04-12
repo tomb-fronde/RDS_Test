@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Adapted from WAddAllowance.
     // Vastly different: Only used to determine the new allowance's type 
     // and associated vehicle if the calc type is distance-based.
+    // [12-Apr-2021] Changed "maxDate" to be the contract renewal date (was DateTime.MinDate)
     //
     // Once determined, the new record is saved and WMaintainAllowance is 
     // initiated with the allowance calc type included so that WMaintainAllowance
@@ -29,6 +30,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public int il_contract;
         public int il_contract_seq;
         public int newRow = -1;
+        DateTime dtEffDate = DateTime.MinValue;
 
         public int? il_altKey;
         public int? il_alctId;
@@ -96,7 +98,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 2;
-            this.cb_save.Text = "Save";
+            this.cb_save.Text = "OK";
             this.cb_save.Click += new System.EventHandler(this.cb_save_clicked);
             // 
             // cb_cancel
@@ -174,7 +176,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
 
-            DateTime dtEffDate = DateTime.MinValue;
             DateTime dtToday = DateTime.Today.Date;
             DateTime? dtPaidToDate, tmpDate;
 
@@ -237,7 +238,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lvn_Criteria.of_addcriteria("alt_key", il_altKey);
             lvn_Criteria.of_addcriteria("alct_id", il_alctId);
             lvn_Criteria.of_addcriteria("contract_title", ls_title);
-            lvn_Criteria.of_addcriteria("optype", "Update");
+            lvn_Criteria.of_addcriteria("optype", "Insert");
             lnv_msg.of_addcriteria(lvn_Criteria);
 
             // TJB  RPCR_017 July-2010
@@ -305,10 +306,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 return FAILURE;
             }
 
-            // if this is the new record, check that its effective date is later than that
+            // This is the new record; check that its effective date is greater than that
             // of any existing allowances of the same type.
             if (newRow >= 0 && pRow == newRow)
             {
+/*
                 ld_maxdate = new DateTime();
                 int SQLCode = 0;
                 string SQLErrText = string.Empty;
@@ -326,11 +328,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
                     return FAILURE;
                 }
+*/
+                DateTime dEffDate = (DateTime)ld_effdate;
+                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(il_contract, ll_altkey, dtEffDate);
 
-                if (ld_effdate <= ld_maxdate)
+                if (dEffDate <= dMaxDate)
                 {
                     pErrmsg = "The effective date must be greater than "
-                                + ld_maxdate.GetValueOrDefault().ToString("dd/MM/yyyy") + '.';
+                                + dMaxDate.ToString("dd/MM/yyyy") + '.';
                     return FAILURE;
                 }
             }
@@ -367,11 +372,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                        , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
+                // This is a new row.  Mark it with "N".  In WMaintainAllowance, this will
+                // be used when validating its effective date.
+                idw_allowance.GetItem<AddAllowance>(nRow).RowChanged = "N";
             }
+
+            idw_allowance.DataObject.Save();
 
             of_open_WMaintainAllowance();
 
-            idw_allowance.DataObject.Save();
             this.Close();
         }
 
