@@ -8,8 +8,13 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
-    // TJB  Allowances  19-Mar-2021
-    // Added ca_ennd_date and ca_doc_description columns
+    // TJB  Allowances  Mar-2021
+    // Added columns
+    //    ca_end_date
+    //    ca_doc_description
+    //    var_id
+    //    ca_row_changed
+    //    alct_id
     //
     // TJB RPCR_017 July-2010
     // Added GetCurrentAllowances to limit allowance list to current allowances
@@ -28,6 +33,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("con_title", "_contract_title", "contract")]
     [MapInfo("ca_end_date", "_end_date", "contract_allowance")]
     [MapInfo("ca_doc_description", "_doc_description", "contract_allowance")]
+    [MapInfo("var_id", "_var_id", "contract_allowance")]
+    [MapInfo("ca_row_changed", "_ca_row_changed", "contract_allowance")]
+    [MapInfo("alct_id", "_alct_id", "")]
     [System.Serializable()]
 
 	public class AddAllowance : Entity<AddAllowance>
@@ -81,8 +89,17 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         [DBField()]
         private string _doc_description;
 
+        [DBField()]
+        private int? _alct_id;
 
-		public virtual int? AltKey
+        [DBField()]
+        private int? _var_id;
+
+        [DBField()]
+        private string _ca_row_changed;
+
+        /****************************************************************************/
+        public virtual int? AltKey
 		{
 			get
 			{
@@ -262,11 +279,66 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual int? AlctId
+        {
+            get
+            {
+                CanReadProperty("AlctId", true);
+                return _alct_id;
+            }
+            set
+            {
+                CanWriteProperty("AlctId", true);
+                if (_alct_id != value)
+                {
+                    _alct_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? VarId
+        {
+            get
+            {
+                CanReadProperty("VarId", true);
+                return _var_id;
+            }
+            set
+            {
+                CanWriteProperty("AlctId", true);
+                if (_var_id != value)
+                {
+                    _var_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string RowChanged
+        {
+            get
+            {
+                CanReadProperty("RowChanged", true);
+                return _ca_row_changed;
+            }
+            set
+            {
+                CanWriteProperty("RowChanged", true);
+                if (_ca_row_changed != value)
+                {
+                    _ca_row_changed = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
 		{
 			return string.Format( "{0}/{1}/{2}", _alt_key,_contract_no,_effective_date );
 		}
 		#endregion
+/****************************************************************************/
 
 		#region Factory Methods
 		public static AddAllowance NewAddAllowance( int? inContractNo )
@@ -290,6 +362,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
       */
         #endregion
 
+/****************************************************************************/
 		#region Data Access
 		[ServerMethod]
         private void FetchEntity(int? inContractNo, DateTime? inEffDate)
@@ -297,58 +370,74 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             // TJB RPCR_017 July-2010: Added inEffDate parameter and modified query
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
 			{
-				using (DbCommand cm = cn.CreateCommand())
-				{
-                    ParameterCollection pList = new ParameterCollection();
-                    cm.CommandType = CommandType.Text;
-					//GenerateSelectCommandText(cm, "contract_allowance");
-					//GenerateSelectCommandText(cm, "contract");
-                    cm.CommandText =
-                        " SELECT contract_allowance.alt_key"
-                        + "    , contract_allowance.contract_no "
-                        + "    , contract_allowance.ca_effective_date "
-                        + "    , contract_allowance.ca_annual_amount"
-                        + "    , contract_allowance.ca_notes "
-                        + "    , contract_allowance.ca_paid_to_date"
-                        + "    , contract_allowance.ca_approved "
-                        + "    , contract.con_title "
-                        + "    , contract_allowance.ca_end_date"
-                        + "    , contract_allowance.ca_doc_description"
-                        + " FROM rd.contract_allowance, rd.contract "
-                        + "WHERE contract.contract_no = contract_allowance.contract_no "
-                        + "  AND contract_allowance.contract_no = @inContractNo ";
-                    pList.Add(cm, "inContractNo", inContractNo);
-                    if (inEffDate != null)
+                try
+                {
+                    using (DbCommand cm = cn.CreateCommand())
                     {
-                        cm.CommandText += "  AND contract_allowance.ca_effective_date >= @inEffDate ";
-                        pList.Add(cm, "inEffDate", inEffDate);
-                    }
-                    cm.CommandText += "ORDER BY contract_allowance.ca_effective_date DESC ";
+                        ParameterCollection pList = new ParameterCollection();
+                        cm.CommandType = CommandType.Text;
+                        //GenerateSelectCommandText(cm, "contract_allowance");
+                        //GenerateSelectCommandText(cm, "contract");
+                        cm.CommandText =
+                            " SELECT contract_allowance.alt_key"
+                            + "    , contract_allowance.contract_no"
+                            + "    , contract_allowance.ca_effective_date"
+                            + "    , contract_allowance.ca_annual_amount"
+                            + "    , contract_allowance.ca_notes"
+                            + "    , contract_allowance.ca_paid_to_date"
+                            + "    , contract_allowance.ca_approved"
+                            + "    , contract.con_title"
+                            + "    , contract_allowance.ca_end_date"
+                            + "    , contract_allowance.ca_doc_description"
+                            + "    , contract_allowance.var_id"
+                            + "    , contract_allowance.ca_row_changed"
+                            + "    , allowance_type.alct_id"
+                            + " FROM rd.contract_allowance, rd.contract, rd.allowance_type "
+                            + "WHERE contract_allowance.contract_no = @inContractNo "
+                            + "  AND allowance_type.alt_key = contract_allowance.alt_key "
+                            + "  AND contract.contract_no = contract_allowance.contract_no ";
 
-					List<AddAllowance> _list = new List<AddAllowance>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-					{
-						while (dr.Read())
-						{
-							AddAllowance instance = new AddAllowance();
-							instance._alt_key = GetValueFromReader<int?>(dr,0);
-							instance._contract_no = GetValueFromReader<int?>(dr,1);
-							instance._effective_date = GetValueFromReader<DateTime?>(dr,2);
-							instance._annual_amount = GetValueFromReader<decimal?>(dr,3);
-							instance._notes = dr.GetString(4);
-							instance._paid_to_date = GetValueFromReader<DateTime?>(dr,5);
-							instance._approved = dr.GetString(6);
-							instance._contract_title = dr.GetString(7);
-                            instance._end_date = GetValueFromReader<DateTime?>(dr, 8);
-                            instance._doc_description = dr.GetString(9);
-                            instance.MarkOld();
-							instance.StoreInitialValues();
-							_list.Add(instance);
-						}
-						list = _list.ToArray();
-					}
-				}
-			}
+                        pList.Add(cm, "inContractNo", inContractNo);
+                        if (inEffDate != null)
+                        {
+                            cm.CommandText += "  AND contract_allowance.ca_effective_date >= @inEffDate ";
+                            pList.Add(cm, "inEffDate", inEffDate);
+                        }
+                        cm.CommandText += "ORDER BY contract_allowance.ca_effective_date DESC ";
+
+                        List<AddAllowance> _list = new List<AddAllowance>();
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            while (dr.Read())
+                            {
+                                AddAllowance instance = new AddAllowance();
+                                instance._alt_key = GetValueFromReader<int?>(dr, 0);
+                                instance._contract_no = GetValueFromReader<int?>(dr, 1);
+                                instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
+                                instance._annual_amount = GetValueFromReader<decimal?>(dr, 3);
+                                instance._notes = dr.GetString(4);
+                                instance._paid_to_date = GetValueFromReader<DateTime?>(dr, 5);
+                                instance._approved = dr.GetString(6);
+                                instance._contract_title = dr.GetString(7);
+                                instance._end_date = GetValueFromReader<DateTime?>(dr, 8);
+                                instance._doc_description = dr.GetString(9);
+                                instance._var_id = GetValueFromReader<int?>(dr, 10);
+                                instance._ca_row_changed = dr.GetString(11);
+                                instance._alct_id = GetValueFromReader<int?>(dr, 12);
+                                instance.MarkOld();
+                                instance.StoreInitialValues();
+                                _list.Add(instance);
+                            }
+                            list = _list.ToArray();
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _sqlcode = -1;
+                    _sqlerrtext = e.Message;
+                }
+            }
 		}
 
 		[ServerMethod()]
@@ -392,26 +481,26 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             _sqlcode = 0;
             _sqlerrtext = "";
 
-            using (
-                DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
+            using (DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
-				if (GenerateInsertCommandText(cm, "contract_allowance", pList))
-				{
-                    try
-                    {
-                        DBHelper.ExecuteNonQuery(cm, pList);
-                    }
-                    catch (Exception e)
-                    {
-                        _sqlcode = -2;
-                        _sqlerrtext = e.Message;
-                    }
-				}
-				StoreInitialValues();
-			}
+
+                try
+                {
+                    if (GenerateInsertCommandText(cm, "contract_allowance", pList))
+				    {
+                            DBHelper.ExecuteNonQuery(cm, pList);
+				    }
+				    StoreInitialValues();
+		        }
+                catch (Exception e)
+                {
+                    _sqlcode = -2;
+                    _sqlerrtext = e.Message;
+                }
+            }
 		}
 		[ServerMethod()]
 		private void DeleteEntity()
