@@ -20,6 +20,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     // TJB Allowances 19-Mar-2021
     // Minor adjustments when opening WMaintainAllowances
+    // [5-Apr-2021] Changed open WAddAllowance to open WAddAllowance2021.
+    //        WAddAllowance2021 now opens WMaintainAllowances directly
     //
     // TJB Allowances 11-Mar-2021
     // Changed Allowances display to DContractAllowancesV3
@@ -2601,12 +2603,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // if (il_con_active_seq < 1 )
             //    lnv_Criteria.of_addcriteria("con_active_seq", 1);
             
+            // TJB  Allowances 5-Apr-2021
+            // Changed openAddAllowance to open WAddAllowance2021.
+            //
             // TJB  RPCR_017 July-2010
             // Changed WAddAllowance significantly
             // (See WAddAllowance0 for previous version)
             StaticMessage.PowerObjectParm = lnv_msg;
             StaticVariables.window = this;
-            WAddAllowance w_add_allowance = new WAddAllowance();
+            WAddAllowance2021 w_add_allowance = new WAddAllowance2021();
 
             w_add_allowance.MdiParent = StaticVariables.MainMDI;
             w_add_allowance.Show();
