@@ -12,12 +12,12 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
-    // Layout for Activity Allowance maintenance tab
+    // DataControl for Activity Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
 
     public partial class DMaintainActivityAllowance : Metex.Windows.DataUserControl
 	{
-        public DMaintainActivityAllowance(int inActivityId)
+        public DMaintainActivityAllowance()
 		{
 			InitializeComponent();
 			//InitializeDropdown();
@@ -35,7 +35,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
             this.ca_paid_to_date.PromptChar = '0';
-            this.ca_end_date.PromptChar = '0';
+            //this.ca_end_date.PromptChar = '0';
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -61,7 +61,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
 		{
-            set_row_readability();
+            //set_row_readability();
             return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
                                         (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
 		}
@@ -97,22 +97,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
+        public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
+        {
+            // Set the cell's Readonly property to true/false
+            // and its background colour to 'control' if readonly, 'Window' (white) if not
+            grid.Rows[nRow].Cells[sCell].ReadOnly = bValue;
+            if (bValue)
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+            else
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
+
+            grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
+        }
+
         // TJB  Allowance  16-Mar-2021
         // The grid columns for this tab (see designer)
-        // this.grid.Columns
-        //  0    this.alt_description,
-        //  1    this.activity_count, (per week)
-        //  2    this.activity_rate,
-        //  3    this.wks_per_year
-        //  4    this.ca_annual_amount,
-        //  5    this.ca_effective_date,
-        //  6    this.ca_approved,
-        //  7    this.ca_paid_to_date,
-        //  8    this.ca_notes});
-        //
-        // TJB 16-Sept-2010: Added
-        // When the user changes the value in the amount column,
-        // Recalculate the column total and update it on the form.
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {  /*****************************************************
             * NOTE:                                             *
@@ -128,11 +127,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             thisRow = e.RowIndex;
             column = e.ColumnIndex;
             column_name = this.grid.Columns[column].Name;
-
-            // TJB March-2021
-            // Some cell, not necessarily the ca_annual_amount cell - has changed;
-            // mark the row changed
-            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
 
             if (column_name == "ca_var1")
             {   // Calculate the allowance annual amount (ca_annual_amount)
@@ -150,6 +144,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                           * ((wks_per_year == null) ? 0 : (int)wks_per_year);
 
                 grid.Rows[thisRow].Cells["ca_annual_amount"].Value = ThisAmt;
+            }
+
+            // TJB 9-April-2021
+            // If the ca_annual_amount or activity_count (ca_var1) has changed and this row 
+            // isn't marked as new ("N") and hasn't already been marked modified ("M"), 
+            // mark it mark it changed ("C") or modified ("M") as appropriate
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+            if (!(sRowChanged == "N" || sRowChanged == "M"))
+            {
+                if (column_name == "ca_annual_amount" || column_name == "ca_var1")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                else
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
             }
         }
     }

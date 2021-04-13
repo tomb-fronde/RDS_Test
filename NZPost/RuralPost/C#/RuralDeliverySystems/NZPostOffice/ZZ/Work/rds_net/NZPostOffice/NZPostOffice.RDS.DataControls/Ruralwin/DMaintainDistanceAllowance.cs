@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // DataControl for Distance Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
+    // [2-Apr-2021] Changed Vheicle Type column to a dropdown list
 
     public partial class DMaintainDistanceAllowance : Metex.Windows.DataUserControl
 	{
@@ -28,8 +29,13 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // Putting them here overrides the emitted code.
             this.alt_key.DefaultCellStyle.NullValue = null;
             this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            this.alt_key.ValueMember   = "AltKey";
+            this.alt_key.ValueMember = "AltKey";
             this.alt_key.DisplayMember = "AltDescription";
+
+            this.var_id.DefaultCellStyle.NullValue = null;
+            this.var_id.DefaultCellStyle.DataSourceNullValue = null;
+            this.var_id.ValueMember = "VarId";
+            this.var_id.DisplayMember = "VarDescription";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
@@ -56,11 +62,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		private void InitializeDropdown()
 		{
 			alt_key.AssignDropdownType<DddwAllowanceTypesDistance>();
+            var_id.AssignDropdownType<DddwVehicleAllowanceRates>();
 		}
 
 		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
 		{
-            set_row_readability();
+            //set_row_readability();
             return RetrieveCore<MaintainVehAllowance>(new List<MaintainVehAllowance>
                                         (MaintainVehAllowance.GetAllMaintainVehAllowance(inContract, inEffDate, inAlctId)));
 		}
@@ -94,6 +101,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     this.grid.Columns[i].ReadOnly = pValue;
                     break;
                 }
+        }
+
+        public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
+        {
+            // Set the cell's Readonly property to true/false
+            // and its background colour to 'control' if readonly, 'Window' (white) if not
+            grid.Rows[nRow].Cells[sCell].ReadOnly = bValue;
+            if (bValue)
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+            else
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
+
+            grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
         }
 
         // TJB 16-Sept-2010: Added
@@ -132,11 +152,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             column_name = this.grid.Columns[column].Name;
             sHdr = this.grid.Columns[column].HeaderText;
             string s = sHdr;
-
-            // TJB March-2021
-            // Some cell, not necessarily the ca_annual_amount cell - has changed;
-            // mark the row changed
-            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
 
             if (column_name == "ca_var1" || column_name == "ca_dist_day" || column_name == "ca_hrs_wk")
             {
@@ -199,6 +214,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
                 grid.Rows[thisRow].Cells["ca_annual_amount"].Value = (decimal?)(HoursAmt + DistAmt + VehCosts);
             }
+
+            // TJB 9-April-2021
+            // If the ca_annual_amount or any of the user-modifiable calculation factors 
+            // have changed and this row isn't marked as new ("N") and hasn't already been 
+            // marked modified ("M"), mark it mark it changed ("C") or modified ("M") 
+            // as appropriate
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+            if (!(sRowChanged == "N" || sRowChanged == "M"))
+            {
+                if (column_name == "ca_annual_amount" || column_name == "ca_var1" 
+                    || column_name == "ca_dist_day" || column_name == "ca_hrs_wk")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                else
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+            }
         }
 
         private decimal of_GetDecimalValue(int thisRow, string sColumn)
@@ -208,6 +238,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
             decimal? val = (decimal?)grid.Rows[thisRow].Cells[sColumn].Value;
             return (decimal)((val == null) ? 0.0M : val);
+        }
+
+        private void grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

@@ -36,7 +36,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
             this.ca_paid_to_date.PromptChar = '0';
-            this.ca_end_date.PromptChar = '0';
+            //this.ca_end_date.PromptChar = '0';
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -64,7 +64,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		{
             return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
                                         (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
-            set_row_readability();
+            //set_row_readability();
         }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
@@ -98,7 +98,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
-        void SetGridCellReadonly(int nRow, string sCell, bool bValue)
+        public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
         {
             // Set the cell's Readonly property to true/false
             // and its background colour to 'control' if readonly, 'Window' (white) if not
@@ -121,7 +121,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SetGridCellReadonly(i, "alt_key", true);
                     SetGridCellReadonly(i, "ca_annual_amount", false);
                     SetGridCellReadonly(i, "ca_effective_date", false);
-                    SetGridCellReadonly(i, "ca_end_date", false);
+                    //SetGridCellReadonly(i, "ca_end_date", false);
                     SetGridCellReadonly(i, "ca_doc_description", false);
                     SetGridCellReadonly(i, "ca_approved", false);
                     SetGridCellReadonly(i, "ca_paid_to_date", true);
@@ -132,7 +132,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SetGridCellReadonly(i, "alt_key", true);
                     SetGridCellReadonly(i, "ca_annual_amount", true);
                     SetGridCellReadonly(i, "ca_effective_date", true);
-                    SetGridCellReadonly(i, "ca_end_date", true);
+                    //SetGridCellReadonly(i, "ca_end_date", true);
                     SetGridCellReadonly(i, "ca_doc_description", true);
                     SetGridCellReadonly(i, "ca_approved", true);
                     SetGridCellReadonly(i, "ca_paid_to_date", true);
@@ -151,7 +151,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SetGridCellReadonly(i, "alt_key", true);
                     SetGridCellReadonly(i, "ca_annual_amount", false);
                     SetGridCellReadonly(i, "ca_effective_date", false);
-                    SetGridCellReadonly(i, "ca_end_date", false);
+                    //SetGridCellReadonly(i, "ca_end_date", false);
                     SetGridCellReadonly(i, "ca_doc_description", false);
                     SetGridCellReadonly(i, "ca_approved", false);
                     SetGridCellReadonly(i, "ca_paid_to_date", true);
@@ -162,7 +162,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SetGridCellReadonly(i, "alt_key", true);
                     SetGridCellReadonly(i, "ca_annual_amount", true);
                     SetGridCellReadonly(i, "ca_effective_date", true);
-                    SetGridCellReadonly(i, "ca_end_date", true);
+                    //SetGridCellReadonly(i, "ca_end_date", true);
                     SetGridCellReadonly(i, "ca_doc_description", true);
                     SetGridCellReadonly(i, "ca_approved", true);
                     SetGridCellReadonly(i, "ca_paid_to_date", true);
@@ -187,7 +187,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
         }
 
-        // TJB 16-Sept-2010: Added
+        // TJB  Allowances  9-Apr-2021
+        // Updated the Row_changed value to "new" usage
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {  /*****************************************************
             * NOTE:                                             *
@@ -197,11 +198,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             *    Annual amount = <value entered>                *
             *****************************************************/
             int thisRow = e.RowIndex;
+            int column = e.ColumnIndex;
+            string column_name = this.grid.Columns[column].Name;
 
-            // TJB March-2021
-            // Some cell, not necessarily the ca_annual_amount cell - has changed;
-            // mark the row changed
-            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
+            // TJB 9-April-2021
+            // If the ca_annual_amount has changed and this row isn't marked as new ("N") 
+            // and hasn't already been marked modified ("M"), mark it mark it changed ("C") 
+            // or modified ("M") as appropriate
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+            if ( !(sRowChanged == "N" || sRowChanged == "M"))
+            {
+                if (column_name == "ca_annual_amount")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                else
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+            }
         }
 
     }

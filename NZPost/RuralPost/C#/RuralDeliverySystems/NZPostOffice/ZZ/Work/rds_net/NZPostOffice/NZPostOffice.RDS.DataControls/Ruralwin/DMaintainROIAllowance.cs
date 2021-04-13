@@ -39,9 +39,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_effective_date.PromptChar = '0';
             this.ca_effective_date.Mask = "00/00/0000";
             this.ca_effective_date.ValueType = typeof(System.DateTime);
-            this.ca_end_date.PromptChar = '0';
-            this.ca_end_date.Mask = "00/00/0000";
-            this.ca_end_date.ValueType = typeof(System.DateTime);
+            //this.ca_end_date.PromptChar = '0';
+            //this.ca_end_date.Mask = "00/00/0000";
+            //this.ca_end_date.ValueType = typeof(System.DateTime);
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -67,7 +67,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
 		{
-            set_row_readability();
+            //set_row_readability();
             return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
                                         (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
 		}
@@ -103,6 +103,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
+        public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
+        {
+            // Set the cell's Readonly property to true/false
+            // and its background colour to 'control' if readonly, 'Window' (white) if not
+            grid.Rows[nRow].Cells[sCell].ReadOnly = bValue;
+            if (bValue)
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+            else
+                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
+
+            grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
+        }
+
         // TJB Allowances 16-Mar-2021
         // New columns - see designer
         // this.grid.Columns
@@ -133,11 +146,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             column  = e.ColumnIndex;
             column_name = this.grid.Columns[column].Name;
 
-            // TJB March-2021
-            // Some cell, not necessarily the ca_annual_amount cell - has changed;
-            // mark the row changed
-            grid.Rows[thisRow].Cells["row_changed"].Value = (string)"Y";
-
             if (column_name == "ca_var1")
             {
                 decimal? investment_value = 0.0M;
@@ -152,7 +160,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
                 grid.Rows[thisRow].Cells["ca_annual_amount"].Value = ThisAmt;
             }
+
+            // TJB 9-April-2021
+            // If the ca_annual_amount or investment_value (ca_var1) has changed and this row 
+            // isn't marked as new ("N") and hasn't already been marked modified ("M"), 
+            // mark it mark it changed ("C") or modified ("M") as appropriate
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+            if (!(sRowChanged == "N" || sRowChanged == "M"))
+            {
+                if (column_name == "ca_annual_amount" || column_name == "ca_var1")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                else
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+            }
         }
-    
     }
 }

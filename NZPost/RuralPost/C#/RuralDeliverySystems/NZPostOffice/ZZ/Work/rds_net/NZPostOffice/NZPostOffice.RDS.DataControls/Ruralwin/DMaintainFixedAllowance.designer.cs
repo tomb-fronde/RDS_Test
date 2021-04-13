@@ -42,12 +42,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ca_end_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
+            this.total_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_approved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ca_paid_to_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.row_changed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ca_row_changed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -55,7 +55,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // bindingSource
             // 
             this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.MaintainAllowance);
-            this.bindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_ListChanged);
             // 
             // grid
             // 
@@ -78,12 +77,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alt_key,
             this.ca_effective_date,
             this.ca_annual_amount,
-            this.ca_end_date,
+            this.total_amount,
             this.ca_approved,
             this.ca_paid_to_date,
             this.ca_doc_description,
             this.ca_notes,
-            this.row_changed});
+            this.ca_row_changed});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -164,35 +163,26 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_annual_amount.Name = "ca_annual_amount";
             this.ca_annual_amount.Width = 78;
             // 
-            // ca_end_date
+            // total_amount
             // 
-            this.ca_end_date.DataPropertyName = "EndDate";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            this.total_amount.DataPropertyName = "TotalAmount";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ControlLight;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.Format = "dd/MM/yyyy";
-            dataGridViewCellStyle5.NullValue = "00/00/0000";
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ca_end_date.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ca_end_date.HeaderText = "End Date";
-            this.ca_end_date.IncludeLiterals = false;
-            this.ca_end_date.IncludePrompt = false;
-            this.ca_end_date.Mask = null;
-            this.ca_end_date.Name = "ca_end_date";
-            this.ca_end_date.PromptChar = '\0';
-            this.ca_end_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ca_end_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ca_end_date.ValidatingType = null;
-            this.ca_end_date.Visible = false;
-            this.ca_end_date.Width = 70;
+            dataGridViewCellStyle5.Format = "##,###.00";
+            dataGridViewCellStyle5.NullValue = "0.00";
+            this.total_amount.DefaultCellStyle = dataGridViewCellStyle5;
+            this.total_amount.HeaderText = "Total Amount";
+            this.total_amount.Name = "total_amount";
+            this.total_amount.ReadOnly = true;
+            this.total_amount.Width = 78;
             // 
             // ca_approved
             // 
             this.ca_approved.DataPropertyName = "Approved";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle6.NullValue = false;
             this.ca_approved.DefaultCellStyle = dataGridViewCellStyle6;
             this.ca_approved.FalseValue = "N";
@@ -244,18 +234,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_notes.Name = "ca_notes";
             this.ca_notes.Width = 138;
             // 
-            // row_changed
+            // ca_row_changed
             // 
-            this.row_changed.DataPropertyName = "RowChanged";
+            this.ca_row_changed.DataPropertyName = "RowChanged";
             dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.row_changed.DefaultCellStyle = dataGridViewCellStyle10;
-            this.row_changed.HeaderText = "Row Changed";
-            this.row_changed.Name = "row_changed";
-            this.row_changed.Visible = false;
-            this.row_changed.Width = 20;
+            this.ca_row_changed.DefaultCellStyle = dataGridViewCellStyle10;
+            this.ca_row_changed.HeaderText = "Row Changed";
+            this.ca_row_changed.Name = "ca_row_changed";
+            this.ca_row_changed.Visible = false;
+            this.ca_row_changed.Width = 20;
             // 
             // DMaintainFixedAllowance
             // 
@@ -274,13 +264,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         }
 
         void grid_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {   // [DMaintainFixedAllowance]
-            // This gets around a problem where the user has entered 
-            // an allowance then cleared it and wants to move on.  Without this,
+        {
+            // This gets around a problem where the user has entered one of the
+            // fields then cleared it and wants to move on.  Without this,
             // the focus would stay in the field without 'saying' anything about why.
-            if (this.grid.CurrentColumnName == "alt_description")
+            string column;
+            column = this.grid.CurrentColumnName;
+            if (column == "ca_effective_date" || column == "ca_annual_amount" || column == "alt_key")
             {
-                this.grid.CancelEdit();
+                object value1 = this.grid.CurrentCell.EditedFormattedValue;
+                if (value1 == null || (string)value1 == "")
+                    MessageBox.Show("        Please enter a value.        ", ""
+                                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -290,6 +285,15 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             {
                 //this.grid.EndEdit();
             }
+        }
+
+        private string stringValue(string value)
+        {
+            if (value == null)
+                return "null";
+            else if (value == "")
+                return "empty";
+            return value;
         }
 
         // TJB RPCR_017 July-2010
@@ -317,23 +321,26 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             // this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             //  0    this.alt_key,
-            //  1    this.ca_annual_amount,
-            //  2    this.ca_effective_date,
-            //  3    this.ca_end_date,
-            //  4    this.ca_doc_description
-            //  5    this.ca_approved,
-            //  6    this.ca_paid_to_date,
-            //  7    this.ca_notes,
-            //  8    this.row_changed
+            //  1    this.ca_effective_date,
+            //  2    this.ca_annual_amount,
+            //  3    this.ca_approved,
+            //  4    this.ca_paid_to_date,
+            //  5    this.ca_doc_description
+            //  6    this.ca_notes,
+            //  7    this.ca_row_changed
             int nRow = e.RowIndex;
             int nCol = e.ColumnIndex;
-            string s1, s2 = grid.Rows[nRow].Cells["alt_key"].Value.ToString();
-            s1 = s2;
+            string column = grid.CurrentColumnName;
+            string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].EditedFormattedValue;
+            string sValue = (string)((DataGridView)sender).CurrentCell.EditedFormattedValue;
+            sAllowance = stringValue( sAllowance );
+            sValue = stringValue( sValue );
+
             if (grid.Rows[nRow].Cells["ca_paid_to_date"].Value != null)
             {
                 e.Cancel = true;
             }
-            if (nCol == 0)
+            if (column == "alt_key")
             {
                 if (nRow == 0)
                 {
@@ -348,50 +355,30 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
                 else
                 {
-                    MessageBox.Show("Allowance type does not pass validation.\n"
+                    MessageBox.Show("Allowance type '" + sAllowance + "' does not pass validation.\n"
                             + "Please enter a valid Allowance."
-                            , "Validation Error - row "+nRow.ToString()
+                            , "Fixed Allowance Validation Error"
                             , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     e.Cancel = true;
                 }
             }
-            else if (nCol == 1)
+            else if (column == "ca_effective_date")
+            {
+                MessageBox.Show("The Effective Date does not pass validation.\n"
+                        + "Allowance type '" + sAllowance + "'\n" 
+                        + "Value " + sValue + "\n"
+                        + "Please enter a valid Date."
+                        , "Fixed Allowance Validation Error"
+                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                e.Cancel = true;
+            }
+            else if (column == "ca_annual_amount")
             {
                 MessageBox.Show("Annual Amount does not pass validation.\n"
-                        + "Please enter a valid numeric value."
-                        , "Validation Error - row "+nRow.ToString()
-                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true;
-            }
-            else if (nCol == 2)
-            {
-                MessageBox.Show("Effective Date does not pass validation.\n"
-                        + "Please enter a valid Date."
-                        , "Validation Error - row " + nRow.ToString()
-                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true;
-            }
-            else if (nCol == 4)
-            {
-                MessageBox.Show("End Date does not pass validation.\n"
-                        + "Please enter a valid Date."
-                        , "Validation Error - row " + nRow.ToString()
-                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true;
-            }
-            else if (nCol == 6)
-            {
-                MessageBox.Show("Paid-to Date does not pass validation.\n"
-                        + "Please enter a valid Date."
-                        , "Validation Error - row " + nRow.ToString()
-                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                e.Cancel = true;
-            }
-            else 
-            {
-                MessageBox.Show("Column "+nCol.ToString()+" does not pass validation.\n"
-                        + "Please correct."
-                        , "Validation Error - row " + nRow.ToString()
+                        + "Allowance type '" + sAllowance + "'\n"
+                        + "Value " + sValue + "\n"
+                        + "Please enter a valid amount."
+                        , "Fixed Allowance Validation Error"
                         , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
             }
@@ -402,12 +389,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private Metex.Windows.DataGridViewEntityComboColumn alt_key;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private DataGridViewTextBoxColumn ca_annual_amount;
-        private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_end_date;
+        private DataGridViewTextBoxColumn total_amount;
         private DataGridViewCheckBoxColumn ca_approved;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_paid_to_date;
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
-        private DataGridViewTextBoxColumn row_changed;
+        private DataGridViewTextBoxColumn ca_row_changed;
+
+
+
+
+
+
+
 
 
 
