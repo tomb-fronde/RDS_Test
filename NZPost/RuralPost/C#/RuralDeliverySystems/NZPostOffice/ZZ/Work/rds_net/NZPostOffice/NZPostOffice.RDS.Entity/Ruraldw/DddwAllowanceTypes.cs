@@ -8,12 +8,16 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB  Allowances March-2021
+    // Added alct_id
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("alt_key", "_alt_key", "")]
 	[MapInfo("alt_description", "_alt_description", "")]
-	[System.Serializable()]
+    [MapInfo("alct_id", "_alct_id", "")]
+    [System.Serializable()]
 
 	public class DddwAllowanceTypes : Entity<DddwAllowanceTypes>
 	{
@@ -23,6 +27,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
 		[DBField()]
 		private string  _alt_description;
+
+        [DBField()]
+        private int? _alct_id;
 
 
 		public virtual int? AltKey
@@ -47,8 +54,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 		{
 			get
 			{
+                string tmp;
+                tmp = (_alct_id == null) ? "" : (new string(' ', 70)) + ',' + _alct_id.ToString() + '.';
+                   
                 CanReadProperty("AltDescription", true);
-				return _alt_description;
+                return _alt_description + tmp;
 			}
 			set
 			{
@@ -61,7 +71,25 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			}
 		}
 
-		protected override object GetIdValue()
+        public virtual int? AlctId
+        {
+            get
+            {
+                CanReadProperty("AlctId", true);
+                return _alct_id;
+            }
+            set
+            {
+                CanWriteProperty("AlctId", true);
+                if (_alct_id != value)
+                {
+                    _alct_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        protected override object GetIdValue()
 		{
 			return _alt_key + " ";
 		}
@@ -87,10 +115,17 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
-					cm.CommandType = CommandType.StoredProcedure;
-					ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "sp_DDDW_AllowanceType";
-					List<DddwAllowanceTypes> _list = new List<DddwAllowanceTypes>();
+					//cm.CommandType = CommandType.StoredProcedure;
+                    //cm.CommandText = "sp_DDDW_AllowanceType";
+                    cm.CommandType = CommandType.Text;
+                    cm.CommandText = "select alt_key "
+                                   + "     , alt_description "
+                                   + "     , alct_id "
+                                   + "  from allowance_type "
+                                   + " order by alt_description";
+                    
+                    ParameterCollection pList = new ParameterCollection();
+                    List<DddwAllowanceTypes> _list = new List<DddwAllowanceTypes>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
@@ -98,7 +133,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 							DddwAllowanceTypes instance = new DddwAllowanceTypes();
                             instance._alt_key = GetValueFromReader<Int32?>(dr,0);
                             instance._alt_description = GetValueFromReader<String>(dr,1);
-							instance.MarkOld();
+                            instance._alct_id = GetValueFromReader<Int32?>(dr, 2);
+                            instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
 						}
