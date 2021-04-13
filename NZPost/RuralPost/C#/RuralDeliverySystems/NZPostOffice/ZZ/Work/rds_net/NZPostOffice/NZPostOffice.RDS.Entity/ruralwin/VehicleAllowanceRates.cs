@@ -258,14 +258,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     cm.CommandType = CommandType.Text;
                     cm.CommandText =
                         " SELECT var_id"
-                        + "      var_description "
-                        + "      var_carrier_pa "
-                        + "      var_repairs_pk "
-                        + "      var_licemce_pa "
-                        + "      var_tyres_pk "
-                        + "      var_allowance_pk "
-                        + "      var_insurance_pa "
-                        + "      var_ror_pa "
+                        + "    , var_description "
+                        + "    , var_carrier_pa "
+                        + "    , var_repairs_pk "
+                        + "    , var_licemce_pa "
+                        + "    , var_tyres_pk "
+                        + "    , var_allowance_pk "
+                        + "    , var_insurance_pa "
+                        + "    , var_ror_pa "
                         + " FROM rd.vehicle_allowance_rates "
                         + "WHERE var_id = @in_var_id ";
 
