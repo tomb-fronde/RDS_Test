@@ -7,12 +7,22 @@ using Metex.Core;using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+    // TJB Allowances Apr-2021
+    // Include new columns
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("alt_key", "_alt_key", "allowance_type", true)]
 	[MapInfo("alt_description", "_alt_description", "allowance_type")]
-	[System.Serializable()]
+    [MapInfo("alt_rate", "_alt_rate", "allowance_type")]
+    [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type")]
+    [MapInfo("alt_acc", "_alt_acc", "allowance_type")]
+    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
+    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
+    [MapInfo("alct_id", "_alct_id", "allowance_type")]
+    [MapInfo("alct_description", "_alct_description", "")]
+    [System.Serializable()]
 
 	public class AllowanceType : Entity<AllowanceType>
 	{
@@ -22,6 +32,27 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
 		[DBField()]
 		private string  _alt_description;
+
+        [DBField()]
+        private decimal? _alt_rate;
+
+        [DBField()]
+        private decimal? _alt_wks_yr;
+
+        [DBField()]
+        private decimal? _alt_acc;
+
+        [DBField()]
+        private decimal? _alt_fuel_pk;
+
+        [DBField()]
+        private decimal? _alt_ruc_pk;
+
+        [DBField()]
+        private int? _alct_id;
+
+        [DBField]
+        private string _alct_description;
 
 
 		public virtual int? AltKey
@@ -59,6 +90,134 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				}
 			}
 		}
+
+        public virtual decimal? AltRate
+        {
+            get
+            {
+                CanReadProperty("AltRate", true);
+                return _alt_rate;
+            }
+            set
+            {
+                CanWriteProperty("AltRate", true);
+                if (_alt_rate != value)
+                {
+                    _alt_rate = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? AltWksYr
+        {
+            get
+            {
+                CanReadProperty("AltWksYr", true);
+                return _alt_wks_yr;
+            }
+            set
+            {
+                CanWriteProperty("AltWksYr", true);
+                if (_alt_wks_yr != value)
+                {
+                    _alt_wks_yr = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? AltAcc
+        {
+            get
+            {
+                CanReadProperty("AltAcc", true);
+                return _alt_acc;
+            }
+            set
+            {
+                CanWriteProperty("AltAcc", true);
+                if (_alt_acc != value)
+                {
+                    _alt_acc = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? AltFuelPk
+        {
+            get
+            {
+                CanReadProperty("AltFuelPk", true);
+                return _alt_fuel_pk;
+            }
+            set
+            {
+                CanWriteProperty("AltFuelPk", true);
+                if (_alt_fuel_pk != value)
+                {
+                    _alt_fuel_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? AltRucPk
+        {
+            get
+            {
+                CanReadProperty("AltrucPk", true);
+                return _alt_ruc_pk;
+            }
+            set
+            {
+                CanWriteProperty("AltRucPk", true);
+                if (_alt_ruc_pk != value)
+                {
+                    _alt_ruc_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual int? AlctId
+        {
+            get
+            {
+                CanReadProperty("AlctId", true);
+                return _alct_id;
+            }
+            set
+            {
+                CanWriteProperty("AlctId", true);
+                if (_alct_id != value)
+                {
+                    _alct_id = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string AlctDescription
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _alct_description;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_alct_description != value)
+                {
+                    _alct_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+
 		private AllowanceType[] dataList;
 
 		protected override object GetIdValue()
