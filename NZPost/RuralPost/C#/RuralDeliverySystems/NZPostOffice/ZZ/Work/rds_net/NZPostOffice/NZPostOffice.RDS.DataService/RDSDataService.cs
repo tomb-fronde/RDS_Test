@@ -12,6 +12,9 @@ namespace NZPostOffice.RDS.DataService
 {
     // TJB Allowances 11-Mar-2021
     // Added GetAllowanceCalcType
+    // [13Mar] Added LookupAllowanceCalcType
+    // [3-Apr-2021] Added GetVehicleAllowanceRates, VehicleAllowanceRatesItem 
+    //              and VehicleAllowanceRatesList and associated things
     //
     // TJB Frequencies & Vehicles 2-Mar-2021
     // Added vt_key to GetVehicleOverrideRateList parameter list 
@@ -177,6 +180,16 @@ namespace NZPostOffice.RDS.DataService
         }
 
         private int SQLNRows = 0;
+
+        // TJB  Allowances  3-Apr-2021: New
+        private List<VehicleAllowanceRatesItem> _VehicleAllowanceRatesList;
+        public List<VehicleAllowanceRatesItem> VehicleAllowanceRatesList
+        {
+            get
+            {
+                return _VehicleAllowanceRatesList;
+            }
+        }
 
         private List<CaLoadResultsItem> _CaLoadResultsList;
         public List<CaLoadResultsItem> CaLoadResultsList
@@ -872,6 +885,13 @@ namespace NZPostOffice.RDS.DataService
             SQLCode = obj.SQLCode;
             SQLErrText = obj.SQLErrText;
             return obj.intVal;
+        }
+
+        // TJB  Allowances  3-Apr-2021: New
+        public static RDSDataService GetVehicleAllowanceRates()
+        {
+            RDSDataService obj = Execute("_GetVehicleAllowanceRates");
+            return obj;
         }
 
         public static RDSDataService GetCaLoadResults()
@@ -2286,12 +2306,31 @@ namespace NZPostOffice.RDS.DataService
             return obj.strVal;
         }
 
+        // TJB  Allowances  9-Apr-2021
+        // Returns the latest effective date for a contract allowance
+        // ignoring the effective date of new records.  If the max date
+        // is null, returns DateTime.MinValue.
+        public static DateTime? GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey, DateTime inMinDate)
+        {
+            RDSDataService obj = Execute("_GetAllowanceMaxEffectiveDate", inContract, inAltKey, inMinDate);
+            return obj.dtVal;
+        }
+
         // TJB  Allowances  11-Mar-2021
-        // Returns alct_id in obj.intVal, alct_description in obj.strVal
+        // Returns alct_id in obj.intVal
+        //     and alct_description in obj.strVal
         public static RDSDataService GetAllowanceCalcType(int? inAltKey)
         {
             RDSDataService obj = Execute("_GetAllowanceCalcType", inAltKey);
             return obj;
+        }
+
+        // TJB  Allowances  13-Mar-2021
+        // Returns alct_id when alct_description like '%'+inText+'%'
+        public static int LookupAllowanceCalcType(string inText)
+        {
+            RDSDataService obj = Execute("_LookupAllowanceCalcType", inText);
+            return obj.intVal;
         }
 
         /// <summary>
@@ -2300,7 +2339,7 @@ namespace NZPostOffice.RDS.DataService
         public static int GetContractorCount3(int? il_contract, int? il_sequence, ref int SQLCode, ref string SQLErrText)
         {
             RDSDataService obj = Execute("_GetContractorCount3", il_contract, il_sequence);
-            SQLCode = obj.SQLCode;
+            SQLCode    = obj.SQLCode;
             SQLErrText = obj.SQLErrText;
             return obj.intVal;
         }
@@ -6584,6 +6623,58 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Allowances  3-Apr-2021: New
+        [ServerMethod]
+        private void _GetVehicleAllowanceRates()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select "
+                                   + "       var_id "
+                                   + "     , var_description"
+                                   + "     , var_carrier_pa"
+                                   + "     , var_repairs_pk"
+                                   + "     , var_licence_pa"
+                                   + "     , var_tyres_pk"
+                                   + "     , var_allowance_pk"
+                                   + "     , var_insurance_pa"
+                                   + "     , var_ror_pa"
+                                   + "  from rd.vehicle_allowance_rates var ";
+
+                    _VehicleAllowanceRatesList = new List<VehicleAllowanceRatesItem>();
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                VehicleAllowanceRatesItem item = new VehicleAllowanceRatesItem();
+                                _VehicleAllowanceRatesList.Add(item);
+                                item._var_id           = dr.GetInt32(0);
+                                item._var_description  = dr.GetString(1);
+                                item._var_carrier_pa   = dr.GetDecimal(2);
+                                item._var_repairs_pk   = dr.GetDecimal(3);
+                                item._var_licence_pa   = dr.GetDecimal(4);
+                                item._var_tyres_pk     = dr.GetDecimal(5);
+                                item._var_allowance_pk = dr.GetDecimal(6);
+                                item._var_insurance_pa = dr.GetDecimal(7);
+                                item._var_ror_pa       = dr.GetDecimal(8);
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
         [ServerMethod]
         private void _GetCaLoadResults()
         {
@@ -7188,6 +7279,7 @@ namespace NZPostOffice.RDS.DataService
                             {
                                 sequence = dr.GetInt32(0);
                                 _sqlcode = 0;
+                                _sqlerrtext = "";
                             }
                             else
                             {
@@ -7338,6 +7430,57 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Allowances  9-Apr-2021
+        // Returns the latest effective date for a contract allowance
+        // ignoring the effective date of new records.  
+        [ServerMethod]
+        private void _GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey, DateTime inMinDate)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    DateTime? dMaxDate = inMinDate;
+
+                    try
+                    {
+                        cm.CommandText = "select max(ca_effective_date) "
+                                       + "  from rd.contract_allowance"
+                                       + " where contract_no = @inContract"
+                                       + "   and alt_key = @inAltKey"
+                                       + "   and (ca_row_changed is null"
+                                       + "         or ca_row_changed != 'N')";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                dMaxDate = dr.GetDateTime(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                    if (dMaxDate == null || (DateTime)dMaxDate < inMinDate )
+                        dMaxDate = inMinDate;
+
+                    dtVal = dMaxDate;
+                }
+            }
+        }
+
         // TJB  Allowances 11-Mar-2021: New
         [ServerMethod]
         private void _GetAllowanceCalcType(int? inAltKey)
@@ -7384,6 +7527,47 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Allowances 13-Mar-2021: New
+        [ServerMethod]
+        private void _LookupAllowanceCalcType(string inText)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int nId = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select alct.alct_id"
+                                   + "  from rd.allowance_calc_type alct"
+                                   + " where alct.alct_description like '%'+@inText+'%'";
+                    pList.Add(cm, "inText", inText);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                nId = dr.GetInt32(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                nId = -1;
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                        nId = -1;
+                    }
+                    intVal = nId;
+                }
+            }
+        }
+
         [ServerMethod]
         private void _GetContractorCount2(int? lSupplier)
         {
@@ -7393,7 +7577,8 @@ namespace NZPostOffice.RDS.DataService
                 {
                     int sequence = 0;
                     ParameterCollection pList = new ParameterCollection();
-                    cm.CommandText = "Select count(*) From rd.contractor Where contractor_supplier_no = @lSupplier";
+                    cm.CommandText = "Select count(*) From rd.contractor " 
+                                   + " Where contractor_supplier_no = @lSupplier";
                     pList.Add(cm, "lSupplier", lSupplier);
 
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -7406,7 +7591,6 @@ namespace NZPostOffice.RDS.DataService
                         else
                             _sqldbcode = 100;
                     }
-
                     intVal = sequence;
                 }
             }
@@ -13366,6 +13550,92 @@ namespace NZPostOffice.RDS.DataService
             get
             {
                 return _tc_id;
+            }
+        }
+    }
+
+    // TJB  Allowances  3-Apr-2021: New
+    [Serializable()]
+    public class VehicleAllowanceRatesItem
+    {
+	    internal int _var_id;
+        public int VarId
+        {
+            get
+            {
+                return _var_id;
+            }
+        }
+
+	    internal string _var_description;
+        public string VarDescription
+        {
+            get
+            {
+                return _var_description;
+            }
+        }
+
+        internal decimal _var_carrier_pa;
+        public decimal VarCarrierPa
+        {
+            get
+            {
+                return _var_carrier_pa;
+            }
+        }
+
+        internal decimal _var_repairs_pk;
+        public decimal VarRepairsPk
+        {
+            get
+            {
+                return _var_repairs_pk;
+            }
+        }
+
+        internal decimal _var_licence_pa;
+        public decimal VarLicencePa
+        {
+            get
+            {
+                return _var_licence_pa;
+            }
+        }
+
+        internal decimal _var_tyres_pk;
+        public decimal VarTyresPk
+        {
+            get
+            {
+                return _var_tyres_pk;
+            }
+        }
+
+        internal decimal _var_allowance_pk;
+        public decimal VarAllowancePk
+        {
+            get
+            {
+                return _var_allowance_pk;
+            }
+        }
+
+        internal decimal _var_insurance_pa;
+        public decimal VarInsurancePa
+        {
+            get
+            {
+                return _var_insurance_pa;
+            }
+        }
+
+        internal decimal _var_ror_pa;
+        public decimal VarRorPa
+        {
+            get
+            {
+                return _var_ror_pa;
             }
         }
     }

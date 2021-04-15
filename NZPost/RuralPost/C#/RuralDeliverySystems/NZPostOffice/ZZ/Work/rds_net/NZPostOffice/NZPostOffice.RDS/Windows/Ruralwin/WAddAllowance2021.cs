@@ -214,6 +214,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_allowance.GetItem<AddAllowance>(newRow).ContractNo = il_contract;
             idw_allowance.GetItem<AddAllowance>(newRow).EffectiveDate = dtToday;
             idw_allowance.GetItem<AddAllowance>(newRow).Approved = "N";
+            idw_allowance.GetItem<AddAllowance>(newRow).RowChanged = "N";
 
             // Set the focus on the new record (which has been added (usually as the first row))
             ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(newRow);

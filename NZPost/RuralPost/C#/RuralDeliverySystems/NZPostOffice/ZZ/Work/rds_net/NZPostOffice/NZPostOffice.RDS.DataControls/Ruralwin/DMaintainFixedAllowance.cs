@@ -21,17 +21,16 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public DMaintainFixedAllowance()
 		{
 			InitializeComponent();
-			//InitializeDropdown();
 
             // For some reason, any changes to the grid in the designer
             // causes some of these values - particularly the ValueMember
             // and DisplayMember - to be omitted from the generated code
             // (and I don't have to remember to manually put them back).
             // Putting them here overrides the emitted code.
-            this.alt_key.DefaultCellStyle.NullValue = null;
-            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            this.alt_key.ValueMember = "AltKey";
-            this.alt_key.DisplayMember = "AltDescription";
+            //this.alt_key.DefaultCellStyle.NullValue = null;
+            //this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
+            //this.alt_key.ValueMember = "AltKey";
+            //this.alt_key.DisplayMember = "AltDescription";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
@@ -49,7 +48,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     	{
             if (!DesignMode)
     	    {
-            	InitializeDropdown();
+            	//InitializeDropdown();
             }
             base.OnHandleCreated(e);
             this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
@@ -57,7 +56,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
 		private void InitializeDropdown()
 		{
-			alt_key.AssignDropdownType<DddwAllowanceTypesFixed>();
+			//alt_key.AssignDropdownType<DddwAllowanceTypesFixed>();
 		}
 
 		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
@@ -200,19 +199,27 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             int thisRow = e.RowIndex;
             int column = e.ColumnIndex;
             string column_name = this.grid.Columns[column].Name;
-
-            // TJB 9-April-2021
-            // If the ca_annual_amount has changed and this row isn't marked as new ("N") 
-            // and hasn't already been marked modified ("M"), mark it mark it changed ("C") 
-            // or modified ("M") as appropriate
-            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
-            if ( !(sRowChanged == "N" || sRowChanged == "M"))
+            string sRowChanged;
+/*
+            // Setting ca_row_changed below causes another cycle through with it as
+            // the changed row.  We ignore this chance.
+            //if (!(column_name == "ca_row_changed"))
+            if (!(column_name == "ca_annual_amount"))
             {
-                if (column_name == "ca_annual_amount")
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
-                else
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+                // TJB 9-April-2021
+                // If the ca_annual_amount has changed and this row isn't marked as new ("N") 
+                // and hasn't already been marked modified ("M"), mark it mark it changed ("C") 
+                // or modified ("M") as appropriate
+                sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+                if (!(sRowChanged == "N" || sRowChanged == "M"))
+                {
+                    if (column_name == "ca_annual_amount")
+                        grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                    else
+                        grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+                }
             }
+*/
         }
 
     }

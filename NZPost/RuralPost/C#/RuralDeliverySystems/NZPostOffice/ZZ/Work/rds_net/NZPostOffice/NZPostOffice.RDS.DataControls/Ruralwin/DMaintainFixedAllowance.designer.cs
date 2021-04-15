@@ -27,6 +27,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -39,7 +40,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid = new Metex.Windows.DataEntityGrid();
             this.st_title = new System.Windows.Forms.Label();
             this.st_protect_confirm = new System.Windows.Forms.Label();
-            this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
+            this.alt_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.total_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,7 +65,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.BackgroundColor = System.Drawing.SystemColors.Control;
             this.grid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Sunken;
             this.grid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -74,7 +75,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.alt_key,
+            this.alt_description,
             this.ca_effective_date,
             this.ca_annual_amount,
             this.total_amount,
@@ -89,10 +90,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.Location = new System.Drawing.Point(0, 0);
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.grid.RowsDefaultCellStyle = dataGridViewCellStyle11;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.grid.Size = new System.Drawing.Size(828, 250);
             this.grid.TabIndex = 0;
-            this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
             // st_title
@@ -113,21 +115,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.st_protect_confirm.Text = "N";
             this.st_protect_confirm.Visible = false;
             // 
-            // alt_key
+            // alt_description
             // 
-            this.alt_key.DataPropertyName = "AltKey";
+            this.alt_description.DataPropertyName = "AltDescription";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.Format = "00/00/0000";
             dataGridViewCellStyle2.NullValue = "null";
-            this.alt_key.DefaultCellStyle = dataGridViewCellStyle2;
-            this.alt_key.DropDownWidth = 210;
-            this.alt_key.HeaderText = "Allowance";
-            this.alt_key.Name = "alt_key";
-            this.alt_key.ReadOnly = true;
-            this.alt_key.Width = 140;
+            this.alt_description.DefaultCellStyle = dataGridViewCellStyle2;
+            this.alt_description.HeaderText = "Allowance";
+            this.alt_description.Name = "alt_description";
+            this.alt_description.ReadOnly = true;
+            this.alt_description.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.alt_description.Width = 140;
             // 
             // ca_effective_date
             // 
@@ -146,6 +148,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_effective_date.Mask = null;
             this.ca_effective_date.Name = "ca_effective_date";
             this.ca_effective_date.PromptChar = '\0';
+            this.ca_effective_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_effective_date.ValidatingType = null;
             this.ca_effective_date.Width = 70;
             // 
@@ -161,6 +164,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle4;
             this.ca_annual_amount.HeaderText = "Annual Amount";
             this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_annual_amount.Width = 78;
             // 
             // total_amount
@@ -331,7 +335,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             int nRow = e.RowIndex;
             int nCol = e.ColumnIndex;
             string column = grid.CurrentColumnName;
-            string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].EditedFormattedValue;
+           // string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].EditedFormattedValue;
+            string sAllowance = (string)grid.Rows[nRow].Cells["alt_Description"].Value;
             string sValue = (string)((DataGridView)sender).CurrentCell.EditedFormattedValue;
             sAllowance = stringValue( sAllowance );
             sValue = stringValue( sValue );
@@ -386,7 +391,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         #endregion
 
-        private Metex.Windows.DataGridViewEntityComboColumn alt_key;
+        private DataGridViewTextBoxColumn alt_description;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private DataGridViewTextBoxColumn ca_annual_amount;
         private DataGridViewTextBoxColumn total_amount;
@@ -395,6 +400,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_notes;
         private DataGridViewTextBoxColumn ca_row_changed;
+
+
+
+
+
 
 
 

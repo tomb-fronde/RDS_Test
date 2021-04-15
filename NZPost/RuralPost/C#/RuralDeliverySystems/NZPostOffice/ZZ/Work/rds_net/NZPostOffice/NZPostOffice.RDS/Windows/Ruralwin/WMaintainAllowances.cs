@@ -22,6 +22,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public string isOptype = "";
         public int oldTabIndex = -1;
         private DateTime dtEffDate;
+        private int newRow, oldRow;
 
         // Define values for the different calculation types
         public readonly int FIXED = RDSDataService.LookupAllowanceCalcType("Fixed");
@@ -487,6 +488,220 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // of_set_row_readonly();
         }
 
+        private void of_add_new_record(URdsDw thisDw, int dwType, int inRow)
+        {
+            // If the user makes a change to a record (at oldRow), create a copy of 
+            // that record (at row 0).  The old record will become the history record.
+            // Also needed so that the old record remains and its annual_amount 
+            // contributes to the allowance totals as changes are made.
+
+            Decimal? tmpAmount = 0.0M;  // for debugging
+            
+            newRow = 0;
+            // Create the new row in the relevant tab/DW
+            if (dwType == DISTANCE)
+                thisDw.DataObject.InsertItem<MaintainVehAllowance>(newRow, new MaintainVehAllowance());
+            else // its one of FIXED, ROI, ACTIVITY, TIME
+                thisDw.DataObject.InsertItem<MaintainAllowance>(newRow, new MaintainAllowance());
+
+            // Copy the contents of the old row to the new row
+            oldRow = inRow + 1;
+            if (dwType == DISTANCE)
+            {
+                thisDw.GetItem<MaintainVehAllowance>(newRow).ContractTitle
+                           = thisDw.GetItem<MaintainVehAllowance>(oldRow).ContractTitle;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).ContractNo
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).ContractNo;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltKey
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltKey;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).EffectiveDate
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).EffectiveDate;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AnnualAmount
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AnnualAmount;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).PaidToDate
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).PaidToDate;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).Approved
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).Approved;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).DocDescription
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).DocDescription;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).Notes
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).Notes;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).CaVar1
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaVar1;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).CaDistDay
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaDistDay;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).CaHrsWk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaHrsWk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).EndDate
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).EndDate;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).CaCostsCovered
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaCostsCovered;
+
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltDescription
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltDescription;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltRate
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltRate;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltWksYr
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltWksYr;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltAcc
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltAcc;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltFuelPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltFuelPk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AltRucPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltRucPk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AlctId
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AlctId;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).AlctDescription
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).AlctDescription;
+
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarId
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarId;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarDescription
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarDescription;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarCarrierPa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarCarrierPa;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarRepairsPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRepairsPk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarLicencePa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarLicencePa;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarTyresPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarTyresPk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarAllowancePk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarAllowancePk;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarInsurancePa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarInsurancePa;
+                thisDw.GetItem<MaintainVehAllowance>(newRow).VarRorPa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRorPa;
+
+                thisDw.GetItem<MaintainVehAllowance>(newRow).RowChanged = "N";
+                thisDw.GetItem<MaintainVehAllowance>(newRow).MarkNewEntity();
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).RowChanged = "X";
+            }
+            else // its one of FIXED, ROI, ACTIVITY, TIME
+            {
+                thisDw.GetItem<MaintainAllowance>(newRow).ContractTitle
+                           = thisDw.GetItem<MaintainAllowance>(oldRow).ContractTitle;
+                thisDw.GetItem<MaintainAllowance>(newRow).ContractNo
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).ContractNo;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltKey
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltKey;
+                thisDw.GetItem<MaintainAllowance>(newRow).EffectiveDate
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).EffectiveDate;
+                thisDw.GetItem<MaintainAllowance>(newRow).AnnualAmount
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AnnualAmount;
+                thisDw.GetItem<MaintainAllowance>(newRow).PaidToDate
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).PaidToDate;
+                thisDw.GetItem<MaintainAllowance>(newRow).Approved
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).Approved;
+                thisDw.GetItem<MaintainAllowance>(newRow).DocDescription
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).DocDescription;
+                thisDw.GetItem<MaintainAllowance>(newRow).Notes
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).Notes;
+                thisDw.GetItem<MaintainAllowance>(newRow).CaVar1
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).CaVar1;
+                thisDw.GetItem<MaintainAllowance>(newRow).CaDistDay
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).CaDistDay;
+                thisDw.GetItem<MaintainAllowance>(newRow).CaHrsWk
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).CaHrsWk;
+                thisDw.GetItem<MaintainAllowance>(newRow).EndDate
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).EndDate;
+                thisDw.GetItem<MaintainAllowance>(newRow).CaCostsCovered
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).CaCostsCovered;
+
+                thisDw.GetItem<MaintainAllowance>(newRow).AltDescription
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltDescription;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltRate
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltRate;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltWksYr
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltWksYr;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltAcc
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltAcc;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltFuelPk
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltFuelPk;
+                thisDw.GetItem<MaintainAllowance>(newRow).AltRucPk
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AltRucPk;
+                thisDw.GetItem<MaintainAllowance>(newRow).AlctId
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AlctId;
+                thisDw.GetItem<MaintainAllowance>(newRow).AlctDescription
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).AlctDescription;
+
+                thisDw.GetItem<MaintainAllowance>(newRow).RowChanged = "N";
+                thisDw.GetItem<MaintainAllowance>(newRow).MarkNewEntity();
+                thisDw.GetItem<MaintainAllowance>(oldRow).RowChanged = "X";
+            }
+
+            // Put the old record's changed values back to their initial values
+            // (there are only a few possibilities) and mark it clean
+            if (dwType == DISTANCE)
+            {
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).EffectiveDate
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialEffDate;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).AnnualAmount
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialAmount;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).Approved
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialApproved;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).DocDescription
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialDocDescr;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).Notes
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialNotes;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).CaVar1
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialCaVar1;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).CaDistDay
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialDistDay;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).CaHrsWk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialHrsWk;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).CaCostsCovered
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialCostsCovered;
+
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarId
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialVarId;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarCarrierPa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialCarrierPa;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRepairsPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialRepairsPk;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarLicencePa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialLicencePa;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarTyresPk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialTyresPk;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarAllowancePk
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialAllowancePk;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarInsurancePa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialInsurancePa;
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRorPa
+                         = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialRorPa;
+                
+                // Mark this record "clean" so it doesn't get updated
+                thisDw.GetItem<MaintainVehAllowance>(oldRow).MarkClean();
+            }
+            else // its one of FIXED, ROI, ACTIVITY, TIME
+            {
+                thisDw.GetItem<MaintainAllowance>(oldRow).EffectiveDate
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialEffDate;
+                thisDw.GetItem<MaintainAllowance>(oldRow).AnnualAmount
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialAmount;
+                thisDw.GetItem<MaintainAllowance>(oldRow).Approved
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialApproved;
+                thisDw.GetItem<MaintainAllowance>(oldRow).DocDescription
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialDocDescr;
+                thisDw.GetItem<MaintainAllowance>(oldRow).Notes
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialNotes;
+                thisDw.GetItem<MaintainAllowance>(oldRow).CaVar1
+                         = thisDw.GetItem<MaintainAllowance>(oldRow).InitialCaVar1;
+
+                // Mark this record "clean" so it doesn't get updated
+                thisDw.GetItem<MaintainAllowance>(oldRow).MarkClean();
+
+                // Debugging
+                thisDw.GetItem<MaintainAllowance>(newRow).DocDescription = "New row = "+newRow.ToString();
+                thisDw.GetItem<MaintainAllowance>(oldRow).DocDescription = "Old row = " + oldRow.ToString();
+
+            }
+
+
+            // Update the display
+            thisDw.Refresh();
+        }
+
         private void of_markAllClean(URdsDw thisDw, int dwType)
         {
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
@@ -671,7 +886,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 */
             else
             {   // True means the date is either OK or acceptable
-                if (!(StaticVariables.gnv_app.of_sanedate(inEffDate.GetValueOrDefault(), "effective date")))
+                if (!(StaticVariables.gnv_app.of_sanedate(inEffDate.GetValueOrDefault()
+                                            , inAltDescription + " effective date")))
                     nRowErrors++;
                 else
                 {
@@ -1100,6 +1316,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // If this row is marked Modified ("M") we want to insert it as a new row
                     // to preserve the change history.  Otherwise it will be updated.
                     string sRowChanged = ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
+                    if( idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).IsNew )
+                        ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = "X";
                     if (sRowChanged == "M" )
                         ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).MarkNewEntity();
                     // Clear the RowChanged (to an arbitrary "X") so its current value isn't "remembered"
@@ -1616,44 +1834,72 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return dValue;
         }
 
+        void dw_fixed_allowance_EditChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("dw_fixed_allowance_EditChanged");
+            //of_ItemChanged(dw_fixed_allowance, FIXED);
+        }
+
         void dw_fixed_allowance_ItemChanged(object sender, EventArgs e)
         {
-            of_allowance_ItemChanged(dw_fixed_allowance, FIXED);
+            of_ItemChanged(dw_fixed_allowance, FIXED);
         }
 
         void dw_roi_allowance_ItemChanged(object sender, EventArgs e)
         {
-            of_allowance_ItemChanged(dw_roi_allowance, ROI);
+            of_ItemChanged(dw_roi_allowance, ROI);
         }
 
         void dw_activity_allowance_ItemChanged(object sender, EventArgs e)
         {
-            of_allowance_ItemChanged(dw_activity_allowance, ACTIVITY);
+            of_ItemChanged(dw_activity_allowance, ACTIVITY);
         }
 
         void dw_time_allowance_ItemChanged(object sender, EventArgs e)
         {
-            of_allowance_ItemChanged(dw_time_allowance, TIME);
+            of_ItemChanged(dw_time_allowance, TIME);
         }
 
         void dw_distance_allowance_ItemChanged(object sender, EventArgs e)
         {
-            of_allowance_ItemChanged(dw_distance_allowance, DISTANCE);
+            of_ItemChanged(dw_distance_allowance, DISTANCE);
         }
 
-        void of_allowance_ItemChanged(URdsDw thisDw, int dwType)
+        void of_ItemChanged(URdsDw thisDw, int dwType)
         {
             // Implements ItemChanged actions for all tabs
             decimal dThisAmt = 0.0M;
             decimal dTotalAmt = 0.0M;
             int nAltKey;
+            bool thisDwIsNew = false;
+            string thisRowChanged;
+            decimal? thisAmt, thisOldAmt;
 
             // Get the allowance key for the changed item
             int nRow = thisDw.GetRow();
             if (dwType == DISTANCE)
+            {
                 nAltKey = (int)thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
+                thisRowChanged = thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged;
+                thisDwIsNew = thisDw.GetItem<MaintainVehAllowance>(nRow).IsNew
+                                || thisRowChanged == "N";
+                thisAmt = thisDw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
+                thisOldAmt = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialAmount;
+            }
             else
+            {
                 nAltKey = (int)thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
+                thisRowChanged = thisDw.GetItem<MaintainAllowance>(nRow).RowChanged;
+                thisDwIsNew = thisDw.GetItem<MaintainAllowance>(nRow).IsNew
+                                || thisRowChanged == "N";
+                thisAmt = thisDw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
+                thisOldAmt = thisDw.GetItem<MaintainAllowance>(nRow).InitialAmount;
+            }
+            if (!thisDwIsNew && (thisAmt != thisOldAmt))
+            {
+                of_add_new_record(thisDw, dwType, nRow);
+                thisDw.GetItem<MaintainAllowance>(newRow).InitialAmount = thisAmt;
+            }
 
             // Calculate the new allowance total for this allowance type
             // Note: this updates the total for all rows of the same type

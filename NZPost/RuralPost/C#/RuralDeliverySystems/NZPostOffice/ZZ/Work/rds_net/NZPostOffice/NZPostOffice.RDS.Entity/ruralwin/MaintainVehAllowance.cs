@@ -24,32 +24,32 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	[MapInfo("ca_notes", "_notes", "contract_allowance")]
 	[MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
 	[MapInfo("ca_approved", "_approved", "contract_allowance")]
-	[MapInfo("con_title", "_contract_title", "contract")]
     [MapInfo("ca_var1", "_ca_var1", "contract_allowance")]
     [MapInfo("ca_dist_day", "_ca_dist_day", "contract_allowance")]
-    [MapInfo("ca_hrs_wk", "_ca_hrs_wk", "contract_allowance")]
-    [MapInfo("var_id", "_var_id", "contract_allowance")]
-    [MapInfo("alt_description", "_alt_description", "allowance_type")]
-    [MapInfo("alt_rate", "_alt_rate", "allowance_type")]
-    [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type")]
-    [MapInfo("alt_acc", "_alt_acc", "allowance_type")]
-    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
-    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
-    [MapInfo("alct_id", "_alct_id", "allowance_calc_type")]
-    [MapInfo("alct_description", "_alct_description", "allowance_calc_type")]
-    [MapInfo("row_changed", "_row_changed", "")]
     [MapInfo("ca_end_date", "_end_date", "contract_allowance")]
+    [MapInfo("ca_hrs_wk", "_ca_hrs_wk", "contract_allowance")]
     [MapInfo("ca_doc_description", "_ca_doc_description", "contract_allowance")]
     [MapInfo("ca_costs_covered", "_ca_costs_covered", "contract_allowance")]
-    [MapInfo("var_id", "_var_id", "vehicle_allowance_rates")]
-    [MapInfo("var_description", "_var_description", "vehicle_allowance_rates")]
-    [MapInfo("var_carrier_pa", "_var_carrier_pa", "vehicle_allowance_rates")]
-    [MapInfo("var_repairs_pk", "_var_repairs_pk", "vehicle_allowance_rates")]
-    [MapInfo("var_licence_pa", "_var_licence_pa", "vehicle_allowance_rates")]
-    [MapInfo("var_tyres_pk", "_var_tyres_pk", "vehicle_allowance_rates")]
-    [MapInfo("var_allowance_pk", "_var_allowance_pk", "vehicle_allowance_rates")]
-    [MapInfo("var_insurance_pa", "_var_insurance_pa", "vehicle_allowance_rates")]
-    [MapInfo("var_ror_pa", "_var_ror_pa", "vehicle_allowance_rates")]
+    [MapInfo("ca_row_changed", "_ca_row_changed", "contract_allowance")]
+    [MapInfo("var_id", "_var_id", "contract_allowance")]
+    [MapInfo("con_title", "_contract_title", "")]
+    [MapInfo("alt_description", "_alt_description", "")]
+    [MapInfo("alt_rate", "_alt_rate", "")]
+    [MapInfo("alt_wks_yr", "_alt_wks_yr", "")]
+    [MapInfo("alt_acc", "_alt_acc", "")]
+    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "")]
+    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "")]
+    [MapInfo("alct_id", "_alct_id", "")]
+    [MapInfo("alct_description", "_alct_description", "")]
+    [MapInfo("var_description", "_var_description", "")]
+    [MapInfo("var_carrier_pa", "_var_carrier_pa", "")]
+    [MapInfo("var_repairs_pk", "_var_repairs_pk", "")]
+    [MapInfo("var_licence_pa", "_var_licence_pa", "")]
+    [MapInfo("var_tyres_pk", "_var_tyres_pk", "")]
+    [MapInfo("var_allowance_pk", "_var_allowance_pk", "")]
+    [MapInfo("var_insurance_pa", "_var_insurance_pa", "")]
+    [MapInfo("var_ror_pa", "_var_ror_pa", "")]
+    [MapInfo("total_amount", "_total_amount", "")]
     [System.Serializable()]
 
 	public class MaintainVehAllowance : Entity<MaintainVehAllowance>
@@ -144,6 +144,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private string _ca_costs_covered;
 
         [DBField()]
+        private string _ca_row_changed;
+
+        [DBField()]
         private int? _var_id;
 
         [DBField()]
@@ -170,11 +173,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         [DBField()]
         private decimal? _var_ror_pa;
 
-        // Used to mark changed rows, primarily so that
-        // WMaintainVehAllowance.wf_validate only validates changed rows.
         [DBField()]
-        private string _row_changed = "N";
-        
+        private decimal? _total_amount;
+
         /*************************************************************************/
 
 		public virtual int? AltKey
@@ -519,24 +520,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual string RowChanged
-        {
-            get
-            {
-                CanReadProperty("RowChanged", true);
-                return (_row_changed == null) ? "N" : _row_changed;
-            }
-            set
-            {
-                CanWriteProperty("RowChanged", true);
-                if (_row_changed != value)
-                {
-                    _row_changed = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
         public virtual DateTime? EndDate
         {
             get
@@ -586,6 +569,24 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 if (_ca_costs_covered != value)
                 {
                     _ca_costs_covered = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string RowChanged
+        {
+            get
+            {
+                CanReadProperty("RowChanged", true);
+                return (_ca_row_changed ?? "X");
+            }
+            set
+            {
+                CanWriteProperty("RowChanged", true);
+                if (_ca_row_changed != value)
+                {
+                    _ca_row_changed = value;
                     PropertyHasChanged();
                 }
             }
@@ -753,6 +754,302 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
+        public virtual decimal? TotalAmount
+        {
+            get
+            {
+                CanReadProperty("TotalAmount", true);
+                return _total_amount;
+            }
+            set
+            {
+                CanWriteProperty("AnnualAmount", true);
+                if (_total_amount != value)
+                {
+                    _total_amount = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        /*************************************************************************/
+        // The Metex GetInitialValues function doesn't seem to work in WMaintainAllowance
+        // so I've had to maintain my own initial values for some fields.  
+        // See of_add_new_record().
+        /*************************************************************************/
+
+        private DateTime? _initial_eff_date;
+        public virtual DateTime? InitialEffDate
+        {
+            get
+            {
+                return _initial_eff_date;
+            }
+            set
+            {
+                if (_initial_eff_date != value)
+                {
+                    _initial_eff_date = value;
+                }
+            }
+        }
+
+        decimal? _initial_amount;
+        public virtual decimal? InitialAmount
+        {
+            get
+            {
+                return _initial_amount;
+            }
+            set
+            {
+                if (_initial_amount != value)
+                {
+                    _initial_amount = value;
+                }
+            }
+        }
+
+        private string _initial_approved;
+        public virtual string InitialApproved
+        {
+            get
+            {
+                return _initial_approved;
+            }
+            set
+            {
+                if (_initial_approved != value)
+                {
+                    _initial_approved = value;
+                }
+            }
+        }
+
+        private string _initial_doc_descr;
+        public virtual string InitialDocDescr
+        {
+            get
+            {
+                return _initial_doc_descr;
+            }
+            set
+            {
+                if (_initial_doc_descr != value)
+                {
+                    _initial_doc_descr = value;
+                }
+            }
+        }
+
+        private string _initial_notes;
+        public virtual string InitialNotes
+        {
+            get
+            {
+                return _initial_notes;
+            }
+            set
+            {
+                if (_initial_notes != value)
+                {
+                    _initial_notes = value;
+                }
+            }
+        }
+
+        private string _initial_costs_covered;
+        public virtual string InitialCostsCovered
+        {
+            get
+            {
+                return _initial_costs_covered;
+            }
+            set
+            {
+                if (_initial_costs_covered != value)
+                {
+                    _initial_costs_covered = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_ca_var1;
+        public virtual Decimal? InitialCaVar1
+        {
+            get
+            {
+                return _initial_ca_var1;
+            }
+            set
+            {
+                if (_initial_ca_var1 != value)
+                {
+                    _initial_ca_var1 = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_dist_day;
+        public virtual Decimal? InitialDistDay
+        {
+            get
+            {
+                return _initial_dist_day;
+            }
+            set
+            {
+                if (_initial_dist_day != value)
+                {
+                    _initial_dist_day = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_hrs_wk;
+        public virtual Decimal? InitialHrsWk
+        {
+            get
+            {
+                return _initial_hrs_wk;
+            }
+            set
+            {
+                if (_initial_hrs_wk != value)
+                {
+                    _initial_hrs_wk = value;
+                }
+            }
+        }
+
+        private int? _initial_var_id;
+        public virtual int? InitialVarId
+        {
+            get
+            {
+                return _initial_var_id;
+            }
+            set
+            {
+                if (_initial_var_id != value)
+                {
+                    _initial_var_id = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_carrier_pa;
+        public virtual Decimal? InitialCarrierPa
+        {
+            get
+            {
+                return _initial_carrier_pa;
+            }
+            set
+            {
+                if (_initial_carrier_pa != value)
+                {
+                    _initial_carrier_pa = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_repairs_pk;
+        public virtual Decimal? InitialRepairsPk
+        {
+            get
+            {
+                return _initial_repairs_pk;
+            }
+            set
+            {
+                if (_initial_repairs_pk != value)
+                {
+                    _initial_repairs_pk = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_licence_pa;
+        public virtual Decimal? InitialLicencePa
+        {
+            get
+            {
+                return _initial_licence_pa;
+            }
+            set
+            {
+                if (_initial_licence_pa != value)
+                {
+                    _initial_licence_pa = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_tyres_pk;
+        public virtual Decimal? InitialTyresPk
+        {
+            get
+            {
+                return _initial_tyres_pk;
+            }
+            set
+            {
+                if (_initial_tyres_pk != value)
+                {
+                    _initial_tyres_pk = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_allowance_pk;
+        public virtual Decimal? InitialAllowancePk
+        {
+            get
+            {
+                return _initial_allowance_pk;
+            }
+            set
+            {
+                if (_initial_allowance_pk != value)
+                {
+                    _initial_allowance_pk = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_insurance_pa;
+        public virtual Decimal? InitialInsurancePa
+        {
+            get
+            {
+                return _initial_insurance_pa;
+            }
+            set
+            {
+                if (_initial_insurance_pa != value)
+                {
+                    _initial_insurance_pa = value;
+                }
+            }
+        }
+
+        private Decimal? _initial_ror_pa;
+        public virtual Decimal? InitialRorPa
+        {
+            get
+            {
+                return _initial_ror_pa;
+            }
+            set
+            {
+                if (_initial_ror_pa != value)
+                {
+                    _initial_ror_pa = value;
+                }
+            }
+        }
+
         /*************************************************************************/
         
         protected override object GetIdValue()
@@ -761,7 +1058,23 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		}
 		#endregion
 
-		#region Factory Methods
+        private bool isMarkedNew = false;
+        public void MarkNewEntity()
+        {
+            isMarkedNew = true;
+            base.MarkNew();
+        }
+        public void MarkDirtyEntity()
+        {
+            base.MarkDirty();
+        }
+        public void MarkCleanEntity()
+        {
+            isMarkedNew = false;
+            base.MarkClean();
+        }
+
+        #region Factory Methods
 		public static MaintainVehAllowance NewMaintainVehAllowance( int? inContractNo )
 		{
 			return Create(inContractNo);
@@ -824,20 +1137,21 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 + ", var.var_allowance_pk "
                                 + ", var.var_insurance_pa "
                                 + ", var.var_ror_pa "
-                             + "FROM rd.contract_allowance ca "
+                                + ", ca.ca_row_changed "
+                            + " FROM rd.contract_allowance ca "
                                 + ", rd.contract c "
                                 + ", rd.allowance_type alt "
                                 + ", rd.allowance_calc_type alct "
                                 + ", rd.vehicle_allowance_rates var "
-                            + "WHERE ca.contract_no = @inContractNo "
+                           + " WHERE ca.contract_no = @inContractNo "
                             + "  AND ca.ca_effective_date >= @inEffDate "
                             + "  AND c.contract_no = ca.contract_no "
                             + "  AND alt.alt_key = ca.alt_key "
                             + "  AND alt.alct_id =  @inAlctId "
                             + "  AND alct.alct_id = alt.alct_id "
                             + "  AND var.var_id = ca.var_id "
-                            + "ORDER BY ca.ca_effective_date DESC "
-                                   + ", ca.alt_key ";
+                           + " ORDER BY alt.alt_description ASC "
+                                   + ", ca.ca_effective_date DESC ";
 
                     pList.Add(cm, "inContractNo", inContractNo);
                     pList.Add(cm, "inEffDate", inEffDate);
@@ -882,6 +1196,28 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._var_allowance_pk = GetValueFromReader<Decimal?>(dr, 28);
                                 instance._var_insurance_pa = GetValueFromReader<Decimal?>(dr, 29);
                                 instance._var_ror_pa = GetValueFromReader<Decimal?>(dr, 30);
+                                instance._ca_row_changed = dr.GetString(31);
+
+                                instance._total_amount = 0.0M;
+
+                                instance._initial_eff_date = instance._effective_date;
+                                instance._initial_amount = instance._annual_amount;
+                                instance._initial_approved = instance._approved;
+                                instance._initial_doc_descr = instance._ca_doc_description;
+                                instance._initial_notes = instance._notes;
+                                instance._initial_ca_var1 = instance._ca_var1;
+                                instance._initial_dist_day = instance._ca_dist_day;
+                                instance._initial_hrs_wk = instance._ca_hrs_wk;
+                                instance._initial_costs_covered = instance._ca_costs_covered;
+
+                                instance._initial_var_id = instance._var_id;
+                                instance._initial_carrier_pa = instance._var_carrier_pa;
+                                instance._initial_repairs_pk = instance._var_repairs_pk;
+                                instance._initial_licence_pa = instance._var_licence_pa;
+                                instance._initial_tyres_pk = instance._var_tyres_pk;
+                                instance._initial_allowance_pk = instance._var_allowance_pk;
+                                instance._initial_insurance_pa = instance._var_insurance_pa;
+                                instance._initial_ror_pa = instance._var_ror_pa;
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
@@ -889,7 +1225,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             }
                             list = _list.ToArray();
                         }
-                        _row_changed = "N";
                     }
                     catch (Exception e)
                     {
@@ -932,7 +1267,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				}
 				// reinitialize original key/value list
 				StoreInitialValues();
-                _row_changed = "N";
 			}
 		}
 		[ServerMethod()]
@@ -946,20 +1280,62 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
-				if (GenerateInsertCommandText(cm, "contract_allowance", pList))
-				{
+                if (isMarkedNew)
+                {
                     try
                     {
+                        cm.CommandText =
+                                "INSERT INTO rd.contract_allowance "
+                                + " (alt_key, contract_no, ca_effective_date, ca_annual_amount, ca_notes"
+                                + ", ca_paid_to_date, ca_approved, ca_doc_description, ca_costs_covered"
+                                + ", ca_var1, ca_dist_day, ca_hrs_wk, var_id, ca_row_changed) "
+                                + "VALUES "
+                                + " (@alt_key, @contract_no, @effective_date, @annual_amount, @notes"
+                                + ", @paid_to_date, @approved, @ca_doc_description, @ca_costs_covered"
+                                + ", @ca_var1, @ca_dist_day, @ca_hrs_wk, @var_id, @ca_row_changed)";
+
+                        pList.Add(cm, "alt_key", _alt_key);
+                        pList.Add(cm, "contract_no", _contract_no);
+                        pList.Add(cm, "effective_date", _effective_date);
+                        pList.Add(cm, "annual_amount", _annual_amount);
+                        pList.Add(cm, "notes", _notes);
+                        pList.Add(cm, "paid_to_date", _paid_to_date);
+                        pList.Add(cm, "approved", _approved);
+                        pList.Add(cm, "ca_doc_description", _ca_doc_description);
+                        pList.Add(cm, "ca_costs_covered", _ca_costs_covered);
+                        pList.Add(cm, "var_id", _var_id);
+                        pList.Add(cm, "ca_var1", _ca_var1);
+                        pList.Add(cm, "ca_dist_day", _ca_dist_day);
+                        pList.Add(cm, "ca_hrs_wk", _ca_hrs_wk);
+                        pList.Add(cm, "ca_row_changed", _ca_row_changed);
+
                         DBHelper.ExecuteNonQuery(cm, pList);
+                        isMarkedNew = false;
+
+                        StoreInitialValues();
                     }
                     catch (Exception e)
                     {
                         _sqlcode = -2;
                         _sqlerrtext = e.Message;
                     }
-				}
-				StoreInitialValues();
-                _row_changed = "N";
+                }
+                else
+                {
+                    try
+                    {
+                        if (GenerateInsertCommandText(cm, "contract_allowance", pList))
+                        {
+                            DBHelper.ExecuteNonQuery(cm, pList);
+                        }
+                        StoreInitialValues();
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlcode = -2;
+                        _sqlerrtext = e.Message;
+                    }
+                }
 			}
 		}
 		[ServerMethod()]
