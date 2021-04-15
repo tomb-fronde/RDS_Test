@@ -494,14 +494,14 @@ namespace NZPostOffice.Shared.Managers
             return lReturn;
         }
         public virtual bool of_sanedate(DateTime? adt_date, string as_column)
-        {
+        {   // Returns true if date is OK
             DateTime dtCheck;
             DialogResult iBox;
 
             dtCheck = DateTime.Today.AddDays(90);
             iBox = DialogResult.Yes;
 
-            //added condition PP -  in PowerBuilder null date passes this validation
+            // A null date is OK
             if (!adt_date.HasValue) 
             {
                 return true;
