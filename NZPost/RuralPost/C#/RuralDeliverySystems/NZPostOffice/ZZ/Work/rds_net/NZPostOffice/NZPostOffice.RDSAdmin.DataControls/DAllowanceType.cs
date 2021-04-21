@@ -10,18 +10,26 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
+    // TJB  Allowances  21-Apr-2021
+    // Added AllowanceCalcType dropdown
+
 	public partial class DAllowanceType : Metex.Windows.DataUserControl
 	{
 		public DAllowanceType()
 		{
 			InitializeComponent();
+            InitializeDropdown();
             this.SortString = "alt_description A";
 		}
 
-		public override int Retrieve(  )
+        private void InitializeDropdown()
+        {
+            alct_id.AssignDropdownType<DddwAllowanceCalcType>("AlctId", "AlctDescription");
+        }
+
+        public override int Retrieve()
 		{
-			int ret = RetrieveCore<AllowanceType>(new List<AllowanceType>
-                (AllowanceType.GetAllAllowanceType()));
+			int ret = RetrieveCore<AllowanceType>(new List<AllowanceType>(AllowanceType.GetAllAllowanceType()));
             if(this.SortString != "")
                 this.Sort<AllowanceType>();
             return ret;

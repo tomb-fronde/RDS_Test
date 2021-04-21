@@ -43,7 +43,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_fuel_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_ruc_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.alct_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alct_id = new Metex.Windows.DataGridViewEntityComboColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -82,7 +82,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(638, 252);
+            this.grid.Size = new System.Drawing.Size(638, 425);
             this.grid.TabIndex = 0;
             // 
             // alt_description
@@ -100,6 +100,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alt_rate
             // 
             this.alt_rate.DataPropertyName = "AltRate";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle3.NullValue = "null";
             this.alt_rate.DefaultCellStyle = dataGridViewCellStyle3;
@@ -110,6 +112,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alt_wks_yr
             // 
             this.alt_wks_yr.DataPropertyName = "AltWksYr";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle4.NullValue = "null";
             this.alt_wks_yr.DefaultCellStyle = dataGridViewCellStyle4;
@@ -120,6 +124,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alt_acc
             // 
             this.alt_acc.DataPropertyName = "AltAcc";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle5.NullValue = "null";
             this.alt_acc.DefaultCellStyle = dataGridViewCellStyle5;
@@ -130,8 +136,10 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alt_fuel_pk
             // 
             this.alt_fuel_pk.DataPropertyName = "AltFuelPk";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle6.NullValue = "ll";
+            dataGridViewCellStyle6.NullValue = "null";
             this.alt_fuel_pk.DefaultCellStyle = dataGridViewCellStyle6;
             this.alt_fuel_pk.HeaderText = "Fuel/k";
             this.alt_fuel_pk.Name = "alt_fuel_pk";
@@ -140,6 +148,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alt_ruc_pk
             // 
             this.alt_ruc_pk.DataPropertyName = "AltRucPk";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle7.NullValue = "null";
             this.alt_ruc_pk.DefaultCellStyle = dataGridViewCellStyle7;
@@ -150,12 +160,17 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // alct_id
             // 
             this.alct_id.DataPropertyName = "AlctId";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle8.NullValue = "null";
             this.alct_id.DefaultCellStyle = dataGridViewCellStyle8;
-            this.alct_id.HeaderText = "Alct Id";
+            this.alct_id.HeaderText = "Calc Type";
             this.alct_id.Name = "alct_id";
-            this.alct_id.Width = 50;
+            this.alct_id.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alct_id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.alct_id.Width = 140;
             // 
             // DAllowanceType
             // 
@@ -164,7 +179,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DAllowanceType";
-            this.Size = new System.Drawing.Size(638, 252);
+            this.Size = new System.Drawing.Size(638, 425);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -178,7 +193,15 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_acc;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_fuel_pk;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_ruc_pk;
-        private System.Windows.Forms.DataGridViewTextBoxColumn alct_id;
+        private Metex.Windows.DataGridViewEntityComboColumn alct_id;
 
-	}
+
+
+
+
+
+
+
+
+    }
 }
