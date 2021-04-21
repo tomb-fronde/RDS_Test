@@ -52,7 +52,7 @@ namespace NZPostOffice.RDSAdmin
     //    Selecting an existing group or user triggers the save.
     //
     // TJB  RPCR_060  Mar-2014
-    // Added insert code for hs_type table (see m_insert_click)
+    // Added insert code for hs_type table (see m_insert_Click)
     //
     // TJB  RPCR_054  12-Aug-2013
     // Added additional validations for new piece rate types and suppliers
@@ -476,6 +476,13 @@ namespace NZPostOffice.RDSAdmin
                 ((DEclQualityMappings)dw_detail.DataObject).Grid.ClearSelection();
                 ((DEclQualityMappings)dw_detail.DataObject).Grid.Rows[dw_detail.GetRow()].Selected = true;
             }
+            else if (dw_detail.DataObject is DVehicleAllowanceRates)
+            {
+                ((DVehicleAllowanceRates)dw_detail.DataObject).InsertItem<VehicleAllowanceRates>(row, VehicleAllowanceRates.NewVehicleAllowanceRates());
+                ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.ClearSelection();
+                ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.Rows[dw_detail.GetRow()].Selected = true;
+            }
+
             ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).ClearSelection();
             ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).Rows[dw_detail.GetRow()].Selected = true;
         }
