@@ -16,6 +16,10 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin
 {
+    // TJB  Allowances  Apr-2021
+    // Expanded allowance_type to include allowance calculation factors
+    // Added form for vehicle_allowance_rates maintenance
+    //
     // TJB July-2019 Bug: File.Save didn't do anything
     // Fixed: added pfc_save override calling of_save
     // Found of_save didn't work for new users 
