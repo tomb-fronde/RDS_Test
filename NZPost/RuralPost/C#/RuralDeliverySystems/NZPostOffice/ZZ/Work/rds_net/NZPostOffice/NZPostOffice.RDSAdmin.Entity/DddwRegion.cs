@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using System.Data.Common;using Metex.Core;using Metex.Core.Security;
+using System.Data.Common;
+using Metex.Core;
+using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
