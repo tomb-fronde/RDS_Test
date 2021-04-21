@@ -259,19 +259,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				{
                     cm.CommandType = CommandType.Text;
                     ParameterCollection pList = new ParameterCollection();
-/*
-                    cm.CommandText =
-                        " SELECT var_id"
-                        + "    , var_description "
-                        + "    , var_carrier_pa "
-                        + "    , var_repairs_pk "
-                        + "    , var_licemce_pa "
-                        + "    , var_tyres_pk "
-                        + "    , var_allowance_pk "
-                        + "    , var_insurance_pa "
-                        + "    , var_ror_pa "
-                        + " FROM rd.vehicle_allowance_rates ";
-*/
+
                     GenerateSelectCommandText(cm, "vehicle_allowance_rates");
                     List<VehicleAllowanceRates> list = new List<VehicleAllowanceRates>();
 
@@ -285,23 +273,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                             {
                                 VehicleAllowanceRates instance = new VehicleAllowanceRates();
                                 instance.StoreFieldValues(dr, "vehicle_allowance_rates");
-/*
-                                instance._var_id           = GetValueFromReader<int?>(dr, 0);
-                                instance._var_description  = GetValueFromReader<string>(dr, 1);
-                                instance._var_carrier_pa   = GetValueFromReader<decimal?>(dr, 2);
-                                instance._var_repairs_pk   = GetValueFromReader<decimal?>(dr, 3);
-                                instance._var_licence_pa   = GetValueFromReader<decimal?>(dr, 4);
-                                instance._var_tyres_pk     = GetValueFromReader<decimal?>(dr, 5);
-                                instance._var_allowance_pk = GetValueFromReader<decimal?>(dr, 6);
-                                instance._var_insurance_pa = GetValueFromReader<decimal?>(dr, 7);
-                                instance._var_ror_pa       = GetValueFromReader<decimal?>(dr, 8);
-*/
                                 instance.MarkOld();
                                 list.Add(instance);
-/*
-                                instance.StoreInitialValues();
-                                _list.Add(instance);
-*/
                             }
                             dataList = new VehicleAllowanceRates[list.Count];
                             list.CopyTo(dataList);
@@ -316,7 +289,63 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				}
 			}
 		}
-		#endregion
+
+        [ServerMethod()]
+        private void UpdateEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+                if (GenerateUpdateCommandText(cm, "vehicle_allowance_rates", ref pList))
+                {
+                    cm.CommandText += " WHERE  vehicle_allowance_rates.var_id = @var_id ";
+
+                    pList.Add(cm, "var_id", GetInitialValue("_var_id"));
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                // reinitialize original key/value list
+                StoreInitialValues();
+            }
+        }
+
+        [ServerMethod()]
+        private void InsertEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                DbCommand cm = cn.CreateCommand();
+                cm.CommandType = CommandType.Text;
+                ParameterCollection pList = new ParameterCollection();
+
+                if (GenerateInsertCommandText(cm, "vehicle_allowance_rates", pList))
+                {
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                }
+                StoreInitialValues();
+            }
+        }
+        [ServerMethod()]
+        private void DeleteEntity()
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbTransaction tr = cn.BeginTransaction())
+                {
+                    DbCommand cm = cn.CreateCommand();
+                    cm.Transaction = tr;
+                    cm.CommandType = CommandType.Text;
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "var_id", GetInitialValue("_var_id"));
+                    cm.CommandText = "DELETE FROM vehicle_allowance_rates " 
+                                   + " WHERE vehicle_allowance_rates.var_id = @var_id ";
+                    DBHelper.ExecuteNonQuery(cm, pList);
+                    tr.Commit();
+                }
+            }
+        }
+        #endregion
 
 		[ServerMethod()]
 		private void CreateEntity(  )
