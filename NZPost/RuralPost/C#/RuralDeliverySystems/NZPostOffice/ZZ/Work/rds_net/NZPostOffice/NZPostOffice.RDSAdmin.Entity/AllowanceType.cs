@@ -21,7 +21,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
     [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
     [MapInfo("alct_id", "_alct_id", "allowance_type")]
-    [MapInfo("alct_description", "_alct_description", "")]
     [System.Serializable()]
 
 	public class AllowanceType : Entity<AllowanceType>
@@ -50,9 +49,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private int? _alct_id;
-
-        [DBField]
-        private string _alct_description;
 
 
 		public virtual int? AltKey
@@ -194,24 +190,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 if (_alct_id != value)
                 {
                     _alct_id = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual string AlctDescription
-        {
-            get
-            {
-                CanReadProperty(true);
-                return _alct_description;
-            }
-            set
-            {
-                CanWriteProperty(true);
-                if (_alct_description != value)
-                {
-                    _alct_description = value;
                     PropertyHasChanged();
                 }
             }
