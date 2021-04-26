@@ -11,14 +11,17 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Allowances  26-Apr-2021
+    // Adjusting size etc to accommodate changed DAllowanceBreakdown
+    //
+    // TJB RPCR_017 July-2010
+    // Fixed delete row function
+    // - Fixed bug in pfc_deleteRow that allowed a paid allowance to be deleted
+    // - Added recalculation of allowance total when row deleted
+    // - Added parent reset when row deleted
+
     public class WAllowanceBreakdown : WMaster
     {
-        // TJB RPCR_017 July-2010
-        // Fixed delete row function
-        // - Fixed bug in pfc_deleteRow that allowed a paid allowance to be deleted
-        // - Added recalculation of allowance total when row deleted
-        // - Added parent reset when row deleted
-
         #region Define
         public int il_contract;
 
@@ -62,42 +65,53 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         /// </summary>
         private void InitializeComponent()
         {
+            this.cb_close = new System.Windows.Forms.Button();
+            this.dw_1 = new NZPostOffice.RDS.Controls.URdsDw();
             this.SuspendLayout();
-
-            this.cb_close = new Button();
-            this.dw_1 = new URdsDw();
-            //!dw_1.DataObject = new DAllowanceBreakdown();
-            Controls.Add(cb_close);
-            Controls.Add(dw_1);
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.ControlBox = false;
-            this.Location = new System.Drawing.Point(182, 89);
-            this.Size = new System.Drawing.Size(649, 297);
             // 
             // cb_close
             // 
-            this.AcceptButton = cb_close;
-            cb_close.Text = "Close";
-            cb_close.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            cb_close.TabIndex = 1;
-            cb_close.Location = new System.Drawing.Point(553, 4);
-            cb_close.Size = new System.Drawing.Size(72, 20);
-            cb_close.Click += new EventHandler(cb_close_clicked);
+            this.cb_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.cb_close.Location = new System.Drawing.Point(752, 7);
+            this.cb_close.Name = "cb_close";
+            this.cb_close.Size = new System.Drawing.Size(72, 20);
+            this.cb_close.TabIndex = 1;
+            this.cb_close.Text = "Close";
+            this.cb_close.Click += new System.EventHandler(this.cb_close_clicked);
             // 
             // dw_1
             // 
-            ///!this.dw_1.DataObject.BorderStyle = BorderStyle.None;
-            dw_1.VerticalScroll.Visible = false;
-            dw_1.Size = new System.Drawing.Size(641, 272);
-            dw_1.RowFocusChanged += new EventHandler(dw_1_rowfocuschanged);
-            //dw_1.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_constructor);
-            //dw_1.PfcPreDeleteRow +=new NZPostOffice.RDS.Controls.UserEventDelegate1(dw_1_pfc_predeleterow);
-            //dw_1.PfcDeleteRow +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_1_pfc_deleterow);
-            this.ResumeLayout();
+            this.dw_1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dw_1.DataObject = null;
+            this.dw_1.FireConstructor = false;
+            this.dw_1.Location = new System.Drawing.Point(0, 0);
+            this.dw_1.Name = "dw_1";
+            this.dw_1.Size = new System.Drawing.Size(736, 204);
+            this.dw_1.TabIndex = 2;
+            this.dw_1.RowFocusChanged += new System.EventHandler(this.dw_1_rowfocuschanged);
+            // 
+            // WAllowanceBreakdown
+            // 
+            this.AcceptButton = this.cb_close;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(837, 223);
+            this.ControlBox = false;
+            this.Controls.Add(this.cb_close);
+            this.Controls.Add(this.dw_1);
+            this.Location = new System.Drawing.Point(82, 89);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WAllowanceBreakdown";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+            this.Controls.SetChildIndex(this.dw_1, 0);
+            this.Controls.SetChildIndex(this.cb_close, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>
