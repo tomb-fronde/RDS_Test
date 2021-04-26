@@ -10,16 +10,25 @@ using NZPostOffice.RDS.Entity.Ruralwin;
 
 namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
+    // TJB  Allowances  26-Apr-2021
+    // Added Net Amount and Doc Description columns
+    //
+    // TJB  RPCR_017 July-2010
+    // Added 'Approved' column + associated layout changes
+    // Added setTotal method so WAllowanceBreakdown can 
+    // save recalculated compute_1 value.
+
     public partial class DAllowanceBreakdown : Metex.Windows.DataUserControl
     {
-        // TJB  RPCR_017 July-2010
-        // Added 'Approved' column + associated layout changes
-        // Added setTotal method so WAllowanceBreakdown can 
-        // save recalculated compute_1 value.
-
         public DAllowanceBreakdown()
         {
             InitializeComponent();
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
 
         // TJB  RPCR_017 July-2010: added
@@ -27,7 +36,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         public void setTotal(decimal? newTotal)
         {
             // Resets the total (Compute1)
-            this.compute_1.Text = "$" + string.Format("{0:#,##0.00}", newTotal);
+            this.compute_11.Text = "$" + string.Format("{0:#,##0.00}", newTotal);
         }
 
         public int Retrieve(int? inContractNo, int? inAltKey)
@@ -43,10 +52,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     total += allowanceBreakdown.AnnualAmount;
                 }
             }
-            compute_1.Text = "$" + string.Format("{0:#,##0.00}", total);
+            compute_11.Text = "$" + string.Format("{0:#,##0.00}", total);
 
             this.grid.Height = rstList.Count * this.grid.RowTemplate.Height + this.grid.ColumnHeadersHeight;
-            this.compute_1.Top = this.grid.Top + this.grid.Height + 5;
+            this.compute_11.Top = this.grid.Top + this.grid.Height + 5;
             this.panel2.Top = this.grid.Top + this.grid.Height + 3;
 
             return RetrieveCore<AllowanceBreakdown>(new List<AllowanceBreakdown>
