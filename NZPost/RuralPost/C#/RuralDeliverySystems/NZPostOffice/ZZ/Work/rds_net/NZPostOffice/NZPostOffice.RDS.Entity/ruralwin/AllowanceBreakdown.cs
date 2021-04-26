@@ -8,6 +8,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin
 {
+    // TJB  Allowances 25-Apr-2021
+    // Added ca_doc_description, and f_GetAllowanceAmount() to fetched values
+    //
     // TJB RPCR_017 July-2010
     // Added column ca_approved and associated changes
     // Reformatted query strings
@@ -22,8 +25,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("ca_paid_to_date", "_paid_to_date", "contract_allowance")]
 	[MapInfo("ca_annual_amount", "_annual_amount", "contract_allowance")]
 	[MapInfo("ca_notes", "_notes", "contract_allowance")]
-	[MapInfo("alt_description", "_alt_description", "allowance_type")]
-	[System.Serializable()]
+    [MapInfo("ca_doc_description", "_ca_doc_description", "contract_allowance")]
+    [MapInfo("alt_description", "_alt_description", "allowance_type")]
+    [System.Serializable()]
 
 	public class AllowanceBreakdown : Entity<AllowanceBreakdown>
 	{
@@ -49,8 +53,13 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 		[DBField()]
 		private string  _notes;
 
-		[DBField()]
+        [DBField()]
+        private string _ca_doc_description;
+
+        [DBField()]
 		private string  _alt_description;
+
+        private decimal? _net_amount;
 
 
 		public virtual int? ContractNo
@@ -179,7 +188,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			}
 		}
 
-		public virtual string AltDescription
+        public virtual string DocDescription
+        {
+            get
+            {
+                CanReadProperty("DocDescription", true);
+                return _ca_doc_description;
+            }
+            set
+            {
+                CanWriteProperty("DocDescription", true);
+                if (_ca_doc_description != value)
+                {
+                    _ca_doc_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string AltDescription
 		{
 			get
 			{
@@ -197,7 +224,26 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			}
 		}
 
-		protected override object GetIdValue()
+        public virtual decimal? NetAmount
+        {
+            get
+            {
+                CanReadProperty("NetAmount", true);
+                return _net_amount;
+            }
+            set
+            {
+                CanWriteProperty("NetAmount", true);
+                if (_net_amount != value)
+                {
+                    _net_amount = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        
+        protected override object GetIdValue()
 		{
 			return string.Format( "{0}/{1}/{2}", _contract_no,_alt_key,_effective_date );
 		}
@@ -227,22 +273,22 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "inContractNo", inContractNo);
 					pList.Add(cm, "inAltKey", inAltKey);
-                    //GenerateSelectCommandText(cm, "contract_allowance");
-                    //GenerateSelectCommandText(cm, "allowance_type");
-                    cm.CommandText="SELECT contract_allowance.contract_no, " 
-                                        + "contract_allowance.alt_key, "
-                                        + "contract_allowance.ca_effective_date, " 
-                                        + "contract_allowance.ca_paid_to_date, "
-                                        + "contract_allowance.ca_annual_amount," 
-                                        + "contract_allowance.ca_notes, "
-                                        + "allowance_type.alt_description, "
-                                        + "contract_allowance.ca_approved "
-                                   + "FROM rd.contract_allowance, " 
-                                        + "rd.allowance_type "
-                                  + "WHERE allowance_type.alt_key = contract_allowance.alt_key " 
-                                    + "and contract_allowance.contract_no = @inContractNo " 
-                                    + "and contract_allowance.alt_key = @inAltKey "
-                                  + "ORDER BY contract_allowance.ca_effective_date DESC";
+                    cm.CommandText="SELECT ca.contract_no " 
+                                      + ", ca.alt_key "
+                                      + ", ca.ca_effective_date " 
+                                      + ", ca.ca_paid_to_date "
+                                      + ", ca.ca_annual_amount" 
+                                      + ", ca.ca_notes "
+                                      + ", ca.ca_doc_description "
+                                      + ", alt.alt_description "
+                                      + ", ca.ca_approved "
+                                      + ", rd.f_GetAllowanceAmount(ca.contract_no, ca.alt_key, ca_effective_date) "
+                                   + "FROM rd.contract_allowance ca " 
+                                      + ", rd.allowance_type alt "
+                                  + "WHERE alt.alt_key = ca.alt_key " 
+                                    + "and ca.contract_no = @inContractNo " 
+                                    + "and ca.alt_key = @inAltKey "
+                                  + "ORDER BY ca.ca_effective_date DESC";
 
 					List<AllowanceBreakdown> _list = new List<AllowanceBreakdown>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -255,9 +301,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                             instance._effective_date = GetValueFromReader<DateTime?>(dr,2);
                             instance._paid_to_date = GetValueFromReader<DateTime?>(dr,3);
                             instance._annual_amount = GetValueFromReader<decimal?>(dr,4);
-                            instance._notes = GetValueFromReader<string>(dr,5);
-                            instance._alt_description = GetValueFromReader<string>(dr,6);
-                            instance._approved = GetValueFromReader<string>(dr, 7);
+                            instance._notes = GetValueFromReader<string>(dr, 5);
+                            instance._ca_doc_description = GetValueFromReader<string>(dr, 6);
+                            instance._alt_description = GetValueFromReader<string>(dr, 7);
+                            instance._approved = GetValueFromReader<string>(dr, 8);
+                            instance._net_amount = GetValueFromReader<decimal?>(dr, 9);
                             instance.MarkOld();
                             instance.StoreInitialValues();
 							_list.Add(instance);
