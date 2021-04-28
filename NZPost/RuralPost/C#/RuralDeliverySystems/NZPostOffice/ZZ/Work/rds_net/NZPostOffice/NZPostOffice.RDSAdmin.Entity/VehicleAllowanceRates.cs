@@ -10,6 +10,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 {
     // TJB  Allowances  28-Mar-2021:  New
     // Data entity for vehicle allowance calculations
+    // [28-Apr-2021] Add columns var_effective_date, var_notes
 
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -23,7 +24,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("var_allowance_pk", "_var_allowance_pk", "vehicle_allowance_rates")]
     [MapInfo("var_insurance_pa", "_var_insurance_pa", "vehicle_allowance_rates")]
     [MapInfo("var_ror_pa", "_var_ror_pa", "vehicle_allowance_rates")]
-	[System.Serializable()]
+    [MapInfo("var_effective_date", "_var_effective_date", "vehicle_allowance_rates")]
+    [MapInfo("var_notes", "_var_notes", "vehicle_allowance_rates")]
+    [System.Serializable()]
 
     public class VehicleAllowanceRates : Entity<VehicleAllowanceRates>
 	{
@@ -54,6 +57,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private decimal? _var_ror_pa;
+
+        [DBField()]
+        private DateTime? _var_effective_date;
+
+        [DBField()]
+        private string _var_notes;
 
 
 		public virtual int? VarId
@@ -213,6 +222,42 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 if (_var_ror_pa != value)
                 {
                     _var_ror_pa = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string VarNotes
+        {
+            get
+            {
+                CanReadProperty("VarNotes", true);
+                return _var_notes;
+            }
+            set
+            {
+                CanWriteProperty("VarNotes", true);
+                if (_var_notes != value)
+                {
+                    _var_notes = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? VarEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("VarEffectiveDate", true);
+                return _var_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("VarEffectiveDate", true);
+                if (_var_effective_date != value)
+                {
+                    _var_effective_date = value;
                     PropertyHasChanged();
                 }
             }

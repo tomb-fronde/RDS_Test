@@ -9,8 +9,10 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 {
     // TJB Allowances Apr-2021
     // Include new columns
+    //     alt_rate, alt_wks_yr, alt_acc, alt_fuel_pk, alt_ruc_pk, alct_id
+    // [28-Apr-2021] Add columns alt_effective_date, alt_notes
 
-	// Mapping info for object fields to DB
+    // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
 	[MapInfo("alt_key", "_alt_key", "allowance_type", true)]
@@ -21,6 +23,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
     [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
     [MapInfo("alct_id", "_alct_id", "allowance_type")]
+    [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type")]
+    [MapInfo("alt_notes", "_alt_notes", "allowance_type")]
     [System.Serializable()]
 
 	public class AllowanceType : Entity<AllowanceType>
@@ -49,6 +53,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private int? _alct_id;
+
+        [DBField()]
+        private DateTime? _alt_effective_date;
+
+        [DBField()]
+        private string _alt_notes;
 
 
 		public virtual int? AltKey
@@ -195,6 +205,41 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
             }
         }
 
+        public virtual string AltNotes
+        {
+            get
+            {
+                CanReadProperty("AltNotes",true);
+                return _alt_notes;
+            }
+            set
+            {
+                CanWriteProperty("AltNotes", true);
+                if (_alt_notes != value)
+                {
+                    _alt_notes = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual DateTime? AltEffectiveDate
+        {
+            get
+            {
+                CanReadProperty("AltEffectiveDate", true);
+                return _alt_effective_date;
+            }
+            set
+            {
+                CanWriteProperty("AltEffectiveDate", true);
+                if (_alt_effective_date != value)
+                {
+                    _alt_effective_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
 
 		private AllowanceType[] dataList;
 
