@@ -22,6 +22,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Minor adjustments when opening WMaintainAllowances
     // [5-Apr-2021] Changed open WAddAllowance to open WAddAllowance2021.
     //        WAddAllowance2021 now opens WMaintainAllowances directly
+    // [4-May-2021] Added the selected row's allowance type (alt_key) and
+    //        calc type (alct_id) to passed information when opening 
+    //        WMaintainAllowances for update.
     //
     // TJB Allowances 11-Mar-2021
     // Changed Allowances display to DContractAllowancesV3
@@ -1646,6 +1649,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     }
                     lnv_Criteria.of_addcriteria("Contract_no", il_Contract_no);
                     lnv_Criteria.of_addcriteria("alt_key", idw_allowances.GetItem<ContractAllowancesV3>(al_row).AltKey);
+                    lnv_Criteria.of_addcriteria("alt_description", idw_allowances.GetItem<ContractAllowancesV3>(al_row).AltDescription);
                     lnv_Criteria.of_addcriteria("allowance_row", al_row);
                     lnv_msg.of_addcriteria(lnv_Criteria);
                     StaticMessage.PowerObjectParm = lnv_msg;
@@ -2625,12 +2629,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             NCriteria lnv_Criteria;
             NRdsMsg lnv_msg;
 
+            // TJB  Allowances  May-2021
+            // Added the selected row's allowance type (alt_key) an calc type (alct_id)
+            // to passed information when opening WMaintainAllowances
+            int nRow = dw_contract_allowances.GetRow();
+            int? nAltKey = dw_contract_allowances.GetItem<ContractAllowancesV3>(nRow).AltKey;
+            RDSDataService obj = RDSDataService.GetAllowanceCalcType(nAltKey);
+            int? nAlctId = obj.intVal;
+
             lnv_Criteria = new NCriteria();
             lnv_msg = new NRdsMsg();
 
             Cursor.Current = Cursors.WaitCursor;
             lnv_Criteria.of_addcriteria("contract_no", il_Contract_no);
             lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
+            lnv_Criteria.of_addcriteria("alt_key", nAltKey);
+            lnv_Criteria.of_addcriteria("alct_id", nAlctId);
             lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
             lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
