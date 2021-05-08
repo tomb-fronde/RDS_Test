@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // DataControl for Fixed Allowance maintenance tab
     // [31-Mar-2021] Annual amount calculation added
     // [31-Mar-2021] Rearranged columns
+    // [ 5-May-2021] Changed grid_CellValueChanged
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{
@@ -27,10 +28,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // and DisplayMember - to be omitted from the generated code
             // (and I don't have to remember to manually put them back).
             // Putting them here overrides the emitted code.
-            //this.alt_key.DefaultCellStyle.NullValue = null;
-            //this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            //this.alt_key.ValueMember = "AltKey";
-            //this.alt_key.DisplayMember = "AltDescription";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
@@ -59,10 +56,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 			//alt_key.AssignDropdownType<DddwAllowanceTypesFixed>();
 		}
 
-		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
+		public int Retrieve( int? inContract, int? inAlctId)
 		{
             return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
-                                        (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
+                                        (MaintainAllowance.GetAllMaintainAllowance(inContract, inAlctId)));
             //set_row_readability();
         }
 
@@ -191,36 +188,59 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {  /*****************************************************
             * NOTE:                                             *
-            *    There are no variable or fixed components to   *
-            *    the annual amount                              *
+            *    There are no variable or fixed components used *
+            *    to calculate the annual amount.                *
             *                                                   *
             *    Annual amount = <value entered>                *
             *****************************************************/
             int thisRow = e.RowIndex;
             int column = e.ColumnIndex;
             string column_name = this.grid.Columns[column].Name;
-            string sRowChanged;
-/*
-            // Setting ca_row_changed below causes another cycle through with it as
-            // the changed row.  We ignore this chance.
-            //if (!(column_name == "ca_row_changed"))
-            if (!(column_name == "ca_annual_amount"))
-            {
-                // TJB 9-April-2021
-                // If the ca_annual_amount has changed and this row isn't marked as new ("N") 
-                // and hasn't already been marked modified ("M"), mark it mark it changed ("C") 
-                // or modified ("M") as appropriate
-                sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
-                if (!(sRowChanged == "N" || sRowChanged == "M"))
-                {
-                    if (column_name == "ca_annual_amount")
-                        grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
-                    else
-                        grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
-                }
-            }
-*/
-        }
 
+            // Get the RowChanged value, or "X" if not set
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+
+            if (column_name == "ca_row_changed" || column_name == "net_amount" || column_name == "calc_amount")
+            {
+                // Ignore RowChanged, NetAmt and CalcAmt changes triggered by changes to them below
+            }
+            else if (column_name == "ca_annual_amount")
+            {
+                // A new ca_annual_amount has been entered
+                decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
+                decimal? calcAmt = (decimal?)grid.Rows[thisRow].Cells["calc_amount"].Value ?? 0.0M;
+                decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
+
+                if (sRowChanged == "M")
+                {
+                    // If the row has already been marked as modified, the user has changed the 
+                    // value they previously entered. That has already been factored into the 
+                    // net_amount and has to be removed so that the correct net amount can be 
+                    // calculated with the revised entered value.  CalcAmt currently holds the 
+                    // previous entered value.
+                    netAmt = netAmt - calcAmt;
+                }
+
+                // Copy the entered ca_annual_amount to the calc_amount field
+                // (which for other calc types, holds the new entered value).
+                grid.Rows[thisRow].Cells["calc_amount"].Value
+                                = grid.Rows[thisRow].Cells["ca_annual_amount"].Value;
+
+                // and update the Net Amount
+                grid.Rows[thisRow].Cells["net_amount"].Value = netAmt + annualAmt;
+
+                // And mark it modified ("M") if it isn't already marked new ("N") or modified.
+                if ( sRowChanged != "N" && sRowChanged != "M" )
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = "M";
+            }
+            else if (sRowChanged != "N" && sRowChanged != "M" && sRowChanged != "C")
+            {
+                // Something other than the ca_annual_amount, calc_amount, net_amount, or ca_row_changed
+                // has been changed.
+                // If RowChanged has not already been set to one of the new ("N"), modified ("M") 
+                // or changed ("C") values, mark it changed.
+                grid.Rows[thisRow].Cells["ca_row_changed"].Value = "C";
+            }
+        }
     }
 }
