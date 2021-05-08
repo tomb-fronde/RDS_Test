@@ -12,6 +12,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // Get details for the DMaintainAllowances tabs
     // [29Mar2021] Updated alt_fixed* names and added alt_ruc_pk
+    // [April-2021] Changed total_amount to net_amount
+    //              Changed all initial<items> derivations to use GetInitialValue()
 
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -40,7 +42,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "")]
     [MapInfo("alct_id", "_alct_id", "")]
     [MapInfo("alct_description", "_alct_description", "")]
-    [MapInfo("total_amount", "_total_amount", "")]
+    [MapInfo("_net_amount", "_net_amount", "")]
     [System.Serializable()]
 
 	public class MaintainAllowance : Entity<MaintainAllowance>
@@ -138,7 +140,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private string _ca_costs_covered;
 
         [DBField()]
-        private decimal? _total_amount;
+        private decimal? _net_amount;
+        private decimal? _calc_amount;
 
         // Used to mark changed rows.  New reords added via WAddAllowance
         // are marked New ("N") and updated in WModifyAllowance. Existing 
@@ -562,19 +565,37 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual decimal? TotalAmount
+        public virtual decimal? NetAmount
         {
             get
             {
-                CanReadProperty("TotalAmount", true);
-                return _total_amount;
+                CanReadProperty("NetAmount", true);
+                return _net_amount;
             }
             set
             {
-                CanWriteProperty("AnnualAmount", true);
-                if (_total_amount != value)
+                CanWriteProperty("NetAmount", true);
+                if (_net_amount != value)
                 {
-                    _total_amount = value;
+                    _net_amount = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? CalcAmount
+        {
+            get
+            {
+                CanReadProperty("CalcAmount", true);
+                return _calc_amount;
+            }
+            set
+            {
+                CanWriteProperty("CalcAmount", true);
+                if (_calc_amount != value)
+                {
+                    _calc_amount = value;
                     PropertyHasChanged();
                 }
             }
@@ -600,154 +621,106 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
         /*************************************************************************/
         // The Metex GetInitialValues function doesn't seem to work in WMaintainAllowance
-        // so I've had to maintain my own initial values for some fields.  
-        // See of_add_new_record().
+        // but I can get the initial values this way.
+        // See WMaintainAllowance.of_add_new_record().
         /*************************************************************************/
 
-        private DateTime? _initial_eff_date;
+        public virtual int? InitialAltKey
+        {
+            get
+            {
+                return (int?)GetInitialValue("_alt_key");
+            }
+        }
+
+        public virtual string InitialAltDescr
+        {
+            get
+            {
+                return (string)GetInitialValue("_alt_description;");
+            }
+        }
+
         public virtual DateTime? InitialEffDate
         {
             get
             {
-                return _initial_eff_date;
-            }
-            set
-            {
-                if (_initial_eff_date != value)
-                {
-                    _initial_eff_date = value;
-                }
+                return (DateTime?)GetInitialValue("_effective_date");
             }
         }
 
-        decimal? _initial_amount;
         public virtual decimal? InitialAmount
         {
             get
             {
-                return _initial_amount;
-            }
-            set
-            {
-                if (_initial_amount != value)
-                {
-                    _initial_amount = value;
-                }
+                return (decimal?)GetInitialValue("_annual_amount");
             }
         }
 
-        private string _initial_approved;
         public virtual string InitialApproved
         {
             get
             {
-                return _initial_approved;
-            }
-            set
-            {
-                if (_initial_approved != value)
-                {
-                    _initial_approved = value;
-                }
+                return (string)GetInitialValue("_approved");
             }
         }
 
-        private string _initial_doc_descr;
         public virtual string InitialDocDescr
         {
             get
             {
-                return _initial_doc_descr;
-            }
-            set
-            {
-                if (_initial_doc_descr != value)
-                {
-                    _initial_doc_descr = value;
-                }
+                return (string)GetInitialValue("_ca_doc_description");
             }
         }
 
-        private string _initial_notes;
         public virtual string InitialNotes
         {
             get
             {
-                return _initial_notes;
-            }
-            set
-            {
-                if (_initial_notes != value)
-                {
-                    _initial_notes = value;
-                }
+                return (string)GetInitialValue("_notes");
             }
         }
 
-        private string _initial_costs_covered;
         public virtual string InitialCostsCovered
         {
             get
             {
-                return _initial_costs_covered;
-            }
-            set
-            {
-                if (_initial_costs_covered != value)
-                {
-                    _initial_costs_covered = value;
-                }
+                return (string)GetInitialValue("_ca_costs_covered");
             }
         }
 
-        private Decimal? _initial_ca_var1;
         public virtual Decimal? InitialCaVar1
         {
             get
             {
-                return _initial_ca_var1;
-            }
-            set
-            {
-                if (_initial_ca_var1 != value)
-                {
-                    _initial_ca_var1 = value;
-                }
+                return (decimal?)GetInitialValue("_ca_var1");
             }
         }
 
-        private Decimal? _initial_dist_day;
         public virtual Decimal? InitialDistDay
         {
             get
             {
-                return _initial_dist_day;
-            }
-            set
-            {
-                if (_initial_dist_day != value)
-                {
-                    _initial_dist_day = value;
-                }
+                return (decimal?)GetInitialValue("_ca_dist_day");
             }
         }
 
-        private Decimal? _initial_hrs_wk;
         public virtual Decimal? InitialHrsWk
         {
             get
             {
-                return _initial_hrs_wk;
-            }
-            set
-            {
-                if (_initial_hrs_wk != value)
-                {
-                    _initial_hrs_wk = value;
-                }
+                return (decimal?)GetInitialValue("_ca_hrs_wk");
             }
         }
-        
+
+        public virtual decimal? InitialNetAmount
+        {
+            get
+            {
+                return (decimal?)GetInitialValue("_net_amount");
+            }
+        }
+
         /*************************************************************************/
         
         protected override object GetIdValue()
@@ -778,22 +751,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			return Create(inContractNo);
 		}
 
-        public static MaintainAllowance[] GetAllMaintainAllowance(int? inContractNo, DateTime? inEffDate, int? inAlctId)
+        public static MaintainAllowance[] GetAllMaintainAllowance(int? inContractNo, int? inAlctId)
         {
-            return Fetch(inContractNo, inEffDate, inAlctId).list;
+            return Fetch(inContractNo, inAlctId).list;
         }
-/*
-        public static MaintainAllowance[] GetMaintainAllowance(int? inContractNo, DateTime? inEffDate)
-        {
-            int? inAlctId;
-            return Fetch(inContractNo, inEffDate, inAlctId).list;
-        }
-*/
         #endregion
 
 		#region Data Access
 		[ServerMethod]
-        private void FetchEntity(int? inContractNo, DateTime? inEffDate, int? inAlctId)
+        private void FetchEntity(int? inContractNo, int? inAlctId)
 		{
             _sqlcode = 0;
             _sqlerrtext = "";
@@ -833,12 +799,18 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                     + ", ca.ca_doc_description "
                                     + ", ca.ca_costs_covered "
                                     + ", ca.ca_row_changed "
+                                    + ", rd.f_GetAllowanceAmount(ca.contract_no, ca.alt_key, ca_effective_date) "
                                  + "FROM rd.contract_allowance ca "
                                     + ", rd.contract c "
                                     + ", rd.allowance_type alt "
                                     + ", rd.allowance_calc_type alct "
                                 + "WHERE ca.contract_no = @inContractNo "
-                                + "  AND ca.ca_effective_date >= @inEffDate "
+                                + "  AND (ca.ca_effective_date "
+                                + "            >= (select max(ca_effective_date) from rd.contract_allowance"
+                                + "  		      where contract_no = ca.contract_no"
+                                + "  			    and alt_key = ca.alt_key"
+                                + "  				and ca_approved = 'Y')"
+                                + "            or  ca.ca_approved != 'Y')"
                                 + "  AND c.contract_no = ca.contract_no "
                                 + "  AND alt.alt_key = ca.alt_key "
                                 + "  AND alt.alct_id =  @inAlctId "
@@ -847,7 +819,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                        + ", ca.ca_effective_date DESC ";
 
                         pList.Add(cm, "inContractNo", inContractNo);
-                        pList.Add(cm, "inEffDate", inEffDate);
                         pList.Add(cm, "inAlctId", inAlctId);
 
 					    List<MaintainAllowance> _list = new List<MaintainAllowance>();
@@ -880,18 +851,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._ca_doc_description = dr.GetString(21);
                                 instance._ca_costs_covered = dr.GetString(22);
                                 instance._ca_row_changed = dr.GetString(23);
-
-                                instance._total_amount = 0.0M;
-
-                                instance._initial_eff_date = instance._effective_date;
-                                instance._initial_amount = instance._annual_amount;
-                                instance._initial_approved = instance._approved;
-                                instance._initial_doc_descr = instance._ca_doc_description;
-                                instance._initial_notes = instance._notes;
-                                instance._initial_ca_var1 = instance._ca_var1;
-                                instance._initial_dist_day = instance._ca_dist_day;
-                                instance._initial_hrs_wk = instance._ca_hrs_wk;
-                                instance._initial_costs_covered = instance._ca_costs_covered;
+                                instance._net_amount = GetValueFromReader<decimal?>(dr, 24);
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
@@ -925,11 +885,11 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					cm.CommandText += 
 						" WHERE contract_allowance.alt_key = @alt_key " 
 						+ " AND contract_allowance.contract_no = @contract_no " 
-						+ " AND contract_allowance.ca_effective_date = @ca_effective_date ";
+						+ " AND contract_allowance.ca_effective_date = @effective_date ";
 
 					pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
 					pList.Add(cm, "contract_no", GetInitialValue("_contract_no"));
-					pList.Add(cm, "ca_effective_date", GetInitialValue("_effective_date"));
+					pList.Add(cm, "effective_date", GetInitialValue("_effective_date"));
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);

@@ -13,6 +13,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     // Get details for the DMaintainDistanceAllowances tab
     // Derived from MaintainAllowances
     // [31-Mar-2021] Added retreival of vehicle_allowance_rates 
+    // [April-2021] Changed total_amount to net_amount
+    //              Changed all initial<items> derivations to use GetInitialValue()
 
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -37,8 +39,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("alt_rate", "_alt_rate", "")]
     [MapInfo("alt_wks_yr", "_alt_wks_yr", "")]
     [MapInfo("alt_acc", "_alt_acc", "")]
-    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "")]
-    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "")]
     [MapInfo("alct_id", "_alct_id", "")]
     [MapInfo("alct_description", "_alct_description", "")]
     [MapInfo("var_description", "_var_description", "")]
@@ -49,7 +49,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("var_allowance_pk", "_var_allowance_pk", "")]
     [MapInfo("var_insurance_pa", "_var_insurance_pa", "")]
     [MapInfo("var_ror_pa", "_var_ror_pa", "")]
-    [MapInfo("total_amount", "_total_amount", "")]
+    [MapInfo("var_fuel_use_pk", "_var_fuel_use_pk", "")]
+    [MapInfo("var_fuel_rate", "_var_fuel_rate", "")]
+    [MapInfo("var_ruc_rate_pk", "_var_ruc_rate_pk", "")]
     [System.Serializable()]
 
 	public class MaintainVehAllowance : Entity<MaintainVehAllowance>
@@ -123,12 +125,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private decimal? _alt_acc;
 
         [DBField()]
-        private decimal? _alt_fuel_pk;
-
-        [DBField()]
-        private decimal? _alt_ruc_pk;
-
-        [DBField()]
         private int? _alct_id;
 
         [DBField()]
@@ -174,7 +170,17 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         private decimal? _var_ror_pa;
 
         [DBField()]
-        private decimal? _total_amount;
+        private decimal? _var_fuel_use_pk;
+
+        [DBField()]
+        private decimal? _var_fuel_rate;
+
+        [DBField()]
+        private decimal? _var_ruc_rate_pk;
+
+        [DBField()]
+        private decimal? _net_amount;
+        private decimal? _calc_amount;
 
         /*************************************************************************/
 
@@ -443,42 +449,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                 if (_alt_acc != value)
                 {
                     _alt_acc = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual Decimal? AltFuelPk
-        {
-            get
-            {
-                CanReadProperty("AltFuelPk", true);
-                return _alt_fuel_pk;
-            }
-            set
-            {
-                CanWriteProperty("AltFuelPk", true);
-                if (_alt_fuel_pk != value)
-                {
-                    _alt_fuel_pk = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual Decimal? AltRucPk
-        {
-            get
-            {
-                CanReadProperty("AltrucPk", true);
-                return _alt_ruc_pk;
-            }
-            set
-            {
-                CanWriteProperty("AltRucPk", true);
-                if (_alt_ruc_pk != value)
-                {
-                    _alt_ruc_pk = value;
                     PropertyHasChanged();
                 }
             }
@@ -754,19 +724,91 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        public virtual decimal? TotalAmount
+        public virtual Decimal? VarFuelUsePk
         {
             get
             {
-                CanReadProperty("TotalAmount", true);
-                return _total_amount;
+                CanReadProperty("VarFuelUsePk", true);
+                return _var_fuel_use_pk;
             }
             set
             {
-                CanWriteProperty("AnnualAmount", true);
-                if (_total_amount != value)
+                CanWriteProperty("VarFuelUsePk", true);
+                if (_var_fuel_use_pk != value)
                 {
-                    _total_amount = value;
+                    _var_fuel_use_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? VarFuelRate
+        {
+            get
+            {
+                CanReadProperty("VarFuelRate", true);
+                return _var_fuel_rate;
+            }
+            set
+            {
+                CanWriteProperty("VarFuelRate", true);
+                if (_var_fuel_rate != value)
+                {
+                    _var_fuel_rate = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual Decimal? VarRucRatePk
+        {
+            get
+            {
+                CanReadProperty("VarRucRatePk", true);
+                return _var_ruc_rate_pk;
+            }
+            set
+            {
+                CanWriteProperty("VarRucRatePk", true);
+                if (_var_ruc_rate_pk != value)
+                {
+                    _var_ruc_rate_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? NetAmount
+        {
+            get
+            {
+                CanReadProperty("NetAmount", true);
+                return _net_amount;
+            }
+            set
+            {
+                CanWriteProperty("NetAmount", true);
+                if (_net_amount != value)
+                {
+                    _net_amount = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? CalcAmount
+        {
+            get
+            {
+                CanReadProperty("CalcAmount", true);
+                return _calc_amount;
+            }
+            set
+            {
+                CanWriteProperty("CalcAmount", true);
+                if (_calc_amount != value)
+                {
+                    _calc_amount = value;
                     PropertyHasChanged();
                 }
             }
@@ -774,279 +816,167 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 
         /*************************************************************************/
         // The Metex GetInitialValues function doesn't seem to work in WMaintainAllowance
-        // so I've had to maintain my own initial values for some fields.  
-        // See of_add_new_record().
+        // but I can get the initial values this way.
+        // See WMaintainAllowance.of_add_new_record().
         /*************************************************************************/
 
-        private DateTime? _initial_eff_date;
+        public virtual int? InitialAltKey
+        {
+            get
+            {
+                return (int?)GetInitialValue("_alt_key");
+            }
+        }
+
+        public virtual string InitialAltDescr
+        {
+            get
+            {
+                return (string)GetInitialValue("_alt_description;");
+            }
+        }
+
         public virtual DateTime? InitialEffDate
         {
             get
             {
-                return _initial_eff_date;
-            }
-            set
-            {
-                if (_initial_eff_date != value)
-                {
-                    _initial_eff_date = value;
-                }
+                return (DateTime?)GetInitialValue("_effective_date");
             }
         }
 
-        decimal? _initial_amount;
         public virtual decimal? InitialAmount
         {
             get
             {
-                return _initial_amount;
-            }
-            set
-            {
-                if (_initial_amount != value)
-                {
-                    _initial_amount = value;
-                }
+                return (decimal?)GetInitialValue("_annual_amount");
             }
         }
 
-        private string _initial_approved;
         public virtual string InitialApproved
         {
             get
             {
-                return _initial_approved;
-            }
-            set
-            {
-                if (_initial_approved != value)
-                {
-                    _initial_approved = value;
-                }
+                return (string)GetInitialValue("_approved");
             }
         }
 
-        private string _initial_doc_descr;
         public virtual string InitialDocDescr
         {
             get
             {
-                return _initial_doc_descr;
-            }
-            set
-            {
-                if (_initial_doc_descr != value)
-                {
-                    _initial_doc_descr = value;
-                }
+                return (string)GetInitialValue("_ca_doc_description");
             }
         }
 
-        private string _initial_notes;
         public virtual string InitialNotes
         {
             get
             {
-                return _initial_notes;
-            }
-            set
-            {
-                if (_initial_notes != value)
-                {
-                    _initial_notes = value;
-                }
+                return (string)GetInitialValue("_notes");
             }
         }
 
-        private string _initial_costs_covered;
         public virtual string InitialCostsCovered
         {
             get
             {
-                return _initial_costs_covered;
-            }
-            set
-            {
-                if (_initial_costs_covered != value)
-                {
-                    _initial_costs_covered = value;
-                }
+                return (string)GetInitialValue("_ca_costs_covered");
             }
         }
 
-        private Decimal? _initial_ca_var1;
         public virtual Decimal? InitialCaVar1
         {
             get
             {
-                return _initial_ca_var1;
-            }
-            set
-            {
-                if (_initial_ca_var1 != value)
-                {
-                    _initial_ca_var1 = value;
-                }
+                return (decimal?)GetInitialValue("_ca_var1");
             }
         }
 
-        private Decimal? _initial_dist_day;
         public virtual Decimal? InitialDistDay
         {
             get
             {
-                return _initial_dist_day;
-            }
-            set
-            {
-                if (_initial_dist_day != value)
-                {
-                    _initial_dist_day = value;
-                }
+                return (decimal?)GetInitialValue("_ca_dist_day");
             }
         }
 
-        private Decimal? _initial_hrs_wk;
         public virtual Decimal? InitialHrsWk
         {
             get
             {
-                return _initial_hrs_wk;
-            }
-            set
-            {
-                if (_initial_hrs_wk != value)
-                {
-                    _initial_hrs_wk = value;
-                }
+                return (decimal?)GetInitialValue("_ca_hrs_wk");
             }
         }
 
-        private int? _initial_var_id;
         public virtual int? InitialVarId
         {
             get
             {
-                return _initial_var_id;
-            }
-            set
-            {
-                if (_initial_var_id != value)
-                {
-                    _initial_var_id = value;
-                }
+                return (int?)GetInitialValue("_var_id");
             }
         }
 
-        private Decimal? _initial_carrier_pa;
         public virtual Decimal? InitialCarrierPa
         {
             get
             {
-                return _initial_carrier_pa;
-            }
-            set
-            {
-                if (_initial_carrier_pa != value)
-                {
-                    _initial_carrier_pa = value;
-                }
+                return (decimal?)GetInitialValue("_var_carrier_pa");
             }
         }
 
-        private Decimal? _initial_repairs_pk;
         public virtual Decimal? InitialRepairsPk
         {
             get
             {
-                return _initial_repairs_pk;
-            }
-            set
-            {
-                if (_initial_repairs_pk != value)
-                {
-                    _initial_repairs_pk = value;
-                }
+                return (decimal?)GetInitialValue("_var_repairs_pk");
             }
         }
 
-        private Decimal? _initial_licence_pa;
         public virtual Decimal? InitialLicencePa
         {
             get
             {
-                return _initial_licence_pa;
-            }
-            set
-            {
-                if (_initial_licence_pa != value)
-                {
-                    _initial_licence_pa = value;
-                }
+                return (decimal?)GetInitialValue("_var_licence_pa");
             }
         }
 
-        private Decimal? _initial_tyres_pk;
         public virtual Decimal? InitialTyresPk
         {
             get
             {
-                return _initial_tyres_pk;
-            }
-            set
-            {
-                if (_initial_tyres_pk != value)
-                {
-                    _initial_tyres_pk = value;
-                }
+                return (decimal?)GetInitialValue("_var_tyres_pk");
             }
         }
 
-        private Decimal? _initial_allowance_pk;
         public virtual Decimal? InitialAllowancePk
         {
             get
             {
-                return _initial_allowance_pk;
-            }
-            set
-            {
-                if (_initial_allowance_pk != value)
-                {
-                    _initial_allowance_pk = value;
-                }
+                return (decimal?)GetInitialValue("_var_allowance_pk");
             }
         }
 
-        private Decimal? _initial_insurance_pa;
         public virtual Decimal? InitialInsurancePa
         {
             get
             {
-                return _initial_insurance_pa;
-            }
-            set
-            {
-                if (_initial_insurance_pa != value)
-                {
-                    _initial_insurance_pa = value;
-                }
+                return (decimal?)GetInitialValue("_var_insurance_pa");
             }
         }
 
-        private Decimal? _initial_ror_pa;
         public virtual Decimal? InitialRorPa
         {
             get
             {
-                return _initial_ror_pa;
+                return (decimal?)GetInitialValue("_var_ror_pa");
             }
-            set
+        }
+
+        public virtual decimal? InitialNetAmount
+        {
+            get
             {
-                if (_initial_ror_pa != value)
-                {
-                    _initial_ror_pa = value;
-                }
+                return (decimal?)GetInitialValue("_net_amount");
             }
         }
 
@@ -1080,22 +1010,15 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			return Create(inContractNo);
 		}
 
-        public static MaintainVehAllowance[] GetAllMaintainVehAllowance(int? inContractNo, DateTime? inEffDate, int? inAlctId)
+        public static MaintainVehAllowance[] GetAllMaintainVehAllowance(int? inContractNo, int? inAlctId)
         {
-            return Fetch(inContractNo, inEffDate, inAlctId).list;
+            return Fetch(inContractNo, inAlctId).list;
         }
-/*
-        public static MaintainVehAllowance[] GetMaintainVehAllowance(int? inContractNo, DateTime? inEffDate)
-        {
-            int? inAlctId;
-            return Fetch(inContractNo, inEffDate, inAlctId).list;
-        }
-*/
         #endregion
 
 		#region Data Access
 		[ServerMethod]
-        private void FetchEntity(int? inContractNo, DateTime? inEffDate, int? inAlctId)
+        private void FetchEntity(int? inContractNo, int? inAlctId)
 		{
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
 			{
@@ -1121,8 +1044,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 + ", alt.alt_rate "
                                 + ", alt.alt_wks_yr "
                                 + ", alt.alt_acc "
-                                + ", alt.alt_fuel_pk "
-                                + ", alt.alt_ruc_pk "
                                 + ", alct.alct_id "
                                 + ", alct.alct_description "
                                 + ", ca.ca_end_date "
@@ -1137,14 +1058,23 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 + ", var.var_allowance_pk "
                                 + ", var.var_insurance_pa "
                                 + ", var.var_ror_pa "
+                                + ", var.var_fuel_use_pk "
+                                + ", var.var_fuel_rate "
+                                + ", var.var_ruc_rate_pk "
                                 + ", ca.ca_row_changed "
+                                + ", rd.f_GetAllowanceAmount(ca.contract_no, ca.alt_key, ca_effective_date) "
                             + " FROM rd.contract_allowance ca "
                                 + ", rd.contract c "
                                 + ", rd.allowance_type alt "
                                 + ", rd.allowance_calc_type alct "
                                 + ", rd.vehicle_allowance_rates var "
                            + " WHERE ca.contract_no = @inContractNo "
-                            + "  AND ca.ca_effective_date >= @inEffDate "
+                            + "  AND (ca.ca_effective_date "
+                            + "            >= (select max(ca_effective_date) from rd.contract_allowance"
+                            + "  		      where contract_no = ca.contract_no"
+                            + "  			    and alt_key = ca.alt_key"
+                            + "  				and ca_approved = 'Y')"
+                            + "            or  ca.ca_approved != 'Y')"
                             + "  AND c.contract_no = ca.contract_no "
                             + "  AND alt.alt_key = ca.alt_key "
                             + "  AND alt.alct_id =  @inAlctId "
@@ -1154,7 +1084,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                    + ", ca.ca_effective_date DESC ";
 
                     pList.Add(cm, "inContractNo", inContractNo);
-                    pList.Add(cm, "inEffDate", inEffDate);
                     pList.Add(cm, "inAlctId", inAlctId);
 
 					List<MaintainVehAllowance> _list = new List<MaintainVehAllowance>();
@@ -1180,44 +1109,25 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._alt_rate = GetValueFromReader<Decimal?>(dr, 12);
                                 instance._alt_wks_yr = GetValueFromReader<Decimal?>(dr, 13);
                                 instance._alt_acc = GetValueFromReader<Decimal?>(dr, 14);
-                                instance._alt_fuel_pk = GetValueFromReader<Decimal?>(dr, 15);
-                                instance._alt_ruc_pk = GetValueFromReader<Decimal?>(dr, 16);
-                                instance._alct_id = GetValueFromReader<int?>(dr, 17);
-                                instance._alct_description = dr.GetString(18);
-                                instance._ca_end_date = GetValueFromReader<DateTime?>(dr, 19);
-                                instance._ca_doc_description = dr.GetString(20);
-                                instance._ca_costs_covered = dr.GetString(21);
-                                instance._var_id = GetValueFromReader<int?>(dr, 22);
-                                instance._var_description = dr.GetString(23);
-                                instance._var_carrier_pa = GetValueFromReader<Decimal?>(dr, 24);
-                                instance._var_repairs_pk = GetValueFromReader<Decimal?>(dr, 25);
-                                instance._var_licence_pa = GetValueFromReader<Decimal?>(dr, 26);
-                                instance._var_tyres_pk = GetValueFromReader<Decimal?>(dr, 27);
-                                instance._var_allowance_pk = GetValueFromReader<Decimal?>(dr, 28);
-                                instance._var_insurance_pa = GetValueFromReader<Decimal?>(dr, 29);
-                                instance._var_ror_pa = GetValueFromReader<Decimal?>(dr, 30);
-                                instance._ca_row_changed = dr.GetString(31);
-
-                                instance._total_amount = 0.0M;
-
-                                instance._initial_eff_date = instance._effective_date;
-                                instance._initial_amount = instance._annual_amount;
-                                instance._initial_approved = instance._approved;
-                                instance._initial_doc_descr = instance._ca_doc_description;
-                                instance._initial_notes = instance._notes;
-                                instance._initial_ca_var1 = instance._ca_var1;
-                                instance._initial_dist_day = instance._ca_dist_day;
-                                instance._initial_hrs_wk = instance._ca_hrs_wk;
-                                instance._initial_costs_covered = instance._ca_costs_covered;
-
-                                instance._initial_var_id = instance._var_id;
-                                instance._initial_carrier_pa = instance._var_carrier_pa;
-                                instance._initial_repairs_pk = instance._var_repairs_pk;
-                                instance._initial_licence_pa = instance._var_licence_pa;
-                                instance._initial_tyres_pk = instance._var_tyres_pk;
-                                instance._initial_allowance_pk = instance._var_allowance_pk;
-                                instance._initial_insurance_pa = instance._var_insurance_pa;
-                                instance._initial_ror_pa = instance._var_ror_pa;
+                                instance._alct_id = GetValueFromReader<int?>(dr, 15);
+                                instance._alct_description = dr.GetString(16);
+                                instance._ca_end_date = GetValueFromReader<DateTime?>(dr, 17);
+                                instance._ca_doc_description = dr.GetString(18);
+                                instance._ca_costs_covered = dr.GetString(19);
+                                instance._var_id = GetValueFromReader<int?>(dr, 20);
+                                instance._var_description = dr.GetString(21);
+                                instance._var_carrier_pa = GetValueFromReader<Decimal?>(dr, 22);
+                                instance._var_repairs_pk = GetValueFromReader<Decimal?>(dr, 23);
+                                instance._var_licence_pa = GetValueFromReader<Decimal?>(dr, 24);
+                                instance._var_tyres_pk = GetValueFromReader<Decimal?>(dr, 25);
+                                instance._var_allowance_pk = GetValueFromReader<Decimal?>(dr, 26);
+                                instance._var_insurance_pa = GetValueFromReader<Decimal?>(dr, 27);
+                                instance._var_ror_pa = GetValueFromReader<Decimal?>(dr, 28);
+                                instance._var_fuel_use_pk = GetValueFromReader<Decimal?>(dr, 29);
+                                instance._var_fuel_rate = GetValueFromReader<Decimal?>(dr, 30);
+                                instance._var_ruc_rate_pk = GetValueFromReader<Decimal?>(dr, 31);
+                                instance._ca_row_changed = dr.GetString(32);
+                                instance._net_amount = GetValueFromReader<decimal?>(dr, 33);
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();
