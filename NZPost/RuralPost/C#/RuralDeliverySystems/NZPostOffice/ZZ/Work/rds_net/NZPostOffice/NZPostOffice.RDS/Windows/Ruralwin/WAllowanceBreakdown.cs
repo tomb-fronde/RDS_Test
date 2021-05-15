@@ -24,17 +24,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     {
         #region Define
         public int il_contract;
-
         public int il_altKey;
-
         public int il_caRow;
-
-        public URdsDw idw_1;//public dw_1 idw_1;
+        public string is_altDescription;
+        public URdsDw idw_1;
 
         private System.ComponentModel.IContainer components = null;
 
         public Button cb_close;
-
         public URdsDw dw_1;
 
         #endregion
@@ -73,7 +70,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             this.cb_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_close.Location = new System.Drawing.Point(752, 7);
+            this.cb_close.Location = new System.Drawing.Point(782, 7);
             this.cb_close.Name = "cb_close";
             this.cb_close.Size = new System.Drawing.Size(72, 20);
             this.cb_close.TabIndex = 1;
@@ -89,7 +86,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_1.FireConstructor = false;
             this.dw_1.Location = new System.Drawing.Point(0, 0);
             this.dw_1.Name = "dw_1";
-            this.dw_1.Size = new System.Drawing.Size(736, 204);
+            this.dw_1.Size = new System.Drawing.Size(766, 219);
             this.dw_1.TabIndex = 2;
             this.dw_1.RowFocusChanged += new System.EventHandler(this.dw_1_rowfocuschanged);
             // 
@@ -98,14 +95,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.AcceptButton = this.cb_close;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(837, 223);
-            this.ControlBox = false;
+            this.CausesValidation = false;
+            this.ClientSize = new System.Drawing.Size(867, 222);
             this.Controls.Add(this.cb_close);
             this.Controls.Add(this.dw_1);
             this.Location = new System.Drawing.Point(82, 89);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WAllowanceBreakdown";
+            this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Controls.SetChildIndex(this.dw_1, 0);
             this.Controls.SetChildIndex(this.cb_close, 0);
@@ -136,23 +134,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int ll_dwHeight = 0;
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
+
             this.of_bypass_security(true);
             lnv_msg = StaticMessage.PowerObjectParm as NRdsMsg;
             lvn_Criteria = lnv_msg.of_getcriteria();
             il_contract = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("Contract_no"));
             il_altKey = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("alt_key"));
+            is_altDescription = System.Convert.ToString(lvn_Criteria.of_getcriteria("alt_description"));
             il_caRow = System.Convert.ToInt32(lvn_Criteria.of_getcriteria("allowance_row"));
-            //?dw_1.settransobject(StaticVariables.sqlca);
-            //?dw_1.setrowfocusindicator(focusrect!);
 
             dw_1.DataObject.Reset();
             ((DAllowanceBreakdown)dw_1.DataObject).Retrieve(il_contract, il_altKey);
-            //ll_dwHeight = dw_1.RowCount * Metex.Common.Convert.ToInt32(dw_1.Describe("datawindow.detail.height")) + Metex.Common.Convert.ToInt32(dw_1.Describe("datawindow.header.height")) + Metex.Common.Convert.ToInt32(dw_1.Describe("datawindow.summary.height")) + PixelsToUnits(4, ypixelstounits!);
+/*
             ll_dwHeight = (dw_1.RowCount + 1) * 22 + 28 + 20;
             this.Height = ll_dwHeight;
             this.dw_1.Height = ll_dwHeight;
-            this.Left = Cursor.Position.X;
-            this.Top = Cursor.Position.Y - 50;
+*/
+            this.Left = Cursor.Position.X - 20;
+            this.Top = Cursor.Position.Y - 20;
         }
 
         public override void pfc_postopen()
@@ -160,6 +159,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             base.pfc_postopen();
             bool lb_hasDelPriv = false;
             this.of_set_componentname("Allowance");
+            this.Text = is_altDescription + " allowance history";
             lb_hasDelPriv = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_hasprivilege(StaticVariables.gnv_app.of_get_securitymanager().of_get_componentid("Allowance"), this.of_get_regionid(), "D", false);
             idw_1.of_set_createpriv(false);
             idw_1.of_set_modifypriv(false);
