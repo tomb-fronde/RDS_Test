@@ -16,7 +16,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Vastly different: Only used to determine the new allowance's type 
     // and associated vehicle if the calc type is distance-based.
     // [12-Apr-2021] Changed "maxDate" to be the contract renewal date (was DateTime.MinDate)
-    //
+    // [13-May-2021] Added check for existing unapproved allowance and prevent creating
+    //               another one.
     // Once determined, the new record is saved and WMaintainAllowance is 
     // initiated with the allowance calc type included so that WMaintainAllowance
     // can immediately switch to the correct tab.
@@ -31,6 +32,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public int il_contract_seq;
         public int newRow = -1;
         DateTime dtEffDate = DateTime.MinValue;
+        string iChangeType = "Update";
 
         public int? il_altKey;
         public int? il_alctId;
@@ -226,20 +228,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
+            //DateTime? dEffDate;
 
             lnv_msg = (NRdsMsg)StaticMessage.PowerObjectParm;
             lvn_Criteria = lnv_msg.of_getcriteria();
 
             il_altKey = idw_allowance.GetItem<AddAllowance>(0).AltKey;
             il_alctId = idw_allowance.GetItem<AddAllowance>(0).AlctId;
+            //dEffDate  = idw_allowance.GetItem<AddAllowance>(0).EffectiveDate;
 
             Cursor.Current = Cursors.WaitCursor;
             lvn_Criteria.of_addcriteria("contract_no", il_contract);
             lvn_Criteria.of_addcriteria("con_active_seq", il_contract_seq);
             lvn_Criteria.of_addcriteria("alt_key", il_altKey);
             lvn_Criteria.of_addcriteria("alct_id", il_alctId);
+            //lvn_Criteria.of_addcriteria("effective_date", dEffDate);
             lvn_Criteria.of_addcriteria("contract_title", ls_title);
-            lvn_Criteria.of_addcriteria("optype", "Insert");
+            lvn_Criteria.of_addcriteria("optype", iChangeType);
             lnv_msg.of_addcriteria(lvn_Criteria);
 
             // TJB  RPCR_017 July-2010
@@ -311,27 +316,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // of any existing allowances of the same type.
             if (newRow >= 0 && pRow == newRow)
             {
-/*
-                ld_maxdate = new DateTime();
-                int SQLCode = 0;
-                string SQLErrText = string.Empty;
-                ld_maxdate = RDSDataService.GetContractAllownceMaxCaEffective(il_contract, ll_altkey, ref SQLCode, ref SQLErrText);
-
-                if (SQLCode != 0 && SQLCode != 100)
-                {
-                    MessageBox.Show("Failed looking up max(ca_effective_date): \n"
-                                    + "contract=" + il_contract.ToString()
-                                    + ", alt_key=" + ll_altkey.ToString() + "\n\n"
-                                    + "Error Code: " + SQLCode.ToString() + "\n"
-                                    + "Error Text: " + SQLErrText
-                                    , "Database error");
-                    pErrmsg = "Failed looking up max(ca_effective_date)";
-                    ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "ca_effective_date", true);
-                    return FAILURE;
-                }
-*/
                 DateTime dEffDate = (DateTime)ld_effdate;
-                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(il_contract, ll_altkey, dtEffDate);
+                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(il_contract, ll_altkey);
 
                 if (dEffDate <= dMaxDate)
                 {
@@ -349,20 +335,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_save.Focus();
             int rc, nRow, nRows;
             string errmsg = "";
+            int? thisAltKey;
+            DateTime? effDate;
 
             idw_allowance.DataObject.AcceptText();
             is_errmsg = "";
 
-            nRows = idw_allowance.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
+            nRow = 0;
+            // Check to see if there already is an unapproved allowance of this type
+            // If one exists, suggest the user update it instead of creating another one.
+            thisAltKey = idw_allowance.GetItem<AddAllowance>(nRow).AltKey;
+            effDate = RDSDataService.GetUnapprovedAllowanceDate(il_contract, thisAltKey);
+            if (effDate != null)
             {
-                // Only validate the row if it has been changed; assume an unchanged row is OK
-                // The deeper reason is that within the validate function, the effective 
-                // date is checked against the current date (actually a date 90 days in 
-                // the past) and it is possible the effective date on an unchanged record 
-                // will fail this test.
-                bool isRowChanged = StaticFunctions.IsDirty(idw_allowance.DataObject, nRow);
-                if (! isRowChanged) continue;
+                MessageBox.Show("An allowance of this type already exists.\n"
+                               + "Please update it."
+                               , "Warning"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                iChangeType = "Update";
+                idw_allowance.GetItem<AddAllowance>(nRow).MarkClean();
+            }
+            else
+            {
+                // Validate the row
                 rc = wf_validate(nRow, out errmsg);
                 if (!(rc == SUCCESS))
                 {
@@ -373,13 +368,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                                        , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-                // This is a new row.  Mark it with "N".  In WMaintainAllowance, this will
+
+                // This is a new row.  Mark it New ("N").  In WMaintainAllowance, this will
                 // be used when validating its effective date.
                 idw_allowance.GetItem<AddAllowance>(nRow).RowChanged = "N";
+                iChangeType = "Insert";
+
+                // All OK, we can save it
+                idw_allowance.DataObject.Save();
             }
 
-            idw_allowance.DataObject.Save();
-
+            // Switch to WMaintainAllowance()
             of_open_WMaintainAllowance();
 
             this.Close();
