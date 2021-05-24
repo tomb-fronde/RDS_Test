@@ -984,12 +984,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
 
         #region Factory Methods
-		public static MaintainVehAllowance NewMaintainVehAllowance( int? inContractNo )
+		public static MaintainAllowanceV2 NewMaintainAllowanceV2( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-        public static MaintainVehAllowance[] GetAllMaintainVehAllowance(int? inContractNo, int? inAlctId)
+        public static MaintainAllowanceV2[] GetAllMaintainAllowanceV2(int? inContractNo, int? inAlctId)
         {
             return Fetch(inContractNo, inAlctId).list;
         }
@@ -1059,14 +1059,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     pList.Add(cm, "inContractNo", inContractNo);
                     pList.Add(cm, "inAlctId", inAlctId);
 
-					List<MaintainVehAllowance> _list = new List<MaintainVehAllowance>();
+					List<MaintainAllowanceV2> _list = new List<MaintainAllowanceV2>();
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                MaintainVehAllowance instance = new MaintainVehAllowance();
+                                MaintainAllowanceV2 instance = new MaintainAllowanceV2();
                                 instance._alt_key = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_no = GetValueFromReader<int?>(dr, 1);
                                 instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);

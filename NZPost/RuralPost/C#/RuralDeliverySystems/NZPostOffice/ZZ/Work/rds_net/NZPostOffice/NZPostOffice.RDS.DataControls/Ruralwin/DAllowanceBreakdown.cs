@@ -53,11 +53,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
             }
             compute_11.Text = "$" + string.Format("{0:#,##0.00}", total);
-
+/*
             this.grid.Height = rstList.Count * this.grid.RowTemplate.Height + this.grid.ColumnHeadersHeight;
             this.compute_11.Top = this.grid.Top + this.grid.Height + 5;
             this.panel2.Top = this.grid.Top + this.grid.Height + 3;
-
+*/
             return RetrieveCore<AllowanceBreakdown>(new List<AllowanceBreakdown>
                 (AllowanceBreakdown.GetAllAllowanceBreakdown(inContractNo, inAltKey)));
         }

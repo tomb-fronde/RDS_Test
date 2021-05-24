@@ -1018,7 +1018,7 @@ namespace NZPostOffice.RDSAdmin
             this.tv_1.Location = new System.Drawing.Point(5, 35);
             this.tv_1.Name = "tv_1";
             this.tv_1.SelectedImageIndex = 0;
-            this.tv_1.Size = new System.Drawing.Size(192, 504);
+            this.tv_1.Size = new System.Drawing.Size(192, 496);
             this.tv_1.TabIndex = 6;
             this.tv_1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseUp);
             this.tv_1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_1_DragDrop);
@@ -1066,7 +1066,7 @@ namespace NZPostOffice.RDSAdmin
             this.gb_details.Cursor = System.Windows.Forms.Cursors.Cross;
             this.gb_details.Location = new System.Drawing.Point(205, 27);
             this.gb_details.Name = "gb_details";
-            this.gb_details.Size = new System.Drawing.Size(571, 516);
+            this.gb_details.Size = new System.Drawing.Size(752, 512);
             this.gb_details.TabIndex = 0;
             this.gb_details.TabStop = false;
             this.gb_details.Text = "Details";
@@ -1085,7 +1085,7 @@ namespace NZPostOffice.RDSAdmin
             // 
             // WMainMdi
             // 
-            this.ClientSize = new System.Drawing.Size(788, 568);
+            this.ClientSize = new System.Drawing.Size(966, 560);
             this.Controls.Add(this.dw_detail);
             this.Controls.Add(this.st_1);
             this.Controls.Add(this.tv_1);
@@ -1495,8 +1495,16 @@ namespace NZPostOffice.RDSAdmin
             string ls_msg;
             string ls_title;
             DataUserControl idw;
-   
+
+            dw_detail.DataObject.AcceptText();
             //  Checks if datawindows are modified
+            string dwName = dw_detail.DataObject.Name;
+            if( dw_detail.DataObject is DAllowanceType )
+                dwName = "DAllowanceType";
+            else if (dw_detail.DataObject is DVehicleAllowanceRates)
+                dwName = "DVehicleAllowanceRates";
+            string s = dwName;
+
             dw_detail.DataObject.AcceptText();
             if (ab_prompt)
             {
@@ -1618,6 +1626,11 @@ namespace NZPostOffice.RDSAdmin
                         dw_detail.DataObject.GetItem<GroupDetails>(i).UgId = dw_header.DataObject.GetItem<GroupHeader>(0).UgId;
                     }
                 }
+                /**********************************
+                 *                                *
+                 * DwUserDetails                  *
+                 *                                *
+                 **********************************/
                 string errtype = "Change";
                 if (dw_detail.DataObject is DwUserDetails)
                 {
@@ -1634,6 +1647,214 @@ namespace NZPostOffice.RDSAdmin
                         dw_detail.DataObject.GetItem<UserDetails>(0).RdsUserIdUiId = MainMdiService.GetNextSequence("rdsUserId");
                     }
                 }
+                /**********************************
+                 *                                *
+                 * DAllowanceType                 *
+                 *                                *
+                 **********************************/
+                // TJB  Allowances 22-May-2021
+                // If any calculation factors are changed, generate new contract allowances
+                // for the changed allowance type.
+                // Special handling of Allowance Type changes
+                if (dw_detail.DataObject is DAllowanceType)
+                {
+                    // First - validate any changes; we'll do the Save() here rather than below
+                    DataUserControl dw_allowance_type = dw_detail.DataObject;
+                    dw_allowance_type.AcceptText();
+                    if (this.pfc_validation(dw_allowance_type) != SUCCESS)
+                    {
+                        return FAILURE;
+                    }
+
+                    // The user may have made changes to more than one allowance 
+                    // before saving the changes.  The loop below finds which 
+                    // allowances have been changed, and when the loop finishes,
+                    // saves any changes.
+                    // The list, "remembers" which allowances have changed so we 
+                    // generate updated contract_allowance records.
+                    List<int> allowance_index = new List<int>();
+ 
+                    // We need to find out what has changed - is it any of the calculation factors?
+                    for (int i = 0; i < dw_detail.RowCount; i++)
+                    {
+                        string sAltDescription;
+                        decimal? dAltRate, dAltWksYr, dAltAcc, dInitialValue;
+                        int? nAlctId;
+                        int nCalcType;
+                        bool bCalcChanged;
+                        int nAltKey;
+                        DateTime? dAltEffDate;
+                        string sAltNotes;
+
+                        nAltKey = (int)dw_allowance_type.GetItem<AllowanceType>(i).AltKey;
+                        dAltEffDate = dw_allowance_type.GetItem<AllowanceType>(i).AltEffectiveDate;
+                        sAltDescription = dw_allowance_type.GetItem<AllowanceType>(i).AltDescription;
+                        sAltNotes = dw_allowance_type.GetItem<AllowanceType>(i).AltNotes;
+                        bool thisIsNew = dw_allowance_type.GetItem<AllowanceType>(i).IsNew;
+                        bool thisIsDirty = dw_allowance_type.GetItem<AllowanceType>(i).IsDirty;
+                        if (thisIsNew || thisIsDirty)
+                        {
+                            bCalcChanged = false;
+                            nAlctId = (int?)dw_allowance_type.GetItem<AllowanceType>(i).AlctId;
+                            if (nAlctId == null) continue; // The proverbial this should never happen :)
+                            nCalcType = (int)nAlctId;
+
+                            if (nCalcType == 1)   // FIXED does not use any global factors so no new records will
+                            {                       // need to be created.
+                                continue;
+                            }
+                            if (nCalcType >= 2)  // ROI only uses the first factor
+                            {
+                                dAltRate = (decimal?)dw_allowance_type.GetItem<AllowanceType>(i).AltRate;
+                                dInitialValue = dw_allowance_type.GetItem<AllowanceType>(i).GetInitialValue<decimal?>("_alt_rate");
+                                if (dAltRate != dInitialValue)
+                                    bCalcChanged = true;
+                            }
+                            if (nCalcType >= 3)  // ACTIVITY uses the first two factors.  If AltRate is unchanged, 
+                            {                      // WksYr may have been changed.
+                                dAltWksYr = (decimal?)dw_allowance_type.GetItem<AllowanceType>(i).AltWksYr;
+                                dInitialValue = dw_allowance_type.GetItem<AllowanceType>(i).GetInitialValue<decimal?>("_alt_wks_yr");
+                                if (dAltWksYr == dInitialValue)
+                                    bCalcChanged = true;
+                            }
+                            if (nCalcType >= 4 || nCalcType >= 5) // TIME and DISTANCE use all three of these factors
+                            {                                         // and DISTANCE many more (see vehicle_allowance_rates)
+                                dAltAcc = (decimal?)dw_allowance_type.GetItem<AllowanceType>(i).AltWksYr;
+                                dInitialValue = dw_allowance_type.GetItem<AllowanceType>(i).GetInitialValue<decimal?>("_alt_acc");
+                                if (dAltAcc == dInitialValue)
+                                    bCalcChanged = true;
+                            }
+                            // If none of the factors contributing to the allowance calculation have
+                            // changed, keep looking.
+                            if( ! bCalcChanged )
+                                continue;
+
+                            if (dAltEffDate == null)
+                                dw_allowance_type.GetItem<AllowanceType>(i).AltEffectiveDate = DateTime.Today;
+
+                            if (sAltNotes == null)
+                            {
+                                MessageBox.Show("    A note is required for " + sAltDescription + "\n"
+                                                , "Validation error"
+                                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                continue;
+                            }
+
+                            // If there was a calc factor change, save the index of this allowance
+                            if( bCalcChanged )
+                                allowance_index.Add(i);
+                        }
+                    }
+
+                    // Save the changed allowance type(s)
+                    dw_allowance_type.Save();
+                    
+                    foreach( int i in allowance_index)
+                    {
+                        int nAltKey = (int)dw_allowance_type.GetItem<AllowanceType>(i).AltKey;
+                        DateTime dAltEffDate = (DateTime)dw_allowance_type.GetItem<AllowanceType>(i).AltEffectiveDate;
+                        string sAltDescription = dw_allowance_type.GetItem<AllowanceType>(i).AltDescription;
+                        string sAltNotes = dw_allowance_type.GetItem<AllowanceType>(i).AltNotes;
+
+                        // A calculation factor for this allowance has changed
+                        // Generate new contract_allowance records for this change.
+                        string sqlmsg = "";
+                        int nUpdated = MainMdiService.GenerateUpdatedAllowances(nAltKey, dAltEffDate, sAltNotes, out sqlmsg);
+                        if (nUpdated < 0)
+                            MessageBox.Show("Database error updating allowance "+sAltDescription+"\n\n"
+                                           + sqlmsg, "SQL Database error"
+                                          , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        else if (nUpdated == 0)
+                            MessageBox.Show("No " + sAltDescription + " allowances updated. \n");
+                        else if (nUpdated == 1)
+                            MessageBox.Show(nUpdated.ToString() + " " + sAltDescription + " allowance updated. \n");
+                        else
+                            MessageBox.Show(nUpdated.ToString() + " " + sAltDescription + " allowances updated. \n");
+                    }      
+                }
+                /**********************************
+                 *                                *
+                 * DVehicleAllowanceRates         *
+                 *                                *
+                 **********************************/
+                // TJB  Allowances 22-May-2021
+                // If any calculation factors are changed that may affect the annual Net amount,
+                // generate new contract allowances for the changed allowance type.
+                // Special handling of Vehicle Allowance Rates changes
+                if (dw_detail.DataObject is DVehicleAllowanceRates)
+                {
+                    // First - validate any changes; we'll do the Save() here rather than below
+                    DataUserControl dw_vehicle_allowance_rates = dw_detail.DataObject;
+                    dw_vehicle_allowance_rates.AcceptText();
+                    if (this.pfc_validation(dw_vehicle_allowance_rates) != SUCCESS)
+                    {
+                        return FAILURE;
+                    }
+
+                    // The user may have made changes to more than one vehicle type 
+                    // before saving the changes.  The loop below finds which types 
+                    // have been changed, and when the loop finishes saves any changes.
+                    // The list, "remembers" which vehicle types have changed so we 
+                    // generate updated contract_allowance records.
+                    List<int> vehicle_index = new List<int>();
+
+                    // We need to find out what has changed - is it any of the calculation factors?
+                    for (int i = 0; i < dw_detail.RowCount; i++)
+                    {
+                        int? nVarId;
+                        string sVarDescription;
+                        DateTime? dVarEffDate;
+                        string sVarNotes;
+                        bool bCalcChanged;
+
+                        bCalcChanged = false;
+                        nVarId = (int)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarId;
+                        sVarDescription = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarDescription;
+                        dVarEffDate = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarEffectiveDate;
+                        sVarNotes = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarNotes;
+                        bool thisIsNew = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).IsNew;
+                        bool thisIsDirty = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).IsDirty;
+                        if (thisIsNew || thisIsDirty)
+                        {
+                            // At this point, we "should" check to see which factors have changed, perhaps later.  
+                            // For now assume any change has been one or more factor changes.
+                            bCalcChanged = true;
+                            // Save the index of this vehicle type
+                            vehicle_index.Add(i);
+                        }
+                    }
+
+                    // Save the changed vehicle type(s)
+                    dw_vehicle_allowance_rates.Save();
+
+                    foreach (int i in vehicle_index)
+                    {
+                        int nVarId = (int)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarId;
+                        string sVarDescription = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarDescription;
+                        DateTime dVarEffDate = (DateTime)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarEffectiveDate;
+                        string sVarNotes = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarNotes;
+
+                        // A calculation factor for this vehicle type has changed
+                        // Generate new contract_allowance records for this change.
+                        string sqlmsg = "";
+                        int nUpdated = MainMdiService.GenerateUpdatedAllowances(nVarId, dVarEffDate, sVarNotes, out sqlmsg);
+                        if (nUpdated < 0)
+                            MessageBox.Show("Database error updating vehicle type " + sVarDescription + "\n\n"
+                                           + sqlmsg, "SQL Database error"
+                                          , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        else if (nUpdated == 0)
+                            MessageBox.Show("No " + sVarDescription + " vehicle types updated. \n");
+                        else if (nUpdated == 1)
+                            MessageBox.Show(nUpdated.ToString() + " " + sVarDescription + " vehicle type updated. \n");
+                        else
+                            MessageBox.Show(nUpdated.ToString() + " " + sVarDescription + " vehicle types updated. \n");
+                    }
+                }
+
+                /**********************************
+                 *                                *
+                 *                                *
+                 **********************************/
                 if (this.pfc_validation(dw_detail.DataObject) == SUCCESS)
                 {
                     dw_detail.DataObject.Save();
@@ -2333,7 +2554,7 @@ namespace NZPostOffice.RDSAdmin
         // Displays error messages
         public void dw_detail_ItemChanged(object sender, EventArgs args)
         {
-            pfc_validation(dw_detail.DataObject);
+            //pfc_validation(dw_detail.DataObject);
             /*
                 //!base.itemchanged(row, dwo, data);            
                 int rc = SUCCESS;
@@ -2898,6 +3119,7 @@ namespace NZPostOffice.RDSAdmin
             int ll_count = 0;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
+            adw.AcceptText();
 
             //+++++++++++++++++++++++++++++++++++++++++
             // Validate DNpadParameters               +
@@ -2920,7 +3142,7 @@ namespace NZPostOffice.RDSAdmin
             //+++++++++++++++++++++++++++++++++++++++++
             // Validate DwGroupHeader                 +
             //+++++++++++++++++++++++++++++++++++++++++
-            if (adw is DwGroupHeader)
+            else if (adw is DwGroupHeader)
             {
                 // TJB  RPCR_117  July-2018
                 // Added isNew and InitialValue to handle failed group name lookup 
@@ -2977,7 +3199,7 @@ namespace NZPostOffice.RDSAdmin
             //+++++++++++++++++++++++++++++++++++++++++
             // Validate DwUserDetails                 +
             //+++++++++++++++++++++++++++++++++++++++++
-            if (adw is DwUserDetails)
+            else if (adw is DwUserDetails)
             {
                 int nRows = adw.RowCount;
                 for (int i = 0; i < nRows; i++)
@@ -3101,7 +3323,7 @@ namespace NZPostOffice.RDSAdmin
             //+++++++++++++++++++++++++++++++++++++++++
             // TJB  RPCR_054  12-Aug-2013: Added
             // Validate new piece_rate_types
-            if (adw is DPieceRateType)
+            else if (adw is DPieceRateType)
             {
                 int? nPrsKey;
                 string sPrtDescription, sPrtCode, sTestPrtCode;
@@ -3164,7 +3386,7 @@ namespace NZPostOffice.RDSAdmin
             //+++++++++++++++++++++++++++++++++++++++++
             // TJB RPCR_054 April-2013: Added
             // Validate new piece_rate_suppliers
-            if (adw is DPieceRateSupplier)
+            else if (adw is DPieceRateSupplier)
             {
                 int? nPctId, nTestPctId;
                 string sPrsDescription;
@@ -3213,6 +3435,159 @@ namespace NZPostOffice.RDSAdmin
                             }
                         }
                     }
+                }
+            }
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DAllowanceType                +
+            //+++++++++++++++++++++++++++++++++++++++++
+            // TJB Allowances April-2021: Added
+            // Validate allowance type calc factors
+            else if (adw is DAllowanceType)
+            {
+                string errmsg;
+                int nRow, nCol;
+                errmsg = "";
+
+                for (nRow = 0; nRow < adw.RowCount; nRow++)
+                {
+                    // We only need to verify new or dirty rows
+                    if (!(adw.GetItem<AllowanceType>(nRow).IsNew
+                           || adw.GetItem<AllowanceType>(nRow).IsDirty))
+                    {
+                        continue;
+                    }
+                    // If either of the next two errors are found, stop scanning and 
+                    // tell the user without doing any of the remaining validations
+                    string altDescr = adw.GetItem<AllowanceType>(nRow).AltDescription;
+                    if (altDescr == null || altDescr.Length <= 0)
+                    {
+                        errmsg += "You must name the allowance in row " + nRow.ToString() + "\n";
+                        break;
+                    }
+
+                    int? nAlctId = adw.GetItem<AllowanceType>(nRow).AlctId;
+                    if (nAlctId == null || nAlctId < 1)
+                    {
+                        errmsg += "A calc type is required for " + altDescr + "\n";
+                        break;
+                    }
+
+                    if (nAlctId >= 2)
+                    {
+                        if (adw.GetItem<AllowanceType>(nRow).AltRate == null)
+                            errmsg += "    A rate is required for " + altDescr + "\n";
+                    }
+                    if (nAlctId >= 3)
+                    {
+                        if (adw.GetItem<AllowanceType>(nRow).AltWksYr == null)
+                            errmsg += "    A Weeks/Yr value is required for " + altDescr + "\n";
+                    }
+                    if (nAlctId >= 4)
+                    {
+                        if (adw.GetItem<AllowanceType>(nRow).AltAcc == null)
+                            errmsg += "    An ACC% value is required for " + altDescr + "\n";
+                    }
+
+                    if (adw.GetItem<AllowanceType>(nRow).AltEffectiveDate == null)
+                        errmsg += "    An effective date is required for " + altDescr + "\n";
+                    if (adw.GetItem<AllowanceType>(nRow).AltNotes == null)
+                        errmsg += "    A note is required for " + altDescr + "\n";
+
+                    if (errmsg.Length > 0)
+                    {
+                        MessageBox.Show("For allowance " + altDescr + "\n"
+                                        + errmsg
+                                        , "Validation Error"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ll_c = FAILURE;
+                        errmsg = "";
+                    }
+                }
+
+                if (errmsg.Length > 0)
+                {
+                    MessageBox.Show(errmsg, "Validation Error"
+                           , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ll_c = FAILURE;
+                }
+            }
+            //+++++++++++++++++++++++++++++++++++++++++
+            // Validate DVehicleAllowanceRates        +
+            //+++++++++++++++++++++++++++++++++++++++++
+            // TJB Allowances 24-May-2021: Added
+            // Validate vehicle type allowance calc factors
+            else if (adw is DVehicleAllowanceRates)
+            {
+                string errmsg;
+                int nRow, nCol;
+                string sVarDescr;
+                errmsg = "";
+
+                for (nRow = 0; nRow < adw.RowCount; nRow++)
+                {
+                    // We only need to verify new or dirty rows
+                    if (!(adw.GetItem<VehicleAllowanceRates>(nRow).IsNew
+                           || adw.GetItem<VehicleAllowanceRates>(nRow).IsDirty))
+                    {
+                        continue;
+                    }
+                    // If either of the next two errors are found, stop scanning and 
+                    // tell the user without doing any of the remaining validations
+                    sVarDescr = adw.GetItem<VehicleAllowanceRates>(nRow).VarDescription;
+                    if (sVarDescr == null || sVarDescr.Length <= 0)
+                    {
+                        errmsg += "You must name the vehicle type in row " + nRow.ToString() + "\n";
+                        break;
+                    }
+                    int? nVarId = adw.GetItem<VehicleAllowanceRates>(nRow).VarId;
+                    if (nVarId == null || nVarId < 1)
+                    {
+                        errmsg += "A calc type is required for " + sVarDescr + "\n";
+                        break;
+                    }
+                    // Check all the calc factors
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarFuelUsePk == null)
+                        errmsg += "    A fuel use value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarFuelRate == null)
+                        errmsg += "    A fuel rate is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarRucRatePk == null)
+                        errmsg += "    A RUC rate is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarRepairsPk == null)
+                        errmsg += "    A repairs value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarTyresPk == null)
+                        errmsg += "    A tyres value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarAllowancePk == null)
+                        errmsg += "    An allowance value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarCarrierPa == null)
+                        errmsg += "    A carrier value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarLicencePa == null)
+                        errmsg += "    A license value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarInsurancePa == null)
+                        errmsg += "    An insurance value is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarRorPa == null)
+                        errmsg += "    A ROR value is required for " + sVarDescr + "\n";
+
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarEffectiveDate == null)
+                        errmsg += "    An effective date is required for " + sVarDescr + "\n";
+                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarNotes == null)
+                        errmsg += "    A note is required for " + sVarDescr + "\n";
+
+                    if (errmsg.Length > 0)
+                    {
+                        MessageBox.Show("For vehicle type " + sVarDescr + "\n"
+                                        + errmsg
+                                        , "Validation Error"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ll_c = FAILURE;
+                        errmsg = "";
+                    }
+                }
+
+                if (errmsg.Length > 0)
+                {
+                    MessageBox.Show(errmsg, "Validation Error"
+                           , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ll_c = FAILURE;
                 }
             }
             return ll_c;

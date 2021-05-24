@@ -2306,13 +2306,23 @@ namespace NZPostOffice.RDS.DataService
             return obj.strVal;
         }
 
+        // TJB  Allowances  13-May-2021
+        // Returns the latest effective date for an unapproved
+        // contract allowance of the specified type..
+        // If no such allowance is found, returns null.
+        public static DateTime? GetUnapprovedAllowanceDate(int? inContract, int? inAltKey)
+        {
+            RDSDataService obj = Execute("_GetUnapprovedAllowanceDate", inContract, inAltKey); 
+            return obj.dtVal;
+        }
+
         // TJB  Allowances  9-Apr-2021
         // Returns the latest effective date for a contract allowance
-        // ignoring the effective date of new records.  If the max date
-        // is null, returns DateTime.MinValue.
-        public static DateTime? GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey, DateTime inMinDate)
+        // ignoring the effective date of unapproved  records.  
+        // If no max date is found, returns DateTime.MinValue.
+        public static DateTime? GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey)     //, DateTime inMinDate)
         {
-            RDSDataService obj = Execute("_GetAllowanceMaxEffectiveDate", inContract, inAltKey, inMinDate);
+            RDSDataService obj = Execute("_GetAllowanceMaxEffectiveDate", inContract, inAltKey); //, inMinDate);
             return obj.dtVal;
         }
 
@@ -2331,6 +2341,14 @@ namespace NZPostOffice.RDS.DataService
         {
             RDSDataService obj = Execute("_LookupAllowanceCalcType", inText);
             return obj.intVal;
+        }
+
+        // TJB  Allowances  4-May-2021
+        // Returns net allowance amount for the contract allowance type
+        public static Decimal GetAllowanceNetAmount(int? inContract, int? inAltKey)
+        {
+            RDSDataService obj = Execute("_GetAllowanceNetAmount", inContract, inAltKey);
+            return (Decimal)obj.decVal;
         }
 
         /// <summary>
@@ -7430,17 +7448,19 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Allowances  9-Apr-2021
-        // Returns the latest effective date for a contract allowance
-        // ignoring the effective date of new records.  
+        // TJB  Allowances  13-May-2021
+        // Returns the latest effective date for an unapproved
+        // contract allowance of the specified type..
+        // If no such allowance is found, returns null.
         [ServerMethod]
-        private void _GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey, DateTime inMinDate)
+        private void _GetUnapprovedAllowanceDate(int? inContract, int? inAltKey)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    DateTime? dMaxDate = inMinDate;
+                    DateTime? dMaxDate = null;
+                    _sqlcode = 0;
 
                     try
                     {
@@ -7448,8 +7468,57 @@ namespace NZPostOffice.RDS.DataService
                                        + "  from rd.contract_allowance"
                                        + " where contract_no = @inContract"
                                        + "   and alt_key = @inAltKey"
-                                       + "   and (ca_row_changed is null"
-                                       + "         or ca_row_changed != 'N')";
+                                       + "   and ca_approved != 'Y'";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                dMaxDate = (DateTime?)dr.GetDateTime(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+
+                    if( dMaxDate <= DateTime.MinValue )
+                        dtVal = null;
+                    else
+                        dtVal = dMaxDate;
+                }
+            }
+        }
+
+        // TJB  Allowances  9-Apr-2021
+        // Returns the latest effective date for a contract allowance.  Temporary 
+        // records (ca_row_changed = 'N') are ignored.
+        // If there are no allowances of this type, return the minimum date.
+        [ServerMethod]
+        private void _GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    DateTime? dMaxDate = DateTime.MinValue;
+                    _sqlcode = 0;
+
+                    try
+                    {
+                        cm.CommandText = "select max(ca_effective_date) "
+                                       + "  from rd.contract_allowance"
+                                       + " where contract_no = @inContract"
+                                       + "   and alt_key = @inAltKey"
+                                       + "   and ca_approved = 'Y'";
+                                       //+ "   and (ca_row_changed is null"
+                                       //+ "         or ca_row_changed != 'N')";
 
                         ParameterCollection pList = new ParameterCollection();
                         pList.Add(cm, "inContract", inContract);
@@ -7460,11 +7529,6 @@ namespace NZPostOffice.RDS.DataService
                             if (dr.Read())
                             {
                                 dMaxDate = dr.GetDateTime(0);
-                                _sqlcode = 0;
-                            }
-                            else
-                            {
-                                _sqldbcode = 100;
                             }
                         }
                     }
@@ -7473,8 +7537,8 @@ namespace NZPostOffice.RDS.DataService
                         _sqlerrtext = e.Message;
                         _sqlcode = -1;
                     }
-                    if (dMaxDate == null || (DateTime)dMaxDate < inMinDate )
-                        dMaxDate = inMinDate;
+                    //if (dMaxDate == null || (DateTime)dMaxDate < inMinDate )
+                    //    dMaxDate = inMinDate;
 
                     dtVal = dMaxDate;
                 }
@@ -7564,6 +7628,50 @@ namespace NZPostOffice.RDS.DataService
                         nId = -1;
                     }
                     intVal = nId;
+                }
+            }
+        }
+
+        // TJB  Allowances  4-May-2021
+        // Returns net allowance amount for the contract allowance type
+        [ServerMethod]
+        private void _GetAllowanceNetAmount(int? inContract, int? inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    Decimal netAmount = 0.0M;
+                    try
+                    {
+                        cm.CommandText = "select sum(ca_annual_amount) "
+                                       + "  from rd.contract_allowance "
+                                       + " where contract_no = @inContract "
+                                       + "   and alt_key = @inAltKey";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                netAmount = dr.GetDecimal(0);
+                                _sqlcode = 0;
+                            }
+                            else
+                            {
+                                _sqldbcode = 100;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                    decVal = netAmount;
                 }
             }
         }
@@ -11481,7 +11589,7 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = cm.CommandText = "rd.sp_AssignFixedAssetToContract";
+                    cm.CommandText = "rd.sp_AssignFixedAssetToContract";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "in_fixed_asset_no", sFixedAssetNo);
                     pList.Add(cm, "in_contract_no", nContractNo);

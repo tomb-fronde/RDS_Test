@@ -20,22 +20,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         public DMaintainActivityAllowance()
 		{
 			InitializeComponent();
-			//InitializeDropdown();
-
-            // For some reason, any changes to the grid in the designer
-            // causes some of these values - particularly the ValueMember
-            // and DisplayMember - to be omitted from the generated code
-            // (and I don't have to remember to manually put them back).
-            // Putting them here overrides the emitted code.
-            this.alt_key.DefaultCellStyle.NullValue = null;
-            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            this.alt_key.ValueMember = "AltKey";
-            this.alt_key.DisplayMember = "AltDescription";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
-            this.ca_paid_to_date.PromptChar = '0';
-            //this.ca_end_date.PromptChar = '0';
+            this.ca_effective_date.Mask = "00/00/0000";
+            this.ca_effective_date.ValueType = typeof(System.DateTime);
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -46,25 +35,35 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         protected override void OnHandleCreated(EventArgs e)
     	{
-            if (!DesignMode)
-    	    {
-                InitializeDropdown();
-            }
+            //if (!DesignMode)
+            //{
+            //    InitializeDropdown();
+            //}
             base.OnHandleCreated(e);
             this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
     	}
 
-		private void InitializeDropdown()
+        //private void InitializeDropdown()
+        //{
+        //    alt_key.AssignDropdownType<DddwAllowanceTypesActivity>();
+        //}
+
+		public int Retrieve( int? inContract, int? inAlctId)
 		{
-            alt_key.AssignDropdownType<DddwAllowanceTypesActivity>();
+            return RetrieveCore<MaintainAllowanceV2>(new List<MaintainAllowanceV2>
+                                        (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
 		}
 
-		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
-		{
-            //set_row_readability();
-            return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
-                                        (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
-		}
+        public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
+        {
+            if (pValue)
+            {
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells[pColumnName];
+                this.grid.BeginEdit(true);
+            }
+            else
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells["alt_key"];
+        }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
@@ -113,50 +112,71 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         // TJB  Allowance  16-Mar-2021
         // The grid columns for this tab (see designer)
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {  /*****************************************************
-            * NOTE:                                             *
-            *    Activity count = contract_allowance.ca_var1    *
-            *    Activity rate  = allowance_type.alt_rate       *
-            *    Weeks per year = allowance_type.alt_wks_yr     *
-            *                                                   *
-            *    Annual amount = Count * rate * WeeksPerYear    *
-            *****************************************************/
-            int column, thisRow;
-            string column_name;
+        {  /************************************************************
+            * NOTE:                                                    *
+            *    Activity count  = ca_var1     from contract_allowance *
+            *    Activity rate   = alt_rate    from allowance_type     *
+            *    Weeks per year  = alt_wks_yr  from allowance_type     *
+            *                                                          *
+            *    Annual amount = Count * rate * WeeksPerYear           *
+            ***********************************************************/
+            int thisRow = e.RowIndex;
+            int column = e.ColumnIndex;
+            string column_name = this.grid.Columns[column].Name;
 
-            thisRow = e.RowIndex;
-            column = e.ColumnIndex;
-            column_name = this.grid.Columns[column].Name;
-
-            if (column_name == "ca_var1")
-            {   // Calculate the allowance annual amount (ca_annual_amount)
-                decimal? ThisAmt = 0.0M;
-                decimal? activity_count = 0;
-                decimal? wks_per_year = 0;
-                decimal? activity_rate = 0.0M;
-
-                activity_count = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value;
-                activity_rate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value;
-                wks_per_year = (decimal?)grid.Rows[thisRow].Cells["alt_wks_yr"].Value;
-
-                ThisAmt = ((activity_count == null) ? 0 : (int)activity_count)
-                          * ((activity_rate == null) ? 0.0M : (decimal)activity_rate)
-                          * ((wks_per_year == null) ? 0 : (int)wks_per_year);
-
-                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = ThisAmt;
-            }
-
-            // TJB 9-April-2021
-            // If the ca_annual_amount or activity_count (ca_var1) has changed and this row 
-            // isn't marked as new ("N") and hasn't already been marked modified ("M"), 
-            // mark it mark it changed ("C") or modified ("M") as appropriate
+            // Get the RowChanged value, or "X" if not set
             string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
-            if (!(sRowChanged == "N" || sRowChanged == "M"))
+
+            if (column_name == "ca_row_changed" || column_name == "net_amount"
+                || column_name == "calc_amount" || column_name == "ca_annual_amount")
             {
-                if (column_name == "ca_annual_amount" || column_name == "ca_var1")
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                // Ignore rowChanged, netAmt, calcAmt and annualAmt changes triggered by changes to them below
+            }
+            else if (column_name == "ca_var1")
+            {
+                // A new activity count (in ca_var1) has been entered
+                decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
+                decimal? activity_count = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
+                decimal? activity_rate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value ?? 0.0M;
+                decimal? wks_per_year = (decimal?)grid.Rows[thisRow].Cells["alt_wks_yr"].Value ?? 0.0M;
+                decimal? acc = (decimal?)grid.Rows[thisRow].Cells["alt_acc"].Value ?? 0.0M;
+                decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
+                string   Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
+
+                // Determine the previous NetAmt
+                decimal? prevNetAmt;
+                if (Approved == "Y")
+                    // If this is an approved allowance we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    prevNetAmt = netAmt;
                 else
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+                    // If this allowance has not been approved, we'll be changing the 
+                    // net amount that was added on to the pervious allowance. To do this
+                    // we take away this record's previous change amount (still in
+                    // ca_annual_amount; we're about to replace it with a new change amount).
+                    prevNetAmt = netAmt - annualAmt;
+
+                // Calculate the new net amount and save in calc_amount and net_amount
+                decimal? newNetAmt = (activity_count * wks_per_year * activity_rate);
+                newNetAmt = Decimal.Round((decimal)newNetAmt, 2);
+                grid.Rows[thisRow].Cells["calc_amount"].Value = newNetAmt;
+                grid.Rows[thisRow].Cells["net_amount"].Value = newNetAmt;
+
+                // Calculate the change amount and save in ca_annual_amount
+                decimal? changeAmt = newNetAmt - prevNetAmt;
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = changeAmt;
+
+                // Mark it modified ("M") if it isn't already marked new ("N") or modified.
+                if (sRowChanged != "N" && sRowChanged != "M")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = "M";
+            }
+            else if (sRowChanged != "N" && sRowChanged != "M" && sRowChanged != "C")
+            {
+                // Something other than the ca_annual_amount, calc_amount, net_amount, investment amount (ca_var1),
+                // or ca_row_changed has been changed.
+                // If RowChanged has not already been set to one of the new ("N"), modified ("M") 
+                // or changed ("C") values, mark it changed.
+                grid.Rows[thisRow].Cells["ca_row_changed"].Value = "C";
             }
         }
     }

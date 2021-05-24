@@ -20,8 +20,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("alt_rate", "_alt_rate", "allowance_type")]
     [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type")]
     [MapInfo("alt_acc", "_alt_acc", "allowance_type")]
-    [MapInfo("alt_fuel_pk", "_alt_fuel_pk", "allowance_type")]
-    [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "allowance_type")]
     [MapInfo("alct_id", "_alct_id", "allowance_type")]
     [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type")]
     [MapInfo("alt_notes", "_alt_notes", "allowance_type")]
@@ -44,12 +42,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private decimal? _alt_acc;
-
-        [DBField()]
-        private decimal? _alt_fuel_pk;
-
-        [DBField()]
-        private decimal? _alt_ruc_pk;
 
         [DBField()]
         private int? _alct_id;
@@ -146,42 +138,6 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 if (_alt_acc != value)
                 {
                     _alt_acc = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual Decimal? AltFuelPk
-        {
-            get
-            {
-                CanReadProperty("AltFuelPk", true);
-                return _alt_fuel_pk;
-            }
-            set
-            {
-                CanWriteProperty("AltFuelPk", true);
-                if (_alt_fuel_pk != value)
-                {
-                    _alt_fuel_pk = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual Decimal? AltRucPk
-        {
-            get
-            {
-                CanReadProperty("AltrucPk", true);
-                return _alt_ruc_pk;
-            }
-            set
-            {
-                CanWriteProperty("AltRucPk", true);
-                if (_alt_ruc_pk != value)
-                {
-                    _alt_ruc_pk = value;
                     PropertyHasChanged();
                 }
             }

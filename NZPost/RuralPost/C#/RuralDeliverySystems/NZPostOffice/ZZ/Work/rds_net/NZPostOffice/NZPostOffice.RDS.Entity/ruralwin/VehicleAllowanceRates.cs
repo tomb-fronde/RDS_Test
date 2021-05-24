@@ -22,6 +22,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("var_licence_pa", "_var_licence_pa", "vehicle_allowance_rates")]
     [MapInfo("var_tyres_pk", "_var_tyres_pk", "vehicle_allowance_rates")]
     [MapInfo("var_allowance_pa", "_var_allowance_pa", "vehicle_allowance_rates")]
+    [MapInfo("var_insurance_pa", "_var_insurance_pa", "vehicle_allowance_rates")]
     [MapInfo("var_ror_pa", "_var_ror_pa", "vehicle_allowance_rates")]
 	[System.Serializable()]
 

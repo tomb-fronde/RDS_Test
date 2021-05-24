@@ -42,10 +42,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("alt_ruc_pk", "_alt_ruc_pk", "")]
     [MapInfo("alct_id", "_alct_id", "")]
     [MapInfo("alct_description", "_alct_description", "")]
-    [MapInfo("_net_amount", "_net_amount", "")]
     [System.Serializable()]
 
-	public class MaintainAllowance : Entity<MaintainAllowance>
+	public class MaintainAllowanceV1 : Entity<MaintainAllowanceV1>
 	{
         // TJB RPCR_017 July-2010
         // Added GetCurrentAllowances to limit allowance list to current allowances
@@ -637,7 +636,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         {
             get
             {
-                return (string)GetInitialValue("_alt_description;");
+                return (string)GetInitialValue("_alt_description");
             }
         }
 
@@ -746,12 +745,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
 
         #region Factory Methods
-		public static MaintainAllowance NewMaintainAllowance( int? inContractNo )
+		public static MaintainAllowanceV1 NewMaintainAllowanceV1( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-        public static MaintainAllowance[] GetAllMaintainAllowance(int? inContractNo, int? inAlctId)
+        public static MaintainAllowanceV1[] GetAllMaintainAllowanceV1(int? inContractNo, int? inAlctId)
         {
             return Fetch(inContractNo, inAlctId).list;
         }
@@ -805,12 +804,6 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                     + ", rd.allowance_type alt "
                                     + ", rd.allowance_calc_type alct "
                                 + "WHERE ca.contract_no = @inContractNo "
-                                + "  AND (ca.ca_effective_date "
-                                + "            >= (select max(ca_effective_date) from rd.contract_allowance"
-                                + "  		      where contract_no = ca.contract_no"
-                                + "  			    and alt_key = ca.alt_key"
-                                + "  				and ca_approved = 'Y')"
-                                + "            or  ca.ca_approved != 'Y')"
                                 + "  AND c.contract_no = ca.contract_no "
                                 + "  AND alt.alt_key = ca.alt_key "
                                 + "  AND alt.alct_id =  @inAlctId "
@@ -821,12 +814,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                         pList.Add(cm, "inContractNo", inContractNo);
                         pList.Add(cm, "inAlctId", inAlctId);
 
-					    List<MaintainAllowance> _list = new List<MaintainAllowance>();
+					    List<MaintainAllowanceV1> _list = new List<MaintainAllowanceV1>();
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                MaintainAllowance instance = new MaintainAllowance();
+                                MaintainAllowanceV1 instance = new MaintainAllowanceV1();
                                 instance._alt_key = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_no = GetValueFromReader<int?>(dr, 1);
                                 instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
@@ -852,6 +845,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._ca_costs_covered = dr.GetString(22);
                                 instance._ca_row_changed = dr.GetString(23);
                                 instance._net_amount = GetValueFromReader<decimal?>(dr, 24);
+
+                                // CalcAmt may be needed to calculate previous NetAmt
+                                // For FIXED type calculations, the "calculated" amount is the annual amount that was entered;
+                                // for the other types, it is the net amount that was calculated
+                                if (inAlctId == 1) // 1 == FIXED; CalcAmt may be needed to calculate previous NetAmt
+                                    instance._calc_amount = instance._annual_amount;
+                                else
+                                    instance._calc_amount = instance._net_amount;
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();

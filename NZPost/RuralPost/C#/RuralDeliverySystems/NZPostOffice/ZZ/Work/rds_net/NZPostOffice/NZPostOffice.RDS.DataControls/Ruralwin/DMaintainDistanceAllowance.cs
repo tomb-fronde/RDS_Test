@@ -21,56 +21,57 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public DMaintainDistanceAllowance()
 		{
 			InitializeComponent();
-            
-            // For some reason, any changes to the grid in the designer
-            // causes some of these values - particularly the ValueMember
-            // and DisplayMember - to be omitted from the generated code
-            // (and I don't have to remember to manually put them back).
-            // Putting them here overrides the emitted code.
-            this.alt_key.DefaultCellStyle.NullValue = null;
-            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            this.alt_key.ValueMember = "AltKey";
-            this.alt_key.DisplayMember = "AltDescription";
-
-            this.var_id.DefaultCellStyle.NullValue = null;
-            this.var_id.DefaultCellStyle.DataSourceNullValue = null;
-            this.var_id.ValueMember = "VarId";
-            this.var_id.DisplayMember = "VarDescription";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
-            this.ca_paid_to_date.PromptChar = '0';
-            //this.ca_end_date.PromptChar = '0';
+            this.ca_effective_date.Mask = "00/00/0000";
+            this.ca_effective_date.ValueType = typeof(System.DateTime);
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            //this.var_id.DefaultCellStyle.NullValue = null;
+            //this.var_id.DefaultCellStyle.DataSourceNullValue = null;
+            //this.var_id.ValueMember = "VarId";
+            //this.var_id.DisplayMember = "VarDescription"; 
         }
 
         protected override void OnHandleCreated(EventArgs e)
     	{
-            if (!DesignMode)
-    	    {
-            	InitializeDropdown();
-            }
+            //if (!DesignMode)
+            //{
+            //    InitializeDropdown();
+            //}
             base.OnHandleCreated(e);
             this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
     	}
 
-		private void InitializeDropdown()
-		{
-			alt_key.AssignDropdownType<DddwAllowanceTypesDistance>();
-            var_id.AssignDropdownType<DddwVehicleAllowanceRates>();
-		}
+        //private void InitializeDropdown()
+        //{
+        //    alt_key.AssignDropdownType<DddwAllowanceTypesDistance>();
+        //    var_id.AssignDropdownType<DddwVehicleAllowanceRates>();
+        //}
 
-		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
+		public int Retrieve( int? inContract, int? inAlctId)
 		{
             //set_row_readability();
-            return RetrieveCore<MaintainVehAllowance>(new List<MaintainVehAllowance>
-                                        (MaintainVehAllowance.GetAllMaintainVehAllowance(inContract, inEffDate, inAlctId)));
+            return RetrieveCore<MaintainAllowanceV2>(new List<MaintainAllowanceV2>
+                                        (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
 		}
+
+        public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
+        {
+            if (pValue)
+            {
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells[pColumnName];
+                this.grid.BeginEdit(true);
+            }
+            else
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells["alt_key"];
+        }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
@@ -116,121 +117,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
         }
 
-        // TJB 16-Sept-2010: Added
-        // When the user changes the value in the amount column,
-        // Recalculate the column total and update it on the form.
-        private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {  /********************************************************
-            * NOTE:                                                *
-            *    Days per week    = contract_allowance.ca_var1     *
-            *    Distance per day = contract_allowance.ca_dist_day *
-            *    Hours per week   = contract_allowance.ca_hrs_wk   *
-            *    Hourly rate      = allowance_type.alt_rate        *
-            *    Weeks per year   = allowance_type.alt_wks_yr      *
-            *    ACC%             = allowance_type.alt_acc         *
-            *                                                      *
-            *    Annual hours = Days-wk * Hrs-wk * Wks-yr          *
-            *    Yearly Hours amount = Annual hours * Labour rate  *
-            *    Annual hours amount = Yearly amount               *
-            *                          + Yearly amount * ACC%/100  *
-            *                                                      *
-            *    Yearly distance = Distance-day * Days-wk * Wks-yr *
-            *    Annual distance amount = (TBA)                    *
-            *                                                      *
-            *    Annual fixed vehicle costs = (TBA)                *
-            *                                                      *
-            *    Annual amount = Annual hour amount                *
-            *                    + Annual distance amount          *
-            *                    + Annual fixed costs              *
-            ********************************************************/
-            int column, thisRow;
-            string column_name;
-            string sHdr;
-
-            thisRow = e.RowIndex;
-            column = e.ColumnIndex;
-            column_name = this.grid.Columns[column].Name;
-            sHdr = this.grid.Columns[column].HeaderText;
-            string s = sHdr;
-
-            if (column_name == "ca_var1" || column_name == "ca_dist_day" || column_name == "ca_hrs_wk")
-            {
-                // From contract_allowances
-                decimal days_wk      = 0.0M;
-                decimal hours_wk     = 0.0M;
-                decimal distance_day = 0.0M;
-                string  costs_covered = "N";
-
-                // From allowance_type
-                decimal rate_hr      = 0.0M;
-                decimal weeks_yr     = 0.0M;
-                decimal ACC          = 0.0M;
-                decimal fuel_pk      = 0.0M;
-                decimal ruc_pk       = 0.0M;
-
-                // From vehicle_allowance_rates
-                decimal carrier_pa   = 0.0M;
-                decimal repairs_pk   = 0.0M;
-                decimal licence_pa   = 0.0M;
-                decimal tyres_pk     = 0.0M;
-                decimal allowance_pk = 0.0M;
-                decimal insurance_pa = 0.0M;
-                decimal ror_pa       = 0.0M;
-
-                // Intermediate calculated velues
-                decimal HoursAmt     = 0.0M;
-                decimal DistAmt      = 0.0M;
-                decimal Dist_yr      = 0.0M;
-                decimal VehCosts     = 0.0M;
-
-                days_wk      = of_GetDecimalValue(thisRow, "ca_var1");
-                hours_wk     = of_GetDecimalValue(thisRow, "ca_hrs_wk");
-                distance_day = of_GetDecimalValue(thisRow, "ca_dist_day");
-
-                rate_hr      = of_GetDecimalValue(thisRow, "alt_rate");
-                weeks_yr     = of_GetDecimalValue(thisRow, "alt_wks_yr");
-                ACC          = of_GetDecimalValue(thisRow, "alt_acc");
-                fuel_pk      = of_GetDecimalValue(thisRow, "alt_fuel_pk");
-                ruc_pk       = of_GetDecimalValue(thisRow, "alt_ruc_pk");
-
-                repairs_pk   = of_GetDecimalValue(thisRow, "var_repairs_pk");
-                tyres_pk     = of_GetDecimalValue(thisRow, "var_tyres_pk");
-                allowance_pk = of_GetDecimalValue(thisRow, "var_allowance_pk");
-                carrier_pa   = of_GetDecimalValue(thisRow, "var_carrier_pa");
-                licence_pa   = of_GetDecimalValue(thisRow, "var_licence_pa");
-                insurance_pa = of_GetDecimalValue(thisRow, "var_insurance_pa");
-                ror_pa       = of_GetDecimalValue(thisRow, "var_ror_pa");
-
-                costs_covered = (string)grid.Rows[thisRow].Cells["ca_costs_covered"].Value;
-                
-                HoursAmt = (hours_wk * weeks_yr) * rate_hr;
-                Dist_yr  = (distance_day * days_wk * weeks_yr);
-                DistAmt  = (Dist_yr/1000)*(ruc_pk + repairs_pk + tyres_pk + allowance_pk);
-
-                if(costs_covered == "N" || costs_covered == "" || costs_covered == null)
-                    VehCosts = carrier_pa + licence_pa + insurance_pa + ror_pa;
-                else
-                    VehCosts = 0.0M;
-
-                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = (decimal?)(HoursAmt + DistAmt + VehCosts);
-            }
-
-            // TJB 9-April-2021
-            // If the ca_annual_amount or any of the user-modifiable calculation factors 
-            // have changed and this row isn't marked as new ("N") and hasn't already been 
-            // marked modified ("M"), mark it mark it changed ("C") or modified ("M") 
-            // as appropriate
-            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
-            if (!(sRowChanged == "N" || sRowChanged == "M"))
-            {
-                if (column_name == "ca_annual_amount" || column_name == "ca_var1" 
-                    || column_name == "ca_dist_day" || column_name == "ca_hrs_wk")
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
-                else
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
-            }
-        }
-
         private decimal of_GetDecimalValue(int thisRow, string sColumn)
         {
             // Gets the value of the named column and returns it as a Decimal.
@@ -240,9 +126,148 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             return (decimal)((val == null) ? 0.0M : val);
         }
 
-        private void grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
+        // TJB 16-Sept-2010: Added
+        // When the user changes any of the contract_allowance values 
+        // Recalculate the net amount, the change from the previous net amount 
+        // and update the ca_annual_amount on the form with the change amount.
+        private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {  /*************************************************************************
+            * NOTE:                                                                 *
+            *    Days per year    = ca_var1          from contract_allowance        *
+            *    Distance per day = ca_dist_day      from contract_allowance        *
+            *    Hours per week   = ca_hrs_wk        from contract_allowance        *
+            *    Costs covered    = ca_costs_covered from contract_allowance        *
+            *    Hourly rate      = alt_rate         from allowance_type            *
+            *    Weeks per year   = alt_wks_yr       from allowance_type            *
+            *    ACC%             = alt_acc          from allowance_type            *
+            *    Carrier          = var_carrier_pa   from vehicle_alowance_rates    *
+            *    Licencing        = var_licenc_pa    from vehicle_alowance_rates    *
+            *    Insurance        = var_insurance_pa from vehicle_alowance_rates    *
+            *    RoR              = var_ror_pa       from vehicle_alowance_rates    *
+            *    Fuel_use_pk      = var_fuel_use_pk  from vehicle_alowance_rates    *
+            *    Fuel_rate        = var_fuel_rate    from vehicle_alowance_rates    *
+            *    RUC              = var_ruc_pk       from vehicle_alowance_rates    *
+            *    Repairs          = var_repairs_pk   from vehicle_alowance_rates    *
+            *    Tyres            = var_tyres_pk     from vehicle_alowance_rates    *
+            *    Allowance        = var_allowance_pk from vehicle_alowance_rates    *
+            *                                                                       *
+            *    Annual hours = Hours-wk * Wks-yr                                   *
+            *    Time amount = (Annual hours * Labour rate) * (1 + ACC%/100)        *
+            *                                                                       *
+            *    Yearly distance = Distance-day * Days-yr                           *
+            *    Fuel/k per year = Fuel_use_pk * Fuel_rate                          *
+            *    Distance amount                                                    *
+            *        = (Fuel + RUC + Repairs + Tyres + Allowance) * (Distance/1000) *
+            *                                                                       *
+            *    if Costs covered  (= 'Y')                                          *
+            *          Vehicle amount = Carrier + Licence + Insurance + RoR         * 
+            *                                                                       *
+            *    Net amount = Time amount                                           *
+            *                 + Distance amount                                     *
+            *                 + Vehicle amount                                      *
+            *************************************************************************/
+            int thisRow = e.RowIndex;
+            int column = e.ColumnIndex;
+            string column_name = this.grid.Columns[column].Name;
 
+            // Get the RowChanged value, or "X" if not set
+            string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
+
+            if (column_name == "ca_row_changed" || column_name == "net_amount"
+                || column_name == "calc_amount" || column_name == "ca_annual_amount")
+            {
+                // Ignore rowChanged, netAmt, calcAmt and annualAmt changes triggered by changes to them below
+            }
+            else if (column_name == "ca_var1" || column_name == "ca_hrs_wk"
+                     || column_name == "ca_dist_day" || column_name == "ca_costs_covered")
+            {
+                decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
+                decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
+                decimal? initialAmt = (decimal?)grid.Rows[thisRow].Cells["initial_amount"].Value ?? 0.0M;
+                decimal? initialNetAmt = (decimal?)grid.Rows[thisRow].Cells["initial_net_amount"].Value ?? 0.0M;
+                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
+
+                // Determine the previous NetAmt
+                decimal? prevNetAmt;
+                if (Approved == "Y")
+                    // If this is an approved allowance we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    //prevNetAmt = netAmt;
+                    prevNetAmt = initialNetAmt;
+                else
+                    // If this allowance has not been approved, we'll be changing the 
+                    // net amount that was added on to the pervious allowance. To do this
+                    // we take away this record's previous change amount (still in
+                    // ca_annual_amount; we're about to replace it with a new change amount).
+                    //prevNetAmt = netAmt - annualAmt;
+                    prevNetAmt = initialNetAmt - initialAmt;
+
+                // Calculate the new net amount and save it in calc_amount, and calculate the 
+                // change from the pevious net amount and save it in ca_annual_amount.
+
+                // Get the values needed for the calculation
+                // From contract_allowances
+                decimal days_yr      = of_GetDecimalValue(thisRow, "ca_var1");
+                decimal hours_wk     = of_GetDecimalValue(thisRow, "ca_hrs_wk");
+                decimal distance_day = of_GetDecimalValue(thisRow, "ca_dist_day");
+
+                // From allowance_type
+                decimal rate_hr      = of_GetDecimalValue(thisRow, "alt_rate");
+                decimal weeks_yr     = of_GetDecimalValue(thisRow, "alt_wks_yr");
+                decimal ACC          = of_GetDecimalValue(thisRow, "alt_acc");
+
+                // From vehicle_allowance_rates
+                decimal fuel_use_pk  = of_GetDecimalValue(thisRow, "var_fuel_use_pk");
+                decimal fuel_rate    = of_GetDecimalValue(thisRow, "var_fuel_rate");
+                decimal ruc_pk       = of_GetDecimalValue(thisRow, "var_ruc_rate_pk");
+                decimal repairs_pk   = of_GetDecimalValue(thisRow, "var_repairs_pk");
+                decimal tyres_pk     = of_GetDecimalValue(thisRow, "var_tyres_pk");
+                decimal allowance_pk = of_GetDecimalValue(thisRow, "var_allowance_pk");
+                decimal carrier_pa   = of_GetDecimalValue(thisRow, "var_carrier_pa");
+                decimal licence_pa   = of_GetDecimalValue(thisRow, "var_licence_pa");
+                decimal insurance_pa = of_GetDecimalValue(thisRow, "var_insurance_pa");
+                decimal ror_pa       = of_GetDecimalValue(thisRow, "var_ror_pa");
+
+                string costs_covered = (string)grid.Rows[thisRow].Cells["ca_costs_covered"].Value;
+
+                // Intermediate calculated values
+                decimal Hours = hours_wk * weeks_yr;
+                decimal TimeAmt = (Hours * rate_hr) * (1 + (ACC * 0.01M));
+                TimeAmt = Decimal.Round(TimeAmt,2);
+
+                decimal Dist_yr = (distance_day * days_yr);
+                decimal Fuel_pk = fuel_use_pk * fuel_rate;
+                decimal DistAmt = (Dist_yr / 1000) * (Fuel_pk + ruc_pk + repairs_pk + tyres_pk + allowance_pk);
+                DistAmt = Decimal.Round(DistAmt,2);
+
+                // If cost_covered is not 'Y', calculate the Vehicle amount
+                // If cost_covered is 'Y', don't do the calculation and use $0
+                decimal VehAmt  = 0.0M;
+                if (costs_covered != null && costs_covered != "Y")
+                    VehAmt = carrier_pa + licence_pa + insurance_pa + ror_pa;
+                VehAmt = Decimal.Round(VehAmt, 2);
+
+                // Calculate the new net amount and save in calc_amount and net_amount
+                decimal? newNetAmt = TimeAmt + DistAmt + VehAmt;
+                grid.Rows[thisRow].Cells["calc_amount"].Value = newNetAmt;
+                grid.Rows[thisRow].Cells["net_amount"].Value = newNetAmt;
+
+                // Calculate the change amount and save in ca_annual_amount
+                decimal? changeAmt = newNetAmt - prevNetAmt;
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = changeAmt;
+
+                // Mark this record Modified ("M") if it isn't already marked New ("N") or Modified.
+                if (sRowChanged != "N" && sRowChanged != "M")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = "M";
+            }
+            else if (sRowChanged != "N" && sRowChanged != "M" && sRowChanged != "C")
+            {
+                // Something other than the ca_annual_amount, calc_amount, net_amount, investment amount (ca_var1),
+                // or ca_row_changed has been changed.
+                // If RowChanged has not already been set to one of the New ("N"), Modified ("M") 
+                // or Changed ("C") values, mark it changed.
+                grid.Rows[thisRow].Cells["ca_row_changed"].Value = "C";
+            }
         }
     }
 }

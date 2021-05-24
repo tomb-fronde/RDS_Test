@@ -21,27 +21,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		public DMaintainROIAllowance()
 		{
 			InitializeComponent();
-			//InitializeDropdown();
 
-            // For some reason, any changes to the grid in the designer
-            // causes some of these values - particularly the ValueMember
-            // and DisplayMember - to be omitted from the generated code
-            // (and I don't have to remember to manually put them back).
-            // Putting them here overrides the emitted code.
-            this.alt_key.HeaderText = "Allowance";
-            this.alt_key.Name = "alt_key";
-            this.alt_key.Width = 140;
-            this.alt_key.DefaultCellStyle.NullValue = null;
-            this.alt_key.DefaultCellStyle.DataSourceNullValue = null;
-            this.alt_key.ValueMember = "AltKey";
-            this.alt_key.DisplayMember = "AltDescription";
-            this.alt_key.DropDownWidth = 210;
             this.ca_effective_date.PromptChar = '0';
             this.ca_effective_date.Mask = "00/00/0000";
             this.ca_effective_date.ValueType = typeof(System.DateTime);
-            //this.ca_end_date.PromptChar = '0';
-            //this.ca_end_date.Mask = "00/00/0000";
-            //this.ca_end_date.ValueType = typeof(System.DateTime);
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -52,28 +35,55 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         protected override void OnHandleCreated(EventArgs e)
     	{
-            if (!DesignMode)
-    	    {
-            	InitializeDropdown();
-            }
+            //if (!DesignMode)
+            //{
+            //    InitializeDropdown();
+            //}
             base.OnHandleCreated(e);
             this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
     	}
 
-		private void InitializeDropdown()
-		{
-			alt_key.AssignDropdownType<DddwAllowanceTypesROI>();
-		}
+        //private void InitializeDropdown()
+        //{
+        //    alt_key.AssignDropdownType<DddwAllowanceTypesROI>();
+        //}
 
-		public int Retrieve( int? inContract, DateTime? inEffDate, int? inAlctId)
+		public int Retrieve( int? inContract, int? inAlctId)
 		{
             //set_row_readability();
-            return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
-                                        (MaintainAllowance.GetAllMaintainAllowance(inContract, inEffDate, inAlctId)));
+            return RetrieveCore<MaintainAllowanceV2>(new List<MaintainAllowanceV2>
+                                        (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
 		}
+
+        public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
+        {
+            if (pValue)
+            {
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells[pColumnName];
+                this.grid.BeginEdit(true);
+            }
+            else
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells["alt_key"];
+        }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
+            this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
+            for (int i = 0; i < this.grid.ColumnCount; i++)
+                if (this.grid.Columns[i].Name == pColumnName)
+                {
+                    this.grid.Rows[pRow].Cells[i].Selected = pValue;
+                    break;
+                }
+        }
+
+        public void SelectGridCell(int pRow, string pColumnName, bool pValue)
+        {
+            // TJB: derived from SetGridCellSelected
+            for (int i = 0; i < this.grid.RowCount; i++)
+                for (int j = 0; j < this.grid.ColumnCount; j++)
+                    this.grid.Rows[i].Cells[j].Selected = false;
+
             this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
             for (int i = 0; i < this.grid.ColumnCount; i++)
                 if (this.grid.Columns[i].Name == pColumnName)
@@ -132,46 +142,69 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         // When the user changes the value in the amount column,
         // Recalculate the column total and update it on the form.
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {  /*****************************************************
-            * NOTE:                                             *
-            *    Investment amount = contract_allowance.ca_var1 *
-            *    ROI%              = allowance_type.alt_rate    *
-            *                                                   *
-            *    Annual amount = investment * ROI%              *
-            *****************************************************/
-            int column, thisRow;
-            string column_name;
+        {  /***********************************************************
+            * NOTE:                                                   *
+            *    Investment amount = ca_var1  from contract_allowance *
+            *    ROI%              = alt_rate from allowance_type     *
+            *                                                         *
+            *    Annual amount = investment * ROI%                    *
+            ***********************************************************/
+            int thisRow = e.RowIndex;
+            int column = e.ColumnIndex;
+            string column_name = this.grid.Columns[column].Name;
 
-            thisRow = e.RowIndex;
-            column  = e.ColumnIndex;
-            column_name = this.grid.Columns[column].Name;
-
-            if (column_name == "ca_var1")
-            {
-                decimal? investment_value = 0.0M;
-                decimal? roi_value = 0.0M;
-                decimal? ThisAmt = 0.0M;
-
-                investment_value = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value;
-                roi_value        = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value;
-
-                ThisAmt = ((investment_value == null) ? 0.0M : (decimal)investment_value)
-                          * ((roi_value == null) ? 0.0M : (decimal)roi_value)/100.0M;
-
-                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = ThisAmt;
-            }
-
-            // TJB 9-April-2021
-            // If the ca_annual_amount or investment_value (ca_var1) has changed and this row 
-            // isn't marked as new ("N") and hasn't already been marked modified ("M"), 
-            // mark it mark it changed ("C") or modified ("M") as appropriate
+            // Get the RowChanged value, or "X" if not set
             string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
-            if (!(sRowChanged == "N" || sRowChanged == "M"))
+
+            if (column_name == "ca_row_changed" || column_name == "net_amount" 
+                || column_name == "calc_amount" || column_name == "ca_annual_amount")
             {
-                if (column_name == "ca_annual_amount" || column_name == "ca_var1")
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"M";
+                // Ignore rowChanged, netAmt, calcAmt and annualAmt changes triggered by changes to them below
+            }
+            else if (column_name == "ca_var1")
+            {
+                // A new investment amount (in ca_var1) has been entered
+                decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
+                decimal? investmentAmt = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
+                decimal? calcAmt = (decimal?)grid.Rows[thisRow].Cells["calc_amount"].Value ?? 0.0M;
+                decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
+                decimal? roiRate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value ?? 0.0M;
+                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
+
+                // Determine the previous NetAmt
+                decimal? prevNetAmt;
+                if (Approved == "Y")
+                    // If this is an approved allowance we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    prevNetAmt = netAmt;
                 else
-                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = (string)"C";
+                    // If this allowance has not been approved, we'll be changing the 
+                    // net amount that was added on to the pervious allowance. To do this
+                    // we take away this record's previous change amount (still in
+                    // ca_annual_amount; we're about to replace it with a new change amount).
+                    prevNetAmt = netAmt - annualAmt;
+
+                // Calculate the new net amount and save in calc_amount and net_amount
+                decimal? newNetAmt = investmentAmt * (roiRate * 0.01M);
+                newNetAmt = Decimal.Round((decimal)newNetAmt, 2);
+                grid.Rows[thisRow].Cells["calc_amount"].Value = newNetAmt;
+                grid.Rows[thisRow].Cells["net_amount"].Value  = newNetAmt;
+
+                // Calculate the change amount and save in ca_annual_amount
+                decimal? changeAmt = newNetAmt - prevNetAmt;
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = changeAmt;
+                
+                // And mark it modified ("M") if it isn't already marked new ("N") or modified.
+                if (sRowChanged != "N" && sRowChanged != "M")
+                    grid.Rows[thisRow].Cells["ca_row_changed"].Value = "M";
+            }
+            else if (sRowChanged != "N" && sRowChanged != "M" && sRowChanged != "C")
+            {
+                // Something other than the ca_annual_amount, calc_amount, net_amount, investment amount (ca_var1),
+                // or ca_row_changed has been changed.
+                // If RowChanged has not already been set to one of the new ("N"), modified ("M") 
+                // or changed ("C") values, mark it changed.
+                grid.Rows[thisRow].Cells["ca_row_changed"].Value = "C";
             }
         }
     }

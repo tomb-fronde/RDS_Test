@@ -23,16 +23,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 		{
 			InitializeComponent();
 
-            // For some reason, any changes to the grid in the designer
-            // causes some of these values - particularly the ValueMember
-            // and DisplayMember - to be omitted from the generated code
-            // (and I don't have to remember to manually put them back).
-            // Putting them here overrides the emitted code.
-
             // For dates, it sets the prompt to '\0' instead of '0'
             this.ca_effective_date.PromptChar = '0';
-            this.ca_paid_to_date.PromptChar = '0';
-            //this.ca_end_date.PromptChar = '0';
+            this.ca_effective_date.Mask = "00/00/0000";
+            this.ca_effective_date.ValueType = typeof(System.DateTime);
 
             // These settings allow the row height to adjust to the text if it wraps.
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
@@ -43,28 +37,55 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         protected override void OnHandleCreated(EventArgs e)
     	{
-            if (!DesignMode)
-    	    {
-            	//InitializeDropdown();
-            }
+            //if (!DesignMode)
+            //{
+            //    //InitializeDropdown();
+            //}
             base.OnHandleCreated(e);
             this.grid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
     	}
 
-		private void InitializeDropdown()
-		{
-			//alt_key.AssignDropdownType<DddwAllowanceTypesFixed>();
-		}
+        //private void InitializeDropdown()
+        //{
+        //    alt_key.AssignDropdownType<DddwAllowanceTypesFixed>();
+        //}
 
 		public int Retrieve( int? inContract, int? inAlctId)
 		{
-            return RetrieveCore<MaintainAllowance>(new List<MaintainAllowance>
-                                        (MaintainAllowance.GetAllMaintainAllowance(inContract, inAlctId)));
+            return RetrieveCore<MaintainAllowanceV2>(new List<MaintainAllowanceV2>
+                                        (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
             //set_row_readability();
+        }
+
+        public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
+        {
+            if (pValue)
+            {
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells[pColumnName];
+                this.grid.BeginEdit(true);
+            }
+            else
+                this.grid.CurrentCell = this.grid.Rows[pRow].Cells["alt_key"];
         }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
+            this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
+            for (int i = 0; i < this.grid.ColumnCount; i++)
+                if (this.grid.Columns[i].Name == pColumnName)
+                {
+                    this.grid.Rows[pRow].Cells[i].Selected = pValue;
+                    break;
+                }
+        }
+
+        public void SelectGridCell(int pRow, string pColumnName, bool pValue)
+        {
+            // TJB: derived from SetGridCellSelected
+            for (int i = 0; i < this.grid.RowCount; i++)
+                for (int j = 0; j < this.grid.ColumnCount; j++)
+                    this.grid.Rows[i].Cells[j].Selected = false;
+
             this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
             for (int i = 0; i < this.grid.ColumnCount; i++)
                 if (this.grid.Columns[i].Name == pColumnName)
@@ -210,16 +231,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
                 decimal? calcAmt = (decimal?)grid.Rows[thisRow].Cells["calc_amount"].Value ?? 0.0M;
                 decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
+                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
 
-                if (sRowChanged == "M")
-                {
-                    // If the row has already been marked as modified, the user has changed the 
-                    // value they previously entered. That has already been factored into the 
-                    // net_amount and has to be removed so that the correct net amount can be 
-                    // calculated with the revised entered value.  CalcAmt currently holds the 
-                    // previous entered value.
-                    netAmt = netAmt - calcAmt;
-                }
+                // Determine the previous NetAmt
+                decimal? prevNetAmt;
+                if( Approved == "Y" )
+                    // If this is an approved allowance we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    prevNetAmt = netAmt;
+                else
+                    // If this allowance has not been approved, we'll be changing the 
+                    // net amount that was added on to the pervious allowance.  To do this
+                    // we take away this record's change amount which is held in the 
+                    // calc_amount column (the annual_amount has already been changed,
+                    // so we need its value that was previously entered).
+                    prevNetAmt = netAmt - calcAmt;
 
                 // Copy the entered ca_annual_amount to the calc_amount field
                 // (which for other calc types, holds the new entered value).
@@ -227,7 +253,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                                 = grid.Rows[thisRow].Cells["ca_annual_amount"].Value;
 
                 // and update the Net Amount
-                grid.Rows[thisRow].Cells["net_amount"].Value = netAmt + annualAmt;
+                grid.Rows[thisRow].Cells["net_amount"].Value = annualAmt + prevNetAmt;
 
                 // And mark it modified ("M") if it isn't already marked new ("N") or modified.
                 if ( sRowChanged != "N" && sRowChanged != "M" )

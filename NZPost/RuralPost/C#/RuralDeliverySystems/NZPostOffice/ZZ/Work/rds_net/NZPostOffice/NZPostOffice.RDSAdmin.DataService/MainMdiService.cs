@@ -10,6 +10,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.DataService
 {
+    // TJB  Allowances 22-May-2021
+    // 
+    //
     // TJB  RPCR_117  July-2018
     // Added CheckEmailAddress(string p_email) to validate email address format
     // Returns "OK", "null" if null, "empty" if it contains only spaces, 
@@ -26,6 +29,15 @@ namespace NZPostOffice.RDSAdmin.DataService
         private string dataObject;
         private int? intVal;
         private int ll_count;
+        private string _sqlerrmsg;
+
+        public string SQLErrMsg
+        {
+            get
+            {
+                return _sqlerrmsg;
+            }
+        }
        
         public static bool DeleteUserGroup(int group_id)
         {
@@ -264,6 +276,15 @@ namespace NZPostOffice.RDSAdmin.DataService
             return obj.ret;
         }
 
+        // TJB  Allowances 22-May-2021: New
+        // Gnerate updated records for existing allowances when 'hidden' factors are changed
+        public static int GenerateUpdatedAllowances(int alt_key, DateTime new_effective_date, string new_notes, out string SQLerrmsg)
+        {
+            MainMdiService obj = Execute("_GenerateUpdatedAllowances", alt_key, new_effective_date, new_notes);
+            SQLerrmsg = obj.SQLErrMsg;
+            return (int)obj.intVal;
+        }
+
         public static int? GetNextSequence(string sequenceName)
         {
             MainMdiService obj = Execute("_GetNextSequence", sequenceName);
@@ -296,6 +317,41 @@ namespace NZPostOffice.RDSAdmin.DataService
  #endregion
 
         #region Server-side Code
+        [ServerMethod]
+        private void _GenerateUpdatedAllowances(int in_alt_key, DateTime in_new_eff_date, string in_new_notes)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "rd.sp_generate_updated_allowances";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "alt_key", in_alt_key);
+                    pList.Add(cm, "new_effective_date", in_new_eff_date);
+                    pList.Add(cm, "new_notes", in_new_notes);
+
+                    intVal = 0;
+                    _sqlerrmsg = "";
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                intVal = dr.GetInt32(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrmsg = e.Message;
+                        intVal = -1;
+                    }
+                }
+            }
+        }
+       
         [ServerMethod]
         private  void _GetNextSequence(string sequenceName)
         {

@@ -54,7 +54,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("var_ruc_rate_pk", "_var_ruc_rate_pk", "")]
     [System.Serializable()]
 
-	public class MaintainVehAllowance : Entity<MaintainVehAllowance>
+	public class MaintainVehAllowanceV1 : Entity<MaintainVehAllowanceV1>
 	{
         // TJB RPCR_017 July-2010
         // Added GetCurrentAllowances to limit allowance list to current allowances
@@ -832,7 +832,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         {
             get
             {
-                return (string)GetInitialValue("_alt_description;");
+                return (string)GetInitialValue("_alt_description");
             }
         }
 
@@ -1005,12 +1005,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
 
         #region Factory Methods
-		public static MaintainVehAllowance NewMaintainVehAllowance( int? inContractNo )
+		public static MaintainVehAllowanceV1 NewMaintainVehAllowanceV1( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-        public static MaintainVehAllowance[] GetAllMaintainVehAllowance(int? inContractNo, int? inAlctId)
+        public static MaintainVehAllowanceV1[] GetAllMaintainVehAllowanceV1(int? inContractNo, int? inAlctId)
         {
             return Fetch(inContractNo, inAlctId).list;
         }
@@ -1069,31 +1069,26 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 + ", rd.allowance_calc_type alct "
                                 + ", rd.vehicle_allowance_rates var "
                            + " WHERE ca.contract_no = @inContractNo "
-                            + "  AND (ca.ca_effective_date "
-                            + "            >= (select max(ca_effective_date) from rd.contract_allowance"
-                            + "  		      where contract_no = ca.contract_no"
-                            + "  			    and alt_key = ca.alt_key"
-                            + "  				and ca_approved = 'Y')"
-                            + "            or  ca.ca_approved != 'Y')"
-                            + "  AND c.contract_no = ca.contract_no "
-                            + "  AND alt.alt_key = ca.alt_key "
-                            + "  AND alt.alct_id =  @inAlctId "
-                            + "  AND alct.alct_id = alt.alct_id "
-                            + "  AND var.var_id = ca.var_id "
+                           + "  AND c.contract_no = ca.contract_no "
+                           + "  AND alt.alt_key = ca.alt_key "
+                           + "  AND alt.alct_id =  @inAlctId "
+                           + "  AND alct.alct_id = alt.alct_id "
+                           + "  AND (var.var_id = ca.var_id " 
+                           + "       or (ca.var_id is null and var.var_id = 0))"
                            + " ORDER BY alt.alt_description ASC "
                                    + ", ca.ca_effective_date DESC ";
 
                     pList.Add(cm, "inContractNo", inContractNo);
                     pList.Add(cm, "inAlctId", inAlctId);
 
-					List<MaintainVehAllowance> _list = new List<MaintainVehAllowance>();
+					List<MaintainVehAllowanceV1> _list = new List<MaintainVehAllowanceV1>();
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                MaintainVehAllowance instance = new MaintainVehAllowance();
+                                MaintainVehAllowanceV1 instance = new MaintainVehAllowanceV1();
                                 instance._alt_key = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_no = GetValueFromReader<int?>(dr, 1);
                                 instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
@@ -1128,6 +1123,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                                 instance._var_ruc_rate_pk = GetValueFromReader<Decimal?>(dr, 31);
                                 instance._ca_row_changed = dr.GetString(32);
                                 instance._net_amount = GetValueFromReader<decimal?>(dr, 33);
+
+                                instance._calc_amount = instance._annual_amount;
 
                                 instance.MarkOld();
                                 instance.StoreInitialValues();

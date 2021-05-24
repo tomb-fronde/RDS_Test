@@ -24,6 +24,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("var_allowance_pk", "_var_allowance_pk", "vehicle_allowance_rates")]
     [MapInfo("var_insurance_pa", "_var_insurance_pa", "vehicle_allowance_rates")]
     [MapInfo("var_ror_pa", "_var_ror_pa", "vehicle_allowance_rates")]
+    [MapInfo("var_fuel_use_pk","_var_fuel_use_pk", "vehicle_allowance_rates")]
+    [MapInfo("var_fuel_rate","_var_fuel_rate", "vehicle_allowance_rates")]
+    [MapInfo("var_ruc_rate_pk", "_var_ruc_rate_pk", "vehicle_allowance_rates")]
     [MapInfo("var_effective_date", "_var_effective_date", "vehicle_allowance_rates")]
     [MapInfo("var_notes", "_var_notes", "vehicle_allowance_rates")]
     [System.Serializable()]
@@ -59,6 +62,15 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
         private decimal? _var_ror_pa;
 
         [DBField()]
+        private decimal? _var_fuel_use_pk;
+
+        [DBField()]
+        private decimal? _var_fuel_rate;
+
+        [DBField()]
+        private decimal? _var_ruc_rate_pk;
+
+         [DBField()]
         private DateTime? _var_effective_date;
 
         [DBField()]
@@ -222,6 +234,60 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 if (_var_ror_pa != value)
                 {
                     _var_ror_pa = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? VarFuelUsePk
+        {
+            get
+            {
+                CanReadProperty("VarFuelUsePk", true);
+                return _var_fuel_use_pk;
+            }
+            set
+            {
+                CanWriteProperty("VarFuelUsePk", true);
+                if (_var_fuel_use_pk != value)
+                {
+                    _var_fuel_use_pk = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? VarFuelRate
+        {
+            get
+            {
+                CanReadProperty("VarFuelRate", true);
+                return _var_fuel_rate;
+            }
+            set
+            {
+                CanWriteProperty("VarFuelRate", true);
+                if (_var_fuel_rate != value)
+                {
+                    _var_fuel_rate = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual decimal? VarRucRatePk
+        {
+            get
+            {
+                CanReadProperty("VarRucRatePk", true);
+                return _var_ruc_rate_pk;
+            }
+            set
+            {
+                CanWriteProperty("VarRucRatePk", true);
+                if (_var_ruc_rate_pk != value)
+                {
+                    _var_ruc_rate_pk = value;
                     PropertyHasChanged();
                 }
             }

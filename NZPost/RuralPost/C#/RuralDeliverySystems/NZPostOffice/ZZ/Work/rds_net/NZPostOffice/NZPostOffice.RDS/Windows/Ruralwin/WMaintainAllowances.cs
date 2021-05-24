@@ -62,6 +62,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Button cb_delete;
         private TextBox Total;
         private Label Total_t;
+        private TextBox Total_approved;
+        private Label label1;
 
         public Button cb_cancel;
 
@@ -129,6 +131,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_delete = new System.Windows.Forms.Button();
             this.Total = new System.Windows.Forms.TextBox();
             this.Total_t = new System.Windows.Forms.Label();
+            this.Total_approved = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -140,7 +144,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // st_label
             // 
             this.st_label.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.st_label.Location = new System.Drawing.Point(2, 318);
+            this.st_label.Location = new System.Drawing.Point(2, 326);
             this.st_label.Size = new System.Drawing.Size(136, 18);
             this.st_label.Text = "WMaintainAllowances";
             // 
@@ -165,7 +169,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_roi_allowance.FireConstructor = false;
             this.dw_roi_allowance.Location = new System.Drawing.Point(6, 6);
             this.dw_roi_allowance.Name = "dw_roi_allowance";
-            this.dw_roi_allowance.Size = new System.Drawing.Size(960, 264);
+            this.dw_roi_allowance.Size = new System.Drawing.Size(980, 266);
             this.dw_roi_allowance.TabIndex = 1;
             // 
             // dw_activity_allowance
@@ -177,7 +181,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_activity_allowance.FireConstructor = false;
             this.dw_activity_allowance.Location = new System.Drawing.Point(7, 6);
             this.dw_activity_allowance.Name = "dw_activity_allowance";
-            this.dw_activity_allowance.Size = new System.Drawing.Size(959, 264);
+            this.dw_activity_allowance.Size = new System.Drawing.Size(979, 266);
             this.dw_activity_allowance.TabIndex = 1;
             // 
             // dw_time_allowance
@@ -189,7 +193,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_time_allowance.FireConstructor = false;
             this.dw_time_allowance.Location = new System.Drawing.Point(7, 6);
             this.dw_time_allowance.Name = "dw_time_allowance";
-            this.dw_time_allowance.Size = new System.Drawing.Size(959, 264);
+            this.dw_time_allowance.Size = new System.Drawing.Size(979, 266);
             this.dw_time_allowance.TabIndex = 1;
             // 
             // dw_distance_allowance
@@ -201,14 +205,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_distance_allowance.FireConstructor = false;
             this.dw_distance_allowance.Location = new System.Drawing.Point(7, 6);
             this.dw_distance_allowance.Name = "dw_distance_allowance";
-            this.dw_distance_allowance.Size = new System.Drawing.Size(959, 264);
+            this.dw_distance_allowance.Size = new System.Drawing.Size(979, 266);
             this.dw_distance_allowance.TabIndex = 1;
             // 
             // cb_save
             // 
             this.cb_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_save.Location = new System.Drawing.Point(609, 313);
+            this.cb_save.Location = new System.Drawing.Point(614, 317);
             this.cb_save.Name = "cb_save";
             this.cb_save.Size = new System.Drawing.Size(75, 23);
             this.cb_save.TabIndex = 2;
@@ -219,7 +223,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             this.cb_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cb_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.cb_cancel.Location = new System.Drawing.Point(695, 313);
+            this.cb_cancel.Location = new System.Drawing.Point(695, 317);
             this.cb_cancel.Name = "cb_cancel";
             this.cb_cancel.Size = new System.Drawing.Size(81, 23);
             this.cb_cancel.TabIndex = 3;
@@ -260,7 +264,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(969, 276);
+            this.tabPage2.Size = new System.Drawing.Size(989, 278);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "ROI";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -271,7 +275,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(969, 276);
+            this.tabPage3.Size = new System.Drawing.Size(989, 278);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Activity";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -282,7 +286,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(969, 276);
+            this.tabPage4.Size = new System.Drawing.Size(989, 278);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Time";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -293,7 +297,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(969, 276);
+            this.tabPage5.Size = new System.Drawing.Size(989, 278);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Distance";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -301,7 +305,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // cb_delete
             // 
             this.cb_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cb_delete.Location = new System.Drawing.Point(528, 313);
+            this.cb_delete.Location = new System.Drawing.Point(533, 317);
             this.cb_delete.Name = "cb_delete";
             this.cb_delete.Size = new System.Drawing.Size(75, 23);
             this.cb_delete.TabIndex = 5;
@@ -311,29 +315,51 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // 
             // Total
             // 
-            this.Total.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Total.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Total.BackColor = System.Drawing.SystemColors.Control;
             this.Total.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.Total.Location = new System.Drawing.Point(308, 318);
+            this.Total.Location = new System.Drawing.Point(217, 318);
             this.Total.Name = "Total";
             this.Total.Size = new System.Drawing.Size(100, 20);
-            this.Total.TabIndex = 6;
+            this.Total.TabIndex = 0;
             // 
             // Total_t
             // 
-            this.Total_t.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Total_t.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Total_t.AutoSize = true;
-            this.Total_t.Location = new System.Drawing.Point(205, 323);
+            this.Total_t.Location = new System.Drawing.Point(130, 323);
             this.Total_t.Name = "Total_t";
             this.Total_t.Size = new System.Drawing.Size(87, 13);
             this.Total_t.TabIndex = 0;
             this.Total_t.Text = "Total allowances";
+            // 
+            // Total_approved
+            // 
+            this.Total_approved.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Total_approved.BackColor = System.Drawing.SystemColors.Control;
+            this.Total_approved.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.Total_approved.Location = new System.Drawing.Point(418, 317);
+            this.Total_approved.Name = "Total_approved";
+            this.Total_approved.Size = new System.Drawing.Size(100, 20);
+            this.Total_approved.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(334, 322);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Total approved";
             // 
             // WMaintainAllowances
             // 
             this.AcceptButton = this.cb_save;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1009, 344);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Total_approved);
             this.Controls.Add(this.Total_t);
             this.Controls.Add(this.Total);
             this.Controls.Add(this.cb_save);
@@ -342,6 +368,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.Add(this.cb_cancel);
             this.Location = new System.Drawing.Point(46, 55);
             this.Name = "WMaintainAllowances";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Maintain Contract Allowances";
             this.Controls.SetChildIndex(this.cb_cancel, 0);
             this.Controls.SetChildIndex(this.tabControl1, 0);
@@ -350,6 +377,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Controls.SetChildIndex(this.cb_save, 0);
             this.Controls.SetChildIndex(this.Total, 0);
             this.Controls.SetChildIndex(this.Total_t, 0);
+            this.Controls.SetChildIndex(this.Total_approved, 0);
+            this.Controls.SetChildIndex(this.label1, 0);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -495,6 +524,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else
                 tabControl1.SelectedIndex = ((int)il_alctId - 1);
 
+            decimal dTotalAmt;
+            decimal dTotalApproved;
+            of_calc_allowance_total(out dTotalAmt, out dTotalApproved);
+
+            // Display the totals
+            this.Total.Text = dTotalAmt.ToString("###,###.00");
+            this.Total_approved.Text = dTotalApproved.ToString("###,###.00");
+
             // of_set_row_readonly();
         }
 
@@ -506,22 +543,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if (in_alctId == DISTANCE)
-                //{
-                //    if (thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged == "N")
-                //    {
-                //        foundRow = nRow;
-                //        break;
-                //    }
-                //}
-                //else
-                //{
-                //    if (thisDw.GetItem<MaintainAllowance>(nRow).RowChanged == "N")
-                //    {
-                //        foundRow = nRow;
-                //        break;
-                //    }
-                //}
                 if (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged == "N")
                 {
                     foundRow = nRow;
@@ -548,12 +569,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Do everything in a try block so we can catch any errors that might occur
             try
             {
-/*
-                if (dwType == DISTANCE)
-                    thisDw.DataObject.InsertItem<MaintainVehAllowance>(newRow, new MaintainVehAllowance());
-                else // its one of FIXED, ROI, ACTIVITY, TIME
-                    thisDw.DataObject.InsertItem<MaintainAllowance>(newRow, new MaintainAllowance());
-*/
                 thisDw.DataObject.InsertItem<MaintainAllowanceV2>(newRow, new MaintainAllowanceV2());
             }
             catch (Exception e)
@@ -671,200 +686,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             thisDw.GetItem<MaintainAllowanceV2>(oldRow).RowChanged = "X";
             thisDw.GetItem<MaintainAllowanceV2>(oldRow).MarkClean();
 
-            //if (dwType == DISTANCE)
-            //{
-            //    // contract_allowance elements
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).ContractTitle
-            //               = thisDw.GetItem<MaintainVehAllowance>(oldRow).ContractTitle;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).ContractNo
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).ContractNo;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AltKey
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltKey;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).EffectiveDate
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).EffectiveDate;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AnnualAmount
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AnnualAmount;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).PaidToDate = null;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).Approved = "N";
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).DocDescription
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).DocDescription;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).Notes
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).Notes;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).CaVar1
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaVar1;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).CaDistDay
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaDistDay;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).CaHrsWk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaHrsWk;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).EndDate
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).EndDate;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).CaCostsCovered
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).CaCostsCovered;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarId
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarId;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).NetAmount
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).NetAmount;
-
-            //    // allowance_type elements
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AltDescription
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltDescription;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AltRate
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltRate;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AltWksYr
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltWksYr;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AltAcc
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AltAcc;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AlctId
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AlctId;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).AlctDescription
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).AlctDescription;
-
-            //    // vehicle_allowance_rates elements
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarId
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarId;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarDescription
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarDescription;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarCarrierPa
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarCarrierPa;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarRepairsPk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRepairsPk;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarLicencePa
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarLicencePa;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarTyresPk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarTyresPk;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarAllowancePk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarAllowancePk;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarInsurancePa
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarInsurancePa;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarRorPa
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRorPa;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarFuelUsePk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarFuelUsePk;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarFuelRate
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarFuelRate;
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).VarRucRatePk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).VarRucRatePk;
-
-            //    // Mark the new record as New ("N")
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).RowChanged = "M";
-            //    thisDw.GetItem<MaintainVehAllowance>(newRow).MarkNewEntity();
-            //}
-            //else // its one of FIXED, ROI, ACTIVITY, TIME
-            //{
-            //    // contract_allowance elements
-            //    thisDw.GetItem<MaintainAllowance>(newRow).ContractTitle
-            //               = thisDw.GetItem<MaintainAllowance>(oldRow).ContractTitle;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).ContractNo
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).ContractNo;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltKey
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltKey;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).EffectiveDate
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).EffectiveDate;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AnnualAmount
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AnnualAmount;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).NetAmount
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).NetAmount;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).PaidToDate = null;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).Approved = "N";
-            //    thisDw.GetItem<MaintainAllowance>(newRow).DocDescription
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).DocDescription;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).Notes
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).Notes;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).CaVar1
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).CaVar1;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).CaDistDay
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).CaDistDay;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).CaHrsWk
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).CaHrsWk;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).EndDate
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).EndDate;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).CaCostsCovered
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).CaCostsCovered;
-
-            //    // allowance_type elements
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltDescription
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltDescription;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltRate
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltRate;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltWksYr
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltWksYr;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltAcc
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltAcc;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltFuelPk
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltFuelPk;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AltRucPk
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AltRucPk;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AlctId
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AlctId;
-            //    thisDw.GetItem<MaintainAllowance>(newRow).AlctDescription
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).AlctDescription;
-
-            //    // Mark the new record 'New' ("N")
-            //    thisDw.GetItem<MaintainAllowance>(newRow).RowChanged = "N";
-            //    thisDw.GetItem<MaintainAllowance>(newRow).MarkNewEntity();
-            //}
-
-            //// Put the old record's changed values back to their initial values
-            //// (there are only a few possibilities) and mark it clean
-            //if (dwType == DISTANCE)
-            //{
-            //    // contract_allowance elements
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).EffectiveDate
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialEffDate;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).AnnualAmount
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialAmount;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).NetAmount
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialNetAmount;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).Approved
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialApproved;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).DocDescription
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialDocDescr;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).Notes
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialNotes;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).CaVar1
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialCaVar1;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).CaDistDay
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialDistDay;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).CaHrsWk
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialHrsWk;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).CaCostsCovered
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialCostsCovered;
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).VarId
-            //             = thisDw.GetItem<MaintainVehAllowance>(oldRow).InitialVarId;
-
-            //    // Mark the old record "clean" so it doesn't trigger an update
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).RowChanged = "X";
-            //    thisDw.GetItem<MaintainVehAllowance>(oldRow).MarkClean();
-            //}
-            //else // its one of FIXED, ROI, ACTIVITY, TIME
-            //{
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).EffectiveDate
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialEffDate;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).AnnualAmount
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialAmount;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).NetAmount
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialNetAmount;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).Approved
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialApproved;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).DocDescription
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialDocDescr;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).Notes
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialNotes;
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).CaVar1
-            //             = thisDw.GetItem<MaintainAllowance>(oldRow).InitialCaVar1;
-
-            //    // Mark the old record "clean" so it doesn't trigger an update
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).RowChanged = "X";
-            //    thisDw.GetItem<MaintainAllowance>(oldRow).MarkClean();
 
             //    //of_show_record(thisDw, dwType, oldRow, true, "Fix Old row");
-            //    MessageBox.Show("New record isNew " + (thisDw.GetItem<MaintainAllowance>(newRow).IsNew).ToString()
-            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowance>(newRow).IsDirty).ToString() + "\n"
-            //                   + "Old record isNew " + (thisDw.GetItem<MaintainAllowance>(oldRow).IsNew).ToString()
-            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowance>(oldRow).IsDirty).ToString()
+            //    MessageBox.Show("New record isNew " + (thisDw.GetItem<MaintainAllowanceV2>(newRow).IsNew).ToString()
+            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowanceV2>(newRow).IsDirty).ToString() + "\n"
+            //                   + "Old record isNew " + (thisDw.GetItem<MaintainAllowanceV2>(oldRow).IsNew).ToString()
+            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowanceV2>(oldRow).IsDirty).ToString()
             //                   , "of_add_new_record - Debugging");
-
-            //}
 
             // Update the display
             thisDw.Refresh();
@@ -876,10 +704,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if (dwType == DISTANCE)
-                //    thisDw.GetItem<MaintainVehAllowance>(nRow).MarkClean();
-                //else
-                //    thisDw.GetItem<MaintainAllowance>(nRow).MarkClean();
                 thisDw.GetItem<MaintainAllowanceV2>(nRow).MarkClean();
             }
         }
@@ -890,19 +714,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // when being saved and not re-inserted.
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if (dwType == DISTANCE
-                //    && thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged == "N")
-                //{
-                //    thisDw.GetItem<MaintainVehAllowance>(nRow).MarkDirtyEntity();
-                //    //thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged = "M";
-                //}
-                //else
-                //    if (dwType != DISTANCE
-                //        && thisDw.GetItem<MaintainAllowance>(nRow).RowChanged == "N")
-                //    {
-                //        thisDw.GetItem<MaintainAllowance>(nRow).MarkDirtyEntity();
-                //      //  thisDw.GetItem<MaintainAllowance>(nRow).RowChanged = "M";
-                //    }
                 if(thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged == "N")
                     thisDw.GetItem<MaintainAllowanceV2>(nRow).MarkDirtyEntity();
 
@@ -931,7 +742,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Sets all rows in all tabs to readonly if the allowance has been paid (PaidTo date not null)
             for (int nRow = 0; nRow < idw_fixed_allowance.RowCount; nRow++)
             {
-                //if ((idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).PaidToDate) == null)
                 if ((idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).PaidToDate) == null)
                 {
                     ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridRowReadOnly(nRow, true);
@@ -946,7 +756,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_fixed_allowance.DataObject.Refresh();
             for (int nRow = 0; nRow < idw_roi_allowance.RowCount; nRow++)
             {
-                //if ((idw_roi_allowance.GetItem<MaintainAllowance>(nRow).PaidToDate) == null)
                 if ((idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).PaidToDate) == null)
                 {
                     ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
@@ -961,7 +770,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_roi_allowance.DataObject.Refresh();
             for (int nRow = 0; nRow < idw_activity_allowance.RowCount; nRow++)
             {
-                //if ((idw_activity_allowance.GetItem<MaintainAllowance>(nRow).PaidToDate) == null)
                 if ((idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).PaidToDate) == null)
                 {
                     ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
@@ -976,7 +784,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_activity_allowance.DataObject.Refresh();
             for (int nRow = 0; nRow < idw_time_allowance.RowCount; nRow++)
             {
-                //if ((idw_time_allowance.GetItem<MaintainAllowance>(nRow).PaidToDate) == null)
                 if ((idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).PaidToDate) == null)
                 {
                     ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
@@ -991,7 +798,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_time_allowance.DataObject.Refresh();
             for (int nRow = 0; nRow < idw_distance_allowance.RowCount; nRow++)
             {
-                //if ((idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow).PaidToDate) == null)
                 if ((idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).PaidToDate) == null)
                 {
                     ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
@@ -1008,25 +814,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public override void close()
         {
-            //?base.close();
-
-            //int ll_sheetcount;
-            //int ll_rc;
-            //Dictionary<int, WContract2001> lw_opensheets = new Dictionary<int, WContract2001>();
-            //FormBase lw_frame;
-            //lw_frame = StaticVariables.gnv_app.of_getframe();
-            //?if ((lw_frame.inv_sheetmanager != null) == false) {
-            //    lw_frame.inv_sheetmanager = new NCstWinsrvSheetmanager();
-            //}
-            //?ll_sheetcount = lw_frame.inv_sheetmanager.of_getsheetsbyclass(lw_opensheets, "w_contract2001");
-            //if (ll_sheetcount < 2 && ll_sheetcount > 0) {
-            //    ll_rc = lw_opensheets[1].idw_fixed_allowances.Reset();
-            //    ll_rc = lw_opensheets[1].idw_fixed_allowances.Retrieve(new object[]{il_contract});
-            //    ll_rc = lw_opensheets[1].idw_fixed_allowances.SelectRow(0, false);
-            //    ll_rc = lw_opensheets[1].idw_fixed_allowances.SelectRow(il_caRow, true);
-            //}
-            //? this.Close();//close(this);
-
             //  Tell the parent to refresh
             ((WContract2001)StaticVariables.window).idw_allowances.Reset();
             ((WContract2001)StaticVariables.window).idw_allowances.Retrieve(new object[] { il_contract });
@@ -1115,22 +902,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             column_name = "";
             
             // Get some data to check
-            //if (dwType == DISTANCE)
-            //{
-            //    ll_altkey = thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-            //    sAltDescription = thisDw.GetItem<MaintainVehAllowance>(nRow).AltDescription;
-            //    ld_effdate = thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-            //    ldc_amount = thisDw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-            //    sCaNotes = thisDw.GetItem<MaintainVehAllowance>(nRow).Notes;
-            //}
-            //else
-            //{
-            //    ll_altkey = thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-            //    sAltDescription = thisDw.GetItem<MaintainAllowance>(nRow).AltDescription;
-            //    ld_effdate = thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-            //    ldc_amount = thisDw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-            //    sCaNotes = thisDw.GetItem<MaintainAllowance>(nRow).Notes;
-            //}
             ll_altkey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
             sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
             ld_effdate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
@@ -1179,20 +950,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             bool thisIsNew;
 
             ErrMsg = "";
-            //if (dwType == DISTANCE)
-            //{
-            //    sAltDescription = thisDw.GetItem<MaintainVehAllowance>(nRow).AltDescription;
-            //    initialEffDate = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialEffDate;
-            //    sRowChanged = thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged;
-            //    thisIsNew = thisDw.GetItem<MaintainVehAllowance>(nRow).IsNew;
-            //}
-            //else
-            //{
-            //    sAltDescription = thisDw.GetItem<MaintainAllowance>(nRow).AltDescription;
-            //    initialEffDate = thisDw.GetItem<MaintainAllowance>(nRow).InitialEffDate;
-            //    sRowChanged = thisDw.GetItem<MaintainAllowance>(nRow).RowChanged;
-            //    thisIsNew = thisDw.GetItem<MaintainAllowance>(nRow).IsNew;
-            //}
             sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
             initialEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate;
             sRowChanged = thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
@@ -1209,19 +966,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (int i = 0; i < thisDw.RowCount; i++)
             {
                 // If this is the row of the date we're checking, skip it.
-                //if( i == nRow ) continue;
+                if( i == nRow ) continue;
 
                 //// Get some values we need below
-                //if( dwType == DISTANCE )
-                //{
-                //    thisAltKey = thisDw.GetItem<MaintainVehAllowance>(i).AltKey;
-                //    thisEffDate = (DateTime)thisDw.GetItem<MaintainVehAllowance>(i).EffectiveDate;
-                //}
-                //else
-                //{
-                //    thisAltKey = thisDw.GetItem<MaintainAllowance>(i).AltKey;
-                //    thisEffDate = (DateTime)thisDw.GetItem<MaintainAllowance>(i).EffectiveDate;
-                //}
                 thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(i).AltKey;
                 thisEffDate = (DateTime)thisDw.GetItem<MaintainAllowanceV2>(i).EffectiveDate;
 
@@ -1636,22 +1383,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             if( ! bInitial )
             {
-                //if( dwType == DISTANCE )
-                //{
-                //    altKey = thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //    altDescription = thisDw.GetItem<MaintainVehAllowance>(nRow).AltDescription;
-                //    effDate = thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-                //    annualAmount = thisDw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-                //    netAmount = thisDw.GetItem<MaintainVehAllowance>(nRow).NetAmount;
-                //}
-                //else
-                //{
-                //    altKey = thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //    altDescription = thisDw.GetItem<MaintainAllowance>(nRow).AltDescription;
-                //    effDate = thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                //    annualAmount = thisDw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-                //    netAmount = thisDw.GetItem<MaintainAllowance>(nRow).NetAmount;
-                //}
                 altKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 altDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
                 effDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
@@ -1660,22 +1391,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             }
             else
             {
-                //if( dwType == DISTANCE )
-                //{
-                //    altKey = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialAltKey;
-                //    altDescription = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialAltDescr;
-                //    effDate = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialEffDate;
-                //    annualAmount = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialAmount;
-                //    netAmount = thisDw.GetItem<MaintainVehAllowance>(nRow).InitialNetAmount;
-                //}
-                //else
-                //{
-                //    altKey = thisDw.GetItem<MaintainAllowance>(nRow).InitialAltKey;
-                //    altDescription = thisDw.GetItem<MaintainAllowance>(nRow).InitialAltDescr;
-                //    effDate = thisDw.GetItem<MaintainAllowance>(nRow).InitialEffDate;
-                //    annualAmount = thisDw.GetItem<MaintainAllowance>(nRow).InitialAmount;
-                //    netAmount = thisDw.GetItem<MaintainAllowance>(nRow).InitialNetAmount;
-                //}
                 altKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialAltKey;
                 altDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialAltDescr;
                 effDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate;
@@ -1728,16 +1443,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     // Get the this row's effective date 
                     // (use GetValueOrDefault in case it's null (which it shouldn't be))
-                    //if (dwType == DISTANCE)
-                    //{
-                    //    thisAltKey  = thisDw.GetItem<MaintainVehAllowance>(thisRow).AltKey;
-                    //    thisEffDate = thisDw.GetItem<MaintainVehAllowance>(thisRow).EffectiveDate.GetValueOrDefault();
-                    //}
-                    //else
-                    //{
-                    //    thisAltKey = thisDw.GetItem<MaintainAllowance>(thisRow).AltKey;
-                    //    thisEffDate = thisDw.GetItem<MaintainAllowance>(thisRow).EffectiveDate.GetValueOrDefault();
-                    //}
                     thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(thisRow).AltKey;
                     thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(thisRow).EffectiveDate.GetValueOrDefault();
 
@@ -1768,6 +1473,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellSelected(nRow, sColumn, true);
         }
 
+        private void of_setCellFocus(int dwType, int nRow, string sColumn)
+        {
+            if (dwType == FIXED)
+                ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
+            else if (dwType == ROI)
+                ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
+            else if (dwType == ACTIVITY)
+                ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
+            else if (dwType == TIME)
+                ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
+            else if (dwType == DISTANCE)
+                ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
+        }
+
         private bool of_validate_records(URdsDw thisDw, int dwType)
         {
             int? thisAltKey;
@@ -1778,22 +1497,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
                 // Get some values we'll use below
-                //if (dwType == DISTANCE)
-                //{
-                //    thisAltKey  = thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //    thisEffDate = thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-                //    sRowChanged = (thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged) ?? "X";
-                //    Approved    = (thisDw.GetItem<MaintainVehAllowance>(nRow).Approved) ?? "N";
-                //    isNew       = thisDw.GetItem<MaintainVehAllowance>(nRow).IsNew;
-                //}
-                //else
-                //{
-                //    thisAltKey  = thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //    thisEffDate = thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                //    sRowChanged = (thisDw.GetItem<MaintainAllowance>(nRow).RowChanged) ?? "X";
-                //    Approved    = (thisDw.GetItem<MaintainAllowance>(nRow).Approved) ?? "N";
-                //    isNew       = thisDw.GetItem<MaintainAllowance>(nRow).IsNew;
-                //}
                 thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
                 sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
@@ -1809,7 +1512,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 is_errmsg = of_validate_fields(thisDw, dwType, nRow, out errColumn);
                 if (is_errmsg.Length != 0)
                 {
-                    of_setselect(dwType, nRow, errColumn);
+                    //of_setselect(dwType, nRow, errColumn);
+                    of_setCellFocus(dwType, nRow, errColumn);
                     MessageBox.Show(is_errmsg, "Allowance Validation Error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return false;
@@ -1823,15 +1527,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // Only validate the effective date if a new record will be created
                 if( (sRowChanged == "M" && Approved == "Y") || isNew )
                 {
-                    if (!of_validate_effdate(thisDw, ROI, nRow, thisAltKey, thisEffDate, out is_errmsg))
+                    if (!of_validate_effdate(thisDw, dwType, nRow, thisAltKey, thisEffDate, out is_errmsg))
                     {
                         if (is_errmsg.Length != 0)
                         {
-                            of_setselect(dwType, nRow, "ca_effective_date");
+                            //of_setselect(dwType, nRow, "ca_effective_date");
+                            of_setCellFocus(dwType, nRow, "ca_effective_date");
                             MessageBox.Show(is_errmsg, "Allowance Validation Error"
                                            , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
-                        of_setselect(dwType, nRow, "ca_effective_date");
+                        //of_setselect(dwType, nRow, "ca_effective_date");
+                        of_setCellFocus(dwType, nRow, "ca_effective_date");
                         return false;
                     }
                 }
@@ -1851,32 +1557,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             for (nRow = 0; nRow < nRows; nRow++ )
             {
-                //if (dwType == DISTANCE)
-                //    sRowChanged = (thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged) ?? "X";
-                //else
-                //    sRowChanged = (thisDw.GetItem<MaintainAllowance>(nRow).RowChanged) ?? "X";
                 sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
 
                 if (sRowChanged != "N" && sRowChanged != "C" && sRowChanged != "M")
                     continue;
 
                 // Check to see if the net amount has changed
-                //if (dwType == DISTANCE)
-                //{
-                //    AltKey = thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //    EffDate = thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-                //    Approved = thisDw.GetItem<MaintainVehAllowance>(nRow).Approved;
-                //    NetAmt = (thisDw.GetItem<MaintainVehAllowance>(nRow).NetAmount) ?? 0.0M;
-                //    initialNetAmt = (thisDw.GetItem<MaintainVehAllowance>(nRow).InitialNetAmount) ?? 0.0M;
-                //}
-                //else
-                //{
-                //    AltKey = thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //    EffDate = thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                //    Approved = thisDw.GetItem<MaintainAllowance>(nRow).Approved;
-                //    NetAmt = (thisDw.GetItem<MaintainAllowance>(nRow).NetAmount) ?? 0.0M;
-                //    initialNetAmt = (thisDw.GetItem<MaintainAllowance>(nRow).InitialNetAmount) ?? 0.0M;
-                //}
                 AltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 EffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
                 Approved = thisDw.GetItem<MaintainAllowanceV2>(nRow).Approved;
@@ -1889,10 +1575,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         // If the row has been marked as Modified and it hasn't been marked Approved
                         // change its mark to Changed so it won't be inserted.
-                        //if (dwType == DISTANCE)
-                        //    thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged = "C";
-                        //else
-                        //    thisDw.GetItem<MaintainAllowance>(nRow).RowChanged = "C";
                         thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged = "C";
                     }
 
@@ -1907,7 +1589,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         result = is_eff_date_unique(thisDw, dwType, EffDate, AltKey, nRow);
                         if (result == false)
                         {
-                            of_setselect(dwType, nRow, "ca_effective_date");
+                            //of_setselect(dwType, nRow, "ca_effective_date");
+                            of_setCellFocus(dwType, nRow, "ca_effective_date");
                             // The new record was not added successfully
                             MessageBox.Show("The effective date is not unique; please enter a new date \n"
                                            , "Validation error"
@@ -1923,7 +1606,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                             { // If an error occurs at this point, its usually a primary Key error
                                 // (non-unique effective date) but that has usually been caught in
                                 // is_eff_date_unique() ... so this error 'shouldn't' happen
-                                of_setselect(dwType, nRow, "ca_effective_date");
+                                //of_setselect(dwType, nRow, "ca_effective_date");
+                                of_setCellFocus(dwType, nRow, "ca_effective_date");
                                 // The new record was not added successfully
                                 MessageBox.Show("New record insert failed \n"
                                                + "Error = " + errmsg
@@ -1951,43 +1635,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Scan the list and save any changed records
             for (nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if( dwType == DISTANCE )
-                //    sRowChanged = (thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged) ?? "X";
-                //else
-                //    sRowChanged = (thisDw.GetItem<MaintainAllowance>(nRow).RowChanged) ?? "X";
                 sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
 
                 if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
                     continue;
 
                 // Save the record as a clean one.
-                //if (dwType == DISTANCE)
-                //    thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged = "X";
-                //else
-                //    thisDw.GetItem<MaintainAllowance>(nRow).RowChanged = "X";
                 thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged = "X";
 
                 if (sRowChanged == "M")
                 {
-                    //if (dwType == DISTANCE)
-                    //    thisDw.GetItem<MaintainVehAllowance>(nRow).MarkNewEntity();
-                    //else
-                    //    thisDw.GetItem<MaintainAllowance>(nRow).MarkNewEntity();
                     thisDw.GetItem<MaintainAllowanceV2>(nRow).MarkNewEntity();
                 }
 
                 thisDw.Save();
 
-                //if (dwType == DISTANCE)
-                //{
-                //    SQLCode = thisDw.GetItem<MaintainVehAllowance>(nRow).SQLCode;
-                //    SQLErrText = thisDw.GetItem<MaintainVehAllowance>(nRow).SQLErrText;
-                //}
-                //else
-                //{
-                //    SQLCode = thisDw.GetItem<MaintainAllowance>(nRow).SQLCode;
-                //    SQLErrText = thisDw.GetItem<MaintainAllowance>(nRow).SQLErrText;
-                //}
                 SQLCode = thisDw.GetItem<MaintainAllowanceV2>(nRow).SQLCode;
                 SQLErrText = thisDw.GetItem<MaintainAllowanceV2>(nRow).SQLErrText;
 
@@ -1995,10 +1657,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     if (SQLErrText.Contains("PRIMARY KEY"))
                     {
-                        //if (dwType == DISTANCE)
-                        //    effdate = (DateTime)thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-                        //else
-                        //    effdate = (DateTime)thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
                         effdate = (DateTime)thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
 
                         errmsg = "Please change the effective date to a date later than "
@@ -2008,7 +1666,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         errmsg = "Error text: " + SQLErrText;
                     }
-                    of_setselect(FIXED, nRow, "alt_key");
+                    //of_setselect(FIXED, nRow, "alt_key");
+                    of_setCellFocus(FIXED, nRow, "alt_key");
                     MessageBox.Show("Failed to update Allowance. \n\n"
                                    + errmsg, "Database Error"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -2016,10 +1675,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // NOTE: the Save could involve more than one change
                     // If the save failed, reset the RowChanged value so its current value is "remembered" if
                     // we manage to save the record later.
-                    //if (dwType == DISTANCE)
-                    //    thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged = sRowChanged;
-                    //else
-                    //    thisDw.GetItem<MaintainAllowance>(nRow).RowChanged = sRowChanged;
                     thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged = sRowChanged;
 
                     return false;
@@ -2056,9 +1711,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Returns false if errors are detected, true otherwise
 
             cb_save.Focus();
-            int nRow, ll_error;
+            int nRow, ll_error, nSaved, mDeleted;
             is_errmsg = "";
-            bool bSaveOK = true;
             int nChanged, nDeleted;
             Decimal? dAmount = null;
             string sRowChanged;
@@ -2070,10 +1724,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             idw_distance_allowance.DataObject.AcceptText();
 
             decimal dTotalAmt;
-            of_calc_allowance_total(out dTotalAmt);
+            decimal dTotalApproved;
+            of_calc_allowance_total(out dTotalAmt, out dTotalApproved);
 
-            // Display the total
+            // Display the totals
             this.Total.Text = dTotalAmt.ToString("###,###.00");
+            this.Total_approved.Text = dTotalApproved.ToString("###,###.00");
+
+            nSaved = 0;
+            mDeleted = 0;
 
             // Check each tab for changes
             /*************************
@@ -2106,134 +1765,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return false;
                 }
 
-/* [This is the "new" code, replaced with of_validate_records(), of_insert_new_records() and of_save_changes()]
-                for (nRow = 0; nRow < dw_fixed_allowance.RowCount; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    is_errmsg = of_validate_fields(dw_fixed_allowance, FIXED, nRow);
-
-                    if (is_errmsg.Length != 0)
-                    {
-                        of_setselect(FIXED, nRow, "ca_effective_date");
-                        //((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellSelected(nRow, "ca_effective_date", true);
-                        MessageBox.Show(is_errmsg, "Fixed Allowance Validation Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return false;
-                    }
-                    if (!of_validate_effdate(dw_fixed_allowance, FIXED, nRow, out is_errmsg))
-                    {
-                        if (is_errmsg.Length != 0)
-                        {
-                            of_setselect(FIXED, nRow, "ca_effective_date");
-                            MessageBox.Show(is_errmsg, "Fixed Allowance Validation Error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                        of_setselect(FIXED, nRow, "ca_effective_date");
-                        //((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellSelected(nRow, "ca_effective_date", true);
-                        return false;
-                    }
-                }
-
-                // Now, scan the list again and insert new records for any that have changed the net amount
-                int nRows = dw_fixed_allowance.RowCount;
-                Decimal NetAmt, initialNetAmt;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    // Check to see if the net amount has changed
-                    NetAmt = idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).NetAmount.GetValueOrDefault();
-                    initialNetAmt = idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).InitialNetAmount.GetValueOrDefault();
-                    if (NetAmt != initialNetAmt)
-                    {
-                        // The Net amount has been changed.  See if this is a modified existing record ("M").
-                        // If so, this is a candidate for the creation of a new record.
-                        string RowChanged = (idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).RowChanged) ?? "X";
-                        if (RowChanged == "M")
-                        {
-                            // Although the effective date has been validated, that process hasn't 
-                            // ensured that it is unique.  It needs to be unique or there will be 
-                            // a primary key violation when creating the new record.
-                            int? AltKey = idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).AltKey;
-                            DateTime? EffDate = idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                            if (is_eff_date_unique( idw_fixed_allowance, FIXED, EffDate, AltKey, nRow ))
-                            {
-                                // The effective date is unique; we can go ahead and create a new record with the changed details
-                                //Decimal changeAmt;
-                                //changeAmt = NetAmt - initialNetAmt;
-                                string errmsg = of_add_new_record(idw_fixed_allowance, FIXED, nRow);
-                                if ( errmsg != "")
-                                {
-                                    of_setselect(FIXED, nRow, "ca_effective_date");
-                                    //((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellSelected(nRow, "alt_key", true);
-                                    // The new record was not added successfully
-                                    MessageBox.Show("New FIXED record insert failed \n"
-                                                   + "Error = " + errmsg
-                                                   , "Save error");
-
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-
-                    // NOTE: if any new records are added, the rowcount will increase
-                    nRows = dw_fixed_allowance.RowCount;
-                }
-
-                // Now, scan the list again and save any changed records
-                for (nRow = 0; nRow < dw_fixed_allowance.RowCount; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    // Save the record as a clean one.
-                    ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = "X";
-                    if (sRowChanged == "N")
-                        ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).MarkNewEntity();
-                    idw_fixed_allowance.Save();
-                    if (idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).SQLCode != 0)
-                    {
-                        string errmsg = idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).SQLErrText;
-                        if (errmsg.Contains("PRIMARY KEY"))
-                        {
-                            DateTime errdate = (DateTime)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                            errmsg = "Please change the effective date to a date later than "
-                                        + errdate.ToString("dd/MM/yyyy");
-                        }
-                        else
-                        {
-                            errmsg = "Error text: " + errmsg;
-                        }
-                        of_setselect(FIXED, nRow, "alt_key");
-                        //((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellSelected(nRow, "alt_key", true);
-                        MessageBox.Show("Failed to update ROI Allowance. \n\n"
-                                       + errmsg, "Database Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                        // NOTE: the Save could involve more than one change
-                        // If the save failed, reset the RowChanged value so its current value is "remembered" if
-                        // we manage to save the record later.
-                        ((MaintainAllowance)idw_fixed_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = sRowChanged;
-
-                        return false;
-                    }
-                }
-*/
-                if( bSaveOK )
-                    MessageBox.Show("Saved fixed allowance changes");
+                MessageBox.Show("Saved fixed allowance changes");
+                nSaved++;
             }
             // If there are any records to delete, do so
             else if (nDeleted > 0)
             {
                 idw_fixed_allowance.Save();
                 //MessageBox.Show("Fixed allowance record deleted.");
+                mDeleted++;
             }
 
             /*******************************************************************
@@ -2244,6 +1784,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // We can't rely on the user having focus on the changed row(s), 
             // so nRow = idw_roi_allowance.GetRow() isn't useful.
 
+            // If there are changed ROI allowance records ...
             if (nChanged > 0)
             {
                 // Scan the list for changed records and validate any that are found
@@ -2264,131 +1805,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return false;
                 }
 
-/* [This is the "new" code, replaced with of_validate_records(), of_insert_new_records() and of_save_changes]
-                for (nRow = 0; nRow < dw_roi_allowance.RowCount; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    is_errmsg = of_validate_fields(dw_roi_allowance, ROI, nRow);
-
-                    if (is_errmsg.Length != 0)
-                    {
-                        of_setselect(ROI, nRow, "ca_effective_date");
-                        //((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellSelected(nRow, "ca_effective_date", true);
-                        MessageBox.Show(is_errmsg, "ROI Allowance Validation Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return false;
-                    }
-                    if (!of_validate_effdate(dw_roi_allowance, ROI, nRow, out is_errmsg))
-                    {
-                        if (is_errmsg.Length != 0)
-                        {
-                            of_setselect(ROI, nRow, "ca_effective_date");
-                            //((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellSelected(nRow, "ca_effective_date", true);
-                            MessageBox.Show(is_errmsg, "ROI Allowance Validation Error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                        of_setselect(ROI, nRow, "ca_effective_date");
-                        return false;
-                    }
-                }
-
-                // Now, scan the list again and insert new records for any that have changed the net amount
-                int nRows = dw_roi_allowance.RowCount;
-                Decimal NetAmt, initialNetAmt;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    // Check to see if the net amount has changed
-                    NetAmt = idw_roi_allowance.GetItem<MaintainAllowance>(nRow).NetAmount.GetValueOrDefault();
-                    initialNetAmt = idw_roi_allowance.GetItem<MaintainAllowance>(nRow).InitialNetAmount.GetValueOrDefault();
-                    if (NetAmt != initialNetAmt)
-                    {
-                        // The Net amount has been changed.  See if this is a modified existing record ("M").
-                        // If so, this is a candidate for the creation of a new record.
-                        string RowChanged = (idw_roi_allowance.GetItem<MaintainAllowance>(nRow).RowChanged) ?? "X";
-                        if (RowChanged == "M")
-                        {
-                            // Although the effective date has been validated, that process hasn't 
-                            // ensured that it is unique.  It needs to be unique or there will be 
-                            // a primary key violation when creating the new record.
-                            int? AltKey = idw_roi_allowance.GetItem<MaintainAllowance>(nRow).AltKey;
-                            DateTime? EffDate = dw_roi_allowance.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                            if (is_eff_date_unique(dw_roi_allowance, ROI, EffDate, AltKey, nRow))
-                            {
-                                // The effective date is unique; we can go ahead and create a new record with the changed details
-                                string errmsg = of_add_new_record(idw_roi_allowance, ROI, nRow);
-                                if (errmsg != "")
-                                {
-                                    of_setselect(ROI, nRow, "alt_key");
-                                    //((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellSelected(nRow, "alt_key", true);
-                                    // The new record was not added successfully
-                                    MessageBox.Show("New ROI record insert failed \n"
-                                                   + "Error = " + errmsg
-                                                   , "Save error");
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                    // NOTE: if any new records are added, the rowcount will increase
-                    nRows = dw_roi_allowance.RowCount;
-                }
-
-                // Now, scan the list again and save any changed records
-                for (nRow = 0; nRow < dw_roi_allowance.RowCount; nRow++)
-                {
-                    sRowChanged = ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
-                        continue;
-
-                    // Save the record as a clean one.
-                    ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = "X";
-                    if (sRowChanged == "N")
-                        ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).MarkNewEntity();
-                    idw_roi_allowance.Save();
-                    if (idw_roi_allowance.GetItem<MaintainAllowance>(nRow).SQLCode != 0)
-                    {
-                        string errmsg = idw_roi_allowance.GetItem<MaintainAllowance>(nRow).SQLErrText;
-                        if (errmsg.Contains("PRIMARY KEY"))
-                        {
-                            DateTime errdate = (DateTime)idw_roi_allowance.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                            errmsg = "Please change the effective date to a date later than "
-                                        + errdate.ToString("dd/MM/yyyy");
-                        }
-                        else
-                        {
-                            errmsg = "Error text: " + errmsg;
-                        }
-                        of_setselect(ROI, nRow, "alt_key");
-                        //((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellSelected(nRow, "alt_key", true);
-                        MessageBox.Show("Failed to update ROI Allowance. \n\n"
-                                       + errmsg, "Database Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                        // NOTE: the Save could involve more than one change
-                        // If the save failed, reset the RowChanged value so its current value is "remembered" if
-                        // we manage to save the record later.
-                        ((MaintainAllowance)idw_roi_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = sRowChanged;
-
-                        //bSaveOK = false;
-                         return false;
-                    }
-                }
-*/
-                if (bSaveOK)
-                    MessageBox.Show("Saved ROI allowance changes");
+                MessageBox.Show("Saved ROI allowance changes");
+                nSaved++;
             }
             // If there are any records to delete, do so
             else if (nDeleted > 0)
             {
                 idw_roi_allowance.Save();
-                MessageBox.Show("ROI Allowance record deleted");
+                //MessageBox.Show("ROI Allowance record deleted");
+                mDeleted++;
             }
 
             /*******************************************************************
@@ -2397,7 +1822,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nChanged = idw_activity_allowance.ModifiedCount();
             nDeleted = (idw_activity_allowance.DataObject).DeletedCount;
 
-            // If there are changed fixed allowance records ...
+            // If there are changed activity allowance records ...
             if (nChanged > 0)
             {
                 // Scan the list for changed records and validate any that are found
@@ -2419,56 +1844,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return false;
                 }
 
-/* This is the older method
-            nRow     = idw_activity_allowance.GetRow();
-            if (nRow >= 0)
-                dAmount = idw_activity_allowance.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-            if (nChanged > 0 || nDeleted > 0 || (nRow >= 0 && dAmount == null))
-            {
-                ll_error = wf_validate("Activity");
-
-                if (ll_error == FAILURE)
-                {
-                    MessageBox.Show(is_errmsg, "Activity Allowance Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    bSaveOK = false;
-                }
-                else
-                {
-                    // If this row is marked Modified ("M") we want to insert it as a new row
-                    // to preserve the change history.  Otherwise it will be updated.
-                    sRowChanged = ((MaintainAllowance)idw_activity_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (sRowChanged == "M")
-                        ((MaintainAllowance)idw_activity_allowance.GetItem<MaintainAllowance>(nRow)).MarkNewEntity();
-                    // Clear the RowChanged (to an arbitrary "X") so its current value isn't "remembered"
-                    ((MaintainAllowance)idw_activity_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = "X";
-
-                    idw_activity_allowance.Save();
-                    if (idw_activity_allowance.GetItem<MaintainAllowance>(0).SQLCode != 0)
-                    {
-                        MessageBox.Show("Failked to update Activity Allowance.  \n\n"
-                                       + "Error Code: " + idw_activity_allowance.GetItem<MaintainAllowance>(0).SQLCode.ToString() + "\n\n"
-                                       + "Error Text: " + idw_activity_allowance.GetItem<MaintainAllowance>(0).SQLErrText
-                                       , "Database Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        bSaveOK = false;
-
-                        // If the save failed, reset the RowChanged value so its current value is "remembered" if
-                        // we manage to save the record later.
-                        ((MaintainAllowance)idw_activity_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = sRowChanged;
-                    }
-                    else
-                        MessageBox.Show("Saved activity allowance changes");
-                }
- */
-                if (bSaveOK)
-                    MessageBox.Show("Saved ROI allowance changes");
+                MessageBox.Show("Saved Activity allowance changes");
+                nSaved++;
             }
             // If there are any records to delete, do so
             else if (nDeleted > 0)
             {
                 idw_activity_allowance.Save();
-                MessageBox.Show("Activity Allowance record deleted");
+                //MessageBox.Show("Activity Allowance record deleted");
+                mDeleted++;
             }
 
             /*******************************************************************
@@ -2477,78 +1861,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nChanged = idw_time_allowance.ModifiedCount();
             nDeleted = (idw_time_allowance.DataObject).DeletedCount;
 
-            // If there are changed fixed allowance records ...
+            // If there are changed time allowance records ...
             if (nChanged > 0)
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_activity_allowance, ACTIVITY) == false)
+                if (of_validate_records(idw_time_allowance, TIME) == false)
                 {
                     return false;
                 }
 
                 // Now, scan the list again and insert new records for any that have 
                 // changed the net amount
-                if (of_insert_new_records(dw_activity_allowance, ACTIVITY) == false)
+                if (of_insert_new_records(idw_time_allowance, TIME) == false)
                 {
                     return false;
                 }
 
                 // Now, scan the list again and save any changed records
-                if (of_save_changes(dw_activity_allowance, ACTIVITY) == false)
+                if (of_save_changes(idw_time_allowance, TIME) == false)
                 {
                     return false;
                 }
 
-/* This is the older method
-            nRow     = idw_time_allowance.GetRow();
-            if (nRow >= 0)
-                dAmount = idw_time_allowance.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-            if (nChanged > 0 || nDeleted > 0 || (nRow >= 0 && dAmount == null))
-            {
-                ll_error = wf_validate("Time");
-
-                if (ll_error == FAILURE)
-                {
-                    MessageBox.Show(is_errmsg, "Time Allowance Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    bSaveOK = false;
-                }
-                else
-                {
-                    // If this row is marked Modified ("M") we want to insert it as a new row
-                    // to preserve the change history.  Otherwise it will be updated.
-                    sRowChanged = ((MaintainAllowance)idw_time_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged ?? "X";
-                    if (sRowChanged == "M")
-                        ((MaintainAllowance)idw_time_allowance.GetItem<MaintainAllowance>(nRow)).MarkNewEntity();
-                    // Clear the RowChanged (to an arbitrary "X") so its current value isn't "remembered"
-                    ((MaintainAllowance)idw_time_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = "X";
-
-                    idw_time_allowance.Save();
-                    if (idw_time_allowance.GetItem<MaintainAllowance>(0).SQLCode != 0)
-                    {
-                        MessageBox.Show("Failed to update Time Allowance.  \n\n"
-                                       + "Error Code: " + idw_time_allowance.GetItem<MaintainAllowance>(0).SQLCode.ToString() + "\n\n"
-                                       + "Error Text: " + idw_time_allowance.GetItem<MaintainAllowance>(0).SQLErrText
-                                       , "Database Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        bSaveOK = false;
-
-                        // If the save failed, reset the RowChanged value so its current value is "remembered" if
-                        // we manage to save the record later.
-                        ((MaintainAllowance)idw_time_allowance.GetItem<MaintainAllowance>(nRow)).RowChanged = sRowChanged;
-                    }
-                    else
-                        MessageBox.Show("Saved time allowance changes");
-                }
- */
-                if (bSaveOK)
-                    MessageBox.Show("Saved ROI allowance changes");
+                MessageBox.Show("Saved Time allowance changes");
+                nSaved++;
             }
             // If there are any records to delete, do so
             else if (nDeleted > 0)
             {
-                idw_activity_allowance.Save();
-                MessageBox.Show("Activity Allowance record deleted");
+                idw_time_allowance.Save();
+                //MessageBox.Show("Time Allowance record deleted");
+                mDeleted++;
             }
 
             /*******************************************************************
@@ -2557,82 +1900,48 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nChanged = idw_distance_allowance.ModifiedCount();
             nDeleted = (idw_distance_allowance.DataObject).DeletedCount;
 
-            // If there are changed fixed allowance records ...
+            // If there are changed distance allowance records ...
             if (nChanged > 0)
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_activity_allowance, ACTIVITY) == false)
+                if (of_validate_records(idw_distance_allowance, DISTANCE) == false)
                 {
                     return false;
                 }
 
                 // Now, scan the list again and insert new records for any that have 
                 // changed the net amount
-                if (of_insert_new_records(dw_activity_allowance, ACTIVITY) == false)
+                if (of_insert_new_records(dw_distance_allowance, DISTANCE) == false)
                 {
                     return false;
                 }
 
                 // Now, scan the list again and save any changed records
-                if (of_save_changes(dw_activity_allowance, ACTIVITY) == false)
+                if (of_save_changes(dw_distance_allowance, DISTANCE) == false)
                 {
                     return false;
                 }
 
-/* This is the older method
-            nRow     = idw_distance_allowance.GetRow();
-            if (nRow >= 0)
-                dAmount = idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-            if (nChanged > 0 || nDeleted > 0 || (nRow >= 0 && dAmount == null))
-            {
-                ll_error = wf_validate("Distance");
-
-                if (ll_error == FAILURE)
-                {
-                    MessageBox.Show(is_errmsg, "Distance Allowance Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    bSaveOK = false;
-                }
-                else
-                {
-                    // If this row is marked Modified ("M") we want to insert it as a new row
-                    // to preserve the change history.  Otherwise it will be updated.
-                    sRowChanged = ((MaintainVehAllowance)idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow)).RowChanged ?? "X";
-                    if (sRowChanged == "M")
-                        ((MaintainVehAllowance)idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow)).MarkNewEntity();
-                    // Clear the RowChanged (to an arbitrary "X") so its current value isn't "remembered"
-                    ((MaintainVehAllowance)idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow)).RowChanged = "X";
-
-                    idw_distance_allowance.Save();
-                    if (idw_distance_allowance.GetItem<MaintainVehAllowance>(0).SQLCode != 0)
-                    {
-                        MessageBox.Show("Failed to update Distance Allowance.  \n\n"
-                                       + "Error Code: " + idw_distance_allowance.GetItem<MaintainVehAllowance>(0).SQLCode.ToString() + "\n\n"
-                                       + "Error Text: " + idw_distance_allowance.GetItem<MaintainVehAllowance>(0).SQLErrText
-                                       , "Database Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        bSaveOK = false;
-
-                        // If the save failed, reset the RowChanged value so its current value is "remembered" if
-                        // we manage to save the record later.
-                        ((MaintainVehAllowance)idw_distance_allowance.GetItem<MaintainVehAllowance>(nRow)).RowChanged = sRowChanged;
-                    }
-                    else
-                        MessageBox.Show("Saved distance allowance changes");
-                }
-            }
- */
-                if (bSaveOK)
-                    MessageBox.Show("Saved ROI allowance changes");
+                MessageBox.Show("Saved Distance allowance changes");
+                nSaved++;
             }
             // If there are any records to delete, do so
             else if (nDeleted > 0)
             {
-                idw_activity_allowance.Save();
-                MessageBox.Show("Activity Allowance record deleted");
+                idw_distance_allowance.Save();
+                //MessageBox.Show("Distance Allowance record deleted");
+                mDeleted++;
             }
 
-            return bSaveOK;
+            if ((nSaved + mDeleted) > 0)
+                return true;
+            else
+            {
+                if (of_preClose() == true)
+                    this.Close();
+            }
+
+            return true;
         }
 
         private bool isDwNewOrDirty(URdsDw thisDw, int dwType )
@@ -2653,13 +1962,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if( dwType == DISTANCE
-                //      && thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged == "N")
-                //    return true;
-                //else
-                //if( dwType != DISTANCE
-                //      && thisDw.GetItem<MaintainAllowance>(nRow).RowChanged == "N")
-                //    return true;
                 if( thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged == "N")
                 return true;
             }
@@ -2668,26 +1970,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private bool isDwRowComplete(URdsDw thisDw, int inRow, int dwType)
         {
-            //if( dwType == DISTANCE )
-            //{
-            //    if (thisDw.GetItem<MaintainVehAllowance>(inRow).CaVar1 == null
-            //        || thisDw.GetItem<MaintainVehAllowance>(inRow).CaHrsWk == null
-            //        || thisDw.GetItem<MaintainVehAllowance>(inRow).CaDistDay == null
-            //        || thisDw.GetItem<MaintainVehAllowance>(inRow).Notes == null
-            //        || (string)thisDw.GetItem<MaintainVehAllowance>(inRow).Notes == "")
-            //    {
-            //        return false;
-            //    }
-            //}
-            //else if( dwType != DISTANCE )
-            //{
-            //    if (thisDw.GetItem<MaintainAllowance>(inRow).CaVar1 == null
-            //        || thisDw.GetItem<MaintainAllowance>(inRow).Notes == null
-            //        || (string)thisDw.GetItem<MaintainAllowance>(inRow).Notes == "")
-            //    {
-            //        return false;
-            //    }
-            //}
             if (thisDw.GetItem<MaintainAllowanceV2>(inRow).CaVar1 == null
                 || thisDw.GetItem<MaintainAllowanceV2>(inRow).Notes == null
                 || (string)thisDw.GetItem<MaintainAllowanceV2>(inRow).Notes == "")
@@ -2710,23 +1992,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int rc, i;
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                //if (dwType == DISTANCE
-                //        && thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged == "N"
-                //        && isDwRowComplete( thisDw, nRow, dwType ) == false )
-                //{
-                //    thisDw.DataObject.DeleteItemAt(nRow);
-                //    rc = thisDw.Save();
-                //    i = rc;
-                //}
-                //else 
-                //if (dwType != DISTANCE
-                //        && thisDw.GetItem<MaintainAllowance>(nRow).RowChanged == "N"
-                //        && isDwRowComplete( thisDw, nRow, dwType ) == false )
-                //{
-                //    thisDw.DataObject.DeleteItemAt(nRow);
-                //    rc = thisDw.Save();
-                //    i = rc;
-                //}
                 if( thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged == "N"
                         && isDwRowComplete( thisDw, nRow, dwType ) == false )
                 {
@@ -2753,12 +2018,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                       + (dw_activity_allowance.DataObject).DeletedCount + (dw_time_allowance.DataObject).DeletedCount
                       + (dw_distance_allowance.DataObject).DeletedCount;
 
-//            if (isDwNewOrDirty(idw_fixed_allowance, FIXED)
-//                || isDwNewOrDirty(idw_roi_allowance, ROI)
-//                || isDwNewOrDirty(idw_activity_allowance, ACTIVITY)
-//                || isDwNewOrDirty(idw_time_allowance, TIME)
-//                || isDwNewOrDirty(idw_distance_allowance, DISTANCE)
-//               )
             if( nModified > 0 || nDeleted > 0 )
             {
                 DialogResult ans;
@@ -2804,16 +2063,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             if (thisDw.ModifiedCount() > 0 || (thisDw.DataObject).DeletedCount > 0)
             {
-                //if (dwType == DISTANCE)
-                //{
-                //    for (int i = 0; i < thisDw.RowCount; i++)
-                //        thisDw.GetItem<MaintainVehAllowance>(i).MarkClean();
-                //}
-                //else
-                //{
-                //    for (int i = 0; i < thisDw.RowCount; i++)
-                //        thisDw.GetItem<MaintainAllowance>(i).MarkClean();
-                //}
                 for (int i = 0; i < thisDw.RowCount; i++)
                     thisDw.GetItem<MaintainAllowanceV2>(i).MarkClean();
             }
@@ -2860,7 +2109,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if (dwName == "dw_distance_allowance")
             {
                 isReadonly = ((DMaintainDistanceAllowance)(idw_Current.DataObject)).GetGridRowReadOnly(nRow);
-                //sAltDescription = idw_Current.GetItem<MaintainVehAllowance>(nRow).AltDescription;
                 sAltDescription = idw_Current.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
             }
             if (effectiveDate == null)
@@ -2888,10 +2136,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("Record deleted" + msg);
 
                     decimal dTotalAmt;
-                    of_calc_allowance_total(out dTotalAmt);
+                    decimal dTotalApproved;
+                    of_calc_allowance_total(out dTotalAmt, out dTotalApproved);
 
-                    // Display the total
+                    // Display the totals
                     this.Total.Text = dTotalAmt.ToString("###,###.00");
+                    this.Total_approved.Text = dTotalApproved.ToString("###,###.00");
                 }
             }
         }
@@ -2959,7 +2209,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         void dw_distance_allowance_DoubleClick(object sender, EventArgs e)
         {
             // From contract_allowances
-            decimal days_wk = 0.0M;
+            decimal days_yr = 0.0M;
             decimal hours_wk = 0.0M;
             decimal dist_day = 0.0M;
             string  costs_covered = "N";
@@ -2970,84 +2220,80 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             decimal ACC = 0.0M;
 
             // From vehicle_allowance_rates
-            decimal carrier_pa = 0.0M;
-            decimal repairs_pk = 0.0M;
-            decimal licence_pa = 0.0M;
-            decimal tyres_pk = 0.0M;
-            decimal allowance_pk = 0.0M;
-            decimal insurance_pa = 0.0M;
-            decimal ror_pa = 0.0M;
             decimal fuel_use_pk = 0.0M;
             decimal fuel_rate = 0.0M;
             decimal ruc_rate_pk = 0.0M;
+            decimal repairs_pk = 0.0M;
+            decimal tyres_pk = 0.0M;
+            decimal allowance_pk = 0.0M;
+            decimal licence_pa = 0.0M;
+            decimal carrier_pa = 0.0M;
+            decimal insurance_pa = 0.0M;
+            decimal ror_pa = 0.0M;
 
             // Intermediate calculated velues
-            decimal HoursAmt = 0.0M;
+            decimal TimeAmt = 0.0M;
             decimal DistAmt = 0.0M;
             decimal Dist_yr = 0.0M;
             decimal VehAmt = 0.0M;
-            decimal YrAmount = 0.0M;
+            decimal NetAmount = 0.0M;
             decimal Dist_yr_k = 0.0M;
-            decimal Dist_yr_100 = 0.0M;
+            //decimal Dist_yr_100 = 0.0M;
             decimal Fuel_pk = 0.0M;
             decimal Ruc_pk = 0.0M;
 
             int nRow = idw_distance_allowance.GetRow();
 
-            days_wk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).CaVar1);
+            days_yr  = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).CaVar1);
             hours_wk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk);
             weeks_yr = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltWksYr);
-            rate_hr = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltRate);
-            HoursAmt = (hours_wk * weeks_yr) * rate_hr;
+            rate_hr  = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltRate);
+            ACC      = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltAcc);
+            TimeAmt  = ((hours_wk * weeks_yr) * rate_hr) * (1 + (ACC/100));
 
             dist_day = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).CaDistDay);
-            Dist_yr = dist_day * days_wk * weeks_yr;
+            Dist_yr  = dist_day * days_yr;
 
-            repairs_pk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarRepairsPk);
-            tyres_pk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarTyresPk);
+            repairs_pk  = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarRepairsPk);
+            tyres_pk    = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarTyresPk);
             allowance_pk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarAllowancePk);
             fuel_use_pk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarFuelUsePk);
-            fuel_rate = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarFuelRate);
+            fuel_rate   = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarFuelRate);
             ruc_rate_pk = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarRucRatePk);
             
-            Dist_yr_k = Dist_yr / 1000.0M;
-            Dist_yr_100 = Dist_yr / 100.0M;
-            Fuel_pk   = (Dist_yr_100 * fuel_use_pk) * fuel_rate;
-            Ruc_pk    = Dist_yr_k * ruc_rate_pk;
-            DistAmt   = (Ruc_pk + Fuel_pk + repairs_pk + tyres_pk + allowance_pk) * Dist_yr_k;
+            Dist_yr_k  = Dist_yr / 1000.0M;
+            //Dist_yr_100 = Dist_yr / 100.0M;
+            Fuel_pk   = fuel_use_pk * fuel_rate;
+            DistAmt = (Fuel_pk + ruc_rate_pk + repairs_pk + tyres_pk + allowance_pk) * Dist_yr_k;
 
             costs_covered = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).CaCostsCovered;
-            carrier_pa = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarCarrierPa);
-            licence_pa = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarLicencePa);
-            insurance_pa = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarInsurancePa);
-            ror_pa = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarRorPa);
-            VehAmt = (costs_covered == "N") ? (carrier_pa + licence_pa + insurance_pa + ror_pa) : 0.0M;
+            costs_covered = (costs_covered == null || costs_covered != "Y") ? "N" : costs_covered;
+            carrier_pa    = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarCarrierPa);
+            licence_pa    = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarLicencePa);
+            insurance_pa  = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarInsurancePa);
+            ror_pa        = of_getDecimalValue(idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).VarRorPa);
+            VehAmt        = (costs_covered == "N") ? (carrier_pa + licence_pa + insurance_pa + ror_pa) : 0.0M;
 
-            YrAmount = HoursAmt + DistAmt + VehAmt;
+            NetAmount = TimeAmt + DistAmt + VehAmt;
 
-            MessageBox.Show("Labour amount = (Hours/wk * Weeks/yr * Rate/Hr) = $" + HoursAmt.ToString("###,##0.00") + "\n"
+            MessageBox.Show("Time amount = ((Hours/wk * Weeks/yr) * Rate/Hr) * (1 + (ACC/100)) = $" + TimeAmt.ToString("###,##0.00") + "\n"
                           + "  Hours/wk = " + hours_wk.ToString("##0.0") + ",  Weeks/yr = " + weeks_yr.ToString("##0.0")
-                          + ",  Rate/hr = $" + rate_hr.ToString("##0.00") + "\n\n"
-                          + "DistancePerYr = (Dist/day * Days/wk * Weeks/yr) = " + Dist_yr.ToString("###,##0.0") + "Km \n"
-                          + "  Dist/day = "+dist_day.ToString("##0.0")+",  Days/wk = "+days_wk.ToString("##0.0") 
-                          + ",  Weeks/yr = " + weeks_yr.ToString("##0.0")+"\n"
-                          + "Fuel/K = (DistancePerYr/100 * fuel_use_p100) * Fuel_rate = $" + Fuel_pk.ToString("##,##0.00") + "\n"
-                          + "  DistancePerYr/100 = " + Dist_yr_100.ToString("##,##0.0")
-                          + ", Fuel_use_100k = " + fuel_use_pk.ToString("##0.00") + "ltr, Fuel_rate = $" + fuel_rate.ToString("##0.00") + "\n"
-                          + "Ruc/K  = DistancePerYr * Ruc_rate = $" + Ruc_pk.ToString("##,##0.00") + "\n"
-                          + "  DistancePerYr/1000 = " + Dist_yr_k.ToString("##,##0.0") + ", Ruc_rate = $" + ruc_rate_pk.ToString("##0.00") + "\n\n"
-                          + "Distance amount = (DistancePerYr/1000) * (Fuel/K + RUC/K + Repairs/K + Tyres/K + Allowance/K) = $" + DistAmt.ToString("###,##0.00") + "\n"
-                          + "  DistancePerYr/1000 = " + Dist_yr_k.ToString("##,##0.0") + "\n"
-                          + "  Fuel/K = $" + Fuel_pk.ToString("#,##0.00") + ",  RUC/K = $" + Ruc_pk.ToString("#,##0.00")+ ",  Repairs/K = $" + repairs_pk.ToString("#,##0.00")
-                          + ",  Tyres/K = $"+tyres_pk.ToString("#,##0.00") + ",  Allowance/K = $" + allowance_pk.ToString("##0.00") + "\n\n"
+                          + ",  Rate/hr = $" + rate_hr.ToString("##0.00") + ", ACC% = " + ACC.ToString("##.00") + "% \n\n"
+                          + "Distance amount = (Distance/Yr/1000km) * (Fuel/1000km + RUC/1000km + Repairs/1000km + Tyres/1000km + Allowance/1000km) = $" + DistAmt.ToString("###,##0.00") + "\n"
+                          + "  Distance/Yr/1000 = " + Dist_yr_k.ToString("###,##0.000") + "\n"
+                          + "  Fuel/1000km = $" + Fuel_pk.ToString("#,##0.00") + ",  RUC/1000km = $" + ruc_rate_pk.ToString("#,##0.00") + ",  Repairs/1000km = $" + repairs_pk.ToString("#,##0.00") + ",\n"
+                          + "  Tyres/1000km = $" + tyres_pk.ToString("#,##0.00") + ",  Allowance/1000km = $" + allowance_pk.ToString("##0.00") + "\n\n"
+                          + "Distance/Yr = (Dist/Day * Days/yr) = " + Dist_yr.ToString("###,##0.0") + "Km \n"
+                          + "  Dist/Day = " + dist_day.ToString("##0.0") + ",  Days/yr = " + days_yr.ToString("##0.0")+"\n\n"
+                          + "Fuel/1000km = (Fuel_use/1000km * Fuel_rate) = $" + Fuel_pk.ToString("##,##0.00") + "\n"
+                          + "  Fuel_use/1000km = " + fuel_use_pk.ToString("##0.00") + "ltr, Fuel_rate = $" + fuel_rate.ToString("##0.00") + "\n\n"
                           + "If Costs_covered = 'Y', Vehicle amount = $0.00 \n"
-                          + "If Costs_covered = 'N', Vehicle amount = (Carrier/yr + Licence/yr + Insurance/yr + RoR/yr) \n"
-                          + "Vehicle amount = $" + VehAmt.ToString("###,##0.00") + "\n"
+                          + "If Costs_covered = 'N', Vehicle amount = (Carrier/yr + Licence/yr + Insurance/yr + RoR/yr) = $" + VehAmt.ToString("###,##0.00") + "\n"
                           + "  Costs_covered = '" + costs_covered + "'"
-                          + ",  Carrier/yr = $"+carrier_pa.ToString("#,##0.00") + ",  Licence/yr = $"+licence_pa.ToString("#,##0.00")
-                          + ",  Insurance/yr = $" + insurance_pa.ToString("#,##0.00") + ",  RoR/yr = $" + ror_pa.ToString("#,##0.00") + "\n\n"
-                          + "Annual_amount = (Distance amount + Labour amount + Vehicle amount) = $" + YrAmount.ToString("##,##0.00") + "\n"
-                          + "  Distance amount = $" + DistAmt.ToString("###,##0.00") + ", Labour amount = $" + HoursAmt.ToString("###,##0.00")
+                          + ",  Carrier/yr = $"+carrier_pa.ToString("#,##0.00") + ",  Licence/yr = $"+licence_pa.ToString("##,##0.00")
+                          + ",  Insurance/yr = $" + insurance_pa.ToString("#,##0.00") + ",  RoR/yr = $" + ror_pa.ToString("##,##0.00") + "\n\n"
+                          + "Net amount = (Labour amount + Distance amount + Vehicle amount) = $" + NetAmount.ToString("###,##0.00") + "\n"
+                          + " Time amount = $" + TimeAmt.ToString("###,##0.00") + ", Distance amount = $" + DistAmt.ToString("###,##0.00")
                           + ",  Vehicle amount = $" + VehAmt.ToString("###,##0.00") + "\n"
                           , "Distance-based calculation details"
                           , MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -3103,16 +2349,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (int nRow = 0; nRow < nRows; nRow++)
             {
                 // Get this record's allowance type and effective date
-                //if (dwType == DISTANCE)
-                //{
-                //    altKey = (int)thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //    effDate = (DateTime)thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-                //}
-                //else
-                //{
-                //    altKey = (int)thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //    effDate = (DateTime)thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-                //}
                 altKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 effDate = (DateTime)thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
 
@@ -3125,10 +2361,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         // Save the date as the most-recent
                         maxEffDate = effDate;
                         // and get the record's Net Amount
-                        //if (dwType == DISTANCE)
-                        //    PrevNetAmount = (Decimal)thisDw.GetItem<MaintainVehAllowance>(nRow).NetAmount;
-                        //else
-                        //    PrevNetAmount = (Decimal)thisDw.GetItem<MaintainAllowance>(nRow).NetAmount;
                         PrevNetAmount = (Decimal)thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount;
                     }
                 }
@@ -3161,10 +2393,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string sRowChanged;
             for (int i = 0; i < thisDw.RowCount; i++)
             {
-                //if (dwType == DISTANCE)
-                //    sRowChanged = thisDw.GetItem<MaintainVehAllowance>(i).RowChanged;
-                //else
-                //    sRowChanged = thisDw.GetItem<MaintainAllowance>(i).RowChanged;
                 sRowChanged = thisDw.GetItem<MaintainAllowanceV2>(i).RowChanged;
 
                 if (sRowChanged == "M")
@@ -3190,59 +2418,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int nRow = of_findChangedRow(thisDw, dwType);
             if (nRow < 0) return;   // Exit if no changed row found
 
-            //if (dwType == DISTANCE)
-            //{
-            //    thisAltKey    = (int)thisDw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-            //    thisEffDate = thisDw.GetItem<MaintainVehAllowance>(nRow).EffectiveDate;
-            //    thisApproved = thisDw.GetItem<MaintainVehAllowance>(nRow).Approved; ;
-            //    string errmsg = of_checkEffDate(il_contract, thisAltKey, thisEffDate);
-            //    if (!(errmsg.Length == 0))
-            //    {
-            //        MessageBox.Show(errmsg + " - please correct", "Warning"
-            //                       , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //        return;
-            //    }
-
-            //    thisRowChanged = thisDw.GetItem<MaintainVehAllowance>(nRow).RowChanged;
-            //    thisDwIsNew = thisDw.GetItem<MaintainVehAllowance>(nRow).IsNew
-            //                    || thisRowChanged == "N";
-            //    thisAmt = thisDw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-            //    calcAmt = thisDw.GetItem<MaintainVehAllowance>(nRow).CalcAmount;
-            //    netAmt  = thisDw.GetItem<MaintainVehAllowance>(nRow).NetAmount;
-            //    prevNetAmt = RDSDataService.GetAllowanceNetAmount(il_contract, thisAltKey);
-            //    changeAmt = (decimal)(calcAmt ?? 0.0M) - prevNetAmt;
-            //} 
-            //else
-            //{
-            //    thisAltKey = (int)thisDw.GetItem<MaintainAllowance>(nRow).AltKey;
-            //    thisEffDate = thisDw.GetItem<MaintainAllowance>(nRow).EffectiveDate;
-            //    thisApproved = thisDw.GetItem<MaintainAllowance>(nRow).Approved; ;
-            //    string errmsg = of_checkEffDate(il_contract, thisAltKey, thisEffDate);
-            //    if( !(errmsg.Length == 0))
-            //    {
-            //        MessageBox.Show(errmsg + " - please correct", "Warning"
-            //                       , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //        return;
-            //    }
-
-            //    thisRowChanged = thisDw.GetItem<MaintainAllowance>(nRow).RowChanged;
-            //    thisDwIsNew = thisDw.GetItem<MaintainAllowance>(nRow).IsNew
-            //                    || thisRowChanged == "N";
-            //    thisAmt = thisDw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-            //    calcAmt = thisDw.GetItem<MaintainAllowance>(nRow).CalcAmount;
-            //    netAmt = thisDw.GetItem<MaintainAllowance>(nRow).NetAmount;
-            //    prevNetAmt = RDSDataService.GetAllowanceNetAmount(il_contract, thisAltKey);
-            //    if (dwType == FIXED)
-            //    {
-            //        //changeAmt = (decimal)(thisAmt ?? 0.0M);
-            //        changeAmt = (decimal)(netAmt ?? 0.0M) - prevNetAmt;
-            //    }
-            //    else  // dwType = ROI, ACTIVITY or TIME
-            //    {
-            //        //changeAmt = (decimal)(calcAmt ?? 0.0M) - prevNetAmt;
-            //        changeAmt = (decimal)(netAmt ?? 0.0M) - prevNetAmt;
-            //    }
-            //}
             thisAltKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
             thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
             thisApproved = thisDw.GetItem<MaintainAllowanceV2>(nRow).Approved; ;
@@ -3343,10 +2518,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
             {
                 // Get this row's alt_key
-                //if (dwType == DISTANCE)
-                //    nAltKey = (int)tab_dw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //else
-                //    nAltKey = (int)tab_dw.GetItem<MaintainAllowance>(nRow).AltKey;
                 nAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
 
                 // If we haven't seen it before ...
@@ -3376,16 +2547,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dTotalAmt = 0.0M;
             for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
             {
-                //if (dwType == DISTANCE)
-                //{
-                //    dThisAmt = tab_dw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-                //    thisAltKey = (int)tab_dw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //}
-                //else
-                //{
-                //    dThisAmt = tab_dw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-                //    thisAltKey = (int)tab_dw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //}
                 dThisAmt = tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
                 thisAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
 
@@ -3399,18 +2560,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Update the allowance types' totals for each row of that type
             for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
             {
-                //if (dwType == DISTANCE)
-                //{
-                //    thisAltKey = (int)tab_dw.GetItem<MaintainVehAllowance>(nRow).AltKey;
-                //    if (thisAltKey == inAltKey)
-                //        tab_dw.GetItem<MaintainVehAllowance>(nRow).NetAmount = dTotalAmt;
-                //}
-                //else
-                //{
-                //    thisAltKey = (int)tab_dw.GetItem<MaintainAllowance>(nRow).AltKey;
-                //    if (thisAltKey == inAltKey)
-                //        tab_dw.GetItem<MaintainAllowance>(nRow).NetAmount = dTotalAmt;
-                //}
                 thisAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 if (thisAltKey == inAltKey)
                     tab_dw.GetItem<MaintainAllowanceV2>(nRow).NetAmount = dTotalAmt;
@@ -3420,48 +2569,58 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             type_total = dTotalAmt;
         }
 
-        private void of_calc_allowance(URdsDw tab_dw, int dwType, out decimal tab_total)
+        private void of_calc_allowance(URdsDw tab_dw, out decimal allowance_total, out decimal approved_total)
         {
-            int nRow, nRows;
-            decimal dTotalAmt = 0.0M;
             decimal? dThisAmt = 0.0M;
+            decimal dTotalAmt = 0.0M;
+            decimal dApprovedTotal = 0.0M;
+            string thisApproved;
 
             // Re-calculate the total of the AnnualPayments
-            dTotalAmt = 0.0M;
-            nRows = tab_dw.RowCount;
-            for (nRow = 0; nRow < nRows; nRow++)
+            for (int nRow = 0; nRow < tab_dw.RowCount; nRow++)
             {
-                //if( dwType == DISTANCE)
-                //    dThisAmt = tab_dw.GetItem<MaintainVehAllowance>(nRow).AnnualAmount;
-                //else
-                //    dThisAmt = tab_dw.GetItem<MaintainAllowance>(nRow).AnnualAmount;
-                dThisAmt = tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
+                dThisAmt = (tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount) ?? 0.0M;
+                thisApproved = (tab_dw.GetItem<MaintainAllowanceV2>(nRow).Approved) ?? "N";
+                dTotalAmt += (decimal)dThisAmt;
 
-                if (dThisAmt != null)
-                    dTotalAmt += (decimal)dThisAmt;
+                if (thisApproved == "Y")
+                    dApprovedTotal += (decimal)dThisAmt;
             }
 
-            // Return the total
-            tab_total = dTotalAmt;
+            // Return the totals
+            allowance_total = dTotalAmt;
+            approved_total = dApprovedTotal;
         }
 
-        private void of_calc_allowance_total(out decimal allowance_total)
+        private void of_calc_allowance_total(out decimal allowance_total, out decimal approved_total)
         {
             decimal dTotalAmt = 0.0M;
-            decimal dThisAmt  = 0.0M;
+            decimal dTotalApproved = 0.0M;
+            decimal dThisAmt = 0.0M;
+            decimal dThisApproved = 0.0M;
 
-            of_calc_allowance(idw_fixed_allowance, FIXED, out dThisAmt);
+            of_calc_allowance(idw_fixed_allowance, out dThisAmt, out dThisApproved);
             dTotalAmt += dThisAmt;
-            of_calc_allowance(idw_roi_allowance, ROI, out dThisAmt);
+            dTotalApproved += dThisApproved;
+
+            of_calc_allowance(idw_roi_allowance, out dThisAmt, out dThisApproved);
             dTotalAmt += dThisAmt;
-            of_calc_allowance(idw_activity_allowance, ACTIVITY, out dThisAmt);
+            dTotalApproved += dThisApproved;
+
+            of_calc_allowance(idw_activity_allowance, out dThisAmt, out dThisApproved);
             dTotalAmt += dThisAmt;
-            of_calc_allowance(idw_time_allowance, TIME, out dThisAmt);
+            dTotalApproved += dThisApproved;
+
+            of_calc_allowance(idw_time_allowance, out dThisAmt, out dThisApproved);
             dTotalAmt += dThisAmt;
-            of_calc_allowance(idw_distance_allowance, DISTANCE, out dThisAmt);
+            dTotalApproved += dThisApproved;
+
+            of_calc_allowance(idw_distance_allowance, out dThisAmt, out dThisApproved);
             dTotalAmt += dThisAmt;
+            dTotalApproved += dThisApproved;
 
             allowance_total = dTotalAmt;
+            approved_total = dTotalApproved;
         }
     }
 }

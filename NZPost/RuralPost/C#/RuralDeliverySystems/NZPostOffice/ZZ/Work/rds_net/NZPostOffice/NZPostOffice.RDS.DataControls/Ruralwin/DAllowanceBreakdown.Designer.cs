@@ -86,7 +86,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ReadOnly = true;
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.grid.Size = new System.Drawing.Size(736, 229);
+            this.grid.Size = new System.Drawing.Size(756, 210);
             this.grid.TabIndex = 0;
             // 
             // effective_date
@@ -203,7 +203,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.panel2.BackColor = System.Drawing.Color.Black;
-            this.panel2.Location = new System.Drawing.Point(238, 235);
+            this.panel2.Location = new System.Drawing.Point(248, 186);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(90, 2);
             this.panel2.TabIndex = 6;
@@ -214,7 +214,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.compute_11.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.compute_11.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             this.compute_11.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.compute_11.Location = new System.Drawing.Point(243, 232);
+            this.compute_11.Location = new System.Drawing.Point(253, 183);
             this.compute_11.Name = "compute_11";
             this.compute_11.Size = new System.Drawing.Size(83, 27);
             this.compute_11.TabIndex = 1;
@@ -232,7 +232,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.Controls.Add(this.compute_11);
             this.MinimumSize = new System.Drawing.Size(739, 152);
             this.Name = "DAllowanceBreakdown";
-            this.Size = new System.Drawing.Size(739, 261);
+            this.Size = new System.Drawing.Size(759, 212);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);

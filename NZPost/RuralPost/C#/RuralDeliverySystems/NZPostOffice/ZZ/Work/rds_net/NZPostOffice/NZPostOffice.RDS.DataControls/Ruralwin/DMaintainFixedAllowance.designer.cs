@@ -40,7 +40,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid = new Metex.Windows.DataEntityGrid();
             this.st_title = new System.Windows.Forms.Label();
             this.st_protect_confirm = new System.Windows.Forms.Label();
-            this.alt_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_key = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_annual_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.net_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,7 +56,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             // bindingSource
             // 
-            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.MaintainAllowance);
+            this.bindingSource.DataSource = typeof(NZPostOffice.RDS.Entity.Ruralwin.MaintainAllowanceV2);
             // 
             // grid
             // 
@@ -76,7 +76,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.alt_description,
+            this.alt_key,
             this.ca_effective_date,
             this.ca_annual_amount,
             this.net_amount,
@@ -117,21 +117,21 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.st_protect_confirm.Text = "N";
             this.st_protect_confirm.Visible = false;
             // 
-            // alt_description
+            // alt_key
             // 
-            this.alt_description.DataPropertyName = "AltDescription";
+            this.alt_key.DataPropertyName = "AltDescription";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle2.NullValue = "null";
-            this.alt_description.DefaultCellStyle = dataGridViewCellStyle2;
-            this.alt_description.HeaderText = "Allowance";
-            this.alt_description.Name = "alt_description";
-            this.alt_description.ReadOnly = true;
-            this.alt_description.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.alt_description.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.alt_description.Width = 140;
+            this.alt_key.DefaultCellStyle = dataGridViewCellStyle2;
+            this.alt_key.HeaderText = "Allowance";
+            this.alt_key.Name = "alt_key";
+            this.alt_key.ReadOnly = true;
+            this.alt_key.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_key.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.alt_key.Width = 140;
             // 
             // ca_effective_date
             // 
@@ -347,7 +347,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             int nCol = e.ColumnIndex;
             string column = grid.CurrentColumnName;
            // string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].EditedFormattedValue;
-            string sAllowance = (string)grid.Rows[nRow].Cells["alt_Description"].Value;
+            string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].Value;
             string sValue = (string)((DataGridView)sender).CurrentCell.EditedFormattedValue;
             sAllowance = stringValue( sAllowance );
             sValue = stringValue( sValue );
@@ -402,7 +402,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         #endregion
 
-        private DataGridViewTextBoxColumn alt_description;
+        private DataGridViewTextBoxColumn alt_key;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn ca_effective_date;
         private DataGridViewTextBoxColumn ca_annual_amount;
         private DataGridViewTextBoxColumn net_amount;
@@ -412,6 +412,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_row_changed;
         private DataGridViewTextBoxColumn calc_amount;
+
+
 
 
 

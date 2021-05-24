@@ -38,9 +38,16 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
             this.var_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.var_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_fuel_use_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_fuel_rate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.carrier_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.repairs_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.licence_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,6 +55,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.allowance_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.insurance_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ror_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_ruc_rate_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_effective_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sQLCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sQLErrText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
@@ -76,6 +86,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.var_id,
             this.var_description,
+            this.var_fuel_use_pk,
+            this.var_fuel_rate,
             this.carrier_pa,
             this.repairs_pk,
             this.licence_pa,
@@ -83,6 +95,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.allowance_pk,
             this.insurance_pa,
             this.ror_pa,
+            this.var_ruc_rate_pk,
+            this.var_effective_date,
+            this.var_notes,
             this.sQLCode,
             this.sQLErrText});
             this.grid.DataSource = this.bindingSource;
@@ -92,7 +107,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(638, 252);
+            this.grid.Size = new System.Drawing.Size(970, 252);
             this.grid.TabIndex = 0;
             // 
             // var_id
@@ -118,24 +133,49 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.var_description.Name = "var_description";
             this.var_description.Width = 140;
             // 
+            // var_fuel_use_pk
+            // 
+            this.var_fuel_use_pk.DataPropertyName = "VarFuelUsePk";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            this.var_fuel_use_pk.DefaultCellStyle = dataGridViewCellStyle4;
+            this.var_fuel_use_pk.HeaderText = "Fuel Use 1000Km";
+            this.var_fuel_use_pk.Name = "var_fuel_use_pk";
+            this.var_fuel_use_pk.Width = 60;
+            // 
+            // var_fuel_rate
+            // 
+            this.var_fuel_rate.DataPropertyName = "VarFuelRate";
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            this.var_fuel_rate.DefaultCellStyle = dataGridViewCellStyle5;
+            this.var_fuel_rate.HeaderText = "Fuel Rate";
+            this.var_fuel_rate.Name = "var_fuel_rate";
+            this.var_fuel_rate.Width = 60;
+            // 
             // carrier_pa
             // 
             this.carrier_pa.DataPropertyName = "VarCarrierPa";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            this.carrier_pa.DefaultCellStyle = dataGridViewCellStyle4;
-            this.carrier_pa.HeaderText = "Carrier per Yr";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            this.carrier_pa.DefaultCellStyle = dataGridViewCellStyle6;
+            this.carrier_pa.HeaderText = "Carrier $ per Yr";
             this.carrier_pa.Name = "carrier_pa";
             this.carrier_pa.Width = 60;
             // 
             // repairs_pk
             // 
             this.repairs_pk.DataPropertyName = "VarRepairsPk";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            this.repairs_pk.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
+            this.repairs_pk.DefaultCellStyle = dataGridViewCellStyle7;
             this.repairs_pk.HeaderText = "Repairs 1000Km";
             this.repairs_pk.Name = "repairs_pk";
             this.repairs_pk.Width = 60;
@@ -143,21 +183,21 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // licence_pa
             // 
             this.licence_pa.DataPropertyName = "VarLicencePa";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
-            this.licence_pa.DefaultCellStyle = dataGridViewCellStyle6;
-            this.licence_pa.HeaderText = "Licence per Yr";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
+            this.licence_pa.DefaultCellStyle = dataGridViewCellStyle8;
+            this.licence_pa.HeaderText = "Licence $ per Yr";
             this.licence_pa.Name = "licence_pa";
             this.licence_pa.Width = 60;
             // 
             // tyres_pk
             // 
             this.tyres_pk.DataPropertyName = "VarTyresPk";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            this.tyres_pk.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
+            this.tyres_pk.DefaultCellStyle = dataGridViewCellStyle9;
             this.tyres_pk.HeaderText = "Tyres 1000Km";
             this.tyres_pk.Name = "tyres_pk";
             this.tyres_pk.Width = 60;
@@ -165,10 +205,10 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // allowance_pk
             // 
             this.allowance_pk.DataPropertyName = "VarAllowancePk";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
-            this.allowance_pk.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black;
+            this.allowance_pk.DefaultCellStyle = dataGridViewCellStyle10;
             this.allowance_pk.HeaderText = "Allowance 1000Km";
             this.allowance_pk.Name = "allowance_pk";
             this.allowance_pk.Width = 60;
@@ -176,24 +216,60 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // insurance_pa
             // 
             this.insurance_pa.DataPropertyName = "VarInsurancePa";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
-            this.insurance_pa.DefaultCellStyle = dataGridViewCellStyle9;
-            this.insurance_pa.HeaderText = "Insurance per Yr";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
+            this.insurance_pa.DefaultCellStyle = dataGridViewCellStyle11;
+            this.insurance_pa.HeaderText = "Insurance $ per Yr";
             this.insurance_pa.Name = "insurance_pa";
             this.insurance_pa.Width = 60;
             // 
             // ror_pa
             // 
             this.ror_pa.DataPropertyName = "VarRorPa";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black;
-            this.ror_pa.DefaultCellStyle = dataGridViewCellStyle10;
-            this.ror_pa.HeaderText = "  ROR   per Yr";
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Black;
+            this.ror_pa.DefaultCellStyle = dataGridViewCellStyle12;
+            this.ror_pa.HeaderText = "  ROR    $ per Yr";
             this.ror_pa.Name = "ror_pa";
             this.ror_pa.Width = 60;
+            // 
+            // var_ruc_rate_pk
+            // 
+            this.var_ruc_rate_pk.DataPropertyName = "VarRucRatePk";
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.Black;
+            this.var_ruc_rate_pk.DefaultCellStyle = dataGridViewCellStyle13;
+            this.var_ruc_rate_pk.HeaderText = "Ruc Rate 1000Km";
+            this.var_ruc_rate_pk.Name = "var_ruc_rate_pk";
+            this.var_ruc_rate_pk.Width = 60;
+            // 
+            // var_effective_date
+            // 
+            this.var_effective_date.DataPropertyName = "VarEffectiveDate";
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
+            this.var_effective_date.DefaultCellStyle = dataGridViewCellStyle14;
+            this.var_effective_date.HeaderText = "Effective Date";
+            this.var_effective_date.Name = "var_effective_date";
+            this.var_effective_date.Width = 70;
+            // 
+            // var_notes
+            // 
+            this.var_notes.DataPropertyName = "VarNotes";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black;
+            this.var_notes.DefaultCellStyle = dataGridViewCellStyle15;
+            this.var_notes.HeaderText = "Notes";
+            this.var_notes.Name = "var_notes";
+            this.var_notes.Width = 120;
             // 
             // sQLCode
             // 
@@ -218,7 +294,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DVehicleAllowanceRates";
-            this.Size = new System.Drawing.Size(638, 252);
+            this.Size = new System.Drawing.Size(970, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -235,6 +311,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn var_ror_pa;
         private System.Windows.Forms.DataGridViewTextBoxColumn var_id;
         private System.Windows.Forms.DataGridViewTextBoxColumn var_description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn var_fuel_use_pk;
+        private System.Windows.Forms.DataGridViewTextBoxColumn var_fuel_rate;
         private System.Windows.Forms.DataGridViewTextBoxColumn carrier_pa;
         private System.Windows.Forms.DataGridViewTextBoxColumn repairs_pk;
         private System.Windows.Forms.DataGridViewTextBoxColumn licence_pa;
@@ -242,6 +320,9 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn allowance_pk;
         private System.Windows.Forms.DataGridViewTextBoxColumn insurance_pa;
         private System.Windows.Forms.DataGridViewTextBoxColumn ror_pa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn var_ruc_rate_pk;
+        private System.Windows.Forms.DataGridViewTextBoxColumn var_effective_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn var_notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLErrText;
 
