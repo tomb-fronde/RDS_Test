@@ -7,25 +7,23 @@ using Metex.Core;using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
-    // TJB Allowances Apr-2021
-    // Include new columns
-    //     alt_rate, alt_wks_yr, alt_acc, alt_fuel_pk, alt_ruc_pk, alct_id
-    // [28-Apr-2021] Add columns alt_effective_date, alt_notes
+    // TJB Allowances 1-June-2021: New
+    // Data access for allowance_type_history table
 
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
-	[MapInfo("alt_key", "_alt_key", "allowance_type", true)]
-	[MapInfo("alt_description", "_alt_description", "allowance_type")]
-    [MapInfo("alt_rate", "_alt_rate", "allowance_type")]
-    [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type")]
-    [MapInfo("alt_acc", "_alt_acc", "allowance_type")]
-    [MapInfo("alct_id", "_alct_id", "allowance_type")]
-    [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type")]
-    [MapInfo("alt_notes", "_alt_notes", "allowance_type")]
+	[MapInfo("alt_key", "_alt_key", "allowance_type_history")]
+    [MapInfo("alt_description", "_alt_description", "allowance_type_history")]
+    [MapInfo("alt_rate", "_alt_rate", "allowance_type_history")]
+    [MapInfo("alt_wks_yr", "_alt_wks_yr", "allowance_type_history")]
+    [MapInfo("alt_acc", "_alt_acc", "allowance_type_history")]
+    [MapInfo("alct_id", "_alct_id", "allowance_type_history")]
+    [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type_history")]
+    [MapInfo("alt_notes", "_alt_notes", "allowance_type_history")]
     [System.Serializable()]
 
-	public class AllowanceType : Entity<AllowanceType>
+	public class AllowanceTypeHistory : Entity<AllowanceTypeHistory>
 	{
 		#region Business Methods
 		[DBField()]
@@ -217,7 +215,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
         }
 
 
- private AllowanceType[] dataList;
+ private AllowanceTypeHistory[] dataList;
 
 		protected override object GetIdValue()
 		{
@@ -226,12 +224,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		#endregion
 
 		#region Factory Methods
-        public static AllowanceType NewAllowanceType(int? alt_key)
+        public static AllowanceTypeHistory NewAllowanceType(int? alt_key)
 		{
             return Create(alt_key);
 		}
 
-		public static AllowanceType[] GetAllAllowanceType(  )
+		public static AllowanceTypeHistory[] GetAllAllowanceType(  )
 		{
 			return Fetch().dataList;
 		}
@@ -247,19 +245,19 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-					GenerateSelectCommandText(cm, "allowance_type");
+                    GenerateSelectCommandText(cm, "allowance_type_history");
 
-					List<AllowanceType> list = new List<AllowanceType>();
+					List<AllowanceTypeHistory> list = new List<AllowanceTypeHistory>();
 					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
 						while (dr.Read())
 						{
-							AllowanceType instance = new AllowanceType();
-							instance.StoreFieldValues(dr, "allowance_type");
+							AllowanceTypeHistory instance = new AllowanceTypeHistory();
+                            instance.StoreFieldValues(dr, "allowance_type_history");
 							instance.MarkOld();
 							list.Add(instance);
 						}
-						dataList = new AllowanceType[list.Count];
+						dataList = new AllowanceTypeHistory[list.Count];
 						list.CopyTo(dataList);
 					}
 				}
@@ -274,11 +272,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
                 ParameterCollection pList = new ParameterCollection();
-                if (GenerateUpdateCommandText(cm, "allowance_type", ref pList))
+                if (GenerateUpdateCommandText(cm, "allowance_type_history", ref pList))
 				{
-					cm.CommandText += " WHERE  allowance_type.alt_key = @alt_key ";
-                                    + "  and allowance_type.alt_effective_date = @alt_effective_date";
-                    pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
+					cm.CommandText += " WHERE allowance_type_history.alt_key = @alt_key "
+                                     +"   and allowance_type_history.alt_effective_date = @alt_effective_date";
+
+					pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
                     pList.Add(cm, "alt_effective_date", GetInitialValue("_alt_effective_date"));
                     DBHelper.ExecuteNonQuery(cm, pList);
 				}
@@ -294,7 +293,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				DbCommand cm = cn.CreateCommand();
 				cm.CommandType = CommandType.Text;
 				ParameterCollection pList = new ParameterCollection();
-				if (GenerateInsertCommandText(cm, "allowance_type", pList))
+				if (GenerateInsertCommandText(cm, "allowance_type_history", pList))
 				{
 					DBHelper.ExecuteNonQuery(cm, pList);
 				}
@@ -312,12 +311,12 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					cm.Transaction = tr;
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-					pList.Add(cm,"alt_key", GetInitialValue("_alt_key"));
+                    pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
                     pList.Add(cm, "alt_effective_date", GetInitialValue("_alt_effective_date"));
-                    cm.CommandText = "DELETE FROM allowance_type_history "
-                                     + "WHERE allowance_type.alt_key = @alt_key "
-                                     + "  and allowance_type.alt_effective_date = @alt_effective_date";
-                    DBHelper.ExecuteNonQuery(cm, pList);
+                    cm.CommandText = "DELETE FROM allowance_type_history " 
+						             + "WHERE allowance_type_history.alt_key = @alt_key "
+                                     + "  and allowance_type_history.alt_effective_date = @alt_effective_date";
+					DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}
 			}
