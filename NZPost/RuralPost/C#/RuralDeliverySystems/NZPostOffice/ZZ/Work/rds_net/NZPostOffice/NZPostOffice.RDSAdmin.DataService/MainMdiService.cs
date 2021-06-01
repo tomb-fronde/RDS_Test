@@ -15,8 +15,8 @@ namespace NZPostOffice.RDSAdmin.DataService
     //    GenerateUpdatedAllowances
     //    UpdateAllowanceTypeHistory
     //    UpdateVehicleAllowanceRatesHistory
-    //    AllowanceMaxDate
-    //    VehicleAllowanceMaxDate
+    //    GetAllowanceMaxDate
+    //    GetVehicleAllowanceMaxDate
     //
     // TJB  RPCR_117  July-2018
     // Added CheckEmailAddress(string p_email) to validate email address format
@@ -296,17 +296,17 @@ namespace NZPostOffice.RDSAdmin.DataService
 
         // TJB Allowances 1-June-2021: New
         // Check to see if the effective_date in the allowance_type record is unique
-        public static DateTime? AllowanceMaxDate(int inAltKey)
+        public static DateTime? GetAllowanceMaxDate(int inAltKey)
         {
-            MainMdiService obj = Execute("_AllowanceMaxDate", inAltKey);
+            MainMdiService obj = Execute("_GetAllowanceMaxDate", inAltKey);
             return obj.dtVal;
         }
 
         // TJB Allowances 1-June-2021: New
         // Check to see if the effective_date in the vehicle_allowance_rates record is unique
-        public static DateTime? VehicleAllowanceMaxDate(int inVarId)
+        public static DateTime? GetVehicleAllowanceMaxDate(int inVarId)
         {
-            MainMdiService obj = Execute("_VehicleAllowanceMaxDate", inVarId);
+            MainMdiService obj = Execute("_GetVehicleAllowanceMaxDate", inVarId);
             return obj.dtVal;
         }
 
@@ -404,7 +404,7 @@ namespace NZPostOffice.RDSAdmin.DataService
 
         // TJB Allowances 1-June-2021: New
         [ServerMethod]
-        private void _AllowanceMaxDate(int inAltKey)
+        private void _GetAllowanceMaxDate(int inAltKey)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -437,7 +437,7 @@ namespace NZPostOffice.RDSAdmin.DataService
 
         // TJB Allowances 1-June-2021: New
         [ServerMethod]
-        private void _VehicleAllowanceMaxDate(int inVarId)
+        private void _GetVehicleAllowanceMaxDate(int inVarId)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {

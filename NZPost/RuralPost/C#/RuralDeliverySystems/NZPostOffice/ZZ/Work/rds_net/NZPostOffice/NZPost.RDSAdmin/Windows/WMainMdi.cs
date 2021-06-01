@@ -3594,7 +3594,7 @@ namespace NZPostOffice.RDSAdmin
                         errmsg += "    An effective date is required \n";
                     else
                     {
-                        DateTime? dMaxDate = MainMdiService.AllowanceMaxDate(nAltKey);
+                        DateTime? dMaxDate = MainMdiService.GetAllowanceMaxDate(nAltKey);
                         if( dMaxDate != null && dEffDate <= dMaxDate )
                         errmsg += "    The effective date must be greater than " 
                                    + ((DateTime)dMaxDate).ToString("dd/MM/yyyy") + " \n";
@@ -3677,7 +3677,7 @@ namespace NZPostOffice.RDSAdmin
                         errmsg += "    An effective date is required \n";
                     else
                     {
-                        DateTime? dMaxDate = MainMdiService.VehicleAllowanceMaxDate((int)nVarId);
+                        DateTime? dMaxDate = MainMdiService.GetVehicleAllowanceMaxDate((int)nVarId);
                         if( dMaxDate != null && dEffDate <= dMaxDate )
                             errmsg += "    The effective date must be greater than " 
                                         + ((DateTime)dMaxDate).ToString("dd/MM/yyyy") + " \n";
