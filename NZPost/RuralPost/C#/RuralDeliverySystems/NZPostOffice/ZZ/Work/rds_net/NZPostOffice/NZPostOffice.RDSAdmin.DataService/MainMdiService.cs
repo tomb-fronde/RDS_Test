@@ -13,8 +13,10 @@ namespace NZPostOffice.RDSAdmin.DataService
     // TJB Allowances May-2021
     // Added
     //    GenerateUpdatedAllowances
-    //    UpdateVehicleAllowanceTypeHistory
+    //    UpdateAllowanceTypeHistory
     //    UpdateVehicleAllowanceRatesHistory
+    //    AllowanceMaxDate
+    //    VehicleAllowanceMaxDate
     //
     // TJB  RPCR_117  July-2018
     // Added CheckEmailAddress(string p_email) to validate email address format
@@ -31,6 +33,7 @@ namespace NZPostOffice.RDSAdmin.DataService
         private bool ret = false;
         private string dataObject;
         private int? intVal;
+        private DateTime? dtVal;
         private int ll_count;
         private string _sqlerrmsg;
 
@@ -291,6 +294,22 @@ namespace NZPostOffice.RDSAdmin.DataService
             return (int)obj.intVal;
         }
 
+        // TJB Allowances 1-June-2021: New
+        // Check to see if the effective_date in the allowance_type record is unique
+        public static DateTime? AllowanceMaxDate(int inAltKey)
+        {
+            MainMdiService obj = Execute("_AllowanceMaxDate", inAltKey);
+            return obj.dtVal;
+        }
+
+        // TJB Allowances 1-June-2021: New
+        // Check to see if the effective_date in the vehicle_allowance_rates record is unique
+        public static DateTime? VehicleAllowanceMaxDate(int inVarId)
+        {
+            MainMdiService obj = Execute("_VehicleAllowanceMaxDate", inVarId);
+            return obj.dtVal;
+        }
+
         // TJB Allowances 31-May-2021: New
         // Update the allowance_type_history table with the values from the 
         // record in the allowance_type table that has alt_key = inAltKey
@@ -383,6 +402,72 @@ namespace NZPostOffice.RDSAdmin.DataService
         }
 
 
+        // TJB Allowances 1-June-2021: New
+        [ServerMethod]
+        private void _AllowanceMaxDate(int inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    DateTime? rc = null;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select max(alt_effective_date) "
+                                    + " from [rd].[allowance_type] "
+                                    + " where alt_key = @alt_key";
+                    pList.Add(cm, "@alt_key", inAltKey);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                rc = dr.GetDateTime(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrmsg = e.Message;
+                    }
+                    dtVal = rc;
+                }
+            }
+        }
+
+        // TJB Allowances 1-June-2021: New
+        [ServerMethod]
+        private void _VehicleAllowanceMaxDate(int inVarId)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    DateTime? rc = null;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select max(var_effective_date) "
+                                    + " from [rd].[vehicle_allowance_rates] "
+                                    + " where var_id = @var_id";
+                    pList.Add(cm, "@var_id", inVarId);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                rc = dr.GetDateTime(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrmsg = e.Message;
+                    }
+                    dtVal = rc;
+                }
+            }
+        }
+
         // TJB Allowances 31-May-2021: New
         [ServerMethod]
         private  void _UpdateAllowanceTypeHistory(int inAltKey)
@@ -391,14 +476,13 @@ namespace NZPostOffice.RDSAdmin.DataService
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    int? rc = 0;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "insert into [rd].[allowance_type_history] "
                                      + "select * from [rd].[allowance_type] "
                                      + " where alt_key = @alt_key";
                     pList.Add(cm, "@alt_key", inAltKey);
                     DBHelper.ExecuteReader(cm, pList);
-                    intVal = rc;
+                    intVal = 0;
                 }
             }
         }
@@ -411,14 +495,13 @@ namespace NZPostOffice.RDSAdmin.DataService
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    int? rc = 0;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandText = "insert into [rd].[vehicle_allowance_rates_history] "
                                      + "select * from [rd].[vehicle_allowance_rates] "
                                      + " where var_id = @var_id";
                     pList.Add(cm, "@var_id", inVarId);
                     DBHelper.ExecuteReader(cm, pList);
-                    intVal = rc;
+                    intVal = 0;
                 }
             }
         }
