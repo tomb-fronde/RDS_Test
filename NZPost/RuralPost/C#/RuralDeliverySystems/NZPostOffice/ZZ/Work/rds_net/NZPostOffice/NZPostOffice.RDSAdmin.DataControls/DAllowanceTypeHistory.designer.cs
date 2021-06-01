@@ -42,9 +42,11 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_rate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_wks_yr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.alct_id = new Metex.Windows.DataGridViewEntityComboColumn();
+            this.alct_deescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.alt_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_key = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alct_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -73,9 +75,11 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_rate,
             this.alt_wks_yr,
             this.alt_acc,
-            this.alct_id,
+            this.alct_deescription,
             this.alt_effective_date,
-            this.alt_notes});
+            this.alt_notes,
+            this.alt_key,
+            this.alct_id});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
@@ -93,7 +97,6 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(794, 425);
             this.grid.TabIndex = 0;
-            this.grid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellValueChanged);
             // 
             // alt_description
             // 
@@ -105,6 +108,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_description.DefaultCellStyle = dataGridViewCellStyle2;
             this.alt_description.HeaderText = "Allowance Types";
             this.alt_description.Name = "alt_description";
+            this.alt_description.ReadOnly = true;
             this.alt_description.Width = 180;
             // 
             // alt_rate
@@ -117,6 +121,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_rate.DefaultCellStyle = dataGridViewCellStyle3;
             this.alt_rate.HeaderText = "Rate";
             this.alt_rate.Name = "alt_rate";
+            this.alt_rate.ReadOnly = true;
             this.alt_rate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.alt_rate.Width = 50;
             // 
@@ -130,6 +135,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_wks_yr.DefaultCellStyle = dataGridViewCellStyle4;
             this.alt_wks_yr.HeaderText = "Weeks per Yr";
             this.alt_wks_yr.Name = "alt_wks_yr";
+            this.alt_wks_yr.ReadOnly = true;
             this.alt_wks_yr.Width = 50;
             // 
             // alt_acc
@@ -142,22 +148,23 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_acc.DefaultCellStyle = dataGridViewCellStyle5;
             this.alt_acc.HeaderText = "Acc %";
             this.alt_acc.Name = "alt_acc";
+            this.alt_acc.ReadOnly = true;
             this.alt_acc.Width = 50;
             // 
-            // alct_id
+            // alct_deescription
             // 
-            this.alct_id.DataPropertyName = "AlctId";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.alct_deescription.DataPropertyName = "AlctDescription";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle6.NullValue = "null";
-            this.alct_id.DefaultCellStyle = dataGridViewCellStyle6;
-            this.alct_id.HeaderText = "Calc Type";
-            this.alct_id.Name = "alct_id";
-            this.alct_id.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.alct_id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.alct_id.Width = 140;
+            this.alct_deescription.DefaultCellStyle = dataGridViewCellStyle6;
+            this.alct_deescription.HeaderText = "Calc Type";
+            this.alct_deescription.Name = "alct_deescription";
+            this.alct_deescription.ReadOnly = true;
+            this.alct_deescription.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alct_deescription.Width = 140;
             // 
             // alt_effective_date
             // 
@@ -175,6 +182,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_effective_date.Mask = null;
             this.alt_effective_date.Name = "alt_effective_date";
             this.alt_effective_date.PromptChar = '\0';
+            this.alt_effective_date.ReadOnly = true;
             this.alt_effective_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.alt_effective_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.alt_effective_date.ValidatingType = null;
@@ -190,13 +198,30 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_notes.DefaultCellStyle = dataGridViewCellStyle8;
             this.alt_notes.HeaderText = "Notes";
             this.alt_notes.Name = "alt_notes";
+            this.alt_notes.ReadOnly = true;
+            this.alt_notes.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.alt_notes.Width = 220;
+            // 
+            // alt_key
+            // 
+            this.alt_key.DataPropertyName = "AltKey";
+            this.alt_key.HeaderText = "alt_key";
+            this.alt_key.Name = "alt_key";
+            this.alt_key.Visible = false;
+            // 
+            // alct_id
+            // 
+            this.alct_id.DataPropertyName = "AlctId";
+            this.alct_id.HeaderText = "alct_id";
+            this.alct_id.Name = "alct_id";
+            this.alct_id.Visible = false;
             // 
             // DAllowanceTypeHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
+            this.CausesValidation = false;
             this.Controls.Add(this.grid);
             this.Name = "DAllowanceTypeHistory";
             this.Size = new System.Drawing.Size(794, 425);
@@ -211,9 +236,15 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_rate;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_wks_yr;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_acc;
-        private Metex.Windows.DataGridViewEntityComboColumn alct_id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn alct_deescription;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn alt_effective_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_notes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn alt_key;
+        private System.Windows.Forms.DataGridViewTextBoxColumn alct_id;
+
+
+
+
 
 
 

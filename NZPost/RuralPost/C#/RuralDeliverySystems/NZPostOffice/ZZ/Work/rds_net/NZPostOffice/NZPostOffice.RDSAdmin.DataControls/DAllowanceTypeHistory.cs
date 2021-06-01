@@ -10,7 +10,7 @@ using NZPostOffice.RDSAdmin.Entity.Security;
 
 namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
-    // TJB  Allowances  1-Jun-2021: Ney
+    // TJB  Allowances  1-Jun-2021: New
     // Data control for allowance_type history display
 
 	public partial class DAllowanceTypeHistory : Metex.Windows.DataUserControl
@@ -18,8 +18,6 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		public DAllowanceTypeHistory()
 		{
 			InitializeComponent();
-            InitializeDropdown();
-            this.SortString = "alt_description A";
 
             // For dates, it sets the prompt to '\0' instead of '0'
             this.alt_effective_date.PromptChar = '0';
@@ -29,16 +27,21 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             // These settings allow the row height to adjust to the text if it wraps.
             this.alt_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.alt_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            // Needed to ignore data errors (probably null values)
+            this.grid.DataError += new DataGridViewDataErrorEventHandler(grid_DataError);
         }
 
-        private void InitializeDropdown()
-        {
-            alct_id.AssignDropdownType<DddwAllowanceCalcType>("AlctId", "AlctDescription");
+        void grid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {  // Needed to ignore data errors (probably null values)
+           //throw new Exception("The method or operation is not implemented.");
         }
 
-        public override int Retrieve(int? AltKey)
+        public int Retrieve(int? AltKey)
 		{
-			int ret = RetrieveCore<AllowanceTypeHistory>(new List<AllowanceTypeHistory>(AllowanceTypeHistory.GetAllAllowanceType(AltKey)));
+			int ret = RetrieveCore<AllowanceTypeHistory>(new List<AllowanceTypeHistory>
+                                (AllowanceTypeHistory.GetAllAllowanceTypeHistory(AltKey)));
+            this.SortString = "alt_effective_date Desc";
             if(this.SortString != "")
                 this.Sort<AllowanceTypeHistory>();
             return ret;
