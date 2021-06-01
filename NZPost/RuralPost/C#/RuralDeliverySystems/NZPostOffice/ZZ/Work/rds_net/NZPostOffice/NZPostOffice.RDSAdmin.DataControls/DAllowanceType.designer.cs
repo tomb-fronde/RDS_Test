@@ -43,7 +43,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_wks_yr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alt_acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.alct_id = new Metex.Windows.DataGridViewEntityComboColumn();
-            this.alt_effective_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alt_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.alt_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -166,9 +166,18 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle7.Format = "d";
+            dataGridViewCellStyle7.NullValue = null;
             this.alt_effective_date.DefaultCellStyle = dataGridViewCellStyle7;
             this.alt_effective_date.HeaderText = "Effective Date";
+            this.alt_effective_date.IncludeLiterals = false;
+            this.alt_effective_date.IncludePrompt = false;
+            this.alt_effective_date.Mask = null;
             this.alt_effective_date.Name = "alt_effective_date";
+            this.alt_effective_date.PromptChar = '\0';
+            this.alt_effective_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_effective_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.alt_effective_date.ValidatingType = null;
             this.alt_effective_date.Width = 70;
             // 
             // alt_notes
@@ -181,7 +190,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_notes.DefaultCellStyle = dataGridViewCellStyle8;
             this.alt_notes.HeaderText = "Notes";
             this.alt_notes.Name = "alt_notes";
-            this.alt_notes.Width = 120;
+            this.alt_notes.Width = 220;
             // 
             // DAllowanceType
             // 
@@ -203,8 +212,11 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_wks_yr;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_acc;
         private Metex.Windows.DataGridViewEntityComboColumn alct_id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn alt_effective_date;
+        private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn alt_effective_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_notes;
+
+
+
 
 
 

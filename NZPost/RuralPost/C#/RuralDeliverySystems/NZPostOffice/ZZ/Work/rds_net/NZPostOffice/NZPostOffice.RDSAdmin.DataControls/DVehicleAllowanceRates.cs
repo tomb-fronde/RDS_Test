@@ -19,7 +19,16 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 		{
 			InitializeComponent();
             this.SortString = "var_id A";
-		}
+
+            // For dates, it sets the prompt to '\0' instead of '0'
+            this.var_effective_date.PromptChar = '0';
+            this.var_effective_date.Mask = "00/00/0000";
+            this.var_effective_date.ValueType = typeof(System.DateTime);
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.var_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.var_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         public override int Retrieve()
 		{

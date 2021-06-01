@@ -24,7 +24,15 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.DataError += new DataGridViewDataErrorEventHandler(grid_DataError);
             this.grid.Validating += new CancelEventHandler(grid_Validating);
 
-		}
+            // For dates, it sets the prompt to '\0' instead of '0'
+            this.alt_effective_date.PromptChar = '0';
+            this.alt_effective_date.Mask = "00/00/0000";
+            this.alt_effective_date.ValueType = typeof(System.DateTime);
+
+            // These settings allow the row height to adjust to the text if it wraps.
+            this.alt_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        }
 
         private void InitializeDropdown()
         {

@@ -94,6 +94,7 @@ namespace NZPostOffice.RDSAdmin
         private DwGroupDetails dw_1;
         private ImageList MainMdiImageList;
         private MSecurityTvs m_SecTvs;
+        private Button updatebutton;
         private MRdsDw mRdsDw;
 
         public WMainMdi()
@@ -527,6 +528,11 @@ namespace NZPostOffice.RDSAdmin
             string ls_component_name;
             int ll_component_id;
             int ll_Ctr;
+            string sDwName = (dw_detail.DataObject).Name;
+            string sColumnName = ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).Columns[e.ColumnIndex].Name;
+            string s1 = sDwName;
+            string s2 = sColumnName;
+
             if (e.Button == MouseButtons.Left && ((Metex.Windows.DataEntityGrid)dw_detail.DataObject.GetControlByName("grid")).Columns[e.ColumnIndex].Name == "component_list")
             {
                 WSecurityComponent w = new WSecurityComponent();
@@ -830,6 +836,24 @@ namespace NZPostOffice.RDSAdmin
                 //    MessageBox("Password", gnv_app.of_Decrypt(GetItemString(1, "rds_user_id_ui_password")));
                 //}*/
             }
+            if (dw_detail.DataObject is DAllowanceType)
+            {
+                int nRow = (dw_detail.DataObject).GetRow();
+                int alt_key = (int)dw_detail.DataObject.GetItem<AllowanceType>(nRow).AltKey;
+                string alt_description = dw_detail.DataObject.GetItem<AllowanceType>(nRow).AltDescription;
+                //MessageBox.Show("Show Allowance History for " + alt_key.ToString() + " ("+ alt_description+")");
+                WAllowanceTypeHistory w = new WAllowanceTypeHistory(alt_key);
+                w.Show(this);
+            }
+            if (dw_detail.DataObject is DVehicleAllowanceRates)
+            {
+                int nRow = (dw_detail.DataObject).GetRow();
+                int var_id = (int)dw_detail.DataObject.GetItem<VehicleAllowanceRates>(nRow).VarId;
+                string var_description = dw_detail.DataObject.GetItem<VehicleAllowanceRates>(nRow).VarDescription;
+                //MessageBox.Show("Show Vehicle Allowance Rate History for " + var_description);
+                WVehicleAllowanceRatesHistory w = new WVehicleAllowanceRatesHistory(var_id);
+                w.Show(this);
+            }
         }
 
         public override void ue_refresh()
@@ -957,15 +981,17 @@ namespace NZPostOffice.RDSAdmin
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WMainMdi));
             this.dw_user_region = new NZPostOffice.RDSAdmin.DataControls.Security.DwUserRegion();
             this.dw_detail = new Metex.Windows.DataUserControlContainer();
+            this.updatebutton = new System.Windows.Forms.Button();
             this.dw_1 = new NZPostOffice.RDSAdmin.DataControls.Security.DwGroupDetails();
             this.st_1 = new NZPostOffice.Shared.VisualComponents.USt();
-            this.tv_1 = new NZPostOffice.RDSAdmin.Controls.USecurityTvs();
             this.MainMdiImageList = new System.Windows.Forms.ImageList(this.components);
             this.dw_header = new Metex.Windows.DataUserControlContainer();
             this.dw_contract_type = new NZPostOffice.RDSAdmin.DataControls.Security.DwContractTypes();
             this.gb_details = new System.Windows.Forms.GroupBox();
             this.dw_user_details = new NZPostOffice.RDSAdmin.DataControls.Security.DUiIdDetails();
+            this.tv_1 = new NZPostOffice.RDSAdmin.Controls.USecurityTvs();
             this.dw_detail.SuspendLayout();
+            this.gb_details.SuspendLayout();
             this.SuspendLayout();
             // 
             // dw_user_region
@@ -986,9 +1012,23 @@ namespace NZPostOffice.RDSAdmin
             this.dw_detail.DataObject = null;
             this.dw_detail.Location = new System.Drawing.Point(212, 160);
             this.dw_detail.Name = "dw_detail";
-            this.dw_detail.Size = new System.Drawing.Size(558, 320);
+            this.dw_detail.Size = new System.Drawing.Size(1100, 320);
             this.dw_detail.TabIndex = 5;
             this.dw_detail.Visible = false;
+            // 
+            // updatebutton
+            // 
+            this.updatebutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.updatebutton.CausesValidation = false;
+            this.updatebutton.Location = new System.Drawing.Point(18, 459);
+            this.updatebutton.Name = "updatebutton";
+            this.updatebutton.Size = new System.Drawing.Size(99, 23);
+            this.updatebutton.TabIndex = 2;
+            this.updatebutton.TabStop = false;
+            this.updatebutton.Text = "Update";
+            this.updatebutton.UseVisualStyleBackColor = true;
+            this.updatebutton.Visible = false;
+            this.updatebutton.Click += new System.EventHandler(this.updatebutton_Click);
             // 
             // dw_1
             // 
@@ -1007,28 +1047,6 @@ namespace NZPostOffice.RDSAdmin
             this.st_1.Name = "st_1";
             this.st_1.Size = new System.Drawing.Size(3, 504);
             this.st_1.TabIndex = 1;
-            // 
-            // tv_1
-            // 
-            this.tv_1.AllowDrop = true;
-            this.tv_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.tv_1.ImageIndex = 0;
-            this.tv_1.ImageList = this.MainMdiImageList;
-            this.tv_1.Location = new System.Drawing.Point(5, 35);
-            this.tv_1.Name = "tv_1";
-            this.tv_1.SelectedImageIndex = 0;
-            this.tv_1.Size = new System.Drawing.Size(192, 496);
-            this.tv_1.TabIndex = 6;
-            this.tv_1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseUp);
-            this.tv_1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_1_DragDrop);
-            this.tv_1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_1_AfterSelect);
-            this.tv_1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseMove);
-            this.tv_1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseDown);
-            this.tv_1.DragEnter += new System.Windows.Forms.DragEventHandler(this.tv_1_DragEnter);
-            this.tv_1.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_1_BeforeSelect);
-            this.tv_1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tv_1_ItemDrag);
-            this.tv_1.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_1_DragOver);
             // 
             // MainMdiImageList
             // 
@@ -1063,6 +1081,7 @@ namespace NZPostOffice.RDSAdmin
             // 
             // gb_details
             // 
+            this.gb_details.Controls.Add(this.updatebutton);
             this.gb_details.Cursor = System.Windows.Forms.Cursors.Cross;
             this.gb_details.Location = new System.Drawing.Point(205, 27);
             this.gb_details.Name = "gb_details";
@@ -1083,6 +1102,28 @@ namespace NZPostOffice.RDSAdmin
             this.dw_user_details.Visible = false;
             this.dw_user_details.lockClick += new System.EventHandler(this.dw_user_details_lockClick);
             // 
+            // tv_1
+            // 
+            this.tv_1.AllowDrop = true;
+            this.tv_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.tv_1.ImageIndex = 0;
+            this.tv_1.ImageList = this.MainMdiImageList;
+            this.tv_1.Location = new System.Drawing.Point(5, 35);
+            this.tv_1.Name = "tv_1";
+            this.tv_1.SelectedImageIndex = 0;
+            this.tv_1.Size = new System.Drawing.Size(192, 496);
+            this.tv_1.TabIndex = 6;
+            this.tv_1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseUp);
+            this.tv_1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_1_DragDrop);
+            this.tv_1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_1_AfterSelect);
+            this.tv_1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseMove);
+            this.tv_1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_1_MouseDown);
+            this.tv_1.DragEnter += new System.Windows.Forms.DragEventHandler(this.tv_1_DragEnter);
+            this.tv_1.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.tv_1_BeforeSelect);
+            this.tv_1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tv_1_ItemDrag);
+            this.tv_1.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_1_DragOver);
+            // 
             // WMainMdi
             // 
             this.ClientSize = new System.Drawing.Size(966, 560);
@@ -1095,6 +1136,7 @@ namespace NZPostOffice.RDSAdmin
             this.Controls.Add(this.dw_user_region);
             this.Controls.Add(this.dw_contract_type);
             this.Name = "WMainMdi";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Rural Delivery System Administration";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WMainMdi_FormClosed);
@@ -1107,6 +1149,7 @@ namespace NZPostOffice.RDSAdmin
             this.Controls.SetChildIndex(this.st_1, 0);
             this.Controls.SetChildIndex(this.dw_detail, 0);
             this.dw_detail.ResumeLayout(false);
+            this.gb_details.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1505,7 +1548,6 @@ namespace NZPostOffice.RDSAdmin
                 dwName = "DVehicleAllowanceRates";
             string s = dwName;
 
-            dw_detail.DataObject.AcceptText();
             if (ab_prompt)
             {
                 if (StaticFunctions.IsDirty(dw_header.DataObject)
@@ -1532,7 +1574,7 @@ namespace NZPostOffice.RDSAdmin
                     }
                     else
                     {
-                        ls_title = "Save Details?";
+                        ls_title = "Save " + dw_detail.DataObject.Name+ "?";
                         ls_msg = "Some information has been modified.";
                     }
                     if (ls_title.Length > 0)
@@ -1591,7 +1633,7 @@ namespace NZPostOffice.RDSAdmin
             {               
                 if (dw_detail.DataObject is DwGroupDetails)
                 { 
-                    //?support validate added by jlwang
+                    //?support validate added by jlwangFdw_vehicle_allowance
                     int ll_currentRow = dw_detail.DataObject.GetRow();
 
                     if (ll_currentRow >= 0)
@@ -1673,6 +1715,7 @@ namespace NZPostOffice.RDSAdmin
                     // The list, "remembers" which allowances have changed so we 
                     // generate updated contract_allowance records.
                     List<int> allowance_index = new List<int>();
+                    List<int> allowance_changed = new List<int>();
  
                     // We need to find out what has changed - is it any of the calculation factors?
                     for (int i = 0; i < dw_detail.RowCount; i++)
@@ -1698,6 +1741,9 @@ namespace NZPostOffice.RDSAdmin
                             nAlctId = (int?)dw_allowance_type.GetItem<AllowanceType>(i).AlctId;
                             if (nAlctId == null) continue; // The proverbial this should never happen :)
                             nCalcType = (int)nAlctId;
+
+                            // Track ALL changed rows not just those where the allowance calculation factore have changed
+                            allowance_changed.Add(i);  // Track ALL changed rows not just those where the allowance calculation factore have changed
 
                             if (nCalcType == 1)   // FIXED does not use any global factors so no new records will
                             {                       // need to be created.
@@ -1748,6 +1794,13 @@ namespace NZPostOffice.RDSAdmin
 
                     // Save the changed allowance type(s)
                     dw_allowance_type.Save();
+
+                    foreach (int i in allowance_changed)
+                    {
+                        // Add the changed record to the history table
+                        int nAltKey = (int)dw_allowance_type.GetItem<AllowanceType>(i).AltKey;
+                        MainMdiService.UpdateAllowanceTypeHistory(nAltKey);
+                    }
                     
                     foreach( int i in allowance_index)
                     {
@@ -1758,8 +1811,10 @@ namespace NZPostOffice.RDSAdmin
 
                         // A calculation factor for this allowance has changed
                         // Generate new contract_allowance records for this change.
+                        // [26-May-2021] Added var_id parameter to GenerateUpdatedAllowances call
+                        //               See detail in MainMdiService.GenerateUpdatedAllowances
                         string sqlmsg = "";
-                        int nUpdated = MainMdiService.GenerateUpdatedAllowances(nAltKey, dAltEffDate, sAltNotes, out sqlmsg);
+                        int nUpdated = MainMdiService.GenerateUpdatedAllowances(nAltKey, -1, dAltEffDate, sAltNotes, out sqlmsg);
                         if (nUpdated < 0)
                             MessageBox.Show("Database error updating allowance "+sAltDescription+"\n\n"
                                            + sqlmsg, "SQL Database error"
@@ -1834,10 +1889,15 @@ namespace NZPostOffice.RDSAdmin
                         DateTime dVarEffDate = (DateTime)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarEffectiveDate;
                         string sVarNotes = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarNotes;
 
+                        // Add the changed record to the history table
+                        MainMdiService.UpdateVehicleAllowanceRatesHistory(nVarId);
+
                         // A calculation factor for this vehicle type has changed
                         // Generate new contract_allowance records for this change.
+                        // [26-May-2021] Added var_id parameter to GenerateUpdatedAllowances call
+                        //               See detail in MainMdiService.GenerateUpdatedAllowances
                         string sqlmsg = "";
-                        int nUpdated = MainMdiService.GenerateUpdatedAllowances(nVarId, dVarEffDate, sVarNotes, out sqlmsg);
+                        int nUpdated = MainMdiService.GenerateUpdatedAllowances( -1, nVarId, dVarEffDate, sVarNotes, out sqlmsg);
                         if (nUpdated < 0)
                             MessageBox.Show("Database error updating vehicle type " + sVarDescription + "\n\n"
                                            + sqlmsg, "SQL Database error"
@@ -2675,11 +2735,16 @@ namespace NZPostOffice.RDSAdmin
 
         public virtual void ue_navigated()
         {
-            // PowerBuilder 'Choose Case' statement converted into 'if' statement
             int level = tv_1.SelectedNode.Level;
 
             int parent_id1 = 0;
             int parent_id2 = 0;
+
+            // TJB Allowances 27-May-2021: Added button
+            // Ensure its off unless switching to the dw_vehicle_allowance_rates window (see below)
+            if( updatebutton.Visible )
+                updatebutton.Visible = false;
+
             switch (level)
             {
                 case 0:
@@ -2823,6 +2888,22 @@ namespace NZPostOffice.RDSAdmin
                             dw_contract_type.Visible = false;
                             dw_user_details.Visible = false;
                             this.Cursor = Cursors.Arrow;
+
+                            // TJB Allowances 27-May-2021: Added button
+                            if(PBName == "d_vehicle_allowance_rates")
+                            {
+                                int y = dw_detail.Location.Y;
+                                int x = updatebutton.Location.X;
+                                updatebutton.Location = new Point(x, y + 232);
+                                updatebutton.Visible = true;
+                            }
+                            else if(PBName == "d_allowance_type")
+                            {
+                                int y = dw_detail.Location.Y;
+                                int x = updatebutton.Location.X;
+                                updatebutton.Location = new Point(x, y + 406);
+                                updatebutton.Visible = true;
+                            }
                         }
                     }
                     break;
@@ -3596,6 +3677,18 @@ namespace NZPostOffice.RDSAdmin
         private void WMainMdi_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.Windows.Forms.Application.Exit();
+        }
+
+        // TJB Allowances 27-May-2021: Added
+        private void updatebutton_Click(object sender, EventArgs e)
+        {
+            DialogResult ans = MessageBox.Show("Please confirm that you want to update these deetails\n"
+                                              + "without generating updated contract allowance records."
+                                              , "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (ans == DialogResult.Yes)
+                MessageBox.Show("'Yes' not yet implemented", "Warning");
+            if (ans == DialogResult.No)
+                MessageBox.Show("'No' not yet implemented", "Warning");
         }
 
     }

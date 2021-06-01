@@ -56,7 +56,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.insurance_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ror_pa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.var_ruc_rate_pk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.var_effective_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.var_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.var_notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sQLCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sQLErrText = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -107,7 +107,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(970, 252);
+            this.grid.Size = new System.Drawing.Size(1070, 252);
             this.grid.TabIndex = 0;
             // 
             // var_id
@@ -254,9 +254,18 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle14.Format = "d";
+            dataGridViewCellStyle14.NullValue = null;
             this.var_effective_date.DefaultCellStyle = dataGridViewCellStyle14;
             this.var_effective_date.HeaderText = "Effective Date";
+            this.var_effective_date.IncludeLiterals = false;
+            this.var_effective_date.IncludePrompt = false;
+            this.var_effective_date.Mask = null;
             this.var_effective_date.Name = "var_effective_date";
+            this.var_effective_date.PromptChar = '\0';
+            this.var_effective_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.var_effective_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.var_effective_date.ValidatingType = null;
             this.var_effective_date.Width = 70;
             // 
             // var_notes
@@ -269,7 +278,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.var_notes.DefaultCellStyle = dataGridViewCellStyle15;
             this.var_notes.HeaderText = "Notes";
             this.var_notes.Name = "var_notes";
-            this.var_notes.Width = 120;
+            this.var_notes.Width = 220;
             // 
             // sQLCode
             // 
@@ -294,7 +303,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DVehicleAllowanceRates";
-            this.Size = new System.Drawing.Size(970, 252);
+            this.Size = new System.Drawing.Size(1070, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -321,7 +330,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn insurance_pa;
         private System.Windows.Forms.DataGridViewTextBoxColumn ror_pa;
         private System.Windows.Forms.DataGridViewTextBoxColumn var_ruc_rate_pk;
-        private System.Windows.Forms.DataGridViewTextBoxColumn var_effective_date;
+        private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn var_effective_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn var_notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLErrText;
