@@ -372,6 +372,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                     ParameterCollection pList = new ParameterCollection();
 
                     GenerateSelectCommandText(cm, "vehicle_allowance_rates");
+                    cm.CommandText += " WHERE vehicle_allowance_rates.var_id > 0";
                     List<VehicleAllowanceRates> list = new List<VehicleAllowanceRates>();
 
                     try

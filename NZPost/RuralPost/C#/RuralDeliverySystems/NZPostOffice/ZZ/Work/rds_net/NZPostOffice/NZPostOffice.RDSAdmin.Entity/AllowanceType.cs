@@ -276,10 +276,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 ParameterCollection pList = new ParameterCollection();
                 if (GenerateUpdateCommandText(cm, "allowance_type", ref pList))
 				{
-					cm.CommandText += " WHERE  allowance_type.alt_key = @alt_key ";
-                                    + "  and allowance_type.alt_effective_date = @alt_effective_date";
+                    cm.CommandText += " WHERE  allowance_type.alt_key = @alt_key ";
                     pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
-                    pList.Add(cm, "alt_effective_date", GetInitialValue("_alt_effective_date"));
                     DBHelper.ExecuteNonQuery(cm, pList);
 				}
 				// reinitialize original key/value list
@@ -313,10 +311,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm,"alt_key", GetInitialValue("_alt_key"));
-                    pList.Add(cm, "alt_effective_date", GetInitialValue("_alt_effective_date"));
                     cm.CommandText = "DELETE FROM allowance_type_history "
-                                     + "WHERE allowance_type.alt_key = @alt_key "
-                                     + "  and allowance_type.alt_effective_date = @alt_effective_date";
+                                     + "WHERE allowance_type.alt_key = @alt_key ";
                     DBHelper.ExecuteNonQuery(cm, pList);
 					tr.Commit();
 				}

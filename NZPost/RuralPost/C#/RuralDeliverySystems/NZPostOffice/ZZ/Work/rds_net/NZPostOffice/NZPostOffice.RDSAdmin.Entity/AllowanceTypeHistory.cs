@@ -21,6 +21,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("alct_id", "_alct_id", "allowance_type_history")]
     [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type_history")]
     [MapInfo("alt_notes", "_alt_notes", "allowance_type_history")]
+    [MapInfo("alct_description", "_alct_description", "")]
     [System.Serializable()]
 
 	public class AllowanceTypeHistory : Entity<AllowanceTypeHistory>
@@ -49,6 +50,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private string _alt_notes;
+
+        [DBField()]
+        private string _alct_description;
 
         private int _sqlcode;
         private string _sqlerrmsg;
@@ -198,6 +202,24 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
             }
         }
 
+        public virtual string AlctDescription
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _alct_description;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_alct_description != value)
+                {
+                    _alct_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual int SqlCode
         {
             get
@@ -224,20 +246,20 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		#endregion
 
 		#region Factory Methods
-        public static AllowanceTypeHistory NewAllowanceType(int? alt_key)
+        public static AllowanceTypeHistory NewAllowanceTypeHistory(int? AltKey)
 		{
-            return Create(alt_key);
+            return Create(AltKey);
 		}
 
-		public static AllowanceTypeHistory[] GetAllAllowanceType(  )
+		public static AllowanceTypeHistory[] GetAllAllowanceTypeHistory(int? AltKey  )
 		{
-			return Fetch().dataList;
+			return Fetch(AltKey).dataList;
 		}
 		#endregion
 
 		#region Data Access
 		[ServerMethod]
-		private void FetchEntity(  )
+		private void FetchEntity(int? AltKey  )
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO" ))
 			{
@@ -245,20 +267,42 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				{
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
-                    GenerateSelectCommandText(cm, "allowance_type_history");
+                    cm.CommandText = "SELECT alt.alt_key "
+                                   + "     , alt.alt_description "
+                                   + "     , alt.alct_id"
+                                   + "     , alt.alt_rate "
+                                   + "     , alt.alt_wks_yr "
+                                   + "     , alt.alt_acc "
+                                   + "     , alt.alt_effective_date  "
+                                   + "     , alt.alt_notes "
+                                   + "     , alct.alct_description "
+                                   + "  FROM allowance_type_history alt "
+                                   + "     , rd.allowance_calc_type alct "
+                                   + " WHERE alt.alt_key = @alt_key "
+                                   + "   AND alct.alct_id = alt.alct_id ";
 
-					List<AllowanceTypeHistory> list = new List<AllowanceTypeHistory>();
-					using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                    pList.Add(cm, "@alt_key", AltKey);
+                    List<AllowanceTypeHistory> _list = new List<AllowanceTypeHistory>();
+                    using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
 					{
-						while (dr.Read())
-						{
-							AllowanceTypeHistory instance = new AllowanceTypeHistory();
-                            instance.StoreFieldValues(dr, "allowance_type_history");
-							instance.MarkOld();
-							list.Add(instance);
-						}
-						dataList = new AllowanceTypeHistory[list.Count];
-						list.CopyTo(dataList);
+                        while (dr.Read())
+                        {
+                            AllowanceTypeHistory instance = new AllowanceTypeHistory();
+                            instance._alt_key = GetValueFromReader<int?>(dr, 0);
+                            instance._alt_description = GetValueFromReader<string>(dr, 1);
+                            instance._alct_id = GetValueFromReader<int?>(dr, 2);
+                            instance._alt_rate = GetValueFromReader<decimal?>(dr, 3);
+                            instance._alt_wks_yr = GetValueFromReader<decimal?>(dr, 4);
+                            instance._alt_acc = GetValueFromReader<decimal?>(dr, 5);
+                            instance._alt_effective_date = GetValueFromReader<DateTime?>(dr, 6);
+                            instance._alt_notes = GetValueFromReader<string>(dr, 7);
+                            instance._alct_description = GetValueFromReader<string>(dr, 8);
+                            instance.MarkOld();
+                            instance.StoreInitialValues();
+                            _list.Add(instance);
+                        }
+                        dataList = new AllowanceTypeHistory[_list.Count];
+						_list.CopyTo(dataList);
 					}
 				}
 			}

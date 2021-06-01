@@ -10,8 +10,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.DataService
 {
-    // TJB  Allowances 22-May-2021
-    // 
+    // TJB Allowances May-2021
+    // Added
+    //    GenerateUpdatedAllowances
+    //    UpdateVehicleAllowanceTypeHistory
+    //    UpdateVehicleAllowanceRatesHistory
     //
     // TJB  RPCR_117  July-2018
     // Added CheckEmailAddress(string p_email) to validate email address format
@@ -276,13 +279,34 @@ namespace NZPostOffice.RDSAdmin.DataService
             return obj.ret;
         }
 
-        // TJB  Allowances 22-May-2021: New
-        // Gnerate updated records for existing allowances when 'hidden' factors are changed
-        public static int GenerateUpdatedAllowances(int alt_key, DateTime new_effective_date, string new_notes, out string SQLerrmsg)
+        // TJB Allowances May-2021: New
+        // Called to generate updated contract_allowance records when either an Allowance_type
+        // factor changes, or when one of the vahicle_allowance_rates changes
+        // Var_id <= 0 means its one of the allowance_type changes
+        // Alt_key <= 0 means its one of the vahicle_allowance_rates changes
+        public static int GenerateUpdatedAllowances(int alt_key, int var_id, DateTime new_effective_date, string new_notes, out string SQLerrmsg)
         {
-            MainMdiService obj = Execute("_GenerateUpdatedAllowances", alt_key, new_effective_date, new_notes);
+            MainMdiService obj = Execute("_GenerateUpdatedAllowances", alt_key, var_id, new_effective_date, new_notes);
             SQLerrmsg = obj.SQLErrMsg;
             return (int)obj.intVal;
+        }
+
+        // TJB Allowances 31-May-2021: New
+        // Update the allowance_type_history table with the values from the 
+        // record in the allowance_type table that has alt_key = inAltKey
+        public static int? UpdateAllowanceTypeHistory(int inAltKey)
+        {
+            MainMdiService obj = Execute("_UpdateAllowanceTypeHistory", inAltKey);
+            return obj.intVal;
+        }
+
+        // TJB Allowances 31-May-2021: New
+        // Update the vehicle_allowance_rates_history table with the values from the 
+        // record in the vehicle_allowance_rates table that has var_id = inVarId
+        public static int? UpdateVehicleAllowanceRatesHistory(int inVarId)
+        {
+            MainMdiService obj = Execute("_UpdateVehicleAllowanceRatesHistory", inVarId);
+            return obj.intVal;
         }
 
         public static int? GetNextSequence(string sequenceName)
@@ -317,8 +341,13 @@ namespace NZPostOffice.RDSAdmin.DataService
  #endregion
 
         #region Server-side Code
+        // TJB Allowances May-2021: New
+        // Called to generate updated contract_allowance records when either an Allowance_type
+        // factor changes, or when one of the vahicle_allowance_rates changes
+        // Var_id <= 0 means its one of the allowance_type changes
+        // Alt_key <= 0 means its one of the vahicle_allowance_rates changes
         [ServerMethod]
-        private void _GenerateUpdatedAllowances(int in_alt_key, DateTime in_new_eff_date, string in_new_notes)
+        private void _GenerateUpdatedAllowances(int in_alt_key, int in_var_id, DateTime in_new_eff_date, string in_new_notes)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -327,7 +356,8 @@ namespace NZPostOffice.RDSAdmin.DataService
                     cm.CommandType = CommandType.StoredProcedure;
                     cm.CommandText = "rd.sp_generate_updated_allowances";
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "alt_key", in_alt_key);
+                    pList.Add(cm, "in_alt_key", in_alt_key);
+                    pList.Add(cm, "in_var_id   ", in_var_id);
                     pList.Add(cm, "new_effective_date", in_new_eff_date);
                     pList.Add(cm, "new_notes", in_new_notes);
 
@@ -351,7 +381,48 @@ namespace NZPostOffice.RDSAdmin.DataService
                 }
             }
         }
-       
+
+
+        // TJB Allowances 31-May-2021: New
+        [ServerMethod]
+        private  void _UpdateAllowanceTypeHistory(int inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? rc = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "insert into [rd].[allowance_type_history] "
+                                     + "select * from [rd].[allowance_type] "
+                                     + " where alt_key = @alt_key";
+                    pList.Add(cm, "@alt_key", inAltKey);
+                    DBHelper.ExecuteReader(cm, pList);
+                    intVal = rc;
+                }
+            }
+        }
+
+        // TJB Allowances 31-May-2021: New
+        [ServerMethod]
+        private void _UpdateVehicleAllowanceRatesHistory(int inVarId)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? rc = 0;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "insert into [rd].[vehicle_allowance_rates_history] "
+                                     + "select * from [rd].[vehicle_allowance_rates] "
+                                     + " where var_id = @var_id";
+                    pList.Add(cm, "@var_id", inVarId);
+                    DBHelper.ExecuteReader(cm, pList);
+                    intVal = rc;
+                }
+            }
+        }
+
         [ServerMethod]
         private  void _GetNextSequence(string sequenceName)
         {

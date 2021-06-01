@@ -337,15 +337,14 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 		#endregion
 
 		#region Factory Methods
-		public static VehicleAllowanceRatesHistory NewVehicleAllowanceRates()
+		public static VehicleAllowanceRatesHistory NewVehicleAllowanceRatesHistory()
 		{
 			return Create();
 		}
 
-		public static VehicleAllowanceRatesHistory[] GetAllVehicleAllowanceRates()
+		public static VehicleAllowanceRatesHistory[] GetAllVehicleAllowanceRatesHistory(int? VarId)
 		{
-            //return Fetch().list;
-            return Fetch().dataList;
+            return Fetch(VarId).dataList;
 		}
 		#endregion
 
@@ -361,7 +360,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
         public string SqlErrMsg = "";
 
 		[ServerMethod]
-        private void FetchEntity()
+        private void FetchEntity(int? VarId)
 		{
 			using ( DbConnection cn= DbConnectionFactory.RequestNextAvaliableSessionDbConnection( "NZPO"))
 			{
@@ -371,13 +370,14 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                     ParameterCollection pList = new ParameterCollection();
 
                     GenerateSelectCommandText(cm, "vehicle_allowance_rates_history");
-                    cm.CommandText += " WHERE vehicle_allowance_rates_history.var_id > 0";
+                    cm.CommandText += " WHERE vehicle_allowance_rates_history.var_id = @var_id";
                     List<VehicleAllowanceRatesHistory> list = new List<VehicleAllowanceRatesHistory>();
 
                     try
                     {
                         SqlErrCode = 0;
                         List<VehicleAllowanceRatesHistory> _list = new List<VehicleAllowanceRatesHistory>();
+                        pList.Add(cm, "@var_id", VarId);
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
