@@ -5,6 +5,8 @@ using NZPostOffice.Shared.VisualComponents;
 
 namespace NZPostOffice.RDSAdmin.Menus
 {
+    // TJB  Allowances  2-June-2021
+    // Added m_save
     public class MRdsDw : MDw
     {
         private System.ComponentModel.IContainer components = null;
@@ -39,7 +41,10 @@ namespace NZPostOffice.RDSAdmin.Menus
 
             m_delete.Enabled = true;
 
+            m_save.Visible = false;
+            m_save.Enabled = true;
         }
+
         public virtual void SetFunctionalPart(MRdsDw _m_rds_dw)
         {
             //!base.SetFunctionalPart(_m_rds_dw);
@@ -70,6 +75,10 @@ namespace NZPostOffice.RDSAdmin.Menus
         }
 
         public override void m_delete_clicked(object sender, EventArgs e)
+        {
+        }
+
+        public override void m_save_clicked(object sender, EventArgs e)
         {
         }
 

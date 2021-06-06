@@ -1,5 +1,8 @@
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB  Allowances  2-June-2021
+    // Added m_save
+
     using System;
     using System.Windows.Forms;
 
@@ -33,6 +36,9 @@ namespace NZPostOffice.Shared.VisualComponents
         public ToolStripMenuItem m_addrow;
 
         public ToolStripMenuItem m_delete;
+
+        // TJB  Allowances  June-2021
+        public ToolStripMenuItem m_save;
 
         public ToolStripMenuItem m_restorerow;
 
@@ -94,6 +100,7 @@ namespace NZPostOffice.Shared.VisualComponents
             m_modify = new ToolStripMenuItem();
             m_addrow = new ToolStripMenuItem();
             m_delete = new ToolStripMenuItem();
+            m_save = new ToolStripMenuItem();
             m_restorerow = new ToolStripMenuItem();
             m_dash12 = new ToolStripSeparator();
             m_columns = new ToolStripMenuItem();
@@ -112,6 +119,7 @@ namespace NZPostOffice.Shared.VisualComponents
             Items.Add(m_modify);
             Items.Add(m_addrow);
             Items.Add(m_delete);
+            Items.Add(m_save);
             Items.Add(m_restorerow);
             Items.Add(m_dash12);
             Items.Add(m_columns);
@@ -177,6 +185,13 @@ namespace NZPostOffice.Shared.VisualComponents
             m_delete.ToolTipText = "Deletes selected rows";
             m_delete.Enabled = false;
             m_delete.ShortcutKeys = (Keys)Shortcut.CtrlDel;
+            // 
+            // m_save
+            // 
+            m_save.Text = "&Save";
+            m_save.ToolTipText = "Save changed rows";
+            m_save.Enabled = false;
+            m_save.ShortcutKeys = (Keys)Shortcut.CtrlS;
             // 
             // m_restorerow
             // 
@@ -244,6 +259,7 @@ namespace NZPostOffice.Shared.VisualComponents
             m_modify.Click += new EventHandler(m_modify_clicked);
             m_addrow.Click += new EventHandler(m_addrow_clicked);
             m_delete.Click += new EventHandler(m_delete_clicked);
+            m_save.Click += new EventHandler(m_save_clicked);
             m_restorerow.Click += new EventHandler(m_restorerow_clicked);
             m_columns.Click += new EventHandler(m_columns_clicked);
             m_functions.Click += new EventHandler(m_functions_clicked);
@@ -293,6 +309,10 @@ namespace NZPostOffice.Shared.VisualComponents
         {
             //idw_parent.pfc_deleterow();
             //!idw_parent.DeleteRow(idw_parent.GetRow());
+        }
+
+        public virtual void m_save_clicked(object sender, EventArgs e)
+        {
         }
 
         public virtual void m_restorerow_clicked(object sender, EventArgs e)
