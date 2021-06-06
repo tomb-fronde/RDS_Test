@@ -31,7 +31,7 @@ namespace NZPostOffice.Shared.VisualComponents
             this.InitializeComponent();
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetEntryAssembly();
             string sBuiltOn = AppManager.ApplicationBuiltOn;
-            // TJB  Release 7.1.13.3  May-2015
+            // TJB  Release 7.1.17.5  June-2021
             // Changed Version string to improve clarity.
             // Used by RDSAdmin
             lblVersion.Text = "Version " + AppManager.ApplicationVersion + ", " + sBuiltOn;
