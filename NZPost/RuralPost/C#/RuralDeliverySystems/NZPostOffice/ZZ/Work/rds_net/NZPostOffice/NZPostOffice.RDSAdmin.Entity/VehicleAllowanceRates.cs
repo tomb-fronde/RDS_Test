@@ -15,7 +15,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
-    [MapInfo("var_id", "_var_id", "vehicle_allowance_rates")]
+    [MapInfo("var_id", "_var_id", "vehicle_allowance_rates",true)]
     [MapInfo("var_description", "_var_description", "vehicle_allowance_rates")]
     [MapInfo("var_carrier_pa", "_var_carrier_pa", "vehicle_allowance_rates")]
     [MapInfo("var_repairs_pk", "_var_repairs_pk", "vehicle_allowance_rates")]
@@ -392,6 +392,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                             list.CopyTo(dataList);
                             //list = _list.ToArray();
                         }
+
                     }
                     catch (Exception e)
                     {
@@ -414,8 +415,16 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 {
                     cm.CommandText += " WHERE  vehicle_allowance_rates.var_id = @var_id ";
 
-                    pList.Add(cm, "var_id", GetInitialValue("_var_id"));
-                    DBHelper.ExecuteNonQuery(cm, pList);
+                    pList.Add(cm, "var_id", _var_id);
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        SqlErrCode = -1;
+                        SqlErrMsg = e.Message;
+                    }
                 }
                 // reinitialize original key/value list
                 StoreInitialValues();
@@ -433,7 +442,15 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
                 if (GenerateInsertCommandText(cm, "vehicle_allowance_rates", pList))
                 {
-                    DBHelper.ExecuteNonQuery(cm, pList);
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                    }
+                    catch (Exception e)
+                    {
+                        SqlErrCode = -1;
+                        SqlErrMsg = e.Message;
+                    }
                 }
                 StoreInitialValues();
             }

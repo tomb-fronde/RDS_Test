@@ -23,6 +23,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
     [MapInfo("alct_id", "_alct_id", "allowance_type")]
     [MapInfo("alt_effective_date", "_alt_effective_date", "allowance_type")]
     [MapInfo("alt_notes", "_alt_notes", "allowance_type")]
+    [MapInfo("alct_description", "_alt_description", "")]
     [System.Serializable()]
 
 	public class AllowanceType : Entity<AllowanceType>
@@ -51,6 +52,9 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 
         [DBField()]
         private string _alt_notes;
+
+        [DBField()]
+        private string _alct_description;
 
         private int _sqlcode;
         private string _sqlerrmsg;
@@ -200,6 +204,24 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
             }
         }
 
+        public virtual string AlctDescription
+        {
+            get
+            {
+                CanReadProperty(true);
+                return _alct_description;
+            }
+            set
+            {
+                CanWriteProperty(true);
+                if (_alct_description != value)
+                {
+                    _alct_description = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual int SqlCode
         {
             get
@@ -277,7 +299,7 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
                 if (GenerateUpdateCommandText(cm, "allowance_type", ref pList))
 				{
                     cm.CommandText += " WHERE  allowance_type.alt_key = @alt_key ";
-                    pList.Add(cm, "alt_key", GetInitialValue("_alt_key"));
+                    pList.Add(cm, "alt_key", _alt_key);
                     DBHelper.ExecuteNonQuery(cm, pList);
 				}
 				// reinitialize original key/value list
@@ -296,7 +318,8 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				{
 					DBHelper.ExecuteNonQuery(cm, pList);
 				}
-				StoreInitialValues();
+                // initialize key/value list
+                StoreInitialValues();
 			}
 		}
 		[ServerMethod()]

@@ -17,6 +17,7 @@ namespace NZPostOffice.RDSAdmin.DataService
     //    UpdateVehicleAllowanceRatesHistory
     //    GetAllowanceMaxDate
     //    GetVehicleAllowanceMaxDate
+    //    LookUpAllowanceRateId
     //
     // TJB  RPCR_117  July-2018
     // Added CheckEmailAddress(string p_email) to validate email address format
@@ -310,6 +311,14 @@ namespace NZPostOffice.RDSAdmin.DataService
             return obj.dtVal;
         }
 
+        // TJB Allowances 3-June-2021: New
+        // Lookup the allowance ID (alt_key or var_id) given the description
+        public static int LookUpAllowanceRateId(string inAltDescr, string inVarDescr)
+        {
+            MainMdiService obj = Execute("_LookUpAllowanceRateId", inAltDescr, inVarDescr);
+            return (int)obj.intVal;
+        }
+
         // TJB Allowances 31-May-2021: New
         // Update the allowance_type_history table with the values from the 
         // record in the allowance_type table that has alt_key = inAltKey
@@ -434,7 +443,7 @@ namespace NZPostOffice.RDSAdmin.DataService
                 }
             }
         }
-
+        
         // TJB Allowances 1-June-2021: New
         [ServerMethod]
         private void _GetVehicleAllowanceMaxDate(int inVarId)
@@ -464,6 +473,50 @@ namespace NZPostOffice.RDSAdmin.DataService
                         _sqlerrmsg = e.Message;
                     }
                     dtVal = rc;
+                }
+            }
+        }
+
+        
+        // TJB Allowances 1-June-2021: New
+        [ServerMethod]
+        private void _LookUpAllowanceRateId(string inAltDescr, string inVarDescr)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? rc = null;
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "declare @Id int "
+                                    + "if( @inVarDescr = '' ) "
+                                    + "    select @Id = alt_key from rd.allowance_type  "
+                                    + "     where alt_description = @inAltDescr "
+                                    + "else if( @inAltDescr = '' ) "
+                                    + "    select @Id = var_id from rd.vehicle_allowance_rates  "
+                                    + "     where var_description = @inVarDescr "
+                                    + "else "
+                                    + "    select @Id = -1 "
+                                    + "select isnull(@Id,-1) as Id ";
+
+                    pList.Add(cm, "@inAltDescr", inAltDescr);
+                    pList.Add(cm, "@inVarDescr", inVarDescr);
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                rc = dr.GetInt32(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrmsg = e.Message;
+                        rc = -1;
+                    }
+                    intVal = rc;
                 }
             }
         }
