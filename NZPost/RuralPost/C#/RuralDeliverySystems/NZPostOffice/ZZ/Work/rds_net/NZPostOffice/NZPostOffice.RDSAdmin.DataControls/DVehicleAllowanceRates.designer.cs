@@ -107,7 +107,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(1070, 252);
+            this.grid.Size = new System.Drawing.Size(1070, 425);
             this.grid.TabIndex = 0;
             // 
             // var_id
@@ -120,6 +120,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.var_id.DefaultCellStyle = dataGridViewCellStyle2;
             this.var_id.HeaderText = "ID";
             this.var_id.Name = "var_id";
+            this.var_id.Visible = false;
             this.var_id.Width = 36;
             // 
             // var_description
@@ -303,7 +304,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.Controls.Add(this.grid);
             this.Name = "DVehicleAllowanceRates";
-            this.Size = new System.Drawing.Size(1070, 252);
+            this.Size = new System.Drawing.Size(1050, 424);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
@@ -334,8 +335,5 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private System.Windows.Forms.DataGridViewTextBoxColumn var_notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn sQLErrText;
-
-
-
     }
 }

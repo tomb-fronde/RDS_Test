@@ -105,8 +105,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
             this.grid.Name = "grid";
-            this.grid.RowHeadersVisible = false;
             this.grid.ReadOnly = true;
+            this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grid.Size = new System.Drawing.Size(1070, 252);
             this.grid.TabIndex = 0;
@@ -122,6 +122,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.var_id.HeaderText = "ID";
             this.var_id.Name = "var_id";
             this.var_id.ReadOnly = true;
+            this.var_id.Visible = false;
             this.var_id.Width = 36;
             // 
             // var_description
