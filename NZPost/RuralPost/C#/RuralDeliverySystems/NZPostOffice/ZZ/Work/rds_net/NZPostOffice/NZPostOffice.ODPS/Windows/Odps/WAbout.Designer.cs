@@ -31,68 +31,91 @@ namespace NZPostOffice.ODPS.Windows.Odps
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WAbout));
+            this.p_about = new System.Windows.Forms.PictureBox();
+            this.st_company = new System.Windows.Forms.Label();
+            this.st_application = new System.Windows.Forms.Label();
+            this.st_version = new System.Windows.Forms.Label();
+            this.st_copyright = new System.Windows.Forms.Label();
+            this.pb_ok = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.p_about)).BeginInit();
             this.SuspendLayout();
-            this.Size = new System.Drawing.Size(382, 241);
-            this.Load += new EventHandler(WAbout_Load);
             // 
             // p_about
             // 
-            p_about = new PictureBox();
-            p_about.Image = global::NZPostOffice.Shared.Properties.Resources.Logo;
-            p_about.SizeMode = PictureBoxSizeMode.StretchImage;
-            p_about.Size = new System.Drawing.Size(63, 44);
-            p_about.Location = new System.Drawing.Point(4, 7);
-            p_about.DoubleClick += new EventHandler(p_about_doubleclicked);
-
+            this.p_about.Image = ((System.Drawing.Image)(resources.GetObject("p_about.Image")));
+            this.p_about.Location = new System.Drawing.Point(4, 7);
+            this.p_about.Name = "p_about";
+            this.p_about.Size = new System.Drawing.Size(96, 44);
+            this.p_about.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.p_about.TabIndex = 1;
+            this.p_about.TabStop = false;
+            this.p_about.DoubleClick += new System.EventHandler(this.p_about_doubleclicked);
             // 
             // st_company
             // 
-            st_company = new Label();
-            st_company.Location = new System.Drawing.Point(106, 12);
-            st_company.Size = new System.Drawing.Size(260, 30);
-            st_company.Font = new System.Drawing.Font("Ms Sans Serif ", 13, System.Drawing.FontStyle.Bold);
-
+            this.st_company.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold);
+            this.st_company.Location = new System.Drawing.Point(106, 12);
+            this.st_company.Name = "st_company";
+            this.st_company.Size = new System.Drawing.Size(260, 30);
+            this.st_company.TabIndex = 5;
             // 
             // st_application
             // 
-            st_application = new Label();
-            st_application.Location = new System.Drawing.Point(106, 50);
-            st_application.Size = new System.Drawing.Size(250, 30);
-            st_application.Font = new System.Drawing.Font("Ms Sans Serif ", 10);
-
+            this.st_application.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.st_application.Location = new System.Drawing.Point(106, 50);
+            this.st_application.Name = "st_application";
+            this.st_application.Size = new System.Drawing.Size(250, 30);
+            this.st_application.TabIndex = 2;
             // 
             // st_version
             // 
-            st_version = new Label();
-            st_version.Location = new System.Drawing.Point(106, 88);
-            st_version.Size = new System.Drawing.Size(250, 35);
-            st_version.Font = new System.Drawing.Font("Ms Sans Serif ", 10);
-
+            this.st_version.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.st_version.Location = new System.Drawing.Point(106, 88);
+            this.st_version.Name = "st_version";
+            this.st_version.Size = new System.Drawing.Size(250, 35);
+            this.st_version.TabIndex = 3;
             // 
             // st_copyright
             // 
-            st_copyright = new Label();
-            st_copyright.Location = new System.Drawing.Point(106, 125);
-            st_copyright.Size = new System.Drawing.Size(250, 50);
-            st_copyright.Font = new System.Drawing.Font("Ms Sans Serif ", 10);
-
+            this.st_copyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.st_copyright.Location = new System.Drawing.Point(106, 125);
+            this.st_copyright.Name = "st_copyright";
+            this.st_copyright.Size = new System.Drawing.Size(250, 50);
+            this.st_copyright.TabIndex = 4;
             // 
             // pb_ok
             // 
-            pb_ok = new Button();
-            pb_ok.Text = "&Ok";
-            pb_ok.Location = new System.Drawing.Point(153, 185);
-            pb_ok.Click += new EventHandler(pb_ok_Click);
-
-            this.Controls.Add(p_about);
-            this.Controls.Add(st_application);
-            this.Controls.Add(st_version);
-            this.Controls.Add(st_copyright);
-            this.Controls.Add(st_company);
-            this.Controls.Add(pb_ok);
+            this.pb_ok.Location = new System.Drawing.Point(153, 185);
+            this.pb_ok.Name = "pb_ok";
+            this.pb_ok.Size = new System.Drawing.Size(75, 23);
+            this.pb_ok.TabIndex = 6;
+            this.pb_ok.Text = "&Ok";
+            this.pb_ok.Click += new System.EventHandler(this.pb_ok_Click);
+            // 
+            // WAbout
+            // 
+            this.ClientSize = new System.Drawing.Size(374, 214);
+            this.Controls.Add(this.p_about);
+            this.Controls.Add(this.st_application);
+            this.Controls.Add(this.st_version);
+            this.Controls.Add(this.st_copyright);
+            this.Controls.Add(this.st_company);
+            this.Controls.Add(this.pb_ok);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.ResumeLayout();
+            this.Name = "WAbout";
+            this.Load += new System.EventHandler(this.WAbout_Load);
+            this.Controls.SetChildIndex(this.pb_ok, 0);
+            this.Controls.SetChildIndex(this.st_company, 0);
+            this.Controls.SetChildIndex(this.st_copyright, 0);
+            this.Controls.SetChildIndex(this.st_version, 0);
+            this.Controls.SetChildIndex(this.st_application, 0);
+            this.Controls.SetChildIndex(this.p_about, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.p_about)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         private PictureBox p_about;

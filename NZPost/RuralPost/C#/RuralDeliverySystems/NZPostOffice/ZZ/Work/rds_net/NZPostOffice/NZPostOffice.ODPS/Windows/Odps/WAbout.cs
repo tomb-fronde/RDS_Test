@@ -10,6 +10,9 @@ using NZPostOffice.ODPS.Windows.OdpsPayrun;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB Rebranding 2021
+    // Changed logo image to Logo_slim (in Designer)
+
     public partial class WAbout : WMaster
     {
         public WAbout()
