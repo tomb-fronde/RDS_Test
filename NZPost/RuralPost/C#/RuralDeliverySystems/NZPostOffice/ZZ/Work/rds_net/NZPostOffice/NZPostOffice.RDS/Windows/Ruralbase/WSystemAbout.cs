@@ -17,6 +17,9 @@ using System.Configuration;
 
 namespace NZPostOffice.RDS.Windows.Ruralbase
 {
+    // TJB Rebranding 2021
+    // Changed image to Logo_slim
+
     public class WSystemAbout : WMaster
     {
         #region Define
@@ -115,7 +118,8 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.st_1.Name = "st_1";
             this.st_1.Size = new System.Drawing.Size(236, 45);
             this.st_1.TabIndex = 2;
-            this.st_1.Text = "Please contact your nearest user support representive for information about this application.";
+            this.st_1.Text = "Please contact your nearest user support representive for information about this " +
+                "application.";
             // 
             // cb_ok
             // 
@@ -131,7 +135,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             // 
             this.st_copyright.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.st_copyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_copyright.Location = new System.Drawing.Point(51, 61);
+            this.st_copyright.Location = new System.Drawing.Point(74, 61);
             this.st_copyright.Name = "st_copyright";
             this.st_copyright.Size = new System.Drawing.Size(212, 18);
             this.st_copyright.TabIndex = 3;
@@ -140,9 +144,9 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             // 
             this.st_version.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.st_version.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_version.Location = new System.Drawing.Point(51, 25);
+            this.st_version.Location = new System.Drawing.Point(74, 25);
             this.st_version.Name = "st_version";
-            this.st_version.Size = new System.Drawing.Size(285, 37);
+            this.st_version.Size = new System.Drawing.Size(242, 37);
             this.st_version.TabIndex = 4;
             this.st_version.Text = "Version";
             // 
@@ -150,9 +154,9 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             // 
             this.st_title.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(4)))), ((int)(((byte)(212)))), ((int)(((byte)(208)))), ((int)(((byte)(200)))));
             this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(50, 8);
+            this.st_title.Location = new System.Drawing.Point(74, 8);
             this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(289, 14);
+            this.st_title.Size = new System.Drawing.Size(256, 14);
             this.st_title.TabIndex = 5;
             this.st_title.Text = "System Title";
             // 
@@ -161,7 +165,8 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
             this.p_icon.Image = ((System.Drawing.Image)(resources.GetObject("p_icon.Image")));
             this.p_icon.Location = new System.Drawing.Point(3, 4);
             this.p_icon.Name = "p_icon";
-            this.p_icon.Size = new System.Drawing.Size(32, 32);
+            this.p_icon.Size = new System.Drawing.Size(65, 36);
+            this.p_icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.p_icon.TabIndex = 6;
             this.p_icon.TabStop = false;
             this.p_icon.DoubleClick += new System.EventHandler(this.p_icon_doubleclicked);
