@@ -1,5 +1,11 @@
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB  Rebranding June-2021
+    // Changed Logo
+    // Had trouble referencing a new picture so renamed 
+    // NZ_Post_Logo_Horizontal_Red_RBG.jpg (a 640 x 480 version) to Logo_slim.jpg
+    // (and old vfile Logo_slim to Logo_slim_V1).
+    //
     // TJB  Apr-2014
     // Added Application.ProductName == "Rural Delivery System Administration"
     // to btnLogin_Click to give user grace login attempts.
@@ -169,15 +175,15 @@ namespace NZPostOffice.Shared.VisualComponents
             // 
             // lblCopyright
             // 
-            this.lblCopyright.Location = new System.Drawing.Point(319, 155);
+            this.lblCopyright.Location = new System.Drawing.Point(319, 180);
             this.lblCopyright.Name = "lblCopyright";
-            this.lblCopyright.Size = new System.Drawing.Size(251, 99);
+            this.lblCopyright.Size = new System.Drawing.Size(258, 81);
             this.lblCopyright.TabIndex = 10;
             this.lblCopyright.Text = resources.GetString("lblCopyright.Text");
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(370, 121);
+            this.btnLogin.Location = new System.Drawing.Point(365, 152);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 2;
@@ -188,7 +194,7 @@ namespace NZPostOffice.Shared.VisualComponents
             // btnExit
             // 
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnExit.Location = new System.Drawing.Point(452, 121);
+            this.btnExit.Location = new System.Drawing.Point(447, 152);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 3;
@@ -199,7 +205,7 @@ namespace NZPostOffice.Shared.VisualComponents
             // lblUserID
             // 
             this.lblUserID.AutoSize = true;
-            this.lblUserID.Location = new System.Drawing.Point(374, 68);
+            this.lblUserID.Location = new System.Drawing.Point(369, 99);
             this.lblUserID.Name = "lblUserID";
             this.lblUserID.Size = new System.Drawing.Size(46, 13);
             this.lblUserID.TabIndex = 4;
@@ -208,7 +214,7 @@ namespace NZPostOffice.Shared.VisualComponents
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(364, 96);
+            this.lblPassword.Location = new System.Drawing.Point(359, 127);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(56, 13);
             this.lblPassword.TabIndex = 5;
@@ -216,7 +222,7 @@ namespace NZPostOffice.Shared.VisualComponents
             // 
             // tbUserID
             // 
-            this.tbUserID.Location = new System.Drawing.Point(424, 64);
+            this.tbUserID.Location = new System.Drawing.Point(419, 95);
             this.tbUserID.Name = "tbUserID";
             this.tbUserID.Size = new System.Drawing.Size(100, 20);
             this.tbUserID.TabIndex = 0;
@@ -224,7 +230,7 @@ namespace NZPostOffice.Shared.VisualComponents
             // tbPassword
             // 
             this.tbPassword.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.tbPassword.Location = new System.Drawing.Point(424, 92);
+            this.tbPassword.Location = new System.Drawing.Point(419, 123);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(100, 20);
@@ -261,9 +267,10 @@ namespace NZPostOffice.Shared.VisualComponents
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(344, 5);
+            this.pictureBox1.Location = new System.Drawing.Point(357, 1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(183, 54);
+            this.pictureBox1.Size = new System.Drawing.Size(173, 83);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
