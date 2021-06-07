@@ -1,5 +1,8 @@
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB Rebranding 2021
+    // Changed logo image to Logo_slim
+    //
     // TJB  Release 7.1.13.3  May-2015
     // Changed Version string in WAbout() to improve clarity.
 
@@ -106,10 +109,10 @@ namespace NZPostOffice.Shared.VisualComponents
             // 
             // pbAbout
             // 
-            this.pbAbout.Image = global::NZPostOffice.Shared.Properties.Resources.Logo;
+            this.pbAbout.Image = global::NZPostOffice.Shared.Properties.Resources.Logo_slim;
             this.pbAbout.Location = new System.Drawing.Point(0, 0);
             this.pbAbout.Name = "pbAbout";
-            this.pbAbout.Size = new System.Drawing.Size(88, 56);
+            this.pbAbout.Size = new System.Drawing.Size(88, 44);
             this.pbAbout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbAbout.TabIndex = 3;
             this.pbAbout.TabStop = false;
