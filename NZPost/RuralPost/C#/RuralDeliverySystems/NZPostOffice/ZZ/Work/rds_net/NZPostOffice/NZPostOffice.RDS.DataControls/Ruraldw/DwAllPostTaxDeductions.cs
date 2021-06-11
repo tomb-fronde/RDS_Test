@@ -10,6 +10,9 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Release 7.1.16 fixups June-2021
+    // Changed frame size to accommodate content width without scrollbar (in Designer)
+
 	public partial class DwAllPostTaxDeductions : Metex.Windows.DataUserControl
 	{
 		public DwAllPostTaxDeductions()
