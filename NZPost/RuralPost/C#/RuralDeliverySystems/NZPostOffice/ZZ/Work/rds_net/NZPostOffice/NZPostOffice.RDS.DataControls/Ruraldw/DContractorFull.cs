@@ -10,6 +10,10 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
+    // TJB Release 7.1.16 fixups June 2021
+    // Disabled references to pay_related_Leave.  Handle changes to tax-related changes 
+    // differently; see WContractor2001.dw_owner_driver_ItemFocusChanged.
+    //
     // TJB RPCR_151 May-2020
     // Added pay_related_Enter() and pay_related_Leave()
     // These set/clear the checkBox1 which is bound to InPayRelated in entity ContractorFull
@@ -30,16 +34,19 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.c_ird_no.LostFocus += new System.EventHandler(this.c_ird_no_LostFocus);
             this.c_gst_number.LostFocus += new System.EventHandler(this.c_gst_number_LostFocus);
 
+            // TJB Release 7.1.16 fixups June 2021
+            // Disabled references to pay_related_Leave.  Handle changes differently;
+            // see WContractor2001.dw_owner_driver_ItemFocusChanged
             this.c_bank_account_no.Enter += new EventHandler(pay_related_Enter);
-            this.c_bank_account_no.Leave += new EventHandler(pay_related_Leave);
+            //this.c_bank_account_no.Leave += new EventHandler(pay_related_Leave);
             this.c_ird_no.Enter += new EventHandler(pay_related_Enter);
-            this.c_ird_no.Leave += new EventHandler(pay_related_Leave);
+            //this.c_ird_no.Leave += new EventHandler(pay_related_Leave);
             this.c_gst_number.Enter += new EventHandler(pay_related_Enter);
-            this.c_gst_number.Leave += new EventHandler(pay_related_Leave);
+            //this.c_gst_number.Leave += new EventHandler(pay_related_Leave);
             this.c_tax_rate.Enter += new EventHandler(pay_related_Enter);
-            this.c_tax_rate.Leave += new EventHandler(pay_related_Leave);
+            //this.c_tax_rate.Leave += new EventHandler(pay_related_Leave);
             this.c_witholding_tax_certificate.Enter += new EventHandler(pay_related_Enter);
-            this.c_witholding_tax_certificate.Leave += new EventHandler(pay_related_Leave);
+            //this.c_witholding_tax_certificate.Leave += new EventHandler(pay_related_Leave);
 
             // TJB  RD7_0034   21-July-2009
             //    Changed type of c_salutation and c_address controls to Textbox from RichTextbos
@@ -117,7 +124,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             }
             else
             {
-                this.c_ird_no.Mask = "00-000-0009";
+                this.c_ird_no.Mask = "00-000-009";
             }
         }
         private void c_gst_number_LostFocus(object sender, System.EventArgs e)
