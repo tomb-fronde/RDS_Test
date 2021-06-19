@@ -14,7 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // DataControl for Distance Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
-    // [2-Apr-2021] Changed Vheicle Type column to a dropdown list
+    // [19-June-2021] Disabled validating (in designer)
 
     public partial class DMaintainDistanceAllowance : Metex.Windows.DataUserControl
 	{
@@ -32,11 +32,45 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             this.ca_doc_description.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.alt_key.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_key.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             //this.var_id.DefaultCellStyle.NullValue = null;
             //this.var_id.DefaultCellStyle.DataSourceNullValue = null;
             //this.var_id.ValueMember = "VarId";
             //this.var_id.DisplayMember = "VarDescription"; 
+
+            this.grid.RowsAdded += new DataGridViewRowsAddedEventHandler(grid_RowsAdded);
+        }
+
+        void grid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            int nRows = this.grid.RowCount;
+            int nRow = e.RowIndex;
+            string s1, s2;
+
+            s2 = "";
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                s1 = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                DateTime? paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                if (s1 != null && s1 == s2)
+                {
+                    if (paid != null)
+                    {
+                        for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
+                        {
+                            this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
+                            this.grid.Rows[nRow].Cells[nCol].Style.BackColor
+                                           = System.Drawing.Color.WhiteSmoke;   // A lighter grey
+                                           //= System.Drawing.Color.Gainsboro;   // A light grey
+                                           //= System.Drawing.SystemColors.Control; // Grey
+                        }
+                    }
+                }
+                else
+                    s2 = s1;
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -64,17 +98,22 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
         {
+            this.grid.ClearSelection();
             if (pValue)
             {
                 this.grid.CurrentCell = this.grid.Rows[pRow].Cells[pColumnName];
                 this.grid.BeginEdit(true);
             }
             else
+            {
                 this.grid.CurrentCell = this.grid.Rows[pRow].Cells["alt_key"];
+                this.grid.CurrentCell.Selected = true;
+            }
         }
 
         public void SetGridCellSelected(int pRow, string pColumnName, bool pValue)
         {
+            this.grid.ClearSelection();
             this.grid.Rows[pRow].Cells[pColumnName].Selected = pValue;
             for (int i = 0; i < this.grid.ColumnCount; i++)
                 if (this.grid.Columns[i].Name == pColumnName)

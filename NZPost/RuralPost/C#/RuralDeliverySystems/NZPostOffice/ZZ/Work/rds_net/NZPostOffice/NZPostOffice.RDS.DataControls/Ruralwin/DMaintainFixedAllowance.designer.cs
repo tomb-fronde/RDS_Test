@@ -121,7 +121,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.alt_key.DataPropertyName = "AltDescription";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle2.NullValue = "null";
@@ -173,7 +173,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.net_amount.DataPropertyName = "NetAmount";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.Format = "$#,##0.00;$-#,##0.00";
@@ -201,7 +201,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_paid_to_date.DataPropertyName = "PaidToDate";
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle7.Format = "dd/MM/yyyy";
@@ -278,6 +278,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         }
 
+        // TJB 19-June-2021: Disabled; may want to t5ab over "required" fields without
+        // being told to provide a value, especially during transition to calculated
+        // annual amounts.
         void grid_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // This gets around a problem where the user has entered one of the
@@ -285,12 +288,55 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // the focus would stay in the field without 'saying' anything about why.
             string column;
             column = this.grid.CurrentColumnName;
+            int nRow = this.grid.CurrentCell.RowIndex;
+            string row_changed = (string)this.grid.Rows[nRow].Cells["ca_row_changed"].Value;
             if (column == "ca_effective_date" || column == "ca_annual_amount" || column == "alt_key")
             {
+                object alt_key = this.grid.Rows[nRow].Cells["alt_key"].Value;
                 object value1 = this.grid.CurrentCell.EditedFormattedValue;
-                if (value1 == null || (string)value1 == "")
-                    MessageBox.Show("        Please enter a value.        ", ""
-                                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if ((value1 == null || (string)value1 == "") && (alt_key != null))
+                {
+                    // When a new record is created, row_changed for the row it was 
+                    // generated from is set to 'Y' (it is set to 'X' in the new row itself)
+                    // grid_validating is called twice - once for the new row and once for 
+                    // the row the new one was generated from.  That row may be from the 
+                    // time when allowance calculations were done offline and it may not 
+                    // (legitimately) have any calculation factors (ca_var1 in particular).
+                    // This check here avoids a warning message in those cases.
+                    if (row_changed != "Y")
+                    {
+                        string column_type = "";
+                        if (column == "ca_effective_date") column_type = "effective date";
+                        else if (column == "ca_annual_amount") column_type = "annual aount";
+                        else if (column == "alt_key") column_type = "allowance type";
+                        MessageBox.Show("    Please enter an " + column_type + " value.    ", ""
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        // SetGridCellFocus(int pRow, string pColumnName, bool pValue
+                        SetGridCellFocus(nRow, column, true);
+                    }
+                }
+            }
+            // row_changed set to 'Y' is used here to set the previous row readonly
+            // It is placed here because the column identified may not be one of those
+            // identified above.
+            if (row_changed == "Y")
+            {
+                // Put row_changed back to the default 'not changed' ('X')
+                this.grid.Rows[nRow].Cells["ca_row_changed"].Value = "X";
+                if (!(this.grid.Rows[nRow].Cells["ca_effective_date"].ReadOnly))
+                    set_row_readonly(nRow, true);
+            }
+        }
+
+        void set_row_readonly(int pRow, bool pValue)
+        {
+            System.Drawing.Color CellBackColour = System.Drawing.SystemColors.Window;
+            if (pValue) CellBackColour = System.Drawing.Color.WhiteSmoke;
+
+            for (int i = 0; i < this.grid.ColumnCount; i++)
+            {
+                this.grid.Rows[pRow].Cells[i].ReadOnly = true;
+                this.grid.Rows[pRow].Cells[i].Style.BackColor = CellBackColour;
             }
         }
 
@@ -412,6 +458,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_row_changed;
         private DataGridViewTextBoxColumn calc_amount;
+
 
 
 

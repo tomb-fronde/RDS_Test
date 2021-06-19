@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // DataControl for Time-based Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
+    // [19-June-2021] Disabled validating (in designer)
 
     public partial class DMaintainTimeAllowance : Metex.Windows.DataUserControl
 	{
@@ -31,6 +32,38 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.alt_key.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_key.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            this.grid.RowsAdded += new DataGridViewRowsAddedEventHandler(grid_RowsAdded);
+        }
+
+        void grid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            int nRows = this.grid.RowCount;
+            int nRow = e.RowIndex;
+            string s1, s2;
+
+            s2 = "";
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                s1 = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                DateTime? paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                if (s1 != null && s1 == s2)
+                {
+                    if (paid != null)
+                    {
+                        for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
+                        {
+                            this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
+                            this.grid.Rows[nRow].Cells[nCol].Style.BackColor
+                                           = System.Drawing.Color.WhiteSmoke;   // A lighter grey
+                        }
+                    }
+                }
+                else if( s1 != null )
+                    s2 = s1;
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
