@@ -14,6 +14,10 @@ using System.Text.RegularExpressions;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Release 7.1.16 fixups June 2021
+    // Changed method of detecting tax-related changes in dw_owner_driver_ItemFocusChanged()
+    // Added nRow test for available records (in bSplitOwnerNames())
+    //
     // TJB RPCR_151 May-2020
     // Display a message when any fields in the pay-related group change.
     // See also datacontrol DContractorFull and entity ContractorFull.
@@ -208,10 +212,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.tabpage_drivers = new System.Windows.Forms.TabPage();
             this.cb_EditDriver = new System.Windows.Forms.Button();
             this.dw_driversHSInfo = new NZPostOffice.RDS.Controls.URdsDw();
+            this.cb_AddOwner = new System.Windows.Forms.Button();
             this.cb_RemoveDriver = new System.Windows.Forms.Button();
             this.cb_AddDriver = new System.Windows.Forms.Button();
             this.tt_RemoveDriver = new System.Windows.Forms.ToolTip(this.components);
-            this.cb_AddOwner = new System.Windows.Forms.Button();
             this.tab_contractor.SuspendLayout();
             this.tabpage_owner_driver.SuspendLayout();
             this.tabpage_contract_types.SuspendLayout();
@@ -268,7 +272,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_owner_driver.FireConstructor = false;
             this.dw_owner_driver.Location = new System.Drawing.Point(3, 4);
             this.dw_owner_driver.Name = "dw_owner_driver";
-            this.dw_owner_driver.Size = new System.Drawing.Size(521, 280);
+            this.dw_owner_driver.Size = new System.Drawing.Size(563, 280);
             this.dw_owner_driver.TabIndex = 2;
             this.dw_owner_driver.Tag = "ComponentName=Owner Driver;";
             // 
@@ -355,7 +359,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_post_tax_deductions.FireConstructor = false;
             this.dw_post_tax_deductions.Location = new System.Drawing.Point(3, 5);
             this.dw_post_tax_deductions.Name = "dw_post_tax_deductions";
-            this.dw_post_tax_deductions.Size = new System.Drawing.Size(530, 260);
+            this.dw_post_tax_deductions.Size = new System.Drawing.Size(579, 260);
             this.dw_post_tax_deductions.TabIndex = 1;
             // 
             // tabpage_procurement
@@ -417,6 +421,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_driversHSInfo.Size = new System.Drawing.Size(560, 260);
             this.dw_driversHSInfo.TabIndex = 2;
             // 
+            // cb_AddOwner
+            // 
+            this.cb_AddOwner.Location = new System.Drawing.Point(477, 104);
+            this.cb_AddOwner.Name = "cb_AddOwner";
+            this.cb_AddOwner.Size = new System.Drawing.Size(75, 23);
+            this.cb_AddOwner.TabIndex = 3;
+            this.cb_AddOwner.Text = "Add Owner";
+            this.cb_AddOwner.UseVisualStyleBackColor = true;
+            this.cb_AddOwner.Visible = false;
+            this.cb_AddOwner.Click += new System.EventHandler(this.cb_AddOwner_Click);
+            // 
             // cb_RemoveDriver
             // 
             this.cb_RemoveDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -429,10 +444,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_RemoveDriver.UseVisualStyleBackColor = true;
             this.cb_RemoveDriver.Visible = false;
             // 
-            // tt_RemoveDriver
-            // 
-            this.tt_RemoveDriver.IsBalloon = true;
-            // 
             // cb_AddDriver
             // 
             this.cb_AddDriver.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -444,16 +455,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_AddDriver.UseVisualStyleBackColor = true;
             this.cb_AddDriver.Visible = false;
             // 
-            // cb_AddOwner
+            // tt_RemoveDriver
             // 
-            this.cb_AddOwner.Location = new System.Drawing.Point(477, 104);
-            this.cb_AddOwner.Name = "cb_AddOwner";
-            this.cb_AddOwner.Size = new System.Drawing.Size(75, 23);
-            this.cb_AddOwner.TabIndex = 3;
-            this.cb_AddOwner.Text = "Add Owner";
-            this.cb_AddOwner.UseVisualStyleBackColor = true;
-            this.cb_AddOwner.Click += new System.EventHandler(this.cb_AddOwner_Click);
-            this.cb_AddOwner.Visible = false;
+            this.tt_RemoveDriver.IsBalloon = true;
             // 
             // WContractor2001
             // 
@@ -595,11 +599,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((MaskedTextBox)idw_owner_driver.GetControlByName("c_gst_number")).Mask = "00-000-0009";
                     idw_owner_driver.GetItem<ContractorFull>(idw_owner_driver.GetRow()).MarkClean();
                 }
-                
+
                 // TJB RPCR_151 May-2020
                 // Initialise 'in pay-related' tracking
                 IsInPayRelated = false;
                 of_save_pay_related(idw_owner_driver.GetRow());
+                // Set showMessage to 'true' so that any change can be detected 
+                // and the 'Attention' message displayed.
+                showMessage = true;
             }
             else
             {
@@ -675,7 +682,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
         // TJB RPCR_151 May-2020
-        // variables only used by of_save_pay_related and of_check_pay_related
+        // Variables only used by of_save_pay_related and of_check_pay_related
         string sBankAccountNo, sIrdNo, sGstNumber, sTaxCertificate;
         decimal? sTaxRate;
 
@@ -688,9 +695,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             sGstNumber = idw_owner_driver.GetItem<ContractorFull>(arow).CGstNumber;
             sTaxRate = idw_owner_driver.GetItem<ContractorFull>(arow).CTaxRate;  //Note: this is a double, not string
             sTaxCertificate = idw_owner_driver.GetItem<ContractorFull>(arow).CWitholdingTaxCertificate;
-            // Set showMessage to 'true' so that any changed can be detected 
+            // TJB Release 7.1.16 fixups June 2021
+            // Moved 'showMessage = true' to outside function so it can be used to only save
+            // changed pay-related items.
+            // Set showMessage to 'true' so that any change can be detected 
             // and the 'Attention' message displayed.
-            showMessage = true;
+            //showMessage = true;
         }
 
         // TJB RPCR_151 May-2020: NEW
@@ -992,6 +1002,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             int aRow = dw_owner_driver.GetRow();
             of_save_pay_related(aRow);
+            // Set showMessage to 'true' so that any change can be detected 
+            // and the 'Attention' message displayed.
+            showMessage = true;
         }
 
         public virtual int dw_owner_driver_pfc_validation()
@@ -1351,6 +1364,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     idw_owner_driver.Retrieve(new object[]{ii_contractor});
                     of_save_pay_related(idw_owner_driver.GetRow());
+                    // Set showMessage to 'true' so that any change can be detected 
+                    // and the 'Attention' message displayed.
+                    showMessage = true;
                 }
             }
             else if (str == "contract types")//(TestExpr == 2)
@@ -1642,16 +1658,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int aRow = dw_owner_driver.GetRow();
 
             NowInPayRelated = dw_owner_driver.GetItem<ContractorFull>(aRow).InPayRelated;
-            // If we were in thr pay-related group of fields (IsInPayRelated == true)
+
+            // TJB Release 7.1.16 fixups June 2021
+            // Disabled references to pay_related_Leave in DContractorFull which made InPayRelated false.
+            // Handle changes differently; detect changes via the 'saved' values (sBankAccountNo etc).
+            // If any have changed and we're in one of them (InPayRelated set in DContractorFull.pay_related_Enter)
+            // change NowInPayRelated to false to indicate we're leaving the field.
+            isModified = of_check_pay_related(aRow);
+            if (NowInPayRelated && isModified)
+            {
+                NowInPayRelated = false;
+            }
+
+            // If we were in the pay-related group of fields (IsInPayRelated == true)
             // but now we're not (NowInPayRelated == false), we've left the group.
             if (NowInPayRelated == false && IsInPayRelated == true)
             {
-                // Check to see if any fields have changed
+                // Check to see if any fields have changed (7.1.16 fixups: we found this out above)
                 // If so, display the 'Attention' message
-                isModified = of_check_pay_related(aRow);
+//                isModified = of_check_pay_related(aRow);
                 if (isModified)
                 {
-                        of_displayMessage();
+                    of_displayMessage();
+                    // 7.1.16 fixups: ans update the saved values to 'remember' any changes 
+                    // so we can detect any further changes.
+                    of_save_pay_related(aRow);
                 }
             }
             // Save the current in/out focus
@@ -2055,9 +2086,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             bTwonames = false;
 
-            sTitle = idw_owner_driver.GetItem<ContractorFull>(0).CTitle;
-            sFirstnames = idw_owner_driver.GetItem<ContractorFull>(0).CFirstNames;
-            sSurname = idw_owner_driver.GetItem<ContractorFull>(0).CSurnameCompany;
+            // TJB Release 7.1.16 fixups June 2021
+            // Added nRow test for available records
+            // sTitle access failed in some circumstances if there are no H&S records 
+            // accessing row 0 (access below used '0').
+            int nRow = idw_owner_driver.GetRow();
+            if (nRow < 0)
+                return bTwonames;
+
+            sTitle = idw_owner_driver.GetItem<ContractorFull>(nRow).CTitle;
+            sFirstnames = idw_owner_driver.GetItem<ContractorFull>(nRow).CFirstNames;
+            sSurname = idw_owner_driver.GetItem<ContractorFull>(nRow).CSurnameCompany;
 
             // TJB  Jun-2014  RPCR_+060 bug fix
             // Added check for company (no title or first name)
