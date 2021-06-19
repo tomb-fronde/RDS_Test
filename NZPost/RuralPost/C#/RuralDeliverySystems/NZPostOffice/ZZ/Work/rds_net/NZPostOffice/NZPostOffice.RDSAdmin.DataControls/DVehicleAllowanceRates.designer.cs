@@ -107,7 +107,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(1070, 425);
+            this.grid.Size = new System.Drawing.Size(1050, 424);
             this.grid.TabIndex = 0;
             // 
             // var_id
@@ -165,7 +165,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
             this.carrier_pa.DefaultCellStyle = dataGridViewCellStyle6;
-            this.carrier_pa.HeaderText = "Carrier $ per Yr";
+            this.carrier_pa.HeaderText = "  Carrier  $ per Yr";
             this.carrier_pa.Name = "carrier_pa";
             this.carrier_pa.Width = 60;
             // 
@@ -188,7 +188,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
             this.licence_pa.DefaultCellStyle = dataGridViewCellStyle8;
-            this.licence_pa.HeaderText = "Licence $ per Yr";
+            this.licence_pa.HeaderText = " Licence $ per Yr";
             this.licence_pa.Name = "licence_pa";
             this.licence_pa.Width = 60;
             // 
@@ -255,8 +255,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle14.Format = "d";
-            dataGridViewCellStyle14.NullValue = null;
+            dataGridViewCellStyle14.Format = "dd/MM/yyyy";
             this.var_effective_date.DefaultCellStyle = dataGridViewCellStyle14;
             this.var_effective_date.HeaderText = "Effective Date";
             this.var_effective_date.IncludeLiterals = false;
