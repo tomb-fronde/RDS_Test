@@ -60,7 +60,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 	{
         // TJB Allowances 15-May-2021
         
-        private int _sqlcode = 0;
+        private int _sqlcode;
         public int SQLCode
         {
             get
@@ -69,7 +69,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
             }
         }
 
-        private string _sqlerrtext = "";
+        private string _sqlerrtext;
         public string SQLErrText
         {
             get
@@ -1003,6 +1003,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 			{
 				using (DbCommand cm = cn.CreateCommand())
 				{
+                    _sqlerrtext = "";
+                    _sqlcode = 0;
                     ParameterCollection pList = new ParameterCollection();
                     cm.CommandType = CommandType.Text;
 					//GenerateSelectCommandText(cm, "contract_allowance");
