@@ -11,6 +11,10 @@ using Metex.Windows;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB  Allowances  June-2021
+    // Changed handling of existing unapproved DISTANCE records. Insert vehicle
+    // type and effective date in existing record.
+    //
     // TJB  Allowances  4-Apr-2021: New
     // Adapted from WAddAllowance.
     // Vastly different: Only used to determine the new allowance's type 
@@ -49,6 +53,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         private Label Title;
         public Button cb_cancel;
 
+        // Define values for the different calculation types
+        public readonly int FIXED = RDSDataService.LookupAllowanceCalcType("Fixed");
+        public readonly int ROI = RDSDataService.LookupAllowanceCalcType("Return ");
+        public readonly int ACTIVITY = RDSDataService.LookupAllowanceCalcType("Activity");
+        public readonly int TIME = RDSDataService.LookupAllowanceCalcType("Time");
+        public readonly int DISTANCE = RDSDataService.LookupAllowanceCalcType("Distance");
+
         #endregion
 
         public WAddAllowance2021()
@@ -58,6 +69,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.dw_allowance.DataObject = new DAddAllowance();
             dw_allowance.DataObject.BorderStyle = BorderStyle.None;
             idw_allowance = dw_allowance;
+
+
         }
 
         #region FormDesign
@@ -345,15 +358,37 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Check to see if there already is an unapproved allowance of this type
             // If one exists, suggest the user update it instead of creating another one.
             thisAltKey = idw_allowance.GetItem<AddAllowance>(nRow).AltKey;
-            effDate = RDSDataService.GetUnapprovedAllowanceDate(il_contract, thisAltKey);
+            effDate = RDSDataService.GetUnpaidAllowanceDate(il_contract, thisAltKey);
+            int? varId = idw_allowance.GetItem<AddAllowance>(nRow).VarId;
             if (effDate != null)
             {
-                MessageBox.Show("An allowance of this type already exists.\n"
-                               + "Please update it."
-                               , "Warning"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                iChangeType = "Update";
-                idw_allowance.GetItem<AddAllowance>(nRow).MarkClean();
+                // TJB  Allowances  June-2021
+                // Changed handling of existing unapproved DISTANCE records. Insert vehicle
+                // type and effective date in existing record.
+                if (idw_allowance.GetItem<AddAllowance>(nRow).AlctId == DISTANCE)
+                {
+                    int sqlCode = 0;
+                    string sqlErrText = "";
+                    bool isOK = RDSDataService.UpdateAllowanceVehicleType(il_contract, thisAltKey, effDate, varId
+                                                   , ref sqlCode, ref sqlErrText);
+                    if (!isOK)
+                    {
+                        MessageBox.Show("Error updating allowance " + thisAltKey.ToString() + " vehicle type\n"
+                                        + "sqlCode = " + sqlCode.ToString() + "\n"
+                                        + "sqlErrText = " + sqlErrText
+                                        , "WAddAllowance2021.cb_save_clicked");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("An allowance of this type already exists.\n"
+                                   + "Please update it."
+                                   , "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    iChangeType = "Update";
+                    idw_allowance.GetItem<AddAllowance>(nRow).MarkClean();
+                }
             }
             else
             {
