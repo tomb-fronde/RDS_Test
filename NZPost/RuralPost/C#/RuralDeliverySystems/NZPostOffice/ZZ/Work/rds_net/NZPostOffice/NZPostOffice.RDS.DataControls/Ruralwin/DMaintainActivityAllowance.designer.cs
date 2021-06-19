@@ -103,7 +103,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.grid.Size = new System.Drawing.Size(901, 252);
             this.grid.TabIndex = 0;
-            this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
+            //this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
             this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
@@ -128,7 +128,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // alt_key
             // 
             this.alt_key.DataPropertyName = "AltDescription";
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.alt_key.DefaultCellStyle = dataGridViewCellStyle2;
@@ -177,7 +177,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.alt_rate.DataPropertyName = "AltRate";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.Format = "N2";
@@ -191,7 +191,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // alt_wks_yr
             // 
             this.alt_wks_yr.DataPropertyName = "AltWksYr";
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             this.alt_wks_yr.DefaultCellStyle = dataGridViewCellStyle6;
@@ -205,7 +205,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_annual_amount.DataPropertyName = "AnnualAmount";
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle7.Format = "$#,##0.00;$-#,##0.00";
@@ -213,13 +213,14 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle7;
             this.ca_annual_amount.HeaderText = "Annual Amount";
             this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.ReadOnly = true;
             this.ca_annual_amount.Width = 73;
             // 
             // net_amount
             // 
             this.net_amount.DataPropertyName = "NetAmount";
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle8.Format = "$#,##0.00;$-#,##0.00";
@@ -248,7 +249,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_paid_to_date.DataPropertyName = "PaidToDate";
             dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.WhiteSmoke;
             dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle10.Format = "dd/MM/yyyy";
@@ -325,6 +326,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         }
 
+        // TJB 19-June-2021: Disabled; may want to t5ab over "required" fields without
+        // being told to provide a value, especially during transition to calculated
+        // annual amounts.
         void grid_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // This gets around a problem where the user has entered one of the
@@ -332,12 +336,55 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // the focus would stay in the field without 'saying' anything about why.
             string column;
             column = this.grid.CurrentColumnName;
+            int nRow = this.grid.CurrentCell.RowIndex;
+            string row_changed = (string)this.grid.Rows[nRow].Cells["ca_row_changed"].Value;
             if (column == "ca_effective_date" || column == "ca_var1" || column == "alt_key")
             {
+                object alt_key = this.grid.Rows[nRow].Cells["alt_key"].Value;
                 object value1 = this.grid.CurrentCell.EditedFormattedValue;
-                if( value1 == null || (string)value1 == "")
-                    MessageBox.Show("        Please enter a value.        ", ""
-                                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if ((value1 == null || (string)value1 == "") && (alt_key != null))
+                {
+                    // When a new record is created, row_changed for the row it was 
+                    // generated from is set to 'Y' (it is set to 'X' in the new row itself)
+                    // grid_validating is called twice - once for the new row and once for 
+                    // the row the new one was generated from.  That row may be from the 
+                    // time when allowance calculations were done offline and it may not 
+                    // (legitimately) have any calculation factors (ca_var1 in particular).
+                    // This check here avoids a warning message in those cases.
+                    if (row_changed != "Y")
+                    {
+                        string column_type = "";
+                        if (column == "ca_effective_date") column_type = "an effective date";
+                        else if (column == "ca_var1") column_type = "a count per week";
+                        else if (column == "alt_key") column_type = "an allowance type";
+                        MessageBox.Show("    Please enter " + column_type + " value.    ", ""
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        // SetGridCellFocus(int pRow, string pColumnName, bool pValue
+                        SetGridCellFocus(nRow, column, true);
+                    }
+                }
+            }
+            // row_changed set to 'Y' is used here to set the previous row readonly
+            // It is placed here because the column identified may not be one of those
+            // identified above.
+            if (row_changed == "Y")
+            {
+                // Put row_changed back to the default 'not changed' ('X')
+                this.grid.Rows[nRow].Cells["ca_row_changed"].Value = "X";
+                if (!(this.grid.Rows[nRow].Cells["ca_effective_date"].ReadOnly))
+                    set_row_readonly(nRow, true);
+            }
+        }
+
+        void set_row_readonly(int pRow, bool pValue)
+        {
+            System.Drawing.Color CellBackColour = System.Drawing.SystemColors.Window;
+            if (pValue) CellBackColour = System.Drawing.Color.WhiteSmoke;
+
+            for (int i = 0; i < this.grid.ColumnCount; i++)
+            {
+                this.grid.Rows[pRow].Cells[i].ReadOnly = true;
+                this.grid.Rows[pRow].Cells[i].Style.BackColor = CellBackColour;
             }
         }
 
@@ -381,6 +428,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private int alt_key_err_count = 0;
         void grid_DataError(object sender, System.Windows.Forms.DataGridViewDataErrorEventArgs e)
         {
+        //    int nRow = e.RowIndex;
+        //    int nCol = e.ColumnIndex;
+        //    string column = grid.CurrentColumnName;
+        //    string sAllowance = (string)grid.Rows[nRow].Cells["alt_key"].EditedFormattedValue;
+        //    string sValue = (string)((DataGridView)sender).CurrentCell.EditedFormattedValue;
         }
 
         void grid_DataError_Buggy(object sender, System.Windows.Forms.DataGridViewDataErrorEventArgs e)

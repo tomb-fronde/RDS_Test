@@ -14,6 +14,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // DataControl for Activity Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
+    // [19-June-2021] Disabled validating (in designer)
+    //
 
     public partial class DMaintainActivityAllowance : Metex.Windows.DataUserControl
 	{
@@ -31,7 +33,52 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_doc_description.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             this.ca_notes.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ca_notes.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            this.alt_key.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.alt_key.DataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            this.grid.RowsAdded += new DataGridViewRowsAddedEventHandler(grid_RowsAdded);
 		}
+
+        void grid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            // If there are several allowances of the same type, and one or more 
+            // of them have already been paid, we want to make them readonly.  
+            // If there's only one allowance of the type, it is not readonly
+            // whether or not it has been paid (if it is subsequently modified
+            // a new record will be created with the changes).
+            int nRows = this.grid.RowCount;
+            int nRow = e.RowIndex;
+            string s1, s2;
+
+            s2 = "";  // s2 "remembers" that we've encountered an allowance of this type
+
+            // Scan the set of allowances
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                // Get this allowance row's type and paid-to status
+                s1 = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                DateTime? paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                // If we have seen this allowance type before (this is the 2nd or greater time)
+                if (s1 != null && s1 == s2)
+                {
+                    // ... and the allowance has been paid (there's a date - its not null)
+                    if (paid != null)
+                    {   // Mark the row readonly and highlight it
+                        // (doing it column by column seems more reliable than 
+                        // trying to do the row as a whole)
+                        for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
+                        {
+                            this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
+                            this.grid.Rows[nRow].Cells[nCol].Style.BackColor
+                                           = System.Drawing.Color.WhiteSmoke; 
+                                           //= System.Drawing.SystemColors.Control; // Grey
+                        }
+                    }
+                }
+                else  // This is the first time we've encountered this allowance type
+                    s2 = s1;  // "remember" it
+            }
+        }
 
         protected override void OnHandleCreated(EventArgs e)
     	{
@@ -48,10 +95,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         //    alt_key.AssignDropdownType<DddwAllowanceTypesActivity>();
         //}
 
-		public int Retrieve( int? inContract, int? inAlctId)
+        public int Retrieve(int? inContract, int? inAlctId)
 		{
             return RetrieveCore<MaintainAllowanceV2>(new List<MaintainAllowanceV2>
-                                        (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
+                         (MaintainAllowanceV2.GetAllMaintainAllowanceV2(inContract, inAlctId)));
 		}
 
         public void SetGridCellFocus(int pRow, string pColumnName, bool pValue)
@@ -76,9 +123,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
+        // This doesn't seem to work when called from WMaintainAllowance
+        // but may work when called from a triggered event within this module
         public void SetGridRowReadOnly(int pRow, bool pValue)
         {
-            this.grid.Rows[pRow].ReadOnly = pValue;
+            for (int i = 0; i < this.grid.ColumnCount; i++)
+            {
+                this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
+                if( pValue )
+                    this.grid.Rows[pRow].Cells[i].Style.BackColor 
+                               = System.Drawing.Color.WhiteSmoke; // Very light Grey
+            }
         }
 
         public bool GetGridRowReadOnly(int pRow)
@@ -96,6 +151,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 }
         }
 
+        // Don't think this works either
         public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
         {
             // Set the cell's Readonly property to true/false
@@ -139,10 +195,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 decimal? activity_count = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
                 decimal? activity_rate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value ?? 0.0M;
                 decimal? wks_per_year = (decimal?)grid.Rows[thisRow].Cells["alt_wks_yr"].Value ?? 0.0M;
-                decimal? acc = (decimal?)grid.Rows[thisRow].Cells["alt_acc"].Value ?? 0.0M;
                 decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
-                string   Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
-
+                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
+                
                 // Determine the previous NetAmt
                 decimal? prevNetAmt;
                 if (Approved == "Y")
