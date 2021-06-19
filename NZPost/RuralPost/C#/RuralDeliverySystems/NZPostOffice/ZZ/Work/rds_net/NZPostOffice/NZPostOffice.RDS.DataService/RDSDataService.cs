@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.DataService
     // [13Mar] Added LookupAllowanceCalcType
     // [3-Apr-2021] Added GetVehicleAllowanceRates, VehicleAllowanceRatesItem 
     //              and VehicleAllowanceRatesList and associated things
+    // [18-June-2021] Added UpdateAllowanceVehicleType, GetUnpaidAllowanceDate
     //
     // TJB Frequencies & Vehicles 2-Mar-2021
     // Added vt_key to GetVehicleOverrideRateList parameter list 
@@ -2306,13 +2307,33 @@ namespace NZPostOffice.RDS.DataService
             return obj.strVal;
         }
 
+        // TJB  Allowances  18-June-2021
+        public static bool UpdateAllowanceVehicleType(int? inContract, int? inAltKey, DateTime? inEffDate, int? inVarId
+                                                        , ref int sqlCode, ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateAllowanceVehicleType", inContract, inAltKey, inEffDate, inVarId);
+            sqlCode = obj._sqlcode;
+            sqlErrText = obj._sqlerrtext;
+            return (sqlCode == 0);
+        }
+
+        // TJB  Allowances  18-June-2021
+        // Returns the latest effective date for an unpaid
+        // contract allowance of the specified type..
+        // If no such allowance is found, returns null.
+        public static DateTime? GetUnpaidAllowanceDate(int? inContract, int? inAltKey)
+        {
+            RDSDataService obj = Execute("_GetUnpaidAllowanceDate", inContract, inAltKey); 
+            return obj.dtVal;
+        }
+
         // TJB  Allowances  13-May-2021
         // Returns the latest effective date for an unapproved
         // contract allowance of the specified type..
         // If no such allowance is found, returns null.
         public static DateTime? GetUnapprovedAllowanceDate(int? inContract, int? inAltKey)
         {
-            RDSDataService obj = Execute("_GetUnapprovedAllowanceDate", inContract, inAltKey); 
+            RDSDataService obj = Execute("_GetUnapprovedAllowanceDate", inContract, inAltKey);
             return obj.dtVal;
         }
 
@@ -7448,6 +7469,90 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Allowances  18-June-2021 
+        [ServerMethod]
+        private void _UpdateAllowanceVehicleType(int? inContract, int? inAltKey, DateTime? inEffDate, int? inVarId)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    _sqlcode = 0;
+
+                    try
+                    {
+                        cm.CommandText = "update rd.contract_allowance"
+                                       + "   set var_id = @inVarId"
+                                       + " where contract_no = @inContract"
+                                       + "   and alt_key = @inAltKey"
+                                       + "   and ca_effective_date = @inEffDate";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+                        pList.Add(cm, "inEffDate", inEffDate);
+                        pList.Add(cm, "inVarId", inVarId);
+
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
+        // TJB  Allowances  18-June-2021
+        // Returns the latest effective date for an unpaid
+        // contract allowance of the specified type..
+        // If no such allowance is found, returns null.
+        [ServerMethod]
+        private void _GetUnpaidAllowanceDate(int? inContract, int? inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    DateTime? dMaxDate = null;
+                    _sqlcode = 0;
+
+                    try
+                    {
+                        cm.CommandText = "select max(ca_effective_date) "
+                                       + "  from rd.contract_allowance"
+                                       + " where contract_no = @inContract"
+                                       + "   and alt_key = @inAltKey"
+                                       + "   and ca_paid_to_date is null";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                dMaxDate = (DateTime?)dr.GetDateTime(0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+
+                    if( dMaxDate <= DateTime.MinValue )
+                        dtVal = null;
+                    else
+                        dtVal = dMaxDate;
+                }
+            }
+        }
+
         // TJB  Allowances  13-May-2021
         // Returns the latest effective date for an unapproved
         // contract allowance of the specified type..
@@ -7488,7 +7593,7 @@ namespace NZPostOffice.RDS.DataService
                         _sqlcode = -1;
                     }
 
-                    if( dMaxDate <= DateTime.MinValue )
+                    if (dMaxDate <= DateTime.MinValue)
                         dtVal = null;
                     else
                         dtVal = dMaxDate;
