@@ -166,8 +166,8 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.Format = "d";
-            dataGridViewCellStyle7.NullValue = null;
+            dataGridViewCellStyle7.Format = "dd/MM/yyyy";
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.alt_effective_date.DefaultCellStyle = dataGridViewCellStyle7;
             this.alt_effective_date.HeaderText = "Effective Date";
             this.alt_effective_date.IncludeLiterals = false;
@@ -175,8 +175,6 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             this.alt_effective_date.Mask = null;
             this.alt_effective_date.Name = "alt_effective_date";
             this.alt_effective_date.PromptChar = '\0';
-            this.alt_effective_date.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.alt_effective_date.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.alt_effective_date.ValidatingType = null;
             this.alt_effective_date.Width = 70;
             // 
@@ -214,6 +212,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private Metex.Windows.DataGridViewEntityComboColumn alct_id;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn alt_effective_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_notes;
+
 
 
 
