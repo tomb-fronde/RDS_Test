@@ -36,12 +36,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
-            this.st_title = new System.Windows.Forms.Label();
-            this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new Metex.Windows.DataGridViewEntityComboColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.var_id = new Metex.Windows.DataGridViewEntityComboColumn();
             this.alct_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_protect_confirm = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -85,24 +85,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
             this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
-            // 
-            // st_title
-            // 
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(0, 0);
-            this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(638, 14);
-            this.st_title.TabIndex = 1;
-            this.st_title.Text = "Renewal:";
-            // 
-            // st_protect_confirm
-            // 
-            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
-            this.st_protect_confirm.Name = "st_protect_confirm";
-            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
-            this.st_protect_confirm.TabIndex = 2;
-            this.st_protect_confirm.Text = "N";
-            this.st_protect_confirm.Visible = false;
             // 
             // alt_key
             // 
@@ -160,6 +142,24 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alct_id.Name = "alct_id";
             this.alct_id.Visible = false;
             this.alct_id.Width = 30;
+            // 
+            // st_title
+            // 
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_title.Location = new System.Drawing.Point(0, 0);
+            this.st_title.Name = "st_title";
+            this.st_title.Size = new System.Drawing.Size(638, 14);
+            this.st_title.TabIndex = 1;
+            this.st_title.Text = "Renewal:";
+            // 
+            // st_protect_confirm
+            // 
+            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
+            this.st_protect_confirm.Name = "st_protect_confirm";
+            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
+            this.st_protect_confirm.TabIndex = 2;
+            this.st_protect_confirm.Text = "N";
+            this.st_protect_confirm.Visible = false;
             // 
             // DAddAllowance
             // 
