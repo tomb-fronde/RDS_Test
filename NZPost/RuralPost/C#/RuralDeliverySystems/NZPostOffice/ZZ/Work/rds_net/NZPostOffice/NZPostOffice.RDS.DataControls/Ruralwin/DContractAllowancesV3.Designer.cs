@@ -176,7 +176,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.Format = "d";
-            dataGridViewCellStyle5.NullValue = "null";   // "00/00/0000";
+            dataGridViewCellStyle5.NullValue = "null";
             this.CaEffectiveDate.DefaultCellStyle = dataGridViewCellStyle5;
             this.CaEffectiveDate.HeaderText = "Effective Date";
             this.CaEffectiveDate.Name = "CaEffectiveDate";
@@ -190,7 +190,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle6.Format = "d";
-            dataGridViewCellStyle6.NullValue = "null";   // "00/00/0000";
+            dataGridViewCellStyle6.NullValue = "null";
             this.CaPaidToDate.DefaultCellStyle = dataGridViewCellStyle6;
             this.CaPaidToDate.HeaderText = "Paid To Date";
             this.CaPaidToDate.Name = "CaPaidToDate";
@@ -207,6 +207,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.alct_id.HeaderText = "AlctId";
             this.alct_id.Name = "alct_id";
             this.alct_id.ReadOnly = true;
+            this.alct_id.Visible = false;
             this.alct_id.Width = 50;
             // 
             // DContractAllowancesV3
