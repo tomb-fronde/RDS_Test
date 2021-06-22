@@ -11,6 +11,8 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 {
     // TJB Allowances 15-May-2021: New
     // Merged MaintainAllowances and MaintainVehAllowances to rationalise WMaintainAllowances code
+    // [22-June-2021] Changed how function f_GetAllowanceAmount.sql determines net_amount
+    //                for fixed-type calculations (no change to MaintainAllowancesV2)
     //
     // TJB Allowances 29-Mar-2021: New
     // Get details for the DMaintainDistanceAllowances tab
