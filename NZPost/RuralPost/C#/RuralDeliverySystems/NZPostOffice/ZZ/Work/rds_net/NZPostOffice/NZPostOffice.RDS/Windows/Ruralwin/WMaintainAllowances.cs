@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // Updated from WAddAllowance
     // Maintenance screen for allowance calculations
     // 8-June-2021 Added 'Terminate' button: 
+    // 23-Jun-2021 Refine effective date checking
 
     public class WMaintainAllowances : WAncestorWindow
     {
@@ -1546,13 +1547,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         private bool is_eff_date_unique( URdsDw thisDw, int dwType, DateTime? inEffDate, int? inAltKey, int inRow )
         {
-            // Check whether the effective date for this allowance type (AltKey) is unique in the DataControl
+            // Check whether the effective date for this allowance type (AltKey) is unique 
+            // in the DataControl
             // Returns true if it is unique, 
             //         false if not
 
             int thisRow;
             int? thisAltKey;
-            DateTime? thisEffDate;
+            DateTime? thisEffDate, initialEffDate;
+
+            // Check the date to see if it has changed.  The check for uniqueness is in
+            // preparation for creating a new record.  The new record cannot be created 
+            // with the same effective date as the record we're creating it from.
+            thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(inRow).EffectiveDate ?? DateTime.MinValue;
+            initialEffDate = thisDw.GetItem<MaintainAllowanceV2>(inRow).InitialEffDate ?? DateTime.MinValue;
+            if (thisEffDate == initialEffDate)
+                return false;
 
             // Scan the DW
             for( thisRow = 0; thisRow < thisDw.RowCount; thisRow++ )
@@ -1563,11 +1573,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     // Get the this row's effective date 
                     // (use GetValueOrDefault in case it's null (which it shouldn't be))
                     thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(thisRow).AltKey;
-                    thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(thisRow).EffectiveDate.GetValueOrDefault();
 
                     // If this record is the same allowance type check the date
                     if (thisAltKey == inAltKey)
                     {
+                        thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(thisRow).EffectiveDate ?? DateTime.MinValue;
                         // If this record matches the date we're checking, return false
                         if (thisEffDate == inEffDate)
                             return false;
@@ -1671,6 +1681,49 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return true;
         }
 
+        private bool of_create_new_record(URdsDw thisDw, int nRow, int dwType)
+        {
+            bool result;
+            int? AltKey;
+            DateTime? EffDate;
+
+            // Although the effective date has been validated, that process hasn't 
+            // ensured that it is unique.  It needs to be unique or there will be 
+            // a primary key violation when creating the new record.
+            AltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
+            EffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
+            result = is_eff_date_unique(thisDw, dwType, EffDate, AltKey, nRow);
+            if (result == false)
+            {
+                //of_setselect(dwType, nRow, "ca_effective_date");
+                of_setCellFocus(dwType, 0, "ca_effective_date");
+                // The new record was not added successfully
+                MessageBox.Show("The effective date is not unique; please enter a new date \n"
+                               , "Validation error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return false;
+            }
+            // The effdate is unique.
+            // We can go ahead and create a new record with the changed details
+            string errmsg = of_add_new_record(thisDw, nRow, dwType);
+            if (errmsg != "")
+            { // If an error occurs at this point, its usually a primary Key error
+                // (non-unique effective date) but that has usually been caught in
+                // is_eff_date_unique() ... so this error 'shouldn't' happen
+                of_setCellFocus(dwType, 0, "ca_effective_date");
+                // The new record was not added successfully
+                MessageBox.Show("New record insert failed \n"
+                               + "Error = " + errmsg
+                               , "Save error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return false;
+            }
+            
+            return true;
+        }
+
         private int of_insert_new_records(URdsDw thisDw, int dwType)
         {
             // Scan the DW inserting new records for any that have changed the net amount
@@ -1678,28 +1731,59 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int nRow = 0, nRows, NewRows = 0, startRows;
             Decimal NetAmt, initialNetAmt;
             int? AltKey;
-            DateTime? EffDate;
+            DateTime? EffDate, initialEffDate, PaidToDate;
             string sRowChanged, Approved;
-            bool result;
+            bool result, RowIsDirty;
 
             startRows = thisDw.RowCount;
             nRows = thisDw.RowCount;
             for (nRow = 0; nRow < nRows; nRow++)
             {
+                AltKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
 
+                // In the DataControl (DMaintainFixedAllowance etc) RowChanged is set to 
+                // "M" (Modified), "N" (New) or "C" (Changed).  Anything else (usually "X") 
+                // means the record hasn't been changed.
                 if (sRowChanged != "N" && sRowChanged != "C" && sRowChanged != "M")
                     continue;
 
+                // Check to see if the only thing changed is one of the things that 
+                // is allowed to be changed whether or not the allowance has already 
+                // been paid (eg Notes and Doc Descriptions)
+                RowIsDirty = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsDirty;
+                if (RowIsDirty)
+                {
+                    if( ! of_need_new_record( thisDw, dwType, nRow) )
+                        continue;
+                }
+
                 // Check to see if the net amount has changed
-                AltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
                 EffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
+                initialEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate;
+                PaidToDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).PaidToDate;
                 Approved = thisDw.GetItem<MaintainAllowanceV2>(nRow).Approved;
                 NetAmt = (thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount) ?? 0.0M;
                 initialNetAmt = (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialNetAmount) ?? 0.0M;
-                if (NetAmt != initialNetAmt)
+
+                // If this record has been paid, any change means that a new record is to be created.
+                if (PaidToDate != null && PaidToDate != DateTime.MinValue)
                 {
-                    // The Net amount has been changed.  
+                    result = of_create_new_record( thisDw, nRow, dwType );
+                    // If there was a problem, quit now
+                    if (result == false)
+                        return -1;
+                }
+                
+                //Has there been a change in the net amount or the effective date?
+                // Note: If this record hasn't been paid, the only other fields (apart 
+                // from the effective date) that might be changed won't affect the net 
+                // amount and can be changed without generating a new record. Even if 
+                // they're the only things changed, they will trigger a save().
+                else if (NetAmt != initialNetAmt || EffDate != initialEffDate)
+                {
+                    // Check to see if this is a modified existing record ("M" as opposed
+                    // to a new record "N")
                     if (sRowChanged == "M" && Approved != "Y")
                     {
                         // If the row has been marked as Modified and it hasn't been marked Approved
@@ -1707,48 +1791,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                         thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged = "C";
                     }
 
-                    // See if this is a modified existing 
-                    // record ("M") that has been approved. If so, this is a candidate for
-                    // the creation of a new record.
+                    // See if this is a modified existing record ("M") that has been approved. 
+                    // If so, this is a candidate for the creation of a new record.
                     if (sRowChanged == "M" && Approved == "Y")
                     {
-                        // Although the effective date has been validated, that process hasn't 
-                        // ensured that it is unique.  It needs to be unique or there will be 
-                        // a primary key violation when creating the new record.
-                        result = is_eff_date_unique(thisDw, dwType, EffDate, AltKey, nRow);
+                        result = of_create_new_record(thisDw, nRow, dwType);
+                        // If there was a problem, quit now
                         if (result == false)
-                        {
-                            //of_setselect(dwType, nRow, "ca_effective_date");
-                            of_setCellFocus(dwType, 0, "ca_effective_date");
-                            // The new record was not added successfully
-                            MessageBox.Show("The effective date is not unique; please enter a new date \n"
-                                           , "Validation error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                             return -1;
-                        }
-                        else // the effdate is unique
-                        {
-                            // The effective date is unique; we can go ahead and create a new record with the changed details
-                            string errmsg = of_add_new_record(thisDw, nRow, dwType);
-                            if (errmsg != "")
-                            { // If an error occurs at this point, its usually a primary Key error
-                                // (non-unique effective date) but that has usually been caught in
-                                // is_eff_date_unique() ... so this error 'shouldn't' happen
-                                //of_setselect(dwType, nRow, "ca_effective_date");
-                                of_setCellFocus(dwType, 0, "ca_effective_date");
-                                // The new record was not added successfully
-                                MessageBox.Show("New record insert failed \n"
-                                               + "Error = " + errmsg
-                                               , "Save error"
-                                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                                return -1;
-                            }
-                        }
                     }
                 }
 
+                // If there has been a record added, re-calculate the allowance's net_amount
+                if( nRows != thisDw.RowCount )
+                {
+                    Decimal allowance_total = 0;
+                    of_calc_allowance_type(thisDw, (int)AltKey, dwType, out allowance_total);
+                }
+                
                 // NOTE: if any new records are added, the RowCount will increase
                 nRows = thisDw.RowCount;
                 of_setCellFocus(dwType, nRow, "alt_key");
@@ -1756,6 +1816,64 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             NewRows = thisDw.RowCount - startRows;
 
             return NewRows;
+        }
+
+        private bool of_need_new_record( URdsDw thisDw, int dwType, int nRow)
+        {
+            // Check to see what has changed.  If its only some columns (specifically 
+            // the Notes and Doc Description columns) then no new record will be required.
+            // Return TRUE if any columns other than these have changed
+            // Return FALSE otherwise
+            // Checking has to be done on a calc type by calc type basis as what the user 
+            // can change varies by calc type.
+            // What we'll check are the things that, if changed, may require a new record
+            // to be generated.  If they are all unchanged, then a new record won't be 
+            // needed and whatever else that might have been changed we don't need to check.
+            // NOTE: some columns cannot be changed: allowance_type, Paid-to date, and vehicle type
+            //       and so don't need to be checked.
+            
+            // Some things are common to all calc types
+            // Check the effective date
+            if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate ?? DateTime.MinValue)
+                    != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate ?? DateTime.MinValue) )
+            {
+                return true;
+            }
+            if (dwType == FIXED)
+            {   // This is specific to the FIXED calc type
+                if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount ?? 0.0M)
+                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialAmount ?? 0.0M))
+                {
+                    return true;
+                }
+            }
+            if (dwType == ROI || dwType == ACTIVITY || dwType == TIME || dwType == DISTANCE)
+            {   // ca_var1 is common to all but the FIXED calc types
+                if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).CaVar1 ?? 0.0M)
+                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialCaVar1 ?? 0.0M))
+                {
+                    return true;
+                }
+            }
+            if (dwType == DISTANCE)
+            {   // These are specific to the DISTANCE calc type
+                if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk ?? 0.0M)
+                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialHrsWk ?? 0.0M) )
+                {
+                    return true;
+                }
+                if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaDistDay ?? 0.0M)
+                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialDistDay ?? 0.0M) )
+                {
+                    return true;
+                }
+                if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).CaCostsCovered ?? "N")
+                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialCostsCovered ?? "N"))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private int of_save_changes(URdsDw thisDw)
@@ -2634,66 +2752,38 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         #endregion
 
-        private void of_calc_tab_allowances(URdsDw tab_dw, int dwType)
+        private void of_calc_allowance_type(URdsDw thisDw, int inAltKey, int dwType, out decimal type_total)
         {
-            // Scans the allowance panel, updating the allowance totals for all allowances listed
-            int nRow, nAltKey;
-            List<int> keysSeen = new List<int>();
-            decimal dThisTotal = 0.0M;
-
-            // Scan through the DW
-            for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
-            {
-                // Get this row's alt_key
-                nAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-
-                // If we haven't seen it before ...
-                if (!keysSeen.Contains(nAltKey))
-                {
-                    // Calculate the total allowance for this allowance type 
-                    // (and update all rows of the same type with the value).
-                    of_calc_allowance_type(tab_dw, nAltKey, dwType, out dThisTotal);
-
-                    // Add the key to the list os 'seen' keys
-                    keysSeen.Add(nAltKey);
-                }
-            }
-        }
-
-        private void of_calc_allowance_type(URdsDw tab_dw, int inAltKey, int dwType, out decimal type_total)
-        {
-            //Calculate the total allowance for an individual allowance type
-            // and update the allowance total for each row
-            int nRow;
+            // Calculate the total allowance (net amount) for an individual allowance type,
+            // update the running total for each row, and return the final net amount.
+            int nRow, startRow;
             int thisAltKey;
 
-            decimal dTotalAmt = 0.0M;
+            decimal? dTotalAmt = 0.0M;
             decimal? dThisAmt = 0.0M;
  
             // Re-calculate the total of the AnnualPayments for the specified allowance type
             dTotalAmt = 0.0M;
-            for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
+            startRow = thisDw.RowCount - 1;
+            for (nRow = startRow; nRow >= 0; nRow--)
             {
-                dThisAmt = tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                thisAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
+                thisAltKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
 
                 if (thisAltKey == inAltKey)
                 {
-                    if (dThisAmt != null)
-                        dTotalAmt += (decimal)dThisAmt;
+                    dThisAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
+                    if (dwType == FIXED)
+                    {
+                        dTotalAmt = dThisAmt;
+                        thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount = dTotalAmt;
+                    }
+                    else
+                        dTotalAmt += dThisAmt ?? 0.0M;
                 }
             }
 
-            // Update the allowance types' totals for each row of that type
-            for (nRow = 0; nRow < tab_dw.RowCount; nRow++)
-            {
-                thisAltKey = (int)tab_dw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                if (thisAltKey == inAltKey)
-                    tab_dw.GetItem<MaintainAllowanceV2>(nRow).NetAmount = dTotalAmt;
-            }
-
             // Return the total
-            type_total = dTotalAmt;
+            type_total = (decimal)(dTotalAmt ?? 0.0M);
         }
 
         private void of_calc_allowance(URdsDw tab_dw, out decimal allowance_total, out decimal approved_total)
