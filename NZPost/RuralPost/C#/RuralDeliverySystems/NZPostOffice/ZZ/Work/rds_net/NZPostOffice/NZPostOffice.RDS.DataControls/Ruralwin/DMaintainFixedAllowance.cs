@@ -17,6 +17,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // [31-Mar-2021] Rearranged columns
     // [ 5-May-2021] Changed grid_CellValueChanged
     // [19-June-2021] Disabled validating (in designer)
+    // [22-June-2021] Changed Net amount to be latest Annual Amount (not sum of annual amounts)
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{
@@ -285,8 +286,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 grid.Rows[thisRow].Cells["calc_amount"].Value
                                 = grid.Rows[thisRow].Cells["ca_annual_amount"].Value;
 
-                // and update the Net Amount
-                grid.Rows[thisRow].Cells["net_amount"].Value = annualAmt + prevNetAmt;
+                // and update the Net Amount (For FIXED allowances, the entered amount is the new net amount).
+                grid.Rows[thisRow].Cells["net_amount"].Value = annualAmt; // +prevNetAmt;
 
                 // And mark it modified ("M") if it isn't already marked new ("N") or modified.
                 if ( sRowChanged != "N" && sRowChanged != "M" )
