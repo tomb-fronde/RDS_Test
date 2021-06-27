@@ -16,6 +16,8 @@ namespace NZPostOffice.RDS.DataService
     // [3-Apr-2021] Added GetVehicleAllowanceRates, VehicleAllowanceRatesItem 
     //              and VehicleAllowanceRatesList and associated things
     // [18-June-2021] Added UpdateAllowanceVehicleType, GetUnpaidAllowanceDate
+    // [27-June-2021] Modified GetAllowanceMaxEffectiveDate: get max PAID date
+    //                Added GetUnpaidAllowanceVehicle
     //
     // TJB Frequencies & Vehicles 2-Mar-2021
     // Added vt_key to GetVehicleOverrideRateList parameter list 
@@ -2307,6 +2309,15 @@ namespace NZPostOffice.RDS.DataService
             return obj.strVal;
         }
 
+        // TJB  Allowances  27-June-2021
+        // Returns the vehicle type for an unpaid contract allowance of the specified type..
+        // If no such allowance is found, returns -1 (no vehicle type is 0).
+        public static int GetUnpaidAllowanceVehicle(int? inContract, int? inAltKey)
+        {
+            RDSDataService obj = Execute("_GetUnpaidAllowanceVehicle", inContract, inAltKey);
+            return obj.intVal;
+        }
+
         // TJB  Allowances  18-June-2021
         public static bool UpdateAllowanceVehicleType(int? inContract, int? inAltKey, DateTime? inEffDate, int? inVarId
                                                         , ref int sqlCode, ref string sqlErrText)
@@ -2337,9 +2348,8 @@ namespace NZPostOffice.RDS.DataService
             return obj.dtVal;
         }
 
-        // TJB  Allowances  9-Apr-2021
-        // Returns the latest effective date for a contract allowance
-        // ignoring the effective date of unapproved  records.  
+        // TJB  Allowances  9-Apr-2021 (modified 27-June-2021: get max PAID date)
+        // Returns the latest effective date for a paid contract allowance of inAltKey type.
         // If no max date is found, returns DateTime.MinValue.
         public static DateTime? GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey)     //, DateTime inMinDate)
         {
@@ -7469,6 +7479,54 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB  Allowances  27-June-2021
+        // Returns the vehicle type for an unpaid contract allowance of the specified type..
+        // If no such allowance is found, returns -1 (no vehicle type is 0).
+        [ServerMethod]
+        private void _GetUnpaidAllowanceVehicle(int? inContract, int? inAltKey)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    int? _varID = -1;
+                    _sqlcode = 0;
+
+                    try
+                    {
+                        cm.CommandText = "select var_id "
+                                       + "  from rd.contract_allowance"
+                                       + " where contract_no = @inContract"
+                                       + "   and alt_key = @inAltKey"
+                                       + "   and ca_paid_to_date is null";
+
+                        ParameterCollection pList = new ParameterCollection();
+                        pList.Add(cm, "inContract", inContract);
+                        pList.Add(cm, "inAltKey", inAltKey);
+
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                _varID = GetValueFromReader<int?>(dr, 0);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                        _varID = -1;
+                    }
+
+                    if (_varID == null)
+                        intVal = 0;
+                    else
+                        intVal = (int)_varID;
+                }
+            }
+        }
+
         // TJB  Allowances  18-June-2021 
         [ServerMethod]
         private void _UpdateAllowanceVehicleType(int? inContract, int? inAltKey, DateTime? inEffDate, int? inVarId)
@@ -7601,10 +7659,9 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        // TJB  Allowances  9-Apr-2021
-        // Returns the latest effective date for a contract allowance.  Temporary 
-        // records (ca_row_changed = 'N') are ignored.
-        // If there are no allowances of this type, return the minimum date.
+        // TJB  Allowances  9-Apr-2021 (modified 27-June-2021: get max PAID date)
+        // Returns the latest effective date for a paid contract allowance of inAltKey type.
+        // If no max date is found, returns DateTime.MinValue.
         [ServerMethod]
         private void _GetAllowanceMaxEffectiveDate(int? inContract, int? inAltKey)
         {
@@ -7621,9 +7678,7 @@ namespace NZPostOffice.RDS.DataService
                                        + "  from rd.contract_allowance"
                                        + " where contract_no = @inContract"
                                        + "   and alt_key = @inAltKey"
-                                       + "   and ca_approved = 'Y'";
-                                       //+ "   and (ca_row_changed is null"
-                                       //+ "         or ca_row_changed != 'N')";
+                                       + "   and ca_paid_to_date is not null";
 
                         ParameterCollection pList = new ParameterCollection();
                         pList.Add(cm, "inContract", inContract);
@@ -7642,9 +7697,6 @@ namespace NZPostOffice.RDS.DataService
                         _sqlerrtext = e.Message;
                         _sqlcode = -1;
                     }
-                    //if (dMaxDate == null || (DateTime)dMaxDate < inMinDate )
-                    //    dMaxDate = inMinDate;
-
                     dtVal = dMaxDate;
                 }
             }
