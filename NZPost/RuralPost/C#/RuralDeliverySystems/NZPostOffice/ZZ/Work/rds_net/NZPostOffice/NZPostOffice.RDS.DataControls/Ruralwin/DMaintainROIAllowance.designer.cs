@@ -197,6 +197,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle6;
             this.ca_annual_amount.HeaderText = "Annual Amount";
             this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.ReadOnly = true;
             this.ca_annual_amount.Width = 73;
             // 
             // net_amount
@@ -209,7 +210,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle7.Format = "$#,##0.00;$-#,##0.00";
             dataGridViewCellStyle7.NullValue = "0.00";
             this.net_amount.DefaultCellStyle = dataGridViewCellStyle7;
-            this.net_amount.HeaderText = "Net Amount";
+            this.net_amount.HeaderText = "   Net Amount";
             this.net_amount.Name = "net_amount";
             this.net_amount.ReadOnly = true;
             this.net_amount.Width = 73;
@@ -606,6 +607,9 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_row_changed;
         private DataGridViewTextBoxColumn calc_amount;
+
+
+
 
 
 

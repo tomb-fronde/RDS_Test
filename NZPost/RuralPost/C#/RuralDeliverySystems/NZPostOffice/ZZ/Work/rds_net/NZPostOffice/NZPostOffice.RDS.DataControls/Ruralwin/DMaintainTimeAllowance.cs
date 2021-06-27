@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // DataControl for Time-based Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
     // [19-June-2021] Disabled validating (in designer)
+    // [26 June 2021] Changed calculation to use PaidToDate instead of Approved
 
     public partial class DMaintainTimeAllowance : Metex.Windows.DataUserControl
 	{
@@ -177,7 +178,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
                 decimal? investmentAmt = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
                 decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
-                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
 
                 decimal? hours = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
                 decimal? rate = (decimal?)grid.Rows[thisRow].Cells["alt_rate"].Value ?? 0.0M;
@@ -186,16 +186,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
                 // Determine the previous NetAmt
                 decimal? prevNetAmt;
-                if (Approved == "Y")
-                    // If this is an approved allowance we'll be creating 
-                    // an additional allowance to add on to the current allowance
-                    prevNetAmt = netAmt;
-                else
-                    // If this allowance has not been approved, we'll be changing the 
+                DateTime? paid = (DateTime?)grid.Rows[thisRow].Cells["ca_paid_to_date"].Value;
+                if (paid == null)
+                    // If this allowance has not been paid, we'll be changing the 
                     // net amount that was added on to the pervious allowance. To do this
                     // we take away this record's previous change amount (still in
                     // ca_annual_amount; we're about to replace it with a new change amount).
                     prevNetAmt = netAmt - annualAmt;
+                else
+                    // If this allowance has been paid we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    prevNetAmt = netAmt;
 
                 // Calculate the gross amount and save in calc_amount and net_amount
                 decimal? TimeAmt = hours * rate * wks;
