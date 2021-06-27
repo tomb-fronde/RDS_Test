@@ -33,8 +33,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public readonly int TIME = RDSDataService.LookupAllowanceCalcType("Time");
         public readonly int DISTANCE = RDSDataService.LookupAllowanceCalcType("Distance");
 
-        public string is_errmsg = String.Empty;
-
         private System.ComponentModel.IContainer components = null;
 
         public URdsDw idw_Current;  // Used to represent the currently selected tabpage/DataControl
@@ -497,19 +495,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // Check whether the user has permission to approve allowances, and
             // set the ca_approved column readonly if not.
             set_approvability();
-/*
-            // Calculate the allowance totals for each tab
-            of_calc_tab_allowances(dw_fixed_allowance, FIXED);
-            of_calc_tab_allowances(dw_roi_allowance, ROI);
-            of_calc_tab_allowances(dw_activity_allowance, ACTIVITY);
-            of_calc_tab_allowances(dw_time_allowance, TIME);
-            of_calc_tab_allowances(dw_distance_allowance, DISTANCE);
 
-            // Calculate the total of all allowances and display it
-            decimal dTotalAmt;
-            of_calc_allowance_total(out dTotalAmt);
-            this.Total.Text = dTotalAmt.ToString("###,###.00");
-*/
             // Updating the allowance totals has marked all allowances "dirty"
             // Mark them "Clean" to avoid being asked about saving changes
             of_markAllClean(dw_fixed_allowance, FIXED);
@@ -706,13 +692,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             thisDw.GetItem<MaintainAllowanceV2>(oldRow).MarkClean();
 
 
-            //    //of_show_record(thisDw, dwType, oldRow, true, "Fix Old row");
-            //    MessageBox.Show("New record isNew " + (thisDw.GetItem<MaintainAllowanceV2>(newRow).IsNew).ToString()
-            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowanceV2>(newRow).IsDirty).ToString() + "\n"
-            //                   + "Old record isNew " + (thisDw.GetItem<MaintainAllowanceV2>(oldRow).IsNew).ToString()
-            //                         + ", isDirty " + (thisDw.GetItem<MaintainAllowanceV2>(oldRow).IsDirty).ToString()
-            //                   , "of_add_new_record - Debugging");
-
             // Update the display
             //of_setCellFocus(dwType, newRow, "alt_key");
             of_setselect(dwType, newRow, "alt_key");
@@ -782,11 +761,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     else // No, this is the first time for this allowance; remember
                         prev_alt_key = alt_key;
                 }
-                //else
-                //{
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;  // White
-                //}
             }
             idw_fixed_allowance.DataObject.Refresh();
 
@@ -806,11 +780,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     else
                         prev_alt_key = alt_key;
                 }
-                //else
-                //{
-                //    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
-                //    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
-                //}
             }
             idw_roi_allowance.DataObject.Refresh();
 
@@ -830,11 +799,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     else
                         prev_alt_key = alt_key;
                 }
-                //else
-                //{
-                //    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
-                //    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
-                //}
             }
             idw_activity_allowance.DataObject.Refresh();
 
@@ -854,11 +818,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     else
                         prev_alt_key = alt_key;
                 }
-                //else
-                //{
-                //    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
-                //    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
-                //}
             }
             idw_time_allowance.DataObject.Refresh();
 
@@ -878,11 +837,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     else
                         prev_alt_key = alt_key;
                 }
-                //else
-                //{
-                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridRowReadOnly(nRow, false);
-                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
-                //}
             }
             idw_distance_allowance.DataObject.Refresh();
         }
@@ -895,486 +849,162 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             StaticVariables.window = null;
         }
 
-        private void wf_checkBasicErrors(int? inContract, int? inAltKey, DateTime? inEffDate, decimal? inAmount, string inNotes
-                                       , string inAltDescription, string inRowChanged
-                                       , URdsDw thisDw, int dwType, int thisRow
-                                       , ref int inErrors, ref string inErrmsg)
-        {
-            int SQLCode = 0;
-            int nRowErrors = 0;
-            string sRowError = string.Empty;
-            string SQLErrText = string.Empty;
-            DateTime? ld_maxdate = new DateTime();
-
-            // Check that some essential values have been entered
-            if (inAmount == null)
-            {
-                sRowError += inAltDescription + " - Please enter an amount.\n";
-                nRowErrors++;
-            }
-
-            // Ensure an effective date has been specified
-            if (inEffDate == null)
-            {
-                sRowError += inAltDescription + " - Please enter an effective date.\n";
-                nRowErrors++;
-            }
-/*
-            // If the effective date hasn't changed, don't need to check it further
-            DateTime? initialEffDate;
-            if( dwType == DISTANCE )
-                initialEffDate = thisDw.GetItem<MaintainVehAllowance>(thisRow).InitialEffDate;
-            else
-                initialEffDate = thisDw.GetItem<MaintainAllowance>(thisRow).InitialEffDate;
-            if (!(inEffDate == initialEffDate))
-            {
-*/
-                // Check that we won't duplicate the effective date 
-                // (leading to a database duplicate key error)
-                DateTime dEffDate = (DateTime)inEffDate;
-                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(inContract, inAltKey);
-                if ((DateTime)inEffDate <= dMaxDate)
-                {
-                    sRowError += inAltDescription + " - The effective date must be greater than " 
-                                 + dMaxDate.ToString("dd/MM/yyyy")+ ".\n";
-                    nRowErrors++;
-                }
-                else
-                {   // of_sanedate returning True means the date is either OK or acceptable
-                    if (!(StaticVariables.gnv_app.of_sanedate(inEffDate.GetValueOrDefault()
-                                                , inAltDescription + " effective date")))
-                    {
-                        nRowErrors++;
-                    }
-                }
-/*
-            }
-*/
-            if (inNotes == null || inNotes.Trim() == "")
-            {
-                sRowError += inAltDescription + " - Please enter a note.\n";
-                nRowErrors++;
-            }
-
-            inErrors += nRowErrors;
-            inErrmsg += sRowError;
-        }
-
         public virtual string of_validate_fields(URdsDw thisDw, int dwType, int nRow
-                        , out string column_name )
+                        , out string err_column )
         {
             // Check that values are present in required fields
-            int? ll_altkey;
-            string sAltDescription;
+            string sAltDescription, sCaNotes;
             DateTime? ld_effdate;
-            Decimal? ldc_amount;
-            string sCaNotes;
-            string ErrMsg;
-            int nErrors;
+            int nErrors = 0;
+            string ErrMsg = "";
 
-            nErrors = 0;
-            ErrMsg = "";
-            column_name = "";
-            
-            // Get some data to check
-            ll_altkey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
             sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-            ld_effdate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-            ldc_amount = thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-            sCaNotes = thisDw.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-            // First check some common things
-            if (ldc_amount == null)
-            {
-                ErrMsg += sAltDescription + " - Please enter an amount.\n";
-                nErrors++;
-                column_name = "ca_annual_amount";
-            }
+            err_column = "";
 
             // Ensure an effective date has been specified
+            // (We do more detailed validation in of_validate_effdate)
+            ld_effdate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
             if (ld_effdate == null)
             {
-                ErrMsg += sAltDescription + " - Please enter an effective date.\n";
                 nErrors++;
-                column_name = "ca_effective_date";
+                ErrMsg += sAltDescription + " - Please enter an effective date.\n";
+                err_column = "ca_effective_date";
             }
 
+            sCaNotes = thisDw.GetItem<MaintainAllowanceV2>(nRow).Notes;
             if (sCaNotes == null || sCaNotes.Trim().Length == 0)
             {
-                ErrMsg += sAltDescription + " - Please enter a note.\n";
                 nErrors++;
-                column_name = "ca_notes";
+                ErrMsg += sAltDescription + " - Please enter a note.\n";
+                err_column = "ca_notes";
             }
             if( thisDw.GetItem<MaintainAllowanceV2>(nRow).CaVar1 == null )
             {
-                if (dwType == ROI || dwType == ACTIVITY || dwType == TIME || dwType == DISTANCE)
-                {
-                    string errtype = "";
-                    if( dwType == ROI ) errtype = "an investment amount";
-                    else if(dwType == ACTIVITY) errtype = "a count per week";
-                    else if(dwType == TIME)     errtype = "an hours per week";
-                    else if(dwType == DISTANCE) errtype = "a days per year";
+                string errtype = "";
+                if (dwType == FIXED) errtype = "the total amount";
+                else if(dwType == ROI) errtype = "an investment amount";
+                else if(dwType == ACTIVITY) errtype = "a count per week";
+                else if(dwType == TIME)     errtype = "an hours per week";
+                else if(dwType == DISTANCE) errtype = "a days per year";
 
-                    ErrMsg += sAltDescription + " - Please enter " + errtype + " value.\n";
-                    nErrors++;
-                    column_name = "ca_var1";
-                }
+                nErrors++;
+                ErrMsg += sAltDescription + " - Please enter " + errtype + " value.\n";
+                err_column = "ca_var1";
             }
-            if( thisDw.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk == null )
+
+            if (dwType == DISTANCE)
             {
-                if (dwType == DISTANCE)
+                if (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk == null)
                 {
+                    nErrors++;
                     ErrMsg += sAltDescription + " - Please enter an hours per week value.\n";
-                    nErrors++;
-                    column_name = "ca_hrs_wk";
+                    err_column = "ca_hrs_wk";
                 }
-            }
-            if( thisDw.GetItem<MaintainAllowanceV2>(nRow).CaDistDay == null )
-            {
-                if (dwType == DISTANCE)
+                if (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaDistDay == null)
                 {
+                    nErrors++;
                     ErrMsg += sAltDescription + " - Please enter an distance per day value.\n";
-                    nErrors++;
-                    column_name = "ca_dist_day";
+                    err_column = "ca_dist_day";
                 }
             }
-            int? nVarId = thisDw.GetItem<MaintainAllowanceV2>(nRow).VarId;
-            if (nVarId == null || nVarId == 0)
-            {
-                if (dwType == DISTANCE)
-                {
-                    ErrMsg += "A vehicle type is required.\n";
-                    ErrMsg += "Please INSERT a new " + sAltDescription + " allowance and select a vehicle type.\n";
-                    nErrors++;
-                    column_name = "var_id";
-                }
-            }
-
             if (nErrors > 1)
-                column_name = "alt_key";  // for the row as a whole
+                err_column = "alt_key";  // for the row as a whole
 
             return ErrMsg;
         }
 
-        public virtual bool of_validate_effdate(URdsDw thisDw, int dwType, int nRow
-                                                , int? inAltKey, DateTime? inEffDate
-                                                , out string ErrMsg)
+        private DateTime of_GetMaxEffectiveDate(URdsDw thisDw, int inContract, int inAltKey)
+        {
+            // Get the maximum effective date of the paid allowances of the type (inAltKey)
+            int thisAltKey;
+            DateTime? thisPaidDate, dMaxDate, thisEffDate;
+
+            // Scan the rows in thisDw (which contains a single allowance type)
+            dMaxDate = DateTime.MinValue;
+            for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
+            {
+                // Skip this row if it isn't the same type
+                thisAltKey = (int)(thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey ?? -1);
+                if (thisAltKey != inAltKey)
+                    continue;
+
+                // Skip this row if it isn't paid
+                thisPaidDate = (DateTime?)thisDw.GetItem<MaintainAllowanceV2>(nRow).PaidToDate;
+                if (thisPaidDate == null)
+                    continue;
+
+                // If this row's effective date is greater than the saved one, save it
+                thisEffDate = (DateTime?)(thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate ?? DateTime.MinValue);
+                if (thisEffDate > dMaxDate)
+                    dMaxDate = thisEffDate;
+            }
+            return (DateTime)dMaxDate;
+        }
+
+        public virtual int of_validate_effdate(URdsDw thisDw, int dwType, int inRow
+                                                , int? inAltKey, DateTime? inEffDate)
         {
             // Check that the effective date is unique for this allowance type
+            // Return
+            //    0    OK
+            //    1    Error, no message
+            //   -1    Error message displayed
 
-            int? thisAltKey;
-            DateTime? EffDate, initialEffDate;
-            DateTime dEffDate, dInitialEffDate, dMaxDate, thisEffDate;
+            DateTime? thisPaidDate, initialEffDate;
+            DateTime dEffDate, dInitialEffDate, dMaxDate;
             string sAltDescription, sRowChanged;
             bool thisIsNew;
 
-            ErrMsg = "";
-            sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-            initialEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate;
-            sRowChanged = thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-            thisIsNew = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsNew;
+            sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(inRow).AltDescription;
+            initialEffDate = thisDw.GetItem<MaintainAllowanceV2>(inRow).InitialEffDate;
+            sRowChanged = thisDw.GetItem<MaintainAllowanceV2>(inRow).RowChanged;
+            thisIsNew = thisDw.GetItem<MaintainAllowanceV2>(inRow).IsNew;
 
             // Convert the dates to DateTime from DateTime?, so we don't run into trouble with nulls
             dEffDate = (DateTime)(inEffDate ?? DateTime.MinValue);
             dInitialEffDate = (DateTime)(initialEffDate ?? DateTime.MinValue);
-            dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(il_contract, inAltKey);
-            bool b = thisIsNew;
+            dMaxDate = (DateTime)of_GetMaxEffectiveDate(thisDw, il_contract, (int)inAltKey);
+            thisPaidDate = (DateTime?)thisDw.GetItem<MaintainAllowanceV2>(inRow).PaidToDate;
 
-            // Check that we won't duplicate the effective date if we're going to create a new record
-            // (leading to a database duplicate key error)
-            for (int i = 0; i < thisDw.RowCount; i++)
+            // If the date we're checking is greater than the max date (maximum of all paid allowances 
+            // of the same type (alt_key)) then the date is OK regardless of whether this allowance 
+            // has been paid or not.
+            if( dEffDate > dMaxDate )
             {
-                // If this is the row of the date we're checking, skip it.
-                if( i == nRow ) continue;
-
-                //// Get some values we need below
-                thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(i).AltKey;
-                thisEffDate = (DateTime)thisDw.GetItem<MaintainAllowanceV2>(i).EffectiveDate;
-
-                // Skip if this record is for a different allowance type
-                if( thisAltKey != inAltKey ) continue;
-
-                // If this record's date matches the date we're checking, we've found a duplicate
-                // Tell the user.
-                if( thisEffDate == inEffDate )
-                {
-                    ErrMsg += sAltDescription + " - The effective date must be unique.";
-                    return false;
-                }
+                // Do the sanedate check to warn if the date entered is +/- 90 days from the present
+                // (returns TRUE if within 90 days of today and if its outside that and the user said it was OK)
+                if (StaticVariables.gnv_app.of_sanedate(inEffDate, sAltDescription + " Effective Date"))
+                    return 0;
+                else
+                    return -1;
             }
 
-            // If the user has changed the Annual Amount, the record will be marked Modified ("M")
-            // meaning that a new record is to be created.  If the effective date hasn't been changed,
-            // the new record will have a duplicated date which the other checks won't catch;
-            // this test will.
-            if (sRowChanged == "M" && dEffDate == dInitialEffDate)
+            // If the record we're checking has not been paid and the date we're checking is not 
+            // greater than the max date (maximum of all paid allowances of the same type) the 
+            // user needs to enter a more-recent date regardless of whatever else may have changed.
+            if ( (thisPaidDate == null) && (dEffDate <= dMaxDate) )
             {
-                ErrMsg += sAltDescription + " - Please enter a new effective date greater than "
-                                          + dEffDate.ToString("dd/MM/yyyy");
-                return false;
-            }
-/*
-            // Check that the effective date is at least as recent as the most-recent
-            // (this record may be the most-recent).
-            if (dEffDate < dMaxDate)
-            {
-                ErrMsg += sAltDescription + " - The effective date must be greater than "
-                             + dMaxDate.ToString("dd/MM/yyyy") + ".\n";
-                return false;
+                MessageBox.Show(sAltDescription + " - The effective date must be greater than "
+                                    + dMaxDate.ToString("dd/MM/yyyy") + ".\n"
+                               , "Validation Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                of_setCellFocus(dwType, inRow, "ca_effective_date");
+                return -1;
             }
 
-            // If the effective date hasn't changed, don't need to check it further at this stage.
-            // (The user may just be changing the Notes or DocDescription).
-            if (!(dEffDate == dInitialEffDate))
-            {
-
-               // of_sanedate returning True means the date is either OK or acceptable
-                // NOTE: of_sanedate reports an error if found, and asks whether to 
-                //       allow it, returning true if so, or false if not
-                return StaticVariables.gnv_app.of_sanedate(EffDate.GetValueOrDefault()
-                                         , sAltDescription + " Effective Date" );
-            }
-*/
-            // Finally, check that the date is "sane"
-            return StaticVariables.gnv_app.of_sanedate(inEffDate, sAltDescription + " Effective Date" );
+            // At this point, the record we're checking has been paid, and its effective date
+            // is the same as the max date (it can't be less and isn't greater). What we do now 
+            // depends on whether a new record will be created or not (if so the effective date 
+            // must be greater than the max date) and that depends on what is being changed.
+            // This is checked in of_create_new_record().
 
             // If all else fails and there's a duplicate effective date when inserting
             // a new record, the insert will throw an error that is caught, and the user 
             // told about it.
 
-            return true;
+            return 0;
         }
 
-        public virtual int wf_validate(string sAllowanceType)
-        {
-            // Validate data in each tab where there have been modifications. 
-            // Tell the user, then skip to the next tab.  
-            // If there are no failures, return SUCCESS (1).
-            // If there are some failures and no successes, return FAILURE (-1)
-
-            DateTime? ld_effdate;
-            DateTime? ld_maxdate;
-            Decimal?  ldc_amount;
-            int? ll_altkey;
-            string sAltDescription;
-            string sCaNotes;
-            int nSucceeded;
-            int nAllErrors;
-            int nRowErrors, nTabErrors;
-            int FAILURE2 = -(2);
-            int nRow, nRows;
-            string sRowChanged;
-            
-            ll_altkey = null;
-            sAltDescription = "";
-            nSucceeded = 0;
-            nAllErrors = 0;
-            is_errmsg = "";
-
-            // Validate each allowance type separately
-            // Fixed Allowances
-            if (sAllowanceType == "Fixed")
-            {
-                nTabErrors = 0;
-                nRows = idw_fixed_allowance.RowCount;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    // Check to see if this row has been changed
-                    sRowChanged = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-                    // If sRowChanged is not one of C, N, M (Changed, New, Modified - value changed)
-                    // no need to validate it.
-                    if (sRowChanged == null || !(sRowChanged == "C" || sRowChanged == "N" || sRowChanged == "M"))
-                        continue;
-
-                    nRowErrors = 0;
-                    ld_effdate = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                    ldc_amount = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    ll_altkey = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                    sAltDescription = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                    sCaNotes = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-                    wf_checkBasicErrors(il_contract, ll_altkey, ld_effdate, ldc_amount, sCaNotes
-                                    , sAltDescription, sRowChanged
-                                    , idw_fixed_allowance, FIXED, nRow
-                                    , ref nRowErrors, ref is_errmsg);
-                    
-                    if( nRowErrors > 0 )
-                    {
-                        nTabErrors += nRowErrors;
-
-                    }
-                } // end for each fixed row loop
-                if( nTabErrors > 0 )
-                    nAllErrors += nTabErrors;
-                else
-                    nSucceeded++;
-            } // end fixed allowances validation
-
-            // ROI Allowances
-            if (sAllowanceType == "ROI")
-            {
-                nTabErrors = 0;
-
-                nRows = idw_roi_allowance.RowCount;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    // Check to see if this row has been changed
-                    sRowChanged = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-                    // If sRowChanged is not one of C, N, M (Changed, New, Modified - value changed)
-                    // no need to validate it.
-                    if (sRowChanged == null || !(sRowChanged == "C" || sRowChanged == "N" || sRowChanged == "M"))
-                        continue;
-
-                    nRowErrors = 0;
-                    ld_effdate = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                    ldc_amount = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    ll_altkey = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                    sAltDescription = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                    sCaNotes = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-                    wf_checkBasicErrors(il_contract, ll_altkey, ld_effdate, ldc_amount, sCaNotes
-                                    , sAltDescription, sRowChanged
-                                    , idw_roi_allowance, ROI, nRow
-                                    , ref nRowErrors, ref is_errmsg);
-                    
-                    if( nRowErrors > 0 )
-                    {
-                        nTabErrors += nRowErrors;
-                    }
-                } // end for each fixed row loop
-
-                if( nTabErrors > 0 )
-                    nAllErrors += nTabErrors;
-                else
-                    nSucceeded++;
-            }
-
-            // Activity Allowances
-            if (sAllowanceType == "Activity")
-            {
-                nTabErrors = 0;
-
-                nRows = idw_activity_allowance.RowCount;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    // Check to see if this row has been changed
-                    sRowChanged = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-                    // If sRowChanged is not one of C, N, M (Changed, New, Modified - value changed)
-                    // no need to validate it.
-                    if (sRowChanged == null || !(sRowChanged == "C" || sRowChanged == "N" || sRowChanged == "M"))
-                        continue;
-
-                    nRowErrors = 0;
-                    ld_effdate = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                    ldc_amount = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    ll_altkey = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                    sAltDescription = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                    sCaNotes = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-                    wf_checkBasicErrors(il_contract, ll_altkey, ld_effdate, ldc_amount, sCaNotes
-                                    , sAltDescription, sRowChanged
-                                    , idw_activity_allowance, ACTIVITY, nRow
-                                    , ref nRowErrors, ref is_errmsg);
-
-                    if (nRowErrors > 0)
-                    {
-                        nTabErrors += nRowErrors;
-                    }
-                } // end for each fixed row loop
-
-                if (nTabErrors > 0)
-                    nAllErrors += nTabErrors;
-                else
-                    nSucceeded++;
-            }
-
-            // Time Allowances
-            if (sAllowanceType == "Time")
-            {
-                nTabErrors = 0;
-
-                nRows = idw_time_allowance.RowCount;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    // Check to see if this row has been changed
-                    sRowChanged = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-                    // If sRowChanged is not one of C, N, M (Changed, New, Modified - value changed)
-                    // no need to validate it.
-                    if (sRowChanged == null || !(sRowChanged == "C" || sRowChanged == "N" || sRowChanged == "M"))
-                        continue;
-
-                    nRowErrors = 0;
-                    ld_effdate = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                    ldc_amount = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    ll_altkey = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                    sAltDescription = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                    sCaNotes = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-                    wf_checkBasicErrors(il_contract, ll_altkey, ld_effdate, ldc_amount, sCaNotes
-                                    , sAltDescription, sRowChanged
-                                    , idw_time_allowance, TIME, nRow
-                                    , ref nRowErrors, ref is_errmsg);
-
-                    if (nRowErrors > 0)
-                    {
-                        nTabErrors += nRowErrors;
-                    }
-                } // end for each fixed row loop
-
-                if (nTabErrors > 0)
-                    nAllErrors += nTabErrors;
-                else
-                    nSucceeded++;
-            }
-
-            // Distance Allowances
-            if (sAllowanceType == "Distance")
-            {
-                nTabErrors = 0;
-
-                nRows = idw_distance_allowance.RowCount;
-                for (nRow = 0; nRow < nRows; nRow++)
-                {
-                    // Check to see if this row has been changed
-                    sRowChanged = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-                    // If sRowChanged is not one of C, N, M (Changed, New, Modified - value changed)
-                    // no need to validate it.
-                    if (sRowChanged == null || !(sRowChanged == "C" || sRowChanged == "N" || sRowChanged == "M") )
-                        continue;
-
-                    nRowErrors = 0;
-                    ld_effdate = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                    ldc_amount = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    ll_altkey = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                    sAltDescription = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                    sCaNotes = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).Notes;
-
-                    wf_checkBasicErrors(il_contract, ll_altkey, ld_effdate, ldc_amount, sCaNotes
-                                    , sAltDescription, sRowChanged
-                                    , idw_distance_allowance, DISTANCE, nRow
-                                    , ref nRowErrors, ref is_errmsg);
-
-                    if (nRowErrors > 0)
-                    {
-                        nTabErrors += nRowErrors;
-                    }
-                } // end for each fixed row loop
-
-                if (nTabErrors > 0)
-                    nAllErrors += nTabErrors;
-                else
-                    nSucceeded++;
-            }
-            if( nAllErrors == 0 )
-                return SUCCESS;  // Return SUCCESS if there were no errore
-            else
-            {
-                if( nSucceeded > 0 )
-                    return FAILURE2; // Return FAILURE2 if there was partial success
-
-                return FAILURE;      // Otherwise return FAILURE
-            }
-        }
 
         public virtual void dw_fixed_allowance_constructor()
         {
@@ -1535,14 +1165,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 
         public virtual void cb_save_clicked(object sender, EventArgs e)
         {
-            bool result = of_save();
-            if( result == false )
-                // If there were errors, tell the user and exit without closing
-                MessageBox.Show("Save failed        ", ""
-                     ,MessageBoxButtons.OK, MessageBoxIcon.Warning);  
-            //else 
-            //    // If there were no errors, we close the window
-            //    this.Close();
+            int result = of_save();
+            if (result == 1)  // There was an error with no message displayed
+            {                 // so we tell the user
+                MessageBox.Show("    Save failed    ", ""
+                     , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private bool is_eff_date_unique( URdsDw thisDw, int dwType, DateTime? inEffDate, int? inAltKey, int inRow )
@@ -1616,124 +1244,158 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellFocus(nRow, sColumn, true);
         }
 
-        private bool of_validate_records(URdsDw thisDw, int dwType)
+        private int of_validate_records(URdsDw thisDw, int dwType)
         {
+            // Does some validation
+            // Returns 
+            //    0    OK
+            //    1    Failed without a message displayed
+            //   -1    Failed with message displayed
             int? thisAltKey;
             DateTime? thisEffDate;
-            string sRowChanged, Approved;
-            bool isNew;
-            Decimal thisNetAmt;
+            string sRowChanged, altDescription;
+            bool isNew, isDirty;
+            //Decimal thisNetAmt;
 
             for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
                 // Get some values we'll use below
-                thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-                sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
-                Approved = (thisDw.GetItem<MaintainAllowanceV2>(nRow).Approved) ?? "N";
-                thisNetAmt = (thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount) ?? 0;
+                altDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
                 isNew = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsNew;
+                isDirty = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsDirty;
 
                 // Skip records that haven't been changed (New, Changed, Modified)
+                if ((!isNew) && (!isDirty))
+                    continue;
+
+                sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
                 if (sRowChanged != "N" && sRowChanged != "C" && sRowChanged != "M")
                     continue;
 
                 // Skip records where the net amount is 0 (primarily terminated records)
                 // Do this to avoid checking that required values have been entered
-                if (thisNetAmt == 0)
-                    continue;
+                //thisNetAmt = (thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount) ?? 0;
+                //if (thisNetAmt == 0)
+                //    continue;
+
+                // Do this early to avoid checking and finding other errors first
+                if (dwType == DISTANCE)
+                {
+                    int? varId = thisDw.GetItem<MaintainAllowanceV2>(nRow).VarId;
+                    if (varId == null || varId <= 0)
+                    {
+                        MessageBox.Show("A vehicle type is required.\n"
+                                        + " Please INSERT a new " + altDescription
+                                              + " and select its vehicle type.\n");
+                        return -1;
+                    }
+                }
 
                 // Check that values are present in required fields
                 string errColumn = "alt_key";
-                is_errmsg = of_validate_fields(thisDw, dwType, nRow, out errColumn);
-                if (is_errmsg.Length != 0)
+                string errMsg = of_validate_fields(thisDw, dwType, nRow, out errColumn);
+                if (errMsg.Length != 0)
                 {
-                    //of_setselect(dwType, nRow, errColumn);
                     of_setCellFocus(dwType, nRow, errColumn);
-                    MessageBox.Show(is_errmsg, "Allowance Validation Error"
-                                   , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return false;
+                    MessageBox.Show(errMsg, "Validation Error"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return -1;
                 }
 
-                // Check that the effective date is unique if a new record is going
-                // to be saved (avoiding a primary key (duplicate) error).
-                // Note: One of the tests displays its own error message and doesn't return 
-                //       it in is_errmsg. of_validate_effdate returns false in this case with 
-                //       no error message to display.
-                // Only validate the effective date if a new record will be created
-                if( (sRowChanged == "M" && Approved == "Y") || isNew )
+                // Validation of the effective date is complicated.
+                // of_validate_fields has checked that a  date is present.
+                // of_validate_effdate does some value and sanity checking, but 
+                // leaves an important check for later (see comments in of_validate_effdate).
+                thisAltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
+                thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
+                int errcode = of_validate_effdate(thisDw, dwType, nRow, thisAltKey, thisEffDate);
+                if( errcode != 0 )
                 {
-                    if (!of_validate_effdate(thisDw, dwType, nRow, thisAltKey, thisEffDate, out is_errmsg))
+                    if (errcode > 0)
                     {
-                        if (is_errmsg.Length != 0)
-                        {
-                            //of_setselect(dwType, nRow, "ca_effective_date");
-                            of_setCellFocus(dwType, nRow, "ca_effective_date");
-                            MessageBox.Show(is_errmsg, "Allowance Validation Error"
-                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                        //of_setselect(dwType, nRow, "ca_effective_date");
+                        string sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show(sAltDescription + " - invalid effective date"
+                                       , "Validation Error"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         of_setCellFocus(dwType, nRow, "ca_effective_date");
-                        return false;
                     }
+                    return errcode;
                 }
-            }
-            return true;
+            } // (end for loop)
+            return 0;
         }
 
-        private bool of_create_new_record(URdsDw thisDw, int nRow, int dwType)
+        private int of_create_new_record(URdsDw thisDw, int nRow, int dwType)
         {
+            // Check to see if a new record should be created
+            //  Returns
+            //     0     Yes
+            //     1     No
+            //    -1     Error (message displayed)
+
             bool result;
             int? AltKey;
             DateTime? EffDate;
 
-            // Although the effective date has been validated, that process hasn't 
-            // ensured that it is unique.  It needs to be unique or there will be 
-            // a primary key violation when creating the new record.
-            AltKey = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-            EffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-            result = is_eff_date_unique(thisDw, dwType, EffDate, AltKey, nRow);
-            if (result == false)
-            {
-                //of_setselect(dwType, nRow, "ca_effective_date");
-                of_setCellFocus(dwType, 0, "ca_effective_date");
-                // The new record was not added successfully
-                MessageBox.Show("The effective date is not unique; please enter a new date \n"
-                               , "Validation error"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Although the effective date has been validated its left the situation 
+            // where it may be the same as the max effective date (for this allowance).
+            // If a new record is generated, this is not OK as that would result in 
+            // a database duplicate key error.  Otherwise, if the record is to be 
+            // updated (eg approved or the Notes os Doc Description upodated) is should
+            // be left as is.
+            // NOTE: of_need_new_record returns 1 if no new record needed, 0 otherwise
+            if (of_need_new_record(thisDw, dwType, nRow) == 1)
+                return 1;
 
-                return false;
+            // Finally we check the case where the record has been paid.  The user has
+            // made some changes that mean a new record is to be generated.  The effective
+            // date must be greater than the record's original effective date.
+            DateTime thisEffDate = (DateTime)(thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate ?? DateTime.MinValue);
+            DateTime initialEffDate = (DateTime)(thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate ?? DateTime.MinValue);
+            if (thisEffDate <= initialEffDate)
+            {
+                int contractNo = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).ContractNo;
+                int altKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
+                string sAltDescription = thisDw.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(contractNo, altKey);
+                MessageBox.Show(sAltDescription + " - The effective date must be greater than "
+                             + dMaxDate.ToString("dd/MM/yyyy") + ".\n");
+                of_setCellFocus(dwType, nRow, "ca_effective_date");
+                return -1;
             }
-            // The effdate is unique.
             // We can go ahead and create a new record with the changed details
             string errmsg = of_add_new_record(thisDw, nRow, dwType);
             if (errmsg != "")
             { // If an error occurs at this point, its usually a primary Key error
                 // (non-unique effective date) but that has usually been caught in
                 // is_eff_date_unique() ... so this error 'shouldn't' happen
-                of_setCellFocus(dwType, 0, "ca_effective_date");
+                of_setCellFocus(dwType, nRow, "ca_effective_date");
                 // The new record was not added successfully
                 MessageBox.Show("New record insert failed \n"
                                + "Error = " + errmsg
                                , "Save error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                return false;
+                return -1;
             }
             
-            return true;
+            return 0;
         }
 
         private int of_insert_new_records(URdsDw thisDw, int dwType)
         {
             // Scan the DW inserting new records for any that have changed the net amount
-            // Return the number of rows added or -1 on error
+            // Return 
+            //   >=0    The number of rows added 
+            //    -1    on error (message displayed)
+
             int nRow = 0, nRows, NewRows = 0, startRows;
             Decimal NetAmt, initialNetAmt;
             int? AltKey;
             DateTime? EffDate, initialEffDate, PaidToDate;
             string sRowChanged, Approved;
-            bool result, RowIsDirty;
+            int result;
+            bool RowIsDirty;
 
             startRows = thisDw.RowCount;
             nRows = thisDw.RowCount;
@@ -1753,8 +1415,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // been paid (eg Notes and Doc Descriptions)
                 RowIsDirty = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsDirty;
                 if (RowIsDirty)
-                {
-                    if( ! of_need_new_record( thisDw, dwType, nRow) )
+                {   // of_need_new_record returns 1 if no new record needed, 0 otherwise
+                    if( of_need_new_record( thisDw, dwType, nRow) == 1 )
                         continue;
                 }
 
@@ -1771,8 +1433,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 {
                     result = of_create_new_record( thisDw, nRow, dwType );
                     // If there was a problem, quit now
-                    if (result == false)
-                        return -1;
+                    if (result < 0)
+                        return result;
                 }
                 
                 //Has there been a change in the net amount or the effective date?
@@ -1797,8 +1459,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     {
                         result = of_create_new_record(thisDw, nRow, dwType);
                         // If there was a problem, quit now
-                        if (result == false)
-                            return -1;
+                        if (result < 0)
+                            return result;
                     }
                 }
 
@@ -1818,12 +1480,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return NewRows;
         }
 
-        private bool of_need_new_record( URdsDw thisDw, int dwType, int nRow)
+        private int of_need_new_record( URdsDw thisDw, int dwType, int nRow)
         {
             // Check to see what has changed.  If its only some columns (specifically 
             // the Notes and Doc Description columns) then no new record will be required.
-            // Return TRUE if any columns other than these have changed
-            // Return FALSE otherwise
+            // Return 
+            //    0   if any columns other than these have changed
+            //    1   No new record required
+            //   -1   Error (message displayed)
             // Checking has to be done on a calc type by calc type basis as what the user 
             // can change varies by calc type.
             // What we'll check are the things that, if changed, may require a new record
@@ -1831,49 +1495,45 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // needed and whatever else that might have been changed we don't need to check.
             // NOTE: some columns cannot be changed: allowance_type, Paid-to date, and vehicle type
             //       and so don't need to be checked.
-            
+
+            // If this record has not been paid, no new record will be needed
+            DateTime? PaidDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).PaidToDate;
+            if (PaidDate == null)
+                return 1;
+
             // Some things are common to all calc types
             // Check the effective date
             if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate ?? DateTime.MinValue)
                     != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate ?? DateTime.MinValue) )
             {
-                return true;
+                return 0;
             }
-            if (dwType == FIXED)
-            {   // This is specific to the FIXED calc type
-                if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount ?? 0.0M)
-                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialAmount ?? 0.0M))
-                {
-                    return true;
-                }
-            }
-            if (dwType == ROI || dwType == ACTIVITY || dwType == TIME || dwType == DISTANCE)
-            {   // ca_var1 is common to all but the FIXED calc types
-                if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).CaVar1 ?? 0.0M)
-                        != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialCaVar1 ?? 0.0M))
-                {
-                    return true;
-                }
+            // All calc types use ca_var1 in their calculation (for FIXED this is the calculated amount)
+            // If has changed
+            if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).CaVar1 ?? 0.0M)
+                    != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialCaVar1 ?? 0.0M))
+            {
+                return 0;
             }
             if (dwType == DISTANCE)
             {   // These are specific to the DISTANCE calc type
                 if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk ?? 0.0M)
                         != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialHrsWk ?? 0.0M) )
                 {
-                    return true;
+                    return 0;
                 }
                 if( (thisDw.GetItem<MaintainAllowanceV2>(nRow).CaDistDay ?? 0.0M)
                         != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialDistDay ?? 0.0M) )
                 {
-                    return true;
+                    return 0;
                 }
                 if ((thisDw.GetItem<MaintainAllowanceV2>(nRow).CaCostsCovered ?? "N")
                         != (thisDw.GetItem<MaintainAllowanceV2>(nRow).InitialCostsCovered ?? "N"))
                 {
-                    return true;
+                    return 0;
                 }
             }
-            return false;
+            return 1;
         }
 
         private int of_save_changes(URdsDw thisDw)
@@ -1884,22 +1544,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int nRow, SQLCode;
             DateTime effdate;
             int nUpdated = 0;
+            bool isNew, isDirty;
 
             // Scan the list and save any changed records
             for (nRow = 0; nRow < thisDw.RowCount; nRow++)
             {
-                sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
-
-                if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
+                isNew = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsNew;
+                isDirty = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsDirty;
+                if (!(isNew || isDirty))
                     continue;
+                sRowChanged = (thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged) ?? "X";
+                if (!(sRowChanged == "N" || sRowChanged == "C" || sRowChanged == "M"))
+                {
+                    //continue;
+                }
 
                 // Save the record as a clean one.
                 thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged = "X";
 
-                if (sRowChanged == "M")
-                {
+                //if (sRowChanged == "M")
+                if( isNew )
                     thisDw.GetItem<MaintainAllowanceV2>(nRow).MarkNewEntity();
-                }
 
                 nUpdated = thisDw.Save();
 
@@ -1956,18 +1621,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         }
 
 
-        public virtual bool of_save()
+        public virtual int of_save()
         {
             // Processes the records in all tabs, looking for changes.  Velidates
             // the records and inserts new ones and updates existing records that
             // have been changed.
-            // Returns false if errors are detected, true otherwise
+            // Returns
+            //     0    OK
+            //     1    Error with no message displayed
+            //    -1    Error with message displayed
 
             cb_save.Focus();
             int nSaved, mDeleted;
-            is_errmsg = "";
             int nChanged, nDeleted;
             int nInserted, nUpdated;
+            int errcode = 0;
 
             idw_fixed_allowance.DataObject.AcceptText();
             idw_roi_allowance.DataObject.AcceptText();
@@ -1999,25 +1667,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nChanged > 0) && !(isTerminated(idw_fixed_allowance)))
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_fixed_allowance, FIXED) == false)
-                {
-                    return false;
-                }
+                errcode = of_validate_records(idw_fixed_allowance, FIXED);
+                if (errcode != 0)
+                    return errcode;
 
-                // Now, scan the list again and insert new records for any that have 
-                // changed the net amount
+                // Now, scan the list again and insert any new records required
                 nInserted = of_insert_new_records(dw_fixed_allowance, FIXED);
-                if (nInserted == -1)
+                if (nInserted < 0)
                 {
-                    return false;
+                    return nInserted;
                 }
                 nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_fixed_allowance);
-                if (nUpdated == -1)
+                if (nUpdated < 0)
                 {
-                    return false;
+                    return nUpdated;
                 }
                 else if (nUpdated > 0)
                 {
@@ -2045,24 +1711,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nChanged > 0) && !(isTerminated(idw_roi_allowance)))
             {
                 // Scan the list for changed records and validate any that are found
-                if( of_validate_records(idw_roi_allowance, ROI) == false )
-                {
-                    return false;
-                }
+                errcode = of_validate_records(idw_roi_allowance, ROI);
+                if (errcode != 0)
+                    return errcode;
 
                 // Now, scan the list again and insert new records for any that have changed the net amount
                 nInserted = of_insert_new_records(dw_roi_allowance, ROI);
-                if (nInserted == -1)
+                if (nInserted < 0)
                 {
-                    return false;
+                    return nInserted;
                 }
                 nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_roi_allowance);
-                if (nUpdated == -1)
+                if (nUpdated < 0)
                 {
-                    return false;
+                    return nUpdated;
                 }
                 else if (nUpdated > 0)
                 {
@@ -2088,25 +1753,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nChanged > 0) && !(isTerminated(idw_activity_allowance)))
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_activity_allowance, ACTIVITY) == false)
-                {
-                    return false;
-                }
+                errcode = of_validate_records(idw_activity_allowance, ACTIVITY);
+                if (errcode != 0)
+                    return errcode;
 
                 // Now, scan the list again and insert new records for any that have 
                 // changed the net amount
                 nInserted = of_insert_new_records(dw_activity_allowance, ACTIVITY);
-                if (nInserted == -1)
+                if (nInserted< 0)
                 {
-                    return false;
+                    return nInserted;
                 }
                 nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_activity_allowance);
-                if (nUpdated == -1)
+                if (nUpdated < 0)
                 {
-                    return false;
+                    return nUpdated;
                 }
                 else if (nUpdated > 0)
                 {
@@ -2132,25 +1796,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nChanged > 0) && !(isTerminated(idw_time_allowance)))
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_time_allowance, TIME) == false)
-                {
-                    return false;
-                }
+                errcode = of_validate_records(idw_time_allowance, TIME);
+                if (errcode != 0)
+                    return errcode;
 
                 // Now, scan the list again and insert new records for any that have 
                 // changed the net amount
                 nInserted = of_insert_new_records(idw_time_allowance, TIME);
-                if (nInserted == -1)
+                if (nInserted < 0)
                 {
-                    return false;
+                    return nInserted;
                 }
                 nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_time_allowance);
-                if (nUpdated == -1)
+                if (nUpdated < 0)
                 {
-                    return false;
+                    return nUpdated;
                 }
                 else if (nUpdated > 0)
                 {
@@ -2176,25 +1839,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nChanged > 0) && !(isTerminated(idw_distance_allowance)))
             {
                 // Scan the list for changed records and validate any that are found
-                if (of_validate_records(idw_distance_allowance, DISTANCE) == false)
-                {
-                    return false;
-                }
+                errcode = of_validate_records(idw_distance_allowance, DISTANCE);
+                if (errcode != 0)
+                    return errcode;
 
                 // Now, scan the list again and insert new records for any that have 
                 // changed the net amount
                 nInserted = of_insert_new_records(dw_distance_allowance, DISTANCE);
-                if (nInserted == -1)
+                if (nInserted < 0)
                 {
-                    return false;
+                    return nInserted;
                 }
                 nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_distance_allowance);
-                if (nUpdated == -1)
+                if (nUpdated < 0)
                 {
-                    return false;
+                    return nUpdated;
                 }
                 else if (nUpdated > 0)
                 {
@@ -2213,7 +1875,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             if ((nSaved + mDeleted) == 0)
                 MessageBox.Show("   Nothing to save.   ");
 
-            return true;
+            return 0;
         }
 
         private bool isTerminated(URdsDw thisDw)
@@ -2310,10 +1972,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     return false;
                 else if (ans == DialogResult.Yes)
                 {
-                    bool bSaveResult = of_save();
-                    if (bSaveResult == false)
-                    {
-                        MessageBox.Show("Save failed        ", ""
+                    int bSaveResult = of_save();
+                    if (bSaveResult == 1)  // There was an error with no error message displayed
+                    {                      // so we tell the user
+                        MessageBox.Show("    Save failed    ", ""
                              , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return false;
                     }
@@ -2457,39 +2119,30 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 idw_Current = idw_fixed_allowance;
                 if (idw_fixed_allowance.RowCount > 0)
                     idw_fixed_allowance.Refresh();
-//                if ( dw_fixed_allowance.RowCount <= 0 )
-//                    ((DMaintainFixedAllowance)dw_fixed_allowance.DataObject).Retrieve(il_contract, FIXED);
             }
             if (ToTabName == "roi")
             {
                 idw_Current = idw_roi_allowance;
                 if (idw_roi_allowance.RowCount > 0)
                     idw_roi_allowance.Refresh();
-//                if (idw_roi_allowance.RowCount <= 0)
-//                    ((DMaintainROIAllowance)idw_roi_allowance.DataObject).Retrieve(il_contract, ROI);
             }
             if (ToTabName == "activity")
             {
                 idw_Current = idw_activity_allowance;
                 if (idw_activity_allowance.RowCount > 0)
                     idw_activity_allowance.Refresh();
-//                if (idw_activity_allowance.RowCount <= 0)
-//                    ((DMaintainActivityAllowance)idw_activity_allowance.DataObject).Retrieve(il_contract, ACTIVITY);
             }
             if (ToTabName == "time")
             {
                 idw_Current = idw_time_allowance;
                 if (idw_time_allowance.RowCount > 0)
                     idw_time_allowance.Refresh();
-//                if (idw_time_allowance.RowCount <= 0)
-//                    ((DMaintainTimeAllowance)idw_time_allowance.DataObject).Retrieve(il_contract, TIME);
             }
             if (ToTabName == "distance")
             {
                 idw_Current = idw_distance_allowance;
                 if (idw_distance_allowance.RowCount > 0)
                     idw_distance_allowance.Refresh();
-//                    ((DMaintainDistanceAllowance)idw_distance_allowance.DataObject).Retrieve(il_contract, DISTANCE);
             }
         }
 
@@ -2593,163 +2246,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return dValue;
         }
 
-        void dw_fixed_allowance_EditChanged(object sender, EventArgs e)
-        {
-            //of_ItemChanged(dw_fixed_allowance, FIXED);
-        }
-
-        void dw_fixed_allowance_ItemChanged(object sender, EventArgs e)
-        {
-            of_ItemChanged(dw_fixed_allowance, FIXED);
-        }
-
-        void dw_roi_allowance_ItemChanged(object sender, EventArgs e)
-        {
-            of_ItemChanged(dw_roi_allowance, ROI);
-        }
-
-        void dw_activity_allowance_ItemChanged(object sender, EventArgs e)
-        {
-            of_ItemChanged(dw_activity_allowance, ACTIVITY);
-        }
-
-        void dw_time_allowance_ItemChanged(object sender, EventArgs e)
-        {
-            of_ItemChanged(dw_time_allowance, TIME);
-        }
-
-        void dw_distance_allowance_ItemChanged(object sender, EventArgs e)
-        {
-            of_ItemChanged(dw_distance_allowance, DISTANCE);
-        }
-
-        Decimal of_GetPrevNetAmount(URdsDw thisDw, int? nAltKey, DateTime? dEffDate, int dwType)
-        {
-            // Get the Net Amount from the most-recent change record
-            Decimal PrevNetAmount = 0.0M;
-            DateTime effDate, maxEffDate;
-            int altKey;
-
-            // Scal thisDw looking for the most recent record of this allowance type
-            maxEffDate = DateTime.MinValue;
-            int nRows = thisDw.RowCount;
-            for (int nRow = 0; nRow < nRows; nRow++)
-            {
-                // Get this record's allowance type and effective date
-                altKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-                effDate = (DateTime)thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-
-                // If this is the right allowance type and not the changed record
-                if( (altKey == (int)nAltKey) && (effDate < (DateTime)dEffDate) )
-                {
-                    // If its effective date is more recent that any we've seen so far ...
-                    if (effDate > maxEffDate)
-                    {
-                        // Save the date as the most-recent
-                        maxEffDate = effDate;
-                        // and get the record's Net Amount
-                        PrevNetAmount = (Decimal)thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount;
-                    }
-                }
-            }
-            // Return the PrevNetAmount value.  If no other allowance records were found,
-            // we'll return 0.0.
-            return PrevNetAmount;
-        }
-
-        private string of_checkEffDate(int? inContract, int? inAltKey, DateTime? inEffDate )
-        {
-            string errmsg = "";
-            
-            if (inEffDate == null)
-                errmsg = "Please enter an effective date.";
-            else
-            {
-                DateTime dMaxDate = (DateTime)RDSDataService.GetAllowanceMaxEffectiveDate(inContract, inAltKey);
-                if( (DateTime)inEffDate <= dMaxDate)
-                    errmsg = "The effective date must be greater than " + dMaxDate.ToString("dd/MM/yyyy");
-            }
-            return errmsg;
-        }
-
-        int of_findChangedRow(URdsDw thisDw, int dwType)
-        {
-            // Find the changed row; we can't rely on the current focus being
-            // on the row with the change.
-            // Returns -1 if not found.
-            string sRowChanged;
-            for (int i = 0; i < thisDw.RowCount; i++)
-            {
-                sRowChanged = thisDw.GetItem<MaintainAllowanceV2>(i).RowChanged;
-
-                if (sRowChanged == "M")
-                    return i;
-            }
-            return -1;
-        }
-        void of_ItemChanged(URdsDw thisDw, int dwType)
-        {
-            // Implements ItemChanged actions for all tabs
-            decimal dThisAmt = 0.0M;
-            decimal dTotalAmt = 0.0M;
-            int thisAltKey;
-            bool thisDwIsNew = false;
-            string thisRowChanged, thisApproved;
-            decimal? thisAmt, netAmt, calcAmt;
-            decimal prevNetAmt, newNetAmt, changeAmt;
-            DateTime? thisEffDate;
-
-            // Get the allowance key for the changed item
-            // Can't rely on focus being on the changed row, so getRow() is unreliable.
-            //int nRow = thisDw.GetRow();
-            int nRow = of_findChangedRow(thisDw, dwType);
-            if (nRow < 0) return;   // Exit if no changed row found
-
-            thisAltKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-            thisEffDate = thisDw.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
-            thisApproved = thisDw.GetItem<MaintainAllowanceV2>(nRow).Approved; ;
-            string errmsg = of_checkEffDate(il_contract, thisAltKey, thisEffDate);
-            if( !(errmsg.Length == 0))
-            {
-                MessageBox.Show(errmsg + " - please correct", "Warning"
-                               , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            thisRowChanged = thisDw.GetItem<MaintainAllowanceV2>(nRow).RowChanged;
-            thisDwIsNew = thisDw.GetItem<MaintainAllowanceV2>(nRow).IsNew
-                            || thisRowChanged == "N";
-            thisAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-            calcAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).CalcAmount;
-            netAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount;
-            prevNetAmt = RDSDataService.GetAllowanceNetAmount(il_contract, thisAltKey);
-            if (dwType == FIXED)
-            {
-                //changeAmt = (decimal)(thisAmt ?? 0.0M);
-                changeAmt = (decimal)(netAmt ?? 0.0M) - prevNetAmt;
-            }
-            else  // dwType = ROI, ACTIVITY or TIME
-            {
-                //changeAmt = (decimal)(calcAmt ?? 0.0M) - prevNetAmt;
-                changeAmt = (decimal)(netAmt ?? 0.0M) - prevNetAmt;
-            }
-
-            // If the record change has affected the annual_amount, see if we need
-            // to add the change as a new record (to preserve history).  Only amount
-            // changes need to be preserved  and only if approved.
-            if( (!(changeAmt == 0.0M)) && thisApproved == "Y")
-            {
-                if (!thisDwIsNew)  // If we're changing an existing record (thisDwIsNew == false)
-                {                  // insert the change as a new record
-                    of_add_new_record(thisDw, nRow, dwType);
-                }
-            }
-
-            // Refresh the display to show all changes
-            thisDw.Refresh();
-            thisDw.SelectRow(nRow, true);
-        }
-
         #endregion
 
         private void of_calc_allowance_type(URdsDw thisDw, int inAltKey, int dwType, out decimal type_total)
@@ -2768,42 +2264,35 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             for (nRow = startRow; nRow >= 0; nRow--)
             {
                 thisAltKey = (int)thisDw.GetItem<MaintainAllowanceV2>(nRow).AltKey;
-
                 if (thisAltKey == inAltKey)
                 {
                     dThisAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
-                    if (dwType == FIXED)
-                    {
-                        dTotalAmt = dThisAmt;
-                        thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount = dTotalAmt;
-                    }
-                    else
-                        dTotalAmt += dThisAmt ?? 0.0M;
+                    dTotalAmt += dThisAmt ?? 0.0M;
+                    thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount = dTotalAmt;
                 }
             }
-
             // Return the total
             type_total = (decimal)(dTotalAmt ?? 0.0M);
         }
 
         private void of_calc_allowance(URdsDw tab_dw, out decimal allowance_total, out decimal approved_total)
-        {
-            decimal? dThisAmt = 0.0M;
+        {   // Calculate the allowance totals for an allowance calc type
+            // This does it for a single allowance calc type (via the tab's DataContron tab_dw)
+            decimal dThisAmt = 0.0M;
             decimal dTotalAmt = 0.0M;
             decimal dApprovedTotal = 0.0M;
-            string thisApproved;
+            string  thisApproved = "N";
 
-            // Re-calculate the total of the AnnualPayments
+            // Calculate the total of the AnnualAmounts 
             for (int nRow = 0; nRow < tab_dw.RowCount; nRow++)
             {
-                dThisAmt = (tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount) ?? 0.0M;
+                dThisAmt = (decimal)(tab_dw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount ?? 0.0M);
                 thisApproved = (tab_dw.GetItem<MaintainAllowanceV2>(nRow).Approved) ?? "N";
-                dTotalAmt += (decimal)dThisAmt;
 
-                if (thisApproved == "Y")
-                    dApprovedTotal += (decimal)dThisAmt;
+                dTotalAmt += dThisAmt;
+                if( thisApproved == "Y" )
+                    dApprovedTotal += dThisAmt;
             }
-
             // Return the totals
             allowance_total = dTotalAmt;
             approved_total = dApprovedTotal;
