@@ -140,7 +140,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.grid.Size = new System.Drawing.Size(833, 251);
             this.grid.TabIndex = 0;
-            //this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
             this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
@@ -292,6 +291,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_annual_amount.DefaultCellStyle = dataGridViewCellStyle10;
             this.ca_annual_amount.HeaderText = "Annual   Amount";
             this.ca_annual_amount.Name = "ca_annual_amount";
+            this.ca_annual_amount.ReadOnly = true;
             this.ca_annual_amount.Width = 73;
             // 
             // net_amount
@@ -303,7 +303,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle11.Format = "$#,##0.00;$-#,##0.00";
             this.net_amount.DefaultCellStyle = dataGridViewCellStyle11;
-            this.net_amount.HeaderText = "Net   Amount";
+            this.net_amount.HeaderText = "   Net   Amount";
             this.net_amount.Name = "net_amount";
             this.net_amount.ReadOnly = true;
             this.net_amount.Width = 73;
@@ -858,6 +858,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn calc_amount;
         private DataGridViewTextBoxColumn initial_amount;
         private DataGridViewTextBoxColumn initial_net_amount;
+
+
 
 
 

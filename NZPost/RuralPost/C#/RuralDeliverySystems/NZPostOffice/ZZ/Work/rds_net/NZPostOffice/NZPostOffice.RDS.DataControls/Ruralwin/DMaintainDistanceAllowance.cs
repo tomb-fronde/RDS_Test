@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // DataControl for Distance Allowance maintenance tab
     // [31-Mar-2021] Added calculation for annual amount
     // [19-June-2021] Disabled validating (in designer)
+    // [26 June 2021] Changed calculation to use PaidToDate instead of Approved
 
     public partial class DMaintainDistanceAllowance : Metex.Windows.DataUserControl
 	{
@@ -224,22 +225,20 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
                 decimal? initialAmt = (decimal?)grid.Rows[thisRow].Cells["initial_amount"].Value ?? 0.0M;
                 decimal? initialNetAmt = (decimal?)grid.Rows[thisRow].Cells["initial_net_amount"].Value ?? 0.0M;
-                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
 
                 // Determine the previous NetAmt
                 decimal? prevNetAmt;
-                if (Approved == "Y")
-                    // If this is an approved allowance we'll be creating 
-                    // an additional allowance to add on to the current allowance
-                    //prevNetAmt = netAmt;
-                    prevNetAmt = initialNetAmt;
-                else
-                    // If this allowance has not been approved, we'll be changing the 
+                DateTime? paid = (DateTime?)grid.Rows[thisRow].Cells["ca_paid_to_date"].Value;
+                if (paid == null)
+                    // If this allowance has not been paid, we'll be changing the 
                     // net amount that was added on to the pervious allowance. To do this
                     // we take away this record's previous change amount (still in
                     // ca_annual_amount; we're about to replace it with a new change amount).
-                    //prevNetAmt = netAmt - annualAmt;
-                    prevNetAmt = initialNetAmt - initialAmt;
+                    prevNetAmt = netAmt - annualAmt;
+                else
+                    // If this allowance has been paid we'll be creating 
+                    // an additional allowance to add on to the current allowance
+                    prevNetAmt = netAmt;
 
                 // Calculate the new net amount and save it in calc_amount, and calculate the 
                 // change from the pevious net amount and save it in ca_annual_amount.

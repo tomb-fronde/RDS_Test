@@ -103,7 +103,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.grid.Size = new System.Drawing.Size(901, 252);
             this.grid.TabIndex = 0;
-            //this.grid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grid_Validating);
             this.grid.CurrentCellDirtyStateChanged += new System.EventHandler(this.grid_CurrentCellDirtyStateChanged);
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
@@ -226,7 +225,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             dataGridViewCellStyle8.Format = "$#,##0.00;$-#,##0.00";
             dataGridViewCellStyle8.NullValue = "0.00";
             this.net_amount.DefaultCellStyle = dataGridViewCellStyle8;
-            this.net_amount.HeaderText = "Net Amount";
+            this.net_amount.HeaderText = "   Net Amount";
             this.net_amount.Name = "net_amount";
             this.net_amount.ReadOnly = true;
             this.net_amount.Width = 73;
