@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB  Allowances  June-2021
     // Changed handling of existing unapproved DISTANCE records. Insert vehicle
     // type and effective date in existing record.
+    // [27-June-2021] Changes to cb_save_clicked
     //
     // TJB  Allowances  4-Apr-2021: New
     // Adapted from WAddAllowance.
@@ -241,21 +242,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         {
             NRdsMsg lnv_msg;
             NCriteria lvn_Criteria;
-            //DateTime? dEffDate;
+            DateTime? dEffDate;
 
             lnv_msg = (NRdsMsg)StaticMessage.PowerObjectParm;
             lvn_Criteria = lnv_msg.of_getcriteria();
 
             il_altKey = idw_allowance.GetItem<AddAllowance>(0).AltKey;
             il_alctId = idw_allowance.GetItem<AddAllowance>(0).AlctId;
-            //dEffDate  = idw_allowance.GetItem<AddAllowance>(0).EffectiveDate;
+            dEffDate  = idw_allowance.GetItem<AddAllowance>(0).EffectiveDate;
 
             Cursor.Current = Cursors.WaitCursor;
             lvn_Criteria.of_addcriteria("contract_no", il_contract);
             lvn_Criteria.of_addcriteria("con_active_seq", il_contract_seq);
             lvn_Criteria.of_addcriteria("alt_key", il_altKey);
             lvn_Criteria.of_addcriteria("alct_id", il_alctId);
-            //lvn_Criteria.of_addcriteria("effective_date", dEffDate);
+            lvn_Criteria.of_addcriteria("effective_date", dEffDate);
             lvn_Criteria.of_addcriteria("contract_title", ls_title);
             lvn_Criteria.of_addcriteria("optype", iChangeType);
             lnv_msg.of_addcriteria(lvn_Criteria);
@@ -304,7 +305,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_altkey = idw_allowance.GetItem<AddAllowance>(pRow).AltKey;
             if (ll_altkey == null)
             {
-                pErrmsg = "You must enter an allowance type.";
+                pErrmsg = "You must select an allowance type.";
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "alt_key", true);
                 return FAILURE;
             }
@@ -320,7 +321,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             ll_varid = idw_allowance.GetItem<AddAllowance>(pRow).VarId;
             if (ll_varid == null && ll_alctid == 5)
             {
-                pErrmsg = "You must enter a vehicle type.";
+                pErrmsg = "You must select a vehicle type.";
                 ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(pRow, "var_id", true);
                 return FAILURE;
             }
@@ -348,62 +349,103 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             cb_save.Focus();
             int rc, nRow, nRows;
             string errmsg = "";
-            int? thisAltKey;
+            int? thisAltKey, varId;
             DateTime? effDate;
 
             idw_allowance.DataObject.AcceptText();
             is_errmsg = "";
 
             nRow = 0;
-            // Check to see if there already is an unapproved allowance of this type
+
+            // First, if the user has selected a DISTANCE allowance, check that a vehicle
+            // type has been selected.
+            // Validate the row
+            rc = wf_validate(nRow, out errmsg);
+            if (!(rc == SUCCESS))
+            {
+                ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(nRow);
+                this.ResumeLayout(true);
+                if (rc == FAILURE)
+                    MessageBox.Show(errmsg, "Warning"
+                                   , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            varId = idw_allowance.GetItem<AddAllowance>(nRow).VarId;
+            //if (idw_allowance.GetItem<AddAllowance>(nRow).AlctId == DISTANCE)
+            //{
+            //    if (varId == null || varId == 0)
+            //    {
+            //        MessageBox.Show("You must select a vehicle type."
+            //                        , "Warning"
+            //                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //        ((DAddAllowance)(idw_allowance.DataObject)).SetGridCellSelected(nRow, "var_id", true);
+            //        return;
+            //    }
+            //}
+
+            // Check to see if there already is an unpaid allowance of this type
             // If one exists, suggest the user update it instead of creating another one.
             thisAltKey = idw_allowance.GetItem<AddAllowance>(nRow).AltKey;
             effDate = RDSDataService.GetUnpaidAllowanceDate(il_contract, thisAltKey);
-            int? varId = idw_allowance.GetItem<AddAllowance>(nRow).VarId;
             if (effDate != null)
             {
                 // TJB  Allowances  June-2021
-                // Changed handling of existing unapproved DISTANCE records. Insert vehicle
-                // type and effective date in existing record.
+                // Changed handling of existing unpaid DISTANCE records. 
                 if (idw_allowance.GetItem<AddAllowance>(nRow).AlctId == DISTANCE)
                 {
-                    int sqlCode = 0;
-                    string sqlErrText = "";
-                    bool isOK = RDSDataService.UpdateAllowanceVehicleType(il_contract, thisAltKey, effDate, varId
-                                                   , ref sqlCode, ref sqlErrText);
-                    if (!isOK)
+                    DialogResult ans;
+                    string msg = "An unpaid allowance of this type exists";
+                    int otherVarId = RDSDataService.GetUnpaidAllowanceVehicle(il_contract, thisAltKey);
+                    if (otherVarId == -1 || otherVarId == 0)
+                        msg += " with no vehicle specified. \n";
+                    else if (otherVarId != varId)
+                        msg += " with a different vehicle type. \n";
+
+                    if (otherVarId != varId)
                     {
-                        MessageBox.Show("Error updating allowance " + thisAltKey.ToString() + " vehicle type\n"
-                                        + "sqlCode = " + sqlCode.ToString() + "\n"
-                                        + "sqlErrText = " + sqlErrText
-                                        , "WAddAllowance2021.cb_save_clicked");
-                        return;
+                        ans = MessageBox.Show(msg + "\n"
+                                        + "Do you want to update it?"
+                                        , "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                     }
+                    else
+                    {
+                        MessageBox.Show("An unpaid allowance of this type exists.\n\n" 
+                                        + "    Please update it.    "
+                                       , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ans = DialogResult.No;
+                    }
+
+                    // Insert vehicle type and effective date in existing record.
+                    if (ans == DialogResult.Yes)
+                    {
+                        int sqlCode = 0;
+                        string sqlErrText = "";
+                        bool isOK = RDSDataService.UpdateAllowanceVehicleType(il_contract, thisAltKey, effDate, varId
+                                                       , ref sqlCode, ref sqlErrText);
+                        if (!isOK)
+                        {
+                            MessageBox.Show("Error updating allowance " + thisAltKey.ToString() + " vehicle type\n"
+                                            + "sqlCode = " + sqlCode.ToString() + "\n"
+                                            + "sqlErrText = " + sqlErrText
+                                            , "WAddAllowance2021.cb_save_clicked");
+                            return;
+                        }
+                    }
+                    else if (ans == DialogResult.Cancel)
+                        return;
                 }
                 else
                 {
-                    MessageBox.Show("An allowance of this type already exists.\n"
-                                   + "Please update it."
+                    MessageBox.Show("An allowance of this type already exists.\n\n"
+                                   + "    Please update it.    "
                                    , "Warning"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     iChangeType = "Update";
-                    idw_allowance.GetItem<AddAllowance>(nRow).MarkClean();
                 }
             }
             else
             {
-                // Validate the row
-                rc = wf_validate(nRow, out errmsg);
-                if (!(rc == SUCCESS))
-                {
-                    ((DAddAllowance)(idw_allowance.DataObject)).SetCurrent(nRow);
-                    this.ResumeLayout(true);
-                    if (rc == FAILURE)
-                        MessageBox.Show(errmsg, "Error"
-                                       , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
                 // This is a new row.  Mark it New ("N").  In WMaintainAllowance, this will
                 // be used when validating its effective date.
                 idw_allowance.GetItem<AddAllowance>(nRow).RowChanged = "N";
@@ -412,6 +454,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 // All OK, we can save it
                 idw_allowance.DataObject.Save();
             }
+
+            idw_allowance.GetItem<AddAllowance>(nRow).MarkClean();
 
             // Switch to WMaintainAllowance()
             of_open_WMaintainAllowance();
