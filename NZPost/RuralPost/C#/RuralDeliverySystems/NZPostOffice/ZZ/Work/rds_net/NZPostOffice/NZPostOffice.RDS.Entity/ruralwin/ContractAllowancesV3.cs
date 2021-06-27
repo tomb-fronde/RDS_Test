@@ -11,6 +11,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     // TJB  Allowances  10-Mar-2021: New
     // Updated ContractAllowancesV2 with additional fields
     // [15-Mar-2021] Added alct_id as retreived value (mostly for debugging)
+    // [24-June-2021] Changed allowance net amount determination in fetch
     
     // Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
@@ -256,11 +257,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
 					cm.CommandType = CommandType.Text;
 					ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inContractNo", inContractNo);
-					
+
+                    // [24-June-2021] Changed compute_0004 calc to function f_CalcAllowanceNetAmount()
                     cm.CommandText= " SELECT contract_allowance.contract_no"
                                         + ", contract_type.contract_type" 
                                         + ", allowance_type.alt_description"
-                                        + ", sum(contract_allowance.ca_annual_amount) as compute_0004" 
+                                        + ", sum(contract_allowance.ca_annual_amount) as compute_0004"
                                         + ", allowance_type.alt_key "
                                         + ", ca_notes = (select top 1 ca.ca_notes from contract_allowance ca"
                                         + "	              where ca.contract_no = contract_allowance.contract_no"
