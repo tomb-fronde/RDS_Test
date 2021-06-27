@@ -17,7 +17,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // [31-Mar-2021] Rearranged columns
     // [ 5-May-2021] Changed grid_CellValueChanged
     // [19-June-2021] Disabled validating (in designer)
-    // [22-June-2021] Changed Net amount to be latest Annual Amount (not sum of annual amounts)
+    // [26 June 2021] Changed calculation to use ca_var1 as input amount
+    //                Changed calculation to use PaidToDate instead of Approved
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{
@@ -170,7 +171,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 {
                     // Note: changed alt_key to readonly
                     SetGridCellReadonly(i, "alt_key", true);
-                    SetGridCellReadonly(i, "ca_annual_amount", false);
+                    SetGridCellReadonly(i, "ca_annual_amount", true);
                     SetGridCellReadonly(i, "ca_effective_date", false);
                     //SetGridCellReadonly(i, "ca_end_date", false);
                     SetGridCellReadonly(i, "ca_doc_description", false);
@@ -200,7 +201,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 {
                     // Note: changed alt_key to readonly
                     SetGridCellReadonly(i, "alt_key", true);
-                    SetGridCellReadonly(i, "ca_annual_amount", false);
+                    SetGridCellReadonly(i, "ca_annual_amount", true);
                     SetGridCellReadonly(i, "ca_effective_date", false);
                     //SetGridCellReadonly(i, "ca_end_date", false);
                     SetGridCellReadonly(i, "ca_doc_description", false);
@@ -220,11 +221,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     SetGridCellReadonly(i, "ca_notes", true);
                 }
 
-                if (grid.Rows[i].Cells["ca_approved"].Value != null
-                    && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
-                    SetGridCellReadonly(i, "ca_annual_amount", true);
-                else
-                    SetGridCellReadonly(i, "ca_annual_amount", false);
+                //if (grid.Rows[i].Cells["ca_approved"].Value != null
+                //    && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
+                //    SetGridCellReadonly(i, "ca_annual_amount", true);
+                //else
+                //    SetGridCellReadonly(i, "ca_annual_amount", false);
 
                 if (this.st_protect_confirm.Text == "Y")
                     SetGridCellReadonly(i, "ca_approved", true);
@@ -241,12 +242,17 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         // TJB  Allowances  9-Apr-2021
         // Updated the Row_changed value to "new" usage
         private void grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {  /*****************************************************
-            * NOTE:                                             *
-            *    There are no variable or fixed components used *
-            *    to calculate the annual amount.                *
-            *                                                   *
-            *    Annual amount = <value entered>                *
+        {  /******************************************************
+            * NOTE:                                              *
+            *    There are no variable or fixed components used  *
+            *    to calculate the annual amount. The user enters *
+            *    a "Total" amount which is copied to the calcAmt *
+            *    and the new annual_amount is calculated as the  *
+            *    difference between the previous netAmt.         *
+            *                                                    *
+            *    fixedAmt = <ca_var1 (value entered)>            *
+            *    net_amount = fixedAmt                           *
+            *    annual_amount - net_amount - previous net amt   *
             *****************************************************/
             int thisRow = e.RowIndex;
             int column = e.ColumnIndex;
@@ -255,39 +261,43 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // Get the RowChanged value, or "X" if not set
             string sRowChanged = (string)grid.Rows[thisRow].Cells["ca_row_changed"].Value ?? "X";
 
-            if (column_name == "ca_row_changed" || column_name == "net_amount" || column_name == "calc_amount")
+            if (column_name == "ca_row_changed" || column_name == "ca_annual_amount"
+                || column_name == "net_amount" || column_name == "calc_amount")
             {
-                // Ignore RowChanged, NetAmt and CalcAmt changes triggered by changes to them below
+                // Ignore RowChanged, AnnualAmt, NetAmt and CalcAmt changes triggered by changes to them below
             }
-            else if (column_name == "ca_annual_amount")
+            else if (column_name == "ca_var1")
             {
                 // A new ca_annual_amount has been entered
                 decimal? annualAmt = (decimal?)grid.Rows[thisRow].Cells["ca_annual_amount"].Value ?? 0.0M;
+                decimal? fixedAmt = (decimal?)grid.Rows[thisRow].Cells["ca_var1"].Value ?? 0.0M;
                 decimal? calcAmt = (decimal?)grid.Rows[thisRow].Cells["calc_amount"].Value ?? 0.0M;
                 decimal? netAmt = (decimal?)grid.Rows[thisRow].Cells["net_amount"].Value ?? 0.0M;
-                string Approved = (string)grid.Rows[thisRow].Cells["ca_approved"].Value ?? "N";
 
                 // Determine the previous NetAmt
                 decimal? prevNetAmt;
-                if( Approved == "Y" )
-                    // If this is an approved allowance we'll be creating 
+                DateTime? paid = (DateTime?)grid.Rows[thisRow].Cells["ca_paid_to_date"].Value;
+                if (paid == null)
+                    // If this allowance has not been paid, we'll be changing the 
+                    // net amount that was added on to the pervious allowance. To do this
+                    // we take away this record's previous change amount (still in
+                    // ca_annual_amount; we're about to replace it with a new change amount).
+                    prevNetAmt = netAmt - annualAmt;
+                else
+                    // If this allowance has been paid we'll be creating 
                     // an additional allowance to add on to the current allowance
                     prevNetAmt = netAmt;
-                else
-                    // If this allowance has not been approved, we'll be changing the 
-                    // net amount that was added on to the pervious allowance.  To do this
-                    // we take away this record's change amount which is held in the 
-                    // calc_amount column (the annual_amount has already been changed,
-                    // so we need its value that was previously entered).
-                    prevNetAmt = netAmt - calcAmt;
 
-                // Copy the entered ca_annual_amount to the calc_amount field
-                // (which for other calc types, holds the new entered value).
-                grid.Rows[thisRow].Cells["calc_amount"].Value
-                                = grid.Rows[thisRow].Cells["ca_annual_amount"].Value;
+                // Copy the entered ca_var1 to the calc_amount field
+                // (which for other calc types, holds the new calculated value).
+                grid.Rows[thisRow].Cells["calc_amount"].Value = fixedAmt;
 
                 // and update the Net Amount (For FIXED allowances, the entered amount is the new net amount).
-                grid.Rows[thisRow].Cells["net_amount"].Value = annualAmt; // +prevNetAmt;
+                grid.Rows[thisRow].Cells["net_amount"].Value = fixedAmt;
+
+                // Calculate the change amount and save in ca_annual_amount
+                decimal? changeAmt = fixedAmt - prevNetAmt;
+                grid.Rows[thisRow].Cells["ca_annual_amount"].Value = changeAmt;
 
                 // And mark it modified ("M") if it isn't already marked new ("N") or modified.
                 if ( sRowChanged != "N" && sRowChanged != "M" )
