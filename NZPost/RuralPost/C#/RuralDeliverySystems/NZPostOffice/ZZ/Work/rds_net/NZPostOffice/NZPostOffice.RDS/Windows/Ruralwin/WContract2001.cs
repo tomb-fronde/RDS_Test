@@ -21,10 +21,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB Allowances 19-Mar-2021
     // Minor adjustments when opening WMaintainAllowances
     // [5-Apr-2021] Changed open WAddAllowance to open WAddAllowance2021.
-    //        WAddAllowance2021 now opens WMaintainAllowances directly
+    //        WAddAllowance2021 can now open WMaintainAllowances directly
     // [4-May-2021] Added the selected row's allowance type (alt_key) and
     //        calc type (alct_id) to passed information when opening 
     //        WMaintainAllowances for update.
+    // [27-June-2021] Added effective_date to values passed to WMaintainAllowance
     //
     // TJB Allowances 11-Mar-2021
     // Changed Allowances display to DContractAllowancesV3
@@ -2634,6 +2635,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // to passed information when opening WMaintainAllowances
             int nRow = dw_contract_allowances.GetRow();
             int? nAltKey = dw_contract_allowances.GetItem<ContractAllowancesV3>(nRow).AltKey;
+            DateTime? dtEffDate = dw_contract_allowances.GetItem<ContractAllowancesV3>(nRow).CaEffectiveDate;
             RDSDataService obj = RDSDataService.GetAllowanceCalcType(nAltKey);
             int? nAlctId = obj.intVal;
 
@@ -2645,6 +2647,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             lnv_Criteria.of_addcriteria("con_active_seq", il_con_active_seq);
             lnv_Criteria.of_addcriteria("alt_key", nAltKey);
             lnv_Criteria.of_addcriteria("alct_id", nAlctId);
+            lnv_Criteria.of_addcriteria("effective_date", dtEffDate);
             lnv_Criteria.of_addcriteria("contract_title", idw_contract.GetItem<Contract>(0).ConTitle);
             lnv_Criteria.of_addcriteria("optype", sOptype);
             lnv_msg.of_addcriteria(lnv_Criteria);
