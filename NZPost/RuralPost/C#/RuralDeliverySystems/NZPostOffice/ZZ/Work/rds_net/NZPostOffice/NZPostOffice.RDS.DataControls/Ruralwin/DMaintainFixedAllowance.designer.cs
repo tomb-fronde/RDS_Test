@@ -39,8 +39,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
-            this.st_title = new System.Windows.Forms.Label();
-            this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_var1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,6 +50,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_row_changed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.calc_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_protect_confirm = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -102,29 +102,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
             // 
-            // st_title
-            // 
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(0, 0);
-            this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(638, 14);
-            this.st_title.TabIndex = 1;
-            this.st_title.Text = "Renewal:";
-            // 
-            // st_protect_confirm
-            // 
-            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
-            this.st_protect_confirm.Name = "st_protect_confirm";
-            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
-            this.st_protect_confirm.TabIndex = 2;
-            this.st_protect_confirm.Text = "N";
-            this.st_protect_confirm.Visible = false;
-            // 
             // alt_key
             // 
             this.alt_key.DataPropertyName = "AltDescription";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle2.NullValue = "null";
@@ -175,7 +157,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_annual_amount.DataPropertyName = "AnnualAmount";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.Format = "$#,##0.00;$-#,##0.00";
@@ -191,7 +173,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.net_amount.DataPropertyName = "NetAmount";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle6.Format = "$#,##0.00;$-#,##0.00";
@@ -219,7 +201,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_paid_to_date.DataPropertyName = "PaidToDate";
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle8.Format = "dd/MM/yyyy";
@@ -279,6 +261,24 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.calc_amount.Name = "calc_amount";
             this.calc_amount.Visible = false;
             this.calc_amount.Width = 50;
+            // 
+            // st_title
+            // 
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_title.Location = new System.Drawing.Point(0, 0);
+            this.st_title.Name = "st_title";
+            this.st_title.Size = new System.Drawing.Size(638, 14);
+            this.st_title.TabIndex = 1;
+            this.st_title.Text = "Renewal:";
+            // 
+            // st_protect_confirm
+            // 
+            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
+            this.st_protect_confirm.Name = "st_protect_confirm";
+            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
+            this.st_protect_confirm.TabIndex = 2;
+            this.st_protect_confirm.Text = "N";
+            this.st_protect_confirm.Visible = false;
             // 
             // DMaintainFixedAllowance
             // 
@@ -346,15 +346,41 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
         }
 
-        void set_row_readonly(int pRow, bool pValue)
+        public void set_row_readonly(int pRow, bool pValue)
         {
-            System.Drawing.Color CellBackColour = System.Drawing.SystemColors.Window;
-            if (pValue) CellBackColour = System.Drawing.Color.WhiteSmoke;
+            System.Drawing.Color ReadonlyColour, ReadWriteColour;
+            ReadonlyColour = System.Drawing.SystemColors.Control;
+            ReadWriteColour = System.Drawing.SystemColors.Window;
 
-            for (int i = 0; i < this.grid.ColumnCount; i++)
+            if (pValue == true)
             {
-                this.grid.Rows[pRow].Cells[i].ReadOnly = true;
-                this.grid.Rows[pRow].Cells[i].Style.BackColor = CellBackColour;
+                for (int i = 0; i < this.grid.ColumnCount; i++)
+                {
+                    this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
+                    this.grid.Rows[pRow].Cells[i].Style.BackColor = ReadonlyColour;
+                }
+            }
+            if (pValue == false)
+            {
+                this.grid.Rows[pRow].Cells["alt_key"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["alt_key"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_annual_amount"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_annual_amount"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["net_amount"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["net_amount"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_paid_to_date"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_paid_to_date"].Style.BackColor = ReadonlyColour;
+
+                this.grid.Rows[pRow].Cells["ca_effective_date"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_var1"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_notes"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadWriteColour;
             }
         }
 

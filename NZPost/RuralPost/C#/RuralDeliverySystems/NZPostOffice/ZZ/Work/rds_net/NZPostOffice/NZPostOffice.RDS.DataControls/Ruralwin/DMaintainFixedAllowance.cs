@@ -19,6 +19,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // [19-June-2021] Disabled validating (in designer)
     // [26 June 2021] Changed calculation to use ca_var1 as input amount
     //                Changed calculation to use PaidToDate instead of Approved
+    // [28-June-2021] Refined set_row_readonly to handle both true and false (in designer)
 
     public partial class DMaintainFixedAllowance : Metex.Windows.DataUserControl
 	{
@@ -61,7 +62,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                         {
                             this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
                             this.grid.Rows[nRow].Cells[nCol].Style.BackColor
-                                           = System.Drawing.Color.WhiteSmoke;   // A lighter grey
+                                           = System.Drawing.SystemColors.Control;
                         }
                     }
                 }

@@ -125,7 +125,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.alt_key.DataPropertyName = "AltDescription";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             this.alt_key.DefaultCellStyle = dataGridViewCellStyle2;
@@ -174,7 +174,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.alt_rate.DataPropertyName = "AltRate";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle5.Format = "##,###.00";
@@ -189,7 +189,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_annual_amount.DataPropertyName = "AnnualAmount";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle6.Format = "$#,##0.00;$-#,##0.00";
@@ -204,7 +204,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.net_amount.DataPropertyName = "NetAmount";
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle7.Format = "$#,##0.00;$-#,##0.00";
@@ -232,7 +232,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // 
             this.ca_paid_to_date.DataPropertyName = "PaidToDate";
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle9.Format = "dd/MM/yy";
@@ -359,15 +359,43 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
         }
 
-        void set_row_readonly(int pRow, bool pValue)
+        public void set_row_readonly(int pRow, bool pValue)
         {
-            System.Drawing.Color CellBackColour = System.Drawing.SystemColors.Window;
-            if (pValue) CellBackColour = System.Drawing.Color.WhiteSmoke;
+            System.Drawing.Color ReadonlyColour, ReadWriteColour;
+            ReadonlyColour = System.Drawing.SystemColors.Control;
+            ReadWriteColour = System.Drawing.SystemColors.Window;
 
-            for (int i = 0; i < this.grid.ColumnCount; i++)
+            if (pValue == true)
             {
-                this.grid.Rows[pRow].Cells[i].ReadOnly = true;
-                this.grid.Rows[pRow].Cells[i].Style.BackColor = CellBackColour;
+                for (int i = 0; i < this.grid.ColumnCount; i++)
+                {
+                    this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
+                    this.grid.Rows[pRow].Cells[i].Style.BackColor = ReadonlyColour;
+                }
+            }
+            if (pValue == false)
+            {
+                this.grid.Rows[pRow].Cells["alt_key"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["alt_key"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["alt_rate"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["alt_rate"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_annual_amount"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_annual_amount"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["net_amount"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["net_amount"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_paid_to_date"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_paid_to_date"].Style.BackColor = ReadonlyColour;
+
+                this.grid.Rows[pRow].Cells["ca_effective_date"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_var1"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_notes"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadWriteColour;
             }
         }
 

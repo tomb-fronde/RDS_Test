@@ -16,7 +16,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // [31-Mar-2021] Added calculation for annual amount
     // [19-June-2021] Disabled validating (in designer)
     // [26 June 2021] Changed calculation to use PaidToDate instead of Approved
-    //
+    // [28-June-2021] Refined set_row_readonly to handle both true and false (in designer)
 
     public partial class DMaintainActivityAllowance : Metex.Windows.DataUserControl
 	{
@@ -71,8 +71,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                         {
                             this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
                             this.grid.Rows[nRow].Cells[nCol].Style.BackColor
-                                           = System.Drawing.Color.WhiteSmoke; 
-                                           //= System.Drawing.SystemColors.Control; // Grey
+                                           = System.Drawing.SystemColors.Control; // Grey
                         }
                     }
                 }
@@ -133,7 +132,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
                 if( pValue )
                     this.grid.Rows[pRow].Cells[i].Style.BackColor 
-                               = System.Drawing.Color.WhiteSmoke; // Very light Grey
+                               = System.Drawing.SystemColors.Control; // Grey
             }
         }
 
