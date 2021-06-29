@@ -377,6 +377,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Drawing.Color ReadonlyColour, ReadWriteColour;
             ReadonlyColour = System.Drawing.SystemColors.Control;
             ReadWriteColour = System.Drawing.SystemColors.Window;
+            DateTime? paid;
 
             if (pValue == true)
             {
@@ -403,12 +404,23 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_var1"].Style.BackColor = ReadWriteColour;
-                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
-                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_notes"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadWriteColour;
+
+                // A paid allowance's Approved may not be changed
+                paid = (DateTime?)this.grid.Rows[pRow].Cells["ca_paid_to_date"].Value;
+                if (paid == null || paid <= DateTime.MinValue)
+                {
+                    this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
+                    this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
+                }
+                else
+                {
+                    this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = true;
+                    this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadonlyColour;
+                }
             }
         }
 

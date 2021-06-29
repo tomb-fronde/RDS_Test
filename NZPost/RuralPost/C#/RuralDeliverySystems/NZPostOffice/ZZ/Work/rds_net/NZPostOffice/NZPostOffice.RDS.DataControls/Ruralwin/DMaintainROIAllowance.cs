@@ -44,27 +44,36 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             int nRows = this.grid.RowCount;
             int nRow = e.RowIndex;
-            string s1, s2;
+            DateTime? paid;
+            string thisAltKey, prevAltKey;
 
-            s2 = "";
+            prevAltKey = "";
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                s1 = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-                DateTime? paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
-                if (s1 != null && s1 == s2)
+                thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                if (thisAltKey != null && thisAltKey == prevAltKey)
                 {
-                    if (paid != null)
+                    if (paid != null && paid > DateTime.MinValue)
                     {
                         for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
                         {
                             this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
                             this.grid.Rows[nRow].Cells[nCol].Style.BackColor
-                                           = System.Drawing.SystemColors.Control;   // grey
+                                           = System.Drawing.SystemColors.Control; // Grey
                         }
                     }
                 }
                 else
-                    s2 = s1;
+                    prevAltKey = thisAltKey;
+
+                // A paid allowance's Approved may not be changed
+                if (paid != null && paid > DateTime.MinValue)
+                {
+                    this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
+                    this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
+                                           = System.Drawing.SystemColors.Control; // Grey
+                }
             }
         }
 

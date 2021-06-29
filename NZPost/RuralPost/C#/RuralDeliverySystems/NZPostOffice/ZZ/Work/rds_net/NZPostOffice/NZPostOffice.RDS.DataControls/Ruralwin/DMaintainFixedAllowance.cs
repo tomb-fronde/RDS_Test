@@ -47,27 +47,36 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             int nRows = this.grid.RowCount;
             int nRow = e.RowIndex;
-            string s1, s2;
+            DateTime? paid;
+            string thisAltKey, prevAltKey;
 
-            s2 = "";
+            prevAltKey = "";
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                s1 = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-                DateTime? paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
-                if (s1 != null && s1 == s2)
+                thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                if (thisAltKey != null && thisAltKey == prevAltKey)
                 {
-                    if (paid != null)
+                    if (paid != null && paid > DateTime.MinValue)
                     {
                         for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
                         {
                             this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
                             this.grid.Rows[nRow].Cells[nCol].Style.BackColor
-                                           = System.Drawing.SystemColors.Control;
+                                           = System.Drawing.SystemColors.Control; // Grey
                         }
                     }
                 }
                 else
-                    s2 = s1;
+                    prevAltKey = thisAltKey;
+
+                // A paid allowance's Approved may not be changed
+                if (paid != null && paid > DateTime.MinValue)
+                {
+                    this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
+                    this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
+                                           = System.Drawing.SystemColors.Control; // Grey
+                }
             }
         }
 
@@ -143,25 +152,26 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         public void SetGridColumnReadOnly(string pColumnName, bool pValue)
         {
-            for (int i = 0; i < this.grid.ColumnCount; i++)
-                if (this.grid.Columns[i].Name == pColumnName)
-                {
-                    this.grid.Columns[i].ReadOnly = pValue;
-                    break;
-                }
+            this.grid.Columns[pColumnName].ReadOnly = pValue;
+            //for (int i = 0; i < this.grid.ColumnCount; i++)
+            //    if (this.grid.Columns[i].Name == pColumnName)
+            //    {
+            //        this.grid.Columns[i].ReadOnly = pValue;
+            //        break;
+            //    }
         }
 
-        public void SetGridCellReadonly(int nRow, string sCell, bool bValue)
+        public void SetGridCellReadonly(int nRow, string pColumnName, bool pValue)
         {
             // Set the cell's Readonly property to true/false
             // and its background colour to 'control' if readonly, 'Window' (white) if not
-            grid.Rows[nRow].Cells[sCell].ReadOnly = bValue;
-            if (bValue)
-                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+            grid.Rows[nRow].Cells[pColumnName].ReadOnly = pValue;
+            if (pValue)
+                grid.Rows[nRow].Cells[pColumnName].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
             else
-                grid.Rows[nRow].Cells[sCell].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
+                grid.Rows[nRow].Cells[pColumnName].Style.BackColor = System.Drawing.SystemColors.Window;  // Read/write = White
 
-            grid.Rows[nRow].Cells[sCell].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
+            grid.Rows[nRow].Cells[pColumnName].Style.ForeColor = System.Drawing.SystemColors.WindowText;  // Text = Black
         }
 
         void set_row_readability()

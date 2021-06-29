@@ -351,6 +351,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Drawing.Color ReadonlyColour, ReadWriteColour;
             ReadonlyColour = System.Drawing.SystemColors.Control;
             ReadWriteColour = System.Drawing.SystemColors.Window;
+            DateTime? paid;
 
             if (pValue == true)
             {

@@ -364,6 +364,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Drawing.Color ReadonlyColour, ReadWriteColour;
             ReadonlyColour = System.Drawing.SystemColors.Control;
             ReadWriteColour = System.Drawing.SystemColors.Window;
+            DateTime? paid;
 
             if (pValue == true)
             {
@@ -390,12 +391,23 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_var1"].Style.BackColor = ReadWriteColour;
-                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
-                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_notes"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadWriteColour;
+
+                // A paid allowance's Approved may not be changed
+                paid = (DateTime?)this.grid.Rows[pRow].Cells["ca_paid_to_date"].Value;
+                if (paid == null || paid <= DateTime.MinValue)
+                {
+                    this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
+                    this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
+                }
+                else
+                {
+                    this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = true;
+                    this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadonlyColour;
+                }
             }
         }
 
@@ -516,111 +528,111 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             }
         }
 
-        void set_row_readability()
-        {
-            int nRows = grid.RowCount;
-            for (int i = 0; i < nRows; i++)
-            {
-                if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-                {
-                    grid.Rows[i].Cells["ca_var1"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Window; // Not Readonly = white
-                    grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Window;
-                    grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Window;
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
-                }
-                else
-                {
-                    grid.Rows[i].Cells["ca_var1"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-                    grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Control;
-                    grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Control;
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
-                }
-
-                grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-                grid.Rows[i].Cells["alt_key"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-                grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-                grid.Rows[i].Cells["ca_paid_to_date"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-            }
-        }
-
-        void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
-        {
-            if (grid.RowCount <= 0)
-                return;
-
-            for (int i = 0; i < grid.RowCount; i++)
-            {
-                if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-                {
-                    grid.Rows[i].Cells["ca_var1"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Window; // Not Readonly = white
-                    grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Window;
-                    grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Window;
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
-                }
-                else
-                {
-                    grid.Rows[i].Cells["ca_var1"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-                    grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Control;
-                    grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Control;
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
-                }
-
-                grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-                grid.Rows[i].Cells["alt_key"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-                grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-                grid.Rows[i].Cells["ca_paid_to_date"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
-
-                if (grid.Rows[i].Cells["ca_approved"].Value != null
-                    && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
-                {
-                    grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.SystemColors.Control;
-                }
-                else
-                {
-                    grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.SystemColors.Window;
-                }
-
-                if (this.st_protect_confirm.Text == "Y")
-                {
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
-                }
-                else if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-                {
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
-                }
-                else if (grid.Rows[i].Cells["ca_approved"].Value != null 
-                         && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
-                {
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
-                }
-                else
-                {
-                    grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-                    grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
-                }
-            }
-        }
+        //void set_row_readability()
+        //{
+        //    int nRows = grid.RowCount;
+        //    for (int i = 0; i < nRows; i++)
+        //    {
+        //        if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
+        //        {
+        //            grid.Rows[i].Cells["ca_var1"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Window; // Not Readonly = white
+        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //        }
+        //        else
+        //        {
+        //            grid.Rows[i].Cells["ca_var1"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //        }
+        //
+        //        grid.Rows[i].Cells["alt_key"].ReadOnly = true;
+        //        grid.Rows[i].Cells["alt_key"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //        grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
+        //        grid.Rows[i].Cells["ca_paid_to_date"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //    }
+        //}
+        //
+        //void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
+        //{
+        //    if (grid.RowCount <= 0)
+        //        return;
+        //
+        //    for (int i = 0; i < grid.RowCount; i++)
+        //    {
+        //        if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
+        //        {
+        //            grid.Rows[i].Cells["ca_var1"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Window; // Not Readonly = white
+        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //        }
+        //        else
+        //        {
+        //            grid.Rows[i].Cells["ca_var1"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_var1"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_effective_date"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_notes"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //        }
+        //
+        //        grid.Rows[i].Cells["alt_key"].ReadOnly = true;
+        //        grid.Rows[i].Cells["alt_key"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //        grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
+        //        grid.Rows[i].Cells["ca_paid_to_date"].Style.BackColor = System.Drawing.SystemColors.Control; // Readonly = Grey
+        //
+        //        if (grid.Rows[i].Cells["ca_approved"].Value != null
+        //            && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
+        //        {
+        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //        }
+        //        else
+        //        {
+        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //        }
+        //
+        //        if (this.st_protect_confirm.Text == "Y")
+        //        {
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //        }
+        //        else if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
+        //        {
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //        }
+        //        else if (grid.Rows[i].Cells["ca_approved"].Value != null 
+        //                 && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
+        //        {
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Control;
+        //        }
+        //        else
+        //        {
+        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
+        //            grid.Rows[i].Cells["ca_approved"].Style.BackColor = System.Drawing.SystemColors.Window;
+        //        }
+        //    }
+        //}
         #endregion
 
         private DataGridViewTextBoxColumn alt_key;
@@ -635,28 +647,5 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_row_changed;
         private DataGridViewTextBoxColumn calc_amount;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
