@@ -13,8 +13,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
     // TJB Allowances 9-Mar-2021: New
     // Updated from WAddAllowance
     // Maintenance screen for allowance calculations
-    // 8-June-2021 Added 'Terminate' button: 
-    // 23-Jun-2021 Refine effective date checking
+    // [8-June-2021] Added 'Terminate' button: 
+    // [23-Jun-2021] Refine effective date checking
+    // [29-June-2021] Fixed issue with DISTABCE records Approved readonly setting (with a hack)
 
     public class WMaintainAllowances : WAncestorWindow
     {
@@ -487,9 +488,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
                 else
                 {
-                    // We then add the current net amount into the record.  This is used in the Datacontrol 
-                    // to calculate the change amount (ca_annual_amount)
-                    Decimal? netAmt = RDSDataService.GetAllowanceNetAmount(il_contract, il_altKey);
+                    // We then add the current net amount into the record.  
+                    // This is used in the DataControl to calculate the change 
+                    // amount (ca_annual_amount)
+
+                    decimal? netAmt = RDSDataService.GetAllowanceNetAmount(il_contract, il_altKey);
                     idw_Current.GetItem<MaintainAllowanceV2>(newRow).NetAmount = netAmt;
                     of_setCellFocus((int)il_alctId, newRow, "ca_effective_date");
                 }
@@ -498,7 +501,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             {
                 int thisRow = of_find_inserted(idw_Current, il_altKey, idt_effDate);
                 if( thisRow >= 0 )
-                    of_setCellFocus((int)il_alctId, thisRow, "ca_effective_date");
+                    of_setCellFocus((int)il_alctId, thisRow, "alt_key");
+                    //of_setCellFocus((int)il_alctId, thisRow, "ca_effective_date");
             }
             // Check whether the user has permission to approve allowances, and
             // set the ca_approved column readonly if not.
@@ -519,7 +523,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             of_markNewDirty(dw_roi_allowance, ROI);
             of_markNewDirty(dw_activity_allowance, ACTIVITY);
             of_markNewDirty(dw_time_allowance, TIME);
-            of_markNewDirty(dw_distance_allowance, DISTANCE);
+            //of_markNewDirty(dw_distance_allowance, DISTANCE);
 
             this.Refresh();
 
@@ -544,6 +548,26 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Total_approved.Text = dTotalApproved.ToString("###,###.00");
 
             //of_set_row_readonly();
+
+            // This is a hack.  
+            // For some reason, for the Distance allowances only, on startup, 
+            // all records' Approved items were marked readonly when some should
+            // have been readwrite.  This resets the readonly status for each element
+            // of all rows (including setting those Approved elements readwrite that
+            // should have been by now).  I wasn't able to find any other fix. 
+            // - TJB 30-June-2021
+            int prevRow = -1;
+            for (int Row = 0; Row < dw_distance_allowance.RowCount; Row++)
+            {
+                if (Row == prevRow)
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).set_row_readonly(Row, false);
+                else
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).set_row_readonly(Row, false);
+
+                prevRow = Row;
+            }
+            of_markAllClean(dw_distance_allowance, DISTANCE);
+            of_markNewDirty(dw_distance_allowance, DISTANCE);
         }
 
         private int of_find_inserted(URdsDw thisDw, int? inAltKey, DateTime? inEffDate)
@@ -1130,15 +1154,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             else
             {
                 ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-                ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor  = System.Drawing.SystemColors.ButtonFace;  // Grey
+                ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor  = System.Drawing.SystemColors.Control;  // Grey
                 ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-                ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.ButtonFace;  // Grey
+                ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-                ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.ButtonFace;  // Grey
+                ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-                ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.ButtonFace;  // Grey
+                ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridColumnReadOnly("ca_approved", true);
-                ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.ButtonFace;  // Grey
+                ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
             }
         }
 
@@ -1148,14 +1172,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             // made modifiable (readonly = false).
             // If the allowance has already been approved, make it readonly
             string sApproved = "N";
+            DateTime? paid;
             for (int i = 0; i < dw_fixed_allowance.RowCount; i++)
             {
                 sApproved = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
                 if (!(sApproved == null) && sApproved == "Y")
                 {
-                    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i,"ca_approved",true);
+                    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                     ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 }
+                //paid = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                //if ( paid != null && paid > DateTime.MinValue)
+                //{
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i,"ca_approved",true);
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                //else
+                //{
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window; 
+                //}
+
             }
             for (int i = 0; i < dw_roi_allowance.RowCount; i++)
             {
@@ -1192,6 +1229,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                     ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 }
+                //paid = dw_distance_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                //if (paid != null && paid > DateTime.MinValue)
+                //{
+                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                //else
+                //{
+                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
+                //}
             }
         }
 
