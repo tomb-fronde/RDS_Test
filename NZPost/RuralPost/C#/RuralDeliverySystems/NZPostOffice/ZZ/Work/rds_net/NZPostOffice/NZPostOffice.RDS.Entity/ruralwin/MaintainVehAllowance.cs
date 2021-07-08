@@ -54,7 +54,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("var_ruc_rate_pk", "_var_ruc_rate_pk", "")]
     [System.Serializable()]
 
-	public class MaintainVehAllowanceV1 : Entity<MaintainVehAllowanceV1>
+	public class MaintainVehAllowance_V1 : Entity<MaintainVehAllowance_V1>
 	{
         // TJB RPCR_017 July-2010
         // Added GetCurrentAllowances to limit allowance list to current allowances
@@ -1005,12 +1005,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
 
         #region Factory Methods
-		public static MaintainVehAllowanceV1 NewMaintainVehAllowanceV1( int? inContractNo )
+		public static MaintainVehAllowance_V1 NewMaintainVehAllowance_V1( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-        public static MaintainVehAllowanceV1[] GetAllMaintainVehAllowanceV1(int? inContractNo, int? inAlctId)
+        public static MaintainVehAllowance_V1[] GetAllMaintainVehAllowance_V1(int? inContractNo, int? inAlctId)
         {
             return Fetch(inContractNo, inAlctId).list;
         }
@@ -1081,14 +1081,14 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                     pList.Add(cm, "inContractNo", inContractNo);
                     pList.Add(cm, "inAlctId", inAlctId);
 
-					List<MaintainVehAllowanceV1> _list = new List<MaintainVehAllowanceV1>();
+					List<MaintainVehAllowance_V1> _list = new List<MaintainVehAllowance_V1>();
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                MaintainVehAllowanceV1 instance = new MaintainVehAllowanceV1();
+                                MaintainVehAllowance_V1 instance = new MaintainVehAllowance_V1();
                                 instance._alt_key = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_no = GetValueFromReader<int?>(dr, 1);
                                 instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
