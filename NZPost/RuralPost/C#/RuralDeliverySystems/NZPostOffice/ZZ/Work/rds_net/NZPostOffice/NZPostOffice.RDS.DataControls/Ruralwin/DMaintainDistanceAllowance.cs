@@ -13,10 +13,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 {
     // TJB Allowances 9-Mar-2021: New
     // DataControl for Distance Allowance maintenance tab
-    // [31-Mar-2021] Added calculation for annual amount
+    // [31-Mar-2021]  Added calculation for annual amount
     // [19-June-2021] Disabled validating (in designer)
     // [26 June 2021] Changed calculation to use PaidToDate instead of Approved
     // [28-June-2021] Refined set_row_readonly to handle both true and false (in designer)
+    // [8-Jul-2021]   Bug fix: fuel_use_pk is fuel_use per 100Km
+    // [8-Jul-2021]   Added code to grid_RowsAdded to hide alt_rate when effective_date < 1'Jul-2021'
 
     public partial class DMaintainDistanceAllowance : Metex.Windows.DataUserControl
 	{
@@ -47,62 +49,73 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
 
         void grid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            //int nRows = this.grid.RowCount;
+            int nRows = this.grid.RowCount;
             int nRow = e.RowIndex;
-            DateTime? paid;
+            DateTime? paidDate, effDate;
+            DateTime dateLimit;
             string thisAltKey, prevAltKey;
 
-            // NOTE: the column called alt_key is actually alt_description
-            //       so contains the allowance name, not its number
-            thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-            if( nRow == 0 ) 
-                prevAltKey = "xxx";
-            else
-                prevAltKey = (string)this.grid.Rows[nRow - 1].Cells["alt_key"].Value;
+            prevAltKey = "";
+            for (nRow = 0; nRow < nRows; nRow++)
+            {
+                thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+                paidDate = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                if (thisAltKey != null && thisAltKey == prevAltKey)
+                {
+                    if (paidDate != null && paidDate > DateTime.MinValue)
+                    {
+                        for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
+                        {
+                            this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
+                            this.grid.Rows[nRow].Cells[nCol].Style.BackColor
+                                           = System.Drawing.SystemColors.Control; // Grey
+                        }
+                    }
+                    // If the contract allowance effective date is earlier than 
+                    // the limit date (start of calculating allowances - RDS 7.1.17) 
+                    // don't display the rate.
+                    effDate = (DateTime?)this.grid.Rows[nRow].Cells["ca_effective_date"].Value;
+                    dateLimit = DateTime.Parse("1-Jul-2021");
+                    if (effDate == null || (DateTime)effDate < dateLimit)
+                    {
+                        this.grid.Rows[nRow].Cells["alt_rate"].Value = null;
+                    }
+                }
+                else
+                    // ... but do show the rate for any record that is modifiable
+                    prevAltKey = thisAltKey;
 
-            if (thisAltKey != null &&  prevAltKey == thisAltKey)
-                set_row_readonly(nRow,true);
-            else  // This is the first occurrence
-                set_row_readonly(nRow,false);
-            
-            //prevAltKey = "";
-            //for (nRow = 0; nRow < nRows; nRow++)
-            //{
-            //    thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-            //    paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
-            //    if (thisAltKey == "Parcel Pickups" || thisAltKey == "Second Vehicle - Courier Delivery")
-            //    {
-            //        string s1 = thisAltKey;
-            //        string s2 = s1;
-            //    }
-            //    if (thisAltKey != null &&  prevAltKey == thisAltKey)
-            //    {
-            //        set_row_readonly(nRow,true);
-            //        //if (paid != null && paid > DateTime.MinValue)
-            //        //{
-            //        //    for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
-            //        //    {
-            //        //        this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
-            //        //        this.grid.Rows[nRow].Cells[nCol].Style.BackColor
-            //        //                       = System.Drawing.SystemColors.Control; // Grey
-            //        //    }
-            //        //}
-            //    }
-            //    else  // This is the first occurrence
-            //    {
-            //        prevAltKey = thisAltKey;
-            //        set_row_readonly(nRow,false);
-            //    }
-
-                //// A paid allowance's Approved may not be changed whether its the first occurrence or not
-                //if (paid != null && paid > DateTime.MinValue)
-                //{
-                //    this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
-                //    this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
-                //                           = System.Drawing.SystemColors.Control; // Grey
-                //}
-            //}
+                // A paid allowance's Approved may not be changed
+                if (paidDate != null && paidDate > DateTime.MinValue)
+                {
+                    this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
+                    this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
+                                           = System.Drawing.SystemColors.Control; // Grey
+                }
+            }
         }
+
+        //void grid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        //{
+        //    //int nRows = this.grid.RowCount;
+        //    int nRow = e.RowIndex;
+        //    DateTime? paid;
+        //    string thisAltKey, prevAltKey;
+
+        //    // NOTE: the column called alt_key is actually alt_description
+        //    //       so contains the allowance name, not its number
+        //    thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
+        //    if( nRow == 0 ) 
+        //        prevAltKey = "xxx";
+        //    else
+        //        prevAltKey = (string)this.grid.Rows[nRow - 1].Cells["alt_key"].Value;
+
+        //    if (thisAltKey != null &&  prevAltKey == thisAltKey)
+        //        set_row_readonly(nRow,true);
+        //    else  // This is the first occurrence
+        //        set_row_readonly(nRow,false);
+            
+        //}
 
         protected override void OnHandleCreated(EventArgs e)
     	{
@@ -158,11 +171,11 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             this.grid.Rows[pRow].ReadOnly = pValue;
         }
-
-        public bool GetGridRowReadOnly(int pRow)
-        {
-            return this.grid.Rows[pRow].ReadOnly;
-        }
+        
+        //public bool GetGridRowReadOnly(int pRow)
+        //{
+        //    return this.grid.Rows[pRow].ReadOnly;
+        //}
 
         public void SetGridColumnReadOnly(string pColumnName, bool pValue)
         {
@@ -286,7 +299,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 decimal ACC          = of_GetDecimalValue(thisRow, "alt_acc");
 
                 // From vehicle_allowance_rates
-                decimal fuel_use_pk  = of_GetDecimalValue(thisRow, "var_fuel_use_pk");
+                // 8-Jul-2021 bug fix: fuel_use_pk is fuel_use per 100Km
+                decimal fuel_use_p100  = of_GetDecimalValue(thisRow, "var_fuel_use_pk");
                 decimal fuel_rate    = of_GetDecimalValue(thisRow, "var_fuel_rate");
                 decimal ruc_pk       = of_GetDecimalValue(thisRow, "var_ruc_rate_pk");
                 decimal repairs_pk   = of_GetDecimalValue(thisRow, "var_repairs_pk");
@@ -305,14 +319,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 TimeAmt = Decimal.Round(TimeAmt,2);
 
                 decimal Dist_yr = (distance_day * days_yr);
-                decimal Fuel_pk = fuel_use_pk * fuel_rate;
-                decimal DistAmt = (Dist_yr / 1000) * (Fuel_pk + ruc_pk + repairs_pk + tyres_pk + allowance_pk);
+                decimal Fuel_allowance = (fuel_use_p100 * fuel_rate) * (Dist_yr / 100);
+                decimal DistAmt = (ruc_pk + repairs_pk + tyres_pk + allowance_pk)
+                                   * (Dist_yr / 1000)
+                                   + Fuel_allowance;
                 DistAmt = Decimal.Round(DistAmt,2);
 
                 // If cost_covered is not 'Y', calculate the Vehicle amount
                 // If cost_covered is 'Y', don't do the calculation and use $0
-                decimal VehAmt  = 0.0M;
-                if (costs_covered != null && costs_covered != "Y")
+                decimal VehAmt;
+                if (costs_covered != null && costs_covered == "Y")
+                    VehAmt = 0.0M;
+                else
                     VehAmt = carrier_pa + licence_pa + insurance_pa + ror_pa;
                 VehAmt = Decimal.Round(VehAmt, 2);
 

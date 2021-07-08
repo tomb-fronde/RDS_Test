@@ -574,29 +574,48 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             ReadWriteColour = System.Drawing.SystemColors.Window;
             DateTime? paid;
 
+            // These are not modifiable
+            this.grid.Rows[pRow].Cells["alt_key"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["alt_key"].Style.BackColor = ReadonlyColour;
+            this.grid.Rows[pRow].Cells["alt_rate"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["alt_rate"].Style.BackColor = ReadonlyColour;
+            this.grid.Rows[pRow].Cells["var_id"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["var_id"].Style.BackColor = ReadonlyColour;
+            this.grid.Rows[pRow].Cells["ca_annual_amount"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["ca_annual_amount"].Style.BackColor = ReadonlyColour;
+            this.grid.Rows[pRow].Cells["net_amount"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["net_amount"].Style.BackColor = ReadonlyColour;
+            this.grid.Rows[pRow].Cells["ca_paid_to_date"].ReadOnly = true;
+            this.grid.Rows[pRow].Cells["ca_paid_to_date"].Style.BackColor = ReadonlyColour;
+
+            // These may be if set not readonly
             if (pValue == true)
             {
-                for (int i = 0; i < this.grid.ColumnCount; i++)
-                {
-                    this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
-                    this.grid.Rows[pRow].Cells[i].Style.BackColor = ReadonlyColour;
-                }
+                //for (int i = 0; i < this.grid.ColumnCount; i++)
+                //{
+                //    this.grid.Rows[pRow].Cells[i].ReadOnly = pValue;
+                //    this.grid.Rows[pRow].Cells[i].Style.BackColor = ReadonlyColour;
+                //}
+                this.grid.Rows[pRow].Cells["ca_effective_date"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_var1"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_hrs_wk"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_hrs_wk"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_dist_day"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_dist_day"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_costs_covered"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_costs_covered"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_notes"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadonlyColour;
+                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = true;
+                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadonlyColour;
+
             }
             if (pValue == false)
             {
-                this.grid.Rows[pRow].Cells["alt_key"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["alt_key"].Style.BackColor = ReadonlyColour;
-                this.grid.Rows[pRow].Cells["alt_rate"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["alt_rate"].Style.BackColor = ReadonlyColour;
-                this.grid.Rows[pRow].Cells["var_id"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["var_id"].Style.BackColor = ReadonlyColour;
-                this.grid.Rows[pRow].Cells["ca_annual_amount"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["ca_annual_amount"].Style.BackColor = ReadonlyColour;
-                this.grid.Rows[pRow].Cells["net_amount"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["net_amount"].Style.BackColor = ReadonlyColour;
-                this.grid.Rows[pRow].Cells["ca_paid_to_date"].ReadOnly = true;
-                this.grid.Rows[pRow].Cells["ca_paid_to_date"].Style.BackColor = ReadonlyColour;
-
                 this.grid.Rows[pRow].Cells["ca_effective_date"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_effective_date"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_var1"].ReadOnly = false;
@@ -611,15 +630,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 this.grid.Rows[pRow].Cells["ca_notes"].Style.BackColor = ReadWriteColour;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].ReadOnly = false;
                 this.grid.Rows[pRow].Cells["ca_doc_description"].Style.BackColor = ReadWriteColour;
+                this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
+                this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
 
                 // A paid allowance's Approved may not be changed
                 paid = (DateTime?)this.grid.Rows[pRow].Cells["ca_paid_to_date"].Value;
-                if (paid == null || paid <= DateTime.MinValue)
-                {
-                    this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = false;
-                    this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadWriteColour;
-                }
-                else
+                if (paid != null && paid > DateTime.MinValue)
                 {
                     this.grid.Rows[pRow].Cells["ca_approved"].ReadOnly = true;
                     this.grid.Rows[pRow].Cells["ca_approved"].Style.BackColor = ReadonlyColour;
@@ -781,99 +797,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                 e.Cancel = true;
             }
         }
-
-        //void set_row_readability()
-        //{
-        //    int nRows = grid.RowCount;
-        //    for (int i = 0; i < nRows; i++)
-        //    {
-        //        //if(isNull( ca_paid_to_date ) ,0,1)
-        //        if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-        //        {
-        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
-        //            grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-        //
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-        //            //grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-        //
-        //        }
-        //        else
-        //        {
-        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
-        //            grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-        //
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-        //        }
-        //    }
-        //}
-        //
-        //void bindingSource_ListChanged(object sender, System.ComponentModel.ListChangedEventArgs e)
-        //{
-        //    if (grid.RowCount <= 0)
-        //        return;
-        //
-        //    for (int i = 0; i < grid.RowCount; i++)
-        //    {
-        //        //if(isNull( ca_paid_to_date ) ,0,1)
-        //        if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-        //        {
-        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = false;
-        //            grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-        //
-        //        }
-        //        else
-        //        {
-        //            grid.Rows[i].Cells["ca_effective_date"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_notes"].ReadOnly = true;
-        //            grid.Rows[i].Cells["alt_key"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_paid_to_date"].ReadOnly = true;
-        //        }
-        //
-        //        //if(ca_approved = "Y",1,0)
-        //        if (grid.Rows[i].Cells["ca_approved"].Value != null
-        //            && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
-        //        {
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = true;
-        //            grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.SystemColors.Control;
-        //        }
-        //        else
-        //        {
-        //            grid.Rows[i].Cells["ca_annual_amount"].ReadOnly = false;
-        //            grid.Rows[i].Cells["ca_annual_amount"].Style.BackColor = System.Drawing.Color.White;
-        //        }
-        //
-        //        //if(DESCRIBE("st_protect_confirm.text")="Y", 1, if( isnull(ca_paid_to_date ),0,if(ca_approved = "Y",1,0))) 
-        //        if (this.st_protect_confirm.Text == "Y")
-        //        {
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-        //        }
-        //        else if (grid.Rows[i].Cells["ca_paid_to_date"].Value == null)
-        //        {
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-        //        }
-        //        else if (grid.Rows[i].Cells["ca_approved"].Value != null 
-        //                 && grid.Rows[i].Cells["ca_approved"].Value.ToString() == "Y")
-        //        {
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = true;
-        //        }
-        //        else
-        //        {
-        //            grid.Rows[i].Cells["ca_approved"].ReadOnly = false;
-        //        }
-        //    }
-        //}
         #endregion
 
         private DataGridViewTextBoxColumn alt_key;
