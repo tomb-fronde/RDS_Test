@@ -47,17 +47,18 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         {
             int nRows = this.grid.RowCount;
             int nRow = e.RowIndex;
-            DateTime? paid;
+            DateTime? paidDate, effDate;
+            DateTime dateLimit;
             string thisAltKey, prevAltKey;
 
             prevAltKey = "";
             for (nRow = 0; nRow < nRows; nRow++)
             {
                 thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-                paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
+                paidDate = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
                 if (thisAltKey != null && thisAltKey == prevAltKey)
                 {
-                    if (paid != null && paid > DateTime.MinValue)
+                    if (paidDate != null && paidDate > DateTime.MinValue)
                     {
                         for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
                         {
@@ -71,7 +72,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     prevAltKey = thisAltKey;
 
                 // A paid allowance's Approved may not be changed
-                if (paid != null && paid > DateTime.MinValue)
+                if (paidDate != null && paidDate > DateTime.MinValue)
                 {
                     this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
                     this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
