@@ -44,7 +44,7 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
     [MapInfo("alct_description", "_alct_description", "")]
     [System.Serializable()]
 
-	public class MaintainAllowanceV1 : Entity<MaintainAllowanceV1>
+	public class MaintainAllowance_V1 : Entity<MaintainAllowance_V1>
 	{
         // TJB RPCR_017 July-2010
         // Added GetCurrentAllowances to limit allowance list to current allowances
@@ -745,12 +745,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
         }
 
         #region Factory Methods
-		public static MaintainAllowanceV1 NewMaintainAllowanceV1( int? inContractNo )
+		public static MaintainAllowance_V1 NewMaintainAllowance_V1( int? inContractNo )
 		{
 			return Create(inContractNo);
 		}
 
-        public static MaintainAllowanceV1[] GetAllMaintainAllowanceV1(int? inContractNo, int? inAlctId)
+        public static MaintainAllowance_V1[] GetAllMaintainAllowance_V1(int? inContractNo, int? inAlctId)
         {
             return Fetch(inContractNo, inAlctId).list;
         }
@@ -814,12 +814,12 @@ namespace NZPostOffice.RDS.Entity.Ruralwin
                         pList.Add(cm, "inContractNo", inContractNo);
                         pList.Add(cm, "inAlctId", inAlctId);
 
-					    List<MaintainAllowanceV1> _list = new List<MaintainAllowanceV1>();
+					    List<MaintainAllowance_V1> _list = new List<MaintainAllowance_V1>();
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
                         {
                             while (dr.Read())
                             {
-                                MaintainAllowanceV1 instance = new MaintainAllowanceV1();
+                                MaintainAllowance_V1 instance = new MaintainAllowance_V1();
                                 instance._alt_key = GetValueFromReader<int?>(dr, 0);
                                 instance._contract_no = GetValueFromReader<int?>(dr, 1);
                                 instance._effective_date = GetValueFromReader<DateTime?>(dr, 2);
