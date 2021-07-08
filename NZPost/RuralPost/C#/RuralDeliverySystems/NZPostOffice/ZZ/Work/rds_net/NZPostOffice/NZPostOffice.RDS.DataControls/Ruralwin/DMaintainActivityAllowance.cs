@@ -17,6 +17,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
     // [19-June-2021] Disabled validating (in designer)
     // [26 June 2021] Changed calculation to use PaidToDate instead of Approved
     // [28-June-2021] Refined set_row_readonly to handle both true and false (in designer)
+    // [8-Jul-2021] Added code to grid_RowsAdded to hide alt_rate when effective_date < 1'Jul-2021'
 
     public partial class DMaintainActivityAllowance : Metex.Windows.DataUserControl
 	{
@@ -49,25 +50,19 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             // a new record will be created with the changes).
             int nRows = this.grid.RowCount;
             int nRow = e.RowIndex;
-            DateTime? paid;
+            DateTime? paidDate, effDate;
+            DateTime dateLimit;
             string thisAltKey, prevAltKey;
 
-            prevAltKey = "";  // prevAltKey "remembers" that we've encountered an allowance of this type
-
-            // Scan the set of allowances
+            prevAltKey = "";
             for (nRow = 0; nRow < nRows; nRow++)
             {
-                // Get this allowance row's type and paid-to status
                 thisAltKey = (string)this.grid.Rows[nRow].Cells["alt_key"].Value;
-                paid = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
-                // If we have seen this allowance type before (this is the 2nd or greater time)
+                paidDate = (DateTime?)this.grid.Rows[nRow].Cells["ca_paid_to_date"].Value;
                 if (thisAltKey != null && thisAltKey == prevAltKey)
                 {
-                    // ... and the allowance has been paid (there's a date - its not null)
-                    if (paid != null && paid > DateTime.MinValue)
-                    {   // Mark the row readonly and highlight it
-                        // (doing it column by column seems more reliable than 
-                        // trying to do the row as a whole)
+                    if (paidDate != null && paidDate > DateTime.MinValue)
+                    {
                         for (int nCol = 0; nCol < this.grid.ColumnCount; nCol++)
                         {
                             this.grid.Rows[nRow].Cells[nCol].ReadOnly = true;
@@ -75,12 +70,22 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                                            = System.Drawing.SystemColors.Control; // Grey
                         }
                     }
+                    // If the contract allowance effective date is earlier than 
+                    // the limit date (start of calculating allowances - RDS 7.1.17) 
+                    // don't display the rate.
+                    effDate = (DateTime?)this.grid.Rows[nRow].Cells["ca_effective_date"].Value;
+                    dateLimit = DateTime.Parse("1-Jul-2021");
+                    if (effDate == null || (DateTime)effDate < dateLimit)
+                    {
+                        this.grid.Rows[nRow].Cells["alt_rate"].Value = null;
+                    }
                 }
-                else  // This is the first time we've encountered this allowance type
-                    prevAltKey = thisAltKey;  // "remember" it
+                else
+                    // ... but do show the rate for any record that is modifiable
+                    prevAltKey = thisAltKey;
 
                 // A paid allowance's Approved may not be changed
-                if (paid != null && paid > DateTime.MinValue)
+                if (paidDate != null && paidDate > DateTime.MinValue)
                 {
                     this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = true;
                     this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
