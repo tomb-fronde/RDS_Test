@@ -142,7 +142,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
             this.var_fuel_use_pk.DefaultCellStyle = dataGridViewCellStyle4;
-            this.var_fuel_use_pk.HeaderText = "Fuel Use 1000Km";
+            this.var_fuel_use_pk.HeaderText = "Fuel Use 100Km";
             this.var_fuel_use_pk.Name = "var_fuel_use_pk";
             this.var_fuel_use_pk.Width = 60;
             // 

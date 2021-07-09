@@ -12,6 +12,7 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
 {
     // TJB  Allowances 21-Apr-2021: New
     // Form for maintenance of vehicle_allowance_rates table
+    // [9-Jul-2021]Changed Fuel use heading (in designer) to "Fuel Use 100Km" (was 1000Km)
 
 	public partial class DVehicleAllowanceRates : Metex.Windows.DataUserControl
 	{
