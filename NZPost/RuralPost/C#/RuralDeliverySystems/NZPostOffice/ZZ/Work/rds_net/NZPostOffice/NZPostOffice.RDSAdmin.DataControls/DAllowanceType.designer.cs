@@ -212,31 +212,5 @@ namespace NZPostOffice.RDSAdmin.DataControls.Security
         private Metex.Windows.DataGridViewEntityComboColumn alct_id;
         private NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn alt_effective_date;
         private System.Windows.Forms.DataGridViewTextBoxColumn alt_notes;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
