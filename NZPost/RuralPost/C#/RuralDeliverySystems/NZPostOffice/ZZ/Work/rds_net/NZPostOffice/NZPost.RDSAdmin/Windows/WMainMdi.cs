@@ -21,6 +21,8 @@ namespace NZPostOffice.RDSAdmin
     // Added form for vehicle_allowance_rates maintenance
     // [June-2021] Added date check for Allowances (type and vehicle rates)
     //             Added <Save> to right-click menu for Allowances (only)
+    // [8-Jul-2021] TJB Changed position of dw_detail (looks much better)  (see ue_navigated)
+    // [9-Jul-2021] Tidy-up display of messages and row selection in Allowance_type and Vehicle_allowance_rates
     //
     // TJB July-2019 Bug: File.Save didn't do anything
     // Fixed: added pfc_save override calling of_save
@@ -388,6 +390,7 @@ namespace NZPostOffice.RDSAdmin
                 ((DAllowanceType)dw_detail.DataObject).Grid.Rows[row].Selected = true;
                 ((DAllowanceType)dw_detail.DataObject).Grid.Rows[row].ReadOnly = false;
                 ((DAllowanceType)dw_detail.DataObject).Grid.Rows[row].Cells["alct_id"].ReadOnly = false;
+                ((DAllowanceType)dw_detail.DataObject).Grid.Rows[row].Cells["alt_description"].ReadOnly = false;
                 ((DAllowanceType)dw_detail.DataObject).Refresh();
             }
             else if (dw_detail.DataObject is DArticalType)
@@ -1561,19 +1564,20 @@ namespace NZPostOffice.RDSAdmin
                     // and when the loop finishes, saves any changes.
                     // The dictionary allowance_index, "remembers" all allowances that have changes 
                     // so we can update the allowance history records, and whether the allowance 
-                    // is new so it can look up the alt_key for the new record(s) (the key is in
-                    // an IDENTITY column).
+                    // is new so it can look up the alt_key for the new record(s) (NOTE: the key 
+                    // is in an IDENTITY column).
                     Dictionary<int, bool> allowance_index = new Dictionary<int, bool>();
 
                     // We need to find out what has changed - is it any of the calculation factors?
-                    for (int i = 0; i < dw_detail.RowCount; i++)
+                    for (int nRow = 0; nRow < dw_detail.RowCount; nRow++)
                     {
                         // Track ALL changed rows not just those where the allowance 
-                        // calculation factore have changed
-                        if (dw_allowance_type.GetItem<AllowanceType>(i).IsNew)
-                            allowance_index.Add(i, true);
-                        else if (dw_allowance_type.GetItem<AllowanceType>(i).IsDirty)
-                            allowance_index.Add(i, false);
+                        // calculation factore have changed.  TRUE means a new record 
+                        // will be created; FALSE means the existing record will be updated.
+                        if (dw_allowance_type.GetItem<AllowanceType>(nRow).IsNew)
+                            allowance_index.Add(nRow, true);
+                        else if (dw_allowance_type.GetItem<AllowanceType>(nRow).IsDirty)
+                            allowance_index.Add(nRow, false);
                     }
 
                     // Save the changed allowance type(s)
@@ -1582,11 +1586,11 @@ namespace NZPostOffice.RDSAdmin
                     // Add the changed record(s) to the history table
                     foreach (KeyValuePair<int, bool> record in allowance_index)
                     {
-                        int i = record.Key;
+                        int nRow = record.Key;
                         bool bIsNew = record.Value;
                         int nAltKey;
                         string sAltDescription;
-                        sAltDescription = dw_allowance_type.GetItem<AllowanceType>(i).AltDescription;
+                        sAltDescription = dw_allowance_type.GetItem<AllowanceType>(nRow).AltDescription;
                         if (bIsNew)
                         {
                             nAltKey = MainMdiService.LookUpAllowanceRateId(sAltDescription, "");
@@ -1598,17 +1602,17 @@ namespace NZPostOffice.RDSAdmin
                                                 , MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 continue;
                             }
-                            dw_allowance_type.GetItem<AllowanceType>(i).AltKey = nAltKey;
+                            dw_allowance_type.GetItem<AllowanceType>(nRow).AltKey = nAltKey;
                         }
                         else
                         {
-                            nAltKey = (int)dw_allowance_type.GetItem<AllowanceType>(i).AltKey;
+                            nAltKey = (int)dw_allowance_type.GetItem<AllowanceType>(nRow).AltKey;
                         }
                         MainMdiService.UpdateAllowanceTypeHistory(nAltKey);
                     
                         // Where calculation factors have changed, generate updated contract allowances
-                        DateTime dAltEffDate = (DateTime)dw_allowance_type.GetItem<AllowanceType>(i).AltEffectiveDate;
-                        string sAltNotes = dw_allowance_type.GetItem<AllowanceType>(i).AltNotes;
+                        DateTime dAltEffDate = (DateTime)dw_allowance_type.GetItem<AllowanceType>(nRow).AltEffectiveDate;
+                        string sAltNotes = dw_allowance_type.GetItem<AllowanceType>(nRow).AltNotes;
 
                         // A calculation factor for this allowance has changed
                         // Generate new contract_allowance records for this change.
@@ -1616,19 +1620,29 @@ namespace NZPostOffice.RDSAdmin
                         //               See detail in MainMdiService.GenerateUpdatedAllowances
                         string sqlmsg = "";
                         int nUpdated = MainMdiService.GenerateUpdatedAllowances(nAltKey, -1, dAltEffDate, sAltNotes, out sqlmsg);
+
+                        // Tell the user what was done (with appropriate plurals)
+                        string sAllowances, sUpdated;
+                        sAllowances = "allowances";
+                        sUpdated = nUpdated.ToString();
+                        if (nUpdated == 0)
+                            sUpdated = "No";
+                        else if (nUpdated == 1)
+                            sAllowances = "allowance";
+
                         if (nUpdated < 0)
-                            MessageBox.Show("Database error updating allowance "+sAltDescription+"\n\n"
+                            MessageBox.Show("Database error updating allowance " + sAltDescription + "\n\n"
                                            + sqlmsg, "SQL Database error"
                                           , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        else if (nUpdated == 0)
-                            MessageBox.Show("No " + sAltDescription + " allowances updated. \n");
-                        else if (nUpdated == 1)
-                            MessageBox.Show(nUpdated.ToString() + " " + sAltDescription + " allowance updated. \n");
                         else
-                            MessageBox.Show(nUpdated.ToString() + " " + sAltDescription + " allowances updated. \n");
+                        {
+                            MessageBox.Show(sUpdated + " " + sAltDescription + " " + sAllowances + " updated.\n\n");
+                        }
+
+                        ((DAllowanceType)dw_detail.DataObject).Grid.ClearSelection();
+                        ((DAllowanceType)dw_detail.DataObject).Grid.Rows[nRow].Selected = true;
 
                         dw_allowance_type.Refresh();
-                        ((DAllowanceType)dw_detail.DataObject).Grid.Rows[i].Selected = true;
                     }      
                 }
                 /**********************************
@@ -1660,14 +1674,14 @@ namespace NZPostOffice.RDSAdmin
                     Dictionary<int, bool> vehicle_index = new Dictionary<int, bool>();
 
                     // We need to find out what has changed
-                    for (int i = 0; i < dw_detail.RowCount; i++)
+                    for (int nRow = 0; nRow < dw_detail.RowCount; nRow++)
                     {
                         // Track ALL changed rows not just those where the allowance 
                         // calculation factore have changed
-                        if (dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).IsNew)
-                            vehicle_index.Add(i, true);
-                        else if (dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).IsDirty)
-                            vehicle_index.Add(i, false);
+                        if (dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).IsNew)
+                            vehicle_index.Add(nRow, true);
+                        else if (dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).IsDirty)
+                            vehicle_index.Add(nRow, false);
                     }
 
                     // Save the changed vehicle type(s)
@@ -1677,11 +1691,11 @@ namespace NZPostOffice.RDSAdmin
                     //For each record we found that had been changed (or new) ...
                     foreach (KeyValuePair<int, bool> record in vehicle_index)
                     {
-                        int i = record.Key;
+                        int nRow = record.Key;
                         bool bIsNew = record.Value;
-                        string sVarDescription = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarDescription;
-                        DateTime dVarEffDate = (DateTime)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarEffectiveDate;
-                        string sVarNotes = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarNotes;
+                        string sVarDescription = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).VarDescription;
+                        DateTime dVarEffDate = (DateTime)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).VarEffectiveDate;
+                        string sVarNotes = dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).VarNotes;
 
                         int nVarId;
                         if (bIsNew)
@@ -1695,11 +1709,11 @@ namespace NZPostOffice.RDSAdmin
                                                 , MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 continue;
                             }
-                            dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarId = nVarId;
+                            dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).VarId = nVarId;
                         }
                         else
                         {
-                            nVarId = (int)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(i).VarId;
+                            nVarId = (int)dw_vehicle_allowance_rates.GetItem<VehicleAllowanceRates>(nRow).VarId;
                         }
                         // Add the changed record to the history table
                         MainMdiService.UpdateVehicleAllowanceRatesHistory(nVarId);
@@ -1721,8 +1735,10 @@ namespace NZPostOffice.RDSAdmin
                         else
                             MessageBox.Show(nUpdated.ToString() + " " + sVarDescription + " vehicle types updated. \n");
 
+                        ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.ClearSelection();
+                        ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.CurrentCell.Selected = false;
+                        ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.Rows[nRow].Selected = true;
                         dw_vehicle_allowance_rates.Refresh();
-                        ((DVehicleAllowanceRates)dw_detail.DataObject).Grid.Rows[i].Selected = true;
                     }
                 }
 
@@ -1790,11 +1806,11 @@ namespace NZPostOffice.RDSAdmin
                                , "Database Error");
             }
             int rowcount = dw_contract_type.RowCount;
-            for (int i = 0; i < rowcount; i++)
+            for (int nRow = 0; nRow < rowcount; nRow++)
             {
-                if (dw_contract_type.GetItem<ContractTypes>(i).Dummy1 == "Y")
+                if (dw_contract_type.GetItem<ContractTypes>(nRow).Dummy1 == "Y")
                 {
-                    ct_key = dw_contract_type.GetItem<ContractTypes>(i).ContractTypeCtKey;
+                    ct_key = dw_contract_type.GetItem<ContractTypes>(nRow).ContractTypeCtKey;
                     if (!MainMdiService.InsertRdsUserContractType(ct_key, ui_id, ref ErrorMessage))
                     {
                         MessageBox.Show("Unable to create contract types for the user.  \n\n" 
@@ -1803,7 +1819,7 @@ namespace NZPostOffice.RDSAdmin
                         break;
                     }
                 }
-                dw_contract_type.GetItem<ContractTypes>(i).MarkClean();
+                dw_contract_type.GetItem<ContractTypes>(nRow).MarkClean();
             }
         }
 
@@ -2777,9 +2793,12 @@ namespace NZPostOffice.RDSAdmin
                         dw_header.Top = 40;
                         dw_header.Visible = true;
                         dw_detail.Visible = true;
-                        dw_detail.Top = dw_header.Top + dw_header.Height;
-                        dw_detail.BringToFront();
+                        // [8-Jul-2021] TJB Changed position of dw_detail (looks much better)
+                        //dw_detail.Top = dw_header.Top + dw_header.Height;
+                        dw_detail.Top = dw_header.Top + 160;
+                        dw_detail.Left = dw_header.Left;
                         dw_header.BringToFront();
+                        dw_detail.BringToFront();
                         dw_contract_type.Visible = false;
                     }
                     break;
@@ -3417,7 +3436,7 @@ namespace NZPostOffice.RDSAdmin
                 int nRow, nCol;
                 int? nVarId;
                 string sVarDescr;
-                DateTime? dEffDate, dMaxDate;
+                DateTime? dtEffDate, dtMaxDate;
                 errmsg = "";
 
                 for (nRow = 0; nRow < adw.RowCount; nRow++)
@@ -3445,19 +3464,23 @@ namespace NZPostOffice.RDSAdmin
                         }
                     }
 
-                    dEffDate = adw.GetItem<VehicleAllowanceRates>(nRow).VarEffectiveDate;
-                    if (dEffDate == null)
+                    dtEffDate = adw.GetItem<VehicleAllowanceRates>(nRow).VarEffectiveDate;
+                    if (dtEffDate == null)
                         errmsg += "    An effective date is required \n";
                     if( ! adw.GetItem<VehicleAllowanceRates>(nRow).IsNew )
                     {
                         nVarId = adw.GetItem<VehicleAllowanceRates>(nRow).VarId;
-                        dMaxDate = MainMdiService.GetVehicleAllowanceMaxDate((int)nVarId);
-                        if( dMaxDate != null && dEffDate <= dMaxDate )
+                        dtMaxDate = MainMdiService.GetVehicleAllowanceMaxDate((int)nVarId);
+                        DateTime? dtToday = DateTime.Today;
+                        if (dtToday > dtMaxDate) dtMaxDate = dtToday;
+                            
+                        if( dtMaxDate != null && dtEffDate <= dtMaxDate )
                             errmsg += "    The effective date must be greater than " 
-                                        + ((DateTime)dMaxDate).ToString("dd/MM/yyyy") + " \n";
+                                        + ((DateTime)dtMaxDate).ToString("dd/MM/yyyy") + " \n";
                     }
 
-                    if (adw.GetItem<VehicleAllowanceRates>(nRow).VarNotes == null)
+                    string sNote = adw.GetItem<VehicleAllowanceRates>(nRow).VarNotes;
+                    if ( sNote == null || sNote == "")
                         errmsg += "    A note is required \n";
 
                     // Check all the calc factors
@@ -3498,6 +3521,8 @@ namespace NZPostOffice.RDSAdmin
                     MessageBox.Show(errmsg, "Validation Error"
                            , MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ll_c = FAILURE;
+                    ((DVehicleAllowanceRates)adw).Grid.ClearSelection();
+                    ((DVehicleAllowanceRates)adw).Grid.CurrentCell.Selected = false;
                     ((DVehicleAllowanceRates)adw).Grid.Rows[nRow].Selected = true;
                 }
             }
