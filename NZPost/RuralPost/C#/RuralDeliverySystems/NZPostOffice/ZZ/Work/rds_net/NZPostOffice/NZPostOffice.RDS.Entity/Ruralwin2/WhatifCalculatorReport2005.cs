@@ -8,11 +8,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruralwin2
 {
-    // TJB Frequencies & Vehicles 1-Mar-2021
-    // Added vt_list
-    //
     // TJB Frequencies & Vehicles Jan-2021
     // Changed sp_GetWhatIfCalc2005 to sp_GetWhatIfCalc2021
+    // [1-Mar-2021] Added vt_list
+    //                      !!! WARNING !!!
+    // -------> This does NOT provide data for the WhatIf report <-------
+    // -------> WhatIfCalculator2005 does                        <-------
     //
     // TJB RPCR_148 May-2020  Repurposed Compute6
     // Added _Compute6 variable
