@@ -362,7 +362,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.cb_terminate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cb_terminate.Location = new System.Drawing.Point(811, 316);
             this.cb_terminate.Name = "cb_terminate";
-            this.cb_terminate.Size = new System.Drawing.Size(115, 23);
+            this.cb_terminate.Size = new System.Drawing.Size(121, 23);
             this.cb_terminate.TabIndex = 0;
             this.cb_terminate.Text = "Terminate allowance";
             this.cb_terminate.UseVisualStyleBackColor = true;
@@ -549,6 +549,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             this.Total_approved.Text = dTotalApproved.ToString("###,###.00");
 
             //of_set_row_readonly();
+
+            idw_fixed_allowance.Refresh();
+            idw_roi_allowance.Refresh();
+            idw_activity_allowance.Refresh();
+            idw_time_allowance.Refresh();
+            idw_distance_allowance.Refresh();
         }
 
         private int of_find_inserted(URdsDw thisDw, int? inAltKey, DateTime? inEffDate)
@@ -1053,71 +1059,104 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             DateTime? paid;
             for (int i = 0; i < dw_fixed_allowance.RowCount; i++)
             {
-                sApproved = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
-                if (!(sApproved == null) && sApproved == "Y")
+                //sApproved = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
+                //if (!(sApproved == null) && sApproved == "Y")
+                //{
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                paid = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                if (paid != null && paid > DateTime.MinValue)
                 {
                     ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                     ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 }
-                //paid = dw_fixed_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
-                //if ( paid != null && paid > DateTime.MinValue)
-                //{
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i,"ca_approved",true);
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
-                //}
-                //else
-                //{
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
-                //    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window; 
-                //}
+                else
+                {
+                    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                    ((DMaintainFixedAllowance)(idw_fixed_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
+                }
 
             }
             for (int i = 0; i < dw_roi_allowance.RowCount; i++)
             {
-                sApproved = dw_roi_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
-                if (!(sApproved == null) && sApproved == "Y")
+                //sApproved = dw_roi_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
+                //if (!(sApproved == null) && sApproved == "Y")
+                //{
+                //    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                //    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                paid = idw_roi_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                if (paid != null && paid > DateTime.MinValue)
                 {
                     ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                     ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 }
+                else
+                {
+                    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                    ((DMaintainROIAllowance)(idw_roi_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
+                }
             }
             for (int i = 0; i < dw_activity_allowance.RowCount; i++)
             {
-                sApproved = dw_activity_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
-                if (!(sApproved == null) && sApproved == "Y")
+                //sApproved = dw_activity_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
+                //if (!(sApproved == null) && sApproved == "Y")
+                //{
+                //    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                //    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                paid = idw_activity_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                if (paid != null && paid > DateTime.MinValue)
                 {
                     ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                     ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 }
+                else
+                {
+                    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                    ((DMaintainActivityAllowance)(idw_activity_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
+                }
             }
             for (int i = 0; i < dw_time_allowance.RowCount; i++)
             {
-                sApproved = dw_time_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
-                if (!(sApproved == null) && sApproved == "Y")
+                //sApproved = dw_time_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
+                //if (!(sApproved == null) && sApproved == "Y")
+                //{
+                //    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                //    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                //}
+                paid = dw_time_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                if (paid != null && paid > DateTime.MinValue)
                 {
-                    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
-                    ((DMaintainTimeAllowance)(idw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                    ((DMaintainTimeAllowance)(dw_time_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                    ((DMaintainTimeAllowance)(dw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                }
+                else
+                {
+                    ((DMaintainTimeAllowance)(dw_time_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                    ((DMaintainTimeAllowance)(dw_time_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
                 }
             }
             for (int i = 0; i < dw_distance_allowance.RowCount; i++)
             {
-                sApproved = dw_distance_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
-                if (!(sApproved == null) && sApproved == "Y")
-                {
-                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
-                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
-                }
-                //paid = dw_distance_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
-                //if (paid != null && paid > DateTime.MinValue)
+                //sApproved = dw_distance_allowance.GetItem<MaintainAllowanceV2>(i).Approved;
+                //if (!(sApproved == null) && sApproved == "Y")
                 //{
                 //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
                 //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
                 //}
-                //else
-                //{
-                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
-                //    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
-                //}
+                paid = dw_distance_allowance.GetItem<MaintainAllowanceV2>(i).PaidToDate;
+                if (paid != null && paid > DateTime.MinValue)
+                {
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", true);
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Control;  // Grey
+                }
+                else
+                {
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).SetGridCellReadonly(i, "ca_approved", false);
+                    ((DMaintainDistanceAllowance)(idw_distance_allowance.DataObject)).BackColor = System.Drawing.SystemColors.Window;
+                }
             }
         }
 
@@ -1718,41 +1757,43 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
              * ***********************/
             nChanged = idw_fixed_allowance.ModifiedCount();
             nDeleted = (idw_fixed_allowance.DataObject).DeletedCount;
-            // We can't rely on the user having focus on the changed row(s), 
-            // so nRow = idw_fixed_allowance.GetRow() isn't useful.
 
             // If there are changed fixed allowance records ...
-            if ((nChanged > 0) && !(isTerminated(idw_fixed_allowance)))
+            if (nChanged > 0)
             {
-                // Check to see if the user is trying to reinstate a terminated allowance
-                for (int nRow = 0; nRow < idw_fixed_allowance.RowCount; nRow++)
+                // We can't rely on the user having focus on the changed row(s), 
+                // so nRow = idw_fixed_allowance.GetRow() isn't useful.
+                int nRow = of_GetDirtyRow(idw_fixed_allowance);
+
+                // If this isn't a terminated allowance ...
+                if (!(isTerminated(idw_fixed_allowance, nRow)))
                 {
-                    if (idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).IsDirty )
-                        if (wasTerminated(idw_fixed_allowance, nRow) )
-                        {
-                            string sAltDescr = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                            MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
-                                            + "please use the INSERT button to create a new allowance."
-                                            , "Warning"
-                                            , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            of_reinstate_record(idw_fixed_allowance, nRow, true, FIXED);
-                            return -1;
-                        }
-                }
+                    // Check to see if the user is trying to reinstate a terminated allowance
+                    if (wasTerminated(idw_fixed_allowance, nRow) )
+                    {
+                        string sAltDescr = idw_fixed_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
+                                       + "please use the INSERT button to create a new allowance."
+                                       , "Warning"
+                                       , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        of_reinstate_record(idw_fixed_allowance, nRow, true, FIXED);
+                        return -1;
+                    }
 
-                // Scan the list for changed records and validate any that are found
-                errcode = of_validate_records(idw_fixed_allowance, FIXED);
-                if (errcode != 0)
-                    return errcode;
+                    // Scan the list for changed records and validate any that are found
+                    errcode = of_validate_records(idw_fixed_allowance, FIXED);
+                    if (errcode != 0)
+                        return errcode;
 
-                // Now, scan the list again and insert any new records required
-                nInserted = of_insert_new_records(dw_fixed_allowance, FIXED);
-                if (nInserted < 0)
-                {
-                    return nInserted;
-                }
-                nSaved += nInserted;
-
+                    // Now, scan the list again and insert any new records required
+                    nInserted = of_insert_new_records(dw_fixed_allowance, FIXED);
+                    if (nInserted < 0)
+                    {
+                        return nInserted;
+                    }
+                    nSaved += nInserted;
+                }                
+                
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_fixed_allowance);
                 if (nUpdated < 0)
@@ -1766,7 +1807,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             // If there are any records to delete, do so
-            else if (nDeleted > 0)
+            if (nDeleted > 0)
             {
                 idw_fixed_allowance.Save();
                 //MessageBox.Show("Fixed allowance record deleted.");
@@ -1778,40 +1819,42 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
              *******************************************************************/
             nChanged = idw_roi_allowance.ModifiedCount();
             nDeleted = (idw_roi_allowance.DataObject).DeletedCount;
-            // We can't rely on the user having focus on the changed row(s), 
-            // so nRow = idw_roi_allowance.GetRow() isn't useful.
 
             // If there are changed ROI allowance records ...
-            if ((nChanged > 0) && !(isTerminated(idw_roi_allowance)))
+            if (nChanged > 0)
             {
-                // Check to see if the user is trying to reinstate a terminated allowance
-                for (int nRow = 0; nRow < idw_roi_allowance.RowCount; nRow++)
-                {
-                    if (idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).IsDirty)
-                        if (wasTerminated(idw_roi_allowance, nRow))
-                        {
-                            string sAltDescr = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                            MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
-                                            + "please use the INSERT button to create a new allowance."
-                                            , "Warning"
-                                            , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            of_reinstate_record(idw_roi_allowance, nRow, true, ROI);
-                            return -1;
-                        }
-                }
+                // We can't rely on the user having focus on the changed row(s), 
+                // so nRow = idw_fixed_allowance.GetRow() isn't useful.
+                int nRow = of_GetDirtyRow(idw_roi_allowance);
 
-                // Scan the list for changed records and validate any that are found
-                errcode = of_validate_records(idw_roi_allowance, ROI);
-                if (errcode != 0)
-                    return errcode;
-
-                // Now, scan the list again and insert new records for any that have changed the net amount
-                nInserted = of_insert_new_records(dw_roi_allowance, ROI);
-                if (nInserted < 0)
+                // If this isn't a terminated allowance ...
+                if (!(isTerminated(idw_roi_allowance, nRow)))
                 {
-                    return nInserted;
+                    // Check to see if the user is trying to reinstate a terminated allowance
+                    if (wasTerminated(idw_roi_allowance, nRow))
+                    {
+                        string sAltDescr = idw_roi_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
+                                        + "please use the INSERT button to create a new allowance."
+                                        , "Warning"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        of_reinstate_record(idw_roi_allowance, nRow, true, ROI);
+                        return -1;
+                    }
+
+                    // Scan the list for changed records and validate any that are found
+                    errcode = of_validate_records(idw_roi_allowance, ROI);
+                    if (errcode != 0)
+                        return errcode;
+
+                    // Now, scan the list again and insert new records for any that have changed the net amount
+                    nInserted = of_insert_new_records(dw_roi_allowance, ROI);
+                    if (nInserted < 0)
+                    {
+                        return nInserted;
+                    }
+                    nSaved += nInserted;
                 }
-                nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_roi_allowance);
@@ -1826,7 +1869,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 }
             }
             // If there are any records to delete, do so
-            else if (nDeleted > 0)
+            if (nDeleted > 0)
             {
                 idw_roi_allowance.Save();
                 //MessageBox.Show("ROI Allowance record deleted");
@@ -1840,37 +1883,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nDeleted = (idw_activity_allowance.DataObject).DeletedCount;
 
             // If there are changed activity allowance records ...
-            if ((nChanged > 0) && !(isTerminated(idw_activity_allowance)))
+            if (nChanged > 0)
             {
-                // Check to see if the user is trying to reinstate a terminated allowance
-                for (int nRow = 0; nRow < idw_activity_allowance.RowCount; nRow++)
-                {
-                    if (idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).IsDirty)
-                        if (wasTerminated(idw_activity_allowance, nRow))
-                        {
-                            string sAltDescr = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                            MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
-                                            + "please use the INSERT button to create a new allowance."
-                                            , "Warning"
-                                            , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            of_reinstate_record(idw_activity_allowance, nRow, true, ACTIVITY);
-                            return -1;
-                        }
-                }
+                // We can't rely on the user having focus on the changed row(s), 
+                // so nRow = idw_fixed_allowance.GetRow() isn't useful.
+                int nRow = of_GetDirtyRow(idw_activity_allowance);
 
-                // Scan the list for changed records and validate any that are found
-                errcode = of_validate_records(idw_activity_allowance, ACTIVITY);
-                if (errcode != 0)
-                    return errcode;
-
-                // Now, scan the list again and insert new records for any that have 
-                // changed the net amount
-                nInserted = of_insert_new_records(dw_activity_allowance, ACTIVITY);
-                if (nInserted< 0)
+                // If this isn't a terminated allowance ...
+                if (!(isTerminated(idw_activity_allowance, nRow)))
                 {
-                    return nInserted;
+                    // Check to see if the user is trying to reinstate a terminated allowance
+                    if (wasTerminated(idw_activity_allowance, nRow))
+                    {
+                        string sAltDescr = idw_activity_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
+                                        + "please use the INSERT button to create a new allowance."
+                                        , "Warning"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        of_reinstate_record(idw_activity_allowance, nRow, true, ACTIVITY);
+                        return -1;
+                    }
+
+                    // Scan the list for changed records and validate any that are found
+                    errcode = of_validate_records(idw_activity_allowance, ACTIVITY);
+                    if (errcode != 0)
+                        return errcode;
+
+                    // Now, scan the list again and insert new records for any that have 
+                    // changed the net amount
+                    nInserted = of_insert_new_records(dw_activity_allowance, ACTIVITY);
+                    if (nInserted < 0)
+                    {
+                        return nInserted;
+                    }
+                    nSaved += nInserted;
                 }
-                nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_activity_allowance);
@@ -1884,8 +1931,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("Saved Activity allowance changes");
                 }
             }
+
             // If there are any records to delete, do so
-            else if (nDeleted > 0)
+            if (nDeleted > 0)
             {
                 idw_activity_allowance.Save();
                 //MessageBox.Show("Activity Allowance record deleted");
@@ -1899,37 +1947,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nDeleted = (idw_time_allowance.DataObject).DeletedCount;
 
             // If there are changed time allowance records ...
-            if ((nChanged > 0) && !(isTerminated(idw_time_allowance)))
+            if (nChanged > 0)
             {
-                // Check to see if the user is trying to reinstate a terminated allowance
-                for (int nRow = 0; nRow < idw_time_allowance.RowCount; nRow++)
-                {
-                    if (idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).IsDirty)
-                        if (wasTerminated(idw_time_allowance, nRow))
-                        {
-                            string sAltDescr = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                            MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
-                                            + "please use the INSERT button to create a new allowance."
-                                            , "Warning"
-                                            , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            of_reinstate_record(idw_time_allowance, nRow, true, TIME);
-                            return -1;
-                        }
-                }
+                // We can't rely on the user having focus on the changed row(s), 
+                // so nRow = idw_fixed_allowance.GetRow() isn't useful.
+                int nRow = of_GetDirtyRow(idw_time_allowance);
 
-                // Scan the list for changed records and validate any that are found
-                errcode = of_validate_records(idw_time_allowance, TIME);
-                if (errcode != 0)
-                    return errcode;
-
-                // Now, scan the list again and insert new records for any that have 
-                // changed the net amount
-                nInserted = of_insert_new_records(idw_time_allowance, TIME);
-                if (nInserted < 0)
+                // If this isn't a terminated allowance ...
+                if (!(isTerminated(idw_time_allowance, nRow)))
                 {
-                    return nInserted;
+                    // Check to see if the user is trying to reinstate a terminated allowance
+                    if (wasTerminated(idw_time_allowance, nRow))
+                    {
+                        string sAltDescr = idw_time_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
+                                        + "please use the INSERT button to create a new allowance."
+                                        , "Warning"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        of_reinstate_record(idw_time_allowance, nRow, true, TIME);
+                        return -1;
+                    }
+
+                    // Scan the list for changed records and validate any that are found
+                    errcode = of_validate_records(idw_time_allowance, TIME);
+                    if (errcode != 0)
+                        return errcode;
+
+                    // Now, scan the list again and insert new records for any that have 
+                    // changed the net amount
+                    nInserted = of_insert_new_records(idw_time_allowance, TIME);
+                    if (nInserted < 0)
+                    {
+                        return nInserted;
+                    }
+                    nSaved += nInserted;
                 }
-                nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_time_allowance);
@@ -1943,8 +1995,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("Saved Time allowance changes");
                 }
             }
+
             // If there are any records to delete, do so
-            else if (nDeleted > 0)
+            if (nDeleted > 0)
             {
                 idw_time_allowance.Save();
                 //MessageBox.Show("Time Allowance record deleted");
@@ -1958,37 +2011,41 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             nDeleted = (idw_distance_allowance.DataObject).DeletedCount;
 
             // If there are changed distance allowance records ...
-            if ((nChanged > 0) && !(isTerminated(idw_distance_allowance)))
+            if (nChanged > 0)
             {
-                // Check to see if the user is trying to reinstate a terminated allowance
-                for (int nRow = 0; nRow < idw_distance_allowance.RowCount; nRow++)
-                {
-                    if (idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).IsDirty)
-                        if (wasTerminated(idw_distance_allowance, nRow))
-                        {
-                            string sAltDescr = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
-                            MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
-                                            + "please use the INSERT button to create a new allowance."
-                                            , "Warning"
-                                            , MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            of_reinstate_record(idw_distance_allowance, nRow, true, DISTANCE);
-                            return -1;
-                        }
-                }
+                // We can't rely on the user having focus on the changed row(s), 
+                // so nRow = idw_fixed_allowance.GetRow() isn't useful.
+                int nRow = of_GetDirtyRow(idw_distance_allowance);
 
-                // Scan the list for changed records and validate any that are found
-                errcode = of_validate_records(idw_distance_allowance, DISTANCE);
-                if (errcode != 0)
-                    return errcode;
-
-                // Now, scan the list again and insert new records for any that have 
-                // changed the net amount
-                nInserted = of_insert_new_records(dw_distance_allowance, DISTANCE);
-                if (nInserted < 0)
+                // If this isn't a terminated allowance ...
+                if (!(isTerminated(idw_distance_allowance, nRow)))
                 {
-                    return nInserted;
+                    // Check to see if the user is trying to reinstate a terminated allowance
+                    if (wasTerminated(idw_distance_allowance, nRow))
+                    {
+                        string sAltDescr = idw_distance_allowance.GetItem<MaintainAllowanceV2>(nRow).AltDescription;
+                        MessageBox.Show("To reinstate the terminated " + sAltDescr + " allowance, \n\n"
+                                        + "please use the INSERT button to create a new allowance."
+                                        , "Warning"
+                                        , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        of_reinstate_record(idw_distance_allowance, nRow, true, DISTANCE);
+                        return -1;
+                    }
+
+                    // Scan the list for changed records and validate any that are found
+                    errcode = of_validate_records(idw_distance_allowance, DISTANCE);
+                    if (errcode != 0)
+                        return errcode;
+
+                    // Now, scan the list again and insert new records for any that have 
+                    // changed the net amount
+                    nInserted = of_insert_new_records(dw_distance_allowance, DISTANCE);
+                    if (nInserted < 0)
+                    {
+                        return nInserted;
+                    }
+                    nSaved += nInserted;
                 }
-                nSaved += nInserted;
 
                 // Now, scan the list again and save any changed records
                 nUpdated = of_save_changes(dw_distance_allowance);
@@ -2002,8 +2059,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("Saved Distance allowance changes");
                 }
             }
+
             // If there are any records to delete, do so
-            else if (nDeleted > 0)
+            if (nDeleted > 0)
             {
                 idw_distance_allowance.Save();
                 //MessageBox.Show("Distance Allowance record deleted");
@@ -2016,14 +2074,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             return 0;
         }
 
-        private bool isTerminated(URdsDw thisDw)
+        private int of_GetDirtyRow(URdsDw thisDw)
         {
-            int nRow = thisDw.GetRow();
+            for (int nRow = 0; nRow < thisDw.RowCount; nRow++)
+            {
+                if (thisDw.GetItem<MaintainAllowanceV2>(nRow).IsDirty)
+                    return nRow;
+            }
+            return -1;
+        }
+
+        private bool isTerminated(URdsDw thisDw, int nRow)
+        {
             Decimal? thisAnnualAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount;
             Decimal? thisNetAmt = thisDw.GetItem<MaintainAllowanceV2>(nRow).NetAmount;
             if ((thisNetAmt == null || thisNetAmt == 0)
-                && (thisAnnualAmt != null && thisAnnualAmt != 0))
+                   && (thisAnnualAmt != null && thisAnnualAmt != 0))
                 return true;
+
             return false;
         }
 
@@ -2488,6 +2556,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             int? varId;
             string rowChanged = "";
 
+            dwName = idw_Current.Name;
+            nRow = idw_Current.DataObject.GetRow();
+            if (dwName == "dw_fixed_allowance") dwType = FIXED;
+            else if (dwName == "dw_roi_allowance") dwType = ROI;
+            else if (dwName == "dw_activity_allowance") dwType = ACTIVITY;
+            else if (dwName == "dw_time_allowance") dwType = TIME;
+            else if (dwName == "dw_distance_allowance") dwType = DISTANCE;
+
             DateTime? dtPaidDate = idw_Current.GetItem<MaintainAllowanceV2>(nRow).PaidToDate;
             if (dtPaidDate == null || dtPaidDate == DateTime.MinValue)
             {
@@ -2496,14 +2572,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 of_reinstate_record(idw_Current, nRow, true, of_getDwType(idw_Current));
                 return;
             }
-
-            dwName = idw_Current.Name;
-            nRow   = idw_Current.DataObject.GetRow();
-            if (dwName == "dw_fixed_allowance") dwType = FIXED;
-            else if (dwName == "dw_roi_allowance") dwType = ROI;
-            else if (dwName == "dw_activity_allowance") dwType = ACTIVITY;
-            else if (dwName == "dw_time_allowance") dwType = TIME;
-            else if (dwName == "dw_distance_allowance") dwType = DISTANCE;
 
             effectiveDate = idw_Current.GetItem<MaintainAllowanceV2>(nRow).EffectiveDate;
             initialEffDate = idw_Current.GetItem<MaintainAllowanceV2>(nRow).InitialEffDate;
@@ -2532,6 +2600,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             dAnnualAmt = (dNetAmt * -1);
             idw_Current.GetItem<MaintainAllowanceV2>(nRow).AnnualAmount = dAnnualAmt;
             idw_Current.GetItem<MaintainAllowanceV2>(nRow).NetAmount = 0;
+            idw_Current.GetItem<MaintainAllowanceV2>(nRow).CaVar1 = 0;
+            idw_Current.GetItem<MaintainAllowanceV2>(nRow).CaDistDay = 0;
+            idw_Current.GetItem<MaintainAllowanceV2>(nRow).CaHrsWk = 0;
             idw_Current.GetItem<MaintainAllowanceV2>(nRow).RowChanged = "M";
 
             DialogResult ans;
