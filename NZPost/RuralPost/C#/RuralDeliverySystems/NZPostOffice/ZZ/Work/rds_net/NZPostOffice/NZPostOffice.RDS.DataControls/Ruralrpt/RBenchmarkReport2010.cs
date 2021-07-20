@@ -355,5 +355,10 @@ namespace NZPostOffice.RDS.DataControls.Ruralrpt
             }
             MessageBox.Show(sMsg, "DataControls.Ruralrpt.RBenchmarkReport2010");
         }
+
+        //public override void Print()
+        //{
+        //    this.viewer.PrintReport();
+        //}
     }
 }
