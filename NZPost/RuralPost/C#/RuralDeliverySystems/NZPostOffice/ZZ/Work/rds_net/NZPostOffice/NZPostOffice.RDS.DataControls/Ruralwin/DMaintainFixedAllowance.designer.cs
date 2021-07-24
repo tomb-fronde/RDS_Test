@@ -39,6 +39,8 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.grid = new Metex.Windows.DataEntityGrid();
+            this.st_title = new System.Windows.Forms.Label();
+            this.st_protect_confirm = new System.Windows.Forms.Label();
             this.alt_key = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_effective_date = new NZPostOffice.Shared.VisualComponents.MaskedTextBoxColumn();
             this.ca_var1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,8 +52,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.ca_doc_description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ca_row_changed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.calc_amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.st_title = new System.Windows.Forms.Label();
-            this.st_protect_confirm = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
@@ -101,6 +101,24 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.grid.Size = new System.Drawing.Size(828, 250);
             this.grid.TabIndex = 0;
             this.grid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.grid_DataError);
+            // 
+            // st_title
+            // 
+            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+            this.st_title.Location = new System.Drawing.Point(0, 0);
+            this.st_title.Name = "st_title";
+            this.st_title.Size = new System.Drawing.Size(638, 14);
+            this.st_title.TabIndex = 1;
+            this.st_title.Text = "Renewal:";
+            // 
+            // st_protect_confirm
+            // 
+            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
+            this.st_protect_confirm.Name = "st_protect_confirm";
+            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
+            this.st_protect_confirm.TabIndex = 2;
+            this.st_protect_confirm.Text = "N";
+            this.st_protect_confirm.Visible = false;
             // 
             // alt_key
             // 
@@ -261,24 +279,6 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
             this.calc_amount.Name = "calc_amount";
             this.calc_amount.Visible = false;
             this.calc_amount.Width = 50;
-            // 
-            // st_title
-            // 
-            this.st_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.st_title.Location = new System.Drawing.Point(0, 0);
-            this.st_title.Name = "st_title";
-            this.st_title.Size = new System.Drawing.Size(638, 14);
-            this.st_title.TabIndex = 1;
-            this.st_title.Text = "Renewal:";
-            // 
-            // st_protect_confirm
-            // 
-            this.st_protect_confirm.Location = new System.Drawing.Point(0, 0);
-            this.st_protect_confirm.Name = "st_protect_confirm";
-            this.st_protect_confirm.Size = new System.Drawing.Size(10, 14);
-            this.st_protect_confirm.TabIndex = 2;
-            this.st_protect_confirm.Text = "N";
-            this.st_protect_confirm.Visible = false;
             // 
             // DMaintainFixedAllowance
             // 
@@ -504,6 +504,7 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
         private DataGridViewTextBoxColumn ca_doc_description;
         private DataGridViewTextBoxColumn ca_row_changed;
         private DataGridViewTextBoxColumn calc_amount;
+
 
 
 

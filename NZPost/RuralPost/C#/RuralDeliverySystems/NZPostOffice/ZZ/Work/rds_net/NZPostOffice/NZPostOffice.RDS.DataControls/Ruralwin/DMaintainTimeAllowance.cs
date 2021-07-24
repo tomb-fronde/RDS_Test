@@ -86,6 +86,12 @@ namespace NZPostOffice.RDS.DataControls.Ruralwin
                     this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
                                            = System.Drawing.SystemColors.Control; // Grey
                 }
+                else
+                {
+                    this.grid.Rows[nRow].Cells["ca_approved"].ReadOnly = false;
+                    this.grid.Rows[nRow].Cells["ca_approved"].Style.BackColor
+                                           = System.Drawing.SystemColors.Window; 
+                }
             }
         }
 
