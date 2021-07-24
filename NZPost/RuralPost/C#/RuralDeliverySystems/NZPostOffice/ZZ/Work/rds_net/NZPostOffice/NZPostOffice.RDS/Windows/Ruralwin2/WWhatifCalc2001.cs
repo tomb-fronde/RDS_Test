@@ -27,6 +27,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         //    to the set of vehicle types in the report
         // Commented out of_cachevtkeys; obsolete (could be deleted)
         // [24-Jul-2021] Changed nAccAmount to AccPerAnnum in report (REDWhatifCalculatorReport2005.rpt)
+        //               (Owner Driver ACC ($ pa) field)
         //
         // TJB  RPCR_148 May-2020
         // Added new section for additional Vehicle rates to REDWhatifCalculatorReport2005.rpt
