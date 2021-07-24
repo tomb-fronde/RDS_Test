@@ -17,7 +17,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // TJB Frequencies & Vehicles  12-Feb-2021
     // Changed verification: when effective date is wrong, don't close
     // [15-Feb-2021] Fixed bug in frequency adjustment calculation
-    //
+    // [24-Jul-2021] Disabled message asking if user wanted to create overrides
+
     // TJB Frequencies & Vehicles  22-Jan-2021
     // Derived from WContractRate2001; renamed WOverrideRates to reflect function
     // Added handling of (potentially) multiple vehicles in a contract
@@ -142,18 +143,22 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             idw_otherrates.Retrieve(new object[] { il_contract, il_sequence, iVehicleNo });
 
             // Check to see if override rates were found for this vehicle
-            ll_row = idw_vehicleoverriderates.GetRow();
-            if (idw_vehicleoverriderates.RowCount == 0
-                || idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(ll_row).VehicleNumber != iVehicleNo)
-            {
-                DialogResult ans;
-                ans = MessageBox.Show("Override rates for " + sVehicleName + " not found. \n"
-                                + "Do you want to create new override rates for this vehicle?"
-                                , this.Text
-                                , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (ans == DialogResult.Cancel || ans == DialogResult.No)
-                    this.Close();
+            DialogResult ans = DialogResult.Yes;
+            // TJB [24-Jul-2021] Disabled this message; if the user doesn't want overrides he/she can cancel
+            //ll_row = idw_vehicleoverriderates.GetRow();
+            //if (idw_vehicleoverriderates.RowCount == 0 
+            //      || idw_vehicleoverriderates.GetItem<VehicleOverrideRates>(ll_row).VehicleNumber != iVehicleNo)
+            //{
+            //    ans = MessageBox.Show("Vehcle override rates for " + sVehicleName + " not found. \n"
+            //                    + "Do you want to create new override rates for this vehicle?"
+            //                    , this.Text
+            //                    , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            //    if (ans == DialogResult.Cancel || ans == DialogResult.No)
+            //        this.Close();
+            //}
 
+            if (idw_vehicleoverriderates.RowCount == 0 && ans == DialogResult.Yes)
+            {
                 create_new_rates = true;
                 
                 //MessageBox.Show("Please select the 'New Override Rates' button");
@@ -890,6 +895,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 ll_nvor_rc = idw_nonvehicleoverriderates.Save();
                 ll_vor_rc = idw_vehicleoverriderates.Save();
+            }
+            else
+            {   // If the user didn't enter anything
+                // fake it that the save is OK
+                ll_nvor_rc = ll_vor_rc = 1;
             }
 
             // TJB Frequencies & Vehicles 14-Feb-2021: change
