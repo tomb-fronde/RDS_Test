@@ -13,7 +13,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
     // TJB Frequencies & Values Dec-2020
     // Changed vehicle dropdown from DDddwContractorVehicles to DDddwContractVehicles
     // (see also DRouteFrequency2)
-    //
+    // 
     // TJB Frequencies 3-Dec-2020
     // Made 'Distance' and Adjusted fields read-only
     //

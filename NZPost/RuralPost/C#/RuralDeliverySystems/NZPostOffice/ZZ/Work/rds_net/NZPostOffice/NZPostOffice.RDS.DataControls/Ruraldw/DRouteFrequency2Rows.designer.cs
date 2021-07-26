@@ -106,9 +106,9 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
             this.rf_nms.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rf_nms.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSource, "RfNms", true));
             this.rf_nms.Location = new System.Drawing.Point(73, 22);
-            this.rf_nms.MaxLength = 4;
+            this.rf_nms.MaxLength = 10;
             this.rf_nms.Name = "rf_nms";
-            this.rf_nms.Size = new System.Drawing.Size(61, 13);
+            this.rf_nms.Size = new System.Drawing.Size(78, 13);
             this.rf_nms.TabIndex = 60;
             // 
             // rf_active
