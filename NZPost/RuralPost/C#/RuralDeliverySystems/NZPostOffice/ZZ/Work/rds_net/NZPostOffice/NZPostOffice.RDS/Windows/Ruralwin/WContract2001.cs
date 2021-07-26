@@ -18,6 +18,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies & Vehicles 26-Jul-2021
+    // Changed how 'Previous Benchmark' determined (undid 11-Feb-2021 change)
+    //
     // TJB Allowances 19-Mar-2021
     // Minor adjustments when opening WMaintainAllowances
     // [5-Apr-2021] Changed open WAddAllowance to open WAddAllowance2021.
@@ -166,6 +169,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public DateTime? id_custlist_updated = null;
         private System.Decimal dcPrevBenchmark = 0;  // TJB 8Feb2021: Added
         private bool isFrequencies2Ready = false;    // TJB 15Feb2021 Added
+        private System.Decimal prevBenchmark = 0;  // TJB Frequencies & Vehicles 
 
         private System.ComponentModel.IContainer components = null;
         public TabControl tab_contract;
@@ -467,11 +471,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 /*
     [11-Feb-2021] Changed method of_bypass_security determining previous benchmark
     - now obtained from the frequency_adjustments table
-
-            // TJB  Frequencies & Vehicles 8-Feb-2021
-            // Get the benchmark now; used to determine if there's a change
-            dcPrevBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "pfc_postopen");
 */
+            // TJB  Frequencies & Vehicles 26-Jul-2021
+            // Get the benchmark now; used to determine if there's a change
+            // [Flip-flop: was this way, then to using RDSDataService.GetPrevBench(), now back]
+            prevBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "pfc_postopen");
+
             BeginInvoke(new delegateInvoke(idw_contractInvoke));
             this.tab_contract_selectionchanging(new object(), new EventArgs());
             this.tab_contract_selectionchanged(new object(), new EventArgs());
@@ -2378,23 +2383,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
         public virtual void dw_route_frequency2_pfc_postupdate()
         {
             System.Decimal dcNewBenchmark = 0;
-/*
+
+            /******************  Debugging  ***************************
             MessageBox.Show("Send message to WRenewal that route_frequency updated"
                           , "Debugging - WContract.of_update_route_frequencies2");
             ContractRFUpdatedEventArgs RFUpdated = new ContractRFUpdatedEventArgs();
             RFUpdated.RfUpdated = true;
             OnContractRFUpdated(RFUpdated);
-*/
+            /******************  Debugging  ***************************/
+
             // TJB  11-Feb-2021 Changed method of determining previous benchmark
             // - now get previous value from frequency_adjustments table
-            RDSDataService obj = RDSDataService.GetPrevBench(il_Contract_no);
-            dcPrevBenchmark = (decimal)obj.decVal;
+            // [26-Jul-2021] Back to getting previous at startup and after signal from WRenewal2001
+            //RDSDataService obj = RDSDataService.GetPrevBench(il_Contract_no);
+            //dcPrevBenchmark = (decimal)obj.decVal;
 
             dcNewBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "dw_route_frequency2_pfc_postupdate");
-            if (dcNewBenchmark != dcPrevBenchmark)
+            //if (dcNewBenchmark != dcPrevBenchmark)
+            if (dcNewBenchmark != prevBenchmark)
             {
                 /*******************  Debugging  ***************************
-                MessageBox.Show("dcPrevBenchmark = " + dcPrevBenchmark.ToString() + "\n"
+                MessageBox.Show("prevBenchmark = " + prevBenchmark.ToString() + "\n"
                                + "dcNewBenchmark = " + dcNewBenchmark.ToString() + "\n"
                                , "Debugging - dw_route_frequency2_pfc_postupdate");
                 /*******************  Debugging  ***************************/
@@ -2404,8 +2413,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 //***********************************
                 string sFAReason = "changed frequency vehicle";
 
+                //int rc = wf_add_frequency_adjustment(il_Contract_no, il_con_active_seq
+                //                                   , dcNewBenchmark, dcPrevBenchmark);
                 int rc = wf_add_frequency_adjustment(il_Contract_no, il_con_active_seq
-                                                   , dcNewBenchmark, dcPrevBenchmark);
+                                                   , dcNewBenchmark, prevBenchmark);
 
                 // If successful update the "previous benchmark" in case there are further benchmark changes
                 if (rc == OK)
@@ -2413,7 +2424,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                     MessageBox.Show("A frequency adjustment for the " + sFAReason + " has been made.\n"
                                      + "Please check and confirm it."
                                    , "WContract2001", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dcPrevBenchmark = dcNewBenchmark;
+                    //dcPrevBenchmark = dcNewBenchmark;
+                    prevBenchmark = dcNewBenchmark;
                 }
             }
         }
@@ -4483,9 +4495,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             
             IsRFUpdated = (_IsRFUpdated == null) ? false : (bool)_IsRFUpdated;
 
-            //MessageBox.Show("Received message from WRenewal \n\n"
-            //              + "IsRFUpdated = " + IsRFUpdated.ToString() + "\n"
-            //              , "Debugging - WContract2001.Renewal_RFTableUpdated");
+            /******************  Debugging  ***************************
+            MessageBox.Show("Received message from WRenewal \n\n"
+                          + "IsRFUpdated = " + IsRFUpdated.ToString() + "\n"
+                          , "Debugging - WContract2001.Renewal_RFTableUpdated");
+            /******************  Debugging  ***************************/
 
             if (IsRFUpdated)
             {
@@ -4493,6 +4507,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
                 int t = nRows;
                 IsRFUpdated = false;
             }
+            // TJB  Frequencies & Vehicles  26-Jul-2021
+            // Get previous benchmark; WRenewal may have changed it (even if RFUpdated says it didn't :)
+            prevBenchmark = wf_getBenchmark(il_Contract_no, il_con_active_seq, "Renewal_RFTableUpdated");
         }
         #endregion
     }
