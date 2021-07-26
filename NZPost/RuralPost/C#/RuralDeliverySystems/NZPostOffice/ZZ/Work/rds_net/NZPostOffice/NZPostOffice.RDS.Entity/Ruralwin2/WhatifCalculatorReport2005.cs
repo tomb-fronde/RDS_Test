@@ -11,9 +11,9 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
     // TJB Frequencies & Vehicles Jan-2021
     // Changed sp_GetWhatIfCalc2005 to sp_GetWhatIfCalc2021
     // [1-Mar-2021] Added vt_list
-    //                      !!! WARNING !!!
-    // -------> This does NOT provide data for the WhatIf report <-------
-    // -------> WhatIfCalculator2005 does                        <-------
+    //                      !!! NOTE !!!
+    // -------> This provides data for the WhatIf Full report                    <-------
+    // -------> WhatIfCalculator2005 provides data for the WhatIf Summary report <-------
     //
     // TJB RPCR_148 May-2020  Repurposed Compute6
     // Added _Compute6 variable
