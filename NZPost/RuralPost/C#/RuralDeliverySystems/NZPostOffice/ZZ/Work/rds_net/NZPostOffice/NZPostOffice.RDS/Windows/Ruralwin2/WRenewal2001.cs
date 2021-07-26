@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies & Vehicles 26-Jul-2021 
+    // Added parameter to Send_RFUpdatedMessage() and always do when closing
+    //
     // TJB Frequencies & Vehicles 24-Jul-2021 
     // Changed method of determining previous benchmark back to getting 
     //    prevBenchmark in pfc_postopen and on return from WOverrideRates
@@ -762,16 +765,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             if (ib_rf_modified)
             {
                 ids_route_frequency.Save();
-                ib_rf_modified = false;
-
-                // TJB Frequencies & Vehicles  17-Feb-2021: Added
-                Send_RFUpdatedMessage();
-                // TJB Frequencies & Vehicles  7-Feb-2021: Added
-                // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-                // RFUpdated.RfUpdated = true;
-                // OnRFTableUpdated(RFUpdated);
-                // MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_preclose");
             }
+            // TJB Frequencies & Vehicles  26-Jul-2021
+            // When closing, Tell WContract whether the route_frequency has changed
+            Send_RFUpdatedMessage(ib_rf_modified);
+            // TJB Frequencies & Vehicles  7-Feb-2021: Added
+            // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
+            // RFUpdated.RfUpdated = true;
+            // OnRFTableUpdated(RFUpdated);
+            // MessageBox.Show("RFUpdated sent to WContract", "Debugging - pfc_preclose");
+            ib_rf_modified = false;
             return base.pfc_preclose();
         }
 
@@ -838,10 +841,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 ids_route_frequency.Save();
                 ib_rf_modified = false;
-                // MessageBox.Show("route_frequency saved (modified)", "Debugging - pfc_save");
 
+                // MessageBox.Show("route_frequency saved (modified)", "Debugging - pfc_save");
+                // TJB Frequencies & Vehicles  26-Jul-2021: Added parameter to Send_RFUpdatedMessage()
                 // TJB Frequencies & Vehicles  17-Feb-2021: Added
-                Send_RFUpdatedMessage();
+                Send_RFUpdatedMessage(true);
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
                 // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 // RFUpdated.RfUpdated = true;
@@ -2899,9 +2903,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ib_rf_modified = false;
                 rf_updated = true;
 
+                // TJB Frequencies & Vehicles  26-Jul-2021: Added parameter to Send_RFUpdatedMessage
                 // TJB Frequencies & Vehicles  17-Feb-2021: Added
                 // Tell WContract201 that we've updated the route_frequencies table
-                Send_RFUpdatedMessage();
+                Send_RFUpdatedMessage(true);
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
                 // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 // RFUpdated.RfUpdated = true;
@@ -2913,9 +2918,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {   // Post the event to tell WContract Frequencies tab to refresh
                 // ... particularly its dropdown list of available vehicles
 
+                // TJB Frequencies & Vehicles  26-Jul-2021: Added parameter to Send_RFUpdatedMessage
                 // TJB Frequencies & Vehicles  17-Feb-2021: Added
                 // Tell WContract201 that we've updated the route_frequencies table
-                Send_RFUpdatedMessage();
+                Send_RFUpdatedMessage(true);
                 // TJB Frequencies & Vehicles  7-Feb-2021: Added
                 // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                 // RFUpdated.RfUpdated = true;
@@ -3425,9 +3431,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     ids_route_frequency.Save();
                     ib_rf_modified = false;
 
+                    // TJB Frequencies & Vehicles  26-Jul-2021: Added parameter to Send_RFUpdatedMessage
                     // TJB Frequencies & Vehicles  17-Feb-2021: Added
                     // Tell WContract201 that we've updated the route_frequencies table
-                    Send_RFUpdatedMessage();
+                    Send_RFUpdatedMessage(true);
                     // TJB Frequencies & Vehicles  7-Feb-2021: Added
                     // StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
                     // RFUpdated.RfUpdated = true;
@@ -3809,11 +3816,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             pfc_preclose();
         }
 
-        public void Send_RFUpdatedMessage()
+        public void Send_RFUpdatedMessage(bool inRFUpdated)
         {
+            // TJB Frequencies & Vehicles 26-Jul-2021: Added parameter
             // TJB Frequencies & Vehicles  7-Feb-2021: Added
             StatusUpdatedEventArgs RFUpdated = new StatusUpdatedEventArgs();
-            RFUpdated.RfUpdated = true;
+            RFUpdated.RfUpdated = inRFUpdated;
             OnRFTableUpdated(RFUpdated);
             //MessageBox.Show("RFUpdated sent to WContract", "Debugging - Send_RFUpdatedMessage");
 
