@@ -11,7 +11,10 @@ namespace NZPostOffice.RDS.Entity.Ruralwin2
     // TJB  Frequencies & Vehicles  Jan-2021
     // Changed sp_GetWhatIfCalc2005 to sp_GetWhatIfCalc2021
     // [1-Mar-2021] Added vt_list
-    // -------> This provides data for the WhatIf report <-------
+    // [26-Jul-2021] Added @totalfloor and updated @variance in REDWhatifCalculator2005.rpt
+    //                      !!! NOTE !!!
+    // -------> This provides data for the WhatIf Summary report                    <-------
+    // -------> WhatIfCalculatorReport2005 provides data for the WhatIf Full report <-------
     //
     // TJB RPCR_148 May-2020 Added
     // Added uniform allowance to opcost
