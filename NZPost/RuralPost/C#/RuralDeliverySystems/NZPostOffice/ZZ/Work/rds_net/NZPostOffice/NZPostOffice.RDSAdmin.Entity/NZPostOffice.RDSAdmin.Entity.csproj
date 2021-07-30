@@ -50,6 +50,9 @@
     <Compile Include="AllowanceType.cs" />
     <Compile Include="ArticalType.cs" />
     <Compile Include="ContractType.cs" />
+    <Compile Include="AllowanceTypeHistory.cs" />
+    <Compile Include="VehicleAllowanceRatesHistory.cs" />
+    <Compile Include="DddwAllowanceCalcType.cs" />
     <Compile Include="HSType.cs" />
     <Compile Include="DddwPaymentComponentTypes.cs" />
     <Compile Include="DddwGroupRegion.cs" />
@@ -60,14 +63,14 @@
     <Compile Include="DddwUsername.cs" />
     <Compile Include="DddwUserRegion.cs" />
     <Compile Include="DwComponentList.cs" />
-    <Compile Include="DwContractTypes.cs">
+    <Compile Include="ContractTypes.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DwFind.cs" />
-    <Compile Include="DwGroupDetails.cs">
+    <Compile Include="GroupDetails.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DwGroupHeader.cs" />
+    <Compile Include="GroupHeader.cs" />
     <Compile Include="DwGroupsAnusersLevel1.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -134,6 +137,7 @@
     <Compile Include="UiIdDetails.cs" />
     <Compile Include="VehicalClass.cs" />
     <Compile Include="VehicalType.cs" />
+    <Compile Include="VehicleAllowanceRates.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
