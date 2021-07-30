@@ -26,7 +26,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationVersion>7.1.13.3</ApplicationVersion>
+    <ApplicationVersion>7.1.17.7</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -81,6 +81,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\WVehicleAllowanceRatesHistory.resx">
+      <DependentUpon>WVehicleAllowanceRatesHistory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\WAllowanceTypeHistory.resx">
+      <DependentUpon>WAllowanceTypeHistory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\WAddSuburb.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WAddSuburb.cs</DependentUpon>
@@ -117,6 +125,12 @@
     <Compile Include="Security.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Structures\StrInfo.cs" />
+    <Compile Include="Windows\WVehicleAllowanceRatesHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\WAllowanceTypeHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Windows\WAddSuburb.cs">
       <SubType>Form</SubType>
     </Compile>
