@@ -91,6 +91,12 @@
     <Compile Include="OdpsCodes\DDddwPtaCode.Designer.cs">
       <DependentUpon>DDddwPtaCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="OdpsCodes\DDddwRenewalgroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwRenewalgroup.designer.cs">
+      <DependentUpon>DDddwRenewalgroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="OdpsCodes\DddwAccountId.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -324,6 +330,24 @@
     </Compile>
     <Compile Include="OdpsPayrun\DwPostTaxDeductions.Designer.cs">
       <DependentUpon>DwPostTaxDeductions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetail.Designer.cs">
+      <DependentUpon>DwIrdPaydayDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetailException.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetailException.Designer.cs">
+      <DependentUpon>DwIrdPaydayDetailException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayHeader.Designer.cs">
+      <DependentUpon>DwIrdPaydayHeader.cs</DependentUpon>
     </Compile>
     <Compile Include="OdpsRep\DwApInterfaceGL07Records.cs">
       <SubType>UserControl</SubType>
@@ -1006,6 +1030,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="OdpsCodes\DDddwRenewalgroup.resx">
+      <DependentUpon>DDddwRenewalgroup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.resx">
       <DependentUpon>DwInvoiceDetailPaymentPiecerates.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1022,6 +1050,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DwPaymentManualAdjustment.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPaymentRunPeriod.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPaymentRunPeriod.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OdpsPayrun\DwPayrunNegativepay.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwPayrunNegativepay.cs</DependentUpon>
@@ -1033,6 +1065,10 @@
     <EmbeddedResource Include="Odps\DwNationalDetail.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwNationalDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Odps\DwPbuCode.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPbuCode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Odps\DwReportCriteria.resx">
       <DependentUpon>DwReportCriteria.cs</DependentUpon>

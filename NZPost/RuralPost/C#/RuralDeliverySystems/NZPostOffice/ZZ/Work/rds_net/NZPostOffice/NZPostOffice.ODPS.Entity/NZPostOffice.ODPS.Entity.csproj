@@ -52,6 +52,7 @@
     <Compile Include="OdpsCodes\DddwPbuCode.cs" />
     <Compile Include="OdpsCodes\DddwPbuCodes.cs" />
     <Compile Include="OdpsCodes\DddwPtaCode.cs" />
+    <Compile Include="OdpsCodes\DddwRenewalgroup.cs" />
     <Compile Include="OdpsInvoice\InvoiceDetailPaymentPiecerates.cs" />
     <Compile Include="OdpsInvoice\InvoiceDetailAllowanceBreakdown.cs" />
     <Compile Include="OdpsInvoice\DddwContracttypes.cs" />
@@ -93,6 +94,9 @@
     <Compile Include="OdpsRep\ApInterfaceHeaderRows.cs" />
     <Compile Include="OdpsRep\AuditLog.cs" />
     <Compile Include="OdpsRep\AuditLogAddresschange.cs" />
+    <Compile Include="OdpsRep\IrdPaydayDetail.cs" />
+    <Compile Include="OdpsRep\IrdPaydayDetailException.cs" />
+    <Compile Include="OdpsRep\IrdPaydayHeader.cs" />
     <Compile Include="OdpsRep\VolumesValueSummary.cs" />
     <Compile Include="OdpsRep\WithholdingTax.cs" />
     <Compile Include="OdpsRep\GlAccrualsAudit.cs" />
