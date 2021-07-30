@@ -52,6 +52,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DVehicleAllowanceRatesHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DVehicleAllowanceRatesHistory.designer.cs">
+      <DependentUpon>DVehicleAllowanceRatesHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAllowanceTypeHistory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DAllowanceTypeHistory.designer.cs">
+      <DependentUpon>DAllowanceTypeHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DVehicleAllowanceRates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DVehicleAllowanceRates.designer.cs">
+      <DependentUpon>DVehicleAllowanceRates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DDddwAllowanceCalcType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DDddwAllowanceCalcType.designer.cs">
+      <DependentUpon>DDddwAllowanceCalcType.cs</DependentUpon>
+    </Compile>
     <Compile Include="DHSType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -359,6 +383,22 @@
       <DependentUpon>DwUserRegion.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DVehicleAllowanceRatesHistory.resx">
+      <DependentUpon>DVehicleAllowanceRatesHistory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAllowanceTypeHistory.resx">
+      <DependentUpon>DAllowanceTypeHistory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DVehicleAllowanceRates.resx">
+      <DependentUpon>DVehicleAllowanceRates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAllowanceType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAllowanceType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DEclContactMapping.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DEclContactMapping.cs</DependentUpon>
