@@ -374,6 +374,9 @@
   <ItemGroup>
     <Content Include="Resources\Logo_slim.jpg" />
     <Content Include="Resources\modify.bmp" />
+    <Content Include="Resources\NZ Post_Logo_Horizontal_Black_RBG.jpg" />
+    <Content Include="Resources\NZ Post_Logo_Horizontal_Red_RBG.jpg" />
+    <Content Include="Resources\update_32.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

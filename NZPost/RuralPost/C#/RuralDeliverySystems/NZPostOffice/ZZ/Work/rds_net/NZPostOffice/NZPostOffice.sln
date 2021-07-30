@@ -64,6 +64,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZPostOffice.ODPS.Entity", "NZPostOffice.ODPS.Entity\NZPostOffice.ODPS.Entity.csproj", "{E7A75501-78B9-4729-A4CF-94B61A87A1F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RDS", "RDS", "{84257D9B-0FA9-4AB2-A16A-89A5D77B6DBB}"
+	ProjectSection(SolutionItems) = preProject
+		NZPostOffice.RDS\Settings.cs = NZPostOffice.RDS\Settings.cs
+	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
 	EndProjectSection
