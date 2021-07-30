@@ -905,6 +905,24 @@
       <DependentUpon>RERCustlistRandomLabel_Lbl.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Ruraldw\DSelectContractVehicle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DSelectContractVehicle.designer.cs">
+      <DependentUpon>DSelectContractVehicle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DDddwContractVehicles.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DDddwContractVehicles.designer.cs">
+      <DependentUpon>DDddwContractVehicles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DDddwContractorVehicles.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DDddwContractorVehicles.designer.cs">
+      <DependentUpon>DDddwContractorVehicles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruraldw\DRegionalDailyArticalCountsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -938,11 +956,11 @@
     <Compile Include="Ruraldw\DContractArticalCountsTest.Designer.cs">
       <DependentUpon>DContractArticalCountsTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ruraldw\DContractFixedAssetsTest.cs">
+    <Compile Include="Ruraldw\DContractFixedAssets.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ruraldw\DContractFixedAssetsTest.Designer.cs">
-      <DependentUpon>DContractFixedAssetsTest.cs</DependentUpon>
+    <Compile Include="Ruraldw\DContractFixedAssets.Designer.cs">
+      <DependentUpon>DContractFixedAssets.cs</DependentUpon>
     </Compile>
     <Compile Include="DropDownList\DDropDownList.cs">
       <SubType>UserControl</SubType>
@@ -1020,6 +1038,18 @@
     </Compile>
     <Compile Include="Ruraldw\DRenewalArticalCountsTest.Designer.cs">
       <DependentUpon>DRenewalArticalCountsTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DRouteFrequency2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DRouteFrequency2.designer.cs">
+      <DependentUpon>DRouteFrequency2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruraldw\DRouteFrequency2Rows.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruraldw\DRouteFrequency2Rows.designer.cs">
+      <DependentUpon>DRouteFrequency2Rows.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruralmailmerge\DMailmergeCustDownloadData.cs">
       <SubType>UserControl</SubType>
@@ -1828,11 +1858,11 @@
     <Compile Include="Ruraldw\DContractContractor.designer.cs">
       <DependentUpon>DContractContractor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ruraldw\DContractFixedAssets.cs">
+    <Compile Include="Ruraldw\DContractFixedAssetsTest.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ruraldw\DContractFixedAssets.designer.cs">
-      <DependentUpon>DContractFixedAssets.cs</DependentUpon>
+    <Compile Include="Ruraldw\DContractFixedAssetsTest.designer.cs">
+      <DependentUpon>DContractFixedAssetsTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruraldw\DContractListing.cs">
       <SubType>UserControl</SubType>
@@ -2698,6 +2728,12 @@
     <Compile Include="Ruralsec\DUserTest.Designer.cs">
       <DependentUpon>DUserTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ruralwin2\DsRouteFrequency2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin2\DsRouteFrequency2.designer.cs">
+      <DependentUpon>DsRouteFrequency2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ruralwin2\DsFrequencyDistances.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2745,6 +2781,48 @@
     </Compile>
     <Compile Include="Ruraldw\DDailyArticalCounts.Designer.cs">
       <DependentUpon>DDailyArticalCounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DVehicleAllowanceRates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DVehicleAllowanceRates.Designer.cs">
+      <DependentUpon>DVehicleAllowanceRates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainTimeAllowance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainTimeAllowance.designer.cs">
+      <DependentUpon>DMaintainTimeAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainDistanceAllowance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainDistanceAllowance.designer.cs">
+      <DependentUpon>DMaintainDistanceAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainActivityAllowance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainActivityAllowance.designer.cs">
+      <DependentUpon>DMaintainActivityAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainROIAllowance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainROIAllowance.designer.cs">
+      <DependentUpon>DMaintainROIAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainFixedAllowance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DMaintainFixedAllowance.designer.cs">
+      <DependentUpon>DMaintainFixedAllowance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralwin\DContractAllowancesV3.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralwin\DContractAllowancesV3.Designer.cs">
+      <DependentUpon>DContractAllowancesV3.cs</DependentUpon>
     </Compile>
     <Compile Include="Ruralwin\DReassignContract.cs">
       <SubType>UserControl</SubType>
@@ -3265,6 +3343,18 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RERCustlistRandomLabel_Lbl.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractVehicleTest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractVehicleTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DSelectContractVehicle.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DSelectContractVehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DAddFixedAsset.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DAddFixedAsset.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DRegionalDailyArticalCounts.resx">
       <DependentUpon>DRegionalDailyArticalCounts.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3312,13 +3402,13 @@
       <SubType>Designer</SubType>
       <DependentUpon>DContractArticalCountsTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ruraldw\DContractFixedAssets.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>DContractFixedAssets.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractFixedAssetsTest.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DContractFixedAssetsTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DContractFixedAssets.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DContractFixedAssets.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DContractFreightAllocations.resx">
       <SubType>Designer</SubType>
@@ -3436,6 +3526,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DRenewalProcessCriteria.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRenewals.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRenewals.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DReportGenericCriteria.resx">
       <DependentUpon>DReportGenericCriteria.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3451,6 +3545,18 @@
     <EmbeddedResource Include="Ruraldw\DRouteAuditDePrintBlank.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DRouteAuditDePrintBlank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRouteFrequency.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DRouteFrequency.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRouteFrequency2.resx">
+      <DependentUpon>DRouteFrequency2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DRouteFrequency2Rows.resx">
+      <DependentUpon>DRouteFrequency2Rows.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DSearchAddress.resx">
       <SubType>Designer</SubType>
@@ -3471,6 +3577,10 @@
     <EmbeddedResource Include="Ruraldw\DVehicleRates2001.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DVehicleRates2001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruraldw\DwAllPostTaxDeductions.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwAllPostTaxDeductions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralmailmerge\DMailmergeOwnerdriverDownloadSearch.resx">
       <SubType>Designer</SubType>
@@ -3549,6 +3659,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>ROd.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin2\DsRouteFrequency2.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DsRouteFrequency2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin2\DsVehicleOverrideRate.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DsVehicleOverrideRate.cs</DependentUpon>
@@ -3559,6 +3673,34 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ruraldw\DDailyArticalCounts.resx">
       <DependentUpon>DDailyArticalCounts.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DVehicleAllowanceRates.resx">
+      <DependentUpon>DVehicleAllowanceRates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DMaintainTimeAllowance.resx">
+      <DependentUpon>DMaintainTimeAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DMaintainDistanceAllowance.resx">
+      <DependentUpon>DMaintainDistanceAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DMaintainActivityAllowance.resx">
+      <DependentUpon>DMaintainActivityAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DMaintainROIAllowance.resx">
+      <DependentUpon>DMaintainROIAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DMaintainFixedAllowance.resx">
+      <DependentUpon>DMaintainFixedAllowance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralwin\DContractAllowancesV3.resx">
+      <DependentUpon>DContractAllowancesV3.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ruralwin\DDuplicateDrivers.resx">
@@ -3627,6 +3769,7 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="Properties\DataSources\NZPostOffice.RDS.Entity.Ruraldw.QsOutletDetails.datasource" />
+    <None Include="Properties\DataSources\NZPostOffice.RDS.Entity.Ruraldw.RouteFrequency2.datasource" />
     <None Include="Report\EclErrDataset.xsc">
       <DependentUpon>EclErrDataset.xsd</DependentUpon>
     </None>

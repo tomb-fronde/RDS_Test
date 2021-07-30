@@ -48,6 +48,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ruraldw\AddArticalCounts.cs" />
     <Compile Include="Ruraldw\ContractAddressFrequency.cs" />
+    <Compile Include="Ruraldw\DddwVehicleAllowanceRates.cs" />
+    <Compile Include="Ruraldw\DddwAllowanceTypesDistance.cs" />
+    <Compile Include="Ruraldw\DddwAllowanceTypesTime.cs" />
+    <Compile Include="Ruraldw\DddwAllowanceTypesActivity.cs" />
+    <Compile Include="Ruraldw\DddwAllowanceTypesROI.cs" />
+    <Compile Include="Ruraldw\DddwAllowanceTypesFixed.cs" />
+    <Compile Include="Ruraldw\SelectContractVehicle.cs" />
+    <Compile Include="Ruraldw\DddwContractorVehicles.cs" />
+    <Compile Include="Ruraldw\DddwContractVehicles.cs" />
+    <Compile Include="Ruraldw\RouteFrequency2.cs" />
     <Compile Include="Ruraldw\RegionalDailyArticalCounts.cs" />
     <Compile Include="Ruraldw\DailyArticalCounts.cs" />
     <Compile Include="Ruraldw\DddwPieceRateTypes.cs" />
@@ -361,6 +371,10 @@
     <Compile Include="ruralwin\ContractMailtown.cs" />
     <Compile Include="ruralwin\ContractTown.cs" />
     <Compile Include="ruralwin\ContractorDriverHSInfo.cs" />
+    <Compile Include="ruralwin\ContractAllowancesV3.cs" />
+    <Compile Include="ruralwin\ContractAllowanceCalc.cs" />
+    <Compile Include="ruralwin\MaintainAllowanceV2.cs" />
+    <Compile Include="ruralwin\VehicleAllowanceRates.cs" />
     <Compile Include="ruralwin\DuplicateDrivers.cs" />
     <Compile Include="ruralwin\DriverInfo.cs" />
     <Compile Include="ruralwin\DriverHSInfo.cs" />
