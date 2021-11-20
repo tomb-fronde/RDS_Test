@@ -195,7 +195,6 @@
     </Compile>
     <Compile Include="Report\EclErrDataset.cs">
       <DependentUpon>EclErrDataset.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Report\EclErrDataset.Designer.cs">
       <AutoGen>True</AutoGen>
