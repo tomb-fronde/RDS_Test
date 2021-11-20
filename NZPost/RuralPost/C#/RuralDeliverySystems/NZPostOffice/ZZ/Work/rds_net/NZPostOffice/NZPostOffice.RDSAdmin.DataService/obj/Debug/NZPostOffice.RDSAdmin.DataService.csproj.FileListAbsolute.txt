@@ -1,0 +1,10 @@
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\bin\Debug\NZPostOffice.RDSAdmin.DataService.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\bin\Debug\NZPostOffice.RDSAdmin.DataService.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\bin\Debug\Metex.Service.Core.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\bin\Debug\Metex.Service.Core.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.Properties.Resources.resources
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.csproj.GenerateResource.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.csproj.CoreCompileInputs.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.csproj.CopyComplete
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.DataService\obj\Debug\NZPostOffice.RDSAdmin.DataService.pdb

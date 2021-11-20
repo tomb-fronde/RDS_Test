@@ -4,8 +4,10 @@ using System.Text;
 
 namespace NZPostOffice.Shared.Managers
 {
-  
-        public class NCstObjectMsg
+    // TJB Nov 2021  VS2005 to VS2019 migration 
+    // Syntax change in of_clearmsg()
+
+    public class NCstObjectMsg
         {
             public int ii_MaxIndex = 0;
 
@@ -388,13 +390,22 @@ namespace NZPostOffice.Shared.Managers
                 // 	Description:	removes specified array location
                 // 	Arguments:		aiv_Index - array location index
                 //  Returns:			0
-                ((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Object = "";
-                ((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Msg = "";
-                ((ostr_msgsrvc)istr_msgsrvc[aiv_index]).any_Value = "";
+                /* TJB Nov 2021  VS2005 to VS2019 migration  */
+                /* Syntax change                             */
+                //((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Object = "";
+                //((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Msg = "";
+                //((ostr_msgsrvc)istr_msgsrvc[aiv_index]).any_Value = "";
+                //of_cleararray(aiv_index);
+                //((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Remove = "";
+                //((ostr_msgsrvc)istr_msgsrvc[aiv_index]).dbl_Session = 0;
+
+                istr_msgsrvc[aiv_index].s_Object = "";
+                istr_msgsrvc[aiv_index].s_Msg = "";
+                istr_msgsrvc[aiv_index].any_Value = "";
                 of_cleararray(aiv_index);
-                ((ostr_msgsrvc)istr_msgsrvc[aiv_index]).s_Remove = "";
-                ((ostr_msgsrvc)istr_msgsrvc[aiv_index]).dbl_Session = 0;
-                return 0;
+                istr_msgsrvc[aiv_index].s_Remove = "";
+                istr_msgsrvc[aiv_index].dbl_Session = 0;
+            return 0;
             }
         }
 

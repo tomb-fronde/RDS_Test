@@ -1,0 +1,13 @@
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\NZPostOffice.RDSAdmin.Entity.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\NZPostOffice.RDSAdmin.Entity.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\Metex.Service.Core.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\NZPostOffice.Entity.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\NZPostOffice.Entity.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\bin\Debug\Metex.Service.Core.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.csproj.AssemblyReference.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.Properties.Resources.resources
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.csproj.GenerateResource.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.csproj.CoreCompileInputs.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.csproj.CopyComplete
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDSAdmin.Entity\obj\Debug\NZPostOffice.RDSAdmin.Entity.pdb
