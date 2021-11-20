@@ -6,3 +6,4 @@ C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\Z
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.Entity\obj\Debug\NZPostOffice.Entity.csproj.CopyComplete
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.Entity\obj\Debug\NZPostOffice.Entity.dll
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.Entity\obj\Debug\NZPostOffice.Entity.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.Entity\obj\Debug\NZPostOffice.Entity.csproj.AssemblyReference.cache

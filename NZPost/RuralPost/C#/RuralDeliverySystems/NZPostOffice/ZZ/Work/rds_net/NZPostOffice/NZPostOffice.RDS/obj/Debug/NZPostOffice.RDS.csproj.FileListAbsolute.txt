@@ -94,3 +94,4 @@ C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\Z
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDS\bin\Debug\Metex.Win.pdb
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDS\obj\Debug\NZPostOffice.RDS.exe
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDS\obj\Debug\NZPostOffice.RDS.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.RDS\obj\Debug\NZPostOffice.RDS.csproj.CopyComplete

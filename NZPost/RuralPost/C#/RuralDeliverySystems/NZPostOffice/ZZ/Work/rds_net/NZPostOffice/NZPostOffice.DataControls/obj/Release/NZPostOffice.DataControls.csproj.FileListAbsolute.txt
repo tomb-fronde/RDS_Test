@@ -1,0 +1,13 @@
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\NZPostOffice.DataControls.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\NZPostOffice.DataControls.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\Metex.Service.Core.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\Metex.Win.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\NZPostOffice.Entity.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\NZPostOffice.Entity.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\Metex.Service.Core.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\bin\Release\Metex.Win.pdb
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\obj\Release\NZPostOffice.DataControls.csproj.AssemblyReference.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\obj\Release\NZPostOffice.DataControls.csproj.CoreCompileInputs.cache
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\obj\Release\NZPostOffice.DataControls.csproj.CopyComplete
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\obj\Release\NZPostOffice.DataControls.dll
+C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.DataControls\obj\Release\NZPostOffice.DataControls.pdb

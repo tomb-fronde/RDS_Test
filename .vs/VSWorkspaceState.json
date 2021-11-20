@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\NZPost",
+    "\\NZPost\\RuralPost",
+    "\\NZPost\\RuralPost\\C#",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice\\ZZ",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice\\ZZ\\Work",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice\\ZZ\\Work\\rds_net",
+    "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice\\ZZ\\Work\\rds_net\\NZPostOffice"
   ],
-  "SelectedNode": "\\C:\\Source\\Repos\\Tomb-RDS",
+  "SelectedNode": "\\NZPost\\RuralPost\\C#\\RuralDeliverySystems\\NZPostOffice\\ZZ\\Work\\rds_net\\NZPostOffice\\NZPostOffice.sln",
   "PreviewInSolutionExplorer": false
 }
