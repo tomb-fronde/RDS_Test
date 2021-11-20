@@ -1,4 +1,5 @@
-﻿namespace NZPostOffice.RDS.DataControls.Report {
+﻿namespace NZPostOffice.RDS.DataControls.Report
+{
 
 
     partial class EclErrDataset

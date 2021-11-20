@@ -1,0 +1,181 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7A75501-78B9-4729-A4CF-94B61A87A1F1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NZPostOffice.ODPS.Entity</RootNamespace>
+    <AssemblyName>NZPostOffice.ODPS.Entity</AssemblyName>
+    <SccProjectName>"%24/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice", VCMVAAAA</SccProjectName>
+    <SccLocalPath>..\..\..\..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0219;0414;0169;0649;0168</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OdpsCodes\DddwAccountCodes.cs" />
+    <Compile Include="OdpsCodes\DddwAccountId.cs" />
+    <Compile Include="OdpsCodes\DddwContractors.cs" />
+    <Compile Include="OdpsCodes\DddwPaymentComponents.cs" />
+    <Compile Include="OdpsCodes\DddwPaymentComponentType.cs" />
+    <Compile Include="OdpsCodes\DddwPbuCode.cs" />
+    <Compile Include="OdpsCodes\DddwPbuCodes.cs" />
+    <Compile Include="OdpsCodes\DddwPtaCode.cs" />
+    <Compile Include="OdpsCodes\DddwRenewalgroup.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPiecerates.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailAllowanceBreakdown.cs" />
+    <Compile Include="OdpsInvoice\DddwContracttypes.cs" />
+    <Compile Include="OdpsInvoice\DddwRegions.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPayment.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentDed.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPr.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrDetailcp.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrDetailkm.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrDetailpp.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrDetailxp.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrMessage.cs" />
+    <Compile Include="OdpsInvoice\InvoiceDetailPaymentPrTitle.cs" />
+    <Compile Include="OdpsInvoice\InvoiceHeaderOnly.cs" />
+    <Compile Include="OdpsInvoice\InvoiceHeaderPostaddress.cs" />
+    <Compile Include="OdpsInvoice\InvoiceHeaderv5.cs" />
+    <Compile Include="OdpsInvoice\InvoiceSearch.cs" />
+    <Compile Include="OdpsInvoice\InvoiceSearchResults.cs" />
+    <Compile Include="OdpsLib\PTDImport.cs" />
+    <Compile Include="OdpsLib\PassWord.cs" />
+    <Compile Include="OdpsLib\ShellImport.cs" />
+    <Compile Include="OdpsLib\ShellImportBackup.cs" />
+    <Compile Include="OdpsLib\ShellImportProcessed.cs" />
+    <Compile Include="OdpsLib\ShellImportTest.cs" />
+    <Compile Include="OdpsLib\TelecomImport.cs" />
+    <Compile Include="OdpsPayrun\AcceptRejectMainrundetailGrid.cs" />
+    <Compile Include="OdpsPayrun\AcceptRejectMainrunGrid.cs" />
+    <Compile Include="OdpsPayrun\Emergency.cs" />
+    <Compile Include="OdpsPayrun\PaymentComponentGroup.cs" />
+    <Compile Include="OdpsPayrun\PaymentManualAdjustment.cs" />
+    <Compile Include="OdpsPayrun\PaymentRunContractors.cs" />
+    <Compile Include="OdpsPayrun\PaymentRunContractorsRegion.cs" />
+    <Compile Include="OdpsPayrun\PayrunNegativepay.cs" />
+    <Compile Include="OdpsPayrun\PaymentRunPeriod.cs" />
+    <Compile Include="OdpsPayrun\PaymentRunPerioregion.cs" />
+    <Compile Include="OdpsPayrun\PostTaxDeductions.cs" />
+    <Compile Include="OdpsRep\ApInterfaceDetailRows.cs" />
+    <Compile Include="OdpsRep\ApInterfaceGL07Records.cs" />
+    <Compile Include="OdpsRep\ApInterfaceHeaderRows.cs" />
+    <Compile Include="OdpsRep\AuditLog.cs" />
+    <Compile Include="OdpsRep\AuditLogAddresschange.cs" />
+    <Compile Include="OdpsRep\IrdPaydayDetail.cs" />
+    <Compile Include="OdpsRep\IrdPaydayDetailException.cs" />
+    <Compile Include="OdpsRep\IrdPaydayHeader.cs" />
+    <Compile Include="OdpsRep\VolumesValueSummary.cs" />
+    <Compile Include="OdpsRep\WithholdingTax.cs" />
+    <Compile Include="OdpsRep\GlAccrualsAudit.cs" />
+    <Compile Include="OdpsRep\InvoiceHeaderBackup.cs" />
+    <Compile Include="OdpsRep\GlInterfaceForAccruals.cs" />
+    <Compile Include="OdpsRep\Grosspayvariance.cs" />
+    <Compile Include="OdpsRep\Ir348Detail.cs" />
+    <Compile Include="OdpsRep\Ir348DetailException.cs" />
+    <Compile Include="OdpsRep\Ir348Header.cs" />
+    <Compile Include="OdpsRep\Ir66es.cs" />
+    <Compile Include="OdpsRep\Ir66n.cs" />
+    <Compile Include="OdpsRep\Ir68aIr68p.cs" />
+    <Compile Include="OdpsRep\NationalHistoryChanges.cs" />
+    <Compile Include="OdpsRep\Negativepay.cs" />
+    <Compile Include="OdpsRep\Netpayvariance.cs" />
+    <Compile Include="OdpsRep\PaymentComponentType.cs" />
+    <Compile Include="OdpsRep\PaymentSummary.cs" />
+    <Compile Include="OdpsRep\PaymentSummaryCtype.cs" />
+    <Compile Include="OdpsRep\PostTaxAdjustments.cs" />
+    <Compile Include="OdpsRep\PostTaxAdjustmentsRegion.cs" />
+    <Compile Include="OdpsRep\VolumesValue.cs" />
+    <Compile Include="OdpsRep\VolumesValueDetail.cs" />
+    <Compile Include="OdpsRep\GlInterfaceForPayment.cs" />
+    <Compile Include="OdpsRep\InvoiceInterfaceDetail.cs" />
+    <Compile Include="OdpsRep\InvoiceInterfaceHeader.cs" />
+    <Compile Include="OdpsRep\Ir13InterfaceDetail.cs" />
+    <Compile Include="OdpsRep\Ir13InterfaceHeader.cs" />
+    <Compile Include="OdpsRep\UpdatedContractors.cs" />
+    <Compile Include="Odps\AccountCode.cs" />
+    <Compile Include="Odps\DateSearch.cs" />
+    <Compile Include="Odps\National.cs" />
+    <Compile Include="Odps\NationalDetail.cs" />
+    <Compile Include="Odps\NationalDetailDs.cs" />
+    <Compile Include="Odps\OdpsContract.cs" />
+    <Compile Include="Odps\OdpsContractAdjustments.cs" />
+    <Compile Include="Odps\OdpsFrequencyAdjustments.cs" />
+    <Compile Include="Odps\OdpsOwnerdrivercontract.cs" />
+    <Compile Include="Odps\OdpsPiecerateVolumes.cs" />
+    <Compile Include="Odps\PbuCode.cs" />
+    <Compile Include="Odps\PostIrno.cs" />
+    <Compile Include="Odps\ReportCriteria.cs" />
+    <Compile Include="Odps\ReportCriteriaFinancial.cs" />
+    <Compile Include="Odps\Sptest.cs" />
+    <Compile Include="Odps\Sync.cs" />
+    <Compile Include="Odps\Test.cs" />
+    <Compile Include="Odps\UserId.cs" />
+    <Compile Include="Odps\YearlyEarnings.cs" />
+    <Compile Include="Odps\YearSearch.cs" />
+    <Compile Include="Odps\Ir13.cs" />
+    <Compile Include="Odps\Ir13test.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ruralbase\Datadict.cs" />
+    <Compile Include="Ruralbase\Password.cs" />
+    <Compile Include="Ruralbase\PrintOptions.cs" />
+    <Compile Include="Ruralbase\SystemTitle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
+      <Project>{6D5CE23C-C567-4E5D-8245-F383554C6DC6}</Project>
+      <Name>NZPostOffice.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Shared\NZPostOffice.Shared.csproj">
+      <Project>{D9C16BDE-6368-4221-8319-B7AF123357C1}</Project>
+      <Name>NZPostOffice.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagramODPS_DataEntity.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

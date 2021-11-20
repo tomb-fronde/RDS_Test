@@ -1,0 +1,159 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{933136D5-86EB-41F4-BAEF-39AC7CFE24BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NZPostOffice.RDSAdmin.Entity</RootNamespace>
+    <AssemblyName>NZPostOffice.RDSAdmin.Entity</AssemblyName>
+    <SccProjectName>"%24/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice", VCMVAAAA</SccProjectName>
+    <SccLocalPath>..\..\..\..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0219;0414;0169;0649;0168</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AllowanceType.cs" />
+    <Compile Include="ArticalType.cs" />
+    <Compile Include="ContractType.cs" />
+    <Compile Include="AllowanceTypeHistory.cs" />
+    <Compile Include="VehicleAllowanceRatesHistory.cs" />
+    <Compile Include="DddwAllowanceCalcType.cs" />
+    <Compile Include="HSType.cs" />
+    <Compile Include="DddwPaymentComponentTypes.cs" />
+    <Compile Include="DddwGroupRegion.cs" />
+    <Compile Include="DddwOutletType.cs" />
+    <Compile Include="DddwPieceRateSuppliers.cs" />
+    <Compile Include="DddwRegion.cs" />
+    <Compile Include="DddwTowncity.cs" />
+    <Compile Include="DddwUsername.cs" />
+    <Compile Include="DddwUserRegion.cs" />
+    <Compile Include="DwComponentList.cs" />
+    <Compile Include="ContractTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DwFind.cs" />
+    <Compile Include="GroupDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GroupHeader.cs" />
+    <Compile Include="DwGroupsAnusersLevel1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DwGroupsAnusersLevel2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DwGroupsAnusersLevel3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DwSearchComponent.cs" />
+    <Compile Include="DwSuburb.cs" />
+    <Compile Include="DwTowncity.cs" />
+    <Compile Include="DwTownDddw.cs" />
+    <Compile Include="DwUserDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DwUserRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EclContractMapping.cs" />
+    <Compile Include="EclQualityMappings.cs" />
+    <Compile Include="FixedAssetType.cs" />
+    <Compile Include="FuelType.cs" />
+    <Compile Include="MailCategory.cs" />
+    <Compile Include="NpadParameters.cs" />
+    <Compile Include="OutletForm.cs" />
+    <Compile Include="OutletList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OutletType.cs" />
+    <Compile Include="PieceRateSupplier.cs" />
+    <Compile Include="PieceRateType.cs" />
+    <Compile Include="PostCodeType.cs" />
+    <Compile Include="Procurement.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Region.cs" />
+    <Compile Include="RenewalGroup.cs" />
+    <Compile Include="RoadSuffix.cs" />
+    <Compile Include="RoadType.cs" />
+    <Compile Include="RouteFreqPointType.cs" />
+    <Compile Include="RouteFreqVerbs.cs" />
+    <Compile Include="StandardFrequency.cs" />
+    <Compile Include="Suburblocality.cs" />
+    <Compile Include="Towncity.cs" />
+    <Compile Include="UiIdDetails.cs" />
+    <Compile Include="VehicalClass.cs" />
+    <Compile Include="VehicalType.cs" />
+    <Compile Include="VehicleAllowanceRates.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
+      <Project>{6D5CE23C-C567-4E5D-8245-F383554C6DC6}</Project>
+      <Name>NZPostOffice.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1232 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DF5A05B5-6413-4708-8818-4E290E99528E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NZPostOffice.ODPS.DataControls</RootNamespace>
+    <AssemblyName>NZPostOffice.ODPS.DataControls</AssemblyName>
+    <SccProjectName>"%24/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice", VCMVAAAA</SccProjectName>
+    <SccLocalPath>..\..\..\..\..</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Microsoft Visual SourceSafe</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0219;0414;0169;0649;0168</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Framework, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Enterprise.InfoStore, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Service.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Metex.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MetexLib\Metex.Win.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_MSIL\System.Web.Services\2.0.0.0__b03f5f7f11d50a3a\System.Web.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OdpsCodes\DDddwAccountCodes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwAccountCodes.Designer.cs">
+      <DependentUpon>DDddwAccountCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwContractors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwContractors.Designer.cs">
+      <DependentUpon>DDddwContractors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPaymentComponents.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPaymentComponents.Designer.cs">
+      <DependentUpon>DDddwPaymentComponents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPbuCodes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPbuCodes.Designer.cs">
+      <DependentUpon>DDddwPbuCodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPtaCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwPtaCode.Designer.cs">
+      <DependentUpon>DDddwPtaCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwRenewalgroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DDddwRenewalgroup.designer.cs">
+      <DependentUpon>DDddwRenewalgroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwAccountId.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwAccountId.Designer.cs">
+      <DependentUpon>DddwAccountId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwPaymentComponentType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwPaymentComponentType.Designer.cs">
+      <DependentUpon>DddwPaymentComponentType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwPbuCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsCodes\DddwPbuCode.Designer.cs">
+      <DependentUpon>DddwPbuCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPiecerates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailAllowanceBreakdown.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailAllowanceBreakdown.Designer.cs">
+      <DependentUpon>DwInvoiceDetailAllowanceBreakdown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DDddwContracttypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DDddwContracttypes.Designer.cs">
+      <DependentUpon>DDddwContracttypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DDddwRegions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DDddwRegions.Designer.cs">
+      <DependentUpon>DDddwRegions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPayment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPayment.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentDed.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentDed.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentDed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPr.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPr.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailcp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailcp.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailcp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailpp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailpp.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailpp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailxp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailxp.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailxp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrMessage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrMessage.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceDetailPaymentPrTitle.Designer.cs">
+      <DependentUpon>DwInvoiceDetailPaymentPrTitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderOnly.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderOnly.Designer.cs">
+      <DependentUpon>DwInvoiceHeaderOnly.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderPostaddress.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderPostaddress.Designer.cs">
+      <DependentUpon>DwInvoiceHeaderPostaddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderv5.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceHeaderv5.Designer.cs">
+      <DependentUpon>DwInvoiceHeaderv5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceSearch.Designer.cs">
+      <DependentUpon>DwInvoiceSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceSearchResults.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsInvoice\DwInvoiceSearchResults.Designer.cs">
+      <DependentUpon>DwInvoiceSearchResults.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DPTDImport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DPTDImport.Designer.cs">
+      <DependentUpon>DPTDImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DPassword.Designer.cs">
+      <DependentUpon>DPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImport.Designer.cs">
+      <DependentUpon>DShellImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportBackup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportBackup.Designer.cs">
+      <DependentUpon>DShellImportBackup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportProcessed.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportProcessed.Designer.cs">
+      <DependentUpon>DShellImportProcessed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportTest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DShellImportTest.Designer.cs">
+      <DependentUpon>DShellImportTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsLib\DTelecomImport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsLib\DTelecomImport.Designer.cs">
+      <DependentUpon>DTelecomImport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwAcceptRejectMainrundetailGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwAcceptRejectMainrundetailGrid.designer.cs">
+      <DependentUpon>DwAcceptRejectMainrundetailGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwAcceptRejectMainrunGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwAcceptRejectMainrunGrid.Designer.cs">
+      <DependentUpon>DwAcceptRejectMainrunGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwEmergency.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwEmergency.Designer.cs">
+      <DependentUpon>DwEmergency.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentComponentGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentComponentGroup.Designer.cs">
+      <DependentUpon>DwPaymentComponentGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentManualAdjustment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentManualAdjustment.Designer.cs">
+      <DependentUpon>DwPaymentManualAdjustment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunContractors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunContractors.Designer.cs">
+      <DependentUpon>DwPaymentRunContractors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunContractorsRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunContractorsRegion.Designer.cs">
+      <DependentUpon>DwPaymentRunContractorsRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPayrunNegativepay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPayrunNegativepay.Designer.cs">
+      <DependentUpon>DwPayrunNegativepay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunPeriod.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunPeriod.Designer.cs">
+      <DependentUpon>DwPaymentRunPeriod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunPeriodRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPaymentRunPeriodRegion.Designer.cs">
+      <DependentUpon>DwPaymentRunPeriodRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPostTaxDeductions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsPayrun\DwPostTaxDeductions.Designer.cs">
+      <DependentUpon>DwPostTaxDeductions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetail.Designer.cs">
+      <DependentUpon>DwIrdPaydayDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetailException.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayDetailException.Designer.cs">
+      <DependentUpon>DwIrdPaydayDetailException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIrdPaydayHeader.Designer.cs">
+      <DependentUpon>DwIrdPaydayHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceGL07Records.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceGL07Records.Designer.cs">
+      <DependentUpon>DwApInterfaceGL07Records.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceDetailRows.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceDetailRows.Designer.cs">
+      <DependentUpon>DwApInterfaceDetailRows.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceHeaderRows.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwApInterfaceHeaderRows.Designer.cs">
+      <DependentUpon>DwApInterfaceHeaderRows.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwAuditLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwAuditLog.designer.cs">
+      <DependentUpon>DwAuditLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwAuditLogAddresschange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwAuditLogAddresschange.designer.cs">
+      <DependentUpon>DwAuditLogAddresschange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlAccrualsAudit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlAccrualsAudit.designer.cs">
+      <DependentUpon>DwGlAccrualsAudit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlInterfaceForAccruals.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlInterfaceForAccruals.Designer.cs">
+      <DependentUpon>DwGlInterfaceForAccruals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlInterfaceForPayment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwGlInterfaceForPayment.Designer.cs">
+      <DependentUpon>DwGlInterfaceForPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwGrosspayvariance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwGrosspayvariance.designer.cs">
+      <DependentUpon>DwGrosspayvariance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceHeaderBackup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceHeaderBackup.Designer.cs">
+      <DependentUpon>DwInvoiceHeaderBackup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceInterfaceDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceInterfaceDetail.Designer.cs">
+      <DependentUpon>DwInvoiceInterfaceDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceInterfaceHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwInvoiceInterfaceHeader.Designer.cs">
+      <DependentUpon>DwInvoiceInterfaceHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr13InterfaceDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr13InterfaceDetail.Designer.cs">
+      <DependentUpon>DwIr13InterfaceDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr13InterfaceHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr13InterfaceHeader.Designer.cs">
+      <DependentUpon>DwIr13InterfaceHeader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348Detail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348Detail.Designer.cs">
+      <DependentUpon>DwIr348Detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348DetailException.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348DetailException.Designer.cs">
+      <DependentUpon>DwIr348DetailException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348Header.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr348Header.Designer.cs">
+      <DependentUpon>DwIr348Header.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr66es.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr66es.designer.cs">
+      <DependentUpon>DwIr66es.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr66n.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr66n.Designer.cs">
+      <DependentUpon>DwIr66n.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr68aIr68p.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwIr68aIr68p.Designer.cs">
+      <DependentUpon>DwIr68aIr68p.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwNationalHistoryChanges.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwNationalHistoryChanges.designer.cs">
+      <DependentUpon>DwNationalHistoryChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwNegativepay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwNegativepay.designer.cs">
+      <DependentUpon>DwNegativepay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwNetpayvariance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwNetpayvariance.designer.cs">
+      <DependentUpon>DwNetpayvariance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentComponentType.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentComponentType.Designer.cs">
+      <DependentUpon>DwPaymentComponentType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentSummary.designer.cs">
+      <DependentUpon>DwPaymentSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentSummaryCtype.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwPaymentSummaryCtype.designer.cs">
+      <DependentUpon>DwPaymentSummaryCtype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwPostTaxAdjustments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwPostTaxAdjustments.designer.cs">
+      <DependentUpon>DwPostTaxAdjustments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwPostTaxAdjustmentsRegion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwPostTaxAdjustmentsRegion.designer.cs">
+      <DependentUpon>DwPostTaxAdjustmentsRegion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwUpdatedContractors.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwUpdatedContractors.Designer.cs">
+      <DependentUpon>DwUpdatedContractors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValue.designer.cs">
+      <DependentUpon>DwVolumesValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValueDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValueDetail.designer.cs">
+      <DependentUpon>DwVolumesValueDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValueSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwVolumesValueSummary.designer.cs">
+      <DependentUpon>DwVolumesValueSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdpsRep\DwWithholdingTax.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OdpsRep\DwWithholdingTax.designer.cs">
+      <DependentUpon>DwWithholdingTax.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwAccountCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwAccountCode.Designer.cs">
+      <DependentUpon>DwAccountCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwDateSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwDateSearch.Designer.cs">
+      <DependentUpon>DwDateSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwNational.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwNational.Designer.cs">
+      <DependentUpon>DwNational.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwNationalDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwNationalDetail.Designer.cs">
+      <DependentUpon>DwNationalDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwNationalDetailDs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwNationalDetailDs.Designer.cs">
+      <DependentUpon>DwNationalDetailDs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwOdpsContract.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwOdpsContract.Designer.cs">
+      <DependentUpon>DwOdpsContract.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwOdpsContractAdjustments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwOdpsContractAdjustments.Designer.cs">
+      <DependentUpon>DwOdpsContractAdjustments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwOdpsFrequencyAdjustments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwOdpsFrequencyAdjustments.Designer.cs">
+      <DependentUpon>DwOdpsFrequencyAdjustments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwOdpsOwnerdrivercontract.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwOdpsOwnerdrivercontract.Designer.cs">
+      <DependentUpon>DwOdpsOwnerdrivercontract.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwOdpsPiecerateVolumes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwOdpsPiecerateVolumes.Designer.cs">
+      <DependentUpon>DwOdpsPiecerateVolumes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwPbuCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwPbuCode.Designer.cs">
+      <DependentUpon>DwPbuCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwPostIrdNo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwPostIrdNo.Designer.cs">
+      <DependentUpon>DwPostIrdNo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwReportCriteria.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwReportCriteria.Designer.cs">
+      <DependentUpon>DwReportCriteria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwReportCriteriaFinancial.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwReportCriteriaFinancial.Designer.cs">
+      <DependentUpon>DwReportCriteriaFinancial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwSptest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwSptest.Designer.cs">
+      <DependentUpon>DwSptest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwSync.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwSync.Designer.cs">
+      <DependentUpon>DwSync.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwTest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwTest.Designer.cs">
+      <DependentUpon>DwTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwUserId.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwUserId.Designer.cs">
+      <DependentUpon>DwUserId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwYearlyEarnings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwYearlyEarnings.Designer.cs">
+      <DependentUpon>DwYearlyEarnings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\DwYearSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\DwYearSearch.Designer.cs">
+      <DependentUpon>DwYearSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\Ir13.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\Ir13.Designer.cs">
+      <DependentUpon>Ir13.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Odps\Ir13test.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Odps\Ir13test.Designer.cs">
+      <DependentUpon>Ir13test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\AuditLogAddresschangeDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\AuditLogDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailAllowanceBreakdown.cs">
+      <DependentUpon>REDwInvoiceDetailAllowanceBreakdown.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailAllowanceBreakdownDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\DatadictDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\GlAccrualsAuditDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\GrossPayVarianceDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentDedDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrDetailcpDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrDetailkmDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrDetailppDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrDetailxpDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrMessageDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceDetailPaymentPrTitleDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceHeaderBackupDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceHeaderOnlyDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceHeaderPostaddressDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\InvoiceHeaderv5DataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\Ir66esDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\Ir66nDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\Ir68aIr68pDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\NationalHistoryChangesDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\NegativepayDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\NetpayvarianceDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PaymentSummaryCtypeDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PaymentSummaryDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PostIrdNoDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PostTaxAdjustmentsDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\PostTaxAdjustmentsRegionDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\REDDatadict.cs">
+      <DependentUpon>REDDatadict.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDInvoiceDetailPaymentDed.cs">
+      <DependentUpon>REDInvoiceDetailPaymentDed.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDInvoiceDetailPaymentPr.cs">
+      <DependentUpon>REDInvoiceDetailPaymentPr.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDInvoiceDetailPaymentPrTitle.cs">
+      <DependentUpon>REDInvoiceDetailPaymentPrTitle.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwAuditLog.cs">
+      <DependentUpon>REDwAuditLog.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwAuditLogAddresschange.cs">
+      <DependentUpon>REDwAuditLogAddresschange.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwGlAccrualsAudit.cs">
+      <DependentUpon>REDwGlAccrualsAudit.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwGrossPayVariance.cs">
+      <DependentUpon>REDwGrossPayVariance.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwIinvoiceHeaderPostaddress.cs">
+      <DependentUpon>REDwIinvoiceHeaderPostaddress.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPayment.cs">
+      <DependentUpon>REDwInvoiceDetailPayment.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPaymentPrDetailcp.cs">
+      <DependentUpon>REDwInvoiceDetailPaymentPrDetailcp.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPaymentPrDetailkm.cs">
+      <DependentUpon>REDwInvoiceDetailPaymentPrDetailkm.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPaymentPrDetailpp.cs">
+      <DependentUpon>REDwInvoiceDetailPaymentPrDetailpp.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPaymentPrDetailxp.cs">
+      <DependentUpon>REDwInvoiceDetailPaymentPrDetailxp.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceDetailPaymentPrMessage.cs">
+      <DependentUpon>REDwInvoiceDetailPaymentPrMessage.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceHeaderBackup.cs">
+      <DependentUpon>REDwInvoiceHeaderBackup.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceHeaderOnly.cs">
+      <DependentUpon>REDwInvoiceHeaderOnly.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwInvoiceHeaderv5.cs">
+      <DependentUpon>REDwInvoiceHeaderv5.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwIr66es.cs">
+      <DependentUpon>REDwIr66es.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwIr66n.cs">
+      <DependentUpon>REDwIr66n.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwNegativepay.cs">
+      <DependentUpon>REDwNegativepay.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwNetpayvariance.cs">
+      <DependentUpon>REDwNetpayvariance.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwPaymentSummary.cs">
+      <DependentUpon>REDwPaymentSummary.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwPaymentSummaryCtype.cs">
+      <DependentUpon>REDwPaymentSummaryCtype.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwPostIrdNo.cs">
+      <DependentUpon>REDwPostIrdNo.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwPostTaxAdjustments.cs">
+      <DependentUpon>REDwPostTaxAdjustments.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwPostTaxAdjustmentsRegion.cs">
+      <DependentUpon>REDwPostTaxAdjustmentsRegion.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwVolumesValue.cs">
+      <DependentUpon>REDwVolumesValue.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwVolumesValueDetail.cs">
+      <DependentUpon>REDwVolumesValueDetail.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwVolumesValueSummary.cs">
+      <DependentUpon>REDwVolumesValueSummary.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwWithholdingTax.cs">
+      <DependentUpon>REDwWithholdingTax.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\REDwYearlyEarnings.cs">
+      <DependentUpon>REDwYearlyEarnings.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Report\ReportDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\VolumesValueDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\VolumesValueDetailDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\VolumesValueSummaryDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\WithholdingTaxDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\YearlyEarningsDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ruralbase\DDatadict.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralbase\DDatadict.designer.cs">
+      <DependentUpon>DDatadict.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralbase\DPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralbase\DPassword.designer.cs">
+      <DependentUpon>DPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralbase\DPrintOptions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralbase\DPrintOptions.designer.cs">
+      <DependentUpon>DPrintOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ruralbase\DSystemTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruralbase\DSystemTitle.designer.cs">
+      <DependentUpon>DSystemTitle.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NZPostOffice.DataControls\NZPostOffice.DataControls.csproj">
+      <Project>{55C392CF-5BD7-40D8-946F-0C21674599FC}</Project>
+      <Name>NZPostOffice.DataControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Entity\NZPostOffice.Entity.csproj">
+      <Project>{6D5CE23C-C567-4E5D-8245-F383554C6DC6}</Project>
+      <Name>NZPostOffice.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.ODPS.Entity\NZPostOffice.ODPS.Entity.csproj">
+      <Project>{E7A75501-78B9-4729-A4CF-94B61A87A1F1}</Project>
+      <Name>NZPostOffice.ODPS.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NZPostOffice.Shared\NZPostOffice.Shared.csproj">
+      <Project>{D9C16BDE-6368-4221-8319-B7AF123357C1}</Project>
+      <Name>NZPostOffice.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OdpsCodes\DDddwRenewalgroup.resx">
+      <DependentUpon>DDddwRenewalgroup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPiecerates.resx">
+      <DependentUpon>DwInvoiceDetailPaymentPiecerates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsInvoice\DwInvoiceDetailPaymentPrDetailkm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwInvoiceDetailPaymentPrDetailkm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsLib\DPTDImport.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DPTDImport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPaymentManualAdjustment.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPaymentManualAdjustment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPaymentRunPeriod.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPaymentRunPeriod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsPayrun\DwPayrunNegativepay.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPayrunNegativepay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsRep\DwApInterfaceGL07Records.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwApInterfaceGL07Records.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Odps\DwNationalDetail.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwNationalDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Odps\DwPbuCode.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DwPbuCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Odps\DwReportCriteria.resx">
+      <DependentUpon>DwReportCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailAllowanceBreakdown.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailAllowanceBreakdown.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDDatadict.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDDatadict.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDInvoiceDetailPaymentDed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDInvoiceDetailPaymentDed.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDInvoiceDetailPaymentPr.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDInvoiceDetailPaymentPr.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDInvoiceDetailPaymentPrTitle.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDInvoiceDetailPaymentPrTitle.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwAuditLog.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwAuditLog.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwAuditLogAddresschange.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwAuditLogAddresschange.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwGlAccrualsAudit.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwGlAccrualsAudit.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwGrossPayVariance.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwGrossPayVariance.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwIinvoiceHeaderPostaddress.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwIinvoiceHeaderPostaddress.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPayment.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPayment.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPaymentPrDetailcp.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPaymentPrDetailcp.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPaymentPrDetailkm.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPaymentPrDetailkm.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPaymentPrDetailpp.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPaymentPrDetailpp.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPaymentPrDetailxp.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPaymentPrDetailxp.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceDetailPaymentPrMessage.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceDetailPaymentPrMessage.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceHeaderBackup.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceHeaderBackup.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceHeaderOnly.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceHeaderOnly.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwInvoiceHeaderv5.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwInvoiceHeaderv5.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwIr66es.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwIr66es.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwIr66n.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwIr66n.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwNegativepay.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwNegativepay.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwNetpayvariance.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwNetpayvariance.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwPaymentSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwPaymentSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwPaymentSummaryCtype.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwPaymentSummaryCtype.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwPostIrdNo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwPostIrdNo.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwPostTaxAdjustments.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwPostTaxAdjustments.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwPostTaxAdjustmentsRegion.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwPostTaxAdjustmentsRegion.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwVolumesValue.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwVolumesValue.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwVolumesValueDetail.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwVolumesValueDetail.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwVolumesValueSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwVolumesValueSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwWithholdingTax.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwWithholdingTax.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\REDwYearlyEarnings.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>REDwYearlyEarnings.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ruralbase\DPrintOptions.resx">
+      <DependentUpon>DPrintOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagramODPS_DataControls.cd">
+      <SubType>
+      </SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
