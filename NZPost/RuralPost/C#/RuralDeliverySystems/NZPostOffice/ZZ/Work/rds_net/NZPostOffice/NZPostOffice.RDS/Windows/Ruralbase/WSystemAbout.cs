@@ -77,7 +77,7 @@ namespace NZPostOffice.RDS.Windows.Ruralbase
                               + string.Format("{0:dd-MMM-yyyy HH:mm}", 
                                            System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetEntryAssembly().Location))
                               + ")";
-            this.st_copyright.Text = "Copyright © 2021, all rights reserved";
+            this.st_copyright.Text = "Copyright©2022, all rights reserved";
         }
 
         #region Form Design
