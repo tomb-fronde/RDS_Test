@@ -9,9 +9,19 @@ using NZPostOffice.Shared.LogicUnits;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
+    // TJB IRD Payday Export  Feb-2022
+    // Added 6 columns:
+    //   hours_paid, gross_prior_adjustments,
+    //   paye_prior_adjustments, slcir_deductions,
+    //   slbor_deductions, share_scheme
+    //
     // TJB  RPCR_128  June-2019: New
     // Adapted from Ir348Detail
-    // Added new fields and stored procedure
+    // Added new fields and stored procedure:
+    //   pay_start_date, pay_end_date, pay_cycle,
+    //   ks_deductions, ks_emp_contrib, esct_deductions,
+    //   tax_credits
+
     //
     // TJB  RPI_004  June-2010
     // Changed decimal? fields to strings so that, when saved to a csv file
@@ -28,35 +38,42 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     [MapInfo("start_date", "_start_date", "")]
     [MapInfo("end_date", "_end_date", "")]
 
-    [MapInfo("gross_earnings", "_gross_earnings", "")]
-    [MapInfo("not_liable", "_not_liable", "")]
-    [MapInfo("lump_sum", "_lump_sum", "")]
-
-    [MapInfo("total_paye", "_total_paye", "")]
-    [MapInfo("cs_deductions", "_cs_deductions", "")]
-    [MapInfo("cs_deductioncode", "_cs_deductioncode", "")]
-    [MapInfo("sl_deductions", "_sl_deductions", "")]
-    [MapInfo("family_assistance", "_family_assistance", "")]
-
-    // TJB  RPCR_128  June-2019: added
     [MapInfo("pay_start_date", "_pay_start_date", "")]
     [MapInfo("pay_end_date", "_pay_end_date", "")]
     [MapInfo("pay_cycle", "_pay_cycle", "")]
+    [MapInfo("hours_paid", "_hours_paid", "")]
+
+    [MapInfo("gross_earnings", "_gross_earnings", "")]
+    [MapInfo("prior_gross_adjustments", "_prior_gross_adjustments", "")]
+    [MapInfo("not_liable", "_not_liable", "")]
+    [MapInfo("lump_sum", "_lump_sum", "")]
+    [MapInfo("total_paye", "_total_paye", "")]
+    [MapInfo("prior_paye_adjustments", "_prior_paye_adjustments", "")]
+
+    [MapInfo("cs_deductions", "_cs_deductions", "")]
+    [MapInfo("cs_deductioncode", "_cs_deductioncode", "")]
+    [MapInfo("sl_deductions", "_sl_deductions", "")]
+    [MapInfo("slcir_deductions", "_slcir_deductions", "")]
+    [MapInfo("slbor_deductions", "_slbor_deductions", "")]
+
     [MapInfo("ks_deductions", "_ks_deductions", "")]
     [MapInfo("ks_emp_contrib", "_ks_emp_contrib", "")]
     [MapInfo("esct_deductions", "_esct_deductions", "")]
     [MapInfo("tax_credits", "_tax_credits", "")]
+    [MapInfo("family_assistance", "_family_assistance", "")]
+    [MapInfo("share_scheme", "_share_scheme", "")]
     //-----------------------------------
 
-    // TJB  RPCR_128  June-2019: added new fields to MapInfoIndex
     [MapInfoIndex(new string[] {
         "hdr","c_ird_no","employee_full_name",
         "tax_code","start_date","end_date",
-        "pay_start_date","pay_end_date","pay_cycle",
-        "gross_earnings","not_liable","lump_sum",
-        "total_paye","cs_deductions","cs_deductioncode", 
-        "sl_deductions","ks_deductions","ks_emp_contrib",
-        "esct_deductions","tax_credits","family_assistance"})]
+        "pay_start_date","pay_end_date","pay_cycle","hours_paid",
+        "gross_earnings","prior_gross_adjustments","not_liable","lump_sum",
+        "total_paye","prior_paye_adjustments",
+        "cs_deductions","cs_deductioncode", 
+        "sl_deductions","slcir_deductions","slbor_deductions",
+        "ks_deductions","ks_emp_contrib","esct_deductions",
+        "tax_credits","family_assistance","share_scheme"})]
 
     [System.Serializable()]
 
@@ -82,7 +99,22 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _end_date;
 
         [DBField()]
+        private string _pay_start_date;
+
+        [DBField()]
+        private string _pay_end_date;
+
+        [DBField()]
+        private string _pay_cycle;
+
+        [DBField()]
+        private string _hours_paid;
+
+        [DBField()]
         private string _gross_earnings;
+
+        [DBField()]
+        private string _prior_gross_adjustments;
 
         [DBField()]
         private string _not_liable;
@@ -94,6 +126,9 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _total_paye;
 
         [DBField()]
+        private string _prior_paye_adjustments;
+
+        [DBField()]
         private string _cs_deductions;
 
         [DBField()]
@@ -103,17 +138,10 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _sl_deductions;
 
         [DBField()]
-        private string _family_assistance;
-
-        // TJB  RPCR_128 June-2019: Added new variables
-        [DBField()]
-        private string _pay_start_date;
+        private string _slcir_deductions;
 
         [DBField()]
-        private string _pay_end_date;
-
-        [DBField()]
-        private string _pay_cycle;
+        private string _slbor_deductions;
 
         [DBField()]
         private string _ks_deductions;
@@ -126,6 +154,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
 
         [DBField()]
         private string _tax_credits;
+
+        [DBField()]
+        private string _family_assistance;
+
+        [DBField()]
+        private string _share_scheme;
         //---------------------------------------
 
         public virtual string Hdr
@@ -236,6 +270,78 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
+        public virtual string PayStartDate
+        {
+            get
+            {
+                CanReadProperty("PayStartDate", true);
+                return _pay_start_date;
+            }
+            set
+            {
+                CanWriteProperty("PayStartDate", true);
+                if (_pay_start_date != value)
+                {
+                    _pay_start_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PayEndDate
+        {
+            get
+            {
+                CanReadProperty("PayEndDate", true);
+                return _pay_end_date;
+            }
+            set
+            {
+                CanWriteProperty("PayEndDate", true);
+                if (_pay_end_date != value)
+                {
+                    _pay_end_date = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PayCycle
+        {
+            get
+            {
+                CanReadProperty("PayCycle", true);
+                return _pay_cycle;
+            }
+            set
+            {
+                CanWriteProperty("PayCycle", true);
+                if (_pay_cycle != value)
+                {
+                    _pay_cycle = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string HoursPaid
+        {
+            get
+            {
+                CanReadProperty("HoursPaid", true);
+                return _hours_paid;
+            }
+            set
+            {
+                CanWriteProperty("HoursPaid", true);
+                if (_hours_paid != value)
+                {
+                    _hours_paid = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual string GrossEarnings
         {
             get
@@ -249,6 +355,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 if (_gross_earnings != value)
                 {
                     _gross_earnings = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PriorGrossAdjustments
+        {
+            get
+            {
+                CanReadProperty("PriorGrossAdjustments", true);
+                return _prior_gross_adjustments;
+            }
+            set
+            {
+                CanWriteProperty("PriorGrossAdjustments", true);
+                if (_prior_gross_adjustments != value)
+                {
+                    _prior_gross_adjustments = value;
                     PropertyHasChanged();
                 }
             }
@@ -308,6 +432,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
+        public virtual string PriorPayeAdjustments
+        {
+            get
+            {
+                CanReadProperty("PriorPayeAdjustments", true);
+                return _prior_paye_adjustments;
+            }
+            set
+            {
+                CanWriteProperty("PriorPayeAdjustments", true);
+                if (_prior_paye_adjustments != value)
+                {
+                    _prior_paye_adjustments = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual string CsDeductions
         {
             get
@@ -362,74 +504,37 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual string FamilyAssistance
+        public virtual string SlcirDeductions
         {
             get
             {
-                CanReadProperty("FamilyAssistance", true);
-                return _family_assistance;
+                CanReadProperty("SlcirDeductions", true);
+                return _slcir_deductions;
             }
             set
             {
-                CanWriteProperty("FamilyAssistance", true);
-                if (_family_assistance != value)
+                CanWriteProperty("SlcirDeductions", true);
+                if (_slcir_deductions != value)
                 {
-                    _family_assistance = value;
+                    _slcir_deductions = value;
                     PropertyHasChanged();
                 }
             }
         }
 
-        // TJB  RPCR_128 June-2019: Added new variables
-        public virtual string PayStartDate
+        public virtual string SlborDeductions
         {
             get
             {
-                CanReadProperty("PayStartDate", true);
-                return _pay_start_date;
+                CanReadProperty("SlborDeductions", true);
+                return _slbor_deductions;
             }
             set
             {
-                CanWriteProperty("PayStartDate", true);
-                if (_pay_start_date != value)
+                CanWriteProperty("SlborDeductions", true);
+                if (_slbor_deductions != value)
                 {
-                    _pay_start_date = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual string PayEndDate
-        {
-            get
-            {
-                CanReadProperty("PayEndDate", true);
-                return _pay_end_date;
-            }
-            set
-            {
-                CanWriteProperty("PayEndDate", true);
-                if (_pay_end_date != value)
-                {
-                    _pay_end_date = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual string PayCycle
-        {
-            get
-            {
-                CanReadProperty("PayCycle", true);
-                return _pay_cycle;
-            }
-            set
-            {
-                CanWriteProperty("PayCycle", true);
-                if (_pay_cycle != value)
-                {
-                    _pay_cycle = value;
+                    _slbor_deductions = value;
                     PropertyHasChanged();
                 }
             }
@@ -506,6 +611,42 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 }
             }
         }
+
+        public virtual string FamilyAssistance
+        {
+            get
+            {
+                CanReadProperty("FamilyAssistance", true);
+                return _family_assistance;
+            }
+            set
+            {
+                CanWriteProperty("FamilyAssistance", true);
+                if (_family_assistance != value)
+                {
+                    _family_assistance = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string ShareScheme
+        {
+            get
+            {
+                CanReadProperty("ShareScheme", true);
+                return _share_scheme;
+            }
+            set
+            {
+                CanWriteProperty("ShareScheme", true);
+                if (_share_scheme != value)
+                {
+                    _share_scheme = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
         //---------------------------------------
 
         protected override object GetIdValue()
@@ -557,18 +698,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                             instance._pay_start_date = GetValueFromReader<string>(dr, 6);
                             instance._pay_end_date = GetValueFromReader<string>(dr, 7);
                             instance._pay_cycle = GetValueFromReader<string>(dr, 8);
-                            instance._gross_earnings = GetValueFromReader<string>(dr, 9);
-                            instance._not_liable = GetValueFromReader<string>(dr, 10);
-                            instance._lump_sum = GetValueFromReader<string>(dr, 11);
-                            instance._total_paye = GetValueFromReader<string>(dr, 12);
-                            instance._cs_deductions = GetValueFromReader<string>(dr, 13);
-                            instance._cs_deductioncode = GetValueFromReader<string>(dr, 14);
-                            instance._sl_deductions = GetValueFromReader<string>(dr, 15);
-                            instance._ks_deductions = GetValueFromReader<string>(dr, 16);
-                            instance._ks_emp_contrib = GetValueFromReader<string>(dr, 17);
-                            instance._esct_deductions = GetValueFromReader<string>(dr, 18);
-                            instance._tax_credits = GetValueFromReader<string>(dr, 19);
-                            instance._family_assistance = GetValueFromReader<string>(dr, 20);
+                            instance._hours_paid = GetValueFromReader<string>(dr, 9);
+                            instance._gross_earnings = GetValueFromReader<string>(dr, 10);
+                            instance._prior_gross_adjustments = GetValueFromReader<string>(dr, 11);
+                            instance._not_liable = GetValueFromReader<string>(dr, 12);
+                            instance._lump_sum = GetValueFromReader<string>(dr, 13);
+                            instance._total_paye = GetValueFromReader<string>(dr, 14);
+                            instance._prior_paye_adjustments = GetValueFromReader<string>(dr, 15);
+                            instance._cs_deductions = GetValueFromReader<string>(dr, 16);
+                            instance._cs_deductioncode = GetValueFromReader<string>(dr, 17);
+                            instance._sl_deductions = GetValueFromReader<string>(dr, 18);
+                            instance._slcir_deductions = GetValueFromReader<string>(dr, 19);
+                            instance._slbor_deductions = GetValueFromReader<string>(dr, 20);
+                            instance._ks_deductions = GetValueFromReader<string>(dr, 21);
+                            instance._ks_emp_contrib = GetValueFromReader<string>(dr, 22);
+                            instance._esct_deductions = GetValueFromReader<string>(dr, 23);
+                            instance._tax_credits = GetValueFromReader<string>(dr, 24);
+                            instance._family_assistance = GetValueFromReader<string>(dr, 25);
+                            instance._share_scheme = GetValueFromReader<string>(dr, 26);
                             instance.MarkOld();
                             instance.StoreInitialValues();
                             _list.Add(instance);

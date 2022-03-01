@@ -10,10 +10,19 @@ using NZPostOffice.ODPS.Entity.OdpsRep;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
+    // TJB IRD Payday Export  Feb-2022
+    // Added 6 columns (in designer):
+    //   hours_paid, gross_prior_adjustments,
+    //   paye_prior_adjustments, slcir_deductions,
+    //   slbor_deductions, share_scheme
+    //
     // TJB  RPCR_128  June-2019: New
     // Derived from DwIr348Detail
     // Disabled Retrieve() and modified RetrieveCore
     // Added new fields in designer
+    //   pay_start_date, pay_end_date, pay_cycle,
+    //   ks_deductions, ks_emp_contrib, esct_deductions,
+    //   tax_credits
 
     public partial class DwIrdPaydayDetail : Metex.Windows.DataUserControl
     {

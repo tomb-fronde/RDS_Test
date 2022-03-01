@@ -1065,6 +1065,12 @@
       <SubType>Designer</SubType>
       <DependentUpon>DwApInterfaceGL07Records.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OdpsRep\DwIrdPaydayDetail.resx">
+      <DependentUpon>DwIrdPaydayDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OdpsRep\DwIrdPaydayHeader.resx">
+      <DependentUpon>DwIrdPaydayHeader.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Odps\DwNationalDetail.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DwNationalDetail.cs</DependentUpon>

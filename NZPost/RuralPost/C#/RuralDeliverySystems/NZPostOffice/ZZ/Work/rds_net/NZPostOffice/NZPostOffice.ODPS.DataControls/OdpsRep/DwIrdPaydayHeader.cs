@@ -10,6 +10,12 @@ using NZPostOffice.ODPS.Entity.OdpsRep;
 
 namespace NZPostOffice.ODPS.DataControls.OdpsRep
 {
+    // TJB IRD Payday Export  Feb-2022
+    // Changes required for updated IRD requirements (in designer)
+    //   Header changed to 'HEI2'; Gross and Paye columns moved
+    //   Gross and paye prior adjustments, SLCIR and SLBOR deductions
+    //   and share scheme columns added.
+    //
     // TJB  RPCR_128  June-2019: New
     // Derived from DwIr348Header, otherwise unchanged
 

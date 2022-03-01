@@ -106,3 +106,5 @@ C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZP
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataControls\obj\Debug\NZPostOffice.ODPS.DataControls.csproj.CopyComplete
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataControls\obj\Debug\NZPostOffice.ODPS.DataControls.dll
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataControls\obj\Debug\NZPostOffice.ODPS.DataControls.pdb
+C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataControls\obj\Debug\NZPostOffice.ODPS.DataControls.OdpsRep.DwIrdPaydayDetail.resources
+C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataControls\obj\Debug\NZPostOffice.ODPS.DataControls.OdpsRep.DwIrdPaydayHeader.resources

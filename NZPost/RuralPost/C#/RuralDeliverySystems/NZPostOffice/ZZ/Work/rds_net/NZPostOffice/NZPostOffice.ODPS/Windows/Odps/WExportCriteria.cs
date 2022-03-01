@@ -20,6 +20,11 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace NZPostOffice.ODPS.Windows.Odps
 {
+    // TJB IRD Payday Export  Feb-2022
+    // Changes required for updated IRD requirements
+    // Fields added to header and detail.  See DwIrdPaydayHeader, DwIrdPaydayDetail.
+    // Add code in export_IRDpayday_interface to insert accumulated added values in header record
+    //
     // TJB  RPCR_128 Bugfix 25July2019
     // Total_paye should be as originally coded but found other bug: 
     // tax credits weren't included.
@@ -786,6 +791,11 @@ namespace NZPostOffice.ODPS.Windows.Odps
 
         public virtual void export_IRDpayday_interface()
         {
+            // TJB IRD Payday Export  Feb-2022
+            // Changes required for updated IRD requirements
+            // Fields added to header and detail.  See DwIrdPaydayHeader, DwIrdPaydayDetail.
+            // Add code here to insert accumulated added values in header record
+
             string ls_Gross = string.Empty;
             string ls_NotLiable = string.Empty;
             string ls_FamilyAssistance = string.Empty;
@@ -795,12 +805,26 @@ namespace NZPostOffice.ODPS.Windows.Odps
             string ls_Name = string.Empty;
             string ls_CleanName = string.Empty;
 
+            // TJB Payday Export changes  Feb-2022 added
+            string ls_PriorGross = string.Empty;
+            string ls_PriorPaye = string.Empty;
+            string ls_Slcir = string.Empty;
+            string ls_Slbor = string.Empty;
+            string ls_ShareScheme = string.Empty;
+
             decimal? i_Gross = 0;
             decimal? i_NotLiable = 0;
             decimal? i_FamilyAssistance = 0;
             decimal? i_StudentLoan = 0;
             decimal? i_ChildSupport = 0;
             decimal? i_PAYE = 0;
+
+            // TJB Payday Export changes  Feb-2022 added
+            decimal? i_PriorGross = 0;
+            decimal? i_PriorPaye = 0;
+            decimal? i_Slcir = 0;
+            decimal? i_Slbor = 0;
+            decimal? i_ShareScheme = 0;
 
             // RPCR_128  TJB  June-2019: added
             string ls_KsDeductions = "";
@@ -855,6 +879,15 @@ namespace NZPostOffice.ODPS.Windows.Odps
                 i_KsEmpContrib += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).KsEmpContrib);
                 i_EsctDeductions += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).EsctDeductions);
                 i_TaxCredits += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).TaxCredits);
+
+                // TJB Payday Export changes  Feb-2022 added
+                i_PriorGross += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).PriorGrossAdjustments);
+                i_PriorPaye += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).PriorPayeAdjustments);
+                i_Slcir += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).SlcirDeductions);
+                i_Slbor += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).SlborDeductions);
+                i_ShareScheme += str2dec(dw_secondary.GetItem<IrdPaydayDetail>(ll_Ctr).ShareScheme);
+
+
                 //--------------------------------
             }
             ls_Gross = i_Gross == null ? "0" : i_Gross.ToString();
@@ -873,6 +906,14 @@ namespace NZPostOffice.ODPS.Windows.Odps
             // TJB  RPCR_128 Bugfix 25July2019: Forgot to add tax credits to total deductions
             i_TotalDeducted = i_PAYE + i_ChildSupport + i_StudentLoan + i_FamilyAssistance + i_KsDeductions + i_EsctDeductions - i_TaxCredits;
             ls_TotalDeducted = i_TotalDeducted == null ? "0" : i_TotalDeducted.ToString();
+
+            // TJB Payday Export changes  Feb-2022 added
+            ls_PriorGross = ls_PriorGross == null ? "0" : ls_PriorGross.ToString();
+            ls_PriorPaye = ls_PriorPaye == null ? "0" : ls_PriorPaye.ToString();
+            ls_Slcir = ls_Slcir == null ? "0" : ls_Slcir.ToString();
+            ls_Slbor = ls_Slbor == null ? "0" : ls_Slbor.ToString();
+            ls_ShareScheme = ls_ShareScheme == null ? "0" : ls_ShareScheme.ToString();
+
             //--------------------------------
 
             if (ls_Gross == "!" || ls_NotLiable == "!" || ls_FamilyAssistance == "!" || ls_StudentLoan == "!" || ls_ChildSupport == "!" || ls_PAYE == "!")
@@ -935,9 +976,32 @@ namespace NZPostOffice.ODPS.Windows.Odps
             {
                 dw_primary.SetValue(0, "esct_deducted", ls_EsctDeductions);
             }
+
+            // TJB Payday Export changes  Feb-2022 added
+            if (ls_PriorGross != "" && StaticFunctions.IsNumber(ls_PriorGross))
+            {
+                dw_primary.SetValue(0, "prior_gross_adjustments", ls_PriorGross);
+            }
+            if (ls_PriorPaye != "" && StaticFunctions.IsNumber(ls_PriorPaye))
+            {
+                dw_primary.SetValue(0, "prior_paye_adjustments", ls_PriorPaye);
+            }
+            if (ls_Slcir != "" && StaticFunctions.IsNumber(ls_Slcir))
+            {
+                dw_primary.SetValue(0, "slcir_deductions", ls_Slcir);
+            }
+            if (ls_Slbor != "" && StaticFunctions.IsNumber(ls_Slbor))
+            {
+                dw_primary.SetValue(0, "slbor_deductions", ls_Slbor);
+            }
+            if (ls_ShareScheme != "" && StaticFunctions.IsNumber(ls_ShareScheme))
+            {
+                dw_primary.SetValue(0, "share_scheme", ls_ShareScheme);
+            }
             // ----------------------------------------
 
-            // TJB RPCR_128 June-2019 Change filename for interface file (containing both header and detail)
+            // TJB RPCR_128 June-2019
+            // Change filename for interface file (containing both header and detail)
             //sInitFileName = "IRDPaydayHeader_" + dt_edate.Month + dt_edate.Year.ToString().Substring(2, 2) + ".csv";
             //if (GetFileSaveName("Save Header to File", sInitFileName, ref sReturnedFIleName, smonth_prefix + dt_sdate.Year, "CSV Files  ( *.CSV)|*.CSV|All Files  ( *.*)|*.*"))
             string paydate, paymonth, payyear;

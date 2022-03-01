@@ -10,29 +10,10 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.DataGridViewTextBoxColumn sl_deductions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn gross_earnings;
         private System.Windows.Forms.DataGridViewTextBoxColumn hdr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn c_ird_no;
-        private System.Windows.Forms.DataGridViewTextBoxColumn lump_sum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn start_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cs_deductioncode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn family_assistance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cs_deductions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tax_code;
-        private System.Windows.Forms.DataGridViewTextBoxColumn total_paye;
-        private System.Windows.Forms.DataGridViewTextBoxColumn employee_full_name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn end_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn not_liable;
 
         // TJB  RPCR_128  June-2019: added
         private System.Windows.Forms.DataGridViewTextBoxColumn pay_start_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pay_end_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn pay_cycle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ks_deductions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ks_emp_contrib;
-        private System.Windows.Forms.DataGridViewTextBoxColumn esct_deductions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tax_credits;
 
         protected override void Dispose(bool disposing)
         {
@@ -47,350 +28,395 @@ namespace NZPostOffice.ODPS.DataControls.OdpsRep
         #region Component Designer generated code
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            grid = new Metex.Windows.DataEntityGrid();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.grid = new Metex.Windows.DataEntityGrid();
+            this.c_ird_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.employee_full_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tax_code = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.start_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.end_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hdrDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIrdNoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.employeeFullNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.taxCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.startDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.endDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.payStartDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.payEndDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.payCycleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hoursPaidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.grossEarningsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priorGrossAdjustmentsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.notLiableDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lumpSumDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalPayeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priorPayeAdjustmentsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.csDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.csDeductioncodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.slDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.slcirDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.slborDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ksDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ksEmpContribDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.esctDeductionsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.taxCreditsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.familyAssistanceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ShareScheme = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sQLCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sQLErrTextDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
             this.SuspendLayout();
-
             // 
             // bindingSource
-            //
+            // 
             this.bindingSource.DataSource = typeof(NZPostOffice.ODPS.Entity.OdpsRep.IrdPaydayDetail);
-
             // 
             // grid
             // 
             this.grid.AllowUserToAddRows = false;
             this.grid.AllowUserToResizeRows = false;
             this.grid.AutoGenerateColumns = false;
-            this.grid.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-            this.grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F);
-            this.grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            this.grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.grid.ColumnHeadersDefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.grid.ColumnHeadersHeight = 33;
-            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            dataGridViewCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle.BackColor = System.Drawing.Color.White;
-            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle;
             this.grid.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid.ColumnHeadersHeight = 33;
+            this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.hdrDataGridViewTextBoxColumn,
+            this.cIrdNoDataGridViewTextBoxColumn,
+            this.employeeFullNameDataGridViewTextBoxColumn,
+            this.taxCodeDataGridViewTextBoxColumn,
+            this.startDateDataGridViewTextBoxColumn,
+            this.endDateDataGridViewTextBoxColumn,
+            this.payStartDateDataGridViewTextBoxColumn,
+            this.payEndDateDataGridViewTextBoxColumn,
+            this.payCycleDataGridViewTextBoxColumn,
+            this.hoursPaidDataGridViewTextBoxColumn,
+            this.grossEarningsDataGridViewTextBoxColumn,
+            this.priorGrossAdjustmentsDataGridViewTextBoxColumn,
+            this.notLiableDataGridViewTextBoxColumn,
+            this.lumpSumDataGridViewTextBoxColumn,
+            this.totalPayeDataGridViewTextBoxColumn,
+            this.priorPayeAdjustmentsDataGridViewTextBoxColumn,
+            this.csDeductionsDataGridViewTextBoxColumn,
+            this.csDeductioncodeDataGridViewTextBoxColumn,
+            this.slDeductionsDataGridViewTextBoxColumn,
+            this.slcirDeductionsDataGridViewTextBoxColumn,
+            this.slborDeductionsDataGridViewTextBoxColumn,
+            this.ksDeductionsDataGridViewTextBoxColumn,
+            this.ksEmpContribDataGridViewTextBoxColumn,
+            this.esctDeductionsDataGridViewTextBoxColumn,
+            this.taxCreditsDataGridViewTextBoxColumn,
+            this.familyAssistanceDataGridViewTextBoxColumn,
+            this.ShareScheme,
+            this.sQLCodeDataGridViewTextBoxColumn,
+            this.sQLErrTextDataGridViewTextBoxColumn});
             this.grid.DataSource = this.bindingSource;
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.grid.Location = new System.Drawing.Point(0, 0);
-            this.grid.MultiSelect = true;
             this.grid.Name = "grid";
             this.grid.RowHeadersVisible = false;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(638, 252);
+            this.grid.Size = new System.Drawing.Size(899, 252);
             this.grid.TabIndex = 0;
-            //
-            // hdr
-            //
-            hdr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hdr.DataPropertyName = "hdr";
-            this.hdr.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.hdr.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.hdr.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.hdr.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.hdr.HeaderText = "hdr";
-            this.hdr.Name = "hdr";
-            this.hdr.ReadOnly = true;
-            this.hdr.Width = 60;
-            this.grid.Columns.Add(hdr);
-            //
+            // 
             // c_ird_no
-            //
-            c_ird_no = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            // 
             this.c_ird_no.DataPropertyName = "CIrdNo";
-            this.c_ird_no.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.c_ird_no.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.c_ird_no.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.c_ird_no.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            this.c_ird_no.DefaultCellStyle = dataGridViewCellStyle2;
             this.c_ird_no.HeaderText = "C Ird No";
             this.c_ird_no.Name = "c_ird_no";
             this.c_ird_no.ReadOnly = true;
             this.c_ird_no.Width = 70;
-            this.grid.Columns.Add(c_ird_no);
-            //
+            // 
             // employee_full_name
-            //
-            employee_full_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            // 
             this.employee_full_name.DataPropertyName = "EmployeeFullName";
-            this.employee_full_name.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.employee_full_name.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.employee_full_name.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.employee_full_name.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            this.employee_full_name.DefaultCellStyle = dataGridViewCellStyle3;
             this.employee_full_name.HeaderText = "Employee Full Name";
             this.employee_full_name.Name = "employee_full_name";
             this.employee_full_name.ReadOnly = true;
             this.employee_full_name.Width = 305;
-            this.grid.Columns.Add(employee_full_name);
-            //
+            // 
             // tax_code
-            //
-            tax_code = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            // 
             this.tax_code.DataPropertyName = "TaxCode";
-            this.tax_code.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.tax_code.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.tax_code.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.tax_code.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
+            this.tax_code.DefaultCellStyle = dataGridViewCellStyle4;
             this.tax_code.HeaderText = "Tax Code";
             this.tax_code.Name = "tax_code";
             this.tax_code.ReadOnly = true;
             this.tax_code.Width = 60;
-            this.grid.Columns.Add(tax_code);
-            //
+            // 
             // start_date
-            //
-            start_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            // 
             this.start_date.DataPropertyName = "StartDate";
-            this.start_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.start_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.start_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.start_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            this.start_date.DefaultCellStyle = dataGridViewCellStyle5;
             this.start_date.HeaderText = "Start Date";
             this.start_date.Name = "start_date";
             this.start_date.ReadOnly = true;
             this.start_date.Width = 88;
-            this.grid.Columns.Add(start_date);
-            //
+            // 
             // end_date
-            //
-            end_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            // 
             this.end_date.DataPropertyName = "EndDate";
-            this.end_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.end_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.end_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.end_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ButtonFace;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial", 8F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            this.end_date.DefaultCellStyle = dataGridViewCellStyle6;
             this.end_date.HeaderText = "End Date";
             this.end_date.Name = "end_date";
             this.end_date.ReadOnly = true;
             this.end_date.Width = 88;
-            this.grid.Columns.Add(end_date);
-            //
-            // pay_start_date
-            //
-            pay_start_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pay_start_date.DataPropertyName = "PayStartDate";
-            this.pay_start_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.pay_start_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.pay_start_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.pay_start_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.pay_start_date.HeaderText = "Pay Start_Date";
-            this.pay_start_date.Name = "pay_Start_date";
-            this.pay_start_date.ReadOnly = true;
-            this.pay_start_date.Width = 60;
-            this.grid.Columns.Add(pay_start_date);
-            //
-            // pay_end_date
-            //
-            pay_end_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pay_end_date.DataPropertyName = "PayEndDate";
-            this.pay_end_date.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.pay_end_date.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.pay_end_date.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.pay_end_date.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.pay_end_date.HeaderText = "Pay End Date";
-            this.pay_end_date.Name = "pay_end_date";
-            this.pay_end_date.ReadOnly = true;
-            this.pay_end_date.Width = 60;
-            this.grid.Columns.Add(pay_end_date);
-            //
-            // pay_cycle
-            //
-            pay_cycle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pay_cycle.DataPropertyName = "PayCycle";
-            this.pay_cycle.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.pay_cycle.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.pay_cycle.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.pay_cycle.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.pay_cycle.HeaderText = "Pay Cycle";
-            this.pay_cycle.Name = "pay_cycle";
-            this.pay_cycle.ReadOnly = true;
-            this.pay_cycle.Width = 60;
-            this.grid.Columns.Add(pay_cycle);
-            //
-            // gross_earnings
-            //
-            gross_earnings = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gross_earnings.DataPropertyName = "GrossEarnings";
-            this.gross_earnings.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.gross_earnings.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.gross_earnings.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.gross_earnings.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.gross_earnings.HeaderText = "Gross Earnings";
-            this.gross_earnings.Name = "gross_earnings";
-            this.gross_earnings.ReadOnly = true;
-            this.gross_earnings.Width = 88;
-            this.grid.Columns.Add(gross_earnings);
-            //
-            // not_liable
-            //
-            not_liable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.not_liable.DataPropertyName = "NotLiable";
-            this.not_liable.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.not_liable.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.not_liable.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.not_liable.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.not_liable.HeaderText = "Not Liable";
-            this.not_liable.Name = "not_liable";
-            this.not_liable.ReadOnly = true;
-            this.not_liable.Width = 88;
-            this.grid.Columns.Add(not_liable);
-            //
-            // lump_sum
-            //
-            lump_sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lump_sum.DataPropertyName = "LumpSum";
-            this.lump_sum.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.lump_sum.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.lump_sum.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.lump_sum.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.lump_sum.HeaderText = "Lump Sum";
-            this.lump_sum.Name = "lump_sum";
-            this.lump_sum.ReadOnly = true;
-            this.lump_sum.Width = 88;
-            this.grid.Columns.Add(lump_sum);
-            //
-            // total_paye
-            //
-            total_paye = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total_paye.DataPropertyName = "TotalPaye";
-            this.total_paye.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.total_paye.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.total_paye.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.total_paye.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.total_paye.HeaderText = "Total Paye";
-            this.total_paye.Name = "total_paye";
-            this.total_paye.ReadOnly = true;
-            this.total_paye.Width = 88;
-            this.grid.Columns.Add(total_paye);
-            //
-            // cs_deductions
-            //
-            cs_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cs_deductions.DataPropertyName = "CsDeductions";
-            this.cs_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.cs_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cs_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.cs_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.cs_deductions.HeaderText = "Cs Deductions";
-            this.cs_deductions.Name = "cs_deductions";
-            this.cs_deductions.ReadOnly = true;
-            this.cs_deductions.Width = 88;
-            this.grid.Columns.Add(cs_deductions);
-            //
-            // cs_deductioncode
-            //
-            cs_deductioncode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cs_deductioncode.DataPropertyName = "CsDeductioncode";
-            this.cs_deductioncode.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cs_deductioncode.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cs_deductioncode.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.cs_deductioncode.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.cs_deductioncode.HeaderText = "Cs Deductioncode";
-            this.cs_deductioncode.Name = "cs_deductioncode";
-            this.cs_deductioncode.ReadOnly = true;
-            this.cs_deductioncode.Width = 769;
-            this.grid.Columns.Add(cs_deductioncode);
-            //
-            // sl_deductions
-            //
-            sl_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sl_deductions.DataPropertyName = "SlDeductions";
-            this.sl_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.sl_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.sl_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.sl_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.sl_deductions.HeaderText = "Sl Deductions";
-            this.sl_deductions.Name = "sl_deductions";
-            this.sl_deductions.ReadOnly = true;
-            this.sl_deductions.Width = 88;
-            this.grid.Columns.Add(sl_deductions);
-
-            //
-            // ks_deductions
-            //
-            ks_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ks_deductions.DataPropertyName = "KsDeductions";
-            this.ks_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ks_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ks_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.ks_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.ks_deductions.HeaderText = "KS Deductions";
-            this.ks_deductions.Name = "ks_deductions";
-            this.ks_deductions.ReadOnly = true;
-            this.ks_deductions.Width = 60;
-            this.grid.Columns.Add(ks_deductions);
-            //
-            // ks_emp_contrib
-            //
-            ks_emp_contrib = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ks_emp_contrib.DataPropertyName = "KsEmpContrib";
-            this.ks_emp_contrib.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ks_emp_contrib.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ks_emp_contrib.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.ks_emp_contrib.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.ks_emp_contrib.HeaderText = "KS Emp Contrib";
-            this.ks_emp_contrib.Name = "ks_emp_contrib";
-            this.ks_emp_contrib.ReadOnly = true;
-            this.ks_emp_contrib.Width = 60;
-            this.grid.Columns.Add(ks_emp_contrib);
-            //
-            // esct_deductions
-            //
-            esct_deductions = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.esct_deductions.DataPropertyName = "EsctDeductions";
-            this.esct_deductions.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.esct_deductions.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.esct_deductions.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.esct_deductions.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.esct_deductions.HeaderText = "ESCT Deductions";
-            this.esct_deductions.Name = "esct_deductions";
-            this.esct_deductions.ReadOnly = true;
-            this.esct_deductions.Width = 60;
-            this.grid.Columns.Add(esct_deductions);
-            //
-            // tax_credits
-            //
-            tax_credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tax_credits.DataPropertyName = "TaxCredits";
-            this.tax_credits.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.tax_credits.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.tax_credits.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.tax_credits.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.tax_credits.HeaderText = "Tax Credits";
-            this.tax_credits.Name = "tax_credits";
-            this.tax_credits.ReadOnly = true;
-            this.tax_credits.Width = 60;
-            this.grid.Columns.Add(tax_credits);
-            //
-            // family_assistance
-            //
-            family_assistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.family_assistance.DataPropertyName = "FamilyAssistance";
-            this.family_assistance.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.family_assistance.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.family_assistance.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.family_assistance.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8F);
-            this.family_assistance.HeaderText = "Family Assistance";
-            this.family_assistance.Name = "family_assistance";
-            this.family_assistance.ReadOnly = true;
-            this.family_assistance.Width = 100;
-            this.grid.Columns.Add(family_assistance);
-
+            // 
+            // hdrDataGridViewTextBoxColumn
+            // 
+            this.hdrDataGridViewTextBoxColumn.DataPropertyName = "Hdr";
+            this.hdrDataGridViewTextBoxColumn.HeaderText = "Hdr";
+            this.hdrDataGridViewTextBoxColumn.Name = "hdrDataGridViewTextBoxColumn";
+            // 
+            // cIrdNoDataGridViewTextBoxColumn
+            // 
+            this.cIrdNoDataGridViewTextBoxColumn.DataPropertyName = "CIrdNo";
+            this.cIrdNoDataGridViewTextBoxColumn.HeaderText = "CIrdNo";
+            this.cIrdNoDataGridViewTextBoxColumn.Name = "cIrdNoDataGridViewTextBoxColumn";
+            // 
+            // employeeFullNameDataGridViewTextBoxColumn
+            // 
+            this.employeeFullNameDataGridViewTextBoxColumn.DataPropertyName = "EmployeeFullName";
+            this.employeeFullNameDataGridViewTextBoxColumn.HeaderText = "EmployeeFullName";
+            this.employeeFullNameDataGridViewTextBoxColumn.Name = "employeeFullNameDataGridViewTextBoxColumn";
+            // 
+            // taxCodeDataGridViewTextBoxColumn
+            // 
+            this.taxCodeDataGridViewTextBoxColumn.DataPropertyName = "TaxCode";
+            this.taxCodeDataGridViewTextBoxColumn.HeaderText = "TaxCode";
+            this.taxCodeDataGridViewTextBoxColumn.Name = "taxCodeDataGridViewTextBoxColumn";
+            // 
+            // startDateDataGridViewTextBoxColumn
+            // 
+            this.startDateDataGridViewTextBoxColumn.DataPropertyName = "StartDate";
+            this.startDateDataGridViewTextBoxColumn.HeaderText = "StartDate";
+            this.startDateDataGridViewTextBoxColumn.Name = "startDateDataGridViewTextBoxColumn";
+            // 
+            // endDateDataGridViewTextBoxColumn
+            // 
+            this.endDateDataGridViewTextBoxColumn.DataPropertyName = "EndDate";
+            this.endDateDataGridViewTextBoxColumn.HeaderText = "EndDate";
+            this.endDateDataGridViewTextBoxColumn.Name = "endDateDataGridViewTextBoxColumn";
+            // 
+            // payStartDateDataGridViewTextBoxColumn
+            // 
+            this.payStartDateDataGridViewTextBoxColumn.DataPropertyName = "PayStartDate";
+            this.payStartDateDataGridViewTextBoxColumn.HeaderText = "PayStartDate";
+            this.payStartDateDataGridViewTextBoxColumn.Name = "payStartDateDataGridViewTextBoxColumn";
+            // 
+            // payEndDateDataGridViewTextBoxColumn
+            // 
+            this.payEndDateDataGridViewTextBoxColumn.DataPropertyName = "PayEndDate";
+            this.payEndDateDataGridViewTextBoxColumn.HeaderText = "PayEndDate";
+            this.payEndDateDataGridViewTextBoxColumn.Name = "payEndDateDataGridViewTextBoxColumn";
+            // 
+            // payCycleDataGridViewTextBoxColumn
+            // 
+            this.payCycleDataGridViewTextBoxColumn.DataPropertyName = "PayCycle";
+            this.payCycleDataGridViewTextBoxColumn.HeaderText = "PayCycle";
+            this.payCycleDataGridViewTextBoxColumn.Name = "payCycleDataGridViewTextBoxColumn";
+            // 
+            // hoursPaidDataGridViewTextBoxColumn
+            // 
+            this.hoursPaidDataGridViewTextBoxColumn.DataPropertyName = "HoursPaid";
+            this.hoursPaidDataGridViewTextBoxColumn.HeaderText = "HoursPaid";
+            this.hoursPaidDataGridViewTextBoxColumn.Name = "hoursPaidDataGridViewTextBoxColumn";
+            // 
+            // grossEarningsDataGridViewTextBoxColumn
+            // 
+            this.grossEarningsDataGridViewTextBoxColumn.DataPropertyName = "GrossEarnings";
+            this.grossEarningsDataGridViewTextBoxColumn.HeaderText = "GrossEarnings";
+            this.grossEarningsDataGridViewTextBoxColumn.Name = "grossEarningsDataGridViewTextBoxColumn";
+            // 
+            // priorGrossAdjustmentsDataGridViewTextBoxColumn
+            // 
+            this.priorGrossAdjustmentsDataGridViewTextBoxColumn.DataPropertyName = "PriorGrossAdjustments";
+            this.priorGrossAdjustmentsDataGridViewTextBoxColumn.HeaderText = "PriorGrossAdjustments";
+            this.priorGrossAdjustmentsDataGridViewTextBoxColumn.Name = "priorGrossAdjustmentsDataGridViewTextBoxColumn";
+            // 
+            // notLiableDataGridViewTextBoxColumn
+            // 
+            this.notLiableDataGridViewTextBoxColumn.DataPropertyName = "NotLiable";
+            this.notLiableDataGridViewTextBoxColumn.HeaderText = "NotLiable";
+            this.notLiableDataGridViewTextBoxColumn.Name = "notLiableDataGridViewTextBoxColumn";
+            // 
+            // lumpSumDataGridViewTextBoxColumn
+            // 
+            this.lumpSumDataGridViewTextBoxColumn.DataPropertyName = "LumpSum";
+            this.lumpSumDataGridViewTextBoxColumn.HeaderText = "LumpSum";
+            this.lumpSumDataGridViewTextBoxColumn.Name = "lumpSumDataGridViewTextBoxColumn";
+            // 
+            // totalPayeDataGridViewTextBoxColumn
+            // 
+            this.totalPayeDataGridViewTextBoxColumn.DataPropertyName = "TotalPaye";
+            this.totalPayeDataGridViewTextBoxColumn.HeaderText = "TotalPaye";
+            this.totalPayeDataGridViewTextBoxColumn.Name = "totalPayeDataGridViewTextBoxColumn";
+            // 
+            // priorPayeAdjustmentsDataGridViewTextBoxColumn
+            // 
+            this.priorPayeAdjustmentsDataGridViewTextBoxColumn.DataPropertyName = "PriorPayeAdjustments";
+            this.priorPayeAdjustmentsDataGridViewTextBoxColumn.HeaderText = "PriorPayeAdjustments";
+            this.priorPayeAdjustmentsDataGridViewTextBoxColumn.Name = "priorPayeAdjustmentsDataGridViewTextBoxColumn";
+            // 
+            // csDeductionsDataGridViewTextBoxColumn
+            // 
+            this.csDeductionsDataGridViewTextBoxColumn.DataPropertyName = "CsDeductions";
+            this.csDeductionsDataGridViewTextBoxColumn.HeaderText = "CsDeductions";
+            this.csDeductionsDataGridViewTextBoxColumn.Name = "csDeductionsDataGridViewTextBoxColumn";
+            // 
+            // csDeductioncodeDataGridViewTextBoxColumn
+            // 
+            this.csDeductioncodeDataGridViewTextBoxColumn.DataPropertyName = "CsDeductioncode";
+            this.csDeductioncodeDataGridViewTextBoxColumn.HeaderText = "CsDeductioncode";
+            this.csDeductioncodeDataGridViewTextBoxColumn.Name = "csDeductioncodeDataGridViewTextBoxColumn";
+            // 
+            // slDeductionsDataGridViewTextBoxColumn
+            // 
+            this.slDeductionsDataGridViewTextBoxColumn.DataPropertyName = "SlDeductions";
+            this.slDeductionsDataGridViewTextBoxColumn.HeaderText = "SlDeductions";
+            this.slDeductionsDataGridViewTextBoxColumn.Name = "slDeductionsDataGridViewTextBoxColumn";
+            // 
+            // slcirDeductionsDataGridViewTextBoxColumn
+            // 
+            this.slcirDeductionsDataGridViewTextBoxColumn.DataPropertyName = "SlcirDeductions";
+            this.slcirDeductionsDataGridViewTextBoxColumn.HeaderText = "SlcirDeductions";
+            this.slcirDeductionsDataGridViewTextBoxColumn.Name = "slcirDeductionsDataGridViewTextBoxColumn";
+            // 
+            // slborDeductionsDataGridViewTextBoxColumn
+            // 
+            this.slborDeductionsDataGridViewTextBoxColumn.DataPropertyName = "SlborDeductions";
+            this.slborDeductionsDataGridViewTextBoxColumn.HeaderText = "SlborDeductions";
+            this.slborDeductionsDataGridViewTextBoxColumn.Name = "slborDeductionsDataGridViewTextBoxColumn";
+            // 
+            // ksDeductionsDataGridViewTextBoxColumn
+            // 
+            this.ksDeductionsDataGridViewTextBoxColumn.DataPropertyName = "KsDeductions";
+            this.ksDeductionsDataGridViewTextBoxColumn.HeaderText = "KsDeductions";
+            this.ksDeductionsDataGridViewTextBoxColumn.Name = "ksDeductionsDataGridViewTextBoxColumn";
+            // 
+            // ksEmpContribDataGridViewTextBoxColumn
+            // 
+            this.ksEmpContribDataGridViewTextBoxColumn.DataPropertyName = "KsEmpContrib";
+            this.ksEmpContribDataGridViewTextBoxColumn.HeaderText = "KsEmpContrib";
+            this.ksEmpContribDataGridViewTextBoxColumn.Name = "ksEmpContribDataGridViewTextBoxColumn";
+            // 
+            // esctDeductionsDataGridViewTextBoxColumn
+            // 
+            this.esctDeductionsDataGridViewTextBoxColumn.DataPropertyName = "EsctDeductions";
+            this.esctDeductionsDataGridViewTextBoxColumn.HeaderText = "EsctDeductions";
+            this.esctDeductionsDataGridViewTextBoxColumn.Name = "esctDeductionsDataGridViewTextBoxColumn";
+            // 
+            // taxCreditsDataGridViewTextBoxColumn
+            // 
+            this.taxCreditsDataGridViewTextBoxColumn.DataPropertyName = "TaxCredits";
+            this.taxCreditsDataGridViewTextBoxColumn.HeaderText = "TaxCredits";
+            this.taxCreditsDataGridViewTextBoxColumn.Name = "taxCreditsDataGridViewTextBoxColumn";
+            // 
+            // familyAssistanceDataGridViewTextBoxColumn
+            // 
+            this.familyAssistanceDataGridViewTextBoxColumn.DataPropertyName = "FamilyAssistance";
+            this.familyAssistanceDataGridViewTextBoxColumn.HeaderText = "FamilyAssistance";
+            this.familyAssistanceDataGridViewTextBoxColumn.Name = "familyAssistanceDataGridViewTextBoxColumn";
+            // 
+            // ShareScheme
+            // 
+            this.ShareScheme.DataPropertyName = "ShareScheme";
+            this.ShareScheme.HeaderText = "ShareScheme";
+            this.ShareScheme.Name = "ShareScheme";
+            // 
+            // sQLCodeDataGridViewTextBoxColumn
+            // 
+            this.sQLCodeDataGridViewTextBoxColumn.DataPropertyName = "SQLCode";
+            this.sQLCodeDataGridViewTextBoxColumn.HeaderText = "SQLCode";
+            this.sQLCodeDataGridViewTextBoxColumn.Name = "sQLCodeDataGridViewTextBoxColumn";
+            this.sQLCodeDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // sQLErrTextDataGridViewTextBoxColumn
+            // 
+            this.sQLErrTextDataGridViewTextBoxColumn.DataPropertyName = "SQLErrText";
+            this.sQLErrTextDataGridViewTextBoxColumn.HeaderText = "SQLErrText";
+            this.sQLErrTextDataGridViewTextBoxColumn.Name = "sQLErrTextDataGridViewTextBoxColumn";
+            this.sQLErrTextDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // DwIrdPaydayDetail
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.grid);
+            this.Name = "DwIrdPaydayDetail";
+            this.Size = new System.Drawing.Size(899, 252);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-            this.ResumeLayout(false); this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Size = new System.Drawing.Size(638, 252);
-            this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(grid);
+            this.ResumeLayout(false);
+
         }
         #endregion
+
+        private System.Windows.Forms.DataGridViewTextBoxColumn c_ird_no;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employee_full_name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tax_code;
+        private System.Windows.Forms.DataGridViewTextBoxColumn start_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn end_date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hdrDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIrdNoDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employeeFullNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn taxCodeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn startDateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn endDateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn payStartDateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn payEndDateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn payCycleDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hoursPaidDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn grossEarningsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn priorGrossAdjustmentsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn notLiableDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lumpSumDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn totalPayeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn priorPayeAdjustmentsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn csDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn csDeductioncodeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn slDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn slcirDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn slborDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ksDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ksEmpContribDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn esctDeductionsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn taxCreditsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn familyAssistanceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ShareScheme;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sQLCodeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sQLErrTextDataGridViewTextBoxColumn;
     }
 }

@@ -9,6 +9,12 @@ using NZPostOffice.Shared.LogicUnits;
 
 namespace NZPostOffice.ODPS.Entity.OdpsRep
 {
+    // TJB IRD Payday Export  Feb-2022
+    // Changes required for updated IRD requirements
+    // Header changed to 'HEI2'; Gross and Paye columns moved
+    // Gross and paye prior adjustments, SLCIR and SLBOR
+    // deductions and share scheme columns added.
+    //
     // TJB  RPCR_128  June-2019: New
     // Adapted from Ir348Header
     // Changed 'form_version_no' to 'Form_version'; stored procedure called
@@ -30,10 +36,16 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     [MapInfo("contact_email", "_contact_email", "")]
 
     [MapInfo("total_lines", "_total_lines", "")]
+    [MapInfo("gross", "_gross", "")]
+    [MapInfo("prior_gross_adjustments", "_prior_gross_adjustments", "")]
+    [MapInfo("not_liable", "_not_liable", "")]
     [MapInfo("total_paye", "_total_paye", "")]
+    [MapInfo("prior_paye_adjustments", "_prior_paye_adjustments", "")]
 
     [MapInfo("child_support", "_child_support", "")]
     [MapInfo("student_loan", "_student_loan", "")]
+    [MapInfo("slcir_deductions", "_slcir_deductions", "")]
+    [MapInfo("slbor_deductions", "_slbor_deductions", "")]
     [MapInfo("kiwi_deducted", "_kiwi_deducted", "")]
     [MapInfo("kiwi_emp_contrib", "_kiwi_emp_contrib", "")]
 
@@ -42,8 +54,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
     [MapInfo("total_credits", "_total_credits", "")]
 
     [MapInfo("family_assistance", "_family_assistance", "")]
-    [MapInfo("gross", "_gross", "")]
-    [MapInfo("not_liable", "_not_liable", "")]
+    [MapInfo("share_scheme", "_share_scheme", "")]
     [MapInfo("package", "_package", "")]
     [MapInfo("form_version", "_form_version", "")]
 
@@ -52,10 +63,13 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         "hdr", "ird_no", "pay_date", 
         "final_return", "nil_return", "paye_intermediary",
         "contact_person","contact_phone", "contact_email", 
-        "total_lines", "total_paye", "child_support", 
-        "student_loan", "kiwi_deducted", "kiwi_emp_contrib",
+        "total_lines", "gross", "prior_gross_adjustments", 
+        "not_liable", "total_paye", "prior_paye_adjustments",
+        "child_support", 
+        "student_loan", "slcir_deductions", "slbor_deductions", 
+        "kiwi_deducted", "kiwi_emp_contrib",
         "esct_deducted", "total_deducted", "total_credits",
-        "family_assistance", "gross", "not_liable",
+        "family_assistance", "share_scheme",
         "package", "form_version" })]
 
     [System.Serializable()]
@@ -94,13 +108,31 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _total_lines;
 
         [DBField()]
+        private string _gross;
+
+        [DBField()]
+        private string _prior_gross_adjustments;
+
+        [DBField()]
+        private string _not_liable;
+
+        [DBField()]
         private string _total_paye;
+
+        [DBField()]
+        private string _prior_paye_adjustments;
 
         [DBField()]
         private string _child_support;
 
         [DBField()]
         private string _student_loan;
+
+        [DBField()]
+        private string _slcir_deductions;
+
+        [DBField()]
+        private string _slbor_deductions;
 
         [DBField()]
         private string _kiwi_deducted;
@@ -121,10 +153,7 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         private string _family_assistance;
 
         [DBField()]
-        private string _gross;
-
-        [DBField()]
-        private string _not_liable;
+        private string _share_scheme;
 
         [DBField()]
         private string _package;
@@ -312,6 +341,60 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
+        public virtual string Gross
+        {
+            get
+            {
+                CanReadProperty("Gross", true);
+                return _gross;
+            }
+            set
+            {
+                CanWriteProperty("Gross", true);
+                if (_gross != value)
+                {
+                    _gross = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PriorGrossAdjustments
+        {
+            get
+            {
+                CanReadProperty("PriorGrossAdjustments", true);
+                return _prior_gross_adjustments;
+            }
+            set
+            {
+                CanWriteProperty("PriorGrossAdjustments", true);
+                if (_prior_gross_adjustments != value)
+                {
+                    _prior_gross_adjustments = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string NotLiable
+        {
+            get
+            {
+                CanReadProperty("NotLiable", true);
+                return _not_liable;
+            }
+            set
+            {
+                CanWriteProperty("NotLiable", true);
+                if (_not_liable != value)
+                {
+                    _not_liable = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual string TotalPaye
         {
             get
@@ -325,6 +408,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 if (_total_paye != value)
                 {
                     _total_paye = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string PriorPayeAdjustments
+        {
+            get
+            {
+                CanReadProperty("PriorPayeAdjustments", true);
+                return _prior_paye_adjustments;
+            }
+            set
+            {
+                CanWriteProperty("PriorPayeAdjustments", true);
+                if (_prior_paye_adjustments != value)
+                {
+                    _prior_paye_adjustments = value;
                     PropertyHasChanged();
                 }
             }
@@ -361,6 +462,42 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                 if (_student_loan != value)
                 {
                     _student_loan = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string SlcirDeductions
+        {
+            get
+            {
+                CanReadProperty("SlcirDeductions", true);
+                return _slcir_deductions;
+            }
+            set
+            {
+                CanWriteProperty("SlcirDeductions", true);
+                if (_slcir_deductions != value)
+                {
+                    _slcir_deductions = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
+        public virtual string SlborDeductions
+        {
+            get
+            {
+                CanReadProperty("SlborDeductions", true);
+                return _slbor_deductions;
+            }
+            set
+            {
+                CanWriteProperty("SlborDeductions", true);
+                if (_slbor_deductions != value)
+                {
+                    _slbor_deductions = value;
                     PropertyHasChanged();
                 }
             }
@@ -474,37 +611,19 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
             }
         }
 
-        public virtual string Gross
+        public virtual string ShareScheme
         {
             get
             {
-                CanReadProperty("Gross", true);
-                return _gross;
+                CanReadProperty("ShareScheme", true);
+                return _share_scheme;
             }
             set
             {
-                CanWriteProperty("Gross", true);
-                if (_gross != value)
+                CanWriteProperty("ShareScheme", true);
+                if (_share_scheme != value)
                 {
-                    _gross = value;
-                    PropertyHasChanged();
-                }
-            }
-        }
-
-        public virtual string NotLiable
-        {
-            get
-            {
-                CanReadProperty("NotLiable", true);
-                return _not_liable;
-            }
-            set
-            {
-                CanWriteProperty("NotLiable", true);
-                if (_not_liable != value)
-                {
-                    _not_liable = value;
+                    _share_scheme = value;
                     PropertyHasChanged();
                 }
             }
@@ -514,12 +633,12 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
         {
             get
             {
-                CanReadProperty(true);
+                CanReadProperty("Package", true);
                 return _package;
             }
             set
             {
-                CanWriteProperty(true);
+                CanWriteProperty("Package", true);
                 if (_package != value)
                 {
                     _package = value;
@@ -594,19 +713,24 @@ namespace NZPostOffice.ODPS.Entity.OdpsRep
                             instance._contact_phone = GetValueFromReader<string>(dr, 7);
                             instance._contact_email = GetValueFromReader<string>(dr, 8);
                             instance._total_lines = GetValueFromReader<string>(dr, 9);
-                            instance._total_paye = GetValueFromReader<string>(dr, 10);
-                            instance._child_support = GetValueFromReader<string>(dr, 11);
-                            instance._student_loan = GetValueFromReader<string>(dr, 12);
-                            instance._kiwi_deducted = GetValueFromReader<string>(dr, 13);
-                            instance._kiwi_emp_contrib = GetValueFromReader<string>(dr, 14);
-                            instance._esct_deducted = GetValueFromReader<string>(dr, 15);
-                            instance._total_deducted = GetValueFromReader<string>(dr, 16);
-                            instance._total_credits = GetValueFromReader<string>(dr, 17);
-                            instance._family_assistance = GetValueFromReader<string>(dr, 18);
-                            instance._gross = GetValueFromReader<string>(dr, 19);
-                            instance._not_liable = GetValueFromReader<string>(dr, 20);
-                            instance._package = GetValueFromReader<string>(dr, 21);
-                            instance._form_version = GetValueFromReader<string>(dr, 22);
+                            instance._gross = GetValueFromReader<string>(dr, 10);
+                            instance._prior_gross_adjustments = GetValueFromReader<string>(dr, 11);
+                            instance._not_liable = GetValueFromReader<string>(dr, 12);
+                            instance._total_paye = GetValueFromReader<string>(dr, 13);
+                            instance._prior_paye_adjustments = GetValueFromReader<string>(dr, 14);
+                            instance._child_support = GetValueFromReader<string>(dr, 15);
+                            instance._student_loan = GetValueFromReader<string>(dr, 16);
+                            instance._slcir_deductions = GetValueFromReader<string>(dr, 17);
+                            instance._slbor_deductions = GetValueFromReader<string>(dr, 18);
+                            instance._kiwi_deducted = GetValueFromReader<string>(dr, 19);
+                            instance._kiwi_emp_contrib = GetValueFromReader<string>(dr, 20);
+                            instance._esct_deducted = GetValueFromReader<string>(dr, 21);
+                            instance._total_deducted = GetValueFromReader<string>(dr, 22);
+                            instance._total_credits = GetValueFromReader<string>(dr, 23);
+                            instance._family_assistance = GetValueFromReader<string>(dr, 24);
+                            instance._share_scheme = GetValueFromReader<string>(dr, 25);
+                            instance._package = GetValueFromReader<string>(dr, 26);
+                            instance._form_version = GetValueFromReader<string>(dr, 27);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
