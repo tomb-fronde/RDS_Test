@@ -9,6 +9,9 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDSAdmin.Entity.Security
 {
+	// TJB Frequencies and Allowances Mar-2022
+	// Re-formatted the Fetch query to make it ledgible
+
 	// Mapping info for object fields to DB
 	// Mapping fieldname, entity fieldname, database table name, form name
 	// Application Form Name : BE
@@ -156,7 +159,31 @@ namespace NZPostOffice.RDSAdmin.Entity.Security
 				using (DbCommand cm = cn.CreateCommand())
 				{
 					cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT rds_user_group.ug_name as Label,  rds_user_group.ug_id as ID,  rds_user_group.ug_id as Account,  @al_parent_id1 as parent_id1,  2 as Pictindex  from rds_user_group  where @al_parent_id1=1  union   select rds_user.u_name as Label,  rds_user_id.ui_id as ID,  rds_user.u_id as Account,  @al_parent_id1 as parent_id1,  3 as Pictindex  from rds_user,  rds_user_id  where @al_parent_id1=2  and	rds_user.u_id = rds_user_id.u_id   Union   select rds_maintenance_table.mt_name as Label,  rds_maintenance_table.mt_id as ID,  0 as Account,  @al_parent_id1 as Parent_id1,  5 as Pictindex  from rds_maintenance_table  where @al_parent_id1=3  ";
+                    cm.CommandText = "SELECT rds_user_group.ug_name as Label " 
+						                + ", rds_user_group.ug_id as ID " 
+										+ ", rds_user_group.ug_id as Account "
+										+ ", @al_parent_id1 as parent_id1 "
+										+ ", 2 as Pictindex "
+                                    + " from rds_user_group "
+                                  + " where @al_parent_id1=1 "
+                                + " union "
+                                 + " select rds_user.u_name as Label "
+                                       + ", rds_user_id.ui_id as ID "
+                                       + ", rds_user.u_id as Account "
+									   + ", @al_parent_id1 as parent_id1 "
+									   + ", 3 as Pictindex "
+                                   + " from rds_user "
+									   + ", rds_user_id "
+                                  + " where @al_parent_id1=2 "
+                                   + "  and rds_user.u_id = rds_user_id.u_id "
+                                 + " Union "
+                                 + "  select rds_maintenance_table.mt_name as Label "
+                                        + ", rds_maintenance_table.mt_id as ID "
+										+ ", 0 as Account "
+                                        + ", @al_parent_id1 as Parent_id1 "
+                                        + ", 5 as Pictindex "
+                                    + " from rds_maintenance_table "
+                                   + " where @al_parent_id1=3  ";
 					ParameterCollection pList = new ParameterCollection();
 					pList.Add(cm, "al_parent_id1", al_parent_id1);
 

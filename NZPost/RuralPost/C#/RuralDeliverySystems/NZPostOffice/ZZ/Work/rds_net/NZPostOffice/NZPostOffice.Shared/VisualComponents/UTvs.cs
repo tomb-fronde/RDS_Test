@@ -10,6 +10,10 @@ using Metex.Windows;
 
 namespace NZPostOffice.Shared.VisualComponents
 {
+    // TJB Frequencies and Allowances Mar-2022
+    // Fixed issue when debugging - disabled break on exception
+    // (occurred in Populate(); exception caught and handled)
+
     public partial class UTvs : TreeView
     {
         public UTvs()
@@ -37,7 +41,6 @@ namespace NZPostOffice.Shared.VisualComponents
                     Populate(node.Nodes[i], true);
             }
         }
-
 
         public virtual int Populate(TreeNode al_parent,bool retrievenext)
         {
