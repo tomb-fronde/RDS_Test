@@ -8,6 +8,12 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.Entity.Ruraldw
 {
+    // TJB Frequencies & Allowances  March-2022
+    // Changes to handle multiple vehicles per contract
+    // Add effective_date to call parameters
+    // Add vehicle_number to retreived values (stored proc changed)
+    //   -- primarily during testing to bypass using getdate() in the stored proc
+    //
     // TJB RPCR_134 July-2019
     // Removed contract_type restriction to November Renewals
     // Reformatted Fetch query for readability
@@ -21,6 +27,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("con_rates_effective_date", "_rates_effective_date", "contract_renewals")]
     [MapInfo("con_expiry_date", "_con_expiry_date", "contract_renewals")]
     [MapInfo("con_rg_code_at_renewal", "_rg_code", "contract_renewals")]
+    [MapInfo("vehicle_number", "_vehicle_number", "")]
     [MapInfo("fuel_key", "_fuel_key", "vehicle")]
     [MapInfo("vor_fuel_rate", "_fuel_rate", "vehicle")]
     [MapInfo("fr_fuel_rate", "_original_fuel_rate", "vehicle")]
@@ -47,6 +54,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _rg_code;
+
+        [DBField()]
+        private int? _vehicle_number;
 
         [DBField()]
         private int? _fuel_key;
@@ -168,6 +178,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual int? VehicleNumber
+        {
+            get
+            {
+                CanReadProperty("VehicleNumber", true);
+                return _vehicle_number;
+            }
+            set
+            {
+                CanWriteProperty("VehicleNumber", true);
+                if (_vehicle_number != value)
+                {
+                    _vehicle_number = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         public virtual int? FuelKey
         {
             get
@@ -252,15 +280,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             return Create(al_rg_code);
         }
 
-        public static ContractsBenchmark[] GetAllContractsBenchmark(int? al_rg_code)
+        public static ContractsBenchmark[] GetAllContractsBenchmark(int? al_rg_code, DateTime? ad_eff_date)
         {
-            return Fetch(al_rg_code).list;
+            return Fetch(al_rg_code, ad_eff_date).list;
         }
         #endregion
 
         #region Data Access
         [ServerMethod]
-        private void FetchEntity(int? al_rg_code)
+        private void FetchEntity(int? al_rg_code, DateTime? ad_eff_date)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -269,6 +297,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     cm.CommandType = CommandType.StoredProcedure;
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inRgCode", al_rg_code);
+                    pList.Add(cm, "inEffDate", ad_eff_date);
                     cm.CommandText = "sp_GetContractBenchmarks";
                     //cm.CommandType = CommandType.Text;
                     //cm.CommandText = "SELECT cr.contract_no, "
@@ -321,10 +350,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._con_expiry_date = GetValueFromReader<DateTime?>(dr, 4);
 
                             instance._rg_code = GetValueFromReader<Int32?>(dr, 5);
-                            instance._fuel_key = GetValueFromReader<Int32?>(dr, 6);
-                            instance._fuel_rate = GetValueFromReader<Decimal?>(dr, 7);
-                            instance._original_fuel_rate = GetValueFromReader<Decimal?>(dr, 8);
-                            instance._bench_mark = GetValueFromReader<Int32?>(dr, 9);
+                            instance._vehicle_number = GetValueFromReader<Int32?>(dr, 6);
+                            instance._fuel_key = GetValueFromReader<Int32?>(dr, 7);
+                            instance._fuel_rate = GetValueFromReader<Decimal?>(dr, 8);
+                            instance._original_fuel_rate = GetValueFromReader<Decimal?>(dr, 9);
+                            instance._bench_mark = GetValueFromReader<Int32?>(dr, 10);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
