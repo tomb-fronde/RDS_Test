@@ -60,7 +60,17 @@
       "ProjectGuid": "df5a05b5-6413-4708-8818-4e290e99528e",
       "DisplayName": "NZPostOffice.ODPS.DataControls",
       "ColorIndex": 10
+    },
+    "0b380e0c-0a10-4536-bd85-bf0993671fac": {
+      "ProjectGuid": "0b380e0c-0a10-4536-bd85-bf0993671fac",
+      "DisplayName": "NZPostOffice.RDSAdmin.DataControls",
+      "ColorIndex": 11
+    },
+    "933136d5-86eb-41f4-baef-39ac7cfe24be": {
+      "ProjectGuid": "933136d5-86eb-41f4-baef-39ac7cfe24be",
+      "DisplayName": "NZPostOffice.RDSAdmin.Entity",
+      "ColorIndex": 12
     }
   },
-  "NextColorIndex": 11
+  "NextColorIndex": 13
 }

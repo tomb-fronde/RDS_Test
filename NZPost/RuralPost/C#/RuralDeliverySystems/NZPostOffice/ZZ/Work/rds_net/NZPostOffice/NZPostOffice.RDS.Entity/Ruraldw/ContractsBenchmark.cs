@@ -266,43 +266,47 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    cm.CommandType = CommandType.Text;
-                    cm.CommandText = "SELECT cr.contract_no, " 
-                                   + "       cr.contract_seq_number, " 
-                                   + "       cr.con_start_date, " 
-                                   + "       cr.con_rates_effective_date, " 
-                                   + "       cr.con_expiry_date, " 
-                                   + "       cr.con_rg_code_at_renewal, "
-	                               + "       (SELECT v.ft_key FROM	rd.vehicle v "
-	                               + "         WHERE v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number)) as fuel_key, "
-	                               + "       (SELECT vor_fuel_rate FROM rd.vehicle_override_rate vor "
-	                               + "         WHERE vor.contract_no = cr.contract_no " 
-                                   + "           AND vor.contract_seq_number = cr.contract_seq_number "
-	                               + "           AND vor.vor_effective_date = "
-		                           + "                  (SELECT max(vor2.vor_effective_date) " 
-                                   + "                     FROM rd.vehicle_override_rate vor2 "
-		                           + "                    WHERE vor2.contract_no = vor.contract_no " 
-                                   + "                      AND vor2.contract_seq_number = vor.contract_seq_number) "
-	                               + "           AND vor.vor_effective_date >= cr.con_rates_effective_date), "
-	                               + "       (SELECT fr_fuel_rate FROM rd.fuel_rates "
-	                               + "         WHERE ft_key = " 
-                                   + "                 (SELECT v.ft_key FROM rd.vehicle v " 
-                                   + "                   WHERE v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number)) " 
-                                   + "                     AND rg_code = cr.con_rg_code_at_renewal  " 
-                                   + "                     AND rr_rates_effective_date = cr.con_rates_effective_date), "
-	                               + "       rd.BenchmarkCalc2005(cr.contract_no, cr.contract_seq_number) as bench_mark "
-                                   + "  FROM rd.contract_renewals cr, rd.contract c "
-                                   + " WHERE c.contract_no = cr.contract_no " 
-                                   + "   AND (c.rg_code = @al_rg_code OR @al_rg_code = -1) "
-/* TJB RPCR_134 July-2019: disabled   + "   AND c.con_base_cont_type = 1 "  */
-                                   + "   AND cr.contract_seq_number = c.con_active_sequence "
-                                   + "   AND c.con_date_terminated is null " 
-                                   + "   AND cr.con_acceptance_flag = 'Y' "
-                                   + "   AND cr.con_expiry_date >= getdate() " 
-                                   + " ORDER BY cr.contract_no"; 
-
+                    cm.CommandType = CommandType.StoredProcedure;
                     ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "al_rg_code", al_rg_code);
+                    pList.Add(cm, "inRgCode", al_rg_code);
+                    cm.CommandText = "sp_GetContractBenchmarks";
+                    //cm.CommandType = CommandType.Text;
+                    //cm.CommandText = "SELECT cr.contract_no, "
+                    //               + "       cr.contract_seq_number, "
+                    //               + "       cr.con_start_date, "
+                    //               + "       cr.con_rates_effective_date, "
+                    //               + "       cr.con_expiry_date, "
+                    //               + "       cr.con_rg_code_at_renewal, "
+                    //               + "       (SELECT v.ft_key FROM	rd.vehicle v "
+                    //               + "         WHERE v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number)) as fuel_key, "
+                    //               + "       (SELECT vor_fuel_rate FROM rd.vehicle_override_rate vor "
+                    //               + "         WHERE vor.contract_no = cr.contract_no "
+                    //               + "           AND vor.contract_seq_number = cr.contract_seq_number "
+                    //               + "           AND vor.vor_effective_date = "
+                    //               + "                  (SELECT max(vor2.vor_effective_date) "
+                    //               + "                     FROM rd.vehicle_override_rate vor2 "
+                    //               + "                    WHERE vor2.contract_no = vor.contract_no "
+                    //               + "                      AND vor2.contract_seq_number = vor.contract_seq_number) "
+                    //               + "           AND vor.vor_effective_date >= cr.con_rates_effective_date), "
+                    //               + "       (SELECT fr_fuel_rate FROM rd.fuel_rates "
+                    //               + "         WHERE ft_key = "
+                    //               + "                 (SELECT v.ft_key FROM rd.vehicle v "
+                    //               + "                   WHERE v.vehicle_number = rd.f_GetLatestVehicle(cr.contract_no,cr.contract_seq_number)) "
+                    //               + "                     AND rg_code = cr.con_rg_code_at_renewal  "
+                    //               + "                     AND rr_rates_effective_date = cr.con_rates_effective_date), "
+                    //               + "       rd.BenchmarkCalc2005(cr.contract_no, cr.contract_seq_number) as bench_mark "
+                    //               + "  FROM rd.contract_renewals cr, rd.contract c "
+                    //               + " WHERE c.contract_no = cr.contract_no "
+                    //               + "   AND (c.rg_code = @al_rg_code OR @al_rg_code = -1) "
+                    ///* TJB RPCR_134 July-2019: disabled   + "   AND c.con_base_cont_type = 1 "  */
+                    //                                   + "   AND cr.contract_seq_number = c.con_active_sequence "
+                    //                                   + "   AND c.con_date_terminated is null " 
+                    //                                   + "   AND cr.con_acceptance_flag = 'Y' "
+                    //                                   + "   AND cr.con_expiry_date >= getdate() " 
+                    //                                   + " ORDER BY cr.contract_no"; 
+
+                    //ParameterCollection pList = new ParameterCollection();
+                    //pList.Add(cm, "al_rg_code", al_rg_code);
 
                     List<ContractsBenchmark> _list = new List<ContractsBenchmark>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

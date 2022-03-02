@@ -12,6 +12,10 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies & Allowances  March-2022
+    // Changes to handle multiple vehicles per contract
+    // (see tabpage_fuel_pfc_default)
+    // 
     // TJB 10-July-2019
     // Cosmetic changes: re-formatted MessageBox.Show for readability
     //
@@ -157,6 +161,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         public virtual int tabpage_fuel_pfc_default()
         {
+            // TJB Frequencies & Allowances  March-2022
+            // Changed to handle multiple vehicles per contract
+            // - Change ContractsBenchmark to return separate rows for each vehicle
+            // - Create separate frequency_adjustments and frequency_distances
+            //   for each vehicle with accumulating benchmark values for each contract
+
             int ll_x = 0;
             decimal? ldc_original_fuel_rate;
             decimal? ldc_new_standard_fuel_rate;
