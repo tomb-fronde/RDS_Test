@@ -295,10 +295,11 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "sp_ContractsBenchmarkV2";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inRgCode", al_rg_code);
                     pList.Add(cm, "inEffDate", ad_eff_date);
-                    cm.CommandText = "sp_GetContractBenchmarks";
+
                     //cm.CommandType = CommandType.Text;
                     //cm.CommandText = "SELECT cr.contract_no, "
                     //               + "       cr.contract_seq_number, "

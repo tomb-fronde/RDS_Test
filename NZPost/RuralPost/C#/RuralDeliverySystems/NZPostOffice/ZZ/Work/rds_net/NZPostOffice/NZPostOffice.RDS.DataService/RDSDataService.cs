@@ -10,7 +10,11 @@ using Metex.Core.Security;
 
 namespace NZPostOffice.RDS.DataService
 {
-    // TJB Allowances 11-Mar-2021
+    // TJB Frequencies & Allowances  March-2022
+    // UpdateVehicleOverrideFuelRate
+    // Added vehicle number to parameters in support of handling multiple vehicles
+    //
+    // TJB Frequencies & Allowances 11-Mar-2021
     // Added GetAllowanceCalcType
     // [13Mar] Added LookupAllowanceCalcType
     // [3-Apr-2021] Added GetVehicleAllowanceRates, VehicleAllowanceRatesItem 
@@ -23,7 +27,7 @@ namespace NZPostOffice.RDS.DataService
     // Added vt_key to GetVehicleOverrideRateList parameter list 
     // - get overrides for [one of] the contract's vehicles of the type
     //
-    // TJB Frequencies and Vehicles Jan/Feb-2021
+    // TJB Frequencies & Vehicles Jan/Feb-2021
     // Added GetBenchmarkCalc2021
     //       GetVehicleName
     //       CheckVehicleOwnership 
@@ -2724,42 +2728,35 @@ namespace NZPostOffice.RDS.DataService
             return obj.decVal;
         }
 
+        // TJB Frequencies & Allowances  March-2022
+        // UpdateVehicleOverrideFuelRate
+        // Added vehicle number to parameters in support of handling multiple vehicles
+        //
         // TJB  RPCR_099  Jan-2016:  Bug Fix/Name changes
         // Changed UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
         //
         /// <summary>
-        /// UPDATE vehicle_override_rate vor1  
-        ///    SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate 
-        ///  WHERE vor1.contract_no = @ll_contract_no
-        ///    AND vor1.contract_seq_number = @ll_sequence_no 
-        ///    AND vor1.vor_effective_date >= @ld_rates_effective_date
-        ///    AND vor1.vor_effective_date 
-        ///             = (SELECT max(vor2.vor_effective_date)
-        ///                  FROM vehicle_override_rate vor2 
-        ///                 WHERE vor2.contract_no = vor1.contract_no 
-        ///                   AND vor2.contract_seq_number = vor1.contract_seq_number)
+        /// Update vehicle_override_rate fuel rate for specified contract vehicle
         /// </summary>
         public static void UpdateVehicleOverrideFuelRate(
             decimal? ldc_new_override_fuel_rate,
             int? ll_contract_no,
             int? ll_sequence_no,
+            int? pVehicleNo,
             DateTime? ld_rates_effective_date,
             ref int sqlCode,
             ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateVehicleOverrideFuelRate", ldc_new_override_fuel_rate, ll_contract_no, ll_sequence_no, ld_rates_effective_date);
+            RDSDataService obj = Execute("_UpdateVehicleOverrideFuelRate"
+                                        , ldc_new_override_fuel_rate
+                                        , ll_contract_no, ll_sequence_no
+                                        , pVehicleNo, ld_rates_effective_date);
             sqlCode = obj._sqlcode;
             sqlErrText = obj._sqlerrtext;
         }
 
         /// <summary>
-        /// select contract_renewals.contract_seq_number 
-        ///   into @lRenewal 
-        ///   from contract key join contract_renewals 
-        ///  where contract.contract_no = @lContract
-        ///    and (contract_renewals.contract_seq_number = (contract.con_active_sequence + 1)
-        ///          or (contract.con_active_sequence is null 
-        ///               and contract_renewals.contract_seq_number = 1))
+        /// Get the current contract sequence number
         /// </summary>
         public static int GetContractSeqNumber(int? lContract, ref int SQLCode)
         {
@@ -11510,11 +11507,14 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
+        // TJB Frequencies & Allowances  March-2022
+        // Added vehicle number to parameters in support of handling multiple vehicles
         [ServerMethod]
         private void _UpdateVehicleOverrideFuelRate(
             decimal? ldc_new_override_fuel_rate,
             int? ll_contract_no,
             int? ll_sequence_no,
+            int? pVehicleNo,
             DateTime? ld_rates_effective_date)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
@@ -11523,16 +11523,11 @@ namespace NZPostOffice.RDS.DataService
                 {
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
-                    //!pp - update does not support alias for tables
-                    //!cm.CommandText = " UPDATE vehicle_override_rate vor1 " +
-                    //! " SET vor1.vor_fuel_rate = @ldc_new_override_fuel_rate WHERE vor1.contract_no = @ll_contract_no " +
-                    //! " AND vor1.contract_seq_number = @ll_sequence_no AND vor1.vor_effective_date >= @ld_rates_effective_date " +
-                    //! " AND vor1.vor_effective_date = (SELECT max (vor2.vor_effective_date) FROM vehicle_override_rate vor2 " +
-                    //! " WHERE vor2.contract_no = vor1.contract_no AND vor2.contract_seq_number = vor1.contract_seq_number)";
                     cm.CommandText = " UPDATE rd.vehicle_override_rate " +
                                         " SET vor_fuel_rate = @ldc_new_override_fuel_rate " + 
                                       " WHERE contract_no = @ll_contract_no " +
                                         " AND contract_seq_number = @ll_sequence_no " + 
+                                        " AND vehicle_number = @pVehicleNo " +
                                         " AND vor_effective_date >= @ld_rates_effective_date " +
                                         " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " +
                                                                     " FROM rd.vehicle_override_rate vor2 " +
@@ -11543,6 +11538,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "ldc_new_override_fuel_rate", ldc_new_override_fuel_rate);
                     pList.Add(cm, "ll_contract_no", ll_contract_no);
                     pList.Add(cm, "ll_sequence_no", ll_sequence_no);
+                    pList.Add(cm, "pVehicleNo", pVehicleNo);
                     pList.Add(cm, "ld_rates_effective_date", ld_rates_effective_date);
                     pList.Add(cm, "ll_contract_no", ll_contract_no);
 
