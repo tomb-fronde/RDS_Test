@@ -70,7 +70,12 @@
       "ProjectGuid": "933136d5-86eb-41f4-baef-39ac7cfe24be",
       "DisplayName": "NZPostOffice.RDSAdmin.Entity",
       "ColorIndex": 12
+    },
+    "e980e461-4615-401e-9ec9-f4a9ad09df0a": {
+      "ProjectGuid": "e980e461-4615-401e-9ec9-f4a9ad09df0a",
+      "DisplayName": "NZPostOffice.RDS.DataService",
+      "ColorIndex": 13
     }
   },
-  "NextColorIndex": 13
+  "NextColorIndex": 14
 }
