@@ -61,250 +61,285 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         /// </summary>
         private void InitializeComponent()
         {
+            this.st_1 = new System.Windows.Forms.Label();
+            this.cb_ok = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.cb_cancel = new NZPostOffice.Shared.VisualComponents.UCb();
+            this.tab_rates = new System.Windows.Forms.TabControl();
+            this.tabpage_fuel = new System.Windows.Forms.TabPage();
+            this.description_10 = new System.Windows.Forms.Label();
+            this.description_9 = new System.Windows.Forms.Label();
+            this.description_8 = new System.Windows.Forms.Label();
+            this.description_7 = new System.Windows.Forms.Label();
+            this.description_6 = new System.Windows.Forms.Label();
+            this.description_5 = new System.Windows.Forms.Label();
+            this.description_4 = new System.Windows.Forms.Label();
+            this.description_3 = new System.Windows.Forms.Label();
+            this.description_2 = new System.Windows.Forms.Label();
+            this.dw_details = new NZPostOffice.RDS.Controls.URdsDw();
+            this.description_1 = new System.Windows.Forms.Label();
+            this.gb_fuel = new NZPostOffice.Shared.VisualComponents.UGb();
+            this.tabpage_other_rates = new System.Windows.Forms.TabPage();
+            this.dw_rates = new NZPostOffice.RDS.Controls.URdsDw();
+            this.gb_other = new NZPostOffice.Shared.VisualComponents.UGb();
+            this.dw_criteria = new NZPostOffice.RDS.Controls.URdsDw();
+            this.tab_rates.SuspendLayout();
+            this.tabpage_fuel.SuspendLayout();
+            this.tabpage_other_rates.SuspendLayout();
             this.SuspendLayout();
-            this.st_1 = new Label();
-            this.cb_ok = new UCb();
-            this.cb_cancel = new UCb();
-            this.tab_rates = new TabControl();
-            this.dw_criteria = new URdsDw();
-            //!this.dw_criteria.DataObject = new DFuelOverrideFields();
-            Controls.Add(st_1);
-            Controls.Add(cb_ok);
-            Controls.Add(cb_cancel);
-            Controls.Add(tab_rates);
-            Controls.Add(dw_criteria);
-
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.Text = "National Rates Overrides";
-            this.Size = new System.Drawing.Size(272, 432);
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
             // 
             // st_1
             // 
-            st_1.TabStop = false;
-            st_1.Text = "w_national_fuel_override";
-            st_1.BackColor = System.Drawing.SystemColors.Control;
-            st_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            st_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            st_1.Location = new System.Drawing.Point(5, 390);
-            st_1.Size = new System.Drawing.Size(130, 13);
+            this.st_1.BackColor = System.Drawing.SystemColors.Control;
+            this.st_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.st_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.st_1.Location = new System.Drawing.Point(5, 390);
+            this.st_1.Name = "st_1";
+            this.st_1.Size = new System.Drawing.Size(130, 13);
+            this.st_1.TabIndex = 1;
+            this.st_1.Text = "w_national_fuel_override";
             // 
             // cb_ok
             // 
-            this.AcceptButton = cb_ok;
-            cb_ok.Text = "OK";
-            cb_ok.TabIndex = 3;
-            cb_ok.Location = new System.Drawing.Point(100, 360);
-            cb_ok.Click += new EventHandler(cb_ok_clicked);
+            this.cb_ok.Location = new System.Drawing.Point(100, 360);
+            this.cb_ok.Name = "cb_ok";
+            this.cb_ok.Size = new System.Drawing.Size(75, 23);
+            this.cb_ok.TabIndex = 3;
+            this.cb_ok.Text = "OK";
+            this.cb_ok.Click += new System.EventHandler(this.cb_ok_clicked);
             // 
             // cb_cancel
             // 
-            this.CancelButton = cb_cancel;
-            cb_cancel.Text = "Cancel";
-            cb_cancel.TabIndex = 4;
-            cb_cancel.Location = new System.Drawing.Point(182, 360);
-            cb_cancel.Click += new EventHandler(cb_cancel_clicked);
+            this.cb_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cb_cancel.Location = new System.Drawing.Point(182, 360);
+            this.cb_cancel.Name = "cb_cancel";
+            this.cb_cancel.Size = new System.Drawing.Size(75, 23);
+            this.cb_cancel.TabIndex = 4;
+            this.cb_cancel.Text = "Cancel";
+            this.cb_cancel.Click += new System.EventHandler(this.cb_cancel_clicked);
             // 
             // tab_rates
             // 
-            tabpage_fuel = new TabPage();
-            tabpage_other_rates = new TabPage();
-            tab_rates.TabPages.Add(tabpage_fuel);
-            tab_rates.TabPages.Add(tabpage_other_rates);
-            tab_rates.SelectedIndex = 0;
-            tab_rates.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            tab_rates.TabIndex = 2;
-            tab_rates.Location = new System.Drawing.Point(3, 54);
-            tab_rates.Size = new System.Drawing.Size(256, 299);
-            tab_rates.Selecting += new TabControlCancelEventHandler(tab_rates_selectionchanging);
+            this.tab_rates.Controls.Add(this.tabpage_fuel);
+            this.tab_rates.Controls.Add(this.tabpage_other_rates);
+            this.tab_rates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.tab_rates.Location = new System.Drawing.Point(3, 54);
+            this.tab_rates.Name = "tab_rates";
+            this.tab_rates.SelectedIndex = 0;
+            this.tab_rates.Size = new System.Drawing.Size(256, 299);
+            this.tab_rates.TabIndex = 2;
+            this.tab_rates.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tab_rates_selectionchanging);
             // 
             // tabpage_fuel
             // 
-            description_10 = new Label();
-            description_9 = new Label();
-            description_8 = new Label();
-            description_7 = new Label();
-            description_6 = new Label();
-            description_5 = new Label();
-            description_4 = new Label();
-            description_3 = new Label();
-            description_2 = new Label();
-            gb_fuel = new UGb();
-            dw_details = new URdsDw();
-            //!dw_details.DataObject = new DwNationalFuelOverride();
-            description_1 = new Label();
-            tabpage_fuel.Controls.Add(description_10);
-            tabpage_fuel.Controls.Add(description_9);
-            tabpage_fuel.Controls.Add(description_8);
-            tabpage_fuel.Controls.Add(description_7);
-            tabpage_fuel.Controls.Add(description_6);
-            tabpage_fuel.Controls.Add(description_5);
-            tabpage_fuel.Controls.Add(description_4);
-            tabpage_fuel.Controls.Add(description_3);
-            tabpage_fuel.Controls.Add(description_2);
-            tabpage_fuel.Controls.Add(dw_details);
-            tabpage_fuel.Controls.Add(description_1);
-            tabpage_fuel.Controls.Add(gb_fuel);
-            tabpage_fuel.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_fuel.Text = "Fuel Rates";
-            tabpage_fuel.Name = tabpage_fuel.Text; //
-
-            tabpage_fuel.Size = new System.Drawing.Size(248, 270);
-            tabpage_fuel.Top = 25;
-            tabpage_fuel.Left = 3;
+            this.tabpage_fuel.Controls.Add(this.description_10);
+            this.tabpage_fuel.Controls.Add(this.description_9);
+            this.tabpage_fuel.Controls.Add(this.description_8);
+            this.tabpage_fuel.Controls.Add(this.description_7);
+            this.tabpage_fuel.Controls.Add(this.description_6);
+            this.tabpage_fuel.Controls.Add(this.description_5);
+            this.tabpage_fuel.Controls.Add(this.description_4);
+            this.tabpage_fuel.Controls.Add(this.description_3);
+            this.tabpage_fuel.Controls.Add(this.description_2);
+            this.tabpage_fuel.Controls.Add(this.dw_details);
+            this.tabpage_fuel.Controls.Add(this.description_1);
+            this.tabpage_fuel.Controls.Add(this.gb_fuel);
+            this.tabpage_fuel.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_fuel.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_fuel.Name = this.tabpage_fuel.Text;
+            this.tabpage_fuel.Size = new System.Drawing.Size(248, 273);
+            this.tabpage_fuel.TabIndex = 0;
+            this.tabpage_fuel.Text = "Fuel Rates";
             // 
             // description_10
             // 
-            description_10.TabStop = false;
-            description_10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_10.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_10.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_10.Location = new System.Drawing.Point(16, 228);
-            description_10.Size = new System.Drawing.Size(120, 16);
+            this.description_10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_10.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_10.Location = new System.Drawing.Point(16, 228);
+            this.description_10.Name = "description_10";
+            this.description_10.Size = new System.Drawing.Size(120, 16);
+            this.description_10.TabIndex = 0;
+            this.description_10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_9
             // 
-            description_9.TabStop = false;
-            description_9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_9.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_9.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_9.Location = new System.Drawing.Point(16, 205);
-            description_9.Size = new System.Drawing.Size(120, 16);
+            this.description_9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_9.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_9.Location = new System.Drawing.Point(16, 205);
+            this.description_9.Name = "description_9";
+            this.description_9.Size = new System.Drawing.Size(120, 16);
+            this.description_9.TabIndex = 1;
+            this.description_9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_8
             // 
-            description_8.TabStop = false;
-            description_8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_8.BackColor = System.Drawing.SystemColors.Control;
-            description_8.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_8.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_8.Location = new System.Drawing.Point(16, 182);  
-            description_8.Size = new System.Drawing.Size(120, 16);
+            this.description_8.BackColor = System.Drawing.SystemColors.Control;
+            this.description_8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_8.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_8.Location = new System.Drawing.Point(16, 182);
+            this.description_8.Name = "description_8";
+            this.description_8.Size = new System.Drawing.Size(120, 16);
+            this.description_8.TabIndex = 2;
+            this.description_8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_7
             // 
-            description_7.TabStop = false;
-            description_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_7.BackColor = System.Drawing.SystemColors.Control;
-            description_7.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_7.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_7.Location = new System.Drawing.Point(16, 159);
-            description_7.Size = new System.Drawing.Size(120, 16);
+            this.description_7.BackColor = System.Drawing.SystemColors.Control;
+            this.description_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_7.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_7.Location = new System.Drawing.Point(16, 159);
+            this.description_7.Name = "description_7";
+            this.description_7.Size = new System.Drawing.Size(120, 16);
+            this.description_7.TabIndex = 3;
+            this.description_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_6
             // 
-            description_6.TabStop = false;
-            description_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_6.BackColor = System.Drawing.SystemColors.Control;
-            description_6.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_6.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_6.Location = new System.Drawing.Point(16, 136);
-            description_6.Size = new System.Drawing.Size(120, 16);
+            this.description_6.BackColor = System.Drawing.SystemColors.Control;
+            this.description_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_6.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_6.Location = new System.Drawing.Point(16, 136);
+            this.description_6.Name = "description_6";
+            this.description_6.Size = new System.Drawing.Size(120, 16);
+            this.description_6.TabIndex = 4;
+            this.description_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_5
             // 
-            description_5.TabStop = false;
-            description_5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_5.BackColor = System.Drawing.SystemColors.Control;
-            description_5.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_5.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_5.Location = new System.Drawing.Point(16, 113);
-            description_5.Size = new System.Drawing.Size(120, 16);
+            this.description_5.BackColor = System.Drawing.SystemColors.Control;
+            this.description_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_5.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_5.Location = new System.Drawing.Point(16, 113);
+            this.description_5.Name = "description_5";
+            this.description_5.Size = new System.Drawing.Size(120, 16);
+            this.description_5.TabIndex = 5;
+            this.description_5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_4
             // 
-            description_4.TabStop = false;
-            description_4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_4.BackColor = System.Drawing.SystemColors.Control;
-            description_4.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_4.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_4.Location = new System.Drawing.Point(16, 90);
-            description_4.Size = new System.Drawing.Size(120, 16);
+            this.description_4.BackColor = System.Drawing.SystemColors.Control;
+            this.description_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_4.Location = new System.Drawing.Point(16, 90);
+            this.description_4.Name = "description_4";
+            this.description_4.Size = new System.Drawing.Size(120, 16);
+            this.description_4.TabIndex = 6;
+            this.description_4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_3
             // 
-            description_3.TabStop = false;
-            description_3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_3.BackColor = System.Drawing.SystemColors.Control;
-            description_3.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_3.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_3.Location = new System.Drawing.Point(16, 67);
-            description_3.Size = new System.Drawing.Size(120, 16);
+            this.description_3.BackColor = System.Drawing.SystemColors.Control;
+            this.description_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_3.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_3.Location = new System.Drawing.Point(16, 67);
+            this.description_3.Name = "description_3";
+            this.description_3.Size = new System.Drawing.Size(120, 16);
+            this.description_3.TabIndex = 7;
+            this.description_3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // description_2
             // 
-            description_2.TabStop = false;
-            description_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_2.BackColor = System.Drawing.SystemColors.Control;
-            description_2.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_2.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_2.Location = new System.Drawing.Point(16, 44);
-            description_2.Size = new System.Drawing.Size(120, 16);
-            // 
-            // gb_fuel
-            // 
-            gb_fuel.Text = "";
-            gb_fuel.TabIndex = 0;
-            gb_fuel.Location = new System.Drawing.Point(8, 5);
-            gb_fuel.Size = new System.Drawing.Size(232, 256);
+            this.description_2.BackColor = System.Drawing.SystemColors.Control;
+            this.description_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_2.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_2.Location = new System.Drawing.Point(16, 44);
+            this.description_2.Name = "description_2";
+            this.description_2.Size = new System.Drawing.Size(120, 16);
+            this.description_2.TabIndex = 8;
+            this.description_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dw_details
             // 
-            //!dw_details.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_details.Location = new System.Drawing.Point(144, 17);
-            dw_details.Size = new System.Drawing.Size(88, 224);
-            dw_details.LostFocus += new EventHandler(dw_details_losefocus);
-            //dw_details.Constructor +=new NZPostOffice.RDS.Controls.UserEventDelegate(dw_details_constructor);
+            this.dw_details.DataObject = null;
+            this.dw_details.FireConstructor = false;
+            this.dw_details.Location = new System.Drawing.Point(144, 17);
+            this.dw_details.Name = "dw_details";
+            this.dw_details.Size = new System.Drawing.Size(88, 224);
+            this.dw_details.TabIndex = 9;
+            this.dw_details.LostFocus += new System.EventHandler(this.dw_details_losefocus);
             // 
             // description_1
             // 
-            description_1.TabStop = false;
-            description_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            description_1.BackColor = System.Drawing.SystemColors.Control;
-            description_1.ForeColor = System.Drawing.SystemColors.WindowText;
-            description_1.Font = new System.Drawing.Font("MS Sans Serif", 8, System.Drawing.FontStyle.Regular);
-            description_1.Location = new System.Drawing.Point(9, 20);
-            description_1.Size = new System.Drawing.Size(135, 16);
+            this.description_1.BackColor = System.Drawing.SystemColors.Control;
+            this.description_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.description_1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.description_1.Location = new System.Drawing.Point(9, 20);
+            this.description_1.Name = "description_1";
+            this.description_1.Size = new System.Drawing.Size(135, 16);
+            this.description_1.TabIndex = 10;
+            this.description_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // gb_fuel
+            // 
+            this.gb_fuel.Location = new System.Drawing.Point(8, 5);
+            this.gb_fuel.Name = "gb_fuel";
+            this.gb_fuel.Size = new System.Drawing.Size(232, 256);
+            this.gb_fuel.TabIndex = 0;
+            this.gb_fuel.TabStop = false;
             // 
             // tabpage_other_rates
             // 
-            dw_rates = new URdsDw();
-            //!dw_rates.DataObject = new DNationalRatesOverrideFields();
-            gb_other = new UGb();
-            tabpage_other_rates.Controls.Add(dw_rates);
-            tabpage_other_rates.Controls.Add(gb_other);
-            tabpage_other_rates.ForeColor = System.Drawing.SystemColors.WindowText;
-            tabpage_other_rates.Text = "Other Vehicle Rates";
-            tabpage_other_rates.Name = tabpage_other_rates.Text;//
-
-            tabpage_other_rates.Size=new System.Drawing.Size(248,270);
-            tabpage_other_rates.Top = 25;
-            tabpage_other_rates.Left = 3;
+            this.tabpage_other_rates.Controls.Add(this.dw_rates);
+            this.tabpage_other_rates.Controls.Add(this.gb_other);
+            this.tabpage_other_rates.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tabpage_other_rates.Location = new System.Drawing.Point(4, 22);
+            this.tabpage_other_rates.Name = this.tabpage_other_rates.Text;
+            this.tabpage_other_rates.Size = new System.Drawing.Size(248, 273);
+            this.tabpage_other_rates.TabIndex = 1;
+            this.tabpage_other_rates.Text = "Other Vehicle Rates";
             // 
             // dw_rates
             // 
-            //!dw_rates.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_rates.Location = new System.Drawing.Point(16, 19);
-            dw_rates.Size = new System.Drawing.Size(208, 72);
-            dw_rates.LostFocus += new EventHandler(dw_rates_losefocus);
-            //dw_rates.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_rates_constructor);
+            this.dw_rates.DataObject = null;
+            this.dw_rates.FireConstructor = false;
+            this.dw_rates.Location = new System.Drawing.Point(16, 19);
+            this.dw_rates.Name = "dw_rates";
+            this.dw_rates.Size = new System.Drawing.Size(208, 72);
+            this.dw_rates.TabIndex = 0;
+            this.dw_rates.LostFocus += new System.EventHandler(this.dw_rates_losefocus);
             // 
             // gb_other
             // 
-            gb_other.Text = "";
-            gb_other.TabIndex = 1;
-            gb_other.Location = new System.Drawing.Point(8, 5);
-            gb_other.Size = new System.Drawing.Size(232, 256);
+            this.gb_other.Location = new System.Drawing.Point(8, 5);
+            this.gb_other.Name = "gb_other";
+            this.gb_other.Size = new System.Drawing.Size(232, 256);
+            this.gb_other.TabIndex = 1;
+            this.gb_other.TabStop = false;
             // 
             // dw_criteria
             // 
-            //!dw_criteria.DataObject.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dw_criteria.TabIndex = 1;
-            dw_criteria.Location = new System.Drawing.Point(7, 3);
-            dw_criteria.Size = new System.Drawing.Size(239, 46);
-            //dw_criteria.Constructor += new NZPostOffice.RDS.Controls.UserEventDelegate(dw_criteria_constructor);
-            this.ResumeLayout();
+            this.dw_criteria.DataObject = null;
+            this.dw_criteria.FireConstructor = false;
+            this.dw_criteria.Location = new System.Drawing.Point(7, 3);
+            this.dw_criteria.Name = "dw_criteria";
+            this.dw_criteria.Size = new System.Drawing.Size(239, 46);
+            this.dw_criteria.TabIndex = 1;
+            // 
+            // WNationalFuelOverride
+            // 
+            this.AcceptButton = this.cb_ok;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelButton = this.cb_cancel;
+            this.ClientSize = new System.Drawing.Size(256, 413);
+            this.Controls.Add(this.st_1);
+            this.Controls.Add(this.cb_ok);
+            this.Controls.Add(this.cb_cancel);
+            this.Controls.Add(this.tab_rates);
+            this.Controls.Add(this.dw_criteria);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WNationalFuelOverride";
+            this.Text = "National Rates Overrides";
+            this.Controls.SetChildIndex(this.dw_criteria, 0);
+            this.Controls.SetChildIndex(this.tab_rates, 0);
+            this.Controls.SetChildIndex(this.cb_cancel, 0);
+            this.Controls.SetChildIndex(this.cb_ok, 0);
+            this.Controls.SetChildIndex(this.st_1, 0);
+            this.tab_rates.ResumeLayout(false);
+            this.tabpage_fuel.ResumeLayout(false);
+            this.tabpage_other_rates.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         /// <summary>

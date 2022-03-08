@@ -151,6 +151,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>WGenericReportSearchWithDate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Ruralwin2\WNationalFuelOverride.resx">
+      <DependentUpon>WNationalFuelOverride.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\Ruralwin2\WOverrideRates.resx">
       <DependentUpon>WOverrideRates.cs</DependentUpon>
       <SubType>Designer</SubType>
