@@ -124,7 +124,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ld_effective_date = dw_criteria.GetItem<FuelOverrideFields>(0).AdEffectiveDate;
             if (!(ld_effective_date == null))
             {
-                if (Debugging1)
+                if (Debugging)
                 {
                     MessageBox.Show("Skipping date check");
                 }
@@ -166,9 +166,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return 1;
         }
 
-        bool Debugging1 = false;
-        bool Debugging2 = false;
-        bool Debugging3 = false;
+        bool Debugging = false;
         int nloop = 0, maxloops = 3;
 
         private string convert_to_string(decimal? val)
@@ -239,11 +237,15 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
-            Debugging1 = true;
-            if (Debugging1)
+            Debugging = true;
+            if (Debugging)
             {
-                MessageBox.Show("Debugging1 is enabled","tabpage_fuel_pfc_default");
+                MessageBox.Show("Debugging is enabled","tabpage_fuel_pfc_default");
             }
+
+            //--------------------------------------------------------------------
+            // Check that useable information has been entered
+            //--------------------------------------------------------------------
 
             dw_details.AcceptText();
             if (!StaticFunctions.IsDirty(dw_details))
@@ -292,6 +294,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return li_return;
             }
 
+            //--------------------------------------------------------------------
+            // Start by getting the set of contracts and their vehicles to process
+            // ContractsBenchmark returns each relevant contract and its vehicles, 
+            // the contract's current benchmark (repeated for each vehicle), and 
+            // some info about the vehicle's fuel type, override rate and the standard 
+            // rate for the vehicle.
+            //--------------------------------------------------------------------
+
             this.Cursor = Cursors.WaitCursor;
 
             ids_original = new DContractsBenchmark();
@@ -314,6 +324,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ld_rates_effective_date = ids_original.GetItem<ContractsBenchmark>(ll_x).RatesEffectiveDate;
                 ll_fuel_key = ids_original.GetItem<ContractsBenchmark>(ll_x).FuelKey;
                 vehicle_no = ids_original.GetItem<ContractsBenchmark>(ll_x).VehicleNumber;
+
+                if( ll_contract_no == )
                 
                 // PBY 04/06/2002
                 // Don't bother creating a frequency adjustment if we 
@@ -327,7 +339,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // Find the new rate for this 
                 ldc_new_standard_fuel_rate = get_new_fuel_rate(ll_fuel_key);
 
-                if (Debugging1)
+                if (Debugging)
                 {
                     MessageBox.Show("UpdateVehicleOverrideFuelRate \n"
                                + "Contract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString() + "\n"
@@ -336,24 +348,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                + "Original_fuel_rate = " + convert_to_string(ldc_original_fuel_rate) + "\n"
                                + "Veh_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate) + "\n"
                                + "New_national_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
-                               , "Debugging1");
+                               , "Debugging");
                     SQLCode = 0;
                 }
 
                 // If overridden fuel rate is null (no override for this contract/vehicle),
                 // or the standard fuel rate is null (no standard fuel rate for this fuel type)
-                // skip this record
-                if (ldc_overridden_fuel_rate == null || ldc_overridden_fuel_rate == 0 || ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate == 0)
+                // skip this record.
+                if (ldc_overridden_fuel_rate == null || ldc_overridden_fuel_rate == 0 
+                    || ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate == 0)
                 {
                     // Dont adjust the fuel rate override
                 }
                 else
                 {
                     // An override rate exists for this contract and needs to be re-adjusted
-                    //PP! seems null values in calculation return null in Powerbuilder too
+                    // The new override rate is adjusted by the difference between the old 
+                    // standard fuel rate, and the new national override rate.
+
                     ldc_new_override_fuel_rate = (ldc_overridden_fuel_rate - ldc_original_fuel_rate) + ldc_new_standard_fuel_rate;
 
-                    if (Debugging1)
+                    if (Debugging)
                     {
                         if (nloop >= maxloops)  // Show the message maxloops times
                         {
@@ -366,7 +381,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                      + "New_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate) + "\n"
                                      + "New_override_fuel_rate = " + convert_to_string(ldc_new_override_fuel_rate)
                                      + "\n\nSkipping update"
-                                     , "Debugging1");
+                                     , "Debugging");
                             SQLCode = 0;
                             nloop++;
                         }
@@ -394,6 +409,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     else
                         lb_continue = true;
                 }
+
+                // [Now done below after the current loop is done - TJB Mar 2022]
                 // Update the standard fuel rates if it changes
                 //if (ldc_new_standard_fuel_rate > 0)
                 //{
@@ -408,17 +425,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //            break;
                 //        }
                 //    }
-
+                //
                 //    if (ll_found >= 0)
                 //    {
-                //        if (Debugging1)
+                //        if (Debugging)
                 //        {
                 //            MessageBox.Show("Rate for " + "FtKey " + ll_fuel_key.ToString()
                 //                          + " RgCode " + ll_rg_code.ToString()
                 //                          + " EffectiveDate date " + ((DateTime)ld_rates_effective_date).ToString("d MMM yyyy")
                 //                          + " found" + "\n\n"
                 //                          + "Update standard rates skipped."
-                //                          , "Debugging1"
+                //                          , "Debugging"
                 //                          , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //        } 
                 //        else 
@@ -436,17 +453,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //                      , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //    }
                 //}
-            }
-            if (Debugging1)
+            } // End loop updating each vehicle's override rate
+
+            if (Debugging)
             {
                 MessageBox.Show("End of loop - time to stop" + "\n\n"
                                + "Quitting"
-                               , "Debugging1"
+                               , "Debugging"
                                );
                 return 1;  // Debugging
             }
 
+            //--------------------------------------------------------------------
             // Update standard fuel rates
+            //--------------------------------------------------------------------
+
             int std_fuel_index;
             bool std_fuels_updated = false;
             nloop = 0;
@@ -459,11 +480,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 std_fuel_index = find_std_fuel_index( ll_fuel_key, ll_rg_code, ld_effective_date );
                 if (std_fuel_index > 0)
                 {
-                    if (Debugging1)
+                    if (Debugging)
                     {
                         if (nloop >= maxloops)
                         {
-                            decimal? ldc_old_standard_rate = ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate
+                            decimal? ldc_old_standard_rate = ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate;
                             MessageBox.Show("Update standard fuel rate"
                             + "\nFuel key = " + ll_fuel_key.ToString()
                             + "\nRG Code  = " + ll_rg_code.ToString()
@@ -504,7 +525,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 }
             }
 
-            // Calculate new vehicle benchmarks for each contract/vehicle.
+            //--------------------------------------------------------------------
+            // Calculate new vehicle benchmarks for each contract/vehicle
+            // and create frequency adjustments for each contract vehicle.
+            //--------------------------------------------------------------------
+
             // Determine the benchmark change attributable to each vehicle and create frequency adjustments
             // for each, with a rolling total for the contract.  The last vehicle's rolling benchmark total
             // should be the new contract benchmark.
@@ -514,6 +539,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? newVorFuelRate;
             decimal? oldStdFuelRate;
             decimal? newStdFuelRate;
+            decimal? dNewVehBM;
             int? newVehBM;
             int? newRollingBM = 0;
             int? thisContractNo = 0;  // To detect change in contractNo
@@ -522,6 +548,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Loop over the original list of contracts/vehicles (they're in contract, vehicle order)
             for (ll_x = 0; ll_x < ids_original.RowCount; ll_x++)
             {
+                // Initialise things for this contract/vehicle
+
                 // For each new contract vheicle ...
                 ll_found = 0;
                 ll_contract_no = ids_original.GetItem<ContractsBenchmark>(ll_x).ContractNo;
@@ -534,8 +562,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 oldContractBM = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMark;
                 oldVorFuelRate = ids_original.GetItem<ContractsBenchmark>(ll_x).FuelRate;
                 oldStdFuelRate = ids_original.GetItem<ContractsBenchmark>(ll_x).OriginalFuelRate;
-                std_fuel_index = find_std_fuel_index(ll_fuel_key, ll_rg_code, ld_rates_effective_date);
-                newStdFuelRate = ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate;
+                // Look up the new standard fuel rate (saved above)
+                int i = find_std_fuel_index(ll_fuel_key, ll_rg_code, ld_rates_effective_date);
+                newStdFuelRate = ids_standard_fuels.GetItem<StandardFuelRates>(i).FrFuelRate;
 
                 // if this is a new contract, reset the rolling benchmark
                 if (thisContractNo != ll_contract_no)
@@ -543,43 +572,80 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     newRollingBM = oldContractBM;
                 }
 
-                // If this vehicle has an override rate, calculate its new override rate
-                // and update its record.
-                if (oldVorFuelRate.HasValue)
+                // Determine this vehicle's contribution to the new contract benchmark
+
+                // Get the vehicle's new BM
+                RDSDataService obj = RDSDataService.GetVehBenchmark(ll_contract_no, ll_sequence_no, vehicle_no);
+                dNewVehBM = obj.decVal;
+                newVehBM  = null;
+                if (dNewVehBM != null)
+                    newVehBM = (int)dNewVehBM;
+
+                // Calculate its contribution to the new contract BM
+                //    veh contribution = newVehBM - oldContractBM 
+                int? vehBMChange = newVehBM - oldContractBM;
+
+                // Calculate the new rolling contract benchmark
+                //    rollingBM = rollingBM + veh contribution
+                newRollingBM = newRollingBM + vehBMChange;
+
+                
+                if (Debugging)
                 {
-                    newVorFuelRate = oldVorFuelRate + (newStdFuelRate - oldStdFuelRate);
-                    if (Debugging1)
+                    if (nloop <= maxloops)
                     {
-                        if (nloop <= maxloops)
-                        {
-                            MessageBox.Show("Contract " + ll_contract_no.ToString()
-                                + "\nVehicle " + vehicle_no.ToString()
-                                + "\nOld override fuel rate = "
-                                + "\nNew override fuel rate = "
-                                + "\n\nskipping update"
-                                );
-                            nloop++;
-                        }
+                        MessageBox.Show("Preparing a frequency adjustment"
+                            );
+                        nloop++;
+                    }
+                }
+                // Create a frequency adjustment for this contract vehicle
+
+                if(oldContractBM == null || oldContractBM == 0
+                    || newVehBM == null || newVehBM == 0)
+                {
+                    // There was some trouble calculating benchmark.  Do not create adjustments
+                }
+                else if (newRollingBM != oldContractBM)
+                {
+                    // Create adjustment
+                    NFrequencyAdjustment n_freq = new NFrequencyAdjustment();
+                    n_freq.of_set_contract(ll_contract_no, ll_sequence_no);
+
+                    ldc_standard_fuel_rate_change = newStdFuelRate.GetValueOrDefault() - oldStdFuelRate.GetValueOrDefault();
+                    if (ldc_standard_fuel_rate_change >= 0)
+                    {
+                        ls_reason = "Increase: ";
                     }
                     else
                     {
-                        // Update the vehicle's override rate
+                        ldc_standard_fuel_rate_change = Math.Abs((decimal)ldc_standard_fuel_rate_change);
+                        ls_reason = "Decrease: ";
+                    }
+
+                    // TJB  SR4654  April 2005
+                    // Change the wording of the reason for the change
+                    //			n_freq.is_Reason = 'Global fuel rate changed. \n' &
+                    //									  +'Original standard rate: ' + ldc_original_fuel_rate.ToString() + '\n' &
+                    //									  +'New standard rate: ' + ldc_new_standard_fuel_rate.ToString()
+                    n_freq.is_reason = "Global fuel rate changed.\r\n" 
+                                       + ls_reason + ldc_standard_fuel_rate_change.ToString() + " cents/litre\r\n" 
+                                       + "New standard rate: " + newStdFuelRate.ToString() + " cpl";
+
+                    n_freq.of_set_effective_date(ld_effective_date);
+                    n_freq.idc_new_benchmark = newRollingBM;
+                    n_freq.idc_amount_to_pay = vehBMChange;
+                    n_freq.idc_adjustment_amount = vehBMChange;
+
+                    if (vehBMChange != 0)
+                    {
+                        ll_result = n_freq.of_save();
+                        if (ll_result <= 0)
+                        {
+                            break;
+                        }
                     }
                 }
-
-                //--------------------------------------------------------------------
-                // Determine this vehicle's contribution to the new contract benchmark
-                //--------------------------------------------------------------------
-
-                // Get the new vehicle BM
-                // Calculate its contribution to the new contract BM
-                //    veh contribution = newVehBM - oldContractBM 
-                // Calculate the new rolling contract benchmark
-                //    rollingBM = rollingBM + veh contribution
-
-                //--------------------------------------------------------------------
-                // Create a frequency adjustment for this contract vehicle
-                //--------------------------------------------------------------------
 
             } // end of contract/vehicle processing loop
 

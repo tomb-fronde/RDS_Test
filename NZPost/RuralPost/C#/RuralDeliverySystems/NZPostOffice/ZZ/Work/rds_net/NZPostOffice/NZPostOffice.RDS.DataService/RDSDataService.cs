@@ -13,6 +13,7 @@ namespace NZPostOffice.RDS.DataService
     // TJB Frequencies & Allowances  March-2022
     // UpdateVehicleOverrideFuelRate
     // Added vehicle number to parameters in support of handling multiple vehicles
+    // Added GetVehBenchmark()
     //
     // TJB Frequencies & Allowances 11-Mar-2021
     // Added GetAllowanceCalcType
@@ -874,6 +875,14 @@ namespace NZPostOffice.RDS.DataService
         public static RDSDataService GetBenchmarkCalc2021(int? il_contract, int? il_sequence)
         {
             RDSDataService obj = Execute("_GetBenchmarkCalc2021", il_contract, il_sequence);
+            return obj;
+        }
+
+        // TJB  Frequencies & Vehicles  9-Mar-2022: New
+        // Get the current vehicle benchmark 
+        public static RDSDataService GetVehBenchmark(int? inContract, int? inSequence, int? inVehicle)
+        {
+            RDSDataService obj = Execute("_GetVehBenchmark", inContract, inSequence, inVehicle);
             return obj;
         }
 
@@ -6598,6 +6607,42 @@ namespace NZPostOffice.RDS.DataService
                 }
             }
         }
+
+
+        // TJB  Frequencies & Vehicles  9-March-2022: New
+        [ServerMethod]
+        private void _GetVehBenchmark(int? inContract, int? inSequence, int? inVehicle)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    ParameterCollection pList = new ParameterCollection();
+                    cm.CommandText = "select rd.BenchmarkCalcVeh2021( @inContract, @inSequence, @inVehicle )";
+                    pList.Add(cm, "inContract", inContract);
+                    pList.Add(cm, "inSequence", inSequence);
+                    pList.Add(cm, "inVehicle",  inVehicle);
+
+                    try
+                    {
+                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+                        {
+                            if (dr.Read())
+                            {
+                                decVal = Convert.ToDecimal(dr.GetFloat(0));
+                            }
+                            _sqlcode = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _sqlcode = -1;
+                        _sqlerrtext = ex.Message;
+                    }
+                }
+            }
+        }
+
 
         // TJB  Frequencies & Vehicles  17-Jan-2021
         // Created new routine for BenchmarkCalc2021 derived from _GetBenchmarkCalc2005
