@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.DataControls.Ruraldw
 	// TJB Frequencies & Allowances  March-2022
 	// Changes to handle multiple vehicles per contract
 	// Add effective_date to call parameters
+	// Add vehicle number to returned values
 
 	public partial class DContractsBenchmark : Metex.Windows.DataUserControl
 	{

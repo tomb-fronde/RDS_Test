@@ -11,16 +11,21 @@ using NZPostOffice.RDS.Entity.Ruraldw;
 
 namespace NZPostOffice.RDS.DataControls.Ruraldw
 {
-    public partial class DContractsBenchmarkForRates : Metex.Windows.DataUserControl
+	// TJB Frequencies & Allowances  March-2022
+	// Changes to handle multiple vehicles per contract
+	// Add effective_date to call parameters
+	// Add vehicle number to returned values
+	
+	public partial class DContractsBenchmarkForRates : Metex.Windows.DataUserControl
 	{
 		public DContractsBenchmarkForRates()
 		{
 			InitializeComponent();
 		}
 
-		public int Retrieve( int? al_rg_code )
+		public int Retrieve( int? al_rg_code, DateTime? ad_eff_date)
         {
-			return RetrieveCore<ContractsBenchmarkForRates>(ContractsBenchmarkForRates.GetAllContractsBenchmarkForRates(al_rg_code));
+			return RetrieveCore<ContractsBenchmarkForRates>(ContractsBenchmarkForRates.GetAllContractsBenchmarkForRates(al_rg_code, ad_eff_date));
 		}
 	}
 }

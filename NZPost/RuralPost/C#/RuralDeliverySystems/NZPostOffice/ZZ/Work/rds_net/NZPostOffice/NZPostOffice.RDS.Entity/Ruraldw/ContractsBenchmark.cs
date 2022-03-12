@@ -10,6 +10,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 {
     // TJB Frequencies & Allowances  March-2022
     // Changes to handle multiple vehicles per contract
+    // Changed from inline query to stored proc
     // Add effective_date to call parameters
     // Add vehicle_number to retreived values (stored proc changed)
     //   -- primarily during testing to bypass using getdate() in the stored proc
@@ -294,12 +295,6 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
-                    cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "sp_ContractsBenchmarkV2";
-                    ParameterCollection pList = new ParameterCollection();
-                    pList.Add(cm, "inRgCode", al_rg_code);
-                    pList.Add(cm, "inEffDate", ad_eff_date);
-
                     //cm.CommandType = CommandType.Text;
                     //cm.CommandText = "SELECT cr.contract_no, "
                     //               + "       cr.contract_seq_number, "
@@ -334,9 +329,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     //                                   + "   AND cr.con_acceptance_flag = 'Y' "
                     //                                   + "   AND cr.con_expiry_date >= getdate() " 
                     //                                   + " ORDER BY cr.contract_no"; 
-
+                    //
                     //ParameterCollection pList = new ParameterCollection();
                     //pList.Add(cm, "al_rg_code", al_rg_code);
+
+                    cm.CommandType = CommandType.StoredProcedure;
+                    cm.CommandText = "sp_ContractsBenchmarkV2";
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "inRgCode", al_rg_code);
+                    pList.Add(cm, "inEffDate", ad_eff_date);
 
                     List<ContractsBenchmark> _list = new List<ContractsBenchmark>();
                     using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))

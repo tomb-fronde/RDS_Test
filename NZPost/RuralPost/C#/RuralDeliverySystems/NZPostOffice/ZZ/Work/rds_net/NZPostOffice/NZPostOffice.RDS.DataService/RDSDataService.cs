@@ -11,9 +11,10 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // TJB Frequencies & Allowances  March-2022
+    // GetVehBenchmark()  NEW
+    // UpdateVehicleOverrideRucRate  NEW
     // UpdateVehicleOverrideFuelRate
-    // Added vehicle number to parameters in support of handling multiple vehicles
-    // Added GetVehBenchmark()
+    //     Added vehicle number to parameters in support of handling multiple vehicles
     //
     // TJB Frequencies & Allowances 11-Mar-2021
     // Added GetAllowanceCalcType
@@ -2764,6 +2765,27 @@ namespace NZPostOffice.RDS.DataService
             sqlErrText = obj._sqlerrtext;
         }
 
+        // TJB Frequencies & Allowances  March-2022: NEW
+        // UpdateVehicleOverrideRucRate
+        // Added vehicle number to parameters in support of handling multiple vehicles
+        //
+        public static void UpdateVehicleOverrideRucRate(
+            decimal? ldc_new_override_fuel_rate,
+            int? ll_contract_no,
+            int? ll_sequence_no,
+            int? pVehicleNo,
+            DateTime? ld_rates_effective_date,
+            ref int sqlCode,
+            ref string sqlErrText)
+        {
+            RDSDataService obj = Execute("_UpdateVehicleOverrideRucRate"
+                                        , ldc_new_override_fuel_rate
+                                        , ll_contract_no, ll_sequence_no
+                                        , pVehicleNo, ld_rates_effective_date);
+            sqlCode = obj._sqlcode;
+            sqlErrText = obj._sqlerrtext;
+        }
+
         /// <summary>
         /// Get the current contract sequence number
         /// </summary>
@@ -2921,9 +2943,10 @@ namespace NZPostOffice.RDS.DataService
         /// <summary>
         /// UPDATE	vehicle_rate vr1 SET	vr1.vr_ruc = @ldc_new_standard_ruc_rate WHERE vr1.vr_rates_effective_date = @ld_rates_effective_date
         /// </summary>
-        public static void UpdateVehicleRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date, ref int sqlCode, ref string sqlErrText)
+        // TJB March 2022: Changed name from UpdateVehicleRate to UpdateVehicleRucRate
+        public static void UpdateVehicleRucRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date, ref int sqlCode, ref string sqlErrText)
         {
-            RDSDataService obj = Execute("_UpdateVehicleRate", ldc_new_standard_ruc_rate, ld_rates_effective_date);
+            RDSDataService obj = Execute("_UpdateVehicleRucRate", ldc_new_standard_ruc_rate, ld_rates_effective_date);
 
         }
 
@@ -3191,7 +3214,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         [ServerMethod]
-        private void _UpdateVehicleRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date)
+        private void _UpdateVehicleRucRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -11585,7 +11608,54 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "ll_sequence_no", ll_sequence_no);
                     pList.Add(cm, "pVehicleNo", pVehicleNo);
                     pList.Add(cm, "ld_rates_effective_date", ld_rates_effective_date);
+
+                    try
+                    {
+                        DBHelper.ExecuteNonQuery(cm, pList);
+                        _sqlcode = 0;
+                    }
+                    catch (Exception e)
+                    {
+                        _sqlerrtext = e.Message;
+                        _sqlcode = -1;
+                    }
+                }
+            }
+        }
+
+        [ServerMethod]
+        // TJB Frequencies & Allowances  March-2022: NEW
+        // Update RUC override rate for contract vehicle
+        private void _UpdateVehicleOverrideRucRate(
+            decimal? ldc_new_override_ruc_rate,
+            int? ll_contract_no,
+            int? ll_sequence_no,
+            int? pVehicleNo,
+            DateTime? ld_rates_effective_date)
+        {
+            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+            {
+                using (DbCommand cm = cn.CreateCommand())
+                {
+                    cm.CommandType = CommandType.Text;
+                    int outlet_id = 0;
+                    cm.CommandText = " UPDATE rd.vehicle_override_rate " +
+                                        " SET vor_ruc = @ldc_new_override_ruc_rate " +
+                                      " WHERE contract_no = @ll_contract_no " +
+                                        " AND contract_seq_number = @ll_sequence_no " +
+                                        " AND vehicle_number = @pVehicleNo " +
+                                        " AND vor_effective_date >= @ld_rates_effective_date " +
+                                        " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " +
+                                                                    " FROM rd.vehicle_override_rate vor2 " +
+                                                                   " WHERE vor2.contract_no = vehicle_override_rate.contract_no" +
+                                                                     " AND vor2.contract_seq_number = vehicle_override_rate.contract_seq_number)";
+
+                    ParameterCollection pList = new ParameterCollection();
+                    pList.Add(cm, "ldc_new_override_ruc_rate", ldc_new_override_ruc_rate);
                     pList.Add(cm, "ll_contract_no", ll_contract_no);
+                    pList.Add(cm, "ll_sequence_no", ll_sequence_no);
+                    pList.Add(cm, "pVehicleNo", pVehicleNo);
+                    pList.Add(cm, "ld_rates_effective_date", ld_rates_effective_date);
 
                     try
                     {

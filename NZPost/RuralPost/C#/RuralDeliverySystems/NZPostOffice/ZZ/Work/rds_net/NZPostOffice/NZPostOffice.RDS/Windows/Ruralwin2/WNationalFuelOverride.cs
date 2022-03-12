@@ -365,6 +365,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (ldc_overridden_fuel_rate == null || ldc_overridden_fuel_rate == 0 
                     || ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate == 0)
                 {
+                    // Note: Query now only returns records with non-null fuel overrides
                     // Dont adjust the fuel rate override
                     continue;
                 }
@@ -373,7 +374,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // The new override rate is adjusted by the difference between the old 
                 // standard fuel rate, and the new national override rate.
 
-                ldc_new_override_fuel_rate = ldc_overridden_fuel_rate + (ldc_new_standard_fuel_rate - ldc_original_fuel_rate);
+                ldc_new_override_fuel_rate = ldc_overridden_fuel_rate 
+                                           + (ldc_new_standard_fuel_rate - ldc_original_fuel_rate);
 
                 if (Debugging)
                 {
@@ -390,7 +392,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                     + "\n\nSkipping update"
                                     , "Debugging");
                         SQLCode = 0;
-                        nloop++;
                     }
                 }
                 else
@@ -445,7 +446,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             + "\nNew rate = " + convert_to_string(ldc_new_standard_fuel_rate)
                             + "\n\nskipped"
                             , "Debugging2");
-                            nloop++;
                         }
                     }
                     else
@@ -615,7 +615,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             + "Freq adjustment amt = " + convert_to_string(vehBMChange)
                             , "Debugging"
                             );
-                            nloop++;
                         }
                     }
 
@@ -624,24 +623,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         ll_result = n_freq.of_save();
                         if (ll_result <= 0)
                         {
+                            MessageBox.Show("Problem saving frequency adjustment,"
+                                    + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                                    + "\nVehicle " + vehicle_no.ToString()
+                                    + "\n\n Save result = "+ll_result.ToString()
+                                );
                             break;
                         }
                     }
                 }
-
+                nloop++;
             } // end of frequency adjustments loop
-
 
             this.Cursor = Cursors.Default;
 
-            if (lb_continue)
-            {
-                li_return = 1;  // OK
-            }
-            else
-            {
-                li_return = -1;  // Failure of some sort
-            }
+            li_return = (lb_continue) ? 1 : -1;
             return li_return;
         }
 
@@ -721,7 +717,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         public virtual int tabpage_other_rates_pfc_default()
         {
             int ll_x = 1;
-            decimal? ldc_overridden_ruc_rate;
+            decimal? ldc_old_override_ruc_rate;
             decimal? ldc_new_standard_ruc_rate;
             decimal? ldc_original_ruc_rate;
             decimal? ldc_new_override_ruc_rate;
@@ -739,6 +735,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             bool lb_continue = true;
             int? ll_selected_rg_code;
             int li_RETURN = -1;
+            int? vehicle_no;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
@@ -778,63 +775,67 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //ids_original = CREATE n_ds;
             DataUserControlContainer ids_original = new DataUserControlContainer();
             ids_original.DataObject = new DContractsBenchmarkForRates();// 'd_contracts_benchmark_for_rates';
-            ((DContractsBenchmarkForRates)ids_original.DataObject).Retrieve(ll_selected_rg_code);
+            ((DContractsBenchmarkForRates)ids_original.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
             for (ll_x = 0; ll_x < ids_original.RowCount; ll_x++)
             {
                 ldc_original_ruc_rate = null;
                 ldc_new_override_ruc_rate = null;
-                ldc_overridden_ruc_rate = null;
+                ldc_old_override_ruc_rate = null;
                 ll_contract_no = null;
                 ll_sequence_no = null;
                 ld_rates_effective_date = null;
                 ll_found = 0;
                 ll_contract_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).ContractNo;
                 ll_sequence_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).SequenceNo;
+                vehicle_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).VehicleNumber;
                 ld_rates_effective_date = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).RatesEffectiveDate;
                 ldc_original_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OriginalRucRate;
-                ldc_overridden_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OverrideRucRate;
-                if (ldc_overridden_ruc_rate == null || ldc_overridden_ruc_rate == 0)
+                ldc_old_override_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OverrideRucRate;
+
+                if (ldc_old_override_ruc_rate == null || ldc_old_override_ruc_rate == 0)
                 {
+                    // Note: Query now only returns records with non-null RUC overrides
                     // Dont adjust the ruc rate override
                 }
                 else
                 {
-                    // An override rate exist for this contract and needs to be re-adjusted
-                    ldc_new_override_ruc_rate = (ldc_overridden_ruc_rate.GetValueOrDefault() - ldc_original_ruc_rate.GetValueOrDefault()) + 
-                        ldc_new_standard_ruc_rate.GetValueOrDefault();
-                    /*UPDATE vehicle_override_rate vor1
-                         SET vor1.vor_ruc = :ldc_new_override_ruc_rate
-                       WHERE vor1.contract_no = :ll_contract_no
-                         AND vor1.contract_seq_number = :ll_sequence_no
-                         AND vor1.vor_effective_date >= :ld_rates_effective_date
-                         AND vor1.vor_effective_date 
-                                    = (SELECT max(vor2.vor_effective_date) 
-                                         FROM vehicle_override_rate vor2 
-                                        WHERE vor2.contract_no = vor1.contract_no
-                                          AND vor2.contract_seq_number = vor1.contract_seq_number)
-                    */
-                    // TJB  RPCR_099  8-Jan-2016:  Name change: UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
-                    RDSDataService.UpdateVehicleOverrideFuelRate(ldc_new_override_ruc_rate
-                                             , ll_contract_no
-                                             , ll_sequence_no
-                                             
-                                             , ld_rates_effective_date
-                                             , ref SQLCode, ref SQLErrText);
-                    if (SQLCode != 0)
+                    if (Debugging)
                     {
-                        MessageBox.Show("Unable to update vehicle_override_rate table. \n" 
-                                      + "The global update process will be aborted.\n\n" 
-                                      + "Error Code:" + SQLCode.ToString() + "\n"     // /*?String(itr_tran_obj.SQLDBCode) +*/ "\n" 
-                                      + "Error Text:" + SQLErrText
-                                      , "Database Error"
-                                      , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        lb_continue = false;
-                        break;
+                        MessageBox.Show("Update Vehicle Override RUC Rate "
+                                   + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString() 
+                                   + "\nVehicle " + vehicle_no.ToString() 
+                                   + "\nOriginal_standard_ruc_rate = " + convert_to_string(ldc_original_ruc_rate) 
+                                   + "\nOld_veh_override_ruc_rate = " + convert_to_string(ldc_old_override_ruc_rate) 
+                                   + "\nNew_veh_override_ruc_rate = " + convert_to_string(ldc_new_standard_ruc_rate)
+                                   , "Debugging");
                     }
                     else
                     {
-                        lb_continue = true;
+                        // An override rate exists for this contract and needs to be re-adjusted
+                        ldc_new_override_ruc_rate = ldc_old_override_ruc_rate.GetValueOrDefault() 
+                            + (ldc_new_standard_ruc_rate.GetValueOrDefault() - ldc_original_ruc_rate.GetValueOrDefault());
+
+                        // TJB Mar 2022: Fixed bug: Changed name to UpdateVehicleOverrideRucRate and created new dataservice
+                        // TJB  RPCR_099  8-Jan-2016:  Name change: UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
+                        RDSDataService.UpdateVehicleOverrideRucRate(ldc_new_override_ruc_rate
+                                                 , ll_contract_no
+                                                 , ll_sequence_no
+                                                 , vehicle_no
+                                                 , ld_rates_effective_date
+                                                 , ref SQLCode, ref SQLErrText);
+                        if (SQLCode != 0)
+                        {
+                            MessageBox.Show("Unable to update vehicle_override_rate table. \n"
+                                          + "The global update process will be aborted.\n\n"
+                                          + "Error Code:" + SQLCode.ToString() + "\n"
+                                          + "Error Text:" + SQLErrText
+                                          , "Database Error"
+                                          , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            lb_continue = false;
+                            break;
+                        }
                     }
+                    lb_continue = true;
                 }
                 // Update the standard ruc rates for the rates_effective_date of the renewal group
                 /*UPDATE vehicle_rate vr1
@@ -842,12 +843,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                    WHERE vr1.vr_rates_effective_date = :ld_rates_effective_date
                    USING itr_tran_obj;
                 */
-                RDSDataService.UpdateVehicleRate(ldc_new_standard_ruc_rate, ld_rates_effective_date, ref SQLCode, ref SQLErrText);
+                // TJB: changed name from UpdateVehicleRate to UpdateVehicleRucRate
+                RDSDataService.UpdateVehicleRucRate(ldc_new_standard_ruc_rate, ld_rates_effective_date
+                                                , ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
                     MessageBox.Show("Unable to update vehicle_rate table. \n" 
                                   + "The global update process will be aborted.\n\n" 
-                                  + "Error Code: " + SQLCode.ToString() + "\n"    // /*?String(itr_tran_obj.SQLDBCode) +*/ "\n" 
+                                  + "Error Code: " + SQLCode.ToString() + "\n"
                                   + "Error Text: " + SQLErrText
                                   , "Database Error"
                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -861,7 +864,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //lds_new_benchmarks = CREATE n_ds
                 lds_new_benchmarks = new DataUserControlContainer();
                 lds_new_benchmarks.DataObject = new DContractsBenchmarkForRates();//'d_contracts_benchmark_for_rates';
-                ((DContractsBenchmarkForRates)lds_new_benchmarks.DataObject).Retrieve(ll_selected_rg_code);
+                ((DContractsBenchmarkForRates)lds_new_benchmarks.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
                 // Loop thru the new benchmarks and see if benchmark is different
                 for (ll_x = 0; ll_x < lds_new_benchmarks.RowCount; ll_x++)
                 {
