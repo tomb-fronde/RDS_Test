@@ -31,7 +31,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("vehicle_number", "_vehicle_number", "")]
     [MapInfo("override_ruc_rate", "_override_ruc_rate", "vehicle_override_rate")]
     [MapInfo("original_ruc_rate", "_original_ruc_rate", "vehicle_override_rate")]
-    [MapInfo("bench_mark", "_bench_mark", "vehicle_override_rate")]
+    [MapInfo("benchmark", "_benchmark", "vehicle_override_rate")]
     [System.Serializable()]
 
     public class ContractsBenchmarkForRates : Entity<ContractsBenchmarkForRates>
@@ -65,7 +65,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private decimal? _original_ruc_rate;
 
         [DBField()]
-        private int? _bench_mark;
+        private decimal? _benchmark;
 
         public virtual int? ContractNo
         {
@@ -229,19 +229,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual int? BenchMark
+        public virtual decimal? BenchMark
         {
             get
             {
                 CanReadProperty("BenchMark", true);
-                return _bench_mark;
+                return _benchmark;
             }
             set
             {
                 CanWriteProperty("BenchMark", true);
-                if (_bench_mark != value)
+                if (_benchmark != value)
                 {
-                    _bench_mark = value;
+                    _benchmark = value;
                     PropertyHasChanged();
                 }
             }
@@ -332,9 +332,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._con_expiry_date = GetValueFromReader<DateTime?>(dr, 4);
                             instance._rg_code = GetValueFromReader<Int32?>(dr, 5);
                             instance._vehicle_number = GetValueFromReader<Int32?>(dr, 6);
-                            instance._override_ruc_rate = GetValueFromReader<Int32?>(dr, 7);
+                            instance._override_ruc_rate = GetValueFromReader<Decimal?>(dr, 7);
                             instance._original_ruc_rate = GetValueFromReader<Decimal?>(dr, 8);
-                            instance._bench_mark = GetValueFromReader<Int32?>(dr, 9);
+                            instance._benchmark = GetValueFromReader<Decimal?>(dr, 9);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();

@@ -651,7 +651,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ((DwNationalFuelOverride)dw_details.DataObject).Retrieve(0);
             //  TJB SR4636 1-Dec-2004
             //  Set up the captions on the override rate values, so we can
-            //  change 'Petrol' to 'Petrol  ( Diesel Equivalent)'.
+            //  change 'Petrol' to 'Petrol (Diesel Equivalent)'.
             //  The captions were previously part of the datawindow but 
             //  overriding the 'Petrol' caption caused the selectionchanging 
             //  code to trigger. 
@@ -725,7 +725,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? ll_contract_no;
             int? ll_sequence_no;
             DateTime? ld_rates_effective_date;
-            DataUserControlContainer lds_new_benchmarks;//n_ds
+            DataUserControlContainer lds_new_benchmarks;
             decimal? ldc_new_benchmark;
             decimal? ldc_original_benchmark;
             decimal? ldc_amount_to_pay;
@@ -734,15 +734,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int ll_result = -1;
             bool lb_continue = true;
             int? ll_selected_rg_code;
-            int li_RETURN = -1;
+            int li_RETURN = FAILURE;
             int? vehicle_no;
             int SQLCode = 0;
             string SQLErrText = string.Empty;
 
+            //--------------------------------------------------------------------
+            // Check that useable information has been entered
+            //--------------------------------------------------------------------
+
             dw_rates.AcceptText();
             if (!StaticFunctions.IsDirty(dw_rates))
                 // No rates specified for this tab. ignore the tab
-                return 1;
+                return SUCCESS;
 
             if (Debugging)
             {
@@ -751,7 +755,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             
             // Validate criteria fields
             if (of_validate_criteria() < 0)
-                return li_RETURN;
+                return FAILURE;
 
             ld_effective_date = null;
             ld_effective_date = dw_criteria.GetItem<FuelOverrideFields>(0).AdEffectiveDate;
@@ -763,7 +767,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                               , "Validation Error"
                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 this.Focus();
-                return li_RETURN;
+                return FAILURE;
             }
 
             if(Debugging) MessageBox.Show("Debugging");
@@ -778,8 +782,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 == DialogResult.No)
             {
                 this.Focus();
-                return li_RETURN;
+                return FAILURE;
             }
+
+            //--------------------------------------------------------------------
+            // Start by getting the set of contracts and their vehicles to process
+            // ContractsBenchmark returns each relevant contract and its vehicles, 
+            // the contract's current benchmark (repeated for each vehicle), and 
+            // the vehicle's RUC override rate and its standard rate.
+            //--------------------------------------------------------------------
+
             DataUserControlContainer ids_original = new DataUserControlContainer();
             ids_original.DataObject = new DContractsBenchmarkForRates();// 'd_contracts_benchmark_for_rates';
             ((DContractsBenchmarkForRates)ids_original.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
@@ -803,6 +815,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     // Note: Query now only returns records with non-null RUC overrides
                     // Dont adjust the ruc rate override
+                    continue;
                 }
                 else
                 {
@@ -843,18 +856,27 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                           + "Error Text:" + SQLErrText
                                           , "Database Error"
                                           , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            lb_continue = false;
-                            break;
+                            return FAILURE;
+                            // lb_continue = false;
+                            // break;
                         }
                     }
-                    lb_continue = true;
+                    //lb_continue = true;
                 }
             }  // End loop processing each contract vehicle
 
+            //--------------------------------------------------------------------
+            // Update standard RUC rates
+            //--------------------------------------------------------------------
+
             // Update the standard ruc rates for the rates_effective_date of the renewal group
+            // NOTE: Currently (Mar 2022) there is only one standard RUC rate for all vehicle types
+            //       and renewal groups.  I suspect this will need to be changed in the near future 
+            //       at least for Deisel, PHEV, and BEV vehicle types.   TJB Mar 2022
             if (Debugging)
             {
                 MessageBox.Show("Update the standard ruc rates"
+                    + "\nNew_standard_ruc_rate = " + convert_to_string(ldc_new_standard_ruc_rate)
                     + "\n\n Skipped"
                     , "Debugging");
             }
@@ -870,99 +892,160 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                   + "Error Text: " + SQLErrText
                                   , "Database Error"
                                   , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    lb_continue = false;
+                    return FAILURE;
                 }
             }
 
+            //--------------------------------------------------------------------
+            // Calculate new vehicle benchmarks for each contract/vehicle
+            // and create frequency adjustments for each contract vehicle.
+            //--------------------------------------------------------------------
+
             // Calculate new benchmarks and generate frequency adjustments
-            // - Note: modified to handle multiple RUN-paying vehicles (TJB Mar 2022)
+            // - Note: modified to handle multiple RUC-paying vehicles (TJB Mar 2022)
             if (Debugging)
             {
                 MessageBox.Show("Calculate new benchmarks and generate frequency adjustments"
-                    + "\n\nNot complete - skipping"
+                    + "\n\nSkipping"
                     , "Debugging");
             }
             else
-            {    if (lb_continue == true)
+            {
+                int? ll_last_contract;
+                decimal? ldc_vehicle_benchmark;
+                decimal? ldc_rolling_benchmark;
+                decimal? ldc_vehicle_BM_contribution;
+                ll_last_contract = 0;
+                ldc_rolling_benchmark = 0;
+
+                // Scan for each contract/vehicle with an override RUC rate
+                for (ll_x = 0; ll_x < ids_original.RowCount; ll_x++)
                 {
-                    // Obtain new benchmark
-                    //lds_new_benchmarks = CREATE n_ds
-                    lds_new_benchmarks = new DataUserControlContainer();
-                    lds_new_benchmarks.DataObject = new DContractsBenchmarkForRates();//'d_contracts_benchmark_for_rates';
-                    ((DContractsBenchmarkForRates)lds_new_benchmarks.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
-                    // Loop thru the new benchmarks and see if benchmark is different
-                    for (ll_x = 0; ll_x < lds_new_benchmarks.RowCount; ll_x++)
+                    ldc_original_ruc_rate = null;
+                    ldc_new_override_ruc_rate = null;
+                    ldc_old_override_ruc_rate = null;
+                    ll_contract_no = null;
+                    ll_sequence_no = null;
+                    ld_rates_effective_date = null;
+                    ldc_original_benchmark = null;
+                    ll_found = 0;
+                    ll_contract_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).ContractNo;
+                    ll_sequence_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).SequenceNo;
+                    vehicle_no = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).VehicleNumber;
+                    ld_rates_effective_date = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).RatesEffectiveDate;
+                    ldc_original_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OriginalRucRate;
+                    ldc_old_override_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OverrideRucRate;
+                    ldc_original_benchmark = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_found).BenchMark;
+
+                    if (ldc_old_override_ruc_rate == null || ldc_old_override_ruc_rate == 0)
                     {
-                        ll_contract_no = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).ContractNo;
-                        ll_sequence_no = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).SequenceNo;
-                        ldc_new_benchmark = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).BenchMark;
-                        ldc_new_standard_ruc_rate = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OriginalRucRate;
+                        // Note: Query now only returns records with non-null RUC overrides
+                        // Dont adjust the ruc rate override if the override is 0
+                        continue;
+                    }
 
-                        // Find the new rate for this 
-                        //ll_found = ids_original.Find("contract_no = " + ll_contract_no.ToString() + " and sequence_no = " + ll_sequence_no.ToString(), 1, ids_original.RowCount);
-                        //!ll_found = ids_original.DataObject.Find(new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("contract_no", ll_contract_no),
-                        //!                                                                  new KeyValuePair<string, object>("sequence_no", ll_sequence_no) });
-                        ll_found = -1;
-                        for (int i = 0; i < ids_original.DataObject.RowCount; i++)
+                    // Obtain new benchmark
+                    //lds_new_benchmarks = new DataUserControlContainer();
+                    //lds_new_benchmarks.DataObject = new DContractsBenchmarkForRates();
+                    //((DContractsBenchmarkForRates)lds_new_benchmarks.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
+                    // Loop thru the new benchmarks and see if benchmark is different
+                    //for (ll_x = 0; ll_x < lds_new_benchmarks.RowCount; ll_x++)
+                    //{
+                    //    ll_contract_no = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).ContractNo;
+                    //    ll_sequence_no = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).SequenceNo;
+                    //    ldc_new_benchmark = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).BenchMark;
+                    //    ldc_new_standard_ruc_rate = lds_new_benchmarks.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OriginalRucRate;
+
+                    //    // Find the new rate for this 
+                    //    //ll_found = ids_original.Find("contract_no = " + ll_contract_no.ToString() + " and sequence_no = " + ll_sequence_no.ToString(), 1, ids_original.RowCount);
+                    //    //!ll_found = ids_original.DataObject.Find(new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("contract_no", ll_contract_no),
+                    //    //!                                                                  new KeyValuePair<string, object>("sequence_no", ll_sequence_no) });
+                    //    ll_found = -1;
+                    //    for (int i = 0; i < ids_original.DataObject.RowCount; i++)
+                    //    {
+                    //        ContractsBenchmarkForRates current = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(i);
+                    //        if (current.ContractNo == ll_contract_no && current.SequenceNo == ll_sequence_no)
+                    //        {
+                    //            ll_found = i;
+                    //            break;
+                    //        }
+                    //    }
+
+                    // If the contract_no changes, reset the rolling benchmark.  If there are multiple 
+                    // vehicles in a contract affected by the change in RUC, the rolling benchmark will 
+                    // accumulate the incremental change in benchmark attributable to each vehicle and
+                    // will be the new contract benchmark for the last (or only) vehicle.
+                    if (ll_contract_no != ll_last_contract)
+                    {
+                        ldc_rolling_benchmark = ldc_original_benchmark;
+                    }
+
+                    // Get the new vehicle benchmark (changed as a result of its override RUC rate being changed)
+                    RDSDataService Obj = RDSDataService.GetVehBenchmark(ll_contract_no, ll_sequence_no, vehicle_no);
+                    ldc_vehicle_benchmark = Obj.decVal;
+
+                    if ((ldc_vehicle_benchmark == null) || (ldc_original_benchmark == null) 
+                        || ldc_vehicle_benchmark == 0 || ldc_original_benchmark == 0)
+                    {
+                        // Some trouble calculating benchmark.  Do not create adjustments.
+                        MessageBox.Show("Error calculating vehicle benchmark for frequency adjustment."
+                            + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                            + "\nVehicle "+vehicle_no.ToString()
+                            + "\nOriginal benchmark = " + convert_to_string(ldc_original_benchmark)
+                            + "\nVehicle benchmark = " + convert_to_string(ldc_vehicle_benchmark)
+                            , "Error"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return FAILURE;
+                    }
+                    
+                    if (ldc_vehicle_benchmark != ldc_original_benchmark)
+                    {
+                        // Calculate the contribution this vehicle is making to the new contract benchmark
+                        // Accumulate the rolling total BM
+                        ldc_vehicle_BM_contribution = ldc_vehicle_benchmark - ldc_original_benchmark;
+                        ldc_rolling_benchmark += ldc_vehicle_BM_contribution;
+                        ldc_amount_to_pay = ldc_vehicle_BM_contribution;
+
+                        string ls_reason;
+                        ls_reason = "Global RUC rate changed. \nOriginal RUC rate: " + ldc_original_ruc_rate.ToString()
+                                    + "\nNew RUC rate:" + ldc_new_standard_ruc_rate.ToString();
+                        // ldc_amount_to_pay = ldc_new_benchmark.GetValueOrDefault() - ldc_original_benchmark.GetValueOrDefault();
+                        if (Debugging)
                         {
-                            ContractsBenchmarkForRates current = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(i);
-                            if (current.ContractNo == ll_contract_no && current.SequenceNo == ll_sequence_no)
-                            {
-                                ll_found = i;
-                                break;
-                            }
+                            MessageBox.Show("Create frequency adjustment"
+                                + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                                + "\nReason: " + ls_reason
+                                + "\nOriginal benchmark = " + ldc_original_benchmark.ToString()
+                                + "\nVehicle benchmark = " + ldc_vehicle_benchmark.ToString()
+                                + "\nVehicle contribution = " + ldc_vehicle_BM_contribution.ToString()
+                                + "\nRolling benchmark = " + ldc_rolling_benchmark.ToString()
+                                + "\nNew benchmark = " + ldc_rolling_benchmark.ToString()
+                                + "\nAmount to pay = " + ldc_amount_to_pay.ToString()
+                                + "\nAdjustment amount = " + ldc_amount_to_pay.ToString()
+                                , "Debugging");
                         }
-
-
-                        if (ll_found >= 0)
-                        {
-                            ldc_original_benchmark = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_found).BenchMark;
-                            ldc_original_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_found).OriginalRucRate;
-                            if ((ldc_new_benchmark == null) || (ldc_original_benchmark == null) || ldc_new_benchmark == 0 || ldc_original_benchmark == 0)
+                        else
+                        { 
+                            n_freq = new NFrequencyAdjustment();
+                            n_freq.of_set_contract(ll_contract_no, ll_sequence_no);
+                            n_freq.is_reason = ls_reason;
+                            n_freq.of_set_effective_date(ld_effective_date);
+                            n_freq.idc_new_benchmark = ldc_rolling_benchmark;
+                            n_freq.idc_amount_to_pay = ldc_amount_to_pay;
+                            n_freq.idc_adjustment_amount = ldc_amount_to_pay;
+                            if (ldc_amount_to_pay != 0)
                             {
-                                // Some trouble calculating benchmark.  Do not create adjustments
-                            }
-                            else if (ldc_new_benchmark != ldc_original_benchmark)
-                            {
-                                // Create adjustment
-                                //n_freq = CREATE n_frequency_adjustment;
-                                n_freq = new NFrequencyAdjustment();
-                                n_freq.of_set_contract(ll_contract_no, ll_sequence_no);
-                                n_freq.is_reason = "Global RUC rate changed. \nOriginal RUC rate: " + ldc_original_ruc_rate.ToString() + "\nNew RUC rate:" + ldc_new_standard_ruc_rate.ToString();
-                                n_freq.of_set_effective_date(ld_effective_date);
-                                ldc_amount_to_pay = ldc_new_benchmark.GetValueOrDefault() - ldc_original_benchmark.GetValueOrDefault();
-                                n_freq.idc_new_benchmark = ldc_new_benchmark;
-                                n_freq.idc_amount_to_pay = ldc_amount_to_pay;
-                                n_freq.idc_adjustment_amount = ldc_amount_to_pay;
-                                if (ldc_amount_to_pay != 0)
+                                ll_result = n_freq.of_save();
+                                if (ll_result <= 0)
                                 {
-                                    ll_result = n_freq.of_save();
-                                    if (ll_result <= 0)
-                                    {
-                                        lb_continue = false;
-                                        break;//EXIT
-                                    }
+                                    return FAILURE;
                                 }
                             }
                         }
-                        ll_found = 0;
-                        ll_contract_no = null;
-                        ll_sequence_no = null;
-                        ldc_new_benchmark = null;
-                        ldc_original_benchmark = null;
-                        ldc_amount_to_pay = null;
                     }
                 }
             }
-            if (lb_continue == true)
-            {
-                li_RETURN = 1;
-            }
-            else
-            {
-                li_RETURN = -1;
-            }
-            return li_RETURN;
+            return SUCCESS;
         }
 
         public virtual void dw_rates_ue_initialise()
@@ -1021,11 +1104,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         {
             URdsDw ldw_temp;
             DialogResult li_rc;
-            if (tab_rates.SelectedIndex == 1) //(oldTabIndex == 1)
+            if (tab_rates.SelectedIndex == 1) // Fuel
             {
                 ldw_temp = idw_details;
             }
-            else
+            else                              // RUC
             {
                 ldw_temp = idw_rates;
             }
