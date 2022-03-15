@@ -2947,7 +2947,8 @@ namespace NZPostOffice.RDS.DataService
         public static void UpdateVehicleRucRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date, ref int sqlCode, ref string sqlErrText)
         {
             RDSDataService obj = Execute("_UpdateVehicleRucRate", ldc_new_standard_ruc_rate, ld_rates_effective_date);
-
+            sqlCode = obj._sqlcode;
+            sqlErrText = obj._sqlerrtext;
         }
 
         /// <summary>
@@ -3221,13 +3222,15 @@ namespace NZPostOffice.RDS.DataService
                 using (DbCommand cm = cn.CreateCommand())
                 {
                     cm.CommandType = CommandType.Text;
-                    int outlet_id = 0;
-                    cm.CommandText = "UPDATE rd.vehicle_rate  SET vr_ruc = @ldc_new_standard_ruc_rate " +
-                        "WHERE vr_rates_effective_date = @ld_rates_effective_date";
+                    cm.CommandText = "UPDATE rd.vehicle_rate  SET vr_ruc = @ldc_new_standard_ruc_rate "
+                        + " WHERE vr_rates_effective_date = @ld_rates_effective_date "
+                        + "   AND vr_ruc is not null and vr_ruc != 0  ";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ldc_new_standard_ruc_rate", ldc_new_standard_ruc_rate);
                     pList.Add(cm, "ld_rates_effective_date", ld_rates_effective_date);
 
+                    _sqlcode = 0;
+                    _sqlerrtext = "";
                     try
                     {
                         DBHelper.ExecuteNonQuery(cm, pList);
@@ -6646,6 +6649,7 @@ namespace NZPostOffice.RDS.DataService
                     pList.Add(cm, "inSequence", inSequence);
                     pList.Add(cm, "inVehicle",  inVehicle);
 
+                    _sqlcode = 0;
                     try
                     {
                         using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
@@ -6654,7 +6658,6 @@ namespace NZPostOffice.RDS.DataService
                             {
                                 decVal = Convert.ToDecimal(dr.GetFloat(0));
                             }
-                            _sqlcode = 0;
                         }
                     }
                     catch (Exception ex)
