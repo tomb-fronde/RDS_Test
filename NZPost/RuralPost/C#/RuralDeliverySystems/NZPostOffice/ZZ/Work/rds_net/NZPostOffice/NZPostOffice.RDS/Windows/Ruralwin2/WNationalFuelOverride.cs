@@ -14,7 +14,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     // TJB Frequencies & Allowances  March-2022
     // Changes to handle multiple vehicles per contract
-    // (see tabpage_fuel_pfc_default)
+    // (see tabpage_fuel_pfc_default and tabpage_other_rates_pfc_default (RUCs))
     // 
     // TJB 10-July-2019
     // Cosmetic changes: re-formatted MessageBox.Show for readability
@@ -188,6 +188,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             return null;
         }
 
+        private DateTime? get_rates_effective_date(DateTime? pEffectiveDate)
+        {   // Find the maximum date that is less than or equal to the effective date entered
+            DateTime? date = DateTime.MinValue;
+            DateTime? thisDate = DateTime.MaxValue;
+            for (int i = 0; i < ids_standard_fuels.RowCount; i++)
+            {
+                thisDate = ids_standard_fuels.GetItem<StandardFuelRates>(i).RrRatesEffectiveDate;
+                if(thisDate.HasValue && thisDate <= pEffectiveDate)
+                {
+                    if (thisDate > date)
+                        date = thisDate;
+                }
+            }
+            return date;
+        }
         private int find_std_fuel_index(int? pFuelKey, int? pRgCode, DateTime? pEffectiveDate)
         {
             for (int i = 0; i < ids_standard_fuels.RowCount; i++)
@@ -228,8 +243,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? vehicle_no;
             int? ll_rg_code;
             DateTime? ld_rates_effective_date;
-            decimal? ldc_original_benchmark;
-            decimal? ldc_amount_to_pay;
             DateTime? ld_effective_date;
             string ls_reason;
             bool lb_go;
@@ -266,6 +279,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             for (ll_x = 0; ll_x < dw_details.RowCount; ll_x++)
             {
                 ldc_original_fuel_rate = dw_details.GetItem<NationalFuelOverride>(ll_x).FuelRate;
+                DateTime? rr_effective_date = dw_details.GetItem<NationalFuelOverride>(ll_x).RrRatesEffectiveDate;
+
+                //if (Debugging)
+                //{
+                //    MessageBox.Show("National Fuel Override"
+                //        + "\nRow " + ll_x.ToString()
+                //        + "\nft_key " + (dw_details.GetItem<NationalFuelOverride>(ll_x).FtKey).ToString()
+                //        + "\nrg_code " + (dw_details.GetItem<NationalFuelOverride>(ll_x).RgCode).ToString()
+                //        + "\neffective_date " + ((DateTime)rr_effective_date).ToString("dd-MMM-yyyy")
+                //        + "\nfuelRate " + convert_to_string(ldc_original_fuel_rate)
+                //        , "Debugging");
+                //}
+         
                 if (ldc_original_fuel_rate == null || ldc_original_fuel_rate == 0)
                 {
                 }
@@ -339,19 +365,19 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // Find the new rate for this 
                 ldc_new_standard_fuel_rate = get_new_fuel_rate(ll_fuel_key);
 
-                if (nloop >= maxloops)  // Show the message maxloops times
+                if (Debugging && nloop < maxloops)  // Show the message maxloops times
                 {
-                    if (Debugging)
-                    {
-                        MessageBox.Show("UpdateVehicleOverrideFuelRate \n"
-                                   + "Contract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString() + "\n"
-                                   + "Vehicle " + vehicle_no.ToString() + "\n"
-                                   + "Fuel key " + ll_fuel_key.ToString() + "\n"
-                                   + "Original_standard_fuel_rate = " + convert_to_string(ldc_original_fuel_rate) + "\n"
-                                   + "Veh_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate) + "\n"
-                                   + "New_national_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
-                                   , "Debugging");
-                    }
+                    MessageBox.Show("Processing record"
+                                + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                                + "\nVehicle " + vehicle_no.ToString()
+                                + "\nRegion " + ll_rg_code.ToString()
+                                + "\nOverride effective_date = " + ((DateTime)ld_effective_date).ToString("dd-MMM-yyy")
+                                + "\nRates effective_date = " + ((DateTime)ld_rates_effective_date).ToString("dd-MMM-yyy")
+                                + "\nFuel key " + ll_fuel_key.ToString()
+                                + "\nOriginal_standard_fuel_rate = " + convert_to_string(ldc_original_fuel_rate)
+                                + "\nNew_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
+                                + "\nVeh_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate)
+                                , "Debugging");
                 }
 
                 // If overridden (vor) fuel rate is null (no override for this contract/vehicle),
@@ -361,6 +387,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     || ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate == 0)
                 {
                     // Note: Query now only returns records with non-null fuel overrides
+                    // so this situation is unlikely to occur.
                     // Dont adjust the fuel rate override
                     continue;
                 }
@@ -374,18 +401,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (Debugging)
                 {
-                    if (nloop >= maxloops)  // Show the message maxloops times
+                    if (nloop < maxloops)  // Show the message maxloops times
                     {
-                        MessageBox.Show("UpdateVehicleOverrideFuelRate \n"
+                        MessageBox.Show("Update Vehicle Override Fuel Rate \n"
                                     + "Contract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString() + "\n"
                                     + "Vehicle " + vehicle_no.ToString() + "\n"
                                     + "Fuel key " + ll_fuel_key.ToString() + "\n"
-                                    + "Original_fuel_rate = " + convert_to_string(ldc_original_fuel_rate) + "\n"
-                                    + "Overridden_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate) + "\n"
+                                    + "Original_standard_fuel_rate = " + convert_to_string(ldc_original_fuel_rate) + "\n"
                                     + "New_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate) + "\n"
+                                    + "Original_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate) + "\n"
                                     + "New_override_fuel_rate = " + convert_to_string(ldc_new_override_fuel_rate)
-                                    + "\n\nSkipping update"
-                                    , "Debugging");
+                                   , "Debugging");
                         SQLCode = 0;
                     }
                 }
@@ -417,30 +443,28 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             int std_fuel_index;
             bool std_fuels_updated = false;
+            ld_rates_effective_date = get_rates_effective_date(ld_effective_date);
             nloop = 0;
             for (int i = 0; i < dw_details.RowCount; i++)
             {
                 ll_fuel_key = dw_details.GetItem<NationalFuelOverride>(i).FtKey;
-                ll_rg_code = dw_details.GetItem<NationalFuelOverride>(i).RgCode;
                 ldc_new_standard_fuel_rate = dw_details.GetItem<NationalFuelOverride>(i).FuelRate;
+                if (ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate.Value == 0)
+                    continue;  //Can't set a standard rate to 0 via these National Override Rates
 
-                std_fuel_index = find_std_fuel_index( ll_fuel_key, ll_rg_code, ld_effective_date );
-                if (std_fuel_index > 0)
+                std_fuel_index = find_std_fuel_index( ll_fuel_key, ll_selected_rg_code, ld_rates_effective_date );
+                if (std_fuel_index >= 0)
                 {
                     if (Debugging)
                     {
-                        if (nloop >= maxloops)
-                        {
-                            decimal? ldc_old_standard_rate = ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate;
-                            MessageBox.Show("Update standard fuel rate"
-                            + "\nFuel key = " + ll_fuel_key.ToString()
-                            + "\nRG Code  = " + ll_rg_code.ToString()
-                            + "\nEffective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
-                            + "\nOld rate = " + convert_to_string(ldc_old_standard_rate)
-                            + "\nNew rate = " + convert_to_string(ldc_new_standard_fuel_rate)
-                            + "\n\nskipped"
-                            , "Debugging2");
-                        }
+                        decimal? ldc_old_standard_rate = ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate;
+                        MessageBox.Show("Update standard fuel rate"
+                        + "\nFuel key = " + ll_fuel_key.ToString()
+                        + "\nRG Code  = " + ll_selected_rg_code.ToString()
+                        + "\nEffective date " + ((DateTime)ld_effective_date).ToString("dd-MMM-yyyy")
+                        + "\nOld rate = " + convert_to_string(ldc_old_standard_rate)
+                        + "\nNew rate = " + convert_to_string(ldc_new_standard_fuel_rate)
+                        , "Debugging");
                     }
                     else
                     {
@@ -453,8 +477,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     MessageBox.Show("Failed to find standard fuel rate to update\n"
                             + "Fuel key = " + ll_fuel_key.ToString() + "\n"
-                            + "RG Code  = " + ll_rg_code.ToString() + "\n"
-                            + "Effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
+                            + "RG Code  = " + ll_selected_rg_code.ToString() + "\n"
+                            + "Effective date " + ((DateTime)ld_rates_effective_date).ToString("dd-MMM-yyyy")
                             , "Error");
                 }
             }  // End of standard fuel rates update loop
@@ -533,25 +557,20 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //    rollingBM = rollingBM + veh contribution
                 newRollingBM = newRollingBM + vehBMChange;
 
-                
-                if (Debugging)
+                if (Debugging && nloop < maxloops)
                 {
-                    if (nloop <= maxloops)
-                    {
-                        newVorFuelRate = oldVorFuelRate + (newStdFuelRate - oldStdFuelRate);
-                        MessageBox.Show("Preparing a frequency adjustment"
-                                    + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
-                                    + "\nVehicle " + vehicle_no.ToString()
-                                    + "\nOld VOR fuel rate      = " + convert_to_string(oldVorFuelRate)
-                                    + "\nNew VOR fuel rate      = " + convert_to_string(newVorFuelRate)
-                                    + "\nOld standard fuel rate = " + convert_to_string(oldStdFuelRate)
-                                    + "\nNew standard fuel rate = " + convert_to_string(newStdFuelRate)
-                                    + "\nOld contract BM        = " + convert_to_string(oldContractBM)
-                                    + "\nNew vehicle BM         = " + convert_to_string(newVehBM)
-                                    + "\nRolling contract BM    = " + convert_to_string(newRollingBM)
-                                    , "Debugging"
-                            );
-                    }
+                    newVorFuelRate = oldVorFuelRate + (newStdFuelRate - oldStdFuelRate);
+                    MessageBox.Show("Preparing a frequency adjustment"
+                                + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                                + "\nVehicle " + vehicle_no.ToString()
+                                + "\nOld VOR fuel rate      = " + convert_to_string(oldVorFuelRate)
+                                + "\nNew VOR fuel rate      = " + convert_to_string(newVorFuelRate)
+                                + "\nOld standard fuel rate = " + convert_to_string(oldStdFuelRate)
+                                + "\nNew standard fuel rate = " + convert_to_string(newStdFuelRate)
+                                + "\nOld contract BM        = " + convert_to_string(oldContractBM)
+                                + "\nNew vehicle BM         = " + convert_to_string(newVehBM)
+                                + "\nRolling contract BM    = " + convert_to_string(newRollingBM)
+                                , "Debugging");
                 }
 
                 //--------------------------------------------------------------------
@@ -594,18 +613,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     n_freq.idc_amount_to_pay = vehBMChange;
                     n_freq.idc_adjustment_amount = vehBMChange;
 
-                    if (Debugging)
+                    if (Debugging && nloop < maxloops)
                     {
-                        if (nloop <= maxloops)
-                        {
-                            MessageBox.Show("for frequency adjustment:"
-                            + "Freq effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
-                            + "Freq new benchmark  = " + convert_to_string(newRollingBM)
-                            + "Freq amount to pay  = " + convert_to_string(vehBMChange)
-                            + "Freq adjustment amt = " + convert_to_string(vehBMChange)
-                            , "Debugging"
-                            );
-                        }
+                        MessageBox.Show("for frequency adjustment:"
+                        + "Freq effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
+                        + "Freq new benchmark  = " + convert_to_string(newRollingBM)
+                        + "Freq amount to pay  = " + convert_to_string(vehBMChange)
+                        + "Freq adjustment amt = " + convert_to_string(vehBMChange)
+                        , "Debugging");
                     }
 
                     if (vehBMChange != 0)
@@ -617,7 +632,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                     + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                                     + "\nVehicle " + vehicle_no.ToString()
                                     + "\n\n Save result = " + ll_result.ToString()
-                                );
+                                    , "Error");
                             return FAILURE;
                         }    
                     }
@@ -715,7 +730,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? ll_sequence_no;
             DateTime? ld_rates_effective_date = DateTime.MinValue;
             decimal? ldc_original_benchmark;
-            decimal? ldc_amount_to_pay;
             NFrequencyAdjustment n_freq;
             DateTime? ld_effective_date;
             int ll_result = FAILURE;
@@ -850,7 +864,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Update the standard ruc rates for the rates_effective_date of the renewal group
             // NOTE: Currently (Mar 2022) there is only one standard RUC rate for all vehicle types
             //       and renewal groups.  I suspect this will need to be changed in the near future 
-            //       at least for Deisel, PHEV, and BEV vehicle types.   TJB Mar 2022
+            //       at least for Deisel, PHEV, and BEV vehicle types.
+            //
+            // Originally each standard rate was updated to the new value for each of the several
+            // hundred contracts being processed.  Doing so once for each of the new rates should
+            // save a fraction of a second processing time :-)
+
             if (Debugging)
             {
                 MessageBox.Show("Update the standard ruc rates"
@@ -858,8 +877,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     , "Debugging");
             }
             //else
-            {     // TJB: changed name from UpdateVehicleRate to UpdateVehicleRucRate
-                RDSDataService.UpdateVehicleRucRate(ldc_new_standard_ruc_rate, ld_rates_effective_date  // ld_effective_date
+            {   // TJB: Changed name from UpdateVehicleRate to UpdateVehicleRucRate
+                RDSDataService.UpdateVehicleRucRate(ldc_new_standard_ruc_rate, ld_rates_effective_date
                                                 , ref SQLCode, ref SQLErrText);
                 if (SQLCode != 0)
                 {
@@ -955,13 +974,16 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         , "Debugging");
                 }
 
+                //--------------------------------------------------------------------
+                // Create frequency adjustments for each contract vehicle.
+                //--------------------------------------------------------------------
+
                 if (ldc_vehicle_benchmark != ldc_original_benchmark)
                 {
                     // Calculate the contribution this vehicle is making to the new contract benchmark
                     // Accumulate the rolling total BM
                     ldc_vehicle_BM_contribution = ldc_vehicle_benchmark - ldc_original_benchmark;
                     ldc_rolling_benchmark += ldc_vehicle_BM_contribution;
-                    ldc_amount_to_pay = ldc_vehicle_BM_contribution;
 
                     string ls_reason;
                     ls_reason = "Global RUC rate changed. \nOriginal RUC rate: " + ldc_original_ruc_rate.ToString()
@@ -978,8 +1000,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             + "\nVehicle contribution = " + ldc_vehicle_BM_contribution.ToString()
                             + "\nRolling benchmark = " + ldc_rolling_benchmark.ToString()
                             + "\nNew benchmark = " + ldc_rolling_benchmark.ToString()
-                            + "\nAmount to pay = " + ldc_amount_to_pay.ToString()
-                            + "\nAdjustment amount = " + ldc_amount_to_pay.ToString()
+                            + "\nAmount to pay = " + ldc_vehicle_BM_contribution.ToString()
+                            + "\nAdjustment amount = " + ldc_vehicle_BM_contribution.ToString()
                             , "Debugging");
                     }
                     //else
@@ -989,10 +1011,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         n_freq.is_reason = ls_reason;
                         n_freq.of_set_effective_date(ld_effective_date);
                         n_freq.idc_new_benchmark = ldc_rolling_benchmark;
-                        n_freq.idc_amount_to_pay = ldc_amount_to_pay;
-                        n_freq.idc_adjustment_amount = ldc_amount_to_pay;
+                        n_freq.idc_amount_to_pay = ldc_vehicle_BM_contribution;
+                        n_freq.idc_adjustment_amount = ldc_vehicle_BM_contribution;
 
-                        if (ldc_amount_to_pay != 0)
+                        if (ldc_vehicle_BM_contribution != 0)
                         {
                             ll_result = n_freq.of_save();
                             if (ll_result <= 0)

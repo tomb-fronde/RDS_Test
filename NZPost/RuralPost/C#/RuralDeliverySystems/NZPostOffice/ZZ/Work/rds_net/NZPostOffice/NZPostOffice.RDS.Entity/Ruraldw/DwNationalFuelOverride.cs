@@ -186,7 +186,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                                 + " FROM"
                                 + " fuel_type left outer join fuel_rates fr1"
                                 + " on fuel_type.ft_key = fr1.ft_key"
-                                + " WHERE fr1.rg_code = :al_region_id"
+                                + " WHERE fr1.rg_code = @al_region_id"
                                 + " AND	fr1.rr_rates_effective_Date ="
                                 + " (select max(fr2.rr_rates_effective_date)"
                                 + " from fuel_rates	fr2"

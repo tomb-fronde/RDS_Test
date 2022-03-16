@@ -334,7 +334,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                     //pList.Add(cm, "al_rg_code", al_rg_code);
 
                     cm.CommandType = CommandType.StoredProcedure;
-                    cm.CommandText = "sp_ContractsBenchmarkV2";
+                    cm.CommandText = "sp_ContractsBenchmark";
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "inRgCode", al_rg_code);
                     pList.Add(cm, "inEffDate", ad_eff_date);

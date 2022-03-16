@@ -15,6 +15,8 @@ namespace NZPostOffice.RDS.DataService
     // UpdateVehicleOverrideRucRate  NEW
     // UpdateVehicleOverrideFuelRate
     //     Added vehicle number to parameters in support of handling multiple vehicles
+    // _UpdateVehucleRucRate
+    //     Changed update of RUC rate to do so only where the current rate is non-zero
     //
     // TJB Frequencies & Allowances 11-Mar-2021
     // Added GetAllowanceCalcType
@@ -3216,7 +3218,10 @@ namespace NZPostOffice.RDS.DataService
 
         [ServerMethod]
         private void _UpdateVehicleRucRate(decimal? ldc_new_standard_ruc_rate, DateTime? ld_rates_effective_date)
-        {
+        {   
+            // TJB Frequencies and Allowances March-2022
+            // Changed update of RUC rate to do so only where the current rate is non-zero
+
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
                 using (DbCommand cm = cn.CreateCommand())
