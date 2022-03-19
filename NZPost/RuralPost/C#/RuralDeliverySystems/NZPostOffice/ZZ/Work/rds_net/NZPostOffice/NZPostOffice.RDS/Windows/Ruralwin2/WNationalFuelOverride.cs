@@ -279,10 +279,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             for (ll_x = 0; ll_x < dw_details.RowCount; ll_x++)
             {
                 ldc_original_fuel_rate = dw_details.GetItem<NationalFuelOverride>(ll_x).FuelRate;
-                DateTime? rr_effective_date = dw_details.GetItem<NationalFuelOverride>(ll_x).RrRatesEffectiveDate;
-
+                
                 //if (Debugging)
                 //{
+                //    DateTime? rr_effective_date = dw_details.GetItem<NationalFuelOverride>(ll_x).RrRatesEffectiveDate;
                 //    MessageBox.Show("National Fuel Override"
                 //        + "\nRow " + ll_x.ToString()
                 //        + "\nft_key " + (dw_details.GetItem<NationalFuelOverride>(ll_x).FtKey).ToString()
@@ -291,13 +291,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 //        + "\nfuelRate " + convert_to_string(ldc_original_fuel_rate)
                 //        , "Debugging");
                 //}
-         
+
                 if (ldc_original_fuel_rate == null || ldc_original_fuel_rate == 0)
                 {
                 }
                 else
                 {
                     lb_go = true;
+                    break;   // no need to go on
                 }
             }
             if (!lb_go)
@@ -415,7 +416,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         SQLCode = 0;
                     }
                 }
-                else
+                //else
                 {
                     // TJB  RPCR_099  8-Jan-2016:  Name change: UpdateVehicleOverrideRate to UpdateVehicleOverrideFuelRate
                     RDSDataService.UpdateVehicleOverrideFuelRate(ldc_new_override_fuel_rate
@@ -466,7 +467,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         + "\nNew rate = " + convert_to_string(ldc_new_standard_fuel_rate)
                         , "Debugging");
                     }
-                    else
+                    //else
                     {
                         ids_standard_fuels.GetItem<StandardFuelRates>(std_fuel_index).FrFuelRate
                                    = ldc_new_standard_fuel_rate;
@@ -615,11 +616,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                     if (Debugging && nloop < maxloops)
                     {
-                        MessageBox.Show("for frequency adjustment:"
-                        + "Freq effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
-                        + "Freq new benchmark  = " + convert_to_string(newRollingBM)
-                        + "Freq amount to pay  = " + convert_to_string(vehBMChange)
-                        + "Freq adjustment amt = " + convert_to_string(vehBMChange)
+                        MessageBox.Show("For frequency adjustment:"
+                        + "\nFreq effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
+                        + "\nFreq new benchmark  = " + convert_to_string(newRollingBM)
+                        + "\nFreq amount to pay  = " + convert_to_string(vehBMChange)
+                        + "\nFreq adjustment amt = " + convert_to_string(vehBMChange)
                         , "Debugging");
                     }
 
