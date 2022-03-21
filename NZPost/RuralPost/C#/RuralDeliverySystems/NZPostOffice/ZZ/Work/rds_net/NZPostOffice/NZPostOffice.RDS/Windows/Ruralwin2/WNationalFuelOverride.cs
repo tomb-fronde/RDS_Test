@@ -276,6 +276,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ll_selected_rg_code = dw_criteria.GetItem<FuelOverrideFields>(0).AlRenewalGroup;
             lb_go = false;
             // Check that at least one nationl override rate has been specified
+
             for (ll_x = 0; ll_x < dw_details.RowCount; ll_x++)
             {
                 ldc_original_fuel_rate = dw_details.GetItem<NationalFuelOverride>(ll_x).FuelRate;
@@ -336,6 +337,24 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ((DContractsBenchmark)ids_original).Retrieve(ll_selected_rg_code, ld_effective_date);
             ids_standard_fuels = new DStandardFuelRates();
             ll_found = ids_standard_fuels.Retrieve();
+
+            if (Debugging)
+            {
+                string msg = "";
+                for (int i = 0; i < ids_original.RowCount; i++)
+                {
+                    ll_contract_no = ids_original.GetItem<ContractsBenchmark>(i).ContractNo;
+                    ll_sequence_no = ids_original.GetItem<ContractsBenchmark>(i).SequenceNo;
+                    vehicle_no = ids_original.GetItem<ContractsBenchmark>(i).VehicleNumber;
+                    msg += "\n  Contract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                        + ", Vehicle " + vehicle_no.ToString();
+
+                }
+                MessageBox.Show((ids_original.RowCount).ToString() + " contract/vehicle records found."
+                    + msg
+                    , "Debugging");
+            }
+
             nloop = 0;
             for (ll_x = 0; ll_x < ids_original.RowCount; ll_x++)
             {
@@ -368,6 +387,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (Debugging && nloop < maxloops)  // Show the message maxloops times
                 {
+                    int? originalBM;
+                    originalBM = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMark;
+
                     MessageBox.Show("Processing record"
                                 + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                                 + "\nVehicle " + vehicle_no.ToString()
@@ -378,6 +400,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 + "\nOriginal_standard_fuel_rate = " + convert_to_string(ldc_original_fuel_rate)
                                 + "\nNew_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
                                 + "\nVeh_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate)
+                                + "\nOriginalBM = " + originalBM.ToString()
                                 , "Debugging");
                 }
 

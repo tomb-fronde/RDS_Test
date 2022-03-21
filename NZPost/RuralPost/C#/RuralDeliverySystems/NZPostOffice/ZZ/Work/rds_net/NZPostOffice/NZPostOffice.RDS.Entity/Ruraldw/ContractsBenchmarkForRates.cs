@@ -273,6 +273,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             {
                 using (DbCommand cm = cn.CreateCommand())
                 {
+                    // TJB Frequencies & Vehicles  Mar-2022
+                    // Changed fetch from using inline query to call to stored procedure 
+
 //                    cm.CommandType = CommandType.Text;
 //                    cm.CommandText = "SELECT cr.contract_no, " 
 //                                   + "       cr.contract_seq_number, "
