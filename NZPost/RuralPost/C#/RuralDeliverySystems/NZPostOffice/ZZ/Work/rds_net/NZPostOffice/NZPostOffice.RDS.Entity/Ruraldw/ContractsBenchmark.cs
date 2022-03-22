@@ -32,7 +32,8 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("fuel_key", "_fuel_key", "vehicle")]
     [MapInfo("vor_fuel_rate", "_fuel_rate", "vehicle")]
     [MapInfo("fr_fuel_rate", "_original_fuel_rate", "vehicle")]
-    [MapInfo("bench_mark", "_bench_mark", "vehicle")]
+    [MapInfo("bench_mark", "_bench_mark", "")]
+    [MapInfo("bench_mark_veh", "_bench_mark_veh", "")]
     [System.Serializable()]
 
     public class ContractsBenchmark : Entity<ContractsBenchmark>
@@ -70,6 +71,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
 
         [DBField()]
         private int? _bench_mark;
+
+        [DBField()]
+        private int? _bench_mark_veh;
 
         public virtual int? ContractNo
         {
@@ -269,6 +273,24 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+        public virtual int? BenchMarkVeh
+        {
+            get
+            {
+                CanReadProperty("BenchMarkVeh", true);
+                return _bench_mark_veh;
+            }
+            set
+            {
+                CanWriteProperty("BenchMarkVeh", true);
+                if (_bench_mark_veh != value)
+                {
+                    _bench_mark_veh = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+
         protected override object GetIdValue()
         {
             return "";
@@ -360,6 +382,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._fuel_rate = GetValueFromReader<Decimal?>(dr, 8);
                             instance._original_fuel_rate = GetValueFromReader<Decimal?>(dr, 9);
                             instance._bench_mark = GetValueFromReader<Int32?>(dr, 10);
+                            instance._bench_mark_veh = GetValueFromReader<Int32?>(dr, 11);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();

@@ -12,8 +12,9 @@ namespace NZPostOffice.RDS.DataService
 {
     // TJB Frequencies & Allowances  March-2022
     // GetVehBenchmark()  NEW
+    // GetBenchmarkCalc2021() name changed to GetBenchmarkCalc()
+    //     Removed GetBenchmarkCalc2005() and GetBenchmarkCalc2021()
     // UpdateVehicleOverrideRucRate  NEW
-    // UpdateVehicleOverrideFuelRate
     //     Added vehicle number to parameters in support of handling multiple vehicles
     // _UpdateVehucleRucRate
     //     Changed update of RUC rate to do so only where the current rate is non-zero
@@ -875,9 +876,18 @@ namespace NZPostOffice.RDS.DataService
 
         // TJB  Frequencies & Vehicles  17-Jan-2021
         // Created new routine for BenchmarkCalc2021 derived from GetBenchmarkCalc2005
-        public static RDSDataService GetBenchmarkCalc2021(int? il_contract, int? il_sequence)
+        //public static RDSDataService GetBenchmarkCalc2021(int? il_contract, int? il_sequence)
+        //{
+        //    RDSDataService obj = Execute("_GetBenchmarkCalc2021", il_contract, il_sequence);
+        //    return obj;
+        //}
+
+        // TJB  Frequencies & Vehicles  23-Mar-2022
+        // Changed name to GetBenchmarkCalc (without the date)
+        // Created new routine for BenchmarkCalc2021 derived from GetBenchmarkCalc2005
+        public static RDSDataService GetBenchmarkCalc(int? il_contract, int? il_sequence)
         {
-            RDSDataService obj = Execute("_GetBenchmarkCalc2021", il_contract, il_sequence);
+            RDSDataService obj = Execute("_GetBenchmarkCalc", il_contract, il_sequence);
             return obj;
         }
 
@@ -889,11 +899,11 @@ namespace NZPostOffice.RDS.DataService
             return obj;
         }
 
-        public static RDSDataService GetBenchmarkCalc2005(int? il_sequence, int? il_contract)
-        {
-            RDSDataService obj = Execute("_GetBenchmarkCalc2005", il_sequence, il_contract);
-            return obj;
-        }
+        //public static RDSDataService GetBenchmarkCalc2005(int? il_sequence, int? il_contract)
+        //{
+        //    RDSDataService obj = Execute("_GetBenchmarkCalc2005", il_sequence, il_contract);
+        //    return obj;
+        //}
 
         /// <summary>
         ///select benchmarkCalcVeh2005 ( @il_contract, @il_sequence, @li_newVehNo)  into @ldc_newBenchmark   from dummy
@@ -6674,11 +6684,11 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-
-        // TJB  Frequencies & Vehicles  17-Jan-2021
-        // Created new routine for BenchmarkCalc2021 derived from _GetBenchmarkCalc2005
+        // TJB  Frequencies & Vehicles  23-Mar-2022
+        // Changed name to GetBenchmarkCalc (without the date)
+        // [17-Jan-2021] Created new routine for BenchmarkCalc2021 derived from _GetBenchmarkCalc2005
         [ServerMethod]
-        private void _GetBenchmarkCalc2021(int? il_contract, int? il_sequence )
+        private void _GetBenchmarkCalc(int? il_contract, int? il_sequence)
         {
             using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
             {
@@ -6710,40 +6720,76 @@ namespace NZPostOffice.RDS.DataService
             }
         }
 
-        [ServerMethod]
-        private void _GetBenchmarkCalc2005(int? il_sequence, int? il_contract)
-        {
-            using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
-            {
-                using (DbCommand cm = cn.CreateCommand())
-                {
-                    int sequence = 0;
-                    ParameterCollection pList = new ParameterCollection();
-                    //cm.CommandText = "select BenchmarkCalc2005  @il_contract, @il_sequence ";
-                    pList.Add(cm, "il_sequence", il_sequence);
-                    pList.Add(cm, "il_contract", il_contract);
 
-                    cm.CommandText = "SELECT rd.BenchmarkCalc2005 (:il_contract, :il_sequence)";
+        // TJB  Frequencies & Vehicles  17-Jan-2021
+        // Created new routine for BenchmarkCalc2021 derived from _GetBenchmarkCalc2005
+        //[ServerMethod]
+        //private void _GetBenchmarkCalc2021(int? il_contract, int? il_sequence )
+        //{
+        //    using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+        //    {
+        //        using (DbCommand cm = cn.CreateCommand())
+        //        {
+        //            int sequence = 0;
+        //            ParameterCollection pList = new ParameterCollection();
+        //            cm.CommandText = "select rd.BenchmarkCalc2021( @il_contract, @il_sequence )";
+        //            pList.Add(cm, "il_contract", il_contract);
+        //            pList.Add(cm, "il_sequence", il_sequence);
+        //
+        //            try
+        //            {
+        //                using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+        //                {
+        //                    if (dr.Read())
+        //                    {
+        //                        decVal = Convert.ToDecimal(dr.GetFloat(0));
+        //                    }
+        //                    _sqlcode = 0;
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                _sqlcode = -1;
+        //                _sqlerrtext = ex.Message;
+        //            }
+        //        }
+        //    }
+        //}
 
-                    try
-                    {
-                        using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
-                        {
-                            if (dr.Read())
-                            {
-                                decVal = Convert.ToDecimal(dr.GetFloat(0));
-                            }
-                            _sqlcode = 0;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _sqlcode = -1;
-                        _sqlerrtext = ex.Message;
-                    }
-                }
-            }
-        }
+        //[ServerMethod]
+        //private void _GetBenchmarkCalc2005(int? il_sequence, int? il_contract)
+        //{
+        //    using (DbConnection cn = DbConnectionFactory.RequestNextAvaliableSessionDbConnection("NZPO"))
+        //    {
+        //        using (DbCommand cm = cn.CreateCommand())
+        //        {
+        //            int sequence = 0;
+        //            ParameterCollection pList = new ParameterCollection();
+        //            //cm.CommandText = "select BenchmarkCalc2005  @il_contract, @il_sequence ";
+        //            pList.Add(cm, "il_sequence", il_sequence);
+        //            pList.Add(cm, "il_contract", il_contract);
+        //
+        //            cm.CommandText = "SELECT rd.BenchmarkCalc2005 (:il_contract, :il_sequence)";
+        //
+        //            try
+        //            {
+        //                using (MDbDataReader dr = DBHelper.ExecuteReader(cm, pList))
+        //                {
+        //                    if (dr.Read())
+        //                    {
+        //                        decVal = Convert.ToDecimal(dr.GetFloat(0));
+        //                    }
+        //                    _sqlcode = 0;
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                _sqlcode = -1;
+        //                _sqlerrtext = ex.Message;
+        //            }
+        //        }
+        //    }
+        //}
 
         // TJB  Allowances  3-Apr-2021: New
         [ServerMethod]

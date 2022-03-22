@@ -242,6 +242,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             int? ll_sequence_no;
             int? vehicle_no;
             int? ll_rg_code;
+            int? originalBM, originalBMVeh, BMVehChange;
+            int? newBM, newBMVeh;
+
             DateTime? ld_rates_effective_date;
             DateTime? ld_effective_date;
             string ls_reason;
@@ -280,18 +283,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             for (ll_x = 0; ll_x < dw_details.RowCount; ll_x++)
             {
                 ldc_original_fuel_rate = dw_details.GetItem<NationalFuelOverride>(ll_x).FuelRate;
-                
-                //if (Debugging)
-                //{
-                //    DateTime? rr_effective_date = dw_details.GetItem<NationalFuelOverride>(ll_x).RrRatesEffectiveDate;
-                //    MessageBox.Show("National Fuel Override"
-                //        + "\nRow " + ll_x.ToString()
-                //        + "\nft_key " + (dw_details.GetItem<NationalFuelOverride>(ll_x).FtKey).ToString()
-                //        + "\nrg_code " + (dw_details.GetItem<NationalFuelOverride>(ll_x).RgCode).ToString()
-                //        + "\neffective_date " + ((DateTime)rr_effective_date).ToString("dd-MMM-yyyy")
-                //        + "\nfuelRate " + convert_to_string(ldc_original_fuel_rate)
-                //        , "Debugging");
-                //}
 
                 if (ldc_original_fuel_rate == null || ldc_original_fuel_rate == 0)
                 {
@@ -387,8 +378,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (Debugging && nloop < maxloops)  // Show the message maxloops times
                 {
-                    int? originalBM;
                     originalBM = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMark;
+                    originalBMVeh = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMarkVeh;
 
                     MessageBox.Show("Processing record"
                                 + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
@@ -401,6 +392,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 + "\nNew_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
                                 + "\nVeh_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate)
                                 + "\nOriginalBM = " + originalBM.ToString()
+                                + "\nOriginalBMVeh = " + originalBMVeh.ToString()
                                 , "Debugging");
                 }
 
@@ -522,14 +514,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // for each, with a rolling total for the contract.  The last vehicle's rolling benchmark total
             // should be the new contract benchmark.
 
-            int? oldContractBM;
             decimal? oldVorFuelRate;
             decimal? newVorFuelRate;
             decimal? oldStdFuelRate;
             decimal? newStdFuelRate;
-            decimal? dNewVehBM;
-            int? newVehBM;
-            int? newRollingBM = 0;
+            int? rollingBM = 0;
             int? thisContractNo = 0;  // To detect change in contractNo
 
             nloop = 0;
@@ -540,19 +529,31 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 // For each new contract vheicle ...
                 ll_contract_no = ids_original.GetItem<ContractsBenchmark>(ll_x).ContractNo;
-                oldContractBM = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMark;
+                ll_sequence_no = ids_original.GetItem<ContractsBenchmark>(ll_x).SequenceNo;
+                vehicle_no = ids_original.GetItem<ContractsBenchmark>(ll_x).VehicleNumber;
+                originalBM = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMark;
+                originalBMVeh = ids_original.GetItem<ContractsBenchmark>(ll_x).BenchMarkVeh;
+
+                if (Debugging)
+                {
+                    RDSDataService obj1 = RDSDataService.GetBenchmarkCalc(ll_contract_no, ll_sequence_no);
+                    newBM = (int?)obj1.decVal;
+                    MessageBox.Show("Contract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                        + "\nVehicle " + vehicle_no.ToString()
+                        + "\nOriginal BM = " + originalBM.ToString()
+                        + "\nNew BM = " + newBM.ToString()
+                        , "Debugging");
+                }
 
                 // if this is a new contract, reset the rolling benchmark
                 if (thisContractNo != ll_contract_no)
                 {
-                    newRollingBM = oldContractBM;
+                    rollingBM = originalBM;
                 }
 
                 ll_found = 0;
-                ll_sequence_no = ids_original.GetItem<ContractsBenchmark>(ll_x).SequenceNo;
                 ld_rates_effective_date = ids_original.GetItem<ContractsBenchmark>(ll_x).RatesEffectiveDate;
                 ll_fuel_key = ids_original.GetItem<ContractsBenchmark>(ll_x).FuelKey;
-                vehicle_no = ids_original.GetItem<ContractsBenchmark>(ll_x).VehicleNumber;
                 ll_rg_code = ids_original.GetItem<ContractsBenchmark>(ll_x).RgCode;
 
                 oldVorFuelRate = ids_original.GetItem<ContractsBenchmark>(ll_x).FuelRate;
@@ -568,18 +569,17 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 // Get the vehicle's new BM
                 RDSDataService obj = RDSDataService.GetVehBenchmark(ll_contract_no, ll_sequence_no, vehicle_no);
-                dNewVehBM = obj.decVal;
-                newVehBM  = null;
-                if (dNewVehBM != null)
-                    newVehBM = (int)dNewVehBM;
+                newBMVeh = (int?)obj.decVal;
+                if (newBMVeh != null)
+                    newBMVeh = (int)newBMVeh;
 
                 // Calculate its contribution to the new contract BM
-                //    veh contribution = newVehBM - oldContractBM 
-                int? vehBMChange = newVehBM - oldContractBM;
+                //    veh contribution = new Veh BM - old Contract BM 
+                BMVehChange = newBMVeh - originalBMVeh;
 
                 // Calculate the new rolling contract benchmark
                 //    rollingBM = rollingBM + veh contribution
-                newRollingBM = newRollingBM + vehBMChange;
+                rollingBM += BMVehChange;
 
                 if (Debugging && nloop < maxloops)
                 {
@@ -591,9 +591,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 + "\nNew VOR fuel rate      = " + convert_to_string(newVorFuelRate)
                                 + "\nOld standard fuel rate = " + convert_to_string(oldStdFuelRate)
                                 + "\nNew standard fuel rate = " + convert_to_string(newStdFuelRate)
-                                + "\nOld contract BM        = " + convert_to_string(oldContractBM)
-                                + "\nNew vehicle BM         = " + convert_to_string(newVehBM)
-                                + "\nRolling contract BM    = " + convert_to_string(newRollingBM)
+                                + "\nOld contract BM        = " + convert_to_string(originalBM)
+                                + "\nOld vehicle BM         = " + convert_to_string(originalBMVeh)
+                                + "\nNew vehicle BM         = " + convert_to_string(newBMVeh)
+                                + "\nVehicle contribution   = " + convert_to_string(BMVehChange)
+                                + "\nRolling contract BM    = " + convert_to_string(rollingBM)
                                 , "Debugging");
                 }
 
@@ -601,12 +603,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // Create a frequency adjustment for this contract vehicle
                 //--------------------------------------------------------------------
 
-                if (oldContractBM == null || oldContractBM == 0
-                    || newVehBM == null || newVehBM == 0)
+                if (originalBM == null || originalBM == 0
+                    || newBMVeh == null || newBMVeh == 0)
                 {
                     // There was some trouble calculating benchmark.  Do not create adjustments
                 }
-                else if (newRollingBM != oldContractBM)
+                else if (rollingBM != originalBM)
                 {
                     // Create adjustment
                     NFrequencyAdjustment n_freq = new NFrequencyAdjustment();
@@ -633,21 +635,21 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                        + "\r\nNew standard rate: " + newStdFuelRate.ToString() + " cpl";
 
                     n_freq.of_set_effective_date(ld_effective_date);
-                    n_freq.idc_new_benchmark = newRollingBM;
-                    n_freq.idc_amount_to_pay = vehBMChange;
-                    n_freq.idc_adjustment_amount = vehBMChange;
+                    n_freq.idc_new_benchmark = rollingBM;
+                    n_freq.idc_amount_to_pay = BMVehChange;
+                    n_freq.idc_adjustment_amount = BMVehChange;
 
                     if (Debugging && nloop < maxloops)
                     {
                         MessageBox.Show("For frequency adjustment:"
                         + "\nFreq effective date " + ((DateTime)ld_effective_date).ToString("d MMM yyyy")
-                        + "\nFreq new benchmark  = " + convert_to_string(newRollingBM)
-                        + "\nFreq amount to pay  = " + convert_to_string(vehBMChange)
-                        + "\nFreq adjustment amt = " + convert_to_string(vehBMChange)
+                        + "\nFreq new benchmark  = " + convert_to_string(rollingBM)
+                        + "\nFreq amount to pay  = " + convert_to_string(BMVehChange)
+                        + "\nFreq adjustment amt = " + convert_to_string(BMVehChange)
                         , "Debugging");
                     }
 
-                    if (vehBMChange != 0)
+                    if (BMVehChange != 0)
                     {
                         ll_result = n_freq.of_save();
                         if (ll_result <= 0)

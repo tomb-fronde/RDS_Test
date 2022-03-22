@@ -16,6 +16,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
     // TJB Frequencies & Vehicles Jan-2021
     // Changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
+    // [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
     //
     // TJB  Mar-2016: Bug fix
     // Ensure the NVOR effective date saved is the same as the VOR effective date
@@ -166,8 +167,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
             //  [Jan-2021] TJB - changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
-            //RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
-            RDSDataService dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
+            //  [Mar-2022] TJB - changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
+            RDSDataService dataService = RDSDataService.GetBenchmarkCalc(il_sequence, il_contract);
             this.idc_original_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
@@ -430,8 +431,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Obtain the new benchmark
 
             //  [Jan-2021] TJB - changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021
-            //dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
-            dataService = RDSDataService.GetBenchmarkCalc2021(il_sequence, il_contract);
+            //  [Mar-2022] TJB - changed name GetBenchmarkCalc2-21 to GetBenchmarkCalc
+            dataService = RDSDataService.GetBenchmarkCalc(il_sequence, il_contract);
             ldc_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {

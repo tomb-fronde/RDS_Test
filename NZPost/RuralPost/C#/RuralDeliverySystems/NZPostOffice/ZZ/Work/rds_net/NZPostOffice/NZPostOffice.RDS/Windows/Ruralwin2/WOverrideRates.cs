@@ -18,7 +18,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
     // Changed verification: when effective date is wrong, don't close
     // [15-Feb-2021] Fixed bug in frequency adjustment calculation
     // [24-Jul-2021] Disabled message asking if user wanted to create overrides
-
+    // [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
+    //
     // TJB Frequencies & Vehicles  22-Jan-2021
     // Derived from WContractRate2001; renamed WOverrideRates to reflect function
     // Added handling of (potentially) multiple vehicles in a contract
@@ -462,10 +463,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  TJB  SR4661  May-2005 again in Jan-2021
             //  Changed BenchmarkCalc subroutine name
             //  Obtain the new benchmark
-            //dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
+            //  [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
             dataService = RDSDataService.GetPrevBench(il_contract);
             idc_original_benchmark = dataService.decVal;
-            dataService = RDSDataService.GetBenchmarkCalc2021(il_contract, il_sequence);
+            dataService = RDSDataService.GetBenchmarkCalc(il_contract, il_sequence);
             if (dataService.SQLCode != 0)
             {
                 MessageBox.Show("Unable to calculate a new benchmark for the contract.\n\n" 

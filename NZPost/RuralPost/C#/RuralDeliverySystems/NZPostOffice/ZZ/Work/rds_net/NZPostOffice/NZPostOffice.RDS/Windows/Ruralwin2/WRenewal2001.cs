@@ -14,6 +14,9 @@ using NZPostOffice.RDS.DataService;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
+    // TJB Frequencies & Allowances Mar-2022
+    // Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
+    //
     // TJB Frequencies & Vehicles 26-Jul-2021 
     // Added parameter to Send_RFUpdatedMessage() and always do when closing
     //
@@ -3159,12 +3162,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 nContract = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractNo;
                 nSequence = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).ContractSeqNumber;
                 // nVehicle = idw_contract_vehicle.GetItem<ContractVehicle>(nRow).VehicleNumber;
+
                 // TJB Frequencies & Vehicles 17-Jan-2021
                 // BenchMarkCalcVeh2005 obsolete, replaced with BenchMarkCalc2021
-                //dcVehBenchmark = RDSDataService.GetBenchMarkCalcVeh2005(nContract, nSequence, nVehicle
-                //                                                      , ref SQLCode, ref SQLErrText);
-                
-                RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(nContract, nSequence);
+                // [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
+                RDSDataService obj = RDSDataService.GetBenchmarkCalc(nContract, nSequence);
                 if (obj.SQLCode == 0)
                 {
                     dcVehBenchmark = (Decimal)obj.decVal;

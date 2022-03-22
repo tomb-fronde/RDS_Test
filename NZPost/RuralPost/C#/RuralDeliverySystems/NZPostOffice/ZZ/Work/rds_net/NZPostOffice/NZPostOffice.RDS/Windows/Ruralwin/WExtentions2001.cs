@@ -15,6 +15,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
 {
     // TJB Frequencies & Vehicles 15-Feb-2021
     // Changed BenchmarkCalc2005 to BenchmarkCalc2021
+    // [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
     //
     // TJB  Mar-2016
     // Changed window to allow resizing (to see BM more easily)
@@ -455,10 +456,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             //  TJB  SR4661  May 2005
             //  Changed benchmarkCalc stored proc name
 
-            // TJB Frequencies & Vehicles 15-Feb-2021
-            // Changed BenchmarkCalc2005 to BenchmarkCalc2021 (note changed order of parameters)
-            //dataService = RDSDataService.GetBenchmarkCalc2005(li_seq, li_contract);
-            dataService = RDSDataService.GetBenchmarkCalc2021(li_contract, li_seq);
+            // TJB Frequencies & Vehicles 23-Mar-2022: Changed name to GetBenchmarkCalc
+            // [15-Feb-2021] Changed GetBenchmarkCalc2005 to GetBenchmarkCalc2021 (note changed order of parameters)
+            dataService = RDSDataService.GetBenchmarkCalc(li_contract, li_seq);
             ld_new = dataService.decVal;
             ld_adjust = ld_new - ld_prev;
             return (int)ld_adjust;

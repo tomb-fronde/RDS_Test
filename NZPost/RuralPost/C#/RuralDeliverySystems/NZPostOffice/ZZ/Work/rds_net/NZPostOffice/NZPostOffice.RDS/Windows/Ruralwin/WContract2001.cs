@@ -18,6 +18,9 @@ using NZPostOffice.Entity;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin
 {
+    // TJB Frequencies & Vehicles 23-Mar-2022
+    // Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
+    //
     // TJB Frequencies & Vehicles 26-Jul-2021
     // Changed how 'Previous Benchmark' determined (undid 11-Feb-2021 change)
     //
@@ -1831,7 +1834,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin
             string SQLErrText = string.Empty;
             System.Decimal dcBenchmark = -1;
 
-            RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(inContractNo, inSequenceNo);
+            // TJB Frequencies & Vehicles 23-Mar-2022: Changed name
+            RDSDataService obj = RDSDataService.GetBenchmarkCalc(inContractNo, inSequenceNo);
+            //RDSDataService obj = RDSDataService.GetBenchmarkCalc2021(inContractNo, inSequenceNo);
             if (obj.SQLCode == 0)
             {
                 dcBenchmark = (Decimal)obj.decVal;
