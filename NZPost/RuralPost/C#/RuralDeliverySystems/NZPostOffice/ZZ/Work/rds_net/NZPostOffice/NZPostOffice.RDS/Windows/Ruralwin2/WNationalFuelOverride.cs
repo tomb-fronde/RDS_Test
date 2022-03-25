@@ -519,7 +519,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             decimal? oldStdFuelRate;
             decimal? newStdFuelRate;
             int? rollingBM = 0;
-            int? thisContractNo = 0;  // To detect change in contractNo
+            int? thisContractNo = -1;  // To detect change in contractNo
 
             nloop = 0;
             // Loop over the original list of contracts/vehicles (they're in contract, vehicle order)
@@ -542,13 +542,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         + "\nVehicle " + vehicle_no.ToString()
                         + "\nOriginal BM = " + originalBM.ToString()
                         + "\nNew BM = " + newBM.ToString()
-                        , "Debugging");
+                        , "Debugging frequency adjustments");
                 }
 
                 // if this is a new contract, reset the rolling benchmark
                 if (thisContractNo != ll_contract_no)
                 {
                     rollingBM = originalBM;
+                    thisContractNo = ll_contract_no;
                 }
 
                 ll_found = 0;
@@ -579,11 +580,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 // Calculate the new rolling contract benchmark
                 //    rollingBM = rollingBM + veh contribution
-                rollingBM += BMVehChange;
+                rollingBM = rollingBM + BMVehChange;
 
                 if (Debugging && nloop < maxloops)
                 {
                     newVorFuelRate = oldVorFuelRate + (newStdFuelRate - oldStdFuelRate);
+                    RDSDataService obj2 = RDSDataService.GetBenchmarkCalc(ll_contract_no, ll_sequence_no);
+                    newBM = (int?)obj2.decVal;
                     MessageBox.Show("Preparing a frequency adjustment"
                                 + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                                 + "\nVehicle " + vehicle_no.ToString()
@@ -592,11 +595,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                 + "\nOld standard fuel rate = " + convert_to_string(oldStdFuelRate)
                                 + "\nNew standard fuel rate = " + convert_to_string(newStdFuelRate)
                                 + "\nOld contract BM        = " + convert_to_string(originalBM)
+                                + "\nNew contract BM        = " + convert_to_string(newBM)
                                 + "\nOld vehicle BM         = " + convert_to_string(originalBMVeh)
                                 + "\nNew vehicle BM         = " + convert_to_string(newBMVeh)
                                 + "\nVehicle contribution   = " + convert_to_string(BMVehChange)
                                 + "\nRolling contract BM    = " + convert_to_string(rollingBM)
-                                , "Debugging");
+                                , "Debugging frequency adjustments");
                 }
 
                 //--------------------------------------------------------------------
@@ -818,6 +822,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             DataUserControlContainer ids_original = new DataUserControlContainer();
             ids_original.DataObject = new DContractsBenchmarkForRates();// 'd_contracts_benchmark_for_rates';
             ((DContractsBenchmarkForRates)ids_original.DataObject).Retrieve(ll_selected_rg_code, ld_effective_date);
+            if (ids_original.RowCount <= 0)
+            {
+                MessageBox.Show("No contracts found to update");
+            }
+
             for (ll_x = 0; ll_x < ids_original.RowCount; ll_x++)
             {
                 ldc_original_ruc_rate = null;
@@ -926,10 +935,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // Note: modified to handle multiple RUC-paying vehicles (TJB Mar 2022)
             
             int? ll_last_contract;
-            decimal? ldc_vehicle_benchmark;
+            decimal? ldc_new_vehicle_benchmark;
+            decimal? ldc_old_vehicle_benchmark;
             decimal? ldc_rolling_benchmark;
             decimal? ldc_vehicle_BM_contribution;
-            ll_last_contract = 0;
+            decimal? ldc_new_benchmark;
+            ll_last_contract = -1;
             ldc_rolling_benchmark = 0;
 
             // Scan for each contract/vehicle with an override RUC rate
@@ -950,6 +961,9 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ldc_original_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OriginalRucRate;
                 ldc_old_override_ruc_rate = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_x).OverrideRucRate;
                 ldc_original_benchmark = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_found).BenchMark;
+                ldc_old_vehicle_benchmark = ids_original.DataObject.GetItem<ContractsBenchmarkForRates>(ll_found).VehicleNumber;
+                RDSDataService obj1 = RDSDataService.GetBenchmarkCalc(ll_contract_no, ll_sequence_no);
+                ldc_new_benchmark = obj1.decVal;
 
                 if (ldc_old_override_ruc_rate == null || ldc_old_override_ruc_rate == 0)
                 {
@@ -963,28 +977,29 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // vehicles in a contract affected by the change in RUC, the rolling benchmark will 
                 // accumulate the incremental change in benchmark attributable to each vehicle and
                 // will be the new contract benchmark for the last (or only) vehicle.
-                if (ll_contract_no != ll_last_contract)
+                if (ll_last_contract != ll_contract_no)
                 {
                     ldc_rolling_benchmark = ldc_original_benchmark;
+                    ll_last_contract = ll_contract_no;
                 }
 
                 // Get the new vehicle benchmark (changed as a result of its override RUC rate being changed)
                 RDSDataService Obj = RDSDataService.GetVehBenchmark(ll_contract_no, ll_sequence_no, vehicle_no);
-                ldc_vehicle_benchmark = Obj.decVal;
+                ldc_new_vehicle_benchmark = Obj.decVal;
 
-                if ((ldc_vehicle_benchmark == null) || (ldc_original_benchmark == null) 
-                    || ldc_vehicle_benchmark == 0 || ldc_original_benchmark == 0)
+                if ((ldc_new_vehicle_benchmark == null) || (ldc_original_benchmark == null) 
+                    || ldc_new_vehicle_benchmark == 0 || ldc_original_benchmark == 0)
                 {
                     // Some trouble calculating benchmark.  Do not create adjustments.
                     int errcode = Obj.SQLCode;
                     string errmsg = Obj.SQLErrText;
-                    MessageBox.Show("Error calculating vehicle benchmark for frequency adjustment."
+                    MessageBox.Show("Error calculating new vehicle benchmark for frequency adjustment."
                         + "\nSQLCode = " + errcode.ToString()
                         + "\nSQLErrMsg = " + errmsg
-                        + "\\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
+                        + "\n\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                         + "\nVehicle " + vehicle_no.ToString()
                         + "\nOriginal benchmark = " + convert_to_string(ldc_original_benchmark)
-                        + "\nVehicle benchmark = " + convert_to_string(ldc_vehicle_benchmark)
+                        + "\nVehicle benchmark = " + convert_to_string(ldc_new_vehicle_benchmark)
                         , "Error"
                         , MessageBoxButtons.OK, MessageBoxIcon.Error) ;
                     return FAILURE;
@@ -992,11 +1007,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
                 if (Debugging)
                 {
-                    MessageBox.Show("Vehicle benchmark calculated"
+                    MessageBox.Show("New Vehicle benchmark calculated"
                         + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                         + "\nVehicle "+vehicle_no.ToString()
                         + "\nOriginal benchmark = " + ldc_original_benchmark.ToString()
-                        + "\nVehicle benchmark = " + ldc_vehicle_benchmark.ToString()
+                        + "\nNew benchmark = " + convert_to_string(ldc_new_benchmark)
+                        + "\nOld Vehicle benchmark = " + convert_to_string(ldc_old_vehicle_benchmark)
+                        + "\nNew Vehicle benchmark = " + convert_to_string(ldc_new_vehicle_benchmark)
                         , "Debugging");
                 }
 
@@ -1004,11 +1021,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // Create frequency adjustments for each contract vehicle.
                 //--------------------------------------------------------------------
 
-                if (ldc_vehicle_benchmark != ldc_original_benchmark)
+                if (ldc_new_vehicle_benchmark != ldc_original_benchmark)
                 {
                     // Calculate the contribution this vehicle is making to the new contract benchmark
                     // Accumulate the rolling total BM
-                    ldc_vehicle_BM_contribution = ldc_vehicle_benchmark - ldc_original_benchmark;
+                    ldc_vehicle_BM_contribution = ldc_new_vehicle_benchmark - ldc_old_vehicle_benchmark;
                     ldc_rolling_benchmark += ldc_vehicle_BM_contribution;
 
                     string ls_reason;
@@ -1022,7 +1039,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             + "\nVehicle " + vehicle_no.ToString()
                             + "\nReason: " + ls_reason
                             + "\nOriginal benchmark = " + ldc_original_benchmark.ToString()
-                            + "\nVehicle benchmark = " + ldc_vehicle_benchmark.ToString()
+                            + "\nVehicle benchmark = " + ldc_new_vehicle_benchmark.ToString()
                             + "\nVehicle contribution = " + ldc_vehicle_BM_contribution.ToString()
                             + "\nRolling benchmark = " + ldc_rolling_benchmark.ToString()
                             + "\nNew benchmark = " + ldc_rolling_benchmark.ToString()

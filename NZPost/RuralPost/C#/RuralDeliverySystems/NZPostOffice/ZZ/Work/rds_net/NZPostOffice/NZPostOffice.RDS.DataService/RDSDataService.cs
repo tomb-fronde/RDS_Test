@@ -11,12 +11,15 @@ using Metex.Core.Security;
 namespace NZPostOffice.RDS.DataService
 {
     // TJB Frequencies & Allowances  March-2022
+    // Changes in support of handling multiple vehicles
     // GetVehBenchmark()  NEW
     // GetBenchmarkCalc2021() name changed to GetBenchmarkCalc()
     //     Removed GetBenchmarkCalc2005() and GetBenchmarkCalc2021()
+    // UpdateVehicleOverrideFuelRate
+    //     Added vehicle number to parameters and query in Fetch
     // UpdateVehicleOverrideRucRate  NEW
-    //     Added vehicle number to parameters in support of handling multiple vehicles
-    // _UpdateVehucleRucRate
+    //     Added vehicle number to parameters
+    // _UpdateVehicleRucRate
     //     Changed update of RUC rate to do so only where the current rate is non-zero
     //
     // TJB Frequencies & Allowances 11-Mar-2021
@@ -11630,7 +11633,7 @@ namespace NZPostOffice.RDS.DataService
         }
 
         // TJB Frequencies & Allowances  March-2022
-        // Added vehicle number to parameters in support of handling multiple vehicles
+        // Added vehicle number to parameters and query in support of handling multiple vehicles
         [ServerMethod]
         private void _UpdateVehicleOverrideFuelRate(
             decimal? ldc_new_override_fuel_rate,
@@ -11646,15 +11649,18 @@ namespace NZPostOffice.RDS.DataService
                     cm.CommandType = CommandType.Text;
                     int outlet_id = 0;
                     cm.CommandText = " UPDATE rd.vehicle_override_rate " +
-                                        " SET vor_fuel_rate = @ldc_new_override_fuel_rate " + 
-                                      " WHERE contract_no = @ll_contract_no " +
-                                        " AND contract_seq_number = @ll_sequence_no " + 
-                                        " AND vehicle_number = @pVehicleNo " +
-                                        " AND vor_effective_date >= @ld_rates_effective_date " +
-                                        " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " +
-                                                                    " FROM rd.vehicle_override_rate vor2 " +
-                                                                   " WHERE vor2.contract_no = vehicle_override_rate.contract_no" + 
-                                                                     " AND vor2.contract_seq_number = vehicle_override_rate.contract_seq_number)";
+                                        " SET vor_fuel_rate = @ldc_new_override_fuel_rate " +
+                                       " FROM rd.vehicle_override_rate vor" +
+                                      " WHERE vor.contract_no = @ll_contract_no " +
+                                        " AND vor.contract_seq_number = @ll_sequence_no " +
+                                        " AND vor.vehicle_number = @pVehicleNo " +
+                                        " AND vor.vor_effective_date >= @ld_rates_effective_date " +
+                                        " AND vor.vor_effective_date " + 
+                                                  " = (SELECT max(vor2.vor_effective_date) " +
+                                                       " FROM rd.vehicle_override_rate vor2 " +
+                                                      " WHERE vor2.contract_no = vor.contract_no " +
+                                                        " AND vor2.contract_seq_number = vor.contract_seq_number " +
+                                                        " AND vor2.vehicle_number= vor.vehicle_number)";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ldc_new_override_fuel_rate", ldc_new_override_fuel_rate);
@@ -11695,14 +11701,17 @@ namespace NZPostOffice.RDS.DataService
                     int outlet_id = 0;
                     cm.CommandText = " UPDATE rd.vehicle_override_rate " +
                                         " SET vor_ruc = @ldc_new_override_ruc_rate " +
-                                      " WHERE contract_no = @ll_contract_no " +
-                                        " AND contract_seq_number = @ll_sequence_no " +
-                                        " AND vehicle_number = @pVehicleNo " +
-                                        " AND vor_effective_date >= @ld_rates_effective_date " +
-                                        " AND vor_effective_date = (SELECT	max(vor2.vor_effective_date) " +
-                                                                    " FROM rd.vehicle_override_rate vor2 " +
-                                                                   " WHERE vor2.contract_no = vehicle_override_rate.contract_no" +
-                                                                     " AND vor2.contract_seq_number = vehicle_override_rate.contract_seq_number)";
+                                       " FROM rd.vehicle_override_rate vor" +
+                                      " WHERE vor.contract_no = @ll_contract_no " +
+                                        " AND vor.contract_seq_number = @ll_sequence_no " +
+                                        " AND vor.vehicle_number = @pVehicleNo " +
+                                        " AND vor.vor_effective_date >= @ld_rates_effective_date " +
+                                        " AND vor.vor_effective_date " + 
+                                                  " = (SELECT max(vor2.vor_effective_date) " +
+                                                       " FROM rd.vehicle_override_rate vor2 " +
+                                                      " WHERE vor2.contract_no = vor.contract_no" +
+                                                        " AND vor2.contract_seq_number = vor.contract_seq_number " +
+                                                        " AND vor2.vehicle_number = vor.vehicle_number)";
 
                     ParameterCollection pList = new ParameterCollection();
                     pList.Add(cm, "ldc_new_override_ruc_rate", ldc_new_override_ruc_rate);
