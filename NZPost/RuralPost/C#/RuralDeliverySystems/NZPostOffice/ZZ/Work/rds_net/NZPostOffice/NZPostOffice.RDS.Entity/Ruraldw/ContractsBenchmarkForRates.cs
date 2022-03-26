@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // Add effective_date to call parameters
     // Add vehicle_number to retreived values
     //   -- primarily during testing to bypass using getdate() in the stored proc
+    // [26Mar] Add vehicle benchmark to returned values
     //
     // TJB RPCR_134 July-2019
     // Removed contract_type restriction to November Renewals
@@ -30,8 +31,9 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     [MapInfo("con_rg_code_at_renewal", "_rg_code", "contract_renewals")]
     [MapInfo("vehicle_number", "_vehicle_number", "")]
     [MapInfo("override_ruc_rate", "_override_ruc_rate", "vehicle_override_rate")]
-    [MapInfo("original_ruc_rate", "_original_ruc_rate", "vehicle_override_rate")]
-    [MapInfo("benchmark", "_benchmark", "vehicle_override_rate")]
+    [MapInfo("original_ruc_rate", "_standard_ruc_rate", "vehicle_override_rate")]
+    [MapInfo("benchmark", "_benchmark", "")]
+    [MapInfo("veh_benchmark", "_veh_benchmark", "")]
     [System.Serializable()]
 
     public class ContractsBenchmarkForRates : Entity<ContractsBenchmarkForRates>
@@ -62,11 +64,15 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
         private decimal? _override_ruc_rate;
 
         [DBField()]
-        private decimal? _original_ruc_rate;
+        private decimal? _standard_ruc_rate;
 
         [DBField()]
         private decimal? _benchmark;
 
+        [DBField()]
+        private decimal? _veh_benchmark;
+
+/* --------------------------------------------------------------------------- */
         public virtual int? ContractNo
         {
             get
@@ -211,19 +217,19 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
-        public virtual decimal? OriginalRucRate
+        public virtual decimal? StandardRucRate
         {
             get
             {
-                CanReadProperty("OriginalRucRate", true);
-                return _original_ruc_rate;
+                CanReadProperty("StandardRucRate", true);
+                return _standard_ruc_rate;
             }
             set
             {
-                CanWriteProperty("OriginalRucRate", true);
-                if (_original_ruc_rate != value)
+                CanWriteProperty("StandardRucRate", true);
+                if (_standard_ruc_rate != value)
                 {
-                    _original_ruc_rate = value;
+                    _standard_ruc_rate = value;
                     PropertyHasChanged();
                 }
             }
@@ -247,6 +253,25 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
             }
         }
 
+
+        public virtual decimal? VehBenchMark
+        {
+            get
+            {
+                CanReadProperty("VehBenchMark", true);
+                return _veh_benchmark;
+            }
+            set
+            {
+                CanWriteProperty("VehBenchMark", true);
+                if (_veh_benchmark != value)
+                {
+                    _veh_benchmark = value;
+                    PropertyHasChanged();
+                }
+            }
+        }
+        /* --------------------------------------------------------------------------- */
         protected override object GetIdValue()
         {
             return "";
@@ -275,6 +300,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 {
                     // TJB Frequencies & Vehicles  Mar-2022
                     // Changed fetch from using inline query to call to stored procedure 
+                    // [26Mar] Added vehicle benchmark to returned values
 
 //                    cm.CommandType = CommandType.Text;
 //                    cm.CommandText = "SELECT cr.contract_no, " 
@@ -335,9 +361,10 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                             instance._con_expiry_date = GetValueFromReader<DateTime?>(dr, 4);
                             instance._rg_code = GetValueFromReader<Int32?>(dr, 5);
                             instance._vehicle_number = GetValueFromReader<Int32?>(dr, 6);
-                            instance._override_ruc_rate = GetValueFromReader<Decimal?>(dr, 7);
-                            instance._original_ruc_rate = GetValueFromReader<Decimal?>(dr, 8);
+                            instance._standard_ruc_rate = GetValueFromReader<Decimal?>(dr, 7);
+                            instance._override_ruc_rate = GetValueFromReader<Decimal?>(dr, 8);
                             instance._benchmark = GetValueFromReader<Decimal?>(dr, 9);
+                            instance._veh_benchmark = GetValueFromReader<Decimal?>(dr, 10);
 
                             instance.MarkOld();
                             instance.StoreInitialValues();
