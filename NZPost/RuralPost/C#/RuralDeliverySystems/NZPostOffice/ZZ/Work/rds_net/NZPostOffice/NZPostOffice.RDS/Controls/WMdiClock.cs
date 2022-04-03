@@ -68,7 +68,8 @@ namespace NZPostOffice.RDS.Controls
             {
                 ii_menu_ht = ii_not_menu_ht;
             }
-            /*? GetEnvironment(st_Env);
+/*? 
+             GetEnvironment(st_Env);
              lb_env.text = "Environment " + st_Env.PBMajorRevision.ToString() + '.' + st_Env.PBMinorRevision.ToString() + '.' + String(st_Env.PBFixesRevision, "#####00");
              ii_border = System.Convert.ToInt32 ( ProfileString("win.ini", "windows", "borderwidth", '2' ));
              ii_border_height = 4 * ii_border;
@@ -85,7 +86,8 @@ namespace NZPostOffice.RDS.Controls
                      cUserName = StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_username() + "  ( " + StaticVariables.gnv_app.of_get_securitymanager().of_get_user().of_get_regionname() + ')';
                      st_userid.Text = cUserName;
                  }
-             }*/
+             }
+*/
             //? Timer(60);
             //?this.TriggerEvent(timer!);
             of_parent_resized();

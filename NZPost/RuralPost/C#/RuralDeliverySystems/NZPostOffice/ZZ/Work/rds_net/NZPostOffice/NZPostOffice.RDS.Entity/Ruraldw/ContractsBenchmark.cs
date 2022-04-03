@@ -14,6 +14,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
     // Add effective_date to call parameters
     // Add vehicle_number to retreived values (stored proc changed)
     //   -- primarily during testing to bypass using getdate() in the stored proc
+    // Added vehicle benchmark to returned results (in stored procedure)
     //
     // TJB RPCR_134 July-2019
     // Removed contract_type restriction to November Renewals
@@ -319,6 +320,7 @@ namespace NZPostOffice.RDS.Entity.Ruraldw
                 {
                     // TJB Frequencies & Vehicles  Mar-2022
                     // Changed fetch from using inline query to call to stored procedure 
+                    // Added vehicle benchmark to returned results (in stored procedure)
 
                     //cm.CommandType = CommandType.Text;
                     //cm.CommandText = "SELECT cr.contract_no, "
