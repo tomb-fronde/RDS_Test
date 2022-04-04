@@ -15,18 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_05C0AA55EE95D90BA790B005C9F98D35"
         "OwnerKey" = "8:_AFC4A3BB23E08A294BC0BBA915AE6B35"
         "MsmSig" = "8:_UNDEFINED"
@@ -57,50 +45,38 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
-        "OwnerKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
+        "MsmKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
+        "OwnerKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
+        "MsmKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
+        "MsmKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
+        "MsmKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_35A3B61F68A64A6E9CA1D83E844C0388"
+        "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -123,38 +99,44 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_558ABF911B247EA35EF27F4F28680AA3"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_558ABF911B247EA35EF27F4F28680AA3"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "OwnerKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6F264AE847225CE00314778E873533CB"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E61BD7A4ED7C28A7899744DEA9B9E7E"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E61BD7A4ED7C28A7899744DEA9B9E7E"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
+        "OwnerKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -165,26 +147,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
+        "MsmKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
+        "MsmKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
-        "OwnerKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
+        "MsmKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -207,56 +183,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
+        "MsmKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
+        "OwnerKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_ECACF20E09633EEAF051C1AB03061D3C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_558ABF911B247EA35EF27F4F28680AA3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
-        "OwnerKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
+        "MsmKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -268,6 +208,72 @@
         "Entry"
         {
         "MsmKey" = "8:_CB85366EAD883A79A185AD6C00C63B55"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_D124C7992C9ACD1E443D5662DD88F8C7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_7E61BD7A4ED7C28A7899744DEA9B9E7E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
+        "OwnerKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D124C7992C9ACD1E443D5662DD88F8C7"
+        "OwnerKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D124C7992C9ACD1E443D5662DD88F8C7"
         "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -285,26 +291,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ECACF20E09633EEAF051C1AB03061D3C"
-        "OwnerKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ECACF20E09633EEAF051C1AB03061D3C"
-        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_EDEE6D6D60874E6892E7143431B20991"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EF36CB960EDE43BEA31E3E44B0DA9F8D"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
+        "OwnerKey" = "8:_0A0F86FF260F4F2BBC9C69BDC80C4969"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -322,19 +322,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_CB85366EAD883A79A185AD6C00C63B55"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6F264AE847225CE00314778E873533CB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -346,7 +334,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6F264AE847225CE00314778E873533CB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_05C0AA55EE95D90BA790B005C9F98D35"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_257ED949666A4BAFB7D7F7D46F1622B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -358,55 +358,55 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B92E0377F3E565AF93186EC740FC2EB0"
+        "OwnerKey" = "8:_CEC0DD9F053B196F115F91A3A4EB7F85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_02F09AF7936B12839B14A43DE90FCAAC"
+        "OwnerKey" = "8:_F6762AEDEA0CBD52176B4AAB456D7565"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5A5936034D5A4D1DFC228F48C9A775BE"
+        "OwnerKey" = "8:_C74A7B3644BA8CB31F4D77BC0081641A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ECACF20E09633EEAF051C1AB03061D3C"
+        "OwnerKey" = "8:_D124C7992C9ACD1E443D5662DD88F8C7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_558ABF911B247EA35EF27F4F28680AA3"
+        "OwnerKey" = "8:_7E61BD7A4ED7C28A7899744DEA9B9E7E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1CF3F356AB1E1C4FDDBE351B82499554"
+        "OwnerKey" = "8:_A801E21A45D119DDC7DCC7F703FEBEF9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_25AF6CEE8C8E4500B7B98496BA677587"
+        "OwnerKey" = "8:_29627DB1194B3AE46B8EDFDB127560B2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8E86EA7956A2A3AAEDD3D99E5F22783F"
+        "OwnerKey" = "8:_8069E8C18645F26865BE945B908ADE3C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BAD9C79F74B94B77009EF92FEFABC010"
+        "OwnerKey" = "8:_D048FE8314C93E6B35EDB023A93B6C7E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -510,7 +510,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727 "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -518,37 +518,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_02F09AF7936B12839B14A43DE90FCAAC"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NZPostOffice.RDS.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_02F09AF7936B12839B14A43DE90FCAAC"
-                    {
-                    "Name" = "8:NZPostOffice.RDS.Entity.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NZPostOffice.RDS.Entity.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_05C0AA55EE95D90BA790B005C9F98D35"
             {
             "AssemblyRegister" = "3:1"
@@ -558,11 +527,11 @@
                 {
                     "_05C0AA55EE95D90BA790B005C9F98D35"
                     {
-                    "Name" = "8:Office.dll"
+                    "Name" = "8:office.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Office.dll"
+            "SourcePath" = "8:office.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -580,45 +549,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1CF3F356AB1E1C4FDDBE351B82499554"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NZPostOffice.DataControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_1CF3F356AB1E1C4FDDBE351B82499554"
-                    {
-                    "Name" = "8:NZPostOffice.DataControls.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NZPostOffice.DataControls.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_25AF6CEE8C8E4500B7B98496BA677587"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_29627DB1194B3AE46B8EDFDB127560B2"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:NZPostOffice.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_25AF6CEE8C8E4500B7B98496BA677587"
+                    "_29627DB1194B3AE46B8EDFDB127560B2"
                     {
                     "Name" = "8:NZPostOffice.Entity.dll"
                     "Attributes" = "3:512"
@@ -673,14 +611,45 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_558ABF911B247EA35EF27F4F28680AA3"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6F264AE847225CE00314778E873533CB"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_6F264AE847225CE00314778E873533CB"
+                    {
+                    "Name" = "8:Microsoft.Office.Interop.Excel.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Office.Interop.Excel.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7E61BD7A4ED7C28A7899744DEA9B9E7E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:NZPostOffice.DataService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_558ABF911B247EA35EF27F4F28680AA3"
+                    "_7E61BD7A4ED7C28A7899744DEA9B9E7E"
                     {
                     "Name" = "8:NZPostOffice.DataService.dll"
                     "Attributes" = "3:512"
@@ -704,51 +673,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5A5936034D5A4D1DFC228F48C9A775BE"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8069E8C18645F26865BE945B908ADE3C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NZPostOffice.Shared, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Metex.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5A5936034D5A4D1DFC228F48C9A775BE"
+                    "_8069E8C18645F26865BE945B908ADE3C"
                     {
-                    "Name" = "8:NZPostOffice.Shared.dll"
+                    "Name" = "8:Metex.Win.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:NZPostOffice.Shared.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6F264AE847225CE00314778E873533CB"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_6F264AE847225CE00314778E873533CB"
-                    {
-                    "Name" = "8:Microsoft.Office.Interop.Excel.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.Office.Interop.Excel.dll"
+            "SourcePath" = "8:Metex.Win.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -797,20 +735,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8E86EA7956A2A3AAEDD3D99E5F22783F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A801E21A45D119DDC7DCC7F703FEBEF9"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Metex.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:NZPostOffice.DataControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8E86EA7956A2A3AAEDD3D99E5F22783F"
+                    "_A801E21A45D119DDC7DCC7F703FEBEF9"
                     {
-                    "Name" = "8:Metex.Win.dll"
+                    "Name" = "8:NZPostOffice.DataControls.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Metex.Win.dll"
+            "SourcePath" = "8:NZPostOffice.DataControls.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -859,51 +797,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B92E0377F3E565AF93186EC740FC2EB0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C74A7B3644BA8CB31F4D77BC0081641A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NZPostOffice.RDS.DataControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:NZPostOffice.Shared, Version=7.1.17.11, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B92E0377F3E565AF93186EC740FC2EB0"
+                    "_C74A7B3644BA8CB31F4D77BC0081641A"
                     {
-                    "Name" = "8:NZPostOffice.RDS.DataControls.dll"
+                    "Name" = "8:NZPostOffice.Shared.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:NZPostOffice.RDS.DataControls.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BAD9C79F74B94B77009EF92FEFABC010"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_BAD9C79F74B94B77009EF92FEFABC010"
-                    {
-                    "Name" = "8:Metex.Service.Core.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Metex.Service.Core.dll"
+            "SourcePath" = "8:NZPostOffice.Shared.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -983,20 +890,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E46588DBEE4AE09402F0F5841718D1BD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CEC0DD9F053B196F115F91A3A4EB7F85"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:NZPostOffice.RDS.DataControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E46588DBEE4AE09402F0F5841718D1BD"
+                    "_CEC0DD9F053B196F115F91A3A4EB7F85"
                     {
-                    "Name" = "8:ShockwaveFlashObjects.dll"
+                    "Name" = "8:NZPostOffice.RDS.DataControls.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:ShockwaveFlashObjects.dll"
+            "SourcePath" = "8:NZPostOffice.RDS.DataControls.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -1014,20 +921,82 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ECACF20E09633EEAF051C1AB03061D3C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D048FE8314C93E6B35EDB023A93B6C7E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Metex.Service.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D048FE8314C93E6B35EDB023A93B6C7E"
+                    {
+                    "Name" = "8:Metex.Service.Core.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Metex.Service.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D124C7992C9ACD1E443D5662DD88F8C7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:NZPostOffice.RDS.DataService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_ECACF20E09633EEAF051C1AB03061D3C"
+                    "_D124C7992C9ACD1E443D5662DD88F8C7"
                     {
                     "Name" = "8:NZPostOffice.RDS.DataService.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:NZPostOffice.RDS.DataService.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E46588DBEE4AE09402F0F5841718D1BD"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ShockwaveFlashObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E46588DBEE4AE09402F0F5841718D1BD"
+                    {
+                    "Name" = "8:ShockwaveFlashObjects.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ShockwaveFlashObjects.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
@@ -1065,10 +1034,21 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EF36CB960EDE43BEA31E3E44B0DA9F8D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F6762AEDEA0CBD52176B4AAB456D7565"
             {
-            "SourcePath" = "8:..\\NZPostOffice.RDS\\bin\\Release\\RDS_UAT.config"
-            "TargetName" = "8:RDS_UAT.config"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NZPostOffice.RDS.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F6762AEDEA0CBD52176B4AAB456D7565"
+                    {
+                    "Name" = "8:NZPostOffice.RDS.Entity.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NZPostOffice.RDS.Entity.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F4141249531D4384A9F0B75A6E5E9FAB"
             "Condition" = "8:"
@@ -1082,7 +1062,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F777D4C4BF82D78A70799BD2D97CEAF2"
@@ -1184,7 +1164,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDS.NET"
         "ProductCode" = "8:{C9552777-360E-4910-9709-F057AE40E545}"
-        "PackageCode" = "8:{8975327B-9254-4E21-95BF-ABF610B9529F}"
+        "PackageCode" = "8:{F9693660-BCF5-4846-BE7C-3594DB25F29E}"
         "UpgradeCode" = "8:{67D7B606-CEA0-4D6C-9BF5-6B269267A486}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -1786,6 +1766,20 @@
                     "DefaultValue" = "8:1"
                     "UsePlugInResources" = "11:FALSE"
                     }
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_35A3B61F68A64A6E9CA1D83E844C0388"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc80_atl_x86.msm"
+                "Properties"
+                {
                 }
             "LanguageId" = "3:0"
             "Exclude" = "11:FALSE"

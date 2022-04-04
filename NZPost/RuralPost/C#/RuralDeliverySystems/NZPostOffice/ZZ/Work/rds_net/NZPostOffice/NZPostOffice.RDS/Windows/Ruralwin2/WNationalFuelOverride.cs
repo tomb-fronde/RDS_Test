@@ -500,7 +500,6 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             + "RG Code  = " + ll_selected_rg_code.ToString() + "\n"
                             + "Effective date " + ((DateTime)ld_rates_effective_date).ToString("dd-MMM-yyyy")
                             , "Error");
-                    Application.UseWaitCursor = false;
                     return FAILURE;
                 }
             }  // End of standard fuel rates update loop
