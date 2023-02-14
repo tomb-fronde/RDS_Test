@@ -56,7 +56,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
         private string senderName = string.Empty;
 
-        public decimal?  idc_original_benchmark;
+        public decimal? idc_original_benchmark;
+        public decimal? idc_current_benchmark;
         public DateTime? id_previous_effective_date = DateTime.MinValue;
 
         public URdsDw idw_vehicleoverriderates;
@@ -211,21 +212,23 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed benchmarkCalc stored proc name
             //  Obtain the original benchmark rate
             // TJB Feb-2021: This code obsolete; moved to dw_vehicle_override_rates_pfc_update
+            // TJB Feb-2023: Reinstated with updated GetBenchmarkCalc
             //RDSDataService dataService = RDSDataService.GetBenchmarkCalc2005(il_sequence, il_contract);
-/*
-            this.idc_original_benchmark = dataService.decVal;
+            RDSDataService dataService = RDSDataService.GetBenchmarkCalc(il_contract, il_sequence);
+
+            this.idc_current_benchmark = dataService.decVal;
             if (dataService.SQLCode != 0)
             {
                 // TJB  Apr-2014
                 // Added SQL Error message
                 string sqlErrMsg = dataService.SQLErrText;
-                MessageBox.Show("Unable to retreive the original benchmark for the contract.\n"
+                MessageBox.Show("Unable to retreive the current benchmark for the contract.\n"
                                 + "SQL Error: " + sqlErrMsg
                                , "WOverrideRates.pfc_postopen: Database Error"
                                , MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
-*/
+
             // TJB  RPCR_099  Jan-2015
             // Removed: non_vehicle_override_rate_history no longer used
             //
@@ -464,8 +467,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  Changed BenchmarkCalc subroutine name
             //  Obtain the new benchmark
             //  [Mar-2022] Changed name GetBenchmarkCalc2021 to GetBenchmarkCalc
-            dataService = RDSDataService.GetPrevBench(il_contract);
-            idc_original_benchmark = dataService.decVal;
+            //  [Feb-2023] Use current benchmark instead of GetPreviousBench()
+            //dataService = RDSDataService.GetPrevBench(il_contract);
+            //idc_original_benchmark = dataService.decVal;
+            //  Get BM after overrides updated 
             dataService = RDSDataService.GetBenchmarkCalc(il_contract, il_sequence);
             if (dataService.SQLCode != 0)
             {
@@ -479,8 +484,10 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // TJB  Frequencies & Vehicles 14-Feb-2021 
             // Reorganised and added messages about successful frequenct_adjustment update
             // and zero benchmarkcalc
-            dc_amount_to_pay = dc_this_benchmark - idc_original_benchmark;
-            if (dc_amount_to_pay == 0m || dc_amount_to_pay is Nullable)
+            //  [Feb-2023] Use current benchmark instead of GetPreviousBench()
+            //dc_amount_to_pay = dc_this_benchmark - idc_original_benchmark;
+            dc_amount_to_pay = dc_this_benchmark - idc_current_benchmark;
+            if (dc_amount_to_pay == 0m || dc_amount_to_pay == null)
             {
                 //MessageBox.Show("The benchmark for this contract has not changed.\n"
                 //                + "No frequency adjustment created.");
@@ -505,6 +512,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                    , "WOverrideRates"
                                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                // [Feb-2023] Save the new BM as the current BM
+                idc_current_benchmark = dc_this_benchmark;
             }
             else
             {

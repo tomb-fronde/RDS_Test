@@ -15,3 +15,4 @@ C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZP
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataService\obj\Debug\NZPostOffice.ODPS.DataService.csproj.CopyComplete
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataService\obj\Debug\NZPostOffice.ODPS.DataService.dll
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataService\obj\Debug\NZPostOffice.ODPS.DataService.pdb
+C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS.DataService\obj\Debug\NZPostOffice.ODPS.DataService.csproj.AssemblyReference.cache

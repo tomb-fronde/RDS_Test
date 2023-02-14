@@ -12,7 +12,7 @@ using NZPostOffice.RDS.Controls;
 
 namespace NZPostOffice.RDS.Windows.Ruralwin2
 {
-    // TJB Frequencies & Allowances  March-2022
+    // TJB Frequencies & Allowances  March-2022  Github copy
     // Changes to handle multiple vehicles per contract
     // (see tabpage_fuel_pfc_default and tabpage_other_rates_pfc_default (RUCs))
     // Changed detection of rate changes and allow both fuel and RUC rates to be processed
@@ -96,12 +96,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             // TJB Frequencies & Allowances  Mar-2022
             // Changed detection of rate changes and allow both fuel and RUC rates to be processed
             //if (tab_rates.SelectedIndex == 0)
-            if(StaticFunctions.IsDirty(dw_details))
+            if (StaticFunctions.IsDirty(dw_details))
             {
                 li_rc = tabpage_fuel_pfc_default();
             }
             //else
-            if(StaticFunctions.IsDirty(dw_rates))
+            if (StaticFunctions.IsDirty(dw_rates))
             {
                 li_rc = tabpage_other_rates_pfc_default();
             }
@@ -133,7 +133,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (Debugging)
                 {
                     MessageBox.Show("Skipping date check"
-                        +"\nDebugging is enabled"
+                        + "\nDebugging is enabled"
                         , "Debugging");
                 }
                 if (Testing)
@@ -158,13 +158,13 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
             else
             {
-                 MessageBox.Show("You must specify an effective date."
-                                , "Validation Error"
-                                , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                 dw_criteria.Controls["ad_effective_date"].Focus();
-                 dw_criteria.Focus();
-                 this.Focus();
-                 return FAILED;
+                MessageBox.Show("You must specify an effective date."
+                               , "Validation Error"
+                               , MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                dw_criteria.Controls["ad_effective_date"].Focus();
+                dw_criteria.Focus();
+                this.Focus();
+                return FAILED;
             }
             ll_selected_rg_code = dw_criteria.GetItem<FuelOverrideFields>(0).AlRenewalGroup;
             if (ll_selected_rg_code == null)
@@ -181,14 +181,14 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
         }
 
         bool Debugging = false;
-        bool Testing   = true;
+        bool Testing = true;
 
         private string convert_to_string(decimal? val)
         {
             return (val.HasValue ? Convert.ToString(val.Value) : "Null");
         }
 
-        private decimal? get_new_fuel_rate( int? pFuelKey)
+        private decimal? get_new_fuel_rate(int? pFuelKey)
         {
             for (int i = 0; i < dw_details.RowCount; i++)
             {
@@ -208,7 +208,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             for (int i = 0; i < ids_standard_fuels.RowCount; i++)
             {
                 thisDate = ids_standard_fuels.GetItem<StandardFuelRates>(i).RrRatesEffectiveDate;
-                if(thisDate.HasValue && thisDate <= pEffectiveDate)
+                if (thisDate.HasValue && thisDate <= pEffectiveDate)
                 {
                     if (thisDate > date)
                         date = thisDate;
@@ -224,7 +224,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     && ids_standard_fuels.GetItem<StandardFuelRates>(i).RgCode == pRgCode
                     && ids_standard_fuels.GetItem<StandardFuelRates>(i).RrRatesEffectiveDate == pEffectiveDate)
                 {
-                return i;
+                    return i;
                 }
             }
             return -1;
@@ -286,7 +286,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
 
             if (Debugging)
             {
-                MessageBox.Show("Debugging is enabled","tabpage_fuel_pfc_default");
+                MessageBox.Show("Debugging is enabled", "tabpage_fuel_pfc_default");
             }
 
             //--------------------------------------------------------------------
@@ -332,12 +332,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 return li_return;
             }
             // Prompt for confirmation
-            if (MessageBox.Show("Are you sure you want to proceed with the new fuel rates? \n" 
-                              + "The change will impact on all currently active contracts \n" 
+            if (MessageBox.Show("Are you sure you want to proceed with the new fuel rates? \n"
+                              + "The change will impact on all currently active contracts \n"
                               + "and benchmarks for the selected renewal group."
                               , "Warning"
                               , MessageBoxButtons.YesNo, MessageBoxIcon.Question
-                              , MessageBoxDefaultButton.Button2) 
+                              , MessageBoxDefaultButton.Button2)
                 == DialogResult.No)
             {
                 this.Focus();
@@ -393,7 +393,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 ll_fuel_key = ids_original.GetItem<ContractsBenchmark>(ll_x).FuelKey;
                 vehicle_no = ids_original.GetItem<ContractsBenchmark>(ll_x).VehicleNumber;
 
-               
+
                 // PBY 04/06/2002
                 // Don't bother creating a frequency adjustment if we 
                 // cannot determine the fuel type used!
@@ -408,7 +408,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // If overridden (vor) fuel rate is null (no override for this contract/vehicle),
                 // or the standard fuel rate is null (no standard fuel rate for this fuel type)
                 // skip this record.
-                if (ldc_overridden_fuel_rate == null || ldc_overridden_fuel_rate == 0 
+                if (ldc_overridden_fuel_rate == null || ldc_overridden_fuel_rate == 0
                     || ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate == 0)
                 {
                     continue;
@@ -418,7 +418,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 // The new override rate is adjusted by the difference between the old 
                 // standard fuel rate, and the new national override rate.
 
-                ldc_new_override_fuel_rate = ldc_overridden_fuel_rate 
+                ldc_new_override_fuel_rate = ldc_overridden_fuel_rate
                                            + (ldc_new_standard_fuel_rate - ldc_original_fuel_rate);
 
                 if (Debugging)
@@ -428,7 +428,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         + "\nVehicle " + vehicle_no.ToString()
                         + "\nOverride effective_date = " + ((DateTime)ld_effective_date).ToString("dd-MMM-yyy")
                         + "\nRates effective_date = " + ((DateTime)ld_rates_effective_date).ToString("dd-MMM-yyy")
-                        + "\nFuel key " + ll_fuel_key.ToString() 
+                        + "\nFuel key " + ll_fuel_key.ToString()
                         + "\nOriginal_standard_fuel_rate = " + convert_to_string(ldc_original_fuel_rate)
                         + "\nNew_standard_fuel_rate = " + convert_to_string(ldc_new_standard_fuel_rate)
                         + "\nOriginal_override_fuel_rate = " + convert_to_string(ldc_overridden_fuel_rate)
@@ -472,7 +472,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 if (ldc_new_standard_fuel_rate == null || ldc_new_standard_fuel_rate.Value == 0)
                     continue;  //Can't set a standard rate to 0 via these National Override Rates
 
-                std_fuel_index = find_std_fuel_index( ll_fuel_key, ll_selected_rg_code, ld_rates_effective_date );
+                std_fuel_index = find_std_fuel_index(ll_fuel_key, ll_selected_rg_code, ld_rates_effective_date);
                 if (std_fuel_index >= 0)
                 {
                     if (Debugging)
@@ -578,12 +578,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     if (Debugging)
                     {
-                        MessageBox.Show("Preparing a frequency adjustment" 
+                        MessageBox.Show("Preparing a frequency adjustment"
                             + "\nSkipping - o change in vehicle BM"
                             + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                             + "\nVehicle " + vehicle_no.ToString()
                             , "Debugging");
-                     }
+                    }
                     continue;
                 }
 
@@ -647,8 +647,8 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     //			n_freq.is_Reason = 'Global fuel rate changed. \n' &
                     //									  +'Original standard rate: ' + ldc_original_fuel_rate.ToString() + '\n' &
                     //									  +'New standard rate: ' + ldc_new_standard_fuel_rate.ToString()
-                    n_freq.is_reason = "Global fuel rate changed." 
-                                       + ls_reason + ldc_standard_fuel_rate_change.ToString() + " cents/litre" 
+                    n_freq.is_reason = "Global fuel rate changed."
+                                       + ls_reason + ldc_standard_fuel_rate_change.ToString() + " cents/litre"
                                        + "\r\nNew standard rate: " + newStdFuelRate.ToString() + " cpl";
 
                     n_freq.of_set_effective_date(ld_effective_date);
@@ -677,7 +677,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                                     + "\n\n Save result = " + ll_result.ToString()
                                     , "Error");
                             return FAILURE;
-                        }    
+                        }
                     }
                 }
             } // end of frequency adjustments loop
@@ -795,7 +795,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             {
                 MessageBox.Show("Debugging is enabled", "tabpage_rates_pfc_default");
             }
-            
+
             // Validate criteria fields
             if (of_validate_criteria() < 0)
                 return FAILURE;
@@ -814,12 +814,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             }
 
             // Prompt for confirmation
-            if (MessageBox.Show("Are you sure you want to proceed with the new RUC rate? \n" 
-                              + "The change will impact on all currently active contracts \n" 
+            if (MessageBox.Show("Are you sure you want to proceed with the new RUC rate? \n"
+                              + "The change will impact on all currently active contracts \n"
                               + "and benchmarks for the selected renewal group."
                               , "Warning"
                               , MessageBoxButtons.YesNo, MessageBoxIcon.Question
-                              , MessageBoxDefaultButton.Button2) 
+                              , MessageBoxDefaultButton.Button2)
                 == DialogResult.No)
             {
                 this.Focus();
@@ -887,11 +887,11 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                     if (Debugging)
                     {
                         MessageBox.Show("Update Vehicle Override RUC Rate "
-                            + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString() 
+                            + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
                             + "\nVehicle " + vehicle_no.ToString()
                             + "\nOriginal_standard_ruc_rate = " + convert_to_string(ldc_standard_ruc_rate)
                             + "\nNew_standard_ruc_rate = " + convert_to_string(ldc_new_standard_ruc_rate)
-                            + "\nOld_veh_override_ruc_rate = " + convert_to_string(ldc_old_override_ruc_rate) 
+                            + "\nOld_veh_override_ruc_rate = " + convert_to_string(ldc_old_override_ruc_rate)
                             + "\nNew_veh_override_ruc_rate = " + convert_to_string(ldc_new_override_ruc_rate)
                             , "Debugging");
                     }
@@ -962,7 +962,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //--------------------------------------------------------------------
 
             // Note: modified to handle multiple RUC-paying vehicles (TJB Mar 2022)
-            
+
             int? ll_last_contract;
             decimal? ldc_rolling_benchmark;
             ll_last_contract = -1;
@@ -995,7 +995,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 RDSDataService Obj = RDSDataService.GetVehBenchmark(ll_contract_no, ll_sequence_no, vehicle_no);
                 ldc_new_veh_benchmark = Obj.decVal;
 
-                if ((ldc_new_veh_benchmark == null) || (ldc_original_benchmark == null) 
+                if ((ldc_new_veh_benchmark == null) || (ldc_original_benchmark == null)
                     || ldc_new_veh_benchmark == 0 || ldc_original_benchmark == 0)
                 {
                     // Some trouble calculating benchmark.  Do not create adjustments.
@@ -1011,7 +1011,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                         + "\nOriginal Vehicle benchmark = " + convert_to_string(ldc_original_veh_benchmark)
                         + "\nNew Vehicle benchmark = " + convert_to_string(ldc_new_veh_benchmark)
                         , "Error"
-                        , MessageBoxButtons.OK, MessageBoxIcon.Error) ;
+                        , MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return FAILURE;
                 }
 
@@ -1023,7 +1023,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                 {
                     MessageBox.Show("New Vehicle benchmark calculated"
                         + "\nContract " + ll_contract_no.ToString() + "/" + ll_sequence_no.ToString()
-                        + "\nVehicle "+vehicle_no.ToString()
+                        + "\nVehicle " + vehicle_no.ToString()
                         + "\nOriginal benchmark = " + convert_to_string(ldc_original_benchmark)
                         + "\nNew benchmark = " + convert_to_string(ldc_new_benchmark)
                         + "\nOld Vehicle benchmark = " + convert_to_string(ldc_original_veh_benchmark)
@@ -1074,7 +1074,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
                             , "Debugging");
                     }
                     //else
-                    { 
+                    {
                         n_freq = new NFrequencyAdjustment();
                         n_freq.of_set_contract(ll_contract_no, ll_sequence_no);
                         n_freq.is_reason = ls_reason;
@@ -1127,12 +1127,12 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             //  If we're OK'ing the details, ask the user to confirm
             //  that they're correct.  we really want a double-check 
             //  that the Petrol override is really a diesel equivalent.
-            
+
             // TJB  Frequencies and Allowances  Mar-2022: Changed detection of changes to fuel rates
             //if (tab_rates.SelectedIndex == 0)
-            if(StaticFunctions.IsDirty(dw_details))
+            if (StaticFunctions.IsDirty(dw_details))
             {
-                li_rc = MessageBox.Show("Please confirm that the rates entered are correct, and\n" 
+                li_rc = MessageBox.Show("Please confirm that the rates entered are correct, and\n"
                                       + "especially that the Petrol rate is a diesel equivalent."
                                       , "Confirm"
                                       , MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
@@ -1167,7 +1167,7 @@ namespace NZPostOffice.RDS.Windows.Ruralwin2
             ldw_temp.AcceptText();
             if (ldw_temp.DataObject.DeletedCount > 0 && ldw_temp.ModifiedCount() > 0)
             {
-                li_rc = MessageBox.Show("The changes you made will be lost if you switch to \n" 
+                li_rc = MessageBox.Show("The changes you made will be lost if you switch to \n"
                                       + "the other tabpage.  Do you want to continue?"
                                       , "Tabpage focus change"
                                       , MessageBoxButtons.YesNo, MessageBoxIcon.Question
