@@ -31,7 +31,7 @@ namespace NZPostOffice.ODPS.Windows.Odps
 
             //!config.AppSettings.Settings["Version"].Value.ToString() + " (Built on " + config.AppSettings.Settings["BuildDate"].Value.ToString() + ")"
             this.st_version.Text = "Version " + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString() + "\n"
-                        + "(Built on " + string.Format("{0: dd/MM/yyyy HH:mm:ss}",System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) 
+                        + "(Built on " + string.Format("{0: dd-MMM-yyyy HH:mm}",System.IO.File.GetLastWriteTime(string.Format(System.Reflection.Assembly.GetEntryAssembly().Location))) 
                         + ")";
             
             this.st_application.Text = config.AppSettings.Settings["AppName"].Value.ToString();

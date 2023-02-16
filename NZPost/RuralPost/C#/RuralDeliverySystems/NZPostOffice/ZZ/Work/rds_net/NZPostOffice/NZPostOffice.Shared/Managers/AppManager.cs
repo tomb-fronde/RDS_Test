@@ -913,7 +913,7 @@ namespace NZPostOffice.Shared.Managers
             {
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetEntryAssembly();
                 DateTime createdDaye = new System.IO.FileInfo(assembly.CodeBase.Replace("/", @"\").Replace(@"file:\\\", "")).LastWriteTime;
-                return "Built on " + createdDaye.Date.ToString("dd/MM/yyyy") + " at " + createdDaye.ToString("HH:mm:ss");
+                return "Built on " + createdDaye.Date.ToString("dd-MMM-yyyy") + " at " + createdDaye.ToString("HH:mm");
             }
         }
     }

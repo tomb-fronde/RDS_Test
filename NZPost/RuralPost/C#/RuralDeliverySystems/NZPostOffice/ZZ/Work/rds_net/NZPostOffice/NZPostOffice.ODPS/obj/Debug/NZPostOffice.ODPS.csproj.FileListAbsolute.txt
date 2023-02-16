@@ -61,7 +61,6 @@ C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\Z
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\obj\Debug\NZPostOffice.ODPS.csproj.CopyComplete
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\obj\Debug\NZPostOffice.ODPS.exe
 C:\Source\Repos\Tomb-RDS\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\obj\Debug\NZPostOffice.ODPS.pdb
-C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\bin\Debug\ODPS_UAT.config
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\bin\Debug\NZPostOffice.ODPS.exe.config
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\bin\Debug\NZPostOffice.ODPS.exe
 C:\Source\Repos\ruraldeliverysystem\NZPost\RuralPost\C#\RuralDeliverySystems\NZPostOffice\ZZ\Work\rds_net\NZPostOffice\NZPostOffice.ODPS\bin\Debug\NZPostOffice.ODPS.pdb

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fronde Systems Group")]
 [assembly: AssemblyProduct("Rural Delivery System")]
-[assembly: AssemblyCopyright("Copyright@2022 Rural Post")]
+[assembly: AssemblyCopyright("Copyright@2023 Rural Post")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("7.1.17.11")]
-[assembly: AssemblyFileVersion("7.1.17.11")]
+[assembly: AssemblyVersion("7.1.17.12")]
+[assembly: AssemblyFileVersion("7.1.17.12")]
