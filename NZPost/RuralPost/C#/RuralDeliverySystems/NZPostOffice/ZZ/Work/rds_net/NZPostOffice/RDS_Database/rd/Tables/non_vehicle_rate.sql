@@ -1,0 +1,25 @@
+﻿CREATE TABLE [rd].[non_vehicle_rate] (
+    [rg_code]                            INT             NOT NULL,
+    [nvr_rates_effective_date]           DATETIME        NOT NULL,
+    [nvr_wage_hourly_rate]               NUMERIC (6, 2)  NULL,
+    [nvr_vehicle_insurance_base_premium] NUMERIC (6, 2)  NULL,
+    [nvr_public_liability_rate]          NUMERIC (6, 2)  NULL,
+    [nvr_carrier_risk_rate]              NUMERIC (6, 2)  NULL,
+    [nvr_acc_rate]                       NUMERIC (6, 2)  NULL,
+    [nvr_item_proc_rate_per_hr]          SMALLINT        NULL,
+    [nvr_frozen_indicator]               VARCHAR (1)     NULL,
+    [nvr_contract_start]                 DATETIME        NULL,
+    [nvr_contract_end]                   DATETIME        NULL,
+    [nvr_accounting]                     NUMERIC (8, 2)  NULL,
+    [nvr_telephone]                      NUMERIC (8, 2)  NULL,
+    [nvr_sundries]                       NUMERIC (8, 2)  NULL,
+    [nvr_acc_rate_amount]                NUMERIC (12, 2) NULL,
+    [nvr_uniform]                        NUMERIC (12, 2) NULL,
+    [nvr_delivery_wage_rate]             NUMERIC (6, 2)  NULL,
+    [nvr_processing_wage_rate]           NUMERIC (6, 2)  NULL,
+    [nvr_relief_weeks]                   NUMERIC (6, 2)  NULL,
+    CONSTRAINT [non_vehicle_rate_cns] PRIMARY KEY CLUSTERED ([rg_code] ASC, [nvr_rates_effective_date] ASC),
+    CONSTRAINT [FK_NON_VEHI_REF_784_RENEWAL_] FOREIGN KEY ([rg_code]) REFERENCES [rd].[renewal_group] ([rg_code]),
+    CONSTRAINT [FK_NON_VEHI_REF_784_RENEWAL_1] FOREIGN KEY ([rg_code]) REFERENCES [rd].[renewal_group] ([rg_code])
+);
+

@@ -1,0 +1,25 @@
+﻿CREATE TABLE [rd].[t_contract] (
+    [contract_no]                INT            NOT NULL,
+    [rg_code]                    INT            NULL,
+    [con_old_mail_service_no]    VARCHAR (6)    NULL,
+    [con_title]                  VARCHAR (60)   NULL,
+    [con_rd_paper_file_text]     VARCHAR (40)   NULL,
+    [con_rcm_paper_file_text]    VARCHAR (40)   NULL,
+    [con_base_office]            INT            NULL,
+    [con_lodgement_office]       INT            NULL,
+    [con_active_sequence]        INT            NULL,
+    [con_base_cont_type]         INT            NULL,
+    [con_rd_ref_text]            VARCHAR (35)   NULL,
+    [con_last_service_review]    DATETIME       NULL,
+    [con_last_delivery_check]    DATETIME       NULL,
+    [con_last_work_msrmnt_check] DATETIME       NULL,
+    [con_lngth_sealed_road]      INT            NULL,
+    [con_lngth_unsealed_road]    INT            NULL,
+    [con_date_terminated]        DATETIME       NULL,
+    [con_date_last_prt_for_od]   DATETIME       NULL,
+    [__________]                 VARCHAR (1)    NULL,
+    [ac_id]                      INT            NULL,
+    [message_for_invoice]        VARCHAR (1000) NULL,
+    [pbu_id]                     INT            NULL
+);
+

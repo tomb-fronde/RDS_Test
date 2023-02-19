@@ -1,0 +1,28 @@
+﻿CREATE TABLE [rd].[contract_rates] (
+    [contract_no]                   INT             NOT NULL,
+    [contract_seq_number]           INT             NOT NULL,
+    [rr_nominal_vehical_value]      NUMERIC (10, 2) NULL,
+    [rr_wage_hourly_rate]           NUMERIC (6, 2)  NULL,
+    [rr_repairs_maintenance_rate]   NUMERIC (6, 2)  NULL,
+    [rr_tyre_tubes_rate]            NUMERIC (6, 2)  NULL,
+    [rr_vehical_allowance_rate]     NUMERIC (6, 2)  NULL,
+    [rr_vehical_insurance_premium]  NUMERIC (6, 2)  NULL,
+    [rr_public_liability_rate_2]    NUMERIC (6, 2)  NULL,
+    [rr_carrier_risk_rate]          NUMERIC (6, 2)  NULL,
+    [rr_acc_rate]                   NUMERIC (6, 2)  NULL,
+    [rr_licence_rate]               NUMERIC (6, 2)  NULL,
+    [rr_vehical_rate_of_return_pct] NUMERIC (6, 2)  NULL,
+    [rr_salvage_ratio]              NUMERIC (6, 2)  NULL,
+    [rr_item_proc_rate_per_hour]    SMALLINT        NULL,
+    [rr_fuel_rate]                  NUMERIC (6, 2)  NULL,
+    [rr_consumption_rate]           NUMERIC (6, 2)  NULL,
+    [rr_frozen]                     VARCHAR (1)     NULL,
+    [rr_ruc]                        NUMERIC (8, 2)  NULL,
+    [rr_accounting]                 NUMERIC (8, 2)  NULL,
+    [rr_telephone]                  NUMERIC (8, 2)  NULL,
+    [rr_sundries]                   NUMERIC (8, 2)  NULL,
+    [rr_sundries_k]                 NUMERIC (12, 2) NULL,
+    CONSTRAINT [contract_rates_cns] PRIMARY KEY CLUSTERED ([contract_no] ASC, [contract_seq_number] ASC),
+    CONSTRAINT [FK_contract_renewals4] FOREIGN KEY ([contract_no], [contract_seq_number]) REFERENCES [rd].[contract_renewals] ([contract_no], [contract_seq_number])
+);
+

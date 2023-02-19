@@ -1,0 +1,1 @@
+﻿CREATE PROCEDURE [rd].[od_rps_irdPaydayDetail] as begin return end
