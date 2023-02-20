@@ -1,9 +1,0 @@
-ALTER TABLE [rd].[rds_user_id_group] CHECK CONSTRAINT [FK_RDS_USER_REFERENCE_RDS_USER_ID]
-GO
-ALTER TABLE [rd].[rds_user_id_group] WITH CHECK 
-  ADD CONSTRAINT [FK_RDS_USER_REFERENCE_RDS_USER1] 
-  FOREIGN KEY([ug_id])
-    REFERENCES [rd].[rds_user_group] ([ug_id])
-GO
-ALTER TABLE [rd].[rds_user_id_group] CHECK CONSTRAINT [FK_RDS_USER_REFERENCE_RDS_USER1]
-GO
