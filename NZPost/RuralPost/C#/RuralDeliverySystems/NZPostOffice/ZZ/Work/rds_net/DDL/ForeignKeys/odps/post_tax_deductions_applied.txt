@@ -1,0 +1,7 @@
+ALTER TABLE [odps].[post_tax_deductions_applied] WITH CHECK 
+  ADD CONSTRAINT [FK_Payment] 
+  FOREIGN KEY([invoice_id])
+    REFERENCES [odps].[Payment] ([Invoice_ID])
+GO
+ALTER TABLE [odps].[post_tax_deductions_applied] CHECK CONSTRAINT [FK_Payment]
+GO
