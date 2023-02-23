@@ -7,7 +7,7 @@ namespace NZPostOffice.Shared.Security
     [Serializable()]
     public class Identity : Metex.Core.Security.ISessionIdentity
     {
-
+        // TJB Feb 2023: Added to test GIT issue
         private string sUser;
         private string sPassword;
         private string connectionName;

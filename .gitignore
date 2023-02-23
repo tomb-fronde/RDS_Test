@@ -47,6 +47,8 @@ NZPostOffice/Backup/
 NZPostOffice/Crystal Reports Backup Files/
 NZPostOffice/ALL_SP_FUNCTN_MSSQL.sql
 NZPostOffice/UpgradeLog.htm
+# Allow NZPostOffice.Shared/Security - somehow was excluded??
+!?*.[Ss]ecurity/
 
 # Visual Studio DB Project
 *.dbmdl
@@ -462,4 +464,4 @@ Footer navigation
     About
 
 gitignore/VisualStudio.gitignore at main · github/gitignore · GitHub
-/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice/ZZ/Work/rds_net/DDL
+/NZPost/RuralPost/C#/RuralDeliverySystems/NZPostOffice/ZZ/Work/rds_net/DDL/
