@@ -118,9 +118,9 @@
     </Compile>
     <Compile Include="Ruralsec\NRdsUser.cs" />
     <Compile Include="Ruralsec\NRdsUserGroups.cs" />
+    <Compile Include="Managers\SecurityManager.cs" />
     <Compile Include="Security\Identity.cs" />
     <Compile Include="Security\Principal.cs" />
-    <Compile Include="Managers\SecurityManager.cs" />
     <Compile Include="Static\Constants.cs" />
     <Compile Include="Static\StaticFunctions.cs" />
     <Compile Include="Static\StaticMessage.cs" />
